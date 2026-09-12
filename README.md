@@ -23,8 +23,14 @@ polynomial exponent may depend on L. The result does not settle the
 separate superconstant-parameter question, attain a linear approximation
 factor, construct one-way functions, or resolve P versus NP.
 
-Version 1.0.0 | Quantyra Research | 12 September 2026.
+Version 0.1.0 | Quantyra Research | 12 September 2026.
 Informal AI mathematical review; no human peer review or machine-checked
 proof is claimed. Citation metadata is in [CITATION.cff](CITATION.cff).
 Original artifact content is licensed under [Apache 2.0](LICENSE);
 external works retain their own copyrights and licenses.
+
+Version correction: 0.1.0 is the current research-preprint version. The
+initial GitHub release was labeled 1.0.0; that historical tag and release
+are preserved. This correction changes version/archive metadata only;
+the theorem statements, proofs, source attributions and review findings
+are unchanged. The Zenodo archive metadata identifies this work as a preprint.

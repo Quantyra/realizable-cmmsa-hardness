@@ -1,6 +1,6 @@
 # Realizable Nearlinear-Gap Hardness for Small Monotone Formulas
 
-Quantyra Research | 12 September 2026 | Version 1.0.0
+Quantyra Research | 12 September 2026 | Version 0.1.0
 
 ## Abstract
 
