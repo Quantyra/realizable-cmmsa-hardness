@@ -34,3 +34,10 @@ initial GitHub release was labeled 1.0.0; that historical tag and release
 are preserved. This correction changes version/archive metadata only;
 the theorem statements, proofs, source attributions and review findings
 are unchanged. The Zenodo archive metadata identifies this work as a preprint.
+
+Archived publication:
+
+- Version 0.1.0 DOI: [10.5281/zenodo.22728702](https://doi.org/10.5281/zenodo.22728702).
+- Concept DOI (all versions): [10.5281/zenodo.22728701](https://doi.org/10.5281/zenodo.22728701).
+
+Use the version DOI to cite this exact archived preprint.
