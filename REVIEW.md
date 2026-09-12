@@ -15,6 +15,8 @@ the cited researchers endorsed or reviewed this manuscript.
 | Independent dependency auditor | Independently inspected the primary-source interfaces, narrower list theorem ancestry, covering conditions, parameter order and transfer model. | GO for the required source interfaces; did not reprove all imported theorems. |
 | Independent source/significance assessor | Compared the exact HN question, earlier realizable hardness and current primary-source results; assessed whether the complete result would merit publication. | REVISE for complete substantive publication preparation after the dependency GO; no exact subsumer identified, no novelty certificate. |
 | Manuscript preparation agent | Extracted the complete frozen proof, added definitions and explicit contracts, resolved the listed presentation notes and prepared metadata. | Editorial preparation; not an independent verifier of its own extraction. |
+| Independent public extraction reviewer | Compared the standalone manuscript with the frozen proof, checking completeness, theorem scope, imported interfaces and the added explanatory passages. | GO on the public candidate identified below; informal AI mathematical/extraction review, not formal or human verification. |
+| Independent public metadata/scope reviewer | Checked README, sources, review disclosures, citation metadata, license and the draft release against the exact theorem scope; validated CFF against its official schema and the license text. | GO on the public candidate and release draft identified below; informal AI metadata/scope review, not a scientific priority certificate. |
 
 These roles were separate AI-agent tasks. Independence means separation
 from proof authorship within this workflow, not organizational independence,
@@ -47,12 +49,23 @@ new mathematics is included in this repository's manuscript.
 | Printed list-theorem advice range too broad for checked ancestry | Use only MZ24 revision 1 Theorem 5.26's 10m/rho range. |
 | Earlier realizable hardness and priority | Credit Hirahara and limit the advance to the nearlinear exponent; priority remains uncertain. |
 
-The mathematical and dependency verdicts concern the source proof and
-source contracts. They do not certify the typesetting or editorial
-extraction merely by inheritance. Any candidate-specific extraction or
-metadata review must identify the public candidate it actually inspected.
-The source significance recommendation was a preparation recommendation,
-not a preemptive publication decision.
+The source mathematical and dependency verdicts concern the source proof
+and source contracts. The subsequent public extraction and metadata/scope
+reviews independently inspected candidate commit
+`4155d527ce89fabd1963b93ffd25690970c4c413`. Both returned GO. The manuscript
+reviewed there has SHA256
+`30cf35ab44e16e32a7fbc70338b5c29558c1ac9f2601bacde5ac5e034ee64958`.
+The scope review also checked the release draft with SHA256
+`bb301f46cc3d4ec03e6faf8a5bb6da946872cd3f0bcfbaf259f852a6807a1832`.
+These candidate-specific checks did not inherit approval merely from the
+source review. The present disclosure addition records those actual
+outcomes without changing the manuscript or the other candidate files.
+
+The source significance verdict REVISE was a recommendation to prepare the
+complete substantive publication, not a negative mathematical verdict or
+a preemptive publication decision. The final orchestrator publication gate
+is separate from these AI review verdicts. No formal verification or
+independent human peer review is claimed by any of these outcomes.
 
 ## Limits
 
