@@ -286,11 +286,13 @@ Let \(N_0\) be the number of monotone variables. Materialize the finite sampling
 
 Construct a bounded-random-bit sampler whose distribution has statistical distance at most \(\epsilon\)/8 from the exact product distribution. One implementation enumerates its \(S\) atoms and rounds cumulative rational probabilities to a dyadic grid with at least \(\log_2(8S/\epsilon)\) bits. Charge the support enumeration and rational arithmetic. This is polynomial for fixed \(L\); it is not an oracle for an exponentially large support.
 
-Take \(M\) to be the least power of two that satisfies
+Choose a natural \(P\) with \(1/\epsilon\le P\); \(\epsilon\) is positive. Since \(\epsilon\) is rational, \(P=\lceil 1/\epsilon\rceil\) can be computed by integer division and remainder on its numerator and denominator. Use the conservative count
 
 \begin{equation}\label{eq:24}
-M\ge\frac{N_0\ln2+\ln6}{2(\epsilon/8)^2}.
+\begin{aligned}T&=32(N_0+11)P^2, &M&=2^{\operatorname{clog}_2 T},\\\frac{N_0\ln2+\ln12}{2(\epsilon/8)^2}&\le T\le M<2T.\end{aligned}
 \end{equation}
+
+Here \(\operatorname{clog}_2 T\) is the least natural exponent whose power of two is at least \(T\). The constructor uses only natural arithmetic. The displayed analytic bound follows from \(\ln 2\le1\), \(\ln 12\le11\) and \(1/\epsilon\le P\); it is a proved comparison, not a real-number computation required by the sampler. This one count already gives sampling success at least 5/6, and therefore also the required 2/3. It is the least qualifying power of two for \(T\), not necessarily for the exact logarithmic threshold. For fixed \(L\) the previously chosen positive rational \(\epsilon\) is fixed, so this choice of \(P\) is constant with respect to the outer input, and \(M<64(N_0+11)P^2\) bounds the list length. Support enumeration and rational arithmetic costs still have to be charged as above. The formal count and probability bounds do not certify an encoded machine runtime.
 
 Draw \(M\) independent formulas from this sampler. Hoeffding's inequality and a union bound over \(2^{N_0}\) assignments imply, with probability at least 2/3, that all empirical satisfaction fractions differ from their exact product probabilities by at most \(\epsilon\)/4, including the sampling-distribution error. Hence the list's YES failure is at most \(\epsilon\)/2, and its NO acceptance is at most \(\Gamma\)/2+\(\epsilon\)/4 \(<\) \(\Gamma\). The exception lemma may therefore use the conservative error budget \(\epsilon\). Its condition \(\epsilon\) \(\sigma\)\(\le\)\(\Gamma\)/2 holds with a factor-eight margin.
 
@@ -317,7 +319,7 @@ Represent the power-of-two list by its exact sampler. Every monotone formula wit
 L+2\lceil\log_2(L+1)\rceil+c_U.
 \end{equation}
 
-Its length parameter can be chosen as a polynomial multiple of \(A_0\), so all strings of length \(v'_i\) times that parameter have integral lengths. The parameter is also increased by a polynomial factor to meet its stated description and soundness bounds. These adjustments are polynomial in the actual instance size. Perfect completeness holds for every randomness string of this transfer; its additional randomized failure probability is on the NO side. Boost the list-construction success to, for example, 5/6 by replacing \(\ln\) 6 with \(\ln\) 12 in \(M\); combine with the transfer's sufficiently small failure probability to obtain a randomized many-one reduction with success at least 2/3. Finitely many small inputs can be handled by a fixed truth table, a constant cost depending on the fixed parameters.
+Its length parameter can be chosen as a polynomial multiple of \(A_0\), so all strings of length \(v'_i\) times that parameter have integral lengths. The parameter is also increased by a polynomial factor to meet its stated description and soundness bounds. These adjustments are polynomial in the actual instance size. Perfect completeness holds for every randomness string of this transfer; its additional randomized failure probability is on the NO side. The conservative list count above already gives success at least 5/6; combine this with the transfer's sufficiently small failure probability to obtain a randomized many-one reduction with success at least 2/3. Finitely many small inputs can be handled by a fixed truth table, a constant cost depending on the fixed parameters.
 
 \section{Final asymptotic parameter choice}\label{sec:10}
 For each fixed sufficiently large target leaf bound \(L\), consider integers \(m\)\(\ge\)256 with \(m\)\(\le\)\(\sqrt{\log_2 L}\). Let \(q\)=\(\lfloor \sqrt{m}\rfloor\) and
@@ -342,7 +344,7 @@ Theorem~\ref{thm:main} follows with the explicit parameters
 \sigma_L=\left\lfloor\frac{\lfloor\sigma/4\rfloor}{2}\right\rfloor,\qquad\gamma_L=2\Gamma.
 \end{equation}
 
-where \(\sigma\), \(\Gamma\), \(m\), \(h\) and \(R\) are selected above. For sufficiently large \(L\) these are in the promised ranges. The sampling success is at least 5/6 when using \(\ln\) 12 in the least-power-of-two list size. Corollary~\ref{cor:learn} follows from the stated HN transfer with its residual error made at most 1/6; the combined success is at least 2/3. The exact sampler and complete repaired YES witness ensure that the learning error parameter is exactly zero. This completes the proofs of Theorem~\ref{thm:main} and Corollary~\ref{cor:learn}.\hfill$\square$
+where \(\sigma\), \(\Gamma\), \(m\), \(h\) and \(R\) are selected above. For sufficiently large \(L\) these are in the promised ranges. The conservative natural list count above gives sampling success at least 5/6. Corollary~\ref{cor:learn} follows from the stated HN transfer with its residual error made at most 1/6; the combined success is at least 2/3. The exact sampler and complete repaired YES witness ensure that the learning error parameter is exactly zero. This completes the proofs of Theorem~\ref{thm:main} and Corollary~\ref{cor:learn}.\hfill$\square$
 
 \section{Research and review disclosure}\label{sec:11}
 This manuscript was developed through AI-assisted mathematical derivation, source challenge, independent agent mathematical review, dependency audit, and source/significance assessment under Quantyra Research. These are informal AI reviews, not independent human peer review or Lean verification. The source challenger contributed to the argument and is not counted as an independent mathematical verifier. Review roles, findings, and limits are disclosed in the companion review disclosures. Bibliographic versions and imported inputs are recorded in the bibliography.

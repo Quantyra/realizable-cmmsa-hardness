@@ -1,8 +1,9 @@
 from pathlib import Path
 import re,json,hashlib
 ROOT=Path(__file__).resolve().parent.parent
-src=(ROOT/'MANUSCRIPT.md').read_text(encoding='utf-8')
-# This renderer is deliberately tied to the reviewed text: every source line is
+SOURCE=Path('paper/submission-manuscript.md')
+src=(ROOT/SOURCE).read_text(encoding='utf-8')
+# This renderer is deliberately tied to the submission source: every source line is
 # assigned to a generated paragraph, table, statement or display in correspondence.json.
 GREEK=['pi','sigma','gamma','epsilon','lambda','Gamma','Lambda','Sigma','rho','beta','delta','Delta','zeta','xi','tau','eta','kappa','alpha']
 FUN=['log2','log','ln','sqrt','floor','ceil','min','max','dim','codim','Pr','SD','Grass','Zoom','sum','Omega']
@@ -66,7 +67,7 @@ r'\epsilon_1\le\frac{\tau}{100(m+1)J}.',
 r'\frac{(m+1)J\epsilon_1}{1-a}\le\frac{\tau}{75}<\tau.',
 r'\sigma=\left\lfloor\frac{R^{1-1/m}}{16}\right\rfloor,\qquad\xi=\frac1{m^2}.',
 r'\Gamma=2(3/4)^q,\qquad\epsilon=\frac{\Gamma}{16\sigma},\qquad\tau=\frac{\epsilon}{4q}.',
-r'M\ge\frac{N_0\ln2+\ln6}{2(\epsilon/8)^2}.',
+r'\begin{aligned}T&=32(N_0+11)P^2, &M&=2^{\operatorname{clog}_2 T},\\\frac{N_0\ln2+\ln12}{2(\epsilon/8)^2}&\le T\le M<2T.\end{aligned}',
 r"B_0=\min\{A_0,\lceil Dt\rceil+N'\},\qquad v_i'=a_i/A_0,\qquad t'=B_0/A_0.",
 r"\frac{\sigma_{\mathrm{new}}}{2}\frac{B_0}{D}\le\frac{\sigma_{\mathrm{new}}}{2}\left(t+\frac{N'+1}{D}\right)\le\frac9{16}\sigma_{\mathrm{new}}t<\sigma_{\mathrm{new}}t.",
 r'L+2\lceil\log_2(L+1)\rceil+c_U.',
@@ -85,6 +86,12 @@ def balanced_at(s,i):
  return j if depth==0 else i
 # Fixed textual expressions with special set/probability semantics.
 special={
+ 'P=ceil(1/epsilon)':r'P=\lceil 1/\epsilon\rceil',
+ 'clog_2 T':r'\operatorname{clog}_2 T',
+ 'M<64(N_0+11)P^2':r'M<64(N_0+11)P^2',
+ '1/epsilon<=P':r'1/\epsilon\le P',
+ 'ln 2<=1':r'\ln 2\le1',
+ 'ln 12<=11':r'\ln 12\le11',
  'p_V':r'p_V',
  '2^N_0':r'2^{N_0}',
  'L=a-2 ceil(log2(a+1))-c_U':r'L=a-2\lceil\log_2(a+1)\rceil-c_U',
@@ -246,5 +253,5 @@ tex=tex.replace(r'We now prove the parameter extension and the remaining composi
 tex=tex.replace('This completes both proofs.',r'This completes the proofs of Theorem~\ref{thm:main} and Corollary~\ref{cor:learn}.\hfill$\square$')
 tex=re.sub(r'\{([^{}]+)\\brack ([^{}]+)\}_2',lambda m:r'\genfrac{[}{]}{0pt}{}{'+m[1]+'}{'+m[2]+'}_2',tex)
 (ROOT/'paper'/'body.tex').write_text(tex,encoding='utf-8',newline='\n')
-(ROOT/'paper'/'correspondence.json').write_text(json.dumps({'source':'MANUSCRIPT.md','source_sha256':hashlib.sha256(src.encode()).hexdigest(),'source_lines':len(lines),'display_count':di,'mapping':ledger},indent=2)+'\n',encoding='utf-8',newline='\n')
+(ROOT/'paper'/'correspondence.json').write_text(json.dumps({'source':SOURCE.as_posix(),'source_sha256':hashlib.sha256(src.encode()).hexdigest(),'source_lines':len(lines),'display_count':di,'mapping':ledger},indent=2)+'\n',encoding='utf-8',newline='\n')
 print('Rendered body',len(tex),'characters',di,'displays',len(ledger),'source spans')
