@@ -75,7 +75,14 @@ unchanged; the existing DOI identifies that archive, not this later PDF.
 
 ## Current regeneration status
 
-The source-only count reconciliation has regenerated `body.tex` and
-`correspondence.json`, but has not rebuilt the PDF or refreshed visual QA.
-The existing PDF and QA receipts refer to the prior source. Independent
-content review and a reserved-capacity PDF/visual QA pass remain required.
+The count-reconciled submission source, `body.tex`, correspondence manifest,
+and PDF have now been regenerated and independently visually reviewed.
+Current PDF: 15 pages; see `count-reconciliation-pdf-qa-2026-09-12.md` and
+its JSON receipt for exact hashes, all-page review, and the two harmless
+bibliography underfull-box notices. The bounded mathematical/source correction
+review is `count-reconciliation-independent-review-2026-09-12.md`.
+
+`QA.md` and `qa-receipt.json` remain historical records for the earlier
+14-page PDF; they do not certify this revised artifact. Complete Lean
+formalization, manuscript-wide final reconciliation, and submission approval
+remain open. This local rebuild is not a new public release.
