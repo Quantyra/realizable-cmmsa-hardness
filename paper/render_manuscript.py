@@ -62,7 +62,7 @@ r'O(2^{-J/2}+\zeta/p_0).',
 r'2^{J+d-\dim W+1}\le2^{-2J+d+r+1}.',
 r'2^{J+d-(\dim V-r)+1}\le2^{-2J+2T+d+r+1}.',
 r'\frac{B_r}{2^{-2(1-\rho^3)h}}=\frac{2^{2(1000\rho^2-\rho^3)h}}{20\cdot5^r}\ge1',
-r'A>\frac{C_*+10}{\kappa}.',
+r'A>\frac{20}{\kappa}.',
 r'\epsilon_1\le\frac{\tau}{100(m+1)J}.',
 r'\frac{(m+1)J\epsilon_1}{1-a}\le\frac{\tau}{75}<\tau.',
 r'\sigma=\left\lfloor\frac{R^{1-1/m}}{16}\right\rfloor,\qquad\xi=\frac1{m^2}.',
@@ -190,7 +190,15 @@ while i<len(lines):
    abstract=False
   sec+=1;out.append('\\section{'+esc(line[3:])+'}\\label{sec:'+str(sec)+'}');i+=1;continue
  if line.startswith('### '):out.append('\\subsection{'+esc(line[4:])+'}');i+=1;continue
- if line.startswith('    '):
+ if line == '```latex':
+  # Explicit reviewed mathematics stays in the canonical Markdown source.
+  # These unnumbered displays do not consume the legacy numbered-display table.
+  i+=1; block=[]
+  while i<len(lines) and lines[i] != '```':
+   block.append(lines[i]); i+=1
+  if i==len(lines): raise ValueError('Unclosed explicit LaTeX block')
+  i+=1; out.append('\n'.join(block))
+ elif line.startswith('    '):
   block=[]
   while i<len(lines) and (lines[i].startswith('    ') or (not lines[i].strip() and i+1<len(lines) and lines[i+1].startswith('    '))):block.append(lines[i]);i+=1
   out.append('\\begin{equation}\\label{eq:'+str(di+1)+'}\n'+displays[di]+'\n\\end{equation}');di+=1
@@ -221,7 +229,7 @@ while i<len(lines):
   out.append(r'\end{itemize}')
  else:
   block=[]
-  while i<len(lines) and lines[i].strip() and not lines[i].startswith(('##','    ','|','* ')) and not (i>start and re.match(r'^\d+\. ',lines[i])):
+  while i<len(lines) and lines[i].strip() and not lines[i].startswith(('##','    ','|','* ','```')) and not (i>start and re.match(r'^\d+\. ',lines[i])):
    block.append(lines[i].strip());i+=1
   text=' '.join(block)
   if text.startswith('**Theorem 1'):

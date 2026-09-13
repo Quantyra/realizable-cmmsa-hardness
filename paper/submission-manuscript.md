@@ -189,6 +189,9 @@ none is a locally formalized theorem.
    least 2^(-6h^2) of the uniform a-subspaces Q admit W containing Q+H_U,
    of codimension c, and a linear g on W respecting H_U, with agreement
    at least C=2^(-2(1-1000rho^2)h)/5 on the conditioned Grassmann space.
+   This is the source construction's scoped contract. For the changed ambient
+   parameter we derive a robust application with input density at least
+   eight times this threshold below, rather than importing an all-J theorem.
    Transversality losses are charged explicitly below.
 4. **Maximal-pair counting (MZ Definition 5.4; MZ24 revision 1 Theorem 5.26).**
    For a total table of linear functions on Grass(V,2h), a pair (W,g) is
@@ -308,12 +311,171 @@ inverse-alphabet completeness error as part of a black-box theorem.
 All logarithms here are base two (ln denotes the natural logarithm). Fix m and a positive rational rho.
 Use the local decoding and maximal-pair counting contracts stated above
 (MZ Theorem 4.2 and the narrower MZ24 Theorem 5.26 specialization). Their parameters r and the constants
-in their bounds depend on m,rho; their ambient space may be enlarged.
+in their bounds depend on m,rho. The next two lemmas justify the
+changed ambient application with an explicit constant input margin.
 Choose h sufficiently large relative to these fixed parameters and a
 multiple of b_m, the denominator of the selected rational rho. Then
 2(1-rho)h and all test dimensions are integers. All
 subspaces below are over GF(2), U consists of J disjoint triples, and
 dim(U)=3J. The side-condition space H_U has dimension J.
+
+```latex
+\begin{lemma}[Exact complement identity for star queries]\label{lem:complement}
+Let $U=H\oplus Z$, with $\dim H=J$, $\dim Z=2J$, and $t\le d\le2J$.
+Draw a uniform $t$-space $K$ transverse to $H$, then independent uniform
+transverse $d$-spaces $L_i\supseteq K$, for $1\le i\le m$.
+The law of $(K,H+L_1,\ldots,H+L_m)$ equals the law obtained by drawing
+a uniform complement $A$ of $H$, a uniform $t$-space $K\subseteq A$,
+and independent uniform $d$-spaces $L_i'\subseteq A$ containing $K$,
+and outputting $(K,H+L_1',\ldots,H+L_m')$.
+\end{lemma}
+\begin{proof}
+Fix $K$. Projection to $Z$ expresses it as the graph of a map on a
+$t$-space $\overline K$. Each possible $D=H+L$ corresponds to a
+$d$-space of $Z$ containing $\overline K$. Its transverse lifts containing
+$K$ are exactly the $2^{J(d-t)}$ extensions of that graph map.
+Consequently the $D_i$ are independent and uniform among these possible
+spaces. Independently choose a uniform complement $A$ containing $K$.
+The map $D_i\mapsto A\cap D_i$ is a bijection to the $d$-spaces of $A$
+containing $K$, and $H+(A\cap D_i)=D_i$.
+There are $2^{J(2J-t)}$ complements containing each transverse $K$,
+while every complement contains the same Gaussian-binomial number of
+$t$-spaces. Thus the uniform incidence law of $(K,A)$ can be sampled
+in either order, proving the assertion.
+
+The actual leaf table is indexed by $D_i=H+L_i$ and its transported
+label is restricted to $K$. The acceptance event is therefore preserved
+exactly. Random clique representatives can be coupled at identical
+$D_i$, with identical transport; alternatively use the already selected
+clique-consistent table. No condition on intersections among projected
+leaf increments is needed. This is not an identity of the unobserved
+raw tuples $(K,L_1,\ldots,L_m)$.
+\end{proof}
+
+\begin{lemma}[Robust enlarged-ambient local application]\label{lem:robust-local}
+Fix $m,\rho$ and $r=10m/\rho$, with integral test dimensions
+$t=2(1-\rho)h$, $d=2h$. Put
+\[
+ S=2^{-2(1-1000\rho)hm},\qquad
+ \epsilon'=2^{-2(1-1000\rho^2)h},\qquad C=\epsilon'/5.
+\]
+For sufficiently large admissible $h$ and $J=2^{2^{Ah^2}}$, a transverse
+star test of density at least $8S$ in $U$, with $\dim U=3J$ and
+$\dim H=J$, has fixed $a,c$ with $a+c\le r$ such that at least
+$2^{-6h^2}$ of all uniform $a$-spaces $Q\subseteq U$ admit a
+codimension-$c$ space $W\supseteq Q+H$ and a linear function respecting
+$H$ with agreement at least $C$ on the transverse conditioned
+Grassmann space. Here $A>0$ is fixed before $h$.
+\end{lemma}
+\begin{proof}
+We use the no-side-condition inverse argument of MZ Theorem~4.3 and
+its Appendix-B amplification ancestry in MZ24, retaining the following
+ambient estimates. Write $n=2J$ and $b=2\rho h-1$.
+The matrix-to-Grassmann comparison has failure at most
+$(2h+2\rho mh)2^{2h-n}$, required to be at most $1/2$.
+For the high-degree part of the bilinear operator, orthogonality and
+MZ Lemma~4.7 give the safe bound
+\[
+ \|H_{\mathrm{high}}\|_2^2
+ \le 2^{-(r+1)b}+3\cdot2^{2h-n}\le 2^{-rb}
+ \quad\text{if } b\ge1,\quad n\ge2h+rb+\log_2 6.
+\]
+Thus the positive ambient residual is retained, not dropped from the
+source's displayed estimate. The other constants in the inverse
+argument depend on $m,\rho$, not $n$. For large $h$ it provides a pair
+$(Q,W')$, with $\dim Q+\operatorname{codim}W'\le r$, and agreement
+at least $\epsilon'$ whenever the no-side-condition test density is
+at least $S$.
+
+By Lemma~\ref{lem:complement}, the mean density over complements is
+at least $8S$. Complements whose density $\epsilon_A$ is at least
+$4S$ have mass at least $4S$, since the mean is at most $4S$ plus
+that mass. Fix such a complement. Starting from its table, repeatedly
+apply the inverse argument while the current density is at least
+$\epsilon_A/2$. Add the resulting zoom to a union $X$ of leaf entries,
+and independently replace every entry in $X$ by a uniform linear
+function. The inverse threshold remains valid since
+$\epsilon_A/2\ge2S$.
+
+Here is the preservation event, including its ambient bound.
+For each candidate $(Q,W',g)$ with dimensions bounded by $r$, either
+$X$ has relative measure less than $2^{-2h}$ in the zoom, or the
+fraction of the entries in $X$ agreeing with $g$ is at most
+$2^{1-2h}$. Each refreshed entry agrees with a fixed $g$ with probability
+$2^{-2h}$. The Chernoff bound and the lower bound
+$|X\cap\operatorname{Zoom}[Q,W']|
+ \ge2^{-2h}2^{(2h-r)(n-r-2h)}$
+in the second case give a per-step failure probability at most
+\[
+ F_n=16(r+1)^2 2^{n(r+1)}
+       \exp\!\left(-2^E/12\right),\qquad
+ E=-4h+2+(2h-r)(n-r-2h).
+\]
+Indeed at most $16(r+1)^2 2^{n(r+1)}$ triples are needed: the Gaussian
+counts for $Q,W'$ contribute at most $16\cdot2^{nr}$ and the number
+of linear $g$ is at most $2^n$. The same bound holds conditionally on
+any preceding history, since each refresh is independent.
+
+Require $2^{1-2h}\le\epsilon'/2$. Before a new zoom is added, at most
+this much of its agreement comes from previously refreshed entries;
+this includes the alternative with relative measure below $2^{-2h}$.
+Its unrefreshed fraction is therefore at least $\epsilon'/2$.
+The zoom has ambient measure at least $2^{-rn}/4$ by the elementary
+Gaussian bounds, so $X$ increases by at least
+$\epsilon'2^{-rn}/8$. Thus no more than
+$B_n=\lceil8\cdot2^{rn}/\epsilon'\rceil+1$ such steps are possible.
+Choose the parameters so $B_nF_n<1/2$; a history with all preservation
+events then exists. This requirement is satisfied for the prescribed
+$J$: when $h\ge\max(r+4,16)$ and $n\ge8h+4r+16$, we have
+$E\ge hn/2$, whereas $\log B_n+\log(16(r+1)^2 2^{n(r+1)})$
+is $O_{m,\rho}(rn+h)$. Every selected function agrees with the original
+table on at least $\epsilon'/2$ of its zoom.
+
+At termination the acceptance has fallen by at least $\epsilon_A/2$.
+It can change only if at least one of the $m$ leaf occurrences is in
+$X$. Each leaf marginal is uniform, including when leaves repeat,
+so $\mu(X)\ge\epsilon_A/(2m)$. For a fixed $a$-space $Q$, the
+family of all $d$-spaces containing $Q$ has measure at most
+$2^{4h^2-an}$. Count distinct $Q$ rather than algorithmic visits:
+a repeated $Q$ with another zoom still covers only this family.
+For each distinct useful $Q$, choose one witnessing $W'$ and assign
+its codimension $c$. Let $N_{a,c}$ count the assigned pairs with
+$\dim Q=a$, let $T_a$ be the number of all $a$-spaces in the complement,
+and put $f_{a,c}=N_{a,c}/T_a$. Since $T_a\le4\cdot2^{an}$,
+\[
+ \frac{\epsilon_A}{2m}\le\mu(X)
+ \le\sum_{a,c}N_{a,c}2^{4h^2-an}
+ \le4\cdot2^{4h^2}\sum_{a,c}f_{a,c}.
+\]
+Thus $\sum_{a,c}f_{a,c}\ge\epsilon_A2^{-4h^2}/(8m)$.
+Set these fractions to zero on bad complements and average over all
+uniform complements. Good complements have mass at least $4S$ and
+$\epsilon_A\ge4S$, so the sum of the averaged fractions is at least
+$2S^2 2^{-4h^2}/m$. A single pigeonhole over at most $(r+1)^2$
+dimension pairs gives one fixed $(a,c)$ whose success probability is
+at least $2S^2 2^{-4h^2}/(m(r+1)^2)$, and hence at least the
+conservative bound retained below:
+\[
+ \frac{2S^2}{m(r+1)^3}2^{-4h^2}.
+\]
+The pair is fixed after pigeonholing. We do not condition the marginal
+law on a successful complement: successes form a subset of the full
+uniform experiment. Its $Q$ marginal is uniform among $H$-disjoint
+$a$-spaces. Extending to uniform $Q\subseteq U$ loses at most
+$2^{a+1-2J}$. The sufficient bounds
+\[
+ h^2\ge4mh+\log_2(m(r+1)^3)+1,\qquad 2J\ge5h^2+r+2
+\]
+leave at least $2^{-5h^2-1}\ge2^{-6h^2}$ of all $Q$.
+Finally set $W=W'\oplus H$ and extend $g$ by the prescribed side
+conditions. For fixed $A,Q,W'$, projection to $W/H$ gives the same
+uniform quotient law for the containing leaves in $W$ and $W'$;
+the values on $H$ already agree. Hence their agreement events agree
+and the retained $\epsilon'/2$ is stronger than $C=\epsilon'/5$.
+This accounts for the uniform-$Q$ correction inside this lemma;
+subsequent exclusions are applied to its already obtained lucky set.
+\end{proof}
+```
 
 Write a for an advice dimension, 0<=a<=r, and c for a zoom-out
 codimension, 0<=c<=r. Write d=2h. In the outer sampler each triple retains
@@ -432,12 +594,15 @@ success term below; no alteration of the outer game is needed.
 
 Fix the leaf-label assignment T1 after the imported clique-consistency
 selection, with T2 the center-label assignment. A good first-prover question
-U is one whose conditional inner-test density reaches the local decoder's
-threshold. If the composed value exceeds R^(-(1-xi)m), averaging after
-clique selection gives a mass 2^(-O_m(h)) of such U: keep questions of
-conditional density at least half the surviving total density. The slack
-1000rho<=xi/4 and sufficiently large h absorb this factor of two and the
-collision loss in the decoder threshold.
+U is one whose conditional inner-test density reaches the robust threshold
+8S in the preceding lemma, where S=2^(-2(1-1000rho)hm). Write
+Delta=2^(-2(1-xi)hm). After the already charged clique loss, the surviving
+density is at least Delta/2. If Delta/4>=8S, the mass of good U is at
+least Delta/4, since the mean is at most 8S plus that mass. The condition
+Delta/S>=32 is exactly 2hm(xi-1000rho)>=5. It holds for sufficiently
+large h with 1000rho<=xi/4. Thus the good-question mass remains
+2^(-O_m(h)), with the amplification margin paid explicitly and no
+additional complement-coupling error.
 
 Fix a good first-prover question U. In the ideal joint experiment the
 marginal law of Q is P', and the conditional law of V is exactly the
@@ -460,8 +625,8 @@ joint success, again negligible. The threshold-ladder strategy below supplies th
 
 The source vertices L plus H_U require L intersect H_U={0}. For each
 U, extend the induced table to all d-subspaces by assigning the zero
-linear function on otherwise undefined entries. The local decoding
-Theorem 4.2 is applied with its stated side-condition/transversality
+linear function on otherwise undefined entries. The robust enlarged-ambient local lemma above is applied with its
+proved side-condition/transversality
 hypothesis. Its resulting agreement on the full conditioned Grassmann
 space, or equivalently the agreement after charging the exceptional
 entries, loses a negligible amount quantified here.
@@ -561,7 +726,7 @@ theorem are imported; the numerical parameter extension is argued here.
 
 | Use | Control under the replacement |
 |---|---|
-| Ambient dimensions in local decoding | 3J and dim(V)>=J exceed every fixed lower bound depending on h; H_U has dimension J and the same disjoint-triple structure. |
+| Ambient dimensions in local decoding | Counting uses dim(V)>=J>=2^h. Complement decoding has ambient n=2J and its query law is exact. The robust local lemma retains the matrix-rank, spectral, randomization-history and uniform-Q bounds; each ambient error improves with J. |
 | Duplicate clique choices | The source Gaussian-binomial comparison decreases exponentially in J; for large h the union over m^2 pairs is at most 2^(-J). |
 | Lucky advice meeting H_U | Its uniform probability is at most 2^(r+1-2J). |
 | Advice/zoom-in covering | The bounds above and their exceptional Q sets are less than 2^(-20h^2), below the local decoding lucky mass 2^(-6h^2). |
@@ -569,27 +734,38 @@ theorem are imported; the numerical parameter extension is argued here.
 | Number of maximal zoom-outs | The imported bound is 2^(O_{m,rho}(h)) for the relevant agreement and codimension; its constants do not depend on J. |
 | Random extensions | Their agreement cost is at most a factor 2^r, since codimensions are bounded by r. |
 
-Consequently the source's local-to-outer decoding strategy, with these
-errors retained instead of dropped, has success at least 2^(-C_* h^2)
-for some fixed C_*=C_*(m,xi), whenever the composed test has value above
-R^(-(1-xi)m). To see the scale explicitly, the factors are a test-density
-term 2^(-O_m(h)), a constant dimension-guess factor, lucky-advice mass at
-least 2^(-8h^2), decoded agreement 2^(-O_{m,rho}(h)), a list-choice factor
-2^(-O_{m,rho}(h)), and extension probability at least 2^(-r).
-The exponent slack between rho and xi absorbs the fixed multiplicative
-losses and the 2^(-J) clique loss. No factor depending exponentially on J
-is paid in this decoded success probability.
+```latex
+Write the good-question mass as at least $K_U^{-1}2^{-B_Uh}$ and the
+maximal-list bound as at most $K_M2^{B_Mh}$, with $K_U,K_M\ge1$ and
+$B_U,B_M\ge0$. These name the bounds just established and imported;
+their constants depend on $m,\rho$, not $A,J$ or the later YES error.
+The displayed decoding strategy, with its previous losses already
+charged, succeeds before the vector-law correction with probability
+at least $K^{-1}2^{-8h^2-Bh}$, where
+\[
+ K=40K_UK_M(r+1)^3 2^r,\qquad B=B_U+B_M+2.
+\]
+Here $C/8\ge2^{-2h}/40$, the three dimension/threshold guesses cost
+at most $(r+1)^3$, and the extension cost is at most $2^r$.
+For $h\ge\max(1,B+\log_2K)$ this is at least $2^{-9h^2}$.
+Taking $J\ge9h^2+r+1$, the vector-law error $2^{r-J}$ leaves at
+least $2^{-9h^2-1}\ge2^{-10h^2}$. No exponential-in-$J$ success
+factor is paid.
+```
 
-The fixed outer NO gap gives, by the outer-game bound, success at most
-2^(-kappa beta J), with kappa>0 depending on the fixed advice size and
-outer NO gap, not on the outer YES error. Choose an integer
+The fixed outer NO gap gives success at most 2^(-kappa beta J), with
+kappa>0 depending on the fixed advice size and outer NO gap, not on the
+later outer YES error. Choose an integer A before h:
 
-    A > (C_*+10)/kappa.
+    A > 20/kappa.
 
-Then this is at most 2^(-(C_*+10)h^2), contradicting the decoded success.
-Conditioning on legitimate equation tuples changes it by at most a factor
-two, as ensured by padding below. Thus the modified PCP has soundness
-at most R^(-(1-xi)m), where R=2^(2h).
+```latex
+Then the outer upper bound, even including the factor two for legitimate
+conditioning ensured by the padding below, is at most
+$2\cdot2^{-\kappa Ah^2}<2^{-10h^2}$, contradicting decoded success.
+All lower bounds on $h$ may depend on this fixed $A$. Thus the modified
+PCP has soundness at most $R^{-(1-\xi)m}$, where $R=2^{2h}$.
+```
 
 Only after fixing m,xi,h,J,beta do we fix any desired positive constant
 PCP completeness error tau. Select the outer 3-Lin YES error

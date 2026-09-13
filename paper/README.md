@@ -86,3 +86,20 @@ review is `count-reconciliation-independent-review-2026-09-12.md`.
 14-page PDF; they do not certify this revised artifact. Complete Lean
 formalization, manuscript-wide final reconciliation, and submission approval
 remain open. This local rebuild is not a new public release.
+
+
+## Parameter-proof source candidate (2026-09-13)
+
+The private submission source now includes the reviewed exact complement
+query identity, robust eight-times-threshold local application and its
+counted proof, explicit ambient bounds, and A-before-h parameter order.
+The renderer preserves these reviewed LaTeX blocks directly from the
+canonical Markdown and records their source spans. Body and correspondence
+are regenerated for independent source review; no PDF rebuild is included
+in this increment.
+
+The previously verified 15-page PDF (SHA256 beginning `9c2ddd`) and its
+prior QA receipts remain historical artifacts. That PDF is stale relative
+to this source candidate until a new authorized build and all-page QA.
+Published MANUSCRIPT.md, DOI records, releases and Lean artifacts are
+unchanged. This candidate does not claim complete formal certification.
