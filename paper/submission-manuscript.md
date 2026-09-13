@@ -587,10 +587,12 @@ Lemma~\ref{lem:matrix-lift} supplies the matrix lift of an
 $(r,e)$-pseudorandom Grassmann indicator as an $(r,2e)$-pseudorandom
 basis-invariant indicator. The strict budget $r<d=2h$ holds in the
 regime $h\ge r>0$ below, and the ambient bounds imply $n\ge d$.
-The remaining analytic input from MZ~\cite{MZ} is Theorem~4.6:
+Theorem~\ref{thm:binary-hc} in Appendix~\ref{app:binary-hc} proves
+the required binary specialization of MZ~\cite{MZ}, Theorem~4.6:
 it bounds the level-$i$ norm at every dyadic $p\ge4$ by
 $2^{500i^2p}(2e)^{(p-2)/p}$ for $i\le r$.
-Its global-hypercontractive ancestry remains imported.
+The appendix derives this inequality from finite Fourier arguments,
+with the nominal matrix-restriction interface used here.
 Lemma~\ref{lem:finite-spectral}, with $s=s_0=2\rho h$, supplies
 cross-level orthogonality and the unchanged spectral bound
 \[
@@ -598,7 +600,7 @@ cross-level orthogonality and the unchanged spectral bound
  \le \bigl(2^{-i(2\rho h-1)}+3\cdot2^{i-n}\bigr)
        \|F^{=i}\|_2^2.
 \]
-Both finite bridges are proved above.
+The matrix and spectral bridges are proved above; the analytic inequality is proved in the appendix.
 We reconstruct the intervening moment, selection and exponent steps
 rather than invoke the printed inverse proof without these bounds.
 
@@ -1336,3 +1338,750 @@ The source challenger contributed to the argument and is not counted as
 an independent mathematical verifier. Review roles, findings, and limits
 are disclosed in [REVIEW.md](REVIEW.md). Bibliographic versions and imported
 inputs are recorded in [SOURCES.md](SOURCES.md).
+
+```latex
+\appendix
+\section{Finite binary matrix hypercontractivity}\label{app:binary-hc}
+This appendix supplies the analytic inequality used in
+Lemma~\ref{lem:inverse-explicit}. We reconstruct the binary finite-matrix
+argument, including its auxiliary estimates, rather than import a
+hypercontractive theorem. The underlying method is due to Ellis, Kindler
+and Lifshitz, and its globalness and dyadic applications to Evra, Kindler
+and Lifshitz.\footnote{The versions used for comparison are
+Ellis--Kindler--Lifshitz, \emph{An analogue of Bonami's lemma for functions
+on spaces of linear maps, and 2-to-2 games}, arXiv:2209.04243v1,
+\url{https://arxiv.org/abs/2209.04243v1}; and
+Evra--Kindler--Lifshitz, \emph{Polynomial Bogolyubov for special linear
+groups via tensor rank}, arXiv:2404.00641v2,
+\url{https://arxiv.org/abs/2404.00641v2}. The first authors are different.
+The proof below uses the sufficient constants $6,196$ and an auxiliary
+weight $6d$, and retains the final constants $100,103,200,500$. It does not
+assert the stronger intermediate displays in those versions.}
+This is an ordinary mathematical proof, not a claim of Lean verification
+or novelty. Other upstream PCP, compilation and learning inputs of the
+manuscript remain as stated.
+
+\begin{theorem}[Binary Boolean matrix inequality]\label{thm:binary-hc}
+Let $F:\operatorname{Mat}_{n,D}(\mathbb F_2)\to\{0,1\}$ and
+$0\le\delta\le1$. Suppose every consistent restriction
+$MU=V_0$, $XM=Y_0$ of nominal budget $r$ has uniform conditional density
+at most $\delta$. The nominal budget counts the columns of $U$ plus the
+rows of $X$; dependent and zero equations are allowed. For $0\le i\le r$
+and every dyadic integer $p\ge4$, the rank-$i$ Fourier projection satisfies
+\[
+ \|F^{=i}\|_p\le 2^{500i^2p}\delta^{1-2/p}.
+\]
+All measures are normalized probabilities. There is no basis-invariance,
+full-rank-conditioning or aspect-ratio hypothesis.
+\end{theorem}
+We prove the theorem after developing its finite ingredients. Dimensions
+in this appendix may be zero, and all functions other than the final
+indicator may be complex valued.
+
+\subsection{Characters, restrictions and actual derivatives}
+Put $\mathcal H(V,W)=\operatorname{Hom}(V,W)$ for binary vector spaces.
+Its dual characters are indexed by $Y:W\to V$:
+$\chi_Y(M)=(-1)^{\operatorname{Tr}(YM)}$. The matrix trace is in
+$\mathbb F_2$. Its pairing is nondegenerate (test a nonzero matrix entry
+against the transposed elementary matrix), so character orthogonality
+gives Fourier inversion and Parseval with
+$\widehat f(Y)=\mathbb E_M f(M)\chi_Y(M)$.
+Degree means maximum rank of a nonzero Fourier frequency. For subspaces
+$A\le V$, $B\le W$, write $q_A:V\to V/A$ and $j_B:B\to W$ for the
+canonical maps, and set
+\[
+ R_{A,B,T}f(N)=f(T+j_BNq_A),\qquad
+ |(A,B)|=\dim A+\operatorname{codim}_W B.
+\]
+Every average on the restriction is uniform on $\mathcal H(V/A,B)$.
+The ordinary filter $P_{A,B}$ keeps frequencies with
+$A\le\operatorname{im}Y$ and $\ker Y\le B$. The hybrid filter
+$L_{A,B}$ instead keeps
+\[
+ A\le\operatorname{im}Y,\qquad Y^{-1}(A)\le B.
+\]
+Define $D_{A,B,T}=R_{A,B,T}L_{A,B}$ and the influence
+$I_{A,B,T}(f)=\|D_{A,B,T}f\|_2^2$.
+
+Cyclic trace gives
+$R_{A,B,T}\chi_Y=\chi_Y(T)\chi_{q_AY|B}$.
+For a selected hybrid frequency,
+$\ker(q_AY|B)=Y^{-1}(A)$ has dimension $\dim\ker Y+\dim A$.
+Consequently its rank is $\operatorname{rank}Y-|(A,B)|$.
+Thus an order-$s$ derivative annihilates levels below $s$, and for
+$j\ge s$,
+\[
+ D_{A,B,T}(f^{=j})=(D_{A,B,T}f)^{=j-s}.
+\]
+The below-order assertion is a separate zero case, not truncated
+natural subtraction. Raw restrictions only decrease rank. Products have
+additive degree bounds, since $\chi_Y\chi_Z=\chi_{Y+Z}$ and
+$\operatorname{rank}(Y+Z)\le\operatorname{rank}Y+\operatorname{rank}Z$.
+
+If $A_2\le A_1$ and $B_1\le B_2$, a frequency passes the selector for
+$(A_1,B_1)$ precisely when it passes that for $(A_2,B_2)$ and the induced
+frequency passes that for $(A_1/A_2,B_1)$. For the forward implication,
+preimages of $A_1$ lie in $B_1$ and supply representatives for every
+vector of $A_1/A_2$. Conversely, quotient representatives and
+$A_2\le\operatorname{im}Y$ give $A_1\le\operatorname{im}Y$; if
+$Yw\in A_1$, choose $z\in B_2$ with $Yz=Yw$ modulo $A_2$.
+Then $w-z\in Y^{-1}(A_2)\le B_2$, and the second selector puts $w\in B_1$.
+Character phases therefore prove the exact composition
+\[
+ D_{A_1/A_2,B_1,S}D_{A_2,B_2,T}
+   =D_{A_1,B_1,T+j_{B_2}Sq_{A_2}}.                 \tag{A1}
+\]
+All quotient identifications here and below are canonical. In particular
+$D_{0,W,T}$ is translation, not identity unless $T=0$.
+Translation and finite Fubini also prove
+\[
+ \mathbb E_T\|D_{A,B,T}f\|_2^2
+   =\|L_{A,B}f\|_2^2
+   =\sum_{Y\text{ selected}}|\widehat f(Y)|^2.       \tag{A2}
+\]
+At fixed $T$, frequencies may coalesce, so the last equality is not
+asserted without the average.
+
+We also need a different derivative. Write $X\preceq Y$ when
+$\operatorname{rank}Y=\operatorname{rank}X+\operatorname{rank}(Y-X)$.
+Equivalently, $\operatorname{im}X\le\operatorname{im}Y$ and $X$ agrees
+with $Y$ on $Y^{-1}(\operatorname{im}X)$. Indeed rank additivity gives
+complementary images; conversely the agreement condition forces
+$\operatorname{im}(Y-X)\le\operatorname{im}Y$ disjoint from
+$\operatorname{im}X$, and their sum contains $\operatorname{im}Y$.
+Let $L_X$ keep $Y\succeq X$ and
+$D_{X,T}=R_{\operatorname{im}X,\ker X,T}L_X$, with $D_X=D_{X,0}$.
+For rank-$k$ $X$, choose splittings making $X=\left[\begin{smallmatrix}I&0\\0&0\end{smallmatrix}\right]$.
+For a fixed induced frequency $Z:\ker X\to V/\operatorname{im}X$ of
+rank $l$, the selected original frequencies are exactly
+\[
+ Y=\begin{pmatrix}I+uC&uZ\\ C&Z\end{pmatrix},
+ \quad u:\operatorname{im}Z\to\operatorname{im}X,
+ \quad C:\operatorname{im}X\to\operatorname{im}Z.     \tag{A3}
+\]
+Their number is $2^{2kl}$. To check this, the off-diagonal blocks of
+$Y-X$ must factor through $Z$ and land in its image; rank additivity
+forces the remaining block $uC$. Conversely choose a lift $v$ with
+$Zv=C$; then $Y-X=[u;I]Z[v,I]$ has rank $l$, whereas elimination gives
+$\operatorname{rank}Y=k+l$. The formula is independent of the lift.
+Equivalently, the complementary images and kernels from rank additivity
+force these same blocks. Thus $D_X$ lowers degree by $k$, with zero for
+levels below $k$.
+
+\subsection{A weighted fourth-power estimate without contraction}
+For degree-at-most-$d$ $f$, put $E=\|f\|_2^2$,
+$a_X=\sum_{Y\succeq X}|\widehat f(Y)|^2$, and $e_X=\|D_Xf\|_2^2$.
+Cauchy--Schwarz on the fibers (A3) gives
+$e_X\le2^{2k(d-k)}a_X$ for $k=\operatorname{rank}X\le d$; for $k>d$
+both are zero. Since $a_X\le E$,
+$e_X^2\le2^{4k(d-k)}Ea_X$.
+For a fixed rank-$j$ $Y$, its rank-$k$ predecessors correspond to rank-$k$
+projections on $\operatorname{im}Y$, by $X=QY$. Choosing the image of
+$Q$ and a complementary kernel counts exactly
+${j\brack k}_2\,2^{k(j-k)}$. The Gaussian product formula gives
+${j\brack k}_2\le4\,2^{k(j-k)}$: its denominator product exceeds
+$1/4$, since its first three factors give $21/64$ and the remaining
+product is at least $1-\sum_{a\ge4}2^{-a}=7/8$.
+The $k=0$ count is exactly one. Interchanging finite sums now yields
+\[
+ \begin{split}
+ \sum_X2^{-6d\operatorname{rank}X}\|D_Xf\|_2^4
+ &\le E^2\left(1+4\sum_{k\ge1}2^{-6k^2}\right)\\
+ &\le\frac{67}{63}E^2\le2E^2.                       \end{split}\tag{W6}
+\]
+Indeed the coefficient at a rank-$j\le d$ frequency has exponent
+$-6dk+4k(d-k)+2k(j-k)\le-6k^2$.
+At $d=0$ the sum is exactly $E^2$.
+
+This argument is necessary: $D_X$ is not a contraction. In fact the
+weight-$4d$ fourth-power claim in the pinned Ellis--Kindler--Lifshitz
+version fails for the stated operators. For $V=W=\mathbb F_2^d$ and
+$f=\sum_{Y\in\mathrm{GL}_d}\chi_Y$, write $G_d=|\mathrm{GL}_d|$.
+Then $E=G_d$, and every rank-one $X$ has
+$e_X=2^{4(d-1)}G_{d-1}$ by (A3). There are $(2^d-1)^2$ such $X$, and
+$G_d=(2^d-1)2^{d-1}G_{d-1}$. Their contribution to the weight-$4d$
+sum divided by $E^2$ is $2^{2d-6}$, already $4$ at $d=4$.
+We use (W6); the later induction has enough slack for it.
+
+\subsection{Degree reduction from two convolution classes}
+We prove the sufficient ordinary-filter inequality
+\[
+ \frac{\|f\|_4^4}{162}\le2^{6d^2}\|f\|_2^4+
+ \sum_{(A,B)\ne(0,W)}2^{7d(\dim A+\operatorname{codim}B)}
+                       \|P_{A,B}f\|_4^4.             \tag{DR6}
+\]
+Write $a_Y=\widehat f(Y)$, $b_Y=|a_Y|$ and
+$\|f\|_4^4=\sum_X|\sum_{Y+Z=X}a_Ya_Z|^2$.
+All contributing $Y,Z$ have rank at most $d$, and $X$ has rank at most
+$2d$. Say $M=A\oplus C$ if $M=A+C$ with additive ranks.
+Let $\mathcal F_1(X)$ consist of pairs admitting
+$Y=A\oplus C$, $Z=B\oplus C$, $X=A\oplus B$.
+Let $\mathcal F_2(X)$ consist of pairs for which
+\[
+ \operatorname{im}X\cap\operatorname{im}Y\cap\operatorname{im}Z\ne0
+ \quad\text{or}\quad
+ \ker X+\ker Y+\ker Z\ne W.
+\]
+These classes cover all pairs. To prove the assertion outside the second
+class, put $K_M=\ker M$. One has
+$(K_Z+K_X)\cap K_Y=K_Z\cap K_Y$: if $w=u+v\in K_Y$ with
+$u\in K_X$, $v\in K_Z$, then $Zu=Yu=Yv=Xw$ lies in the zero triple
+image intersection. Define $B$ to equal $Z$ on $K_Y$ and zero on
+$K_Z+K_X$, and symmetrically $A$ to equal $Y$ on $K_Z$ and zero on
+$K_Y+K_X$. These are well defined on $W$, and checking on the three
+kernels gives $X=A+B$ and $C=Y+A=Z+B$. Their images lie respectively in
+the pairwise image intersections, so are pairwise disjoint. On $K_Z$,
+$K_Y$, $K_X$ the triples $(A,B,C)$ are $(Y,0,0)$, $(0,Z,0)$,
+$(0,0,Y)$; since these kernels span $W$, the required image sums are
+onto, proving the direct decompositions.
+
+Put $H_X=\sum_{\mathcal F_1(X)}b_Yb_Z$ and
+$O_X=\sum_{\mathcal F_2(X)}a_Ya_Z$. The classes can overlap; partition
+instead into $\mathcal F_2$ and its complement. The convolution is then
+bounded in absolute value by $H_X+|O_X|$. Consequently its squared sum
+is at most $2\sum H_X^2+2\sum|O_X|^2$.
+
+For the first class use independent uniform signs $x_A,y_C$, indexed by
+two disjoint copies of all maps of rank at most $d$, including zero.
+The real Boolean polynomial
+\[
+ \Phi(x,y)=\sum_{A\oplus C} b_{A+C}x_Ay_C
+\]
+has degree two. A rank-$r$ map has at most $2^{r^2}$ direct
+decompositions: the first summand factors through its kernel quotient
+and takes values in its image. Thus
+$\|\Phi\|_2^2\le2^{d^2}\|f\|_2^2$.
+The elementary Boolean estimate $\|\Phi\|_4^4\le81\|\Phi\|_2^4$
+needs no imported hypercontractivity: for real $G=g+xh$, expansion and
+Cauchy--Schwarz give
+$\|G\|_4^4\le\alpha^4+6\alpha^2\beta^2+\beta^4
+\le(\alpha^2+3\beta^2)^2$, where
+$\alpha=\|g\|_4$, $\beta=\|h\|_4$.
+Induction on the sign variables yields
+$\|G\|_4^2\le\sum_S3^{|S|}\widehat G(S)^2$, proving the estimate.
+
+Let $h(A,B)=\sum_C b_{A+C}b_{B+C}$ with both sums direct.
+Then $H_X\le\sum_{A\oplus B=X}h(A,B)$. There are at most
+$2^{4d^2}$ decompositions of $X$, so
+$\sum_XH_X^2\le2^{4d^2}\sum_{A\oplus B}h(A,B)^2$.
+For $A\ne B$, the coefficient of $x_Ax_B$ in $\Phi^2$ is
+$2h(A,B)$; it dominates the two ordered-pair squares. For a direct pair
+with $A=B$ one has $A=B=0$, and $h(0,0)$ is at most the constant
+coefficient of $\Phi^2$. All these coefficients are nonnegative.
+Parseval therefore gives
+\[
+ \sum_XH_X^2\le2^{4d^2}\|\Phi\|_4^4
+                    \le81\,2^{6d^2}\|f\|_2^4.       \tag{A4}
+\]
+
+For the second class preserve complex coefficients and their
+cancellations. Set $\alpha_k=(-1)^{k+1}2^{k(k-1)/2}$ for $k\ge1$.
+For a $t$-space,
+$\mathbf1_{t>0}=\sum_{k=1}^t{t\brack k}_2\alpha_k$.
+This follows by putting $z=-1$ in
+$\prod_{l=0}^{t-1}(1+2^lz)
+=\sum_k{t\brack k}_2\,2^{k(k-1)/2}z^k$.
+The product identity follows inductively from
+${t\brack k}_2={t-1\brack k}_2+2^{t-k}{t-1\brack k-1}_2$,
+obtained by intersecting subspaces with a fixed hyperplane.
+Apply the indicator identity to the triple image intersection and to
+the quotient by the sum of kernels, and use inclusion--exclusion.
+With $\alpha_{i,0}=\alpha_i$, $\alpha_{0,j}=\alpha_j$,
+$\alpha_{i,j}=-\alpha_i\alpha_j$ for $i,j>0$, this gives exactly
+\[
+ O_X=\sum_{\substack{(i,j)\ne(0,0)\\
+ A\le\operatorname{im}X,\ \dim A=i\\
+ B\ge\ker X,\ \operatorname{codim}B=j}}
+       \alpha_{i,j}\widehat{(P_{A,B}f)^2}(X).         \tag{A5}
+\]
+Terms with $i>d$ or $j>d$ vanish. For the others, the number of pairs
+$A,B$ is at most $2^{2d(i+j)}$, because $\operatorname{rank}X\le2d$;
+moreover $|\alpha_{i,j}|^2\le2^{d(i+j)}$.
+Weighted Cauchy--Schwarz with weight $2^{7d(i+j)}$ has remaining factor
+at most
+$\sum_{i,j\ge0,(i,j)\ne(0,0)}2^{-4d(i+j)}<1$ for $d\ge1$
+(at $d=1$ it is $31/225$).
+Summing (A5) over $X$ and using Parseval bounds
+$\sum_X|O_X|^2$ by the weighted sum in (DR6).
+Together with (A4), division by $162$ proves (DR6).
+For $d=0$ it is the constant-function identity with a weakened
+coefficient. No rank-$d$ bound on the convolution frequency $X$ was used.
+
+\subsection{Exact transfers and the fourth-moment induction}
+Fix $A\le V$, $B\le W$. For a frequency $Y$ selected by $P_{A,B}$,
+put
+\[
+ C=Y(B)\cap A,\qquad H=B+Y^{-1}(A),\qquad R=q_CY|H.
+\]
+Define $X(b+z)=Yz+C$ for $b\in B$, $z\in Y^{-1}(A)$.
+Changing the representation changes $Yz$ by $Y(B)\cap A$, so $X$ is
+well defined, with kernel $B$ and image $A/C$. Also $Y^{-1}(C)\le B$,
+so the hybrid selector accepts $Y$. The two images $Y(B)/C$ and $A/C$
+are disjoint; $R=X+(R-X)$ maps onto these components, so $X\preceq R$.
+
+These properties specify the triple uniquely, and no triple exists for
+an unselected $Y$. Indeed suppose a triple $C\le A,H\ge B,X$ has those
+kernel/image conditions, accepts $Y$ by its hybrid selector, and
+$X\preceq q_CY|H$. Then $A\le\operatorname{im}Y$ and $\ker Y\le B$.
+Agreement of $R$ with $X$ on $R^{-1}(\operatorname{im}X)$ gives
+$Y(B)\cap A\le C$; for $c\in C$, a preimage lies in $H$ and then
+in $\ker R\le\ker X=B$, proving the reverse inclusion.
+For $Yw\in A$, choose $h\in H$ matching $Yw$ modulo $C$; the hybrid
+preimage condition gives $w\in H$. On $Y^{-1}(A)$, $R=X$ and maps
+onto $A/C$, whence $H=B+Y^{-1}(A)$. The zero value on $B$ and agreement
+on this preimage also determine $X$.
+On each character the surviving phase is $\chi_Y(T)$, and the final
+frequency is $q_AY|B$. Thus, on the actual common domain,
+\[
+ R_{A,B,T}P_{A,B}f
+   =\sum_{\substack{C\le A,H\ge B\\X:H/B\simeq A/C}}
+            D_XD_{C,H,T}f.                            \tag{T1}
+\]
+The indexing triples are in bijection with linear maps
+$\theta:A\to W/B$: take $C=\ker\theta$, $H/B=\operatorname{im}\theta$
+and $X$ the inverse induced isomorphism. Conversely invert $X$ and
+precompose the quotient of $A$. Hence their number is exactly
+$2^{ij}$ for $i=\dim A,j=\operatorname{codim}B$.
+Holder's inequality for a sum of $N$ functions costs $N^3$ in fourth
+powers. Averaging over the base $T$, whose translation is uniform,
+therefore gives
+\[
+ \|P_{A,B}f\|_4^4\le2^{3ij}
+       \sum_{C,H,X}\mathbb E_T\|D_XD_{C,H,T}f\|_4^4.
+\]
+For nonzero ordinary terms $i,j\le d$. Put
+$t=\dim C+\operatorname{codim}H+k$, $k=\operatorname{rank}X$.
+Then $i+j=t+k\le2t$, and
+$7d(i+j)+3ij\le10d(i+j)\le24dt$.
+Each final triple determines the original pair
+$A=q_C^{-1}(\operatorname{im}X)$, $B=\ker X$ uniquely. Thus (DR6) gives
+\[
+ \frac{\|f\|_4^4}{162}\le2^{6d^2}\|f\|_2^4+
+  \sum_{C,H,X:t>0}2^{24dt}\mathbb E_T\|D_XD_{C,H,T}f\|_4^4.
+                                                               \tag{A6}
+\]
+Mixed derivatives with $t>d$ are zero by the two rank-lowering formulas.
+
+We next interchange a later hybrid derivative with $D_X$.
+Write $A_1=\operatorname{im}X$, $B_1=\ker X$, and fix
+$A_1\le A_2$, $B_2\le B_1$. Sum over complements
+\[
+ A_2=A_1\oplus C,\qquad H+B_1=W,\quad H\cap B_1=B_2,
+ \qquad X'=q_CX|H.
+\]
+Then, with arbitrary actual bases $S,T$,
+\[
+ D_{A_2/A_1,B_2,T}D_{X,S}f
+  =\sum_{C,H}D_{X'}D_{C,H,S+j_{B_1}Tq_{A_1}}f.       \tag{T2}
+\]
+Here is a proof of both selector directions and uniqueness.
+If $X\preceq Y$ passes the left selector, put $Z=Y-X$.
+Its image is complementary to $\operatorname{im}X$ and
+$\ker X+\ker Z=W$. On $B_1$, the induced $Y$ is the injection of
+$Z|B_1$ modulo $A_1$, and $Z(B_1)=\operatorname{im}Z$.
+The left hybrid conditions give
+$C=\operatorname{im}Z\cap A_2$ complementary to $A_1$, and
+$\{w\in B_1:Zw\in C\}\le B_2$, in particular $\ker Y\le B_2$.
+Take $H=\ker Z+B_2$. It has the required complement properties.
+If $Yw\in C$, disjoint images force $w\in B_1$ and then $w\in B_2$,
+so the right hybrid selector holds. On $H=\ker Z+B_2$, the maps $X$
+and $Z$ occupy the two complementary components; quotienting by $C$
+preserves their disjoint images, proving $X'\preceq q_CY|H$.
+
+Conversely suppose a right selector holds. Since $X(H)=\operatorname{im}X$
+and $C\le\operatorname{im}Y$, image inclusion modulo $C$ gives
+$\operatorname{im}X\le\operatorname{im}Y$.
+If $Yw\in\operatorname{im}X$, choose $h\in H$ with $Yh=Yw$:
+the quotient image condition supplies a match modulo $C$, and
+$C\le Y(H)$ supplies the correction. Then $w-h\in\ker Y\le H$.
+Rank-poset agreement modulo $C$ gives $Yw-Xw\in C\cap A_1=0$.
+Thus $X\preceq Y$. Put $Z=Y-X$ again. The hybrid rank drop and
+$\operatorname{rank}X'=\operatorname{rank}X=k$ give
+\[
+ \operatorname{rank}(q_CZ|H)
+  =\operatorname{rank}Z-\dim C-\operatorname{codim}H.
+\]
+For any $Z$, the loss under restriction and quotient is at most this
+sum. Equality forces $\ker Z\le H$ and $C\le Z(H)$, hence
+$Z^{-1}(C)\le H$. Disjointness from $A_1$ now forces
+$C=\operatorname{im}Z\cap A_2$.
+Moreover $\ker Z+B_2\le H$ with equal dimensions: their intersection
+is $\ker Y$, since $B_2\le\ker X$ and
+$\ker Y\le H\cap B_1=B_2$. Rank-nullity gives equality.
+This proves uniqueness. It also gives the left hybrid conditions,
+since $Z(B_1)=\operatorname{im}Z$ and
+$w\in B_1,Zw\in A_2$ implies $w\in H\cap B_1=B_2$.
+Finally both sides of (T2) have phase
+$\chi_Y(S+j_{B_1}Tq_{A_1})$ and frequency $q_{A_2}Y|B_2$.
+This proves the identity without assuming orthogonality of coalescing
+frequencies.
+
+We prove simultaneously on all finite spaces, by induction on $d$,
+\[
+ \|f\|_4^4\le2^{100d^2}Q(f),\qquad
+ Q(f)=\sum_{A,B}\mathbb E_T\|D_{A,B,T}f\|_2^4.       \tag{A7}
+\]
+At $d=0$ only the zero-order derivative survives and equality holds.
+In (A6) write the initial pair $(A_0,B_0)$, rank-$k$ map $X$,
+$s=\dim A_0+\operatorname{codim}B_0$, and $t=s+k>0$.
+The mixed derivative has degree at most $d-t<d$. Apply the induction
+hypothesis on its actual smaller space, then (T2) and (A1).
+A subsequent hybrid derivative has order $u+v\le d-t$.
+The two complement choices in (T2) have counts $2^{ku}$ and $2^{kv}$,
+by writing complements as graphs. Their fourth-power cost is at most
+$2^{3dk}\le2^{6dk}$. The enlarged ordinary order is
+$s+2k+u+v\le d+k$, not necessarily $d$; the count only uses the correct
+mixed bound $s+k+u+v\le d$.
+With $A_1/A_0=\operatorname{im}X$, $B_1=\ker X$, this yields
+\[
+ \begin{split}
+ \mathbb E_T\|D_XD_{A_0,B_0,T}f\|_4^4
+ \le {}&2^{100(d-t)^2+6dk}
+ \sum_{\substack{A\ge A_0,B\le B_0\\
+                 A\cap A_1=A_0,\ B+B_1=B_0}}
+ \mathbb E_T\|D_{X|B\bmod A}D_{A,B,T}f\|_2^4.       \end{split}\tag{A8}
+\]
+In (A8), the induced quotient is by $A/A_0$ inside $V/A_0$,
+with the canonical identification $(V/A_0)/(A/A_0)=V/A$.
+Each final $A,B$ reconstructs the intermediate pair as $A+A_1$,
+$B\cap B_1$, so there is no further multiplicity at this stage.
+For each fixed inner shift, original $T$ plus its canonical embedding
+is still uniform on the original group; Fubini removes the inner
+average with no cardinality or rank-conditioning factor.
+
+For completeness we count the remaining reindexing. Fix final $A,B,Y$
+of dimensions $a=\dim A,b=\operatorname{codim}B,k=\operatorname{rank}Y$;
+nonzero terms require $a+b+k\le d$. Fix initial dimensions
+$i=\dim A_0,j=\operatorname{codim}B_0$. The exact number of initial
+triples inducing $Y$ is
+\[
+ {a\brack i}_2{b\brack j}_2\,2^{k(a-i)}2^{k(b-j)}.   \tag{A9}
+\]
+Choose $A_0\le A$ and $B_0\ge B$ first. The image of $X$ is a lift
+of $\operatorname{im}Y$ to $V/A_0$ disjoint from $A/A_0$, hence a graph
+with $2^{k(a-i)}$ choices. Its kernel in $B_0/\ker Y$ complements
+$B/\ker Y$, with $2^{k(b-j)}$ choices. These choices determine $X$
+uniquely: project along the chosen kernel, apply $Y$, then lift its
+image. This also proves preservation of rank $k$.
+The count is at most $2^{d(i+j+k)}$, and we conservatively use
+$2^{3d(i+j+k)}$. For $t=i+j+k\in[1,d]$, (A6)--(A9) have exponent
+\[
+ 100(d-t)^2+27dt+6dk
+ \le100d^2-73dt+6dk
+ \le100d^2-63dt-4dk.                                \tag{A10}
+\]
+For fixed $k\ge1$, put $z=2^{-63d}$ and sum over $i,j\ge0$:
+$z^k/(1-z)^2\le2z^k\le2^{-31d(k+1)}$.
+For $k=0$ omit $i=j=0$; then
+$(1-z)^{-2}-1\le4z\le2^{-31d}$. Thus
+\[
+ \begin{split}
+ \frac{\|f\|_4^4}{162}\le {}&2^{6d^2}\|f\|_2^4+
+ 2^{100d^2}\sum_{k=0}^d2^{-31d(k+1)}\\[-2pt]
+ &\qquad\cdot\sum_{\substack{A,B,Y:\operatorname{rank}Y=k\\
+                             |(A,B)|+k>0}}
+ 2^{-4dk}\mathbb E_T\|D_YD_{A,B,T}f\|_2^4.          \end{split}\tag{A11}
+\]
+The coefficients satisfy
+$2^{-31d(k+1)-4dk}=2^{-31d-29dk}2^{-6dk}$.
+Apply (W6), with the common bound $d$, to each actual $D_{A,B,T}f$,
+and enlarge sums by nonnegativity. The last line is at most
+$2^{100d^2+1-31d}Q(f)$. Also $\|f\|_2^4\le Q(f)$ by the zero-order
+term. For $d\ge1$,
+$162(2^{-94d^2}+2^{1-31d})<1$, proving (A7).
+This closes a strict-lower-degree induction; its conclusion was not
+used at the current degree.
+
+If all influences of a degree-at-most-$d$ function through order $d$
+are at most $\eta$, (A7) and (A2) imply
+\[
+ \|f\|_4^4\le2^{103d^2}\eta\|f\|_2^2.             \tag{A12}
+\]
+Indeed an input frequency of rank $j$ is selected by exactly
+$\sum_{a+b\le j}{j\brack a}_2{j-a\brack b}_2$ hybrid pairs:
+choose $A\le\operatorname{im}Y$, then $B\ge Y^{-1}(A)$.
+For $j\ge1$ the count is at most
+$(j+1)^2 2^{j^2}\le2^{j^2+2j}\le2^{3j^2}$; for $j=0$ it is one.
+Replace one factor of each squared influence in $Q(f)$ by $\eta$,
+use (A2), and apply this count. Derivatives above the degree vanish.
+
+\subsection{Globalness and both influence conversions}
+A function is \emph{up-to-$r$ $\epsilon$-global} if every actual affine
+restriction of order at most $r$, at every base, has squared $L_2$ norm
+at most $\epsilon$. This definition includes the order-zero norm bound.
+We use this nonvacuous definition also when a quotient space has no
+restriction of order exactly $r$.
+
+For a line $U=\langle v\rangle\le V$, choose $\phi\in V^*$ uniformly
+with $\phi(v)=1$ and $w\in W$ uniformly, independently, and define
+$E_Uf(M)=\mathbb E_{\phi,w}f(M+w\phi)$.
+On $\chi_Y$, averaging $w$ keeps only $\phi Y=0$.
+If $v\in\operatorname{im}Y$ this is impossible; otherwise exactly
+$2^{\dim V-\operatorname{rank}Y-1}$ of the $2^{\dim V-1}$ functionals
+qualify. Its multiplier is therefore zero on the order-one hybrid
+selector and $2^{-\operatorname{rank}Y}$ elsewhere.
+For a hyperplane $B\le W$, let $\psi$ be its nonzero defining functional,
+choose $w$ uniformly with $\psi(w)=1$ and $\phi$ uniformly in $V^*$.
+The same translation average has multiplier
+$\Pr[Yw=0]$, which is zero if $\ker Y\le B$ and
+$2^{-\operatorname{rank}Y}$ otherwise. These are direct finite counts;
+the two distributions remain meaningful in the one-dimensional and
+singleton boundary cases whenever the line or hyperplane exists.
+For either operator $E$, with its hybrid selector $L$, one has
+\[
+ L(f^{=j})=f^{=j}-2^jE(f^{=j}).                     \tag{A13}
+\]
+For $j\ge1$ set
+$P_j=(I-2^jE)(I-2^{j-1}E)$.
+On both ranks $j,j-1$ it equals $L$. A raw order-one restriction loses
+exactly one rank on selected frequencies and zero otherwise. Hence only
+those two input ranks can reach output rank $j-1$, and
+\[
+ (R_{U,T}P_jf)^{=j-1}=D_{U,T}(f^{=j}).              \tag{A14}
+\]
+The selected rank-zero part is zero when $j=1$; no negative rank is
+identified with rank zero. This identity holds for arbitrary $f$ and
+every $T$.
+
+Translations preserve globalness at all bases. Minkowski implies the
+same for any convex mixture of translations, in particular $E,E^2$.
+The coefficient sum of $P_j$ is
+$(1+2^j)(1+2^{j-1})\le2^{2j+1}$.
+Thus, if $f$ is up-to-$j$ $\epsilon$-global, the actual witness
+$f'=R_{U,T}P_jf$ is up-to-$(j-1)$
+$4\,2^{4j}\epsilon$-global and has level $j-1$ given by (A14).
+Indeed composing a further restriction with $R_{U,T}$ adds one to its
+order and adds its canonical embedded base to $T$, preserving the
+normalized measure. This works for both a domain line and codomain
+hyperplane, and uses the requested base $T$, not only zero.
+
+For a derivative of order $k\le d$, peel off a line in its nonzero
+domain constraint, or otherwise a hyperplane containing its codomain
+constraint. Apply this witness at the first base $T$ and subsequently
+at zero. Formula (A1) preserves the specified total base. After $k$
+steps, Parseval for the remaining level gives
+\[
+ I_{A,B,T}(f^{=d})
+ \le2^{4kd-2k^2+4k}\epsilon
+ \le2^{10d^2}\epsilon.                            \tag{A15}
+\]
+Here $f$ was up-to-$d$ global but had no degree assumption.
+The product of losses is
+$\prod_{j=d-k+1}^d4\,2^{4j}$; its exponent is at most $2d^2+4d$
+for $d\ge1$. At $k=0$ use the whole-space Fourier projection bound,
+and at $d=0$ this is the only case. Thus all orders, not just order $d$,
+are covered. For a full degree-at-most-$d$ function, the images of its
+levels under a fixed hybrid derivative are orthogonal, having distinct
+ranks $i-k$. Applying (A15) to each level and summing gives
+\[
+ I_{A,B,T}(f)\le2^{11d^2}\epsilon\quad(k\le d),       \tag{A16}
+\]
+since $(d+1)2^{10d^2}\le2^{11d^2}$ for $d\ge1$.
+The $d=0$ assertion is direct. This uses orthogonality between levels,
+not between colliding individual frequencies.
+
+We also prove the reverse implication: if a degree-at-most-$d$ function
+has all influences through order $d$ at most $\epsilon$, then for every
+natural $r$ it is up-to-$r$ $2^{10dr}\epsilon$-global. First note that
+level projections inherit the influence bound, because they are
+orthogonal projections of the actual reduced derivative. Order-one
+derivatives inherit all influences through $d-1$ by (A1).
+
+The only additional measure calculation is the following. Suppose $f$
+is up-to-$s$ $\eta$-global. Restrict $E_Uf$ first at a line $U=\langle v\rangle$
+and then at further order at most $s$. Write the parent variation as
+$R\in\mathcal H(V/A,B)$ with $U\le A$ and
+$\dim A+\operatorname{codim}B\le s+1$.
+Jensen bounds its squared norm by
+$\mathbb E_{R,\phi,w}|f(M_0+R+w\phi)|^2$.
+Condition on $A'=\ker(\phi|A)$ and $B'=B+\langle w\rangle$.
+The restriction of $\phi$ to $A$ is fixed by $A'$ and $\phi(v)=1$;
+outside $A$ its coordinates remain independently uniform.
+In coordinates on $V/A'$ starting with $v$, $R$ has first column zero
+and other columns independently uniform in $B$.
+If $B'=B$, $w$ is uniform in $B$, and the sum is uniform on
+$\mathcal H(V/A',B)$. If $\dim B'=\dim B+1$, $w$ is uniform in
+$B'\setminus B$; every other column is an independent uniform element
+of $B$ plus an independent uniform bit times $w$, hence uniform in $B'$.
+Thus the resulting map is uniform conditional on its $v$-column being
+outside $B$, an event of density exactly $1/2$.
+The unconditional restriction orders are at most $s$ and $s-1$,
+respectively. Nonnegative expectation under this conditioning costs
+at most two, so the desired squared norm is at most $2\eta$.
+When $s=0$ the expanded case is impossible ($B=W$), so no negative-order
+hypothesis is used. Arbitrary bases are absorbed by translation.
+Codomain hyperplanes follow by transposing the spaces: restrictions
+$(A,B)$ become $(B^\perp,A^\perp)$ with the same order and uniform law.
+
+For homogeneous $f$ of degree $d\ge1$, (A13) reads
+$f=L_Uf+2^dE_Uf$. If $f$ is global through $r-1$ with parameter $\eta_2$
+and every order-one derivative is global through $r-1$ with parameter
+$\eta_1$, the preceding calculation and squared triangle inequality
+bound each order-$r$ restriction by
+\[
+ 2\eta_1+4\,2^{2d}\eta_2.                          \tag{A17}
+\]
+Induct first on $d$ simultaneously for all spaces and all $r$, then on
+$r$. The $d=0$ and $r=0$ cases follow from order-zero influence.
+For $d,r\ge1$ split into rank levels. Lower levels have global bounds
+$2^{10ri}\epsilon$ by outer induction. The top level has the
+$r-1$ bound $2^{10d(r-1)}\epsilon$ by inner induction, and its
+order-one derivatives have the bound
+$2^{10(d-1)(r-1)}\epsilon$ by outer induction.
+Relative to $K=2^{10dr}\epsilon$, (A17) costs at most
+\[
+ 2\,2^{-10(r+d-1)}+4\,2^{-8d}\le9/512<1/4.
+\]
+Smaller-order top restrictions already satisfy the same $K/4$ bound.
+For all lower levels together the squared triangle and geometric bound
+is at most
+$\epsilon(\sum_{i<d}2^{5ri})^2\le K/961$.
+Combining the top and lower sums costs at most
+$K/2+2K/961<K$. This proves
+\[
+ \text{influences through $d$}\le\epsilon
+ \quad\Longrightarrow\quad
+ \text{globalness through $r$}\le2^{10dr}\epsilon
+ \quad\text{for all }r\ge0.                       \tag{A18}
+\]
+If exact-order-$r$ restrictions do not exist, use the smaller-order
+induction result, not a choice from an empty family. If a level is
+unavailable it is zero. The case $\epsilon=0$ follows directly from
+order-zero norm, without division.
+
+\subsection{Square-globalness and all dyadic moments}
+Suppose $f$ has degree at most $d$ and is up-to-$d$
+$\epsilon$-global. Combining (A16) with (A12) gives
+\[
+ \|f\|_4^4\le2^{114d^2}\epsilon\|f\|_2^2.           \tag{A19}
+\]
+Combining (A16) with (A18) at $r=3d$ gives up-to-$3d$ globalness
+parameter $B=2^{41d^2}\epsilon$.
+Every raw restriction $h$ of order at most $2d$ still has degree at most
+$d$ and is up-to-$d$ $B$-global, by composition of restrictions.
+Applying (A16) and (A12) on its actual quotient/subspace space yields
+\[
+ \|h\|_4^4\le2^{114d^2}B\|h\|_2^2
+              \le2^{196d^2}\epsilon^2.              \tag{A20}
+\]
+Both factors $B$ are required. Since raw restriction commutes with
+squaring and $\deg(f^2)\le2d$, the actual square is up-to-$2d$ global
+with parameter $2^{196d^2}\epsilon^2$.
+
+For every dyadic $p\ge2$ we claim
+\[
+ \|f\|_p^p\le2^{200d^2p^2}\|f\|_2^2
+                         \epsilon^{p/2-1}.         \tag{A21}
+\]
+At $p=2$ the last factor is one. If $\epsilon=0$ then $f=0$; if $d=0$
+then $f=c$ is constant and $|c|^2\le\epsilon$, proving the claim
+without loss. For $d\ge1$, $\epsilon>0$, start at $p=4$ with (A19).
+Define $A_4=114$ and $A_p=4A_{p/2}+49p-82$ for $p\ge8$.
+Inductively apply the stronger moment bound with exponent $A_{p/2}$
+to $g=f^2$, its actual degree bound $2d$, and the parameter from (A20).
+Using $\|g\|_2^2=\|f\|_4^4$ and (A19), the total exponent is
+\[
+ 4A_{p/2}+196(p/4-1)+114=4A_{p/2}+49p-82,
+\]
+and the density power is $2(p/4-1)+1=p/2-1$.
+The factor four retains the doubled degree. The invariant
+$A_p\le200p^2-100p$ holds at $p=4$ and propagates because
+$4(200(p/2)^2-100(p/2))+49p-82=200p^2-151p-82$.
+This proves (A21) for $2,4,8,\ldots$ on all finite dimensions.
+No exact-order globalness is inferred on an undersized quotient, and
+no dyadic theorem was imported to prove (A21).
+
+\subsection{The $L^{p'}$ level bridge and the Boolean conclusion}
+Let $p\ge2$ be dyadic and $p'=p/(p-1)$. For arbitrary $f$, suppose every
+restriction through order $i$ has $L^{p'}$ norm at most $\epsilon$.
+This is a norm, not a squared norm. We prove
+\[
+ I_{A,B,T}(f^{=i})\le2^{500i^2p}\epsilon^2
+ \quad\text{for }|(A,B)|\le i.                     \tag{A22}
+\]
+For $p=2$ use (A15). For $p\ge4$ the following duality estimate will be
+used only after its influence premise has been established.
+Put $h=f^{=j}$, $E=\|h\|_2^2>0$, and suppose all its influences through
+$j$ are at most $\beta E$ (necessarily $\beta\ge1$).
+By (A18) its globalness parameter is $2^{10j^2}\beta E$.
+Taking the $p$th root in (A21) gives
+\[
+ \|h\|_p\le2^{210j^2p}\beta^{1/2-1/p}\sqrt E.
+\]
+Since the actual orthogonal projection has $|\langle h,f\rangle|=E$,
+Holder and division by $\sqrt E$ give
+\[
+ E\le2^{420j^2p}\beta^{1-2/p}\|f\|_{p'}^2.          \tag{A23}
+\]
+The zero-energy case is direct.
+
+Induct on $j$ for (A22), simultaneously on all finite spaces.
+At $j=0$ the level is constant and Holder gives $|\mathbb Ef|\le\epsilon$.
+The translation mixtures $E_U,E_U^2$ also preserve globalness in
+$L^{p'}$ by Minkowski. The polynomial in (A14) has coefficient sum at
+most $2^{3j}$ for $j\ge1$. Thus its explicit witness at every base is
+up-to-$(j-1)$ global in $L^{p'}$ with parameter $2^{3j}\epsilon$.
+The inductive hypothesis and (A14) bound every positive-order influence
+of $f^{=j}$ by
+\[
+ B=2^{500(j-1)^2p+6j}\epsilon^2.
+\]
+All positive orders factor through an order-one derivative as in
+(A15), so none is omitted. Let $E=\|f^{=j}\|_2^2$.
+If $E\le B$, every influence is at most $B$, which is at most the bound
+in (A22) since $6j\le500(2j-1)p$.
+If $E>B$, the proved positive-order bounds and the exact zero-order
+energy show that every influence is at most $E$. Only now apply (A23)
+with $\beta=1$, obtaining $E\le2^{420j^2p}\epsilon^2$ and hence (A22).
+There is no assumption of the desired influence bound in this case
+split, and (A21) was proved without using this bridge.
+
+\begin{proof}[Proof of Theorem~\ref{thm:binary-hc}]
+Every actual affine restriction $T+\mathcal H(\mathbb F_2^D/A,B)$ of
+order at most $i\le r$ is a solution set of vector equations:
+choose a basis of $A$ to fix $M$ on it as $T$ does, and quotient rows
+for $B$ to impose the codomain constraints. Pad with zero-equals-zero
+equations to make the nominal budget $r$. Neither the solution set nor
+its uniform measure changes. Thus all these restrictions have density
+at most $\delta$, including the padded empty restriction, which gives
+$\mathbb EF\le\delta$.
+For a Boolean function, its $L^{p'}$ norm on a restriction of density
+$a$ is $a^{1/p'}$. Apply (A22) with
+$\epsilon=\delta^{1-1/p}$ to $h=F^{=i}$. For $i\ge1$, $\delta>0$ its
+influence parameter is
+$\eta=2^{500i^2p}\delta^{2-2/p}$.
+By (A18) its up-to-$i$ squared-$L_2$ globalness parameter is
+$\eta_1=2^{(10+500p)i^2}\delta^{2-2/p}$.
+Apply (A21) and use Parseval and Booleanity:
+$\|h\|_2^2\le\|F\|_2^2=\mathbb EF\le\delta$. Hence
+\[
+ \begin{split}
+ \|h\|_p^p
+ &\le2^{(450p^2-495p-10)i^2}\delta^{p-2+2/p}\\
+ &\le2^{500i^2p^2}\delta^{p-2}.
+ \end{split}
+\]
+The calculations are
+$200p^2+(10+500p)(p/2-1)=450p^2-495p-10$ and
+$1+(2-2/p)(p/2-1)=p-2+2/p$.
+The last inequality uses $0<\delta\le1$ in the correct direction.
+Take the $p$th root. If $\delta=0$, the padded empty restriction forces
+$F=0$. At $i=0$, the projection is the constant
+$\mathbb EF\le\delta\le\delta^{1-2/p}$; unavailable ranks give zero.
+These cases also cover zero-dimensional matrices.
+\end{proof}
+
+If one instead starts with independent restrictions of order exactly
+$i$, an up-to-$i$ bound follows when $i\le\dim V+\dim W$ by partitioning
+each lower-order affine variation space into cosets of a chosen
+order-$i$ variation subspace and averaging the relevant norm powers.
+For a rank-$i$ conclusion, larger $i$ gives the zero level directly.
+For a full bounded-degree function, a vacuous exact-order premise does
+\emph{not} give globalness; all full-function uses above explicitly
+assume up-to-order bounds. The nominal-budget hypothesis of
+Theorem~\ref{thm:binary-hc} avoids this issue by zero padding.
+In Lemma~\ref{lem:inverse-explicit} take $\delta=2e\le1$ and the
+stated dyadic moment. Probability-norm monotonicity supplies any smaller
+moment used there. This discharges precisely the binary analytic input,
+without changing the remaining upstream contracts of the manuscript.
+```
