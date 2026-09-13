@@ -254,6 +254,109 @@ proves $\mathbb E G\le2e$, including all nonempty redundant or
 dependent cases considered above.
 \end{proof}
 
+\begin{lemma}[Finite-character spectral bound]\label{lem:finite-spectral}
+Let $0\le s\le d$, $c=d-s$, and use uniform averages on finite binary
+matrix spaces, including deficient matrices. Define
+\[
+ \begin{aligned}
+ (\mathcal TF)(X)&=\mathbb E_{B\in\mathbb F_2^{n\times s}}F([X,B]),
+       &&X\in\mathbb F_2^{n\times c},\\
+ (\mathcal GH)(M)&=\mathbb E_{R\in\mathbb F_2^{d\times c},\,
+                         \operatorname{rank}R=c}H(MR),\\
+ (\Phi F)(M)&=\mathbb E_{B\in\mathbb F_2^{n\times s},\,
+                    C\in\mathbb F_2^{s\times d},\,
+                    \operatorname{rank}C=s}F(M+BC).
+ \end{aligned}
+\]
+In the last line $B,C$ are independent, $B$ is unrestricted, and only
+$C$ is conditioned on rank. Suppose $F(MA)=F(M)$ for every
+$A\in\operatorname{GL}(d,2)$ and every $M$. Let $F_i$ be its Fourier
+projection onto characters indexed by rank-$i$ matrices. Then the
+$\mathcal TF_i$ are mutually orthogonal, and
+\[
+ \|\mathcal TF_i\|_2^2=\lambda_i\|F_i\|_2^2,
+ \qquad 0\le\lambda_i\le2^{-is}.
+\]
+In particular the weaker bound used below is valid:
+\[
+ \|\mathcal TF_i\|_2^2
+ \le\bigl(2^{-i(s-1)}+3\cdot2^{i-n}\bigr)\|F_i\|_2^2.
+\]
+\end{lemma}
+\begin{proof}
+We reconstruct the finite-character calculation behind MZ Lemma~4.7
+and MZ24 Lemmas~A.10--A.13 for their actual sampling laws.
+Use $\langle F,H\rangle=\mathbb E[F\overline H]$ and let $J_0$ be
+the inclusion of the first $c$ coordinates. The ordinary adjoint of
+$\mathcal T$ is fixed-coordinate pullback, but for basis-invariant $F$
+we may average $M\mapsto MA$ over uniform invertible $A$ to obtain
+\[
+ \langle\mathcal TF,H\rangle
+ =\mathbb E_M F(M)\overline{H(MJ_0)}
+ =\mathbb E_{N,A}F(N)\overline{H(NA^{-1}J_0)}
+ =\langle F,\mathcal GH\rangle.
+\]
+Each full-column-rank injection $A^{-1}J_0$ has the same number of
+invertible completions, so its law is the specified uniform law.
+No invariance of $H$ is required; the identity is not asserted for
+arbitrary first arguments.
+
+To compute the composition, complete a uniform injection $R$ uniformly
+to $A=[R,A_2]\in\operatorname{GL}(d,2)$. At fixed $M,A$ the appended
+uniform matrix has the law $MA_2+W$ with $W$ unrestricted. Therefore
+\[
+ (\mathcal G\mathcal TF)(M)
+ =\mathbb E_{A,W}F(MA+[0,W])
+ =\mathbb E_{A,W}F(M+[0,W]A^{-1})
+ =\mathbb E_{W,C}F(M+WC)=(\Phi F)(M).
+\]
+Basis invariance justifies the second equality. The last $s$ rows
+$C$ of $A^{-1}$ are uniform full row rank by constant completion
+fibres, and $W$ remains independent of $C$. These statements include
+empty matrices at $s=0$ or $c=0$ and deficient $M$.
+
+For $S\in\mathbb F_2^{n\times d}$ put
+$\chi_S(M)=(-1)^{\sum_{u,v}S_{uv}M_{uv}}$.
+Finite character cancellation makes these an orthonormal basis.
+Translation gives $\Phi\chi_S=\lambda_S\chi_S$, where
+$\lambda_S=\mathbb E_{B,C}\chi_S(BC)$.
+At fixed $C$, the exponent pairs $B$ with $SC^{\mathsf T}$.
+Averaging the unrestricted entries of $B$ cancels to zero unless
+$SC^{\mathsf T}=0$, when every term is one. Consequently
+\[
+ \lambda_S=\Pr_C[SC^{\mathsf T}=0].
+\]
+If $\operatorname{rank}S=i$, the rows of $C$ must form an ordered
+independent $s$-tuple in the $(d-i)$-dimensional kernel of $S$.
+Counting these tuples yields
+\[
+ \lambda_i=\begin{cases}
+ 0,&s>d-i,\\
+ \displaystyle\prod_{j=0}^{s-1}
+       \frac{2^{d-i}-2^j}{2^d-2^j},&s\le d-i.
+ \end{cases}
+\]
+The empty product is one. Every nonnegative factor is at most $2^{-i}$,
+so $0\le\lambda_i\le2^{-is}$. This proves positivity directly and
+shows that the eigenvalue depends only on rank, not orientation or $n$.
+
+The identity $\chi_S(MA)=\chi_{SA^{\mathsf T}}(M)$ permutes character
+indices without changing rank. Thus every rank projection $F_i$ of a
+basis-invariant $F$ is itself basis invariant, and
+$\Phi F_i=\lambda_iF_i$; individual characters need not be invariant.
+The restricted adjoint and composition identities now give
+\[
+ \langle\mathcal TF_i,\mathcal TF_j\rangle
+ =\langle F_i,\Phi F_j\rangle
+ =\lambda_j\langle F_i,F_j\rangle.
+\]
+Orthogonality and the squared-norm formula follow. The unsquared
+contraction would be $\sqrt{\lambda_i}$, not $\lambda_i$.
+Finally $2^{-is}\le2^{-i(s-1)}+3\cdot2^{i-n}$ gives the stated
+weaker estimate. We retain that weaker form and the conservative
+ambient conditions in the inverse proof; no constants are reoptimized.
+\end{proof}
+
 \begin{lemma}[Inverse agreement with explicit ambient bounds]\label{lem:inverse-explicit}
 Fix $m\ge2$, $0<\rho\le1/4000$, and integral $r=10m/\rho$.
 Let $h$ be sufficiently large with integral dimensions
@@ -276,16 +379,18 @@ Lemma~\ref{lem:matrix-lift} supplies the matrix lift of an
 $(r,e)$-pseudorandom Grassmann indicator as an $(r,2e)$-pseudorandom
 basis-invariant indicator. The strict budget $r<d=2h$ holds in the
 regime $h\ge r>0$ below, and the ambient bounds imply $n\ge d$.
-The remaining analytic inputs from MZ~\cite{MZ} are these:
-Theorem~4.6 bounds its level-$i$ norm at every dyadic $p\ge4$ by
-$2^{500i^2p}(2e)^{(p-2)/p}$ for $i\le r$; and Lemma~4.7 gives
+The remaining analytic input from MZ~\cite{MZ} is Theorem~4.6:
+it bounds the level-$i$ norm at every dyadic $p\ge4$ by
+$2^{500i^2p}(2e)^{(p-2)/p}$ for $i\le r$.
+Its global-hypercontractive ancestry remains imported.
+Lemma~\ref{lem:finite-spectral}, with $s=s_0=2\rho h$, supplies
+cross-level orthogonality and the unchanged spectral bound
 \[
  \|\mathcal T F^{=i}\|_2^2
  \le \bigl(2^{-i(2\rho h-1)}+3\cdot2^{i-n}\bigr)
        \|F^{=i}\|_2^2.
 \]
-The spectral and global-hypercontractive ancestry of these two inputs
-remains imported; the finite lift bridge is proved above.
+Both finite bridges are proved above.
 We reconstruct the intervening moment, selection and exponent steps
 rather than invoke the printed inverse proof without these bounds.
 
