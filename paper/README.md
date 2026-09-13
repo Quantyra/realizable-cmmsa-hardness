@@ -26,7 +26,8 @@ main composition marks completion of Theorem 1 and Corollary 1.
 The sample-count reconciliation replaces the exact-log least-count constructor
 with a conservative natural constructor; the theorem statements remain unchanged.
 See `count-reconciliation-2026-09-12.md` for scope and pending independent review.
-The transcription still requires independent content review before submission.
+The bounded source integrations have independent reviews; final manuscript-wide
+mathematical/content reconciliation remains required before submission.
 
 ## Reproduce
 
@@ -66,9 +67,10 @@ Quantyra Research and none of A001's mathematical or Lean claims is imported.
 
 ## Submission issues remaining
 
-The full Lean proof and its audit are incomplete. An independent content
-and visual review of this exact paper candidate is required before calling
-it submission-ready. No venue, submission category, author identity changes,
+The full Lean proof and its audit are incomplete. The current 21-page PDF
+has completed author and independent all-page visual QA. Final manuscript-wide
+mathematical/content reconciliation remains open before calling it
+submission-ready. No venue, submission category, author identity changes,
 submission authorization or public-announcement destination is selected by
 this local increment. Existing v0.1.0 archive and both historical tags remain
 unchanged; the existing DOI identifies that archive, not this later PDF.
@@ -98,7 +100,7 @@ canonical Markdown and records their source spans. Source commit
 `dba95d1b9bb7b8890898b3ccdaebe386bee2cd0f` passed bounded independent
 source review.
 
-The last reviewed local PDF has **17 pages**, SHA256
+That historical reviewed local PDF has **17 pages**, SHA256
 `7557d135dcec81031b37f7ae3fe6d993948fb36dcf3e5347eb7211a6956c9d69`.
 It was rebuilt with the existing workflow and all pages passed author
 and independent visual inspection. See
@@ -116,7 +118,7 @@ release, submission approval or complete formal certification. The full
 Lean goal remains incomplete.
 
 
-## Current finite-foundation source candidate (2026-09-13)
+## Current reviewed finite-foundations PDF (2026-09-13)
 
 The canonical submission source now includes a separately reviewed inverse
 derivation with an explicit two-thirds cutoff, dyadic moments, joint-label
@@ -127,10 +129,37 @@ spectral lemma now supplies the actual extension, averaged-injection and
 translation laws, restricted adjoint, exact eigenvalue and squared-norm
 identity. The inverse still uses its existing weaker spectral estimate
 and conservative budgets. Global hypercontractivity remains an external
-input. Body and correspondence are regenerated
-for independent source review; no PDF rebuild belongs to this increment.
+input. The reviewed mathematical source is frozen at
+`4a6d6a141b62d16b10b806549dedc4a5813a89a7`.
 
-The existing 17-page PDF7557d135 and its QA remain the prior verified
-artifact and are stale relative to this new candidate until source review,
-authorized rebuild and all-page QA. Published MANUSCRIPT.md, DOI records
-and Lean artifacts remain unchanged. Full formal certification is incomplete.
+The current local PDF has **21 pages**, SHA256
+`d1ab2f17ccf7f602150912d68522524a14a87dabbc350b54beade3febe6df6bc`.
+Build session 31703 and render session 76132 both returned actual exit 0.
+All 21 pages passed author and independent visual QA; see
+`finite-foundations-pdf-author-qa-2026-09-13.md`, its paired JSON, and
+`finite-foundations-independent-visual-qa-2026-09-13.md`. The final build
+has no overfull boxes or unresolved references; two bibliography underfull
+notices caused no visible defect. The source/body/correspondence remain
+unchanged by this layout archive; this README records the later status.
+
+The prior 17-page PDF7557d135 and its QA are historical, with byte-preserved
+copies under ignored `tmp/pdfs/history-before-finite-foundations-20260913/`.
+Published MANUSCRIPT.md, DOI records and Lean artifacts remain unchanged.
+This is a local layout/document archive, not formal proof acceptance,
+submission approval or public release. Full formal certification is incomplete.
+
+## Conditional Lean consolidation handoff
+
+User instruction recorded on 2026-09-13: once the Lean proof for this paper
+is finalized, consolidate it in this paper repository,
+`C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness`.
+Until the full paper proof is finalized, `C:/Users/Dan/Desktop/Projects/formal-pvnp`
+remains the active proof surface. No migration is performed by this record.
+
+The future handoff must include the paper-specific Lean sources, exact
+dependency pins, theorem-to-paper crosswalk, verification and audit records,
+and reproducible build instructions. Transfer only the paper-specific proof
+and its required dependencies, not the whole general research library.
+Verify the consolidated proof in a clean fresh checkout before treating
+consolidation as complete. This conditional handoff does not change proof
+claims or authorize publication, push, submission or release.
