@@ -1,4 +1,4 @@
-ï»¿# Submission paper build
+# Submission paper build
 
 This is the local submission-paper preparation increment (S3128 under S3126).
 It has not been submitted, announced or released. The complete Lean
@@ -116,12 +116,14 @@ release, submission approval or complete formal certification. The full
 Lean goal remains incomplete.
 
 
-## Current inverse-proof source candidate (2026-09-13)
+## Current inverse and matrix-lift source candidate (2026-09-13)
 
 The canonical submission source now includes a separately reviewed inverse
 derivation with an explicit two-thirds cutoff, dyadic moments, joint-label
-gluing, affine selection and full-signal error absorption. Its exact analytic
-inputs remain external imports. Body and correspondence are regenerated
+gluing, affine selection and full-signal error absorption. A finite matrix-lift lemma now proves the zero-on-deficiency affine
+restriction bridge, including dependent constraints, the target orbit,
+constant full-rank fibres and exact-budget averaging. The spectral and
+global-hypercontractive inputs remain external imports. Body and correspondence are regenerated
 for independent source review; no PDF rebuild belongs to this increment.
 
 The existing 17-page PDF7557d135 and its QA remain the prior verified

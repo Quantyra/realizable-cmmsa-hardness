@@ -352,6 +352,116 @@ leaf increments is needed. This is not an identity of the unobserved
 raw tuples $(K,L_1,\ldots,L_m)$.
 \end{proof}
 
+\begin{lemma}[Finite matrix-lift pseudorandomness]\label{lem:matrix-lift}
+Let $E=\mathbb F_2^n$, $D=\mathbb F_2^d$, $n\ge d$, and
+$0\le r<d$. Suppose $g:\operatorname{Grass}(E,d)\to\{0,1\}$ has
+uniform density at most $e\ge0$ in every nonempty zoom
+$\{L:Q\subseteq L\subseteq W,\ \dim L=d\}$ with
+$\dim Q+\operatorname{codim}_E W=r$.
+Define $G(M)=g(\operatorname{im}M)$ for rank-$d$ maps $M:D\to E$,
+and $G(M)=0$ for deficient maps. Then $G$ is basis invariant and
+its expectation is at most $2e$ on every nonempty affine restriction
+\[
+ \{M:MU=V,\ XM=Y\}
+\]
+whose nominal budget is $a_0+b_0=r$, where $U$ has $a_0$ columns and
+$X$ has $b_0$ rows. Neither family of constraints need be independent.
+This nominal budget counts vector equations, not ordinary affine-space
+codimension. Since $G$ is Boolean, the conclusion is the restricted
+squared-$L_2$ bound in matrix $(r,2e)$-pseudorandomness.
+\end{lemma}
+\begin{proof}
+This reconstructs the finite bridge of MZ Lemma~4.5 and MZ24
+Lemmas~A.17--A.18, with the strict budget and all affine fibres explicit.
+For invertible $B:D\to D$, $\operatorname{im}(MB)=\operatorname{im}M$
+and ranks agree, proving basis invariance.
+
+Reduce columns of $(U,V)$ by invertible operations. A dependent column
+relation violated by $V$ makes the restriction empty; otherwise delete
+redundant equations and retain $a=\operatorname{rank}U\le a_0$
+independent domain vectors. If their prescribed images are dependent,
+every satisfying $M$ has a nonzero kernel and $G=0$.
+In the remaining case, change domain coordinates to make these the
+first $a$ columns, denoted $V$, with independent images. Row operations
+on $(X,Y)$ similarly delete consistent redundancies (an inconsistent
+zero row is the empty case). Let $b=\operatorname{rank}X\le b_0$.
+Compatibility on the fixed columns is necessary; the remaining
+uniform restriction has the form
+\[
+ M=[V,N],\qquad XN=B,\qquad k=d-a,\qquad a+b\le r<d.
+\]
+All operations are bijections or deletion of redundant equations;
+they preserve finite uniform conditional laws and lift values.
+Empty restrictions have no conditional law and require no assertion.
+In particular $b<k$.
+
+Reduce $(X,B)$ together so $B$ has $c=\operatorname{rank}B$
+independent rows $B_1$ followed by zero rows; write
+$X=(X_1;X_0)$ accordingly. The $b$ rows of $X$ are still independent.
+For $H_0=\ker X_0$, the map $X_1:H_0\to\mathbb F_2^c$ is onto:
+the combined map $(X_1,X_0)$ is onto, so any target $(y,0)$ lifts.
+For uniform free columns $N\in H_0^k$, the target $X_1N$ is therefore
+uniform among all $c$-by-$k$ matrices, with equal fibres. The probability
+that it has full row rank is
+\[
+ \pi(c,k)=\prod_{i=0}^{c-1}(1-2^{i-k})
+ \ge1-2^{-k}(2^c-1)>\tfrac12,
+\]
+using $c\le b<k$; the empty product at $c=0$ equals one.
+
+The right action of $\operatorname{GL}(k,2)$ is transitive on
+full-row-rank $c$-by-$k$ targets. The bijection $N\mapsto NB_0$
+for such an invertible $B_0$ preserves $X_0N=0$ and the value
+$G([V,N])$, by right multiplication with $\operatorname{diag}(I_a,B_0)$.
+Thus its conditional expectation is identical at every full-rank
+target and equals the expectation conditioned on full target rank.
+Nonnegativity gives
+\[
+ \mathbb E[G([V,N])\mid X_1N=B_1,\ X_0N=0]
+ \le\pi(c,k)^{-1}\mathbb E[G([V,N])\mid X_0N=0]
+ \le2\mathbb E_{\mathrm{hom}}G.
+\]
+This is the sole factor two; it concerns the small target matrix,
+not a large-$n$ rank approximation.
+
+For the homogeneous experiment put $Q=\operatorname{span}V$,
+$H=\ker X_0$, $W=Q+H$, and $z=\dim(Q\cap H)$.
+This is ordinary subspace sum; no disjointness is assumed.
+Its budget satisfies $\dim Q+\operatorname{codim}W\le a+b-c\le r$.
+If no $d$-space lies between $Q$ and $W$, the lift is identically zero.
+Otherwise, for each such $L$, the map $L\cap H\to L/Q$ is onto
+with kernel $Q\cap H$: writing a vector of $L$ as $q+h$ puts
+$h$ in $L\cap H$. The quotient has dimension $k$.
+The free columns yield rank $d$ and image $L$ exactly when their
+quotient images form an ordered basis. There are exactly
+\[
+ |\operatorname{GL}(k,2)|\,2^{zk}
+\]
+choices, independent of $L$. Conditioning the homogeneous columns
+on full rank therefore gives the uniform zoom law, and zero on the
+complement gives
+\[
+ \mathbb E_{\mathrm{hom}}G
+ =\Pr_{\mathrm{hom}}[\operatorname{rank}[V,N]=d]
+       \mathbb E_{L\in\operatorname{Zoom}[Q,W]}g(L)
+ \le \mathbb E_{L\in\operatorname{Zoom}[Q,W]}g(L).
+\]
+No division by the full-rank probability is made.
+
+Finally put $w=\operatorname{codim}W$ and $a'=r-w$.
+Then $\dim Q\le a'<d$. Average first over uniform $a'$-spaces
+$Q'$ with $Q\subseteq Q'\subseteq W$, then over uniform $d$-spaces
+between $Q'$ and $W$. Both incidence fibre counts are constant:
+every $Q'$ has the same number of extensions, and every $L$ in the
+original zoom has the same number of intermediate $Q'$.
+The marginal $L$ is consequently uniform on the original zoom.
+Every refined zoom has exact budget $r$, so its density is at most
+$e$; averaging proves that bound for the smaller budget as well.
+Combining the homogeneous estimate with the affine-target estimate
+proves $\mathbb E G\le2e$, including all nonempty redundant or
+dependent cases considered above.
+\end{proof}
+
 \begin{lemma}[Inverse agreement with explicit ambient bounds]\label{lem:inverse-explicit}
 Fix $m\ge2$, $0<\rho\le1/4000$, and integral $r=10m/\rho$.
 Let $h$ be sufficiently large with integral dimensions
@@ -370,9 +480,11 @@ agreement greater than $e$ with the leaf table.
 The constants and the lower cutoffs on $h$ depend only on $m,\rho$.
 \end{lemma}
 \begin{proof}
-We use precisely the following analytic inputs from MZ~\cite{MZ}:
-Lemma~4.5 lifts an $(r,e)$-pseudorandom Grassmann indicator to an
-$(r,2e)$-pseudorandom basis-invariant matrix indicator;
+Lemma~\ref{lem:matrix-lift} supplies the matrix lift of an
+$(r,e)$-pseudorandom Grassmann indicator as an $(r,2e)$-pseudorandom
+basis-invariant indicator. The strict budget $r<d=2h$ holds in the
+regime $h\ge r>0$ below, and the ambient bounds imply $n\ge d$.
+The remaining analytic inputs from MZ~\cite{MZ} are these:
 Theorem~4.6 bounds its level-$i$ norm at every dyadic $p\ge4$ by
 $2^{500i^2p}(2e)^{(p-2)/p}$ for $i\le r$; and Lemma~4.7 gives
 \[
@@ -380,7 +492,8 @@ $2^{500i^2p}(2e)^{(p-2)/p}$ for $i\le r$; and Lemma~4.7 gives
  \le \bigl(2^{-i(2\rho h-1)}+3\cdot2^{i-n}\bigr)
        \|F^{=i}\|_2^2.
 \]
-Their bilinear and global-hypercontractive ancestry remains imported.
+The spectral and global-hypercontractive ancestry of these two inputs
+remains imported; the finite lift bridge is proved above.
 We reconstruct the intervening moment, selection and exponent steps
 rather than invoke the printed inverse proof without these bounds.
 
