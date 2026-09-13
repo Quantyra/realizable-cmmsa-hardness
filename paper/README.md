@@ -88,7 +88,7 @@ formalization, manuscript-wide final reconciliation, and submission approval
 remain open. This local rebuild is not a new public release.
 
 
-## Current reviewed parameter-proof PDF (2026-09-13)
+## Prior reviewed parameter-proof PDF (2026-09-13)
 
 The private submission source includes the reviewed exact complement
 query identity, robust eight-times-threshold local application and its
@@ -98,7 +98,7 @@ canonical Markdown and records their source spans. Source commit
 `dba95d1b9bb7b8890898b3ccdaebe386bee2cd0f` passed bounded independent
 source review.
 
-The current local PDF has **17 pages**, SHA256
+The last reviewed local PDF has **17 pages**, SHA256
 `7557d135dcec81031b37f7ae3fe6d993948fb36dcf3e5347eb7211a6956c9d69`.
 It was rebuilt with the existing workflow and all pages passed author
 and independent visual inspection. See
@@ -114,3 +114,17 @@ Published MANUSCRIPT.md, DOI records, releases and Lean artifacts are
 unchanged. This is a privately reviewed paper candidate, not a new
 release, submission approval or complete formal certification. The full
 Lean goal remains incomplete.
+
+
+## Current inverse-proof source candidate (2026-09-13)
+
+The canonical submission source now includes a separately reviewed inverse
+derivation with an explicit two-thirds cutoff, dyadic moments, joint-label
+gluing, affine selection and full-signal error absorption. Its exact analytic
+inputs remain external imports. Body and correspondence are regenerated
+for independent source review; no PDF rebuild belongs to this increment.
+
+The existing 17-page PDF7557d135 and its QA remain the prior verified
+artifact and are stale relative to this new candidate until source review,
+authorized rebuild and all-page QA. Published MANUSCRIPT.md, DOI records
+and Lean artifacts remain unchanged. Full formal certification is incomplete.

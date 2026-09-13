@@ -308,10 +308,10 @@ needed parameter order using the local imported contracts.
 
 This section supplies the parameter modification rather than treating an
 inverse-alphabet completeness error as part of a black-box theorem.
-All logarithms here are base two (ln denotes the natural logarithm). Fix m and a positive rational rho.
+All logarithms here are base two (ln denotes the natural logarithm). Fix an integer m>=2 and a positive rational rho<=1/4000.
 Use the local decoding and maximal-pair counting contracts stated above
 (MZ Theorem 4.2 and the narrower MZ24 Theorem 5.26 specialization). Their parameters r and the constants
-in their bounds depend on m,rho. The next two lemmas justify the
+in their bounds depend on m,rho. The following lemmas justify the
 changed ambient application with an explicit constant input margin.
 Choose h sufficiently large relative to these fixed parameters and a
 multiple of b_m, the denominator of the selected rational rho. Then
@@ -352,8 +352,162 @@ leaf increments is needed. This is not an identity of the unobserved
 raw tuples $(K,L_1,\ldots,L_m)$.
 \end{proof}
 
+\begin{lemma}[Inverse agreement with explicit ambient bounds]\label{lem:inverse-explicit}
+Fix $m\ge2$, $0<\rho\le1/4000$, and integral $r=10m/\rho$.
+Let $h$ be sufficiently large with integral dimensions
+$t_0=2(1-\rho)h$, $s_0=2\rho h$, $d=2h$; write
+\[
+ S=2^{-2(1-1000\rho)hm},\qquad
+ e=2^{-2(1-1000\rho^2)h},\qquad b=s_0-1.
+\]
+For tables of linear functions on the $d$-spaces and $t_0$-spaces
+of an $n$-space, suppose the actual test (uniform center and independent
+uniform containing leaves) has density $\epsilon\ge S$.
+Under the ambient lower bounds below, some nonempty
+$\operatorname{Zoom}[Q,W]$ with
+$\dim Q+\operatorname{codim}W=r$ admits a linear function with
+agreement greater than $e$ with the leaf table.
+The constants and the lower cutoffs on $h$ depend only on $m,\rho$.
+\end{lemma}
+\begin{proof}
+We use precisely the following analytic inputs from MZ~\cite{MZ}:
+Lemma~4.5 lifts an $(r,e)$-pseudorandom Grassmann indicator to an
+$(r,2e)$-pseudorandom basis-invariant matrix indicator;
+Theorem~4.6 bounds its level-$i$ norm at every dyadic $p\ge4$ by
+$2^{500i^2p}(2e)^{(p-2)/p}$ for $i\le r$; and Lemma~4.7 gives
+\[
+ \|\mathcal T F^{=i}\|_2^2
+ \le \bigl(2^{-i(2\rho h-1)}+3\cdot2^{i-n}\bigr)
+       \|F^{=i}\|_2^2.
+\]
+Their bilinear and global-hypercontractive ancestry remains imported.
+We reconstruct the intervening moment, selection and exponent steps
+rather than invoke the printed inverse proof without these bounds.
+
+Require $h\ge r$, $e\le1/2$, and
+\[
+ (2h+2\rho mh)2^{2h-n}\le\tfrac12,\qquad
+ b\ge1,\qquad n\ge2h+rb+\log_2 6.
+\]
+The first condition bounds the probability of any column-rank failure
+in the common-center matrix sampler. Conditioned on full rank, the
+subspace law is the actual uniform star law; the matrix indicators
+vanish otherwise. Thus the star density for sets is at most twice
+the corresponding matrix expectation.
+For an $(r,e)$-pseudorandom leaf set with lift $F$, decompose
+$\mathcal T F=L+H_{\mathrm{high}}$ into levels at most $r$ and above $r$.
+Orthogonality and the spectral input give
+\[
+ \|H_{\mathrm{high}}\|_2^2
+ \le2^{-(r+1)b}+3\cdot2^{2h-n}\le2^{-rb}.
+\]
+Take $\eta=2^{-(2/3)r\rho h}$. Markov's inequality gives
+$\Pr[|H_{\mathrm{high}}|>\eta]\le2^r2^{-(2/3)r\rho h}$.
+On its complement use
+$|L+H_{\mathrm{high}}|^m\le2^{m-1}(|L|^m+\eta^m)$;
+on the exceptional event use $0\le\mathcal TF\le1$.
+
+Choose a power of two
+$T\ge\max(4,4(m+3)/(m\rho))$, and let $P$ be the least power of two
+at least $mT$. These depend only on $m,\rho$.
+For the lifted center indicator $G$, whose expectation is at most its
+Grassmann density $\beta$, H\"older contributes $\beta^{1-1/T}$.
+Probability-space norm monotonicity, contraction of $\mathcal T$,
+and the dyadic norm input at $P$ imply
+\[
+ \|L\|_{mT}^m
+ \le(r+1)^m2^{500mr^2P}(2e)^{m-2m/P}
+ \le(r+1)^m2^{500mr^2P+m}e^{m-2/T}.
+\]
+The last inequality uses $P\ge mT$ and $2e\le1$.
+Combining the splitting and rank factors, the actual matching-star
+density $X$ for these two sets satisfies
+\[
+ X\le K_{\mathrm{inv}}\beta^{1-1/T}e^{m-2/T}
+       +D_{\mathrm{inv}}2^{-(20/3)mh},
+\]
+where the deliberately conservative constants are
+\[
+ K_{\mathrm{inv}}=2^{2m}(r+1)^m2^{500mr^2P},\qquad
+ D_{\mathrm{inv}}=2^m+2^{r+1}.
+\]
+In particular we do not use the stronger printed high-degree error
+or a norm theorem at a possibly nondyadic exponent $mT$.
+
+For the selection step, a good tuple has its $m$ quotient increments
+$L_i/R$ in joint direct sum, not merely pairwise trivial intersection.
+Its total span has dimension $t_0+ms_0$, so labels agreeing on the
+center glue to a linear function on that span. Expose ordered leaf
+bases modulo the center. At increment index $j$, the previously
+exposed span has at most $2^{t_0+j}$ vectors and the allowed sampling
+denominator is at least $2^{n-1}$ when $n\ge d+1$. A union bound gives
+\[
+ q=\Pr[\text{not jointly direct}]<2^{t_0+ms_0+1-n}\le S/2
+ \quad\text{if } n\ge t_0+ms_0+2+\log_2(1/S).
+\]
+Thus good accepting tuples have mass at least $\epsilon/2$.
+This joint-span condition is needed for gluing arbitrary labels in the
+inverse argument; it is not a loss in Lemma~\ref{lem:complement}'s
+exact quotient-query identity.
+
+Choose a uniform global linear $f$. Let $X_f$ be the unrestricted
+star density for which all leaf and center labels match $f$, and let
+$\beta_f$ be its matching-center density. Then
+\[
+ \mathbb E X_f\ge(\epsilon/2)2^{-(t_0+ms_0)},\qquad
+ \mathbb E\beta_f=2^{-t_0}.
+\]
+Average the affine expression
+$X_f-(\epsilon/4)2^{-ms_0}\beta_f$ to choose $f$ such that, writing
+$X=X_f$ and $\beta=\beta_f$,
+\[
+ X\ge(\epsilon/4)2^{-ms_0}\beta
+          +(\epsilon/4)2^{-(t_0+ms_0)},\qquad
+ \beta\ge X\ge(\epsilon/4)2^{-(t_0+ms_0)}
+                \ge\tfrac14 2^{-2(m+1)h}.
+\]
+These are densities over all actual stars, not densities renormalized
+by the generic tuples.
+
+Suppose this $f$'s matching leaf set were $(r,e)$-pseudorandom.
+To absorb the analytic error against half of the first selected
+summand, it suffices to require
+\[
+ D_{\mathrm{inv}}2^{-(20/3)mh}
+ \le (S^2/32)2^{-(t_0+2ms_0)}.
+\]
+Equivalently, the following fixed-parameter lower cutoff suffices:
+\[
+ \bigl((8/3)m-2+(3996m+2)\rho\bigr)h
+       \ge\log_2(32D_{\mathrm{inv}}).
+\]
+Its coefficient is positive. This compares with the full selected
+signal, including $\beta$, rather than with $S$ alone.
+The selected lower bound and analytic upper bound would now imply
+\[
+ 1\le8K_{\mathrm{inv}}2^{ms_0}\beta^{-1/T}
+                  e^{m-2/T}/\epsilon
+ \le8K_{\mathrm{inv}}2^{2/T}2^{-\lambda h},
+\]
+where
+\[
+ \lambda=2000m(\rho-\rho^2)-2m\rho-2(m+3)/T
+ \ge m\rho\bigl(2000(1-\rho)-2.5\bigr)>0.
+\]
+Taking $h>(\log_2(8K_{\mathrm{inv}})+2/T)/\lambda$ is a contradiction.
+By MZ Definition~2.1, failure of $(r,e)$-pseudorandomness provides
+$\dim Q+\operatorname{codim}W=r$ and matching density greater than
+$e$ on a nonempty zoom. The restriction $f|_W$ supplies the asserted
+agreement. This uses the definition's actual dimensions and gives
+agreement $>e$, not an unspecified constant times $e$.
+All constants above are independent of $n$. Every ambient requirement
+is an explicit lower bound, satisfied by $n=2J$ for the prescribed
+$J$ and sufficiently large admissible $h$; there is no ambient upper
+bound or required identity involving $\log\log n$.
+\end{proof}
+
 \begin{lemma}[Robust enlarged-ambient local application]\label{lem:robust-local}
-Fix $m,\rho$ and $r=10m/\rho$, with integral test dimensions
+Fix $m\ge2$, $0<\rho\le1/4000$ and $r=10m/\rho$, with integral test dimensions
 $t=2(1-\rho)h$, $d=2h$. Put
 \[
  S=2^{-2(1-1000\rho)hm},\qquad
@@ -368,24 +522,10 @@ $H$ with agreement at least $C$ on the transverse conditioned
 Grassmann space. Here $A>0$ is fixed before $h$.
 \end{lemma}
 \begin{proof}
-We use the no-side-condition inverse argument of MZ Theorem~4.3 and
-its Appendix-B amplification ancestry in MZ24, retaining the following
-ambient estimates. Write $n=2J$ and $b=2\rho h-1$.
-The matrix-to-Grassmann comparison has failure at most
-$(2h+2\rho mh)2^{2h-n}$, required to be at most $1/2$.
-For the high-degree part of the bilinear operator, orthogonality and
-MZ Lemma~4.7 give the safe bound
-\[
- \|H_{\mathrm{high}}\|_2^2
- \le 2^{-(r+1)b}+3\cdot2^{2h-n}\le 2^{-rb}
- \quad\text{if } b\ge1,\quad n\ge2h+rb+\log_2 6.
-\]
-Thus the positive ambient residual is retained, not dropped from the
-source's displayed estimate. The other constants in the inverse
-argument depend on $m,\rho$, not $n$. For large $h$ it provides a pair
-$(Q,W')$, with $\dim Q+\operatorname{codim}W'\le r$, and agreement
-at least $\epsilon'$ whenever the no-side-condition test density is
-at least $S$.
+Apply Lemma~\ref{lem:inverse-explicit} at $n=2J$, retaining all its
+fixed-parameter cutoffs on $h$ and explicit lower bounds on $n$.
+It supplies agreement greater than $\epsilon'=e$ at input density
+at least $S$. We now give the amplification and side-condition steps.
 
 By Lemma~\ref{lem:complement}, the mean density over complements is
 at least $8S$. Complements whose density $\epsilon_A$ is at least
@@ -717,8 +857,8 @@ outer equations because its extension preserves g on H_U. This proves
 the claimed random-extension success cost.
 ## Completing the modified PCP parameter order
 
-Fix m>=2 and a desired exponent slack xi>0; set rho=xi/4000, shrinking it
-further if necessary to meet the imported local theorems. Use the same
+Fix m>=2 and a desired exponent slack xi>0; set rho<=min(xi/4000,1/4000), choosing it positive and rational and
+shrinking it further if necessary to meet the imported local theorems. Use the same
 star-query construction as MZ, with the new J,beta above. The following
 table checks every ambient/repetition-dependent loss used in its decoding
 argument. Local Grassmann decoding and the maximal-zoom-out counting
