@@ -26,8 +26,9 @@ main composition marks completion of Theorem 1 and Corollary 1.
 The sample-count reconciliation replaces the exact-log least-count constructor
 with a conservative natural constructor; the theorem statements remain unchanged.
 See `count-reconciliation-2026-09-12.md` for scope and pending independent review.
-The bounded source integrations have independent reviews; final manuscript-wide
-mathematical/content reconciliation remains required before submission.
+The bounded source integrations and manuscript-wide content reconciliation have
+local agent reviews. These do not certify all imported proofs or complete Lean
+formalization; final submission identity and venue decisions remain separate.
 
 ## Reproduce
 
@@ -67,10 +68,10 @@ Quantyra Research and none of A001's mathematical or Lean claims is imported.
 
 ## Submission issues remaining
 
-The full Lean proof and its audit are incomplete. The current 21-page PDF
-has completed author and independent all-page visual QA. Final manuscript-wide
-mathematical/content reconciliation remains open before calling it
-submission-ready. No venue, submission category, author identity changes,
+The full Lean proof and its audit are incomplete. The current 31-page PDF
+has completed author and independent all-page visual QA.
+The manuscript-wide content reconciliation and its editorial disposition have
+local agent reviews, bounded to their stated scope. No venue, submission category, author identity changes,
 submission authorization or public-announcement destination is selected by
 this local increment. Existing v0.1.0 archive and both historical tags remain
 unchanged; the existing DOI identifies that archive, not this later PDF.
@@ -118,7 +119,7 @@ release, submission approval or complete formal certification. The full
 Lean goal remains incomplete.
 
 
-## Current reviewed finite-foundations PDF (2026-09-13)
+## Prior reviewed finite-foundations PDF (2026-09-13)
 
 The canonical submission source now includes a separately reviewed inverse
 derivation with an explicit two-thirds cutoff, dyadic moments, joint-label
@@ -132,7 +133,7 @@ and conservative budgets. Global hypercontractivity remains an external
 input. The reviewed mathematical source is frozen at
 `4a6d6a141b62d16b10b806549dedc4a5813a89a7`.
 
-The current local PDF has **21 pages**, SHA256
+That prior local PDF has **21 pages**, SHA256
 `d1ab2f17ccf7f602150912d68522524a14a87dabbc350b54beade3febe6df6bc`.
 Build session 31703 and render session 76132 both returned actual exit 0.
 All 21 pages passed author and independent visual QA; see
@@ -163,3 +164,41 @@ and its required dependencies, not the whole general research library.
 Verify the consolidated proof in a clean fresh checkout before treating
 consolidation as complete. This conditional handoff does not change proof
 claims or authorize publication, push, submission or release.
+
+
+## Current hypercontractivity submission candidate (2026-09-13)
+
+The complete finite binary hypercontractivity appendix and its inverse-lemma
+application were integrated and source-reviewed at commit
+`a8d9363ecbd86ef44ccb2a7ae47cb2ad1df8a40f`. See the local
+[lower-chain review](hypercontractivity-lower-chain-independent-review-2026-09-13.md)
+and [upper-chain review](hypercontractivity-upper-chain-independent-review-2026-09-13.md).
+They assess the reconstructed finite mathematics and the exact transcription;
+they do not claim Lean verification or certify all unchanged upstream inputs.
+
+The subsequent editorial revision distinguishes the source decoder's original
+S-threshold contract from the robust 8S application proved in this submission,
+repairs relative source/review links and bibliography-prefix bytes, and gives
+the appendix heading a plain PDF bookmark. Its canonical heading identifies a
+local submission draft based on archived version 0.1.0, not a new released version.
+The cited outer hardness, star/clique transport, maximal-pair counting,
+compilation and learning contracts remain imported.
+
+The root REVIEW.md and MANUSCRIPT.md describe the preserved archive; the local
+reports above concern this later submission source. The local
+[manuscript-wide content reconciliation](hypercontractivity-manuscript-content-reconciliation-2026-09-13.md)
+found no new mathematical consistency issue and identified the editorial fixes
+above. It binds the source at a8d9363; the subsequent
+[editorial disposition review](hypercontractivity-editorial-disposition-review-2026-09-13.md)
+accepted the exact editorial revision. Intentionally cited upstream proofs are
+not recertified by these passes. The final local PDF has **31 pages**, SHA256
+`f4e7552ccd31f4a4457d2604f0285960daf9eadd51c31decc6152e09c5872746`.
+Build session 35326 and render session 33887 returned actual exit 0. All 31 pages
+passed [author visual QA](hypercontractivity-pdf-author-qa-2026-09-13.md);
+[Independent visual QA](hypercontractivity-independent-visual-qa-2026-09-13.md)
+also passed for this exact PDF; the reviewer inspected all 31 pages separately. The prior 21-page PDF and
+its logs are preserved under ignored
+`tmp/pdfs/history-before-hypercontractivity-20260913/`.
+No public release, submission authorization, DOI change or completed Lean proof
+is implied. The conditional paper-specific Lean consolidation handoff above
+still applies only after full proof finalization.

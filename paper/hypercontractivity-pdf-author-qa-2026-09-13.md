@@ -1,0 +1,13 @@
+# Hypercontractivity PDF author QA - 2026-09-13
+
+PASS for author visual QA of all 31 pages. Every rendered page was opened and inspected individually at 1600-pixel resolution. No clipping, overlap, missing glyphs, equation overflow or table overflow was found. Page 31 has spacious justified bibliography lines and wrapped URLs; both bibliography underfull notices are visually harmless. There are no final overfull boxes, unresolved references or hyperref warnings.
+
+The final PDF is `output/pdf/realizable-hardness.pdf`, 952119 bytes, SHA256 `f4e7552ccd31f4a4457d2604f0285960daf9eadd51c31decc6152e09c5872746`. Build session **35326** and render session **33887** returned actual exit 0. The established builder was `python paper/build.py`; Poppler rendered every page under `tmp/pdfs/hypercontractivity-final-pages/`.
+
+The required artifact marker succeeded exactly once before the first PDF edit/build. Initial build session **15432** also returned actual exit 0; that candidate was superseded by reviewed editorial corrections. Its PDF, source and logs remain in `tmp/pdfs/hypercontractivity-attempt-1/`. The older 21-page PDF and logs remain in `tmp/pdfs/history-before-hypercontractivity-20260913/`, with a hash preservation manifest. No failed or historical evidence was discarded.
+
+The source base is `a8d9363ecbd86ef44ccb2a7ae47cb2ad1df8a40f`; the final editorial revision is covered by `hypercontractivity-editorial-disposition-review-2026-09-13.md` (SHA256 `d33ae5ae8fa014202cebc3345df389bba63e34e37da9e40b18897caf11109699`). The revision corrects relative links, six bibliography-prefix bytes, import-status wording, draft metadata and one plain bookmark heading. The original S-threshold source contract and mathematical inequalities were preserved. Source/body correspondence has 130 verified spans. The final build did not alter the reviewed source, body, correspondence, renderer or bibliography bytes.
+
+The paired JSON records the exact source/output/log hashes, all 31 PNG hashes and dimensions, and page-specific observations. Its SHA256 is `d024e83e6ae6ee15f66de0ce205fa731d32b6debcb2fbdea8553ca801d9968d6`.
+
+This is author production and visual QA, not independent visual review or mathematical verification. Independent visual review was pending at initial receipt creation and subsequently passed separately; see `hypercontractivity-independent-visual-qa-2026-09-13.md` (SHA256 `64df180546b90a8c21658571469a6e778fb16692d7309cd1f26b112aaf3eb4ed`). This update records that later result without changing the author inspection chronology. Full Lean formalization, final submission identity and venue/authorization decisions remain open. No public release, push, DOI change, root MANUSCRIPT change or Lean run occurred.

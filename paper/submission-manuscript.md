@@ -1,6 +1,6 @@
 # Realizable Nearlinear-Gap Hardness for Small Monotone Formulas
 
-Quantyra Research | 12 September 2026 | Version 0.1.0
+Quantyra Research | 12 September 2026 | Local submission draft based on archived version 0.1.0
 
 ## Abstract
 
@@ -107,7 +107,7 @@ realizable CMMSA factor L^alpha for a constant alpha>0, with threshold
 realizable hardness theorem. The source contracts are the corrected June
 23, 2026 revision, not the withdrawn superconstant regime of an earlier
 version. [HN, Definitions 1.2/1.7, Theorems 1.3/1.8, Section 7;
-Hir22](SOURCES.md).
+Hir22](../SOURCES.md).
 
 The MZ higher-query construction gives soundness nearly R^(-m) with m+1
 queries but its displayed main theorem chooses the alphabet after both
@@ -119,14 +119,16 @@ higher-arity contract: independent two-query repetition spends two queries
 per repetition. Likewise a perfect-completeness dictatorship test is not
 by itself this unconditional star-projection PCP. The targeted literature
 assessment found no exact subsumer, but does not certify novelty or priority.
-[MZ, MZ24, BKM](SOURCES.md).
+[MZ, MZ24, BKM](../SOURCES.md).
 
 Slack variables, AND products, concentration, weight rounding, secret
 sharing, and the star compilation are established techniques. The new
 argument is their quantitative composition with the modified repetition,
 actual advice posterior, conditional rank/zoom-out control, and descending
-threshold ladder. We import the local Grassmann theorems and the outer
-hardness machinery rather than reprove them. The STOC 2026 full text of MZ
+threshold ladder. We retain the source local-decoder statement below for comparison.
+The enlarged-ambient application used here is the robust 8S lemma proved
+below; the outer hardness, star transport and maximal-pair counting
+machinery remain cited inputs. The STOC 2026 full text of MZ
 was not accessible in the assessment; claims about its numerical details
 are confined to the accessible arXiv v1, also linked by a coauthor.
 
@@ -146,10 +148,12 @@ rational decoding slack, and repetition count. Set r=10m/rho, choosing rational 
 a fixed integer bound on advice dimensions and zoom-out codimensions;
 the local decoder gives a+c<=r.
 
-The proof uses the following established inputs at their stated parameter
-ranges. Precise public versions and bibliographic links are in
-[SOURCES.md](SOURCES.md). The contracts are explicit mathematical imports;
-none is a locally formalized theorem.
+The following contracts identify the established source results and their
+parameter ranges. Precise public versions and bibliographic links are in
+[SOURCES.md](../SOURCES.md). Contract 3 records the scoped source decoder
+for comparison; our changed-ambient argument uses the separately proved
+robust 8S application. The other contracts remain explicit mathematical
+imports. None is claimed to be locally Lean-formalized.
 
 1. **Outer hardness and game (MZ Theorem 3.1, Section 3.2, Claim 3.2).**
    There is an absolute NO value s_0<1 for 3-Lin, while its fixed positive
@@ -245,7 +249,9 @@ none is a locally formalized theorem.
    this requirement. Integer gap factors are obtained by rounding down.
 
 We now prove the parameter extension and the remaining composition in full.
-The local input theorems above retain their usual external-proof status.
+The cited input theorems retain their external-proof status; the scoped
+decoder in contract 3 is not asserted to have been reproved at its original
+S threshold.
 
 ## Explicit-list exception lemma
 
@@ -1081,8 +1087,9 @@ Fix m>=2 and a desired exponent slack xi>0; set rho<=min(xi/4000,1/4000), choosi
 shrinking it further if necessary to meet the imported local theorems. Use the same
 star-query construction as MZ, with the new J,beta above. The following
 table checks every ambient/repetition-dependent loss used in its decoding
-argument. Local Grassmann decoding and the maximal-zoom-out counting
-theorem are imported; the numerical parameter extension is argued here.
+argument. The robust local decoding application is proved above.
+Maximal-zoom-out counting and the cited star/clique machinery remain
+imported; the numerical parameter extension is argued here.
 
 | Use | Control under the replacement |
 |---|---|
@@ -1336,8 +1343,8 @@ and source/significance assessment under Quantyra Research. These are
 informal AI reviews, not independent human peer review or Lean verification.
 The source challenger contributed to the argument and is not counted as
 an independent mathematical verifier. Review roles, findings, and limits
-are disclosed in [REVIEW.md](REVIEW.md). Bibliographic versions and imported
-inputs are recorded in [SOURCES.md](SOURCES.md).
+are disclosed in [REVIEW.md](../REVIEW.md). Bibliographic versions and imported
+inputs are recorded in [SOURCES.md](../SOURCES.md).
 
 ```latex
 \appendix
@@ -1991,7 +1998,7 @@ This proves (A21) for $2,4,8,\ldots$ on all finite dimensions.
 No exact-order globalness is inferred on an undersized quotient, and
 no dyadic theorem was imported to prove (A21).
 
-\subsection{The $L^{p'}$ level bridge and the Boolean conclusion}
+\subsection{The dual-norm level bridge and the Boolean conclusion}
 Let $p\ge2$ be dyadic and $p'=p/(p-1)$. For arbitrary $f$, suppose every
 restriction through order $i$ has $L^{p'}$ norm at most $\epsilon$.
 This is a norm, not a squared norm. We prove

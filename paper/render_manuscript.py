@@ -118,6 +118,7 @@ special={
 }
 def inline(s):
  s=' '.join(s.split())
+ s=s.replace('](../SOURCES.md)','](SOURCES.md)').replace('](../REVIEW.md)','](REVIEW.md)')
  s=re.sub(r'\[([^\]]+)\]\(SOURCES\.md\)',lambda m:r'\cite{HN,Hir22}' if 'HN' in m[1] else (r'\cite{MZ,MZ24,BKM}' if 'MZ' in m[1] else 'the bibliography'),s)
  s=s.replace('[MANUSCRIPT.md](MANUSCRIPT.md)','this manuscript').replace('[REVIEW.md](REVIEW.md)','the companion review disclosures').replace('[SOURCES.md](SOURCES.md)','the bibliography')
  s=re.sub(r'Theorem 1(?![0-9]|\.[0-9])',lambda m:r'Theorem~\ref{thm:main}',s);s=re.sub(r'Corollary 2(?![0-9]|\.[0-9])',lambda m:r'Corollary~\ref{cor:learn}',s)
