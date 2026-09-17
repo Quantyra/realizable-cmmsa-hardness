@@ -16,7 +16,10 @@ signed tags plus `readNat`. `readTableTag`, `readTableTag_mem_FP`, and
 `readTableTag_of_rows` pack `FiniteSourceSampler.readTable` / `ValidRows`.
 `listLenBits`, `listLenBits_mem_FP`, and
 `listLenBits_of_listTree` pack the cons-count of a list-tree encoding as
-`n.bits`. `decodeInputTag_mem_FP` remains. This file does not
+`n.bits`. `readInputTag`, `readInputTag_mem_FP`, and `readInputTag_of_tree`
+pack weights, packed rows/`ValidRows`, parameters, precision, and trials.
+`decodeInputTag_mem_FP` is on the Cobham surface via
+`decodeInputTag_mem_FP_of_read`. This file does not
 inhabit `hSrcCmmsa` and does not assert unconditional Theorem 1, Corollary 2,
 or P vs NP.
 -/
@@ -61,6 +64,10 @@ open PvNP.RealizableHardness.ExecutablePipelineInput
 #check listLenBits_mem_FP
 #check listLenBits_of_listTree
 #check listLenBits_leaf
+#check readInputTag
+#check readInputTag_mem_FP
+#check readInputTag_of_tree
+#check decodeInputTag_mem_FP
 
 #print axioms decodeInputTag_empty
 #print axioms decodeInputTag_none
@@ -87,6 +94,9 @@ open PvNP.RealizableHardness.ExecutablePipelineInput
 #print axioms listLenBits_mem_FP
 #print axioms listLenBits_of_listTree
 #print axioms listLenBits_leaf
+#print axioms readInputTag_mem_FP
+#print axioms readInputTag_of_tree
+#print axioms decodeInputTag_mem_FP
 
 example : gcdBits ∈ Complexity.FP := gcdBits_mem_FP
 
@@ -107,6 +117,10 @@ example : readParametersTag ∈ Complexity.FP := readParametersTag_mem_FP
 example : readTableTag ∈ Complexity.FP := readTableTag_mem_FP
 
 example : listLenBits ∈ Complexity.FP := listLenBits_mem_FP
+
+example : readInputTag ∈ Complexity.FP := readInputTag_mem_FP
+
+example : decodeInputTag ∈ Complexity.FP := decodeInputTag_mem_FP
 
 example (n : Nat) :
     readFormulaTag (pair n.bits (CMMSACodec.Tree.encode CMMSACodec.Tree.leaf)) =
@@ -149,6 +163,9 @@ example {N : Nat} :
 
 example : listLenBits (CMMSACodec.Tree.encode CMMSACodec.Tree.leaf) = [] :=
   listLenBits_leaf
+
+example : readInputTag (CMMSACodec.Tree.encode CMMSACodec.Tree.leaf) = [] := by
+  simp [readInputTag_of_tree, ExecutablePipelineInput.readInput]
 
 example : listLenBits (CMMSACodec.Tree.encode (CMMSACodec.listTree [])) = [] :=
   listLenBits_of_listTree []

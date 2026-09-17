@@ -23,8 +23,9 @@ is `readFormulaTag_of_pair`. `readRowTag` packs `readSignedTag` plus
 `readNatTag`. `readTableTag` packs `FiniteSourceSampler.readTable`
 (`ValidRows`: nonempty, nonnegative probabilities, sum = 1). Tree agreement
 for packed rows is `readTableTag_of_rows`. `listLenBits` packs the cons-count
-of a list-tree encoding as little-endian `n.bits`. This module does
-not claim `decodeInputTag ∈ FP` until `decodeInputTag_mem_FP`. Empty tape =
+of a list-tree encoding as little-endian `n.bits`. `readInputTag` packs
+weights, packed rows/`ValidRows`, parameters, precision, and trials.
+`decodeInputTag_mem_FP` follows `decodeInputTag_mem_FP_of_read`. Empty tape =
 none (malformed, truncated, trailing bits, or field/source validation failure).
 Nonempty packed input = `true :: encodeInput x`.
 This module does not define `selectedSeededMap`, inhabit `hSrcCmmsa`, or assert
@@ -186,57 +187,6 @@ private theorem nodeRight_length_le (z : List Bool) :
               have := congrArg List.length hpre
               simp [List.length_append] at this
               omega
-
-/-- Pack `readInput` on a tree encoding. Empty = none; nonempty =
-`true :: encodeInput x`. Trailing bits after a tree are rejected. -/
-private def readInputTag (z : List Bool) : List Bool :=
-  match CMMSACodec.Tree.parse (z.length + 1) z with
-  | none => []
-  | some (t, rest) =>
-      if rest = [] then
-        match ExecutablePipelineInput.readInput t with
-        | none => []
-        | some x => true :: ExecutablePipelineInput.encodeInput x
-      else []
-
-private theorem decodeInputTag_eq_guard (bs : List Bool) :
-    decodeInputTag bs =
-      Cobham.selectHead (emptyFlag (treeParseTag bs)) []
-        (Cobham.selectHead (emptyFlag (pairSnd (dropOne (treeParseTag bs))))
-          (readInputTag (pairFst (dropOne (treeParseTag bs))))
-          []) := by
-  simp only [decodeInputTag, readInputTag, decodeInput]
-  cases hp : CMMSACodec.Tree.parse (bs.length + 1) bs with
-  | none =>
-      simp [treeParseTag, hp, emptyFlag_nil, selectHead_true]
-  | some pr =>
-      obtain ⟨t, rest⟩ := pr
-      simp [treeParseTag, hp, emptyFlag_cons, selectHead_false, dropOne_cons,
-        pairFst_pair, pairSnd_pair]
-      cases rest with
-      | nil =>
-          have hparse := CMMSACodec.Tree.parse_encode t []
-            ((CMMSACodec.Tree.encode t).length + 1)
-            (Nat.le_trans (CMMSACodec.Tree.depth_le_length t) (Nat.le_succ _))
-          simp [List.append_nil] at hparse
-          rw [emptyFlag_nil, selectHead_true, hparse]
-          simp
-      | cons _ _ =>
-          simp [emptyFlag_cons, selectHead_false]
-
-private theorem decodeInputTag_mem_FP_of_read
-    (hread : readInputTag ∈ Complexity.FP) :
-    decodeInputTag ∈ Complexity.FP := by
-  have htag := treeParseTag_mem_FP
-  have hdrop := dropOneFn_mem_FP htag
-  have hfst := mem_FP_comp hdrop Cobham.fstBlock_mem_FP
-  have hsnd := mem_FP_comp hdrop Cobham.sndBlock_mem_FP
-  have hread' := mem_FP_comp hfst hread
-  have hinner := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hsnd)
-    hread' (constFn_mem_FP [])
-  have hpack := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP htag)
-    (constFn_mem_FP []) hinner
-  exact mem_FP_of_eq hpack fun bs => (decodeInputTag_eq_guard bs).symm
 
 /-! Canonical bits of a little-endian digit string. -/
 
@@ -9051,5 +9001,283 @@ theorem listLenBits_of_listTree (ts : List CMMSACodec.Tree) :
 theorem listLenBits_leaf :
     listLenBits (CMMSACodec.Tree.encode CMMSACodec.Tree.leaf) = [] :=
   listLenBits_of_tree CMMSACodec.Tree.leaf
+
+/-! ## Packed `readInput`: weights, rows/`ValidRows`, parameters, precision, trials. -/
+
+private def wrapInputEnc (wEnc rEnc pEnc bEnc mEnc : List Bool) : List Bool :=
+  true :: ([true] ++ wEnc ++ [true] ++ rEnc ++ [true] ++ pEnc ++ [true] ++ bEnc ++ mEnc)
+
+private theorem wrapInputEnc_eq (x : ExecutablePipelineInput.Input) :
+    wrapInputEnc
+      (CMMSACodec.Tree.encode (listTree (x.weights.map signedTree)))
+      (CMMSACodec.Tree.encode (listTree (x.source.rows.map rowTree)))
+      (CMMSACodec.Tree.encode (parameterTree x.parameters))
+      (CMMSACodec.Tree.encode (natTree x.precision))
+      (CMMSACodec.Tree.encode (natTree x.trials)) =
+      true :: ExecutablePipelineInput.encodeInput x := by
+  cases x with
+  | mk weights source parameters precision trials =>
+      unfold wrapInputEnc encodeInput inputTree
+      simp [CMMSACodec.Tree.encode, List.append_assoc, List.cons_append]
+
+private theorem wrapInputEnc_mem_FP
+    {w r p b m : List Bool → List Bool}
+    (hw : w ∈ FP) (hr : r ∈ FP) (hp : p ∈ FP) (hb : b ∈ FP) (hm : m ∈ FP) :
+    (fun z => wrapInputEnc (w z) (r z) (p z) (b z) (m z)) ∈ FP :=
+  mem_FP_comp
+    (Cobham.appendFn_mem_FP
+      (Cobham.appendFn_mem_FP
+        (Cobham.appendFn_mem_FP
+          (Cobham.appendFn_mem_FP
+            (Cobham.appendFn_mem_FP
+              (Cobham.appendFn_mem_FP
+                (Cobham.appendFn_mem_FP
+                  (Cobham.appendFn_mem_FP (constFn_mem_FP [true]) hw)
+                  (constFn_mem_FP [true]))
+                hr)
+              (constFn_mem_FP [true]))
+            hp)
+          (constFn_mem_FP [true]))
+        hb)
+      hm)
+    (Cobham.cons_mem_FP true)
+
+private def inputWTag : List Bool → List Bool := readListTag ∘ nodeLeft
+
+private def inputRArg (z : List Bool) : List Bool :=
+  pair (listLenBits (dropOne (inputWTag z))) (nodeLeft (nodeRight z))
+
+private def inputRTag : List Bool → List Bool := readRowListTag ∘ inputRArg
+
+private def inputTTag : List Bool → List Bool := readTableTag ∘ inputRTag
+
+private def inputPArg : List Bool → List Bool :=
+  nodeLeft ∘ nodeRight ∘ nodeRight
+
+private def inputPTag : List Bool → List Bool := readParametersTag ∘ inputPArg
+
+private def inputBArg : List Bool → List Bool :=
+  nodeLeft ∘ nodeRight ∘ nodeRight ∘ nodeRight
+
+private def inputBTag : List Bool → List Bool := readNatTag ∘ inputBArg
+
+private def inputMArg : List Bool → List Bool :=
+  nodeRight ∘ nodeRight ∘ nodeRight ∘ nodeRight
+
+private def inputMTag : List Bool → List Bool := readNatTag ∘ inputMArg
+
+private def inputWrap (z : List Bool) : List Bool :=
+  wrapInputEnc (dropOne (inputWTag z)) (dropOne (inputTTag z))
+    (dropOne (inputPTag z)) (dropOne (inputBTag z)) (dropOne (inputMTag z))
+
+private theorem inputWTag_mem_FP : inputWTag ∈ FP :=
+  mem_FP_comp nodeLeft_mem_FP readListTag_mem_FP
+
+private theorem inputRArg_mem_FP : inputRArg ∈ FP := by
+  unfold inputRArg
+  have hw := dropOneFn_mem_FP inputWTag_mem_FP
+  have hn := mem_FP_comp hw listLenBits_mem_FP
+  have hrows := mem_FP_comp nodeRight_mem_FP nodeLeft_mem_FP
+  exact Cobham.pairFn_mem_FP hn hrows
+
+private theorem inputRTag_mem_FP : inputRTag ∈ FP :=
+  mem_FP_comp inputRArg_mem_FP readRowListTag_mem_FP
+
+private theorem inputTTag_mem_FP : inputTTag ∈ FP :=
+  mem_FP_comp inputRTag_mem_FP readTableTag_mem_FP
+
+private theorem inputPArg_mem_FP : inputPArg ∈ FP := by
+  have hR2 := mem_FP_comp nodeRight_mem_FP nodeRight_mem_FP
+  exact mem_FP_comp hR2 nodeLeft_mem_FP
+
+private theorem inputPTag_mem_FP : inputPTag ∈ FP :=
+  mem_FP_comp inputPArg_mem_FP readParametersTag_mem_FP
+
+private theorem inputBArg_mem_FP : inputBArg ∈ FP := by
+  have hR2 := mem_FP_comp nodeRight_mem_FP nodeRight_mem_FP
+  have hR3 := mem_FP_comp hR2 nodeRight_mem_FP
+  exact mem_FP_comp hR3 nodeLeft_mem_FP
+
+private theorem inputBTag_mem_FP : inputBTag ∈ FP :=
+  mem_FP_comp inputBArg_mem_FP readNatTag_mem_FP
+
+private theorem inputMArg_mem_FP : inputMArg ∈ FP := by
+  have hR2 := mem_FP_comp nodeRight_mem_FP nodeRight_mem_FP
+  have hR3 := mem_FP_comp hR2 nodeRight_mem_FP
+  exact mem_FP_comp hR3 nodeRight_mem_FP
+
+private theorem inputMTag_mem_FP : inputMTag ∈ FP :=
+  mem_FP_comp inputMArg_mem_FP readNatTag_mem_FP
+
+private theorem inputWrap_mem_FP : inputWrap ∈ FP :=
+  wrapInputEnc_mem_FP
+    (dropOneFn_mem_FP inputWTag_mem_FP) (dropOneFn_mem_FP inputTTag_mem_FP)
+    (dropOneFn_mem_FP inputPTag_mem_FP) (dropOneFn_mem_FP inputBTag_mem_FP)
+    (dropOneFn_mem_FP inputMTag_mem_FP)
+
+/-- Pack `readInput` on a complete tree encoding. Empty = none; nonempty =
+`true :: encodeInput x`. -/
+def readInputTag (z : List Bool) : List Bool :=
+  Cobham.selectHead (emptyFlag (splitNode z)) []
+    (Cobham.selectHead (emptyFlag (splitNode (nodeRight z))) []
+      (Cobham.selectHead (emptyFlag (splitNode (nodeRight (nodeRight z)))) []
+        (Cobham.selectHead
+          (emptyFlag (splitNode (nodeRight (nodeRight (nodeRight z))))) []
+          (Cobham.selectHead (emptyFlag (inputWTag z)) []
+            (Cobham.selectHead (emptyFlag (inputTTag z)) []
+              (Cobham.selectHead (emptyFlag (inputPTag z)) []
+                (Cobham.selectHead (emptyFlag (inputBTag z)) []
+                  (Cobham.selectHead (emptyFlag (inputMTag z)) []
+                    (inputWrap z)))))))))
+
+theorem readInputTag_mem_FP : readInputTag ∈ Complexity.FP := by
+  have hR1 := nodeRight_mem_FP
+  have hR2 := mem_FP_comp nodeRight_mem_FP nodeRight_mem_FP
+  have hR3 := mem_FP_comp hR2 nodeRight_mem_FP
+  have hsplit0 := splitNode_mem_FP
+  have hsplit1 := mem_FP_comp hR1 splitNode_mem_FP
+  have hsplit2 := mem_FP_comp hR2 splitNode_mem_FP
+  have hsplit3 := mem_FP_comp hR3 splitNode_mem_FP
+  have hnat := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP inputMTag_mem_FP)
+    (constFn_mem_FP []) inputWrap_mem_FP
+  have hprec := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP inputBTag_mem_FP)
+    (constFn_mem_FP []) hnat
+  have hpar := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP inputPTag_mem_FP)
+    (constFn_mem_FP []) hprec
+  have htab := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP inputTTag_mem_FP)
+    (constFn_mem_FP []) hpar
+  have hw := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP inputWTag_mem_FP)
+    (constFn_mem_FP []) htab
+  have hin3 := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hsplit3)
+    (constFn_mem_FP []) hw
+  have hin2 := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hsplit2)
+    (constFn_mem_FP []) hin3
+  have hin1 := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hsplit1)
+    (constFn_mem_FP []) hin2
+  exact Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hsplit0)
+    (constFn_mem_FP []) hin1
+
+set_option maxHeartbeats 4000000 in
+theorem readInputTag_of_tree (t : CMMSACodec.Tree) :
+    readInputTag (CMMSACodec.Tree.encode t) =
+      match ExecutablePipelineInput.readInput t with
+      | none => []
+      | some x => true :: ExecutablePipelineInput.encodeInput x := by
+  cases t with
+  | leaf =>
+      simp [readInputTag, inputWTag, inputRArg, inputRTag, inputTTag, inputPArg,
+        inputPTag, inputBArg, inputBTag, inputMArg, inputMTag, inputWrap,
+        CMMSACodec.Tree.encode, splitNode_leaf, emptyFlag_nil, selectHead_true,
+        readInput]
+  | node ws mid =>
+      simp [readInputTag, inputWTag, inputRArg, inputRTag, inputTTag, inputPArg,
+        inputPTag, inputBArg, inputBTag, inputMArg, inputMTag, inputWrap,
+        splitNode_node, emptyFlag_cons, selectHead_false, dropOne_cons,
+        nodeLeft_node, nodeRight_node]
+      cases mid with
+      | leaf =>
+          simp [CMMSACodec.Tree.encode, splitNode_leaf, emptyFlag_nil,
+            selectHead_true, readInput]
+      | node rows inner =>
+          simp [splitNode_node, emptyFlag_cons, selectHead_false, dropOne_cons,
+            nodeLeft_node, nodeRight_node]
+          cases inner with
+          | leaf =>
+              simp [CMMSACodec.Tree.encode, splitNode_leaf, emptyFlag_nil,
+                selectHead_true, readInput]
+          | node q last =>
+              simp [splitNode_node, emptyFlag_cons, selectHead_false,
+                dropOne_cons, nodeLeft_node, nodeRight_node]
+              cases last with
+              | leaf =>
+                  simp [CMMSACodec.Tree.encode, splitNode_leaf, emptyFlag_nil,
+                    selectHead_true, readInput]
+              | node b m =>
+                  simp [splitNode_node, emptyFlag_cons, selectHead_false,
+                    dropOne_cons, nodeLeft_node, nodeRight_node,
+                    readListTag_of_tree]
+                  cases hw : readList readSigned ws with
+                  | none =>
+                      simp [readInput, hw, emptyFlag_nil, selectHead_true]
+                  | some weights =>
+                      simp [readInput, hw, emptyFlag_cons, selectHead_false,
+                        dropOne_cons, listLenBits_of_listTree, List.length_map,
+                        readRowListTag_of_pair]
+                      cases hr : readList (readRow weights.length) rows with
+                      | none =>
+                          simp [hr, readTableTag_empty, emptyFlag_nil,
+                            selectHead_true]
+                      | some rowlist =>
+                          simp [hr]
+                          rw [readTableTag_of_rows]
+                          by_cases hval : FiniteSourceSampler.ValidRows rowlist
+                          · rw [if_pos hval]
+                            simp [emptyFlag_cons, selectHead_false, dropOne_cons,
+                              FiniteSourceSampler.readTable, hval,
+                              readParametersTag_of_tree]
+                            cases hp : readParameters q with
+                            | none =>
+                                simp [hp, emptyFlag_nil, selectHead_true]
+                            | some params =>
+                                simp [hp, emptyFlag_cons, selectHead_false,
+                                  dropOne_cons, readNatTag_of_tree]
+                                cases hb : readNat b with
+                                | none =>
+                                    simp [hb, emptyFlag_nil, selectHead_true]
+                                | some prec =>
+                                    simp [hb, emptyFlag_cons, selectHead_false,
+                                      dropOne_cons, readNatTag_of_tree]
+                                    cases hm : readNat m with
+                                    | none =>
+                                        simp [hm, emptyFlag_nil,
+                                          selectHead_true]
+                                    | some trials =>
+                                        have hwrap := wrapInputEnc_eq
+                                          ⟨weights, ⟨rowlist, hval⟩, params,
+                                            prec, trials⟩
+                                        simp [hm, emptyFlag_cons,
+                                          selectHead_false, dropOne_cons]
+                                        exact hwrap
+                          · rw [if_neg hval]
+                            simp [emptyFlag_nil, selectHead_true,
+                              FiniteSourceSampler.readTable, hval]
+
+private theorem decodeInputTag_eq_guard (bs : List Bool) :
+    decodeInputTag bs =
+      Cobham.selectHead (emptyFlag (treeParseTag bs)) []
+        (Cobham.selectHead (emptyFlag (pairSnd (dropOne (treeParseTag bs))))
+          (readInputTag (pairFst (dropOne (treeParseTag bs))))
+          []) := by
+  simp only [decodeInputTag, decodeInput]
+  cases hp : CMMSACodec.Tree.parse (bs.length + 1) bs with
+  | none =>
+      simp [treeParseTag, hp, emptyFlag_nil, selectHead_true]
+  | some pr =>
+      obtain ⟨t, rest⟩ := pr
+      simp [treeParseTag, hp, emptyFlag_cons, selectHead_false, dropOne_cons,
+        pairFst_pair, pairSnd_pair]
+      cases rest with
+      | nil =>
+          rw [emptyFlag_nil, selectHead_true, readInputTag_of_tree]
+          simp
+      | cons _ _ =>
+          simp [emptyFlag_cons, selectHead_false]
+
+private theorem decodeInputTag_mem_FP_of_read
+    (hread : readInputTag ∈ Complexity.FP) :
+    decodeInputTag ∈ Complexity.FP := by
+  have htag := treeParseTag_mem_FP
+  have hdrop := dropOneFn_mem_FP htag
+  have hfst := mem_FP_comp hdrop Cobham.fstBlock_mem_FP
+  have hsnd := mem_FP_comp hdrop Cobham.sndBlock_mem_FP
+  have hread' := mem_FP_comp hfst hread
+  have hinner := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hsnd)
+    hread' (constFn_mem_FP [])
+  have hpack := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP htag)
+    (constFn_mem_FP []) hinner
+  exact mem_FP_of_eq hpack fun bs => (decodeInputTag_eq_guard bs).symm
+
+theorem decodeInputTag_mem_FP : decodeInputTag ∈ Complexity.FP :=
+  decodeInputTag_mem_FP_of_read readInputTag_mem_FP
 
 end PvNP.RealizableHardness.ActualDecodeInputFP
