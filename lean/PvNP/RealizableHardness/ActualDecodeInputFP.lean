@@ -1,5 +1,6 @@
 import PvNP.RealizableHardness.ActualTreeParseFP
 import PvNP.RealizableHardness.ExecutablePipelineInput
+import Mathlib.Algebra.BigOperators.Fin
 import Complexitylib.Classes.P
 import Complexitylib.Classes.P.Cobham
 import Complexitylib.Classes.P.Cobham.Internal
@@ -21,7 +22,7 @@ is `readFormulaTag_of_pair`. `readRowTag` packs `readSignedTag` plus
 `pair n.bits (encode t)`. `readParametersTag` packs three signed tags plus
 `readNatTag`. `readTableTag` packs `FiniteSourceSampler.readTable`
 (`ValidRows`: nonempty, nonnegative probabilities, sum = 1). Tree agreement
-for packed rows is not on this increment. `listLenBits` packs the cons-count
+for packed rows is `readTableTag_of_rows`. `listLenBits` packs the cons-count
 of a list-tree encoding as little-endian `n.bits`. This module does
 not claim `decodeInputTag ∈ FP` until `decodeInputTag_mem_FP`. Empty tape =
 none (malformed, truncated, trailing bits, or field/source validation failure).
@@ -7775,6 +7776,997 @@ theorem readTableTag_mem_FP : readTableTag ∈ Complexity.FP :=
 
 theorem readTableTag_empty : readTableTag [] = [] := by
   simp [readTableTag, emptyFlag_nil, selectHead_true]
+
+/-! Tree agreement of the packed `ValidRows` flag on `rowTree` lists. -/
+
+private theorem bits_zero : (0 : Nat).bits = [] := rfl
+
+private theorem bits_one : (1 : Nat).bits = [true] := by
+  change (Nat.bit true 0).bits = [true]
+  rw [Nat.bits_append_bit 0 true (fun _ => rfl), bits_zero]
+
+private theorem bits_inj {n m : Nat} (h : n.bits = m.bits) : n = m := by
+  simpa [bitValue_bits] using congrArg bitValue h
+
+private theorem selectHead_nil (x y : List Bool) : Cobham.selectHead [] x y = [] := rfl
+
+private theorem size_mul_le (m n : Nat) : (m * n).size ≤ m.size + n.size := by
+  refine Nat.size_le.2 ?_
+  have hm := Nat.lt_size_self m
+  have hn := Nat.lt_size_self n
+  by_cases hn0 : n = 0
+  · subst hn0; simp
+  · have npos : 0 < n := Nat.pos_of_ne_zero hn0
+    have hleft : m * n < 2 ^ m.size * n := Nat.mul_lt_mul_of_pos_right hm npos
+    have hright : 2 ^ m.size * n < 2 ^ m.size * 2 ^ n.size :=
+      Nat.mul_lt_mul_of_pos_left hn (Nat.pow_pos (by decide))
+    have hpow : 2 ^ m.size * 2 ^ n.size = 2 ^ (m.size + n.size) :=
+      (Nat.pow_add 2 _ _).symm
+    rw [← hpow]
+    exact lt_trans hleft hright
+
+private theorem size_add_le (m n : Nat) :
+    (m + n).size ≤ max m.size n.size + 1 := by
+  refine Nat.size_le.2 ?_
+  have hm := Nat.lt_size_self m
+  have hn := Nat.lt_size_self n
+  have hsum : m + n < 2 ^ m.size + 2 ^ n.size := Nat.add_lt_add hm hn
+  have hpow : 2 ^ (max m.size n.size + 1) = 2 ^ max m.size n.size + 2 ^ max m.size n.size := by
+    rw [Nat.pow_succ, Nat.mul_two]
+  have hle : 2 ^ m.size + 2 ^ n.size ≤ 2 ^ max m.size n.size + 2 ^ max m.size n.size :=
+    Nat.add_le_add
+      (Nat.pow_le_pow_right (by decide) (le_max_left _ _))
+      (Nat.pow_le_pow_right (by decide) (le_max_right _ _))
+  exact lt_of_lt_of_le hsum (hpow ▸ hle)
+
+private theorem size_sum_map_le {α : Type} (f : α → Nat) :
+    ∀ xs : List α, (xs.map f).sum.size ≤ (xs.map (fun x => (f x).size)).sum + xs.length
+  | [] => by simp
+  | x :: xs => by
+      have ih := size_sum_map_le f xs
+      have hadd := size_add_le (f x) (xs.map f).sum
+      simp only [List.map, List.sum_cons, List.length_cons]
+      have hmax : max (f x).size (xs.map f).sum.size ≤
+          (f x).size + (xs.map f).sum.size := by omega
+      omega
+
+private def foldAcc {N : Nat} (num den : Nat) :
+    List (FiniteSourceSampler.Row N) → Nat × Nat
+  | [] => (num, den)
+  | r :: rs =>
+      foldAcc (num * r.1.den + r.1.num.natAbs * den) (den * r.1.den) rs
+
+private theorem foldAcc_nil {N : Nat} (num den : Nat) :
+    foldAcc num den ([] : List (FiniteSourceSampler.Row N)) = (num, den) := rfl
+
+private theorem foldAcc_cons {N : Nat} (num den : Nat)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N)) :
+    foldAcc num den (r :: rs) =
+      foldAcc (num * r.1.den + r.1.num.natAbs * den) (den * r.1.den) rs := rfl
+
+private theorem foldAcc_append {N : Nat} (num den : Nat) :
+    ∀ xs ys : List (FiniteSourceSampler.Row N),
+      foldAcc num den (xs ++ ys) =
+        foldAcc (foldAcc num den xs).1 (foldAcc num den xs).2 ys
+  | [], _ => rfl
+  | x :: xs, ys => by
+      simp [foldAcc_cons, List.cons_append]
+      exact foldAcc_append _ _ xs ys
+
+private theorem foldAcc_den_pos {N : Nat} (num den : Nat)
+    (rows : List (FiniteSourceSampler.Row N)) (h : 0 < den) :
+    0 < (foldAcc num den rows).2 := by
+  induction rows generalizing num den with
+  | nil => simpa [foldAcc_nil]
+  | cons r rs ih =>
+      exact ih _ _ (Nat.mul_pos h r.1.den_pos)
+
+private theorem foldAcc_ratio {N : Nat} (num den : Nat)
+    (rows : List (FiniteSourceSampler.Row N)) (hd : 0 < den) :
+    ((foldAcc num den rows).1 : Rat) / (foldAcc num den rows).2 =
+      (num : Rat) / den +
+        (rows.map (fun r => (r.1.num.natAbs : Rat) / r.1.den)).sum := by
+  induction rows generalizing num den with
+  | nil =>
+      simp [foldAcc_nil, hd]
+  | cons r rs ih =>
+      have hr : 0 < r.1.den := r.1.den_pos
+      have hden' : 0 < den * r.1.den := Nat.mul_pos hd hr
+      have ih' := ih (num * r.1.den + r.1.num.natAbs * den) (den * r.1.den) hden'
+      have hstep :
+          ((num * r.1.den + r.1.num.natAbs * den : Nat) : Rat) /
+              (den * r.1.den : Nat) =
+            (num : Rat) / den + (r.1.num.natAbs : Rat) / r.1.den := by
+        have hdz : (den : Rat) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hd)
+        have hrz : (r.1.den : Rat) ≠ 0 :=
+          Nat.cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hr)
+        have hmdz : ((den * r.1.den : Nat) : Rat) ≠ 0 := by
+          simpa [Nat.cast_mul] using mul_ne_zero hdz hrz
+        simp only [Nat.cast_add, Nat.cast_mul]
+        rw [add_div]
+        have h1 : ((num : Rat) * r.1.den) / (den * r.1.den) = (num : Rat) / den :=
+          mul_div_mul_right (num : Rat) (den : Rat) hrz
+        have h2 :
+            ((r.1.num.natAbs : Rat) * den) / (den * r.1.den) =
+              (r.1.num.natAbs : Rat) / r.1.den := by
+          rw [mul_comm (den : Rat) (r.1.den : Rat)]
+          exact mul_div_mul_right _ _ hdz
+        exact congrArg₂ (· + ·) h1 h2
+      simp only [foldAcc_cons, List.map, List.sum_cons, ih', hstep]
+      ac_rfl
+
+private theorem rat_of_nonneg {q : Rat} (h : 0 ≤ q) :
+    (q.num.natAbs : Rat) / q.den = q := by
+  have hn : (q.num.natAbs : Rat) = (q.num : Rat) := by
+    have hz : (q.num.natAbs : Int) = q.num :=
+      Int.natAbs_of_nonneg (Rat.num_nonneg.mpr h)
+    simpa only [Int.cast_natCast] using congrArg (fun z : Int => (z : Rat)) hz
+  simpa [hn] using Rat.num_div_den q
+
+private theorem foldAcc_ratio_nonneg {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N))
+    (hnn : ∀ r ∈ rows, 0 ≤ r.1) :
+    ((foldAcc 0 1 rows).1 : Rat) / (foldAcc 0 1 rows).2 =
+      (rows.map (fun r => r.1)).sum := by
+  have hratio := foldAcc_ratio 0 1 rows Nat.zero_lt_one
+  have hmap :
+      (rows.map (fun r => (r.1.num.natAbs : Rat) / r.1.den)) =
+        rows.map (fun r => r.1) :=
+    List.map_congr_left (fun r hr => rat_of_nonneg (hnn r hr))
+  calc
+    ((foldAcc 0 1 rows).1 : Rat) / (foldAcc 0 1 rows).2
+        = (0 : Rat) / 1 +
+            (rows.map (fun r => (r.1.num.natAbs : Rat) / r.1.den)).sum := hratio
+    _ = (0 : Rat) / 1 + (rows.map (fun r => r.1)).sum := by rw [hmap]
+    _ = (rows.map (fun r => r.1)).sum := by simp
+
+private theorem foldAcc_eq_one_iff {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N))
+    (hnn : ∀ r ∈ rows, 0 ≤ r.1) :
+    (foldAcc 0 1 rows).1 = (foldAcc 0 1 rows).2 ↔
+      (rows.map (fun r => r.1)).sum = 1 := by
+  have hratio := foldAcc_ratio_nonneg rows hnn
+  have hpos : 0 < (foldAcc 0 1 rows).2 := foldAcc_den_pos 0 1 rows Nat.zero_lt_one
+  have hdz : ((foldAcc 0 1 rows).2 : Rat) ≠ 0 :=
+    Nat.cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hpos)
+  constructor
+  · intro h
+    have : ((foldAcc 0 1 rows).1 : Rat) / (foldAcc 0 1 rows).2 = 1 := by
+      rw [h]
+      exact div_self hdz
+    simpa [hratio] using this
+  · intro h
+    have : ((foldAcc 0 1 rows).1 : Rat) / (foldAcc 0 1 rows).2 = 1 := by
+      simpa [h] using hratio
+    have heq : ((foldAcc 0 1 rows).1 : Rat) = ((foldAcc 0 1 rows).2 : Rat) :=
+      (div_eq_one_iff_eq hdz).mp this
+    exact Nat.cast_injective heq
+
+private theorem foldAcc_num_le {N : Nat} (num den : Nat)
+    (rows : List (FiniteSourceSampler.Row N)) (hd : 0 < den) :
+    (foldAcc num den rows).1 * den ≤
+      (num + den * (rows.map (fun r => r.1.num.natAbs)).sum) *
+        (foldAcc num den rows).2 := by
+  induction rows generalizing num den with
+  | nil =>
+      simp [foldAcc_nil]
+  | cons r rs ih =>
+      have hr : 0 < r.1.den := r.1.den_pos
+      have hden' : 0 < den * r.1.den := Nat.mul_pos hd hr
+      have ih' := ih (num * r.1.den + r.1.num.natAbs * den) (den * r.1.den) hden'
+      simp only [foldAcc_cons, List.map, List.sum_cons] at ih' ⊢
+      set d := r.1.den
+      set nAbs := r.1.num.natAbs
+      set restN := (rs.map (fun r => r.1.num.natAbs)).sum
+      have hIH :
+          (foldAcc (num * d + nAbs * den) (den * d) rs).1 * (den * d) ≤
+            (num * d + nAbs * den + den * d * restN) *
+              (foldAcc (num * d + nAbs * den) (den * d) rs).2 := by
+        simpa [d, nAbs, restN] using ih'
+      have hleft :
+          (foldAcc (num * d + nAbs * den) (den * d) rs).1 * den * d ≤
+            (num * d + nAbs * den + den * d * restN) *
+              (foldAcc (num * d + nAbs * den) (den * d) rs).2 := by
+        simpa [Nat.mul_assoc] using hIH
+      have hmid :
+          num * d + nAbs * den + den * d * restN ≤
+            (num + den * (nAbs + restN)) * d := by
+        have hnat : nAbs * den ≤ nAbs * den * d :=
+          Nat.le_mul_of_pos_right _ hr
+        simp [Nat.mul_add, Nat.add_mul, Nat.mul_assoc, Nat.mul_left_comm,
+          Nat.mul_comm]
+        nlinarith
+      have hright := Nat.mul_le_mul_right
+        (foldAcc (num * d + nAbs * den) (den * d) rs).2 hmid
+      have hmul :
+          (foldAcc (num * d + nAbs * den) (den * d) rs).1 * den * d ≤
+            (num + den * (nAbs + restN)) *
+              (foldAcc (num * d + nAbs * den) (den * d) rs).2 * d :=
+        hleft.trans (by
+          simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hright)
+      exact Nat.le_of_mul_le_mul_right
+        (by simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hmul) hr
+
+private theorem foldAcc_num_le_sum {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (foldAcc 0 1 rows).1 ≤
+      (rows.map (fun r => r.1.num.natAbs)).sum * (foldAcc 0 1 rows).2 := by
+  have h := foldAcc_num_le 0 1 rows Nat.zero_lt_one
+  simpa using h
+
+private theorem foldAcc_den_size {N : Nat} (num den : Nat)
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (foldAcc num den rows).2.size ≤
+      den.size + (rows.map (fun r => r.1.den.size)).sum := by
+  induction rows generalizing num den with
+  | nil => simp [foldAcc_nil]
+  | cons r rs ih =>
+      have ih' := ih (num * r.1.den + r.1.num.natAbs * den) (den * r.1.den)
+      have hmul := size_mul_le den r.1.den
+      simp only [foldAcc_cons, List.map, List.sum_cons] at ih' ⊢
+      omega
+
+private def rowsEnc {N : Nat} (rows : List (FiniteSourceSampler.Row N)) : List Bool :=
+  CMMSACodec.Tree.encode (listTree (rows.map rowTree))
+
+private theorem encode_length_pos (t : CMMSACodec.Tree) :
+    0 < (CMMSACodec.Tree.encode t).length := by
+  cases t <;> simp [CMMSACodec.Tree.encode]
+
+private theorem encode_digitTree_len_ge (bs : List Bool) :
+    bs.length ≤ (CMMSACodec.Tree.encode (digitTree bs)).length := by
+  induction bs with
+  | nil => simp [digitTree, CMMSACodec.Tree.encode]
+  | cons b t ih =>
+      cases b <;>
+        simp [digitTree, CMMSACodec.Tree.encode, List.length_cons,
+          List.length_append] <;> omega
+
+private theorem natTree_len_ge (n : Nat) :
+    n.size ≤ (CMMSACodec.Tree.encode (natTree n)).length := by
+  simpa [natTree, Nat.size_eq_bits_len] using encode_digitTree_len_ge n.bits
+
+private theorem rowTree_len_ge {N : Nat} (r : FiniteSourceSampler.Row N) :
+    r.1.num.natAbs.size + r.1.den.size + 1 ≤
+      (CMMSACodec.Tree.encode (rowTree r)).length := by
+  have hn := natTree_len_ge r.1.num.natAbs
+  have hd := natTree_len_ge r.1.den
+  simp only [rowTree, signedTree, ratTree, CMMSACodec.Tree.encode,
+    List.length_cons, List.length_append]
+  split <;> omega
+
+private theorem rowsEnc_nil {N : Nat} :
+    rowsEnc ([] : List (FiniteSourceSampler.Row N)) = [false] := rfl
+
+private theorem rowsEnc_cons {N : Nat} (r : FiniteSourceSampler.Row N)
+    (rs : List (FiniteSourceSampler.Row N)) :
+    rowsEnc (r :: rs) =
+      CMMSACodec.Tree.encode (.node (rowTree r) (listTree (rs.map rowTree))) := by
+  simp [rowsEnc, listTree, List.map]
+
+private theorem rowsEnc_cons_bits {N : Nat} (r : FiniteSourceSampler.Row N)
+    (rs : List (FiniteSourceSampler.Row N)) :
+    rowsEnc (r :: rs) =
+      true :: CMMSACodec.Tree.encode (rowTree r) ++ rowsEnc rs := by
+  rw [rowsEnc_cons, rowsEnc]
+  simp [CMMSACodec.Tree.encode]
+
+private theorem rowsEnc_len_ge {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (rows.map (fun r => r.1.num.natAbs.size + r.1.den.size + 1)).sum ≤
+      (rowsEnc rows).length := by
+  induction rows with
+  | nil => simp [rowsEnc_nil]
+  | cons r rs ih =>
+      have hr := rowTree_len_ge r
+      simp only [rowsEnc_cons_bits, List.map, List.sum_cons, List.length_cons,
+        List.length_append]
+      omega
+
+private theorem rowsEnc_length_ge {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    rows.length + 1 ≤ (rowsEnc rows).length := by
+  induction rows with
+  | nil => simp [rowsEnc_nil]
+  | cons r rs ih =>
+      have hr := encode_length_pos (rowTree r)
+      simp only [rowsEnc_cons_bits, List.length_cons, List.length_append]
+      omega
+
+private theorem rowsEnc_prefix_le {N : Nat} :
+    ∀ xs ys : List (FiniteSourceSampler.Row N),
+      (rowsEnc xs).length ≤ (rowsEnc (xs ++ ys)).length
+  | [], ys => by
+      simp [rowsEnc_nil, rowsEnc]
+      exact Nat.succ_le_of_lt (encode_length_pos _)
+  | x :: xs, ys => by
+      have ih := rowsEnc_prefix_le xs ys
+      simp only [rowsEnc_cons_bits, List.cons_append, List.length_cons,
+        List.length_append]
+      omega
+
+private theorem den_size_sum_le {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (rows.map (fun r => r.1.den.size)).sum ≤
+      (rows.map (fun r => r.1.num.natAbs.size + r.1.den.size + 1)).sum := by
+  induction rows with
+  | nil => simp
+  | cons r rs ih =>
+      simp only [List.map, List.sum_cons]
+      exact Nat.le_trans (Nat.add_le_add_left ih _) (by
+        have : 0 ≤ r.1.num.natAbs.size := Nat.zero_le _
+        omega)
+
+private theorem num_size_sum_le {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (rows.map (fun r => r.1.num.natAbs.size)).sum + rows.length ≤
+      (rows.map (fun r => r.1.num.natAbs.size + r.1.den.size + 1)).sum := by
+  induction rows with
+  | nil => simp
+  | cons r rs ih =>
+      simp only [List.map, List.sum_cons, List.length_cons]
+      have : 0 ≤ r.1.den.size := Nat.zero_le _
+      omega
+
+private theorem foldAcc_den_size_enc {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (foldAcc 0 1 rows).2.size ≤ 1 + (rowsEnc rows).length :=
+  Nat.le_trans (foldAcc_den_size 0 1 rows)
+    (by
+      have h1 : (1 : Nat).size = 1 := by simp
+      have hsum := den_size_sum_le rows
+      have henc := rowsEnc_len_ge rows
+      simp [h1] at *
+      omega)
+
+private theorem foldAcc_bits_len {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (foldAcc 0 1 rows).1.size ≤ 2 * (rowsEnc rows).length + 64 ∧
+      (foldAcc 0 1 rows).2.size ≤ 2 * (rowsEnc rows).length + 64 := by
+  have hden := foldAcc_den_size_enc rows
+  have hnum := foldAcc_num_le_sum rows
+  have henc := rowsEnc_len_ge rows
+  have hden' : (foldAcc 0 1 rows).2.size ≤ 2 * (rowsEnc rows).length + 64 := by
+    have := hden; omega
+  have hnum' : (foldAcc 0 1 rows).1.size ≤ 2 * (rowsEnc rows).length + 64 := by
+    set sumN := (rows.map (fun r => r.1.num.natAbs)).sum
+    have h1 : (foldAcc 0 1 rows).1.size ≤ Nat.size sumN + (foldAcc 0 1 rows).2.size :=
+      (Nat.size_le_size hnum).trans (size_mul_le sumN (foldAcc 0 1 rows).2)
+    have h2 := Nat.add_le_add_right
+      (size_sum_map_le
+        (fun r : FiniteSourceSampler.Row N => r.1.num.natAbs) rows)
+      (foldAcc 0 1 rows).2.size
+    have h3 := Nat.add_le_add_right (num_size_sum_le rows)
+      (foldAcc 0 1 rows).2.size
+    have h4 := Nat.add_le_add henc hden
+    have h5 := h1.trans (h2.trans (h3.trans h4))
+    omega
+  exact ⟨hnum', hden'⟩
+
+private theorem validClamp_eq (src x : List Bool)
+    (h : x.length ≤ (validBound src).length) :
+    validClamp src x = x :=
+  List.take_of_length_le h
+
+private theorem foldAcc_clamp {N : Nat}
+    (all pre : List (FiniteSourceSampler.Row N))
+    (hsuff : ∃ rest, all = pre ++ rest) :
+    (foldAcc 0 1 pre).1.size ≤ (validBound (rowsEnc all)).length ∧
+      (foldAcc 0 1 pre).2.size ≤ (validBound (rowsEnc all)).length := by
+  obtain ⟨rest, hpart⟩ := hsuff
+  have hbits := foldAcc_bits_len pre
+  have hle := rowsEnc_prefix_le pre rest
+  have hb := validBound_length (rowsEnc all)
+  rw [hpart] at hb ⊢
+  have hle' : 2 * (rowsEnc pre).length + 64 ≤
+      2 * (rowsEnc (pre ++ rest)).length + 64 := by
+    have := hle
+    omega
+  exact ⟨hbits.1.trans (hb ▸ hle'), hbits.2.trans (hb ▸ hle')⟩
+
+private theorem vSrc_pack (src rem num den flag seen : List Bool) :
+    vSrc (validPack src rem num den flag seen) = src := by
+  simp [vSrc, validPack, pairFst_pair]
+
+private theorem vRem_pack (src rem num den flag seen : List Bool) :
+    vRem (validPack src rem num den flag seen) = rem := by
+  simp [vRem, validPack, pairFst_pair, pairSnd_pair]
+
+private theorem vNum_pack (src rem num den flag seen : List Bool) :
+    vNum (validPack src rem num den flag seen) = num := by
+  simp [vNum, validPack, pairFst_pair, pairSnd_pair]
+
+private theorem vDen_pack (src rem num den flag seen : List Bool) :
+    vDen (validPack src rem num den flag seen) = den := by
+  simp [vDen, validPack, pairFst_pair, pairSnd_pair]
+
+private theorem vFlag_pack (src rem num den flag seen : List Bool) :
+    vFlag (validPack src rem num den flag seen) = flag := by
+  simp [vFlag, validPack, pairFst_pair, pairSnd_pair]
+
+private theorem vSeen_pack (src rem num den flag seen : List Bool) :
+    vSeen (validPack src rem num den flag seen) = seen := by
+  simp [vSeen, validPack, pairFst_pair, pairSnd_pair]
+
+private theorem vFail_pack (src rem num den flag seen : List Bool) :
+    vFail (validPack src rem num den flag seen) =
+      validPack src rem num den [true] seen := by
+  simp [vFail, vSrc_pack, vRem_pack, vNum_pack, vDen_pack, vSeen_pack]
+
+private theorem validStep_flag_fail (src rem num den seen : List Bool) :
+    validStep (validPack src rem num den [true] seen) =
+      validPack src rem num den [true] seen := by
+  simp [validStep, vFlag_pack, emptyFlag_cons, selectHead_false]
+
+private theorem validStep_iterate_id {st : List Bool} (h : validStep st = st) :
+    ∀ n, validStep^[n] st = st
+  | 0 => rfl
+  | n + 1 => by
+      rw [Function.iterate_succ_apply', validStep_iterate_id h n, h]
+
+private theorem validStep_flag_ok (src rem num den seen : List Bool) :
+    validStep (validPack src rem num den [] seen) =
+      validLeaf (validPack src rem num den [] seen) := by
+  simp [validStep, vFlag_pack, emptyFlag_nil, selectHead_true]
+
+private theorem validLeaf_leaf (src num den seen : List Bool) :
+    validLeaf (validPack src [false] num den [] seen) =
+      validPack src [false] num den [] seen := by
+  have hleaf : Cobham.eqFlag [false] [false] = [true] :=
+    (Cobham.eqFlag_eq_true_iff _ _).mpr rfl
+  simp [validLeaf, vRem_pack, hleaf, selectHead_true]
+
+private theorem validStep_leaf (src num den seen : List Bool) :
+    validStep (validPack src [false] num den [] seen) =
+      validPack src [false] num den [] seen := by
+  rw [validStep_flag_ok, validLeaf_leaf]
+
+private theorem vRow_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den flag seen : List Bool) :
+    vRow (validPack src (rowsEnc (r :: rs)) num den flag seen) =
+      CMMSACodec.Tree.encode (rowTree r) := by
+  simp [vRow, vRem_pack, rowsEnc_cons, nodeLeft_node]
+
+private theorem vRest_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den flag seen : List Bool) :
+    vRest (validPack src (rowsEnc (r :: rs)) num den flag seen) = rowsEnc rs := by
+  simp [vRest, vRem_pack, rowsEnc_cons, nodeRight_node, rowsEnc, listTree]
+
+private theorem vSig_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den flag seen : List Bool) :
+    vSig (validPack src (rowsEnc (r :: rs)) num den flag seen) =
+      CMMSACodec.Tree.encode (signedTree r.1) := by
+  simp [vSig, vRow_cons, rowTree, nodeLeft_node]
+
+private theorem vRat_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den flag seen : List Bool) :
+    vRat (validPack src (rowsEnc (r :: rs)) num den flag seen) =
+      CMMSACodec.Tree.encode (ratTree r.1) := by
+  by_cases h : r.1 < 0
+  · simp [vRat, vSig_cons, signedTree, h, nodeRight_node]
+  · simp [vRat, vSig_cons, signedTree, h, nodeRight_node]
+
+private theorem vNBits_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den flag seen : List Bool) :
+    vNBits (validPack src (rowsEnc (r :: rs)) num den flag seen) =
+      r.1.num.natAbs.bits := by
+  have hdig : readDigitsTag (CMMSACodec.Tree.encode (natTree r.1.num.natAbs)) =
+      true :: r.1.num.natAbs.bits := by
+    rw [readDigitsTag_of_tree]
+    simp [natTree, read_digitTree]
+  rw [vNBits, vRat_cons, ratTree, nodeLeft_node, hdig, dropOne_cons,
+    stripTrailing_eq_bits, bitValue_bits]
+
+private theorem vDBits_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den flag seen : List Bool) :
+    vDBits (validPack src (rowsEnc (r :: rs)) num den flag seen) =
+      r.1.den.bits := by
+  have hdig : readDigitsTag (CMMSACodec.Tree.encode (natTree r.1.den)) =
+      true :: r.1.den.bits := by
+    rw [readDigitsTag_of_tree]
+    simp [natTree, read_digitTree]
+  rw [vDBits, vRat_cons, ratTree, nodeRight_node, hdig, dropOne_cons,
+    stripTrailing_eq_bits, bitValue_bits]
+
+private theorem validLeaf_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den seen : List Bool) :
+    validLeaf (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      validRemNode (validPack src (rowsEnc (r :: rs)) num den [] seen) := by
+  have hne : rowsEnc (r :: rs) ≠ [false] := by
+    simp [rowsEnc_cons, CMMSACodec.Tree.encode]
+  simp [validLeaf, vRem_pack, eqFlag_eq_false_of_ne hne, selectHead_false]
+
+private theorem validRemNode_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den seen : List Bool) :
+    validRemNode (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      validRowNode (validPack src (rowsEnc (r :: rs)) num den [] seen) := by
+  simp [validRemNode, vRem_pack, rowsEnc_cons, splitNode_node, emptyFlag_cons,
+    selectHead_false]
+
+private theorem validRowNode_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den seen : List Bool) :
+    validRowNode (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      validSign (validPack src (rowsEnc (r :: rs)) num den [] seen) := by
+  simp [validRowNode, vRow_cons, rowTree, splitNode_node, emptyFlag_cons,
+    selectHead_false]
+
+private theorem validSign_neg {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den seen : List Bool) (hneg : r.1 < 0) :
+    validSign (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      validPack src (rowsEnc (r :: rs)) num den [true] seen := by
+  have hne :
+      CMMSACodec.Tree.encode (.node .leaf .leaf) ≠ [false] := by
+    simp [CMMSACodec.Tree.encode]
+  have hsign :
+      nodeLeft (CMMSACodec.Tree.encode (signedTree r.1)) =
+        CMMSACodec.Tree.encode (.node .leaf .leaf) := by
+    simp [signedTree, hneg, nodeLeft_node]
+  simp [validSign, vSig_cons, hsign, eqFlag_eq_false_of_ne hne, selectHead_false,
+    vFail_pack]
+
+private theorem validSign_nonneg {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den seen : List Bool) (hnn : ¬ r.1 < 0) :
+    validSign (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      validNRead (validPack src (rowsEnc (r :: rs)) num den [] seen) := by
+  have hsign :
+      nodeLeft (CMMSACodec.Tree.encode (signedTree r.1)) = [false] := by
+    by_cases hlt : r.1 < 0
+    · exact (hnn hlt).elim
+    · have hst : signedTree r.1 = .node .leaf (ratTree r.1) := by
+        unfold signedTree
+        have : (if r.1 < 0 then CMMSACodec.Tree.node .leaf .leaf
+            else CMMSACodec.Tree.leaf) = .leaf := by
+          split
+          · rename_i h; exact (hlt h).elim
+          · rfl
+        rw [this]
+      rw [hst, nodeLeft_node]
+      simp [CMMSACodec.Tree.encode]
+  have hpos : Cobham.eqFlag [false] [false] = [true] :=
+    (Cobham.eqFlag_eq_true_iff _ _).mpr rfl
+  unfold validSign
+  rw [vSig_cons, hsign, hpos, selectHead_true]
+
+private theorem validNRead_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den seen : List Bool) :
+    validNRead (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      validDRead (validPack src (rowsEnc (r :: rs)) num den [] seen) := by
+  have hdig : readDigitsTag (CMMSACodec.Tree.encode (natTree r.1.num.natAbs)) =
+      true :: r.1.num.natAbs.bits := by
+    rw [readDigitsTag_of_tree]
+    simp [natTree, read_digitTree]
+  simp [validNRead, vRat_cons, ratTree, nodeLeft_node, hdig, emptyFlag_cons,
+    selectHead_false]
+
+private theorem validDRead_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den seen : List Bool) :
+    validDRead (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      validDigitsOk (validPack src (rowsEnc (r :: rs)) num den [] seen) := by
+  have hdig : readDigitsTag (CMMSACodec.Tree.encode (natTree r.1.den)) =
+      true :: r.1.den.bits := by
+    rw [readDigitsTag_of_tree]
+    simp [natTree, read_digitTree]
+  simp [validDRead, vRat_cons, ratTree, nodeRight_node, hdig, emptyFlag_cons,
+    selectHead_false]
+
+private theorem validDigitsOk_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den seen : List Bool) :
+    validDigitsOk (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      vSucc (validPack src (rowsEnc (r :: rs)) num den [] seen) := by
+  have hne : r.1.den.bits ≠ [] := by
+    intro h
+    exact Nat.ne_of_gt r.1.den_pos (bits_eq_nil h)
+  simp [validDigitsOk, vDBits_cons, emptyFlag_of_ne_nil hne, selectHead_false]
+
+private theorem vSucc_cons {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den : Nat) (seen : List Bool)
+    (hnum : num.bits.length ≤ (validBound src).length)
+    (hden : den.bits.length ≤ (validBound src).length)
+    (hnum' : (num * r.1.den + r.1.num.natAbs * den).bits.length ≤
+      (validBound src).length)
+    (hden' : (den * r.1.den).bits.length ≤ (validBound src).length) :
+    vSucc (validPack src (rowsEnc (r :: rs)) num.bits den.bits [] seen) =
+      validPack src (rowsEnc rs)
+        (num * r.1.den + r.1.num.natAbs * den).bits
+        (den * r.1.den).bits [] [true] := by
+  unfold vSucc
+  rw [vSrc_pack, vNum_pack, vDen_pack]
+  rw [vNBits_cons src r rs num.bits den.bits [] seen,
+    vDBits_cons src r rs num.bits den.bits [] seen,
+    vRest_cons src r rs num.bits den.bits [] seen]
+  rw [mulCanon_eq_bits num.bits r.1.den.bits,
+    mulCanon_eq_bits r.1.num.natAbs.bits den.bits,
+    mulCanon_eq_bits den.bits r.1.den.bits, addCanon_eq_bits]
+  simp only [bitValue_bits]
+  rw [validClamp, List.take_of_length_le hnum', validClamp,
+    List.take_of_length_le hden']
+
+private theorem validStep_cons_neg {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den : List Bool) (seen : List Bool) (hneg : r.1 < 0) :
+    validStep (validPack src (rowsEnc (r :: rs)) num den [] seen) =
+      validPack src (rowsEnc (r :: rs)) num den [true] seen := by
+  rw [validStep_flag_ok, validLeaf_cons, validRemNode_cons, validRowNode_cons,
+    validSign_neg _ _ _ _ _ _ hneg]
+
+private theorem validStep_cons_nonneg {N : Nat} (src : List Bool)
+    (r : FiniteSourceSampler.Row N) (rs : List (FiniteSourceSampler.Row N))
+    (num den : Nat) (seen : List Bool) (hnn : ¬ r.1 < 0)
+    (hnum' : (num * r.1.den + r.1.num.natAbs * den).bits.length ≤
+      (validBound src).length)
+    (hden' : (den * r.1.den).bits.length ≤ (validBound src).length)
+    (hnum : num.bits.length ≤ (validBound src).length)
+    (hden : den.bits.length ≤ (validBound src).length) :
+    validStep (validPack src (rowsEnc (r :: rs)) num.bits den.bits [] seen) =
+      validPack src (rowsEnc rs)
+        (num * r.1.den + r.1.num.natAbs * den).bits
+        (den * r.1.den).bits [] [true] := by
+  rw [validStep_flag_ok, validLeaf_cons, validRemNode_cons, validRowNode_cons,
+    validSign_nonneg _ _ _ _ _ _ hnn, validNRead_cons, validDRead_cons,
+    validDigitsOk_cons, vSucc_cons _ _ _ _ _ _ hnum hden hnum' hden']
+
+private def validSeen {N : Nat} (done : List (FiniteSourceSampler.Row N)) : List Bool :=
+  if done.length = 0 then [] else [true]
+
+private theorem validInit_rows {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    validInit (rowsEnc rows) =
+      validPack (rowsEnc rows) (rowsEnc rows) (0 : Nat).bits (1 : Nat).bits []
+        (validSeen ([] : List (FiniteSourceSampler.Row N))) := by
+  simp [validInit, bits_zero, bits_one, validSeen]
+
+private theorem foldAcc_bits_bound {N : Nat}
+    (all pre : List (FiniteSourceSampler.Row N))
+    (rest : List (FiniteSourceSampler.Row N))
+    (hpart : all = pre ++ rest) :
+    (foldAcc 0 1 pre).1.bits.length ≤ (validBound (rowsEnc all)).length ∧
+      (foldAcc 0 1 pre).2.bits.length ≤ (validBound (rowsEnc all)).length := by
+  have h := foldAcc_clamp all pre ⟨rest, hpart⟩
+  simpa [Nat.size_eq_bits_len] using h
+
+private theorem validStep_walk_nonneg {N : Nat}
+    (all done rest : List (FiniteSourceSampler.Row N))
+    (hpart : all = done ++ rest)
+    (hnn : ∀ r ∈ rest, 0 ≤ r.1) :
+    validStep^[rest.length]
+      (validPack (rowsEnc all) (rowsEnc rest)
+        (foldAcc 0 1 done).1.bits (foldAcc 0 1 done).2.bits []
+        (validSeen done)) =
+      validPack (rowsEnc all) (rowsEnc ([] : List (FiniteSourceSampler.Row N)))
+        (foldAcc 0 1 all).1.bits (foldAcc 0 1 all).2.bits []
+        (validSeen all) := by
+  induction rest generalizing done with
+  | nil =>
+      subst hpart
+      simp [foldAcc_append, validSeen]
+  | cons r rs ih =>
+      have hr : 0 ≤ r.1 := hnn r (by simp)
+      have hnotlt : ¬ r.1 < 0 := not_lt.mpr hr
+      have hnn' : ∀ s ∈ rs, 0 ≤ s.1 := fun s hs => hnn s (by simp [hs])
+      have hpart' : all = (done ++ [r]) ++ rs := by
+        simp [hpart, List.append_assoc]
+      have hbound := foldAcc_bits_bound all done (r :: rs) hpart
+      have hbound' := foldAcc_bits_bound all (done ++ [r]) rs hpart'
+      have hfold :
+          foldAcc 0 1 (done ++ [r]) =
+            ((foldAcc 0 1 done).1 * r.1.den + r.1.num.natAbs * (foldAcc 0 1 done).2,
+              (foldAcc 0 1 done).2 * r.1.den) := by
+        have h := foldAcc_append 0 1 done [r]
+        simpa [foldAcc_cons, foldAcc_nil] using h
+      have hstep :=
+        validStep_cons_nonneg (rowsEnc all) r rs (foldAcc 0 1 done).1
+          (foldAcc 0 1 done).2 (validSeen done) hnotlt
+          (by simpa [hfold, Nat.size_eq_bits_len] using hbound'.1)
+          (by simpa [hfold, Nat.size_eq_bits_len] using hbound'.2)
+          hbound.1 hbound.2
+      rw [List.length_cons, Function.iterate_succ_apply, hstep]
+      have hseen : validSeen (done ++ [r]) = [true] := by
+        simp [validSeen]
+      have ih' := ih (done ++ [r]) hpart' hnn'
+      simpa [hfold, hseen, hpart', List.append_assoc] using ih'
+
+private theorem validStep_walk_neg {N : Nat}
+    (all done rest : List (FiniteSourceSampler.Row N))
+    (hpart : all = done ++ rest)
+    (hneg : ∃ r ∈ rest, ¬ 0 ≤ r.1) :
+    vFlag (validStep^[rest.length]
+      (validPack (rowsEnc all) (rowsEnc rest)
+        (foldAcc 0 1 done).1.bits (foldAcc 0 1 done).2.bits []
+        (validSeen done))) = [true] := by
+  induction rest generalizing done with
+  | nil =>
+      simp at hneg
+  | cons r rs ih =>
+      by_cases hr : 0 ≤ r.1
+      · have hnotlt : ¬ r.1 < 0 := not_lt.mpr hr
+        have hneg' : ∃ s ∈ rs, ¬ 0 ≤ s.1 := by
+          rcases hneg with ⟨s, hs, hs0⟩
+          simp only [List.mem_cons] at hs
+          rcases hs with hsr | hsrs
+          · subst hsr; exact absurd hr hs0
+          · exact ⟨s, hsrs, hs0⟩
+        have hpart' : all = (done ++ [r]) ++ rs := by
+          simp [hpart, List.append_assoc]
+        have hbound := foldAcc_bits_bound all done (r :: rs) hpart
+        have hbound' := foldAcc_bits_bound all (done ++ [r]) rs hpart'
+        have hfold :
+            foldAcc 0 1 (done ++ [r]) =
+              ((foldAcc 0 1 done).1 * r.1.den + r.1.num.natAbs * (foldAcc 0 1 done).2,
+                (foldAcc 0 1 done).2 * r.1.den) := by
+          have h := foldAcc_append 0 1 done [r]
+          simpa [foldAcc_cons, foldAcc_nil] using h
+        have hstep :=
+          validStep_cons_nonneg (rowsEnc all) r rs (foldAcc 0 1 done).1
+            (foldAcc 0 1 done).2 (validSeen done) hnotlt
+            (by simpa [hfold, Nat.size_eq_bits_len] using hbound'.1)
+            (by simpa [hfold, Nat.size_eq_bits_len] using hbound'.2)
+            hbound.1 hbound.2
+        rw [List.length_cons, Function.iterate_succ_apply, hstep]
+        have hseen : validSeen (done ++ [r]) = [true] := by simp [validSeen]
+        simpa [hfold, hseen] using ih (done ++ [r]) hpart' hneg'
+      · have hlt : r.1 < 0 := lt_of_not_ge hr
+        have hstep :=
+          validStep_cons_neg (rowsEnc all) r rs
+            (foldAcc 0 1 done).1.bits (foldAcc 0 1 done).2.bits
+            (validSeen done) hlt
+        rw [List.length_cons, Function.iterate_succ_apply, hstep]
+        have hid := validStep_iterate_id
+          (validStep_flag_fail (rowsEnc all) (rowsEnc (r :: rs))
+            (foldAcc 0 1 done).1.bits (foldAcc 0 1 done).2.bits
+            (validSeen done)) rs.length
+        simpa [hid, vFlag_pack]
+
+private theorem validRun_nonneg {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N))
+    (hnn : ∀ r ∈ rows, 0 ≤ r.1) :
+    validRun (rowsEnc rows) =
+      validPack (rowsEnc rows) [false]
+        (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+        (validSeen rows) := by
+  have hwalk := validStep_walk_nonneg rows [] rows rfl hnn
+  have hge : rows.length ≤ (rowsEnc rows).length + 1 := by
+    have := rowsEnc_length_ge rows; omega
+  have hsplit : (validRuler (rowsEnc rows)).length =
+      ((rowsEnc rows).length + 1 - rows.length) + rows.length := by
+    simp [validRuler_length]; omega
+  have hid : validStep (validPack (rowsEnc rows) (rowsEnc ([] : List (FiniteSourceSampler.Row N)))
+      (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+      (validSeen rows)) =
+      validPack (rowsEnc rows) (rowsEnc ([] : List (FiniteSourceSampler.Row N)))
+        (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+        (validSeen rows) := by
+    simpa [rowsEnc_nil] using
+      validStep_leaf (rowsEnc rows) (foldAcc 0 1 rows).1.bits
+        (foldAcc 0 1 rows).2.bits (validSeen rows)
+  rw [validRun, hsplit, Function.iterate_add_apply, validInit_rows]
+  have hinit :
+      validPack (rowsEnc rows) (rowsEnc rows) (0 : Nat).bits (1 : Nat).bits []
+          (validSeen ([] : List (FiniteSourceSampler.Row N))) =
+        validPack (rowsEnc rows) (rowsEnc rows)
+          (foldAcc 0 1 ([] : List (FiniteSourceSampler.Row N))).1.bits
+          (foldAcc 0 1 ([] : List (FiniteSourceSampler.Row N))).2.bits []
+          (validSeen ([] : List (FiniteSourceSampler.Row N))) := by
+    simp [foldAcc_nil]
+  rw [hinit, hwalk, validStep_iterate_id hid]
+  simp [rowsEnc_nil]
+
+private theorem validStep_of_flag_true {st : List Bool} (h : vFlag st = [true]) :
+    validStep st = st := by
+  simp [validStep, h, emptyFlag_cons, selectHead_false]
+
+private theorem vFlag_iterate_true {st : List Bool} (h : vFlag st = [true]) :
+    ∀ n, vFlag (validStep^[n] st) = [true]
+  | 0 => h
+  | n + 1 => by
+      have ih := vFlag_iterate_true h n
+      rw [Function.iterate_succ_apply', validStep_of_flag_true ih]
+      exact ih
+
+private theorem validRun_neg {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N))
+    (hneg : ∃ r ∈ rows, ¬ 0 ≤ r.1) :
+    vFlag (validRun (rowsEnc rows)) = [true] := by
+  have hwalk := validStep_walk_neg rows [] rows rfl hneg
+  have hge : rows.length ≤ (rowsEnc rows).length + 1 := by
+    have := rowsEnc_length_ge rows; omega
+  have hsplit : (validRuler (rowsEnc rows)).length =
+      ((rowsEnc rows).length + 1 - rows.length) + rows.length := by
+    simp [validRuler_length]; omega
+  rw [validRun, hsplit, Function.iterate_add_apply, validInit_rows]
+  simp only [foldAcc_nil, validSeen] at hwalk ⊢
+  exact vFlag_iterate_true hwalk _
+
+private def validRowsSelect (st : List Bool) : List Bool :=
+  Cobham.selectHead (vSeen st)
+    (Cobham.selectHead (emptyFlag (vFlag st))
+      (Cobham.selectHead (Cobham.eqFlag (vRem st) [false])
+        (Cobham.selectHead (emptyFlag (vDen st)) []
+          (Cobham.selectHead (Cobham.eqFlag (vNum st) (vDen st)) [true] []))
+        [])
+      [])
+    []
+
+private theorem validRowsSelect_seen_nil (st : List Bool) (h : vSeen st = []) :
+    validRowsSelect st = [] := by
+  simp [validRowsSelect, h, selectHead_nil]
+
+private theorem validRowsSelect_flag_true (st : List Bool)
+    (h : vFlag st = [true]) : validRowsSelect st = [] := by
+  unfold validRowsSelect
+  cases hs : vSeen st with
+  | nil => simp [selectHead_nil]
+  | cons b t =>
+      cases b with
+      | false => simp [hs, selectHead_cons_false']
+      | true =>
+          simp [hs, selectHead_cons_true', h, emptyFlag_cons, selectHead_false]
+
+private theorem validRowsSelect_success (st : List Bool)
+    (hs : vSeen st = [true]) (hf : vFlag st = []) (hr : vRem st = [false])
+    (hd : vDen st ≠ []) (he : vNum st = vDen st) :
+    validRowsSelect st = [true] := by
+  have hleaf : Cobham.eqFlag [false] [false] = [true] :=
+    (Cobham.eqFlag_eq_true_iff _ _).mpr rfl
+  have heq : Cobham.eqFlag (vNum st) (vDen st) = [true] :=
+    (Cobham.eqFlag_eq_true_iff _ _).mpr he
+  unfold validRowsSelect
+  rw [hs, selectHead_true, hf, emptyFlag_nil, selectHead_true, hr, hleaf,
+    selectHead_true, emptyFlag_of_ne_nil hd, selectHead_false, heq,
+    selectHead_true]
+
+private theorem forall_rows_nonneg {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (∀ i : Fin rows.length, 0 ≤ (rows.get i).1) ↔ ∀ r ∈ rows, 0 ≤ r.1 := by
+  constructor
+  · intro h r hr
+    obtain ⟨n, rfl⟩ := List.mem_iff_get.mp hr
+    exact h n
+  · intro h i
+    exact h _ (List.get_mem _ _)
+
+private theorem list_sum_eq_fin_sum {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    (rows.map (fun r => r.1)).sum =
+      Finset.univ.sum (fun i : Fin rows.length => (rows.get i).1) := by
+  induction rows with
+  | nil => simp
+  | cons r rs ih =>
+      rw [List.map_cons, List.sum_cons, ih]
+      simpa [List.get_cons_zero, List.get_cons_succ] using
+        (Fin.sum_univ_succ
+          (fun i : Fin (rs.length + 1) => ((r :: rs).get i).1)).symm
+
+private theorem validRows_iff {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    FiniteSourceSampler.ValidRows rows ↔
+      0 < rows.length ∧ (∀ r ∈ rows, 0 ≤ r.1) ∧
+        (rows.map (fun r => r.1)).sum = 1 := by
+  refine ⟨fun h => ?_, fun h => ?_⟩
+  · rcases h with ⟨hpos, hnn, hsum⟩
+    exact ⟨hpos, (forall_rows_nonneg rows).mp hnn,
+      (list_sum_eq_fin_sum rows).trans hsum⟩
+  · rcases h with ⟨hpos, hnn, hsum⟩
+    exact ⟨hpos, (forall_rows_nonneg rows).mpr hnn,
+      (list_sum_eq_fin_sum rows).symm.trans hsum⟩
+
+private theorem validRowsFlag_eq_select (enc : List Bool) :
+    validRowsFlag enc = validRowsSelect (validRun enc) := rfl
+
+private theorem validRowsFlag_of_rows {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    validRowsFlag (rowsEnc rows) =
+      if FiniteSourceSampler.ValidRows rows then [true] else [] := by
+  rw [validRowsFlag_eq_select]
+  by_cases hnn : ∀ r ∈ rows, 0 ≤ r.1
+  · have hrun := validRun_nonneg rows hnn
+    rw [hrun]
+    cases rows with
+    | nil =>
+      have hs : vSeen (validPack (rowsEnc (N := N) []) [false]
+          (foldAcc (N := N) 0 1 []).1.bits
+          (foldAcc (N := N) 0 1 []).2.bits []
+          (validSeen (N := N) [])) = [] := by
+        simp [vSeen_pack, validSeen]
+      rw [validRowsSelect_seen_nil (st := _) hs]
+      simp [FiniteSourceSampler.ValidRows]
+    | cons r0 rs0 =>
+      set rows := r0 :: rs0
+      have hseen : validSeen rows = [true] := by simp [validSeen, rows]
+      have hpos : 0 < (foldAcc 0 1 rows).2 :=
+        foldAcc_den_pos 0 1 rows Nat.zero_lt_one
+      have hden : (foldAcc 0 1 rows).2.bits ≠ [] := by
+        intro h; exact Nat.ne_of_gt hpos (bits_eq_nil h)
+      have hlen : 0 < rows.length := Nat.succ_pos _
+      have hs : vSeen (validPack (rowsEnc rows) [false]
+          (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+          (validSeen rows)) = [true] := by
+        simp [vSeen_pack, hseen]
+      have hf : vFlag (validPack (rowsEnc rows) [false]
+          (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+          (validSeen rows)) = [] := by
+        simp [vFlag_pack]
+      have hr : vRem (validPack (rowsEnc rows) [false]
+          (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+          (validSeen rows)) = [false] := by
+        simp [vRem_pack]
+      have hd : vDen (validPack (rowsEnc rows) [false]
+          (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+          (validSeen rows)) ≠ [] := by
+        simpa [vDen_pack] using hden
+      by_cases hsum : (rows.map (fun r => r.1)).sum = 1
+      · have hval : (foldAcc 0 1 rows).1 = (foldAcc 0 1 rows).2 :=
+          (foldAcc_eq_one_iff rows hnn).mpr hsum
+        have he : vNum (validPack (rowsEnc rows) [false]
+            (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+            (validSeen rows)) =
+            vDen (validPack (rowsEnc rows) [false]
+              (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+              (validSeen rows)) := by
+          simp [vNum_pack, vDen_pack, hval]
+        have hvr : FiniteSourceSampler.ValidRows rows :=
+          (validRows_iff rows).mpr ⟨hlen, hnn, hsum⟩
+        rw [validRowsSelect_success _ hs hf hr hd he, if_pos hvr]
+      · have hne :
+            (foldAcc 0 1 rows).1.bits ≠ (foldAcc 0 1 rows).2.bits := by
+          intro hb
+          exact hsum ((foldAcc_eq_one_iff rows hnn).mp (bits_inj hb))
+        have hvr : ¬ FiniteSourceSampler.ValidRows rows := by
+          intro hv
+          exact hsum ((validRows_iff rows).mp hv).2.2
+        have hsel : validRowsSelect (validPack (rowsEnc rows) [false]
+            (foldAcc 0 1 rows).1.bits (foldAcc 0 1 rows).2.bits []
+            (validSeen rows)) = [] := by
+          have hleaf : Cobham.eqFlag [false] [false] = [true] :=
+            (Cobham.eqFlag_eq_true_iff _ _).mpr rfl
+          have hneq : Cobham.eqFlag (foldAcc 0 1 rows).1.bits
+              (foldAcc 0 1 rows).2.bits = [false] :=
+            eqFlag_eq_false_of_ne hne
+          unfold validRowsSelect
+          rw [hs, selectHead_true, hf, emptyFlag_nil, selectHead_true, hr, hleaf,
+            selectHead_true, emptyFlag_of_ne_nil hd, selectHead_false]
+          simp [vNum_pack, vDen_pack, hneq, selectHead_false]
+        rw [hsel, if_neg hvr]
+  · have hneg : ∃ r ∈ rows, ¬ 0 ≤ r.1 := by
+      simpa [not_forall] using hnn
+    have hvr : ¬ FiniteSourceSampler.ValidRows rows := by
+      intro hv
+      rcases (validRows_iff rows).mp hv with ⟨_, hnn', _⟩
+      rcases hneg with ⟨r, hr, hr0⟩
+      exact hr0 (hnn' r hr)
+    have hf := validRun_neg rows hneg
+    rw [validRowsSelect_flag_true _ hf, if_neg hvr]
+
+theorem readTableTag_of_rows {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) :
+    readTableTag (true :: CMMSACodec.Tree.encode
+        (CMMSACodec.listTree (rows.map ExecutablePipelineInput.rowTree))) =
+      if FiniteSourceSampler.ValidRows rows then
+        true :: CMMSACodec.Tree.encode
+          (CMMSACodec.listTree (rows.map ExecutablePipelineInput.rowTree))
+      else [] := by
+  simp [readTableTag, emptyFlag_cons, selectHead_false, dropOne_cons]
+  change Cobham.selectHead (validRowsFlag (rowsEnc rows))
+      (true :: rowsEnc rows) [] =
+    if FiniteSourceSampler.ValidRows rows then true :: rowsEnc rows else []
+  rw [validRowsFlag_of_rows]
+  split
+  · simp [selectHead_true]
+  · simp [selectHead_nil]
 
 /-! Packed cons-count of a list-tree encoding, then `readInput`. -/
 
