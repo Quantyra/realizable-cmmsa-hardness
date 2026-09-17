@@ -41,3 +41,5 @@ Archived publication:
 - Concept DOI (all versions): [10.5281/zenodo.22728701](https://doi.org/10.5281/zenodo.22728701).
 
 Use the version DOI to cite this exact archived preprint.
+
+Companion Lean sources for **certified components** (GO / GO-WITH-NOTES, not the full manuscript theorem) live in [`lean/`](lean/README.md). They do not replace the informal manuscript proof, do not inhabit unconditional Theorem 1 or Corollary 2, and do not change this archived preprint.

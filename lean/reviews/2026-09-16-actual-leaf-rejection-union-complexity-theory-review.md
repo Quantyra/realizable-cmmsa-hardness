@@ -1,0 +1,5 @@
+# Rejection union complexity-theory review
+
+**Verdict: GO-WITH-NOTES**
+
+Packaging, not force. Frozen `37dae51`. Main `999A3183…3F83`, Checks `15F4924E…AB86`; objects `96C207B9…2C16` / `48EB9C81…6B8E`. Gate PASS naming `37dae51`. `restrictionAgreesOnCenter` is definitional equality of transported vs queried `restrictToCenter` on hypothesized shared `K`. `restrictionAgreesOnCenter_iff_source` aliases certified `restrictToCenter_class_invariant`. `leafFailIndicator` is 0/1 by `if`. `anyFailIndicator` is the existential over `Fin n`. `anyFailIndicator_le_sum` is: if some index fails then that summand is 1 so 1 ≤ a nonnegative sum, else 0 ≤ sum; `anyFailIndicator_le_card` transits through ∑ 1 = n. Theater: calling that 0/1 inequality a probability union bound. No `PMF`, no expectation, no measure, no star-acceptance predicate. Checks call shipped theorems on three-row and empty fixtures, both `K=⊥`, n=0/1/2; the distinct Rel pair sets `midPackaged` to the transport of the source label, so agreement is definitional and no failing leaf is exhibited. Not credited: Theorem 1, Corollary 2, star acceptance, source hardness, P-versus-NP.

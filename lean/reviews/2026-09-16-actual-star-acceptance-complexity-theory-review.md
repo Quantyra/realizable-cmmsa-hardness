@@ -1,0 +1,5 @@
+# Star acceptance complexity-theory review
+
+**Verdict: GO-WITH-NOTES**
+
+Packaging, not force. Frozen `5606cd9`. Main `1186473C…C7A5`, Checks `ED0E8DA9…E585`; objects `03A3F72E…66F0` / `88FF0F54…7994`. Gate PASS naming `5606cd9`. `starAccepts` is the universal of certified `restrictionAgreesOnCenter` over `Fin n`. `starAccepts_iff_anyFail_zero` is: the forall of agreement iff the `if ∃ ¬agree then 1 else 0` of `anyFailIndicator` is 0; classical split, not a soundness law. `starAccepts_of_source_agrees` is pointwise `restrictionAgreesOnCenter_iff_source.mpr`. `starAcceptsCenter` is the constant-`vs` form; `starAcceptsCenter_iff_starAccepts` is `Iff.rfl`. Theater: calling that `StarListDecoding.Star.accepts`, NP-hardness, or a probability law. No `Star` structure, no projection fibre, no proved coercion, no `PMF`, no expectation, no measure, no source-to-star soundness. Checks call shipped theorems on three-row and empty fixtures, both `K=⊥`, n=0/1/2; the distinct Rel pair sets `midPackaged` to the transport of the source label, so agreement is definitional and no failing leaf is exhibited. Not credited: Theorem 1, Corollary 2, source hardness, P-versus-NP.
