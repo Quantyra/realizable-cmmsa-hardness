@@ -11,12 +11,13 @@ import Complexitylib.Classes.Containments.Internal.BinArith
 
 /-!
 Selected sampling `coinRuler` as an FP length ruler, the paired `paddedRun`
-executor, and the packed decode/`coinRuler` guard of `paddedRunOption`.
-`selectedPairedRun_mem_FP` is omitted: `runOption` / `checkedBits` /
-`accepted` / output `tree` are not on the Cobham FP surface, so
-`selectedSeededMap` is not defined. This module does not inhabit `hSrcCmmsa`,
-does not use a dummy 3SAT→CMMSA identity, and does not prove unconditional
-Theorem 1, Corollary 2, or P vs NP.
+executor, the packed decode/`coinRuler` guard of `paddedRunOption`, and the
+packed decode/`trials*precision` length guard of `runOption`.
+`selectedPairedRun_mem_FP` is omitted: `checkedBits` / `accepted` / output
+`tree` are not on the Cobham FP surface, so `selectedSeededMap` is not
+defined. This module does not inhabit `hSrcCmmsa`, does not use a dummy
+3SAT→CMMSA identity, and does not prove unconditional Theorem 1, Corollary 2,
+or P vs NP.
 -/
 namespace PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap
 open Complexity RandomizedReduction ActualHeadlineParameters
@@ -344,4 +345,515 @@ theorem paddedRunGuardTag_empty (eps : Rat) :
     paddedRunGuardTag eps [] = [] := by
   simp [paddedRunGuardTag_eq, pairFst, decodeInput_empty]
 
+/-! Packed decode + `trials*precision` length guard of `runOption`. -/
+
+private theorem parse_true_eq (fuel : Nat) (bs : List Bool) :
+    CMMSACodec.Tree.parse (fuel + 1) (true :: bs) =
+      (CMMSACodec.Tree.parse fuel bs).bind fun pr =>
+        (CMMSACodec.Tree.parse fuel pr.2).bind fun qr =>
+          some (CMMSACodec.Tree.node pr.1 qr.1, qr.2) :=
+  rfl
+
+private theorem parse_consumed {fuel : Nat} {bs : List Bool} {t : CMMSACodec.Tree}
+    {rest : List Bool}
+    (h : CMMSACodec.Tree.parse fuel bs = some (t, rest)) :
+    bs = CMMSACodec.Tree.encode t ++ rest := by
+  induction fuel generalizing bs t rest with
+  | zero => simp [CMMSACodec.Tree.parse] at h
+  | succ fuel ih =>
+      cases bs with
+      | nil => simp [CMMSACodec.Tree.parse] at h
+      | cons b bs =>
+          cases b with
+          | false =>
+              simp [CMMSACodec.Tree.parse] at h
+              obtain ⟨rfl, rfl⟩ := h
+              simp [CMMSACodec.Tree.encode]
+          | true =>
+              rw [parse_true_eq] at h
+              cases hp : CMMSACodec.Tree.parse fuel bs with
+              | none => simp [Option.bind, hp] at h
+              | some pr =>
+                  obtain ⟨p, mid⟩ := pr
+                  simp [Option.bind, hp] at h
+                  cases hq : CMMSACodec.Tree.parse fuel mid with
+                  | none => simp [hq] at h
+                  | some qr =>
+                      obtain ⟨q, tail⟩ := qr
+                      simp [hq] at h
+                      obtain ⟨rfl, rfl⟩ := h
+                      simp [CMMSACodec.Tree.encode, ih hp, ih hq, List.append_assoc]
+
+private theorem pairSnd_nil : pairSnd [] = [] := rfl
+
+private theorem nodeRight_length_le (z : List Bool) :
+    (nodeRight z).length ≤ z.length := by
+  unfold nodeRight splitNode
+  cases z with
+  | nil =>
+      rw [emptyFlag_nil, selectHead_true]
+      simp [dropOne, pairSnd_nil]
+  | cons b t =>
+      rw [emptyFlag_cons, selectHead_false]
+      cases b with
+      | false =>
+          rw [selectHead_cons_false']
+          simp [dropOne, pairSnd_nil]
+      | true =>
+          rw [selectHead_cons_true', dropOne_cons]
+          cases hp : CMMSACodec.Tree.parse (t.length + 1) t with
+          | none =>
+              simp [treeParseTag, hp, dropOne, pairSnd_nil]
+          | some pr =>
+              obtain ⟨u, rest⟩ := pr
+              have hpre := parse_consumed hp
+              simp [treeParseTag, hp, dropOne_cons]
+              have := congrArg List.length hpre
+              simp [List.length_append] at this
+              omega
+
+private theorem eqFlag_eq_false_of_ne {a b : List Bool} (h : a ≠ b) :
+    Cobham.eqFlag a b = [false] := by
+  have hf := Cobham.eqFlag_flag a b
+  cases hf with
+  | inl ht => exact absurd ((Cobham.eqFlag_eq_true_iff a b).mp ht) h
+  | inr hf => exact hf
+
+private def coinsCap (z : List Bool) : List Bool := pairSnd z ++ [false]
+
+private theorem coinsCap_mem_FP : coinsCap ∈ FP :=
+  Cobham.appendFn_mem_FP Cobham.sndBlock_mem_FP (constFn_mem_FP [false])
+
+private theorem coinsCap_length (z : List Bool) :
+    (coinsCap z).length = (pairSnd z).length + 1 := by
+  simp [coinsCap]
+
+private def nuPack (ruler rem flag pow acc : List Bool) : List Bool :=
+  pair ruler (pair rem (pair flag (pair pow acc)))
+
+private theorem nuPack_length (ruler rem flag pow acc : List Bool) :
+    (nuPack ruler rem flag pow acc).length =
+      2 * ruler.length + 2 * rem.length + 2 * flag.length +
+        2 * pow.length + acc.length + 8 := by
+  simp [nuPack, pair_length]; omega
+
+private def nuRulerOf (st : List Bool) : List Bool := pairFst st
+private def nuRem (st : List Bool) : List Bool := pairFst (pairSnd st)
+private def nuFlag (st : List Bool) : List Bool := pairFst (pairSnd (pairSnd st))
+private def nuPow (st : List Bool) : List Bool :=
+  pairFst (pairSnd (pairSnd (pairSnd st)))
+private def nuAcc (st : List Bool) : List Bool :=
+  pairSnd (pairSnd (pairSnd (pairSnd st)))
+
+private theorem nuRulerOf_mem_FP : nuRulerOf ∈ FP := Cobham.fstBlock_mem_FP
+private theorem nuRem_mem_FP : nuRem ∈ FP :=
+  mem_FP_comp Cobham.sndBlock_mem_FP Cobham.fstBlock_mem_FP
+private theorem nuFlag_mem_FP : nuFlag ∈ FP :=
+  mem_FP_comp (mem_FP_comp Cobham.sndBlock_mem_FP Cobham.sndBlock_mem_FP)
+    Cobham.fstBlock_mem_FP
+private theorem nuPow_mem_FP : nuPow ∈ FP := by
+  have h3 := mem_FP_comp Cobham.sndBlock_mem_FP Cobham.sndBlock_mem_FP
+  have h4 := mem_FP_comp h3 Cobham.sndBlock_mem_FP
+  exact mem_FP_comp h4 Cobham.fstBlock_mem_FP
+private theorem nuAcc_mem_FP : nuAcc ∈ FP := by
+  have h3 := mem_FP_comp Cobham.sndBlock_mem_FP Cobham.sndBlock_mem_FP
+  have h4 := mem_FP_comp h3 Cobham.sndBlock_mem_FP
+  exact mem_FP_comp h4 Cobham.sndBlock_mem_FP
+
+private theorem nuPack_mem_FP {ruler rem flag pow acc : List Bool → List Bool}
+    (hr : ruler ∈ FP) (hrem : rem ∈ FP) (hf : flag ∈ FP) (hp : pow ∈ FP)
+    (ha : acc ∈ FP) :
+    (fun st => nuPack (ruler st) (rem st) (flag st) (pow st) (acc st)) ∈ FP :=
+  Cobham.pairFn_mem_FP hr
+    (Cobham.pairFn_mem_FP hrem
+      (Cobham.pairFn_mem_FP hf (Cobham.pairFn_mem_FP hp ha)))
+
+private def nuClamp (st xs : List Bool) : List Bool :=
+  takeLen (pair (nuRulerOf st) xs)
+
+private theorem nuClampFn_mem_FP {xs : List Bool → List Bool} (hxs : xs ∈ FP) :
+    (fun st => nuClamp st (xs st)) ∈ FP := by
+  have h := Cobham.takeLenFn_mem_FP nuRulerOf_mem_FP hxs
+  exact mem_FP_of_eq h fun st => by
+    simp only [nuClamp, takeLen_pair]
+
+private def nuDone (st : List Bool) : List Bool :=
+  nuPack (nuRulerOf st) [false] [false] (nuPow st) (nuAcc st)
+
+private def nuFail (_st : List Bool) : List Bool :=
+  nuPack [] [] [true] [] []
+
+private def nuFalseDigit (st : List Bool) : List Bool :=
+  nuPack (nuRulerOf st) (nodeRight (nuRem st)) []
+    (nuClamp st (nuPow st ++ nuPow st)) (nuAcc st)
+
+private def nuTrueDigit (st : List Bool) : List Bool :=
+  nuPack (nuRulerOf st) (nodeRight (nuRem st)) []
+    (nuClamp st (nuPow st ++ nuPow st))
+    (nuClamp st (nuAcc st ++ nuPow st))
+
+private def nuStep (st : List Bool) : List Bool :=
+  Cobham.selectHead (emptyFlag (nuFlag st))
+    (Cobham.selectHead (Cobham.eqFlag (nuRem st) [false])
+      (nuDone st)
+      (Cobham.selectHead (emptyFlag (splitNode (nuRem st)))
+        (nuFail st)
+        (Cobham.selectHead (Cobham.eqFlag (nodeLeft (nuRem st)) [false])
+          (nuFalseDigit st)
+          (Cobham.selectHead (Cobham.eqFlag (nodeLeft (nuRem st))
+              [true, false, false])
+            (nuTrueDigit st)
+            (nuFail st)))))
+    st
+
+private theorem nuStep_mem_FP : nuStep ∈ FP := by
+  have hrem := nuRem_mem_FP
+  have hflag := nuFlag_mem_FP
+  have hpow := nuPow_mem_FP
+  have hacc := nuAcc_mem_FP
+  have hruler := nuRulerOf_mem_FP
+  have hsplit := mem_FP_comp hrem splitNode_mem_FP
+  have hleft := mem_FP_comp hrem nodeLeft_mem_FP
+  have hright := mem_FP_comp hrem nodeRight_mem_FP
+  have hleaf := eqFlagFn_mem_FP hrem (constFn_mem_FP [false])
+  have hfalse := eqFlagFn_mem_FP hleft (constFn_mem_FP [false])
+  have htrue := eqFlagFn_mem_FP hleft (constFn_mem_FP [true, false, false])
+  have hdone := nuPack_mem_FP hruler (constFn_mem_FP [false])
+    (constFn_mem_FP [false]) hpow hacc
+  have hfail : (fun _ : List Bool => nuFail []) ∈ FP :=
+    constFn_mem_FP (nuFail [])
+  have hpow2 := nuClampFn_mem_FP (Cobham.appendFn_mem_FP hpow hpow)
+  have hacc1 := nuClampFn_mem_FP (Cobham.appendFn_mem_FP hacc hpow)
+  have hfd := nuPack_mem_FP hruler hright (constFn_mem_FP []) hpow2 hacc
+  have htd := nuPack_mem_FP hruler hright (constFn_mem_FP []) hpow2 hacc1
+  have hbit := Cobham.selectHeadFn_mem_FP htrue htd hfail
+  have hbit' := Cobham.selectHeadFn_mem_FP hfalse hfd hbit
+  have hsplit? := Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hsplit)
+    hfail hbit'
+  have hleaf? := Cobham.selectHeadFn_mem_FP hleaf hdone hsplit?
+  exact Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hflag) hleaf? id_mem_FP
+
+private def nuInitEnc (enc : List Bool → List Bool) (z : List Bool) : List Bool :=
+  nuPack (coinsCap z) (enc z) [] [false] []
+
+private theorem nuInitEnc_mem_FP {enc : List Bool → List Bool} (henc : enc ∈ FP) :
+    (fun z => nuInitEnc enc z) ∈ FP :=
+  nuPack_mem_FP coinsCap_mem_FP henc (constFn_mem_FP [])
+    (constFn_mem_FP [false]) (constFn_mem_FP [])
+
+private theorem pairFst_length_le : ∀ z : List Bool, (pairFst z).length ≤ z.length
+  | [] => by simp [pairFst]
+  | [_] => by simp [pairFst]
+  | false :: false :: z => by
+      have h := pairFst_length_le z
+      simp [pairFst]; omega
+  | true :: true :: z => by
+      have h := pairFst_length_le z
+      simp [pairFst]; omega
+  | false :: true :: _ => by simp [pairFst]
+  | true :: false :: _ => by simp [pairFst]
+
+private theorem nodeLeft_length_le (z : List Bool) :
+    (nodeLeft z).length ≤ z.length := by
+  unfold nodeLeft splitNode
+  cases z with
+  | nil =>
+      rw [emptyFlag_nil, selectHead_true]
+      simp [dropOne, pairFst]
+  | cons b t =>
+      rw [emptyFlag_cons, selectHead_false]
+      cases b with
+      | false =>
+          rw [selectHead_cons_false']
+          simp [dropOne, pairFst]
+      | true =>
+          rw [selectHead_cons_true', dropOne_cons]
+          cases hp : CMMSACodec.Tree.parse (t.length + 1) t with
+          | none =>
+              simp [treeParseTag, hp, dropOne, pairFst]
+          | some pr =>
+              obtain ⟨u, rest⟩ := pr
+              have hpre := parse_consumed hp
+              simp [treeParseTag, hp, dropOne_cons]
+              have := congrArg List.length hpre
+              simp [List.length_append] at this
+              have := pairFst_length_le (pair (CMMSACodec.Tree.encode u) rest)
+              simp at this
+              omega
+
+private theorem instEnc_length_le (z : List Bool) :
+    (instEnc z).length ≤ (decodeInputTag (pairFst z)).length := by
+  simp [instEnc, instTag, dropOne]
+
+private theorem precisionEnc_length_le (z : List Bool) :
+    (precisionEnc z).length ≤ (decodeInputTag (pairFst z)).length := by
+  have h1 := nodeRight_length_le (instEnc z)
+  have h2 := nodeRight_length_le (nodeRight (instEnc z))
+  have h3 := nodeRight_length_le (nodeRight (nodeRight (instEnc z)))
+  have h4 := nodeLeft_length_le
+    (nodeRight (nodeRight (nodeRight (instEnc z))))
+  have hi := instEnc_length_le z
+  simp [precisionEnc] at *
+  omega
+
+private theorem trialsEnc_length_le (z : List Bool) :
+    (trialsEnc z).length ≤ (decodeInputTag (pairFst z)).length := by
+  have h1 := nodeRight_length_le (instEnc z)
+  have h2 := nodeRight_length_le (nodeRight (instEnc z))
+  have h3 := nodeRight_length_le (nodeRight (nodeRight (instEnc z)))
+  have h4 := nodeRight_length_le
+    (nodeRight (nodeRight (nodeRight (instEnc z))))
+  have hi := instEnc_length_le z
+  simp [trialsEnc] at *
+  omega
+
+private def nuIterRuler (z : List Bool) : List Bool :=
+  z ++ decodeInputTag (pairFst z) ++ [false]
+
+private theorem nuIterRuler_mem_FP : nuIterRuler ∈ FP :=
+  Cobham.appendFn_mem_FP
+    (Cobham.appendFn_mem_FP id_mem_FP instTag_mem_FP)
+    (constFn_mem_FP [false])
+
+private theorem nuIterRuler_length (z : List Bool) :
+    (nuIterRuler z).length = z.length + (decodeInputTag (pairFst z)).length + 1 := by
+  simp [nuIterRuler, List.length_append]; omega
+
+private def nuWidth (z : List Bool) : List Bool :=
+  List.replicate
+    ((List.replicate 16 false).length *
+      (z ++ decodeInputTag (pairFst z) ++ coinsCap z ++ [false]).length)
+    false
+
+private theorem nuWidth_mem_FP : nuWidth ∈ FP :=
+  Cobham.mulLenFn_mem_FP (Cobham.const_replicate_mem_FP 16)
+    (Cobham.appendFn_mem_FP
+      (Cobham.appendFn_mem_FP
+        (Cobham.appendFn_mem_FP id_mem_FP instTag_mem_FP)
+        coinsCap_mem_FP)
+      (constFn_mem_FP [false]))
+
+private theorem nuWidth_length (z : List Bool) :
+    (nuWidth z).length =
+      16 * (z.length + (decodeInputTag (pairFst z)).length +
+        (coinsCap z).length + 1) := by
+  simp [nuWidth, coinsCap, List.length_replicate, List.length_append]; omega
+
+private def nuBound (z : List Bool) : Nat :=
+  z.length + (decodeInputTag (pairFst z)).length
+
+private structure NuReach (z : List Bool) (st : List Bool) : Prop where
+  ruler_le : (nuRulerOf st).length ≤ z.length + 1
+  rem_le : (nuRem st).length ≤ nuBound z + 1
+  flag_le : (nuFlag st).length ≤ 1
+  pow_le : (nuPow st).length ≤ z.length + 1
+  acc_le : (nuAcc st).length ≤ z.length + 1
+  st_le : st.length ≤ (nuWidth z).length
+
+private theorem nuReach_selectHead (z : List Bool) (s x y : List Bool)
+    (hx : NuReach z x) (hy : NuReach z y) :
+    NuReach z (Cobham.selectHead s x y) := by
+  rw [Cobham.selectHead]
+  split
+  · exact hx
+  · split
+    · exact hy
+    · constructor
+      · simp [nuRulerOf, pairFst]
+      · simp [nuRem, pairFst, pairSnd_nil, nuBound]
+      · simp [nuFlag, pairFst, pairSnd_nil]
+      · simp [nuPow, pairFst, pairSnd_nil]
+      · simp [nuAcc, pairSnd_nil]
+      · simp [nuWidth, List.length_replicate]
+
+private theorem nuReach_pack (z : List Bool) (ruler rem flag pow acc : List Bool)
+    (hr : ruler.length ≤ z.length + 1) (hrem : rem.length ≤ nuBound z + 1)
+    (hf : flag.length ≤ 1) (hp : pow.length ≤ z.length + 1)
+    (ha : acc.length ≤ z.length + 1) :
+    NuReach z (nuPack ruler rem flag pow acc) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simpa [nuPack, nuRulerOf] using hr
+  · simpa [nuPack, nuRem] using hrem
+  · simpa [nuPack, nuFlag] using hf
+  · simpa [nuPack, nuPow] using hp
+  · simpa [nuPack, nuAcc] using ha
+  · have hlen := nuPack_length ruler rem flag pow acc
+    have hb := nuWidth_length z
+    have hcap : (coinsCap z).length = (pairSnd z).length + 1 := coinsCap_length z
+    have hsnd : (pairSnd z).length ≤ z.length := pairSnd_length_le z
+    have : 2 * ruler.length + 2 +
+        (2 * rem.length + 2 +
+          (2 * flag.length + 2 + (2 * pow.length + 2 + acc.length))) ≤
+        16 * (z.length + (decodeInputTag (pairFst z)).length +
+          (coinsCap z).length + 1) := by
+      simp [nuBound] at hrem
+      omega
+    simpa [nuPack, pair_length, nuWidth_length z] using this
+
+private theorem take_length_le (n : Nat) (l : List Bool) :
+    (l.take n).length ≤ n := by
+  rw [List.length_take]; omega
+
+private theorem nuReach_init_precision (z : List Bool) :
+    NuReach z (nuInitEnc precisionEnc z) := by
+  refine nuReach_pack z _ _ _ _ _ ?_ ?_ (by simp) (by simp) (by simp)
+  · simp [coinsCap]; have := pairSnd_length_le z; omega
+  · have := precisionEnc_length_le z
+    simp [nuBound]; omega
+
+private theorem nuReach_init_trials (z : List Bool) :
+    NuReach z (nuInitEnc trialsEnc z) := by
+  refine nuReach_pack z _ _ _ _ _ ?_ ?_ (by simp) (by simp) (by simp)
+  · simp [coinsCap]; have := pairSnd_length_le z; omega
+  · have := trialsEnc_length_le z
+    simp [nuBound]; omega
+
+private theorem nuReach_fail (z : List Bool) : NuReach z (nuFail []) := by
+  refine nuReach_pack z [] [] [true] [] [] (by simp) ?_ (by simp) (by simp)
+    (by simp)
+  simp [nuBound]
+
+private theorem nuStep_reach (z : List Bool) (st : List Bool)
+    (h : NuReach z st) : NuReach z (nuStep st) := by
+  unfold nuStep
+  have hstay : NuReach z st := h
+  have hdone : NuReach z (nuDone st) := by
+    unfold nuDone
+    refine nuReach_pack z _ _ _ _ _ h.ruler_le ?_ (by simp) h.pow_le h.acc_le
+    simp [nuBound]
+  have hfail := nuReach_fail z
+  have hclamp_pow : (nuClamp st (nuPow st ++ nuPow st)).length ≤ z.length + 1 := by
+    simp [nuClamp, takeLen_pair]
+    have := take_length_le (nuRulerOf st).length (nuPow st ++ nuPow st)
+    have := h.ruler_le
+    omega
+  have hclamp_acc : (nuClamp st (nuAcc st ++ nuPow st)).length ≤ z.length + 1 := by
+    simp [nuClamp, takeLen_pair]
+    have := take_length_le (nuRulerOf st).length (nuAcc st ++ nuPow st)
+    have := h.ruler_le
+    omega
+  have hfd : NuReach z (nuFalseDigit st) := by
+    unfold nuFalseDigit
+    refine nuReach_pack z _ _ _ _ _ h.ruler_le ?_ (by simp) hclamp_pow h.acc_le
+    have := nodeRight_length_le (nuRem st)
+    have := h.rem_le
+    omega
+  have htd : NuReach z (nuTrueDigit st) := by
+    unfold nuTrueDigit
+    refine nuReach_pack z _ _ _ _ _ h.ruler_le ?_ (by simp) hclamp_pow hclamp_acc
+    have := nodeRight_length_le (nuRem st)
+    have := h.rem_le
+    omega
+  exact nuReach_selectHead z (emptyFlag (nuFlag st)) _ st
+    (nuReach_selectHead z (Cobham.eqFlag (nuRem st) [false]) _ _
+      hdone
+      (nuReach_selectHead z (emptyFlag (splitNode (nuRem st))) _ _
+        hfail
+        (nuReach_selectHead z (Cobham.eqFlag (nodeLeft (nuRem st)) [false]) _ _
+          hfd
+          (nuReach_selectHead z (Cobham.eqFlag (nodeLeft (nuRem st))
+              [true, false, false]) _ _ htd hfail))))
+    hstay
+
+private theorem nuReach_iterate_precision (z : List Bool) :
+    ∀ n, NuReach z (nuStep^[n] (nuInitEnc precisionEnc z))
+  | 0 => nuReach_init_precision z
+  | n + 1 => by
+      rw [Function.iterate_succ_apply']
+      exact nuStep_reach z _ (nuReach_iterate_precision z n)
+
+private theorem nuReach_iterate_trials (z : List Bool) :
+    ∀ n, NuReach z (nuStep^[n] (nuInitEnc trialsEnc z))
+  | 0 => nuReach_init_trials z
+  | n + 1 => by
+      rw [Function.iterate_succ_apply']
+      exact nuStep_reach z _ (nuReach_iterate_trials z n)
+
+private def nuRunEnc (enc : List Bool → List Bool) (z : List Bool) : List Bool :=
+  nuStep^[(nuIterRuler z).length] (nuInitEnc enc z)
+
+private theorem precisionRun_mem_FP :
+    (fun z => nuRunEnc precisionEnc z) ∈ FP := by
+  have hbound : ∀ z : List Bool, ∀ n ≤ (nuIterRuler z).length,
+      (nuStep^[n] (nuInitEnc precisionEnc z)).length ≤ (nuWidth z).length := by
+    intro z n _
+    exact (nuReach_iterate_precision z n).st_le
+  exact Cobham.iterate_mem_FP nuStep_mem_FP (nuInitEnc_mem_FP precisionEnc_mem_FP)
+    nuIterRuler_mem_FP nuWidth_mem_FP hbound
+
+private theorem trialsRun_mem_FP :
+    (fun z => nuRunEnc trialsEnc z) ∈ FP := by
+  have hbound : ∀ z : List Bool, ∀ n ≤ (nuIterRuler z).length,
+      (nuStep^[n] (nuInitEnc trialsEnc z)).length ≤ (nuWidth z).length := by
+    intro z n _
+    exact (nuReach_iterate_trials z n).st_le
+  exact Cobham.iterate_mem_FP nuStep_mem_FP (nuInitEnc_mem_FP trialsEnc_mem_FP)
+    nuIterRuler_mem_FP nuWidth_mem_FP hbound
+
+private def natUnaryEnc (run : List Bool → List Bool) (z : List Bool) : List Bool :=
+  Cobham.selectHead (emptyFlag (nuFlag (run z))) []
+    (Cobham.selectHead (Cobham.eqFlag (nuFlag (run z)) [false])
+      (nuAcc (run z)) [])
+
+private theorem natUnaryEnc_mem_FP {run : List Bool → List Bool} (hrun : run ∈ FP) :
+    (fun z => natUnaryEnc run z) ∈ FP := by
+  have hflag : (fun z => nuFlag (run z)) ∈ FP := by
+    have h := mem_FP_comp hrun nuFlag_mem_FP
+    exact mem_FP_of_eq h fun z => by simp only [Function.comp]
+  have hacc : (fun z => nuAcc (run z)) ∈ FP := by
+    have h := mem_FP_comp hrun nuAcc_mem_FP
+    exact mem_FP_of_eq h fun z => by simp only [Function.comp]
+  have hok := eqFlagFn_mem_FP hflag (constFn_mem_FP [false])
+  have hinner := Cobham.selectHeadFn_mem_FP hok hacc (constFn_mem_FP [])
+  exact Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hflag)
+    (constFn_mem_FP []) hinner
+
+private def precisionUnary (z : List Bool) : List Bool :=
+  natUnaryEnc (nuRunEnc precisionEnc) z
+
+private def trialsUnary (z : List Bool) : List Bool :=
+  natUnaryEnc (nuRunEnc trialsEnc) z
+
+private theorem precisionUnary_mem_FP : precisionUnary ∈ FP :=
+  natUnaryEnc_mem_FP precisionRun_mem_FP
+
+private theorem trialsUnary_mem_FP : trialsUnary ∈ FP :=
+  natUnaryEnc_mem_FP trialsRun_mem_FP
+
+private def trialsPrecisionRuler (z : List Bool) : List Bool :=
+  List.replicate ((precisionUnary z).length * (trialsUnary z).length) false
+
+private theorem trialsPrecisionRuler_mem_FP : trialsPrecisionRuler ∈ FP :=
+  Cobham.mulLenFn_mem_FP precisionUnary_mem_FP trialsUnary_mem_FP
+
+/-- Decode + `trials*precision` length guard of `runOption`.
+Success payload is `true :: pair instanceBits coins`; failure is `[]`. -/
+def runOptionGuardTag (z : List Bool) : List Bool :=
+  Cobham.selectHead (emptyFlag (instTag z)) []
+    (Cobham.selectHead
+      (Cobham.lenEqFlag (pairSnd z) (trialsPrecisionRuler z))
+      (true :: pair (pairFst z) (pairSnd z))
+      [])
+
+theorem runOptionGuardTag_mem_FP : runOptionGuardTag ∈ Complexity.FP := by
+  have hinst := instTag_mem_FP
+  have hcoins : (fun z : List Bool => pairSnd z) ∈ FP := Cobham.sndBlock_mem_FP
+  have heq := lenEqFlagFn_mem_FP hcoins trialsPrecisionRuler_mem_FP
+  have hpair :=
+    Cobham.pairFn_mem_FP Cobham.fstBlock_mem_FP Cobham.sndBlock_mem_FP
+  have hcons := mem_FP_comp hpair (Cobham.cons_mem_FP true)
+  have hinner := Cobham.selectHeadFn_mem_FP heq hcons (constFn_mem_FP [])
+  exact Cobham.selectHeadFn_mem_FP (emptyFlagFn_mem_FP hinst)
+    (constFn_mem_FP []) hinner
+
+theorem runOptionGuardTag_none (z : List Bool)
+    (h : decodeInput (pairFst z) = none) :
+    runOptionGuardTag z = [] := by
+  simp [runOptionGuardTag, instTag, decodeInputTag, h, emptyFlag_nil]
+
+theorem runOptionGuardTag_empty : runOptionGuardTag [] = [] :=
+  runOptionGuardTag_none [] (by simp [pairFst, decodeInput_empty])
+
 end PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap
+
+
