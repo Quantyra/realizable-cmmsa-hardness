@@ -1,0 +1,172 @@
+commit=f7f338bdd28101ff66fa482716a435ca783cd191
+repo=C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness
+main-sha256=D2405DC2CE759190671801AEF669297C1F8DD9F56BAC1079F7E95D9EB87DDD87
+checks-sha256=BAD35DD0BFFD06A007E5C552C494AAA823AF1B266CB2F74498EF01E0B614DC9D
+copied_dep_oleans=303
+main-1 exit=0 time=333.2 hash=773E14769F846688877E9E0857873E8AB3286E4CBA43D3D3161D6A717ECBB8E8
+main-2 exit=0 time=333.9 hash=773E14769F846688877E9E0857873E8AB3286E4CBA43D3D3161D6A717ECBB8E8
+checks-1 exit=0 time=26.7 hash=BB977DD6D036454A4C9B5978347A5D345D62F3CA0B816030172A55B57DDF3BC2
+checks-2 exit=0 time=21.9 hash=BB977DD6D036454A4C9B5978347A5D345D62F3CA0B816030172A55B57DDF3BC2
+MATCH_MAIN=True
+MATCH_CHECKS=True
+
+PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag (bs : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag_empty : decodeInputTag [] = []
+PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag_none (bs : List Bool) (h : decodeInput bs = none) :
+  decodeInputTag bs = []
+PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag_some (bs : List Bool) (x : Input)
+  (h : decodeInput bs = some x) : decodeInputTag bs = true :: encodeInput x
+PvNP.RealizableHardness.ActualDecodeInputFP.gcdBits (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.gcdBits_mem_FP : gcdBits ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.gcdBits_odd_pair (a b : List Bool) (ha : a = (CMMSACodec.bitValue a).bits)
+  (hb : b = (CMMSACodec.bitValue b).bits) (hne : a ≠ [])
+  (hodd : b = [] ∨ CMMSACodec.bitValue a % 2 = 1 ∨ CMMSACodec.bitValue b % 2 = 1) :
+  gcdBits (pair a b) = ((CMMSACodec.bitValue a).gcd (CMMSACodec.bitValue b)).bits
+PvNP.RealizableHardness.ActualDecodeInputFP.readRatTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readRatTag_mem_FP : readRatTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readRatTag_of_tree (t : CMMSACodec.Tree) :
+  readRatTag t.encode =
+    match CMMSACodec.readRat t with
+    | none => []
+    | some q => true :: (CMMSAEncoding.ratTree q).encode
+PvNP.RealizableHardness.ActualDecodeInputFP.readSignedTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readSignedTag_mem_FP : readSignedTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readSignedTag_of_tree (t : CMMSACodec.Tree) :
+  readSignedTag t.encode =
+    match readSigned t with
+    | none => []
+    | some q => true :: (signedTree q).encode
+PvNP.RealizableHardness.ActualDecodeInputFP.readListTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readListTag_mem_FP : readListTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readListTag_of_tree (t : CMMSACodec.Tree) :
+  readListTag t.encode =
+    match CMMSACodec.readList readSigned t with
+    | none => []
+    | some qs => true :: (CMMSACodec.listTree (List.map signedTree qs)).encode
+PvNP.RealizableHardness.ActualDecodeInputFP.readFormulaTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readFormulaTag_mem_FP : readFormulaTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readFormulaTag_of_pair (n : ℕ) (t : CMMSACodec.Tree) :
+  readFormulaTag (pair n.bits t.encode) =
+    match CMMSACodec.readFormula n t with
+    | none => []
+    | some f => true :: (CMMSAEncoding.formulaTree f).encode
+PvNP.RealizableHardness.ActualDecodeInputFP.readRowTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readRowTag_mem_FP : readRowTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readRowTag_of_pair (n : ℕ) (t : CMMSACodec.Tree) :
+  readRowTag (pair n.bits t.encode) =
+    match readRow n t with
+    | none => []
+    | some row => true :: (rowTree row).encode
+PvNP.RealizableHardness.ActualDecodeInputFP.readRowListTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readRowListTag_mem_FP : readRowListTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readRowListTag_of_pair (n : ℕ) (t : CMMSACodec.Tree) :
+  readRowListTag (pair n.bits t.encode) =
+    match CMMSACodec.readList (readRow n) t with
+    | none => []
+    | some rows => true :: (CMMSACodec.listTree (List.map rowTree rows)).encode
+PvNP.RealizableHardness.ActualDecodeInputFP.readParametersTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readParametersTag_mem_FP : readParametersTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readParametersTag_of_tree (t : CMMSACodec.Tree) :
+  readParametersTag t.encode =
+    match readParameters t with
+    | none => []
+    | some q => true :: (parameterTree q).encode
+PvNP.RealizableHardness.ActualDecodeInputFP.readTableTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readTableTag_mem_FP : readTableTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readTableTag_empty : readTableTag [] = []
+PvNP.RealizableHardness.ActualDecodeInputFP.readTableTag_of_rows {N : ℕ} (rows : List (FiniteSourceSampler.Row N)) :
+  readTableTag (true :: (CMMSACodec.listTree (List.map rowTree rows)).encode) =
+    if FiniteSourceSampler.ValidRows rows then true :: (CMMSACodec.listTree (List.map rowTree rows)).encode else []
+PvNP.RealizableHardness.ActualDecodeInputFP.listLenBits (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.listLenBits_mem_FP : listLenBits ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.listLenBits_of_listTree (ts : List CMMSACodec.Tree) :
+  listLenBits (CMMSACodec.listTree ts).encode = ts.length.bits
+PvNP.RealizableHardness.ActualDecodeInputFP.listLenBits_leaf : listLenBits CMMSACodec.Tree.leaf.encode = []
+PvNP.RealizableHardness.ActualDecodeInputFP.readInputTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualDecodeInputFP.readInputTag_mem_FP : readInputTag ∈ FP
+PvNP.RealizableHardness.ActualDecodeInputFP.readInputTag_of_tree (t : CMMSACodec.Tree) :
+  readInputTag t.encode =
+    match readInput t with
+    | none => []
+    | some x => true :: encodeInput x
+PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag_mem_FP : decodeInputTag ∈ FP
+'PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag_none' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag_some' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.gcdBits_mem_FP' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.gcdBits_odd_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readRatTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readRatTag_of_tree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readSignedTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readSignedTag_of_tree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readListTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readListTag_of_tree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readFormulaTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readFormulaTag_of_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readRowTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readRowTag_of_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readRowListTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readRowListTag_of_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readParametersTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readParametersTag_of_tree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readTableTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readTableTag_empty' depends on axioms: [propext]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readTableTag_of_rows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.listLenBits_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.listLenBits_of_listTree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.listLenBits_leaf' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readInputTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.readInputTag_of_tree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualDecodeInputFP.decodeInputTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
