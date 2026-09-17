@@ -1,0 +1,36 @@
+commit=b8ba7b55b542759d151410667ed56e50f6dcad3e
+repo=C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness
+main-sha256=1B3BCB0452CD11DCB9C7B61E97F35FF8807297C0526F92534BF9DD2F3D7E69C9
+checks-sha256=94D888D4645D8BD0EB4231F2766F8878030CDC3C585AC06B4F3A0B055E3344A8
+copied_dep_oleans=311
+main-1 exit=0 time=20.9 hash=85487B040ABB6C47267693905D152392E9F461705078D09FB665F903FCC58F5B
+main-2 exit=0 time=19.5 hash=85487B040ABB6C47267693905D152392E9F461705078D09FB665F903FCC58F5B
+checks-1 exit=0 time=15.6 hash=FC2513F4FBD85CC8AEDBD10BA4CB5E53B51034A6C387A912D7DEDEDD0573D5D3
+checks-2 exit=0 time=15.8 hash=FC2513F4FBD85CC8AEDBD10BA4CB5E53B51034A6C387A912D7DEDEDD0573D5D3
+MATCH_MAIN=True
+MATCH_CHECKS=True
+
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.selectedPairedRun (L : ℕ) (eps : ℚ) : List Bool → List Bool
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.selectedCoinRuler (eps : ℚ) : List Bool → List Bool
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.selectedCoinRuler_mem_FP (eps : ℚ) : selectedCoinRuler eps ∈ FP
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag (eps : ℚ) (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_mem_FP (eps : ℚ) : paddedRunGuardTag eps ∈ FP
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_eq (eps : ℚ) (z : List Bool) :
+  paddedRunGuardTag eps z =
+    match decodeInput (pairFst z) with
+    | none => []
+    | some val =>
+      if (pairSnd z).length = coinRuler eps (pairFst z).length then true :: pair (pairFst z) (pairSnd z) else []
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_empty (eps : ℚ) : paddedRunGuardTag eps [] = []
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.selectedCoinRuler_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
