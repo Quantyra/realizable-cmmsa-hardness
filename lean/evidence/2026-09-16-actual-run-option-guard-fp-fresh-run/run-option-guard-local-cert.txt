@@ -1,0 +1,50 @@
+commit=c78bf1a5b4c8c31fe82535f3f293c57c2b348da2
+repo=C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness
+main-sha256=99B5245219A98031C9BA4537E19E2968FF29AD0327F41153CBF8B3275D5EB152
+checks-sha256=FAF432B65CAC722C809646E2979EB8F2CEB43037D7018944C35DD64A055F38D8
+copied_dep_oleans=311
+main-1 exit=0 time=21.2 hash=960B9AB41DA7C6BF5621A2BB285FA926A1D43F34AEE63E2E5AF7352F7BFB1651
+main-2 exit=0 time=21.1 hash=960B9AB41DA7C6BF5621A2BB285FA926A1D43F34AEE63E2E5AF7352F7BFB1651
+checks-1 exit=0 time=15.9 hash=6C841EBD06E28B9E470E600F26517364C4A270E49083B5A1F8B630BCC8CD4B9B
+checks-2 exit=0 time=16.8 hash=6C841EBD06E28B9E470E600F26517364C4A270E49083B5A1F8B630BCC8CD4B9B
+MATCH_MAIN=True
+MATCH_CHECKS=True
+
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.selectedPairedRun (L : ℕ) (eps : ℚ) : List Bool → List Bool
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.selectedCoinRuler (eps : ℚ) : List Bool → List Bool
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.selectedCoinRuler_mem_FP (eps : ℚ) : selectedCoinRuler eps ∈ FP
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag (eps : ℚ) (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_mem_FP (eps : ℚ) : paddedRunGuardTag eps ∈ FP
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_eq (eps : ℚ) (z : List Bool) :
+  paddedRunGuardTag eps z =
+    match decodeInput (pairFst z) with
+    | none => []
+    | some val =>
+      if (pairSnd z).length = coinRuler eps (pairFst z).length then true :: pair (pairFst z) (pairSnd z) else []
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_empty (eps : ℚ) : paddedRunGuardTag eps [] = []
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.runOptionGuardTag (z : List Bool) : List Bool
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.runOptionGuardTag_mem_FP : runOptionGuardTag ∈ FP
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.runOptionGuardTag_none (z : List Bool)
+  (h : decodeInput (pairFst z) = none) : runOptionGuardTag z = []
+PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.runOptionGuardTag_empty : runOptionGuardTag [] = []
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.selectedCoinRuler_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.paddedRunGuardTag_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.runOptionGuardTag_mem_FP' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.runOptionGuardTag_none' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap.runOptionGuardTag_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
