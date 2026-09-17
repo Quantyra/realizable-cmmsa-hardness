@@ -37,4 +37,4 @@ Later stop-loss packings on the same tree, not separately three-lens’d at copy
 
 ## What is not claimed
 
-Unconditional manuscript Theorem 1, Corollary 2, inhabited `hSrcCmmsa`, `decodeInputTag_mem_FP`, `selectedPairedRun_mem_FP`, P versus NP, publication, or DOI/release change.
+Unconditional manuscript Theorem 1, Corollary 2, inhabited `hSrcCmmsa`, `selectedPairedRun_mem_FP`, `selectedSeededMap`, P versus NP, publication, or DOI/release change.

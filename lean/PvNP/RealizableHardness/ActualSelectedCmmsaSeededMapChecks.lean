@@ -2,8 +2,9 @@ import PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap
 
 /-!
 Interface checks for the selected CMMSA sampling ruler, the packed
-decode/`coinRuler` guard of `paddedRunOption`, and the packed
-decode/`trials*precision` length guard of `runOption`.
+decode/`coinRuler` guard of `paddedRunOption`, and the public packed
+`runOptionTruncationTag` / `runOptionGuardTag` interfaces for the
+decode/`trials*precision` stages of `runOption`.
 `decodeInputTag_mem_FP` is on the Cobham surface. Remaining gap is
 `selectedPairedRun_mem_FP` / `selectedSeededMap`: `checkedBits` / `accepted` /
 output `tree` are not packed. This file does not inhabit `hSrcCmmsa` and does
@@ -26,6 +27,10 @@ open PvNP.RealizableHardness.ExecutablePipelineInput
 #check runOptionGuardTag_mem_FP
 #check runOptionGuardTag_none
 #check runOptionGuardTag_empty
+#check runOptionGuardTag_eq
+#check runOptionTruncationTag
+#check runOptionTruncationTag_mem_FP
+#check runOptionTruncationTag_eq
 
 #print axioms selectedCoinRuler_mem_FP
 #print axioms paddedRunGuardTag_mem_FP
@@ -34,6 +39,9 @@ open PvNP.RealizableHardness.ExecutablePipelineInput
 #print axioms runOptionGuardTag_mem_FP
 #print axioms runOptionGuardTag_none
 #print axioms runOptionGuardTag_empty
+#print axioms runOptionGuardTag_eq
+#print axioms runOptionTruncationTag_mem_FP
+#print axioms runOptionTruncationTag_eq
 
 example (eps : Rat) (x : List Bool) :
     (selectedCoinRuler eps x).length = coinRuler eps x.length := by
@@ -57,5 +65,8 @@ example : runOptionGuardTag ∈ Complexity.FP :=
 
 example : runOptionGuardTag [] = [] :=
   runOptionGuardTag_empty
+
+example : runOptionTruncationTag ∈ Complexity.FP :=
+  runOptionTruncationTag_mem_FP
 
 end PvNP.RealizableHardness.ActualSelectedCmmsaSeededMapChecks

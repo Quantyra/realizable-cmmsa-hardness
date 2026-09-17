@@ -11,8 +11,10 @@ import Complexitylib.Classes.Containments.Internal.BinArith
 
 /-!
 Selected sampling `coinRuler` as an FP length ruler, the paired `paddedRun`
-executor, the packed decode/`coinRuler` guard of `paddedRunOption`, and the
-packed decode/`trials*precision` length guard of `runOption`.
+executor, and the public packed interfaces `runOptionTruncationTag` and
+`runOptionGuardTag` for the decode/`trials*precision` stages of `runOption`.
+The earlier packed decode/`coinRuler` guard of `paddedRunOption` remains
+available as well.
 `selectedPairedRun_mem_FP` is omitted: `checkedBits` / `accepted` / output
 `tree` are not on the Cobham FP surface, so `selectedSeededMap` is not
 defined. This module does not inhabit `hSrcCmmsa`, does not use a dummy
@@ -826,6 +828,24 @@ private def trialsPrecisionRuler (z : List Bool) : List Bool :=
 private theorem trialsPrecisionRuler_mem_FP : trialsPrecisionRuler ∈ FP :=
   Cobham.mulLenFn_mem_FP precisionUnary_mem_FP trialsUnary_mem_FP
 
+/-! Packed coin truncation required by `paddedRunOption`.
+
+The policy's final executable stage calls `coins.take (trials*precision)`.
+The transducer below performs that truncation using the unary decoder's
+bounded ruler.  It is deliberately exposed separately from the guard: the
+remaining policy equalities and the checked output constructor are still not
+claimed to be on the Cobham surface.
+-/
+
+def runOptionTruncationTag (z : List Bool) : List Bool :=
+  takeLen (pair (trialsPrecisionRuler z) (pairSnd z))
+
+theorem runOptionTruncationTag_mem_FP : runOptionTruncationTag ∈ Complexity.FP := by
+  have h := Cobham.takeLenFn_mem_FP trialsPrecisionRuler_mem_FP
+    (show (fun z : List Bool => pairSnd z) ∈ FP from Cobham.sndBlock_mem_FP)
+  exact mem_FP_of_eq h (fun z => by
+    simp [runOptionTruncationTag, takeLen_pair])
+
 /-- Decode + `trials*precision` length guard of `runOption`.
 Success payload is `true :: pair instanceBits coins`; failure is `[]`. -/
 def runOptionGuardTag (z : List Bool) : List Bool :=
@@ -854,6 +874,503 @@ theorem runOptionGuardTag_none (z : List Bool)
 theorem runOptionGuardTag_empty : runOptionGuardTag [] = [] :=
   runOptionGuardTag_none [] (by simp [pairFst, decodeInput_empty])
 
+/-! Semantic unary walk of `natTree` encodings. -/
+
+private theorem nuRulerOf_pack (r rem f p a : List Bool) :
+    nuRulerOf (nuPack r rem f p a) = r := by
+  simp [nuRulerOf, nuPack]
+
+private theorem nuRem_pack (r rem f p a : List Bool) :
+    nuRem (nuPack r rem f p a) = rem := by
+  simp [nuRem, nuPack]
+
+private theorem nuFlag_pack (r rem f p a : List Bool) :
+    nuFlag (nuPack r rem f p a) = f := by
+  simp [nuFlag, nuPack]
+
+private theorem nuPow_pack (r rem f p a : List Bool) :
+    nuPow (nuPack r rem f p a) = p := by
+  simp [nuPow, nuPack]
+
+private theorem nuAcc_pack (r rem f p a : List Bool) :
+    nuAcc (nuPack r rem f p a) = a := by
+  simp [nuAcc, nuPack]
+
+private theorem take_replicate_false (k n : Nat) :
+    (List.replicate n false).take k = List.replicate (min k n) false := by
+  induction n generalizing k with
+  | zero => simp
+  | succ n ih =>
+      cases k with
+      | zero => simp
+      | succ k =>
+          simp [List.replicate_succ, ih]
+
+private theorem nuClamp_add (R : List Bool) (n m : Nat) :
+    takeLen (pair R (List.replicate n false ++ List.replicate m false)) =
+      List.replicate (min R.length (n + m)) false := by
+  rw [takeLen_pair, ← List.replicate_add, take_replicate_false]
+
+private inductive NuSem where
+  | fail
+  | done (pow acc : Nat)
+  | run (t : CMMSACodec.Tree) (pow acc : Nat)
+
+private def encodeNu (R : List Bool) : NuSem → List Bool
+  | .fail => nuFail []
+  | .done p a =>
+      nuPack R [false] [false] (List.replicate p false) (List.replicate a false)
+  | .run t p a =>
+      nuPack R (CMMSACodec.Tree.encode t) [] (List.replicate p false)
+        (List.replicate a false)
+
+private def nuSemStep (cap : Nat) : NuSem → NuSem
+  | .fail => .fail
+  | .done p a => .done p a
+  | .run t p a =>
+      match t with
+      | .leaf => .done p a
+      | .node .leaf q => .run q (min cap (2 * p)) a
+      | .node (.node .leaf .leaf) q =>
+          .run q (min cap (2 * p)) (min cap (a + p))
+      | .node _ _ => .fail
+
+private theorem nuStep_encode (R : List Bool) (s : NuSem) :
+    nuStep (encodeNu R s) = encodeNu R (nuSemStep R.length s) := by
+  cases s with
+  | fail =>
+      simp [encodeNu, nuFail, nuSemStep, nuStep, nuPack, nuFlag, emptyFlag_cons]
+  | done p a =>
+      simp [encodeNu, nuSemStep, nuStep, nuPack, nuFlag, emptyFlag_cons]
+  | run t p a =>
+      rw [encodeNu]
+      unfold nuStep
+      rw [nuFlag_pack, emptyFlag_nil, selectHead_true, nuRem_pack]
+      cases t with
+      | leaf =>
+          have hleaf : Cobham.eqFlag [false] [false] = [true] :=
+            (Cobham.eqFlag_eq_true_iff _ _).mpr rfl
+          simp [CMMSACodec.Tree.encode, hleaf, nuDone, nuRulerOf_pack, nuPow_pack,
+            nuAcc_pack, nuSemStep, encodeNu]
+      | node p q =>
+          have hnotleaf := eqFlag_eq_false_of_ne
+            (show CMMSACodec.Tree.encode (.node p q) ≠ [false] by
+              simp [CMMSACodec.Tree.encode])
+          rw [hnotleaf, selectHead_false, splitNode_node, emptyFlag_cons,
+            selectHead_false]
+          simp only [nuFalseDigit, nuTrueDigit, nodeLeft_node, nodeRight_node]
+          cases p with
+          | leaf =>
+              have hp : Cobham.eqFlag (CMMSACodec.Tree.encode .leaf) [false] =
+                  [true] :=
+                (Cobham.eqFlag_eq_true_iff _ _).mpr
+                  (by simp [CMMSACodec.Tree.encode])
+              simp [hp, nuFalseDigit, nuRulerOf_pack, nuRem_pack, nodeRight_node,
+                nuPow_pack, nuAcc_pack, nuClamp, nuClamp_add, nuSemStep, encodeNu]
+              have hclamp :
+                  takeLen (pair R (List.replicate (p + p) false)) =
+                    List.replicate (min R.length (2 * p)) false := by
+                rw [takeLen_pair, take_replicate_false]
+                congr 1
+                omega
+              rw [hclamp]
+          | node a b =>
+              have hp := eqFlag_eq_false_of_ne
+                (show CMMSACodec.Tree.encode (.node a b) ≠ [false] by
+                  simp [CMMSACodec.Tree.encode])
+              rw [hp, selectHead_false]
+              cases a with
+              | leaf =>
+                  cases b with
+                  | leaf =>
+                      have ht : Cobham.eqFlag
+                          (CMMSACodec.Tree.encode (.node .leaf .leaf))
+                          [true, false, false] = [true] :=
+                        (Cobham.eqFlag_eq_true_iff _ _).mpr
+                          (by simp [CMMSACodec.Tree.encode])
+                      simp [ht, nuTrueDigit, nuRulerOf_pack, nuRem_pack,
+                        nodeRight_node, nuPow_pack, nuAcc_pack, nuClamp, nuClamp_add,
+                        nuSemStep, encodeNu]
+                      have hpclamp :
+                          takeLen (pair R (List.replicate (p + p) false)) =
+                            List.replicate (min R.length (2 * p)) false := by
+                        rw [takeLen_pair, take_replicate_false]
+                        congr 1
+                        omega
+                      have haclamp :
+                          takeLen (pair R (List.replicate (a + p) false)) =
+                            List.replicate (min R.length (a + p)) false := by
+                        rw [takeLen_pair, take_replicate_false]
+                      rw [hpclamp, haclamp]
+                  | node a' b' =>
+                      have ht := eqFlag_eq_false_of_ne
+                        (show CMMSACodec.Tree.encode
+                            (.node .leaf (.node a' b')) ≠ [true, false, false] by
+                          simp [CMMSACodec.Tree.encode])
+                      rw [ht, selectHead_false]
+                      simp [nuFail, nuSemStep, encodeNu]
+              | node a' b' =>
+                  have ht := eqFlag_eq_false_of_ne
+                    (show CMMSACodec.Tree.encode
+                        (.node (.node a' b') b) ≠ [true, false, false] by
+                      simp [CMMSACodec.Tree.encode])
+                  rw [ht, selectHead_false]
+                  simp [nuFail, nuSemStep, encodeNu]
+
+private theorem nuStep_iterate_encode (R : List Bool) (s : NuSem) (n : Nat) :
+    nuStep^[n] (encodeNu R s) = encodeNu R ((nuSemStep R.length)^[n] s) := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+      rw [Function.iterate_succ_apply', Function.iterate_succ_apply', ih,
+        nuStep_encode]
+
+private def walkAcc (cap : Nat) : List Bool → Nat → Nat → Nat
+  | [], _, a => a
+  | false :: t, p, a => walkAcc cap t (min cap (2 * p)) a
+  | true :: t, p, a => walkAcc cap t (min cap (2 * p)) (min cap (a + p))
+
+private theorem walkAcc_le (cap : Nat) :
+    ∀ bs p a, a ≤ cap → walkAcc cap bs p a ≤ cap
+  | [], _, a, ha => ha
+  | false :: t, p, a, ha =>
+      walkAcc_le cap t (min cap (2 * p)) a ha
+  | true :: t, p, a, ha =>
+      walkAcc_le cap t (min cap (2 * p)) (min cap (a + p)) (Nat.min_le_left _ _)
+
+private theorem bitValue_false (t : List Bool) :
+    bitValue (false :: t) = 2 * bitValue t := by
+  simp [bitValue]
+
+private theorem bitValue_true (t : List Bool) :
+    bitValue (true :: t) = 1 + 2 * bitValue t := by
+  simp [bitValue]
+
+private theorem walkAcc_add (cap p a : Nat) (bs : List Bool)
+    (ha : a ≤ cap) (hp : p ≤ cap) :
+    walkAcc cap bs p a = min cap (a + p * bitValue bs) := by
+  induction bs generalizing p a with
+  | nil =>
+      simp [walkAcc, bitValue, ha]
+  | cons b t ih =>
+      cases b with
+      | false =>
+          have hp' : min cap (2 * p) ≤ cap := Nat.min_le_left _ _
+          rw [walkAcc, bitValue_false, ih (min cap (2 * p)) a ha hp']
+          by_cases h2 : 2 * p ≤ cap
+          · have hmin : min cap (2 * p) = 2 * p := Nat.min_eq_right h2
+            rw [hmin]
+            ac_rfl
+          · have hmin : min cap (2 * p) = cap := Nat.min_eq_left (Nat.le_of_not_ge h2)
+            rw [hmin]
+            by_cases hz : bitValue t = 0
+            · simp [hz]
+            · have hpos : 1 ≤ bitValue t := Nat.pos_of_ne_zero hz
+              have hL : cap ≤ a + cap * bitValue t := by
+                have := Nat.mul_le_mul_left cap hpos
+                omega
+              have hR : cap ≤ a + p * (2 * bitValue t) := by
+                have hcaplt : cap < 2 * p := Nat.not_le.mp h2
+                have hmul : 2 * p ≤ p * (2 * bitValue t) := by
+                  have hb : 2 ≤ 2 * bitValue t := by omega
+                  simpa [Nat.mul_comm] using Nat.mul_le_mul_left p hb
+                omega
+              simp [Nat.min_eq_left hL, Nat.min_eq_left hR]
+      | true =>
+          have ha' : min cap (a + p) ≤ cap := Nat.min_le_left _ _
+          have hp' : min cap (2 * p) ≤ cap := Nat.min_le_left _ _
+          rw [walkAcc, bitValue_true,
+            ih (min cap (2 * p)) (min cap (a + p)) ha' hp']
+          by_cases hap : a + p ≤ cap
+          · have haeq : min cap (a + p) = a + p := Nat.min_eq_right hap
+            rw [haeq]
+            by_cases h2 : 2 * p ≤ cap
+            · have hmin : min cap (2 * p) = 2 * p := Nat.min_eq_right h2
+              rw [hmin]
+              ring
+            · have hmin : min cap (2 * p) = cap :=
+                Nat.min_eq_left (Nat.le_of_not_ge h2)
+              rw [hmin]
+              by_cases hz : bitValue t = 0
+              · simp [hz]
+              · have hpos : 1 ≤ bitValue t := Nat.pos_of_ne_zero hz
+                have hL : cap ≤ a + p + cap * bitValue t := by
+                  have := Nat.mul_le_mul_left cap hpos
+                  omega
+                have hR : cap ≤ a + p * (1 + 2 * bitValue t) := by
+                  have hcaplt : cap < 2 * p := Nat.not_le.mp h2
+                  have hmul : 2 * p ≤ p * (1 + 2 * bitValue t) := by
+                    have hb : 2 ≤ 1 + 2 * bitValue t := by omega
+                    simpa [Nat.mul_comm] using Nat.mul_le_mul_left p hb
+                  omega
+                simp [Nat.min_eq_left hL, Nat.min_eq_left hR]
+          · have haeq : min cap (a + p) = cap :=
+              Nat.min_eq_left (Nat.le_of_not_ge hap)
+            rw [haeq]
+            have hL : cap ≤ cap + min cap (2 * p) * bitValue t := by omega
+            have hmul : p ≤ p * (1 + 2 * bitValue t) := by
+              have hb : 1 ≤ 1 + 2 * bitValue t := by omega
+              simpa [Nat.mul_comm] using Nat.mul_le_mul_left p hb
+            have hR : cap ≤ a + p * (1 + 2 * bitValue t) := by omega
+            simp [Nat.min_eq_left hL, Nat.min_eq_left hR]
+
+private theorem walkAcc_bits (cap n : Nat) (hcap : 1 ≤ cap) :
+    walkAcc cap n.bits 1 0 = min cap n := by
+  have h := walkAcc_add cap 1 0 n.bits (by omega) hcap
+  simpa [bitValue_bits] using h
+
+private def walkPow (cap : Nat) : List Bool → Nat → Nat
+  | [], p => p
+  | _ :: t, p => walkPow cap t (min cap (2 * p))
+
+private theorem nuSemStep_digitTree (cap p a : Nat) :
+    ∀ bs,
+      (nuSemStep cap)^[bs.length] (.run (digitTree bs) p a) =
+        .run .leaf (walkPow cap bs p) (walkAcc cap bs p a)
+  | [] => by simp [digitTree, walkPow, walkAcc]
+  | false :: t => by
+      simp only [List.length_cons]
+      rw [Function.iterate_succ_apply, digitTree, nuSemStep, walkPow, walkAcc]
+      exact nuSemStep_digitTree cap (min cap (2 * p)) a t
+  | true :: t => by
+      simp only [List.length_cons]
+      rw [Function.iterate_succ_apply, digitTree, nuSemStep, walkPow, walkAcc]
+      exact nuSemStep_digitTree cap (min cap (2 * p)) (min cap (a + p)) t
+
+private theorem nuSemStep_done_iterate (cap p a n : Nat) :
+    (nuSemStep cap)^[n] (.done p a) = .done p a := by
+  induction n with
+  | zero => rfl
+  | succ n ih => simp [Function.iterate_succ_apply', nuSemStep, ih]
+
+private theorem nuSemStep_digitTree_done (cap p a : Nat) (bs : List Bool)
+    {k : Nat} (hk : bs.length + 1 ≤ k) :
+    (nuSemStep cap)^[k] (.run (digitTree bs) p a) =
+      .done (walkPow cap bs p) (walkAcc cap bs p a) := by
+  have hsplit : k = (k - (bs.length + 1)) + (bs.length + 1) := by omega
+  rw [hsplit, Function.iterate_add_apply]
+  have hstep :
+      (nuSemStep cap)^[bs.length + 1] (.run (digitTree bs) p a) =
+        .done (walkPow cap bs p) (walkAcc cap bs p a) := by
+    rw [← Nat.succ_eq_add_one, Function.iterate_succ_apply',
+      nuSemStep_digitTree, nuSemStep]
+  rw [hstep]
+  exact nuSemStep_done_iterate _ _ _ _
+
+private theorem encode_digitTree_length_ge (bs : List Bool) :
+    bs.length + 1 ≤ (CMMSACodec.Tree.encode (digitTree bs)).length := by
+  induction bs with
+  | nil => simp [digitTree, CMMSACodec.Tree.encode]
+  | cons b t ih =>
+      cases b <;>
+        simp [digitTree, CMMSACodec.Tree.encode, List.length_cons,
+          List.length_append] <;> omega
+
+private theorem encodeInput_length_ge_precision (x : Input) :
+    (CMMSACodec.Tree.encode (natTree x.precision)).length ≤
+      (encodeInput x).length := by
+  simp only [encodeInput, inputTree, CMMSACodec.Tree.encode, List.length_cons,
+    List.length_append]
+  omega
+
+private theorem encodeInput_length_ge_trials (x : Input) :
+    (CMMSACodec.Tree.encode (natTree x.trials)).length ≤
+      (encodeInput x).length := by
+  simp only [encodeInput, inputTree, CMMSACodec.Tree.encode, List.length_cons,
+    List.length_append]
+  omega
+
+private theorem nuInit_run (z : List Bool) (t : CMMSACodec.Tree) :
+    nuPack (coinsCap z) (CMMSACodec.Tree.encode t) [] [false] [] =
+      encodeNu (coinsCap z) (.run t 1 0) := by
+  simp [encodeNu, List.replicate]
+
+private theorem natUnaryEnc_done (st : List Bool) {R : List Bool} {p a : Nat}
+    (h : st = encodeNu R (.done p a)) :
+    Cobham.selectHead (emptyFlag (nuFlag st)) []
+      (Cobham.selectHead (Cobham.eqFlag (nuFlag st) [false]) (nuAcc st) []) =
+      List.replicate a false := by
+  subst h
+  have hf : Cobham.eqFlag [false] [false] = [true] :=
+    (Cobham.eqFlag_eq_true_iff _ _).mpr rfl
+  simp [encodeNu, nuFlag_pack, emptyFlag_cons, nuAcc_pack, hf]
+
+private theorem clock_ge_precision_bits (z : List Bool) (x : Input)
+    (h : decodeInput (pairFst z) = some x) :
+    x.precision.bits.length + 1 ≤ (nuIterRuler z).length := by
+  have htag : decodeInputTag (pairFst z) = true :: encodeInput x :=
+    decodeInputTag_some _ _ h
+  have hge := encode_digitTree_length_ge x.precision.bits
+  have henc := encodeInput_length_ge_precision x
+  simp [nuIterRuler, htag, List.length_append, natTree] at henc hge ⊢
+  omega
+
+private theorem clock_ge_trials_bits (z : List Bool) (x : Input)
+    (h : decodeInput (pairFst z) = some x) :
+    x.trials.bits.length + 1 ≤ (nuIterRuler z).length := by
+  have htag : decodeInputTag (pairFst z) = true :: encodeInput x :=
+    decodeInputTag_some _ _ h
+  have hge := encode_digitTree_length_ge x.trials.bits
+  have henc := encodeInput_length_ge_trials x
+  simp [nuIterRuler, htag, List.length_append, natTree] at henc hge ⊢
+  omega
+
+private theorem precisionUnary_some (z : List Bool) (x : Input)
+    (h : decodeInput (pairFst z) = some x) :
+    precisionUnary z =
+      List.replicate (min (coinsCap z).length x.precision) false := by
+  have henc := precisionEnc_some z x h
+  have hinit :
+      nuInitEnc precisionEnc z =
+        encodeNu (coinsCap z) (.run (natTree x.precision) 1 0) := by
+    simp [nuInitEnc, henc, encodeNu, List.replicate, natTree]
+  have hrun :
+      nuRunEnc precisionEnc z =
+        encodeNu (coinsCap z)
+          ((nuSemStep (coinsCap z).length)^[(nuIterRuler z).length]
+            (.run (natTree x.precision) 1 0)) := by
+    rw [nuRunEnc, hinit, nuStep_iterate_encode]
+  have hdone :=
+    (nuSemStep_digitTree_done (coinsCap z).length 1 0 x.precision.bits
+      (clock_ge_precision_bits z x h))
+  have hcap : 1 ≤ (coinsCap z).length := by simp [coinsCap]
+  have hw := walkAcc_bits (coinsCap z).length x.precision hcap
+  have hst :
+      nuRunEnc precisionEnc z =
+        encodeNu (coinsCap z)
+          (.done (walkPow (coinsCap z).length x.precision.bits 1)
+            (walkAcc (coinsCap z).length x.precision.bits 1 0)) := by
+    simpa [hrun, natTree] using congrArg (encodeNu (coinsCap z)) hdone
+  have hextract := natUnaryEnc_done (nuRunEnc precisionEnc z) hst
+  simpa [precisionUnary, natUnaryEnc, hw] using hextract
+
+private theorem trialsUnary_some (z : List Bool) (x : Input)
+    (h : decodeInput (pairFst z) = some x) :
+    trialsUnary z =
+      List.replicate (min (coinsCap z).length x.trials) false := by
+  have henc := trialsEnc_some z x h
+  have hinit :
+      nuInitEnc trialsEnc z =
+        encodeNu (coinsCap z) (.run (natTree x.trials) 1 0) := by
+    simp [nuInitEnc, henc, encodeNu, List.replicate, natTree]
+  have hrun :
+      nuRunEnc trialsEnc z =
+        encodeNu (coinsCap z)
+          ((nuSemStep (coinsCap z).length)^[(nuIterRuler z).length]
+            (.run (natTree x.trials) 1 0)) := by
+    rw [nuRunEnc, hinit, nuStep_iterate_encode]
+  have hdone :=
+    (nuSemStep_digitTree_done (coinsCap z).length 1 0 x.trials.bits
+      (clock_ge_trials_bits z x h))
+  have hcap : 1 ≤ (coinsCap z).length := by simp [coinsCap]
+  have hw := walkAcc_bits (coinsCap z).length x.trials hcap
+  have hst :
+      nuRunEnc trialsEnc z =
+        encodeNu (coinsCap z)
+          (.done (walkPow (coinsCap z).length x.trials.bits 1)
+            (walkAcc (coinsCap z).length x.trials.bits 1 0)) := by
+    simpa [hrun, natTree] using congrArg (encodeNu (coinsCap z)) hdone
+  have hextract := natUnaryEnc_done (nuRunEnc trialsEnc z) hst
+  simpa [trialsUnary, natUnaryEnc, hw] using hextract
+
+theorem runOptionTruncationTag_eq (z : List Bool) (x : Input)
+    (h : decodeInput (pairFst z) = some x) :
+    runOptionTruncationTag z =
+      (pairSnd z).take
+        (min ((pairSnd z).length + 1) x.trials *
+          min ((pairSnd z).length + 1) x.precision) := by
+  have hp := precisionUnary_some z x h
+  have ht := trialsUnary_some z x h
+  simp [runOptionTruncationTag, takeLen_pair,
+    trialsPrecisionRuler, hp, ht, coinsCap, List.length_append, Nat.mul_comm]
+
+private theorem product_min_iff (c P T : Nat) :
+    c = P * T ↔ c = min (c + 1) P * min (c + 1) T := by
+  constructor
+  · intro h
+    subst h
+    by_cases hT0 : T = 0
+    · simp [hT0]
+    · by_cases hP0 : P = 0
+      · simp [hP0]
+      · have hP : P ≤ P * T :=
+          Nat.le_mul_of_pos_right P (Nat.pos_of_ne_zero hT0)
+        have hT : T ≤ P * T :=
+          Nat.le_mul_of_pos_left T (Nat.pos_of_ne_zero hP0)
+        simp [Nat.min_eq_right (Nat.le_succ_of_le hP),
+          Nat.min_eq_right (Nat.le_succ_of_le hT)]
+  · intro h
+    by_cases hP : P ≤ c
+    · by_cases hT : T ≤ c
+      · simpa [Nat.min_eq_right (Nat.le_succ_of_le hP),
+          Nat.min_eq_right (Nat.le_succ_of_le hT)] using h
+      · have hTmin : min (c + 1) T = c + 1 :=
+          Nat.min_eq_left (Nat.succ_le_of_lt (Nat.not_le.mp hT))
+        by_cases hP0 : P = 0
+        · simpa [hP0] using h
+        · have hminpos : 1 ≤ min (c + 1) P := by
+            exact Nat.one_le_iff_ne_zero.mpr (by simp [hP0])
+          have : min (c + 1) P * (c + 1) ≥ c + 1 :=
+            Nat.le_mul_of_pos_left (c + 1) hminpos
+          simp [hTmin] at h
+          omega
+    · have hPmin : min (c + 1) P = c + 1 :=
+        Nat.min_eq_left (Nat.succ_le_of_lt (Nat.not_le.mp hP))
+      by_cases hT0 : T = 0
+      · simpa [hT0] using h
+      · have : (c + 1) * min (c + 1) T ≥ c + 1 :=
+          Nat.le_mul_of_pos_right (c + 1)
+            (Nat.le_min.mpr ⟨Nat.succ_pos c, Nat.pos_of_ne_zero hT0⟩)
+        simp [hPmin] at h
+        omega
+
+theorem runOptionGuardTag_eq (z : List Bool) (x : Input)
+    (h : decodeInput (pairFst z) = some x) :
+    runOptionGuardTag z =
+      if (pairSnd z).length = x.trials * x.precision then
+        true :: pair (pairFst z) (pairSnd z)
+      else [] := by
+  have htag : instTag z = true :: encodeInput x := by
+    simp [instTag, decodeInputTag, h]
+  have hempty : emptyFlag (instTag z) = [false] := by
+    simp [htag, emptyFlag_cons]
+  have hp := precisionUnary_some z x h
+  have ht := trialsUnary_some z x h
+  have hlen :
+      (trialsPrecisionRuler z).length =
+        min ((pairSnd z).length + 1) x.precision *
+          min ((pairSnd z).length + 1) x.trials := by
+    simp [trialsPrecisionRuler, hp, ht, coinsCap, List.length_replicate]
+  simp only [runOptionGuardTag, hempty, selectHead_false]
+  have hiff := product_min_iff (pairSnd z).length x.precision x.trials
+  have hflag :
+      Cobham.lenEqFlag (pairSnd z) (trialsPrecisionRuler z) =
+        if (pairSnd z).length = x.trials * x.precision then [true] else [false] := by
+    by_cases hc : (pairSnd z).length = x.trials * x.precision
+    · have ht' : (pairSnd z).length = (trialsPrecisionRuler z).length := by
+        have hc' : (pairSnd z).length = x.precision * x.trials := by
+          simpa [Nat.mul_comm] using hc
+        rw [hlen]
+        exact hiff.mp hc'
+      have hf := (Cobham.lenEqFlag_eq_true_iff _ _).mpr ht'
+      simp [hc, hf]
+    · have hne : (pairSnd z).length ≠ (trialsPrecisionRuler z).length := by
+        intro heq
+        apply hc
+        have : (pairSnd z).length =
+            min ((pairSnd z).length + 1) x.precision *
+              min ((pairSnd z).length + 1) x.trials := by
+          simpa [hlen] using heq
+        have hPT := hiff.mpr this
+        simpa [Nat.mul_comm] using hPT
+      have hf : Cobham.lenEqFlag (pairSnd z) (trialsPrecisionRuler z) = [false] := by
+        have hr := Cobham.lenEqFlag_flag (pairSnd z) (trialsPrecisionRuler z)
+        cases hr with
+        | inl ht =>
+            exact (hne ((Cobham.lenEqFlag_eq_true_iff _ _).mp ht)).elim
+        | inr hf => exact hf
+      simp [hc, hf]
+  rw [hflag]
+  split <;> simp
+
 end PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap
-
-
