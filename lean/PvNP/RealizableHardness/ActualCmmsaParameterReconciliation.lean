@@ -9,8 +9,10 @@ The manuscript-faithful arithmetic handoff for the CMMSA parameter family.
 
 This module is deliberately independent of the unfinished outer carrier.  It
 defines the exact natural-number blocks, the gap root used by the HN premise,
-and the `/16`, `/4`, `/2` repair chain.  It does not claim an outer score law,
-an AND construction, a codec, a reduction, or a CMMSA promise theorem.
+and the `/16`, `/4`, `/2` repair chain.  `hBlock` is a fixed-`L,m`
+block-scale constructor, not an admissibility selector.  All outer-law,
+amplification, materialization, and reduction statements remain conditional
+and outside this module.
 -/
 namespace PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
 
@@ -20,11 +22,12 @@ def q (m : Nat) : Nat := Nat.sqrt m
 
 def bOf (m : Nat) : Nat := 4000 * m ^ 2
 
-/-- The exact natural-number block selector from the manuscript. -/
+def blockNum (L m : Nat) : Nat :=
+  if L = 0 then 0 else (L - 1) / Nat.max (q m * (m + 1)) 1
+
+/-- The fixed-`L,m` natural-number block-scale constructor. -/
 def hBlock (L m : Nat) : Nat :=
-  let den := q m * (m + 1)
-  let num := if L = 0 then 0 else (L - 1) / Nat.max den 1
-  bOf m * (log2nat num / (2 * bOf m))
+  bOf m * (log2nat (blockNum L m) / (2 * bOf m))
 
 def RBlock (L m : Nat) : Nat := 2 ^ (2 * hBlock L m)
 
@@ -51,6 +54,10 @@ theorem m_dvd_bOf (m : Nat) : m ∣ bOf m := by
 theorem m_dvd_hBlock (L m : Nat) : m ∣ hBlock L m := by
   exact dvd_mul_of_dvd_left (m_dvd_bOf m) _
 
+theorem bOf_dvd_hBlock (L m : Nat) : bOf m ∣ hBlock L m := by
+  dsimp [hBlock]
+  exact dvd_mul_right _ _
+
 theorem sigmaFinal_eq (L m : Nat) :
     sigmaFinal L m = (sigmaBase L m / 4) / 2 := rfl
 
@@ -58,6 +65,29 @@ theorem gammaFinal_eq (m : Nat) :
     gammaFinal m = 4 * ((3 / 4 : Rat) ^ q m) := by
   simp [gammaFinal, Gamma]
   ring
+
+theorem two_mul_hBlock_le_log2_blockNum (L m : Nat) :
+    2 * hBlock L m ≤ log2nat (blockNum L m) := by
+  dsimp [hBlock]
+  calc
+    2 * (bOf m * (log2nat (blockNum L m) / (2 * bOf m))) =
+        (2 * bOf m) * (log2nat (blockNum L m) / (2 * bOf m)) := by ring
+    _ ≤ log2nat (blockNum L m) :=
+      Nat.mul_div_le (log2nat (blockNum L m)) (2 * bOf m)
+
+theorem RBlock_le_blockNum {L m : Nat} (hn : 0 < blockNum L m) :
+    RBlock L m ≤ blockNum L m := by
+  have hlog : 2 * hBlock L m ≤ log2nat (blockNum L m) :=
+    two_mul_hBlock_le_log2_blockNum L m
+  have hpow : 2 ^ (2 * hBlock L m) ≤ 2 ^ log2nat (blockNum L m) :=
+    Nat.pow_le_pow_right (by decide : 0 < 2) hlog
+  have hpowlog : 2 ^ log2nat (blockNum L m) ≤ blockNum L m := by
+    rw [show log2nat (blockNum L m) = Nat.log 2 (blockNum L m) from
+      ite_eq_right (Nat.ne_of_gt hn)]
+    exact Nat.pow_log_le_self 2 hn.ne'
+  have hR : RBlock L m ≤ 2 ^ log2nat (blockNum L m) := by
+    simpa [RBlock] using hpow
+  exact hR.trans hpowlog
 
 private theorem cast_div16_of_dvd {a : Nat} (hd : 16 ∣ a) :
     ((a / 16 : Nat) : ℝ) = (a : ℝ) / 16 := by
@@ -144,11 +174,38 @@ theorem old_sigma_route_failure
   rw [hrewrite]
   exact hratio
 
-/-- The amplified leaf budget, with its exact natural-number sufficient bound. -/
-theorem amplified_leaf_fit
+/-- The amplified leaf budget follows from the exact block numerator. -/
+theorem amplified_leaf_fit_of_hBlock
     {L m : Nat}
-    (hfit : q m * (m + 1) * 2 ^ (2 * hBlock L m) + 1 ≤ L) :
+    (hm : 0 < m)
+    (hden : q m * (m + 1) < L) :
     q m * (m + 1) * RBlock L m + 1 ≤ L := by
-  simpa [RBlock] using hfit
+  let d := q m * (m + 1)
+  have hq : 0 < q m := Nat.sqrt_pos.2 hm
+  have hd : 0 < d := Nat.mul_pos hq (Nat.succ_pos m)
+  have hdL : d < L := by simpa [d] using hden
+  have hLpos : 0 < L := hd.trans hdL
+  have hdle : d ≤ L - 1 := Nat.le_sub_of_add_le (Nat.succ_le_of_lt hdL)
+  have hmax : Nat.max d 1 = d := Nat.max_eq_left (Nat.succ_le_iff.mp hd)
+  have hnumpos : 0 < blockNum L m := by
+    simp only [blockNum, ite_eq_right hLpos.ne']
+    rw [hmax]
+    exact Nat.div_pos hdle hd
+  have hR : RBlock L m ≤ blockNum L m := RBlock_le_blockNum hnumpos
+  have hmul : d * blockNum L m ≤ L - 1 := by
+    have hblockNum_eq : blockNum L m = (L - 1) / Nat.max d 1 := by
+      simp [blockNum, d, hLpos.ne']
+    rw [hblockNum_eq, hmax]
+    exact Nat.mul_div_le _ _
+  have hmulR : d * RBlock L m ≤ d * blockNum L m :=
+    Nat.mul_le_mul_left d hR
+  have hsum : d * RBlock L m + 1 ≤ (L - 1) + 1 :=
+    (Nat.add_le_add_right hmulR 1).trans (Nat.add_le_add_right hmul 1)
+  have hsumL : d * RBlock L m + 1 ≤ L := by
+    have hLone : 1 ≤ L := Nat.succ_le_of_lt hLpos
+    calc
+      d * RBlock L m + 1 ≤ (L - 1) + 1 := hsum
+      _ = L := Nat.sub_add_cancel hLone
+  simpa [d] using hsumL
 
 end PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
