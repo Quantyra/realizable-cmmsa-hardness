@@ -2,8 +2,10 @@ import PvNP.RealizableHardness.ActualThreeSatGrassmannFan
 
 /-!
 Checks for overlapping three-leaf shift-fan packing.  `sevenCover` and
-`cheapTwo` fail RHS-1.  Remaining vertex-dependent 2-list `vdFan` still
-covers: not `No σ_L γ_L`, not `hSrcCmmsa`.  Not `compileRotate` /
+`cheapTwo` fail RHS-1.  `vdFan_eval_rhs1` is only an i-dependent,
+unconstrained local RHS-1 formula witness; it proves neither one global
+assignment nor feasibility/cost.  CMMSA `No` and `hSrcCmmsa` status remain
+OPEN.  Not `compileRotate` /
 `sevenCover` / `compileOverlap` / `fourCover`.
 -/
 namespace PvNP.RealizableHardness.ActualThreeSatGrassmannFanChecks

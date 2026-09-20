@@ -9,9 +9,11 @@ Kills Rotate leftover `sevenCover` (shift-2 sends `1+2^h` to
 `4+2^{h+2}`) and `cheapTwo` (leaf 0 must copy the center color).
 Sat unit is packed `Yes 0` via label `0`.
 
-A vertex-dependent 2-list (center `{0,1+2^h}`, leaf `j` lights
-`{0, (1+2^h)<<j}`) still covers mixed RHS, so this is not
-`No σ_L γ_L` and does not inhabit `hSrcCmmsa`.  Not `if-sat`.
+The vertex-dependent 2-list (center `{0,1+2^h}`, leaf `j` lights
+`{0, (1+2^h)<<j}`) has only the i-dependent, unconstrained local
+RHS-1 witness `vdFan_eval_rhs1`: it proves neither one global assignment
+nor feasibility/cost.  CMMSA `No` and `hSrcCmmsa` status remain OPEN.
+Not `if-sat`.
 Not `compileRotate` / `sevenCover` / `compileOverlap` / `fourCover`.
 Checking-transducer `mem_FP` is not rebuilt.
 -/
