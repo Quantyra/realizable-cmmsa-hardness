@@ -65,7 +65,7 @@ example : codim pTop.W = 0 := by
   unfold codim
   change Module.finrank (ZMod 2) (F2Vec 1) -
     Module.finrank (ZMod 2) (⊤ : Submodule (ZMod 2) (F2Vec 1)) = 0
-  rw [finrank_top (ZMod 2) (F2Vec 1)]
+  rw [finrank_top (ZMod 2) (F2Vec 1), Nat.sub_self]
 
 example : ¬ ∃ P : DecodedPair qOne 0,
     StrictCompatibleExtension pTop P := by
@@ -75,7 +75,7 @@ example : ¬ ∃ P : DecodedPair qOne 0,
     unfold codim
     change Module.finrank (ZMod 2) (F2Vec 1) -
       Module.finrank (ZMod 2) (⊤ : Submodule (ZMod 2) (F2Vec 1)) = 0
-    rw [finrank_top (ZMod 2) (F2Vec 1)]
+    rw [finrank_top (ZMod 2) (F2Vec 1), Nat.sub_self]
   rw [ht] at h
   omega
 
