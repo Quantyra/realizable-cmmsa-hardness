@@ -118,8 +118,16 @@ def AgreesOn (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
 
 /-- The sub-fibre on which the table agrees with the pair. -/
 def AgreeingZoom (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
-    (Q : Grass V a) {d : Nat} (P : DecodedPair Q d) :=
+    (Q : Grass V a) (P : DecodedPair Q d) :=
   {z : Zoom Q P // AgreesOn T z.1 z.2.2}
+
+noncomputable instance zoomFintype (Q : Grass V a) (P : DecodedPair Q d) :
+    Fintype (Zoom Q P) := Fintype.ofFinite _
+
+noncomputable instance agreeingZoomFintype
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (P : DecodedPair Q d) :
+    Fintype (AgreeingZoom T Q P) := Fintype.ofFinite _
 
 /-- Exact rational agreement, with an explicit zero value for an empty fibre. -/
 noncomputable def agreement (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
@@ -213,7 +221,6 @@ lemma ladder_aux
               C / (5 : ℚ) ^ (k + 1) := by
             rw [pow_succ]
             field_simp [show (5 : ℚ) ^ k ≠ 0 by positivity]
-            ring
           refine ⟨k + 1, P'', hcompall, ?_, ?_, ?_, ?_⟩
           · simpa [hpow] using hmax''
           · simpa [hpow] using hA''
