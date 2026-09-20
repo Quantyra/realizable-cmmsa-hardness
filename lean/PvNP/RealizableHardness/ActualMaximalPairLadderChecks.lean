@@ -62,13 +62,20 @@ example : StrictCompatibleExtension pBottom pTop := by
     rfl
 
 example : codim pTop.W = 0 := by
-  simp [pTop, codim, Module.finrank_top]
+  unfold codim
+  change Module.finrank (ZMod 2) (F2Vec 1) -
+    Module.finrank (ZMod 2) (⊤ : Submodule (ZMod 2) (F2Vec 1)) = 0
+  rw [finrank_top (ZMod 2) (F2Vec 1)]
 
 example : ¬ ∃ P : DecodedPair qOne 0,
     StrictCompatibleExtension pTop P := by
   rintro ⟨P, hP⟩
   have h := codim_strict hP
-  have ht : codim pTop.W = 0 := by simp [pTop, codim, Module.finrank_top]
+  have ht : codim pTop.W = 0 := by
+    unfold codim
+    change Module.finrank (ZMod 2) (F2Vec 1) -
+      Module.finrank (ZMod 2) (⊤ : Submodule (ZMod 2) (F2Vec 1)) = 0
+    rw [finrank_top (ZMod 2) (F2Vec 1)]
   rw [ht] at h
   omega
 
