@@ -121,8 +121,18 @@ def AgreeingZoom (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
     (Q : Grass V a) (P : DecodedPair Q d) :=
   {z : Zoom Q P // AgreesOn T z.1 z.2.2}
 
+noncomputable instance zoomFinite (Q : Grass V a) (P : DecodedPair Q d) :
+    Finite (Zoom Q P) :=
+  Finite.of_injective (fun z : Zoom Q P => z.1) Subtype.val_injective
+
 noncomputable instance zoomFintype (Q : Grass V a) (P : DecodedPair Q d) :
     Fintype (Zoom Q P) := Fintype.ofFinite _
+
+noncomputable instance agreeingZoomFinite
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (P : DecodedPair Q d) :
+    Finite (AgreeingZoom T Q P) :=
+  Finite.of_injective (fun z : AgreeingZoom T Q P => z.1) Subtype.val_injective
 
 noncomputable instance agreeingZoomFintype
     (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
