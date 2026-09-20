@@ -1,5 +1,8 @@
-/- UNCOMPILED checks. Authoritative Lean 4.34 verification is performed on
-the pinned GCP builder; this file remains draft until that receipt is recorded. -/
+/- GCP-certified checks at d93d23b: Lean 4.34.0-rc2 on the pinned GCP builder
+built this target in 3059 jobs with exit 0 (and the main target in 3058 jobs
+with exit 0). This receipt certifies compilation only; the bounded three-lens
+closeout and route-final status still require the protocol reviews and
+recorded disposition of any resulting gaps. -/
 import PvNP.RealizableHardness.ActualMaximalPairLadder
 
 /-! Small executable-shape checks for the finite maximal-pair ladder. -/

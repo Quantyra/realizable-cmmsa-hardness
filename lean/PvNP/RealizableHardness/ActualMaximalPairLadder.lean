@@ -1,6 +1,8 @@
-/- UNCOMPILED companion source port. Authoritative Lean 4.34 verification is
-performed on the pinned GCP builder; this file is a draft until that receipt
-and the required reviews are recorded. -/
+/- GCP-certified companion source at d93d23b: Lean 4.34.0-rc2 on the pinned
+builder built this target in 3058 jobs with exit 0, and the checks target in
+3059 jobs with exit 0. This receipt certifies compilation only; the bounded
+three-lens closeout and route-final status still require the protocol reviews
+and recorded disposition of any resulting gaps. -/
 import PvNP.RealizableHardness.GrassmannCounting
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import Mathlib.Tactic
