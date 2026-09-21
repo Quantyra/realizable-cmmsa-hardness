@@ -240,6 +240,24 @@ lemma ladder_aux
           · omega
         · exact False.elim (hmax ⟨hC, hex⟩)
 
+theorem maximalPairLadder_of_agreement
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (P₀ : DecodedPair Q d) (r : Nat) (B : ℚ)
+    (hB : 0 < B) (hr : codim P₀.W ≤ r)
+    (hstart : B ≤ agreement T Q P₀) :
+    ∃ j : Nat, ∃ P : DecodedPair Q d,
+      CompatibleExtension P₀ P ∧
+      MaximalAt T Q (ladder B j) (1 / 5) P ∧
+      ladder B j ≤ agreement T Q P ∧
+      codim P.W + j ≤ codim P₀.W ∧
+      j ≤ codim P₀.W ∧ j ≤ r ∧
+      ladder B r ≤ agreement T Q P := by
+  obtain ⟨j, P, hcomp, hmax, hA, hprog, hj⟩ :=
+    ladder_aux T Q (codim P₀.W) P₀ rfl B hB hstart
+  have hjr : j ≤ r := hj.trans hr
+  have hterminal : ladder B r ≤ ladder B j := ladder_antitone hB.le hjr
+  exact ⟨j, P, hcomp, hmax, hA, hprog, hj, hjr, hterminal.trans hA⟩
+
 /--
 Principal finite ladder theorem.  The only input about the table is the
 agreement of the supplied decoded pair; no source-score or decoder premise is
@@ -259,13 +277,36 @@ theorem maximalPairLadder
       ladder B r ≤ agreement T Q P := by
   have hBstart : B ≤ agreement T Q P₀ := by
     exact (by nlinarith : B ≤ 4 * B).trans hstart
-  obtain ⟨j, P, hcomp, hmax, hA, hprog, hj⟩ :=
-    ladder_aux T Q (codim P₀.W) P₀ rfl B hB hBstart
-  have hjr : j ≤ r := hj.trans hr
-  have hterminal : ladder B r ≤ ladder B j := ladder_antitone hB.le hjr
-  refine ⟨j, P, hcomp, ?_, ?_, hprog, hj, hjr, hterminal.trans hA⟩
-  · simpa [ladder] using hmax
-  · simpa [ladder] using hA
+  exact maximalPairLadder_of_agreement T Q P₀ r B hB hr hBstart
+
+theorem maximalPairLadder_from_quarter
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (P₀ : DecodedPair Q d) (r : Nat) (C : ℚ)
+    (hC : 0 < C) (hr : codim P₀.W ≤ r)
+    (hstart : C / 4 ≤ agreement T Q P₀) :
+    ∃ j : Nat, ∃ P : DecodedPair Q d,
+      CompatibleExtension P₀ P ∧
+      MaximalAt T Q (C / (4 * (5 : ℚ) ^ j)) (1 / 5) P ∧
+      C / (4 * (5 : ℚ) ^ j) ≤ agreement T Q P ∧
+      codim P.W + j ≤ codim P₀.W ∧
+      j ≤ codim P₀.W ∧ j ≤ r ∧
+      C / (4 * (5 : ℚ) ^ r) ≤ agreement T Q P := by
+  have hB : 0 < C / 4 := by positivity
+  obtain ⟨j, P, hcomp, hmax, hA, hprog, hj, hjr, hterminal⟩ :=
+    maximalPairLadder_of_agreement T Q P₀ r (C / 4) hB hr hstart
+  have hscale (m : Nat) :
+      (C / 4) / (5 : ℚ) ^ m = C / (4 * (5 : ℚ) ^ m) := by
+    ring
+  refine ⟨j, P, hcomp, ?_, ?_, hprog, hj, hjr, ?_⟩
+  · simpa [ladder, hscale j] using hmax
+  · simpa [ladder, hscale j] using hA
+  · simpa [ladder, hscale r] using hterminal
+
+/-
+The original public theorem is intentionally retained above with its exact
+signature; the direct wrapper below is the force-bearing form used by later
+many-`W` stages.
+-/
 
 lemma maximalAt_of_codim_zero
     (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
