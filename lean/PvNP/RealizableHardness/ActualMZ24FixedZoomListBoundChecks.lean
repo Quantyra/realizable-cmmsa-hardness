@@ -11,6 +11,10 @@ noncomputable section
 attribute [local instance] Classical.propDecidable
 attribute [local instance 2000] Classical.decEq
 
+/- D3b1 checks cover only tuple/quotient/fibre counting and mass. They do not
+formalize or claim MZ24 Lemma 5.25, a full fixed-zoom list bound, or CMMSA;
+D3b2 predicate/received-word/list-bound transfer remains outstanding. -/
+
 #check wordAgreement
 #check finite_qary_list_bound
 #check Tuple
@@ -19,11 +23,35 @@ attribute [local instance 2000] Classical.decEq
 #check card_tupleAlphabet
 #check linearTupleCodeword_injective
 #check distinct_linearTupleCodeword_agreement
+#check qInW
+#check qInW_finrank
+#check quotientRepresentative
+#check quotientRepresentative_mkQ
+#check quotientTuple
+#check FullRankTuple
+#check FullRankQuotientTuple
+#check tupleSplitEquiv
+#check fullRankTupleSplitEquiv
+#check tupleQuotientGrass
+#check fullRankTupleZoom
+#check card_fullRankTuple_eq
+#check fullRankTupleZoom_fiber_card
+#check fullRankTupleMass_ge_half
+#check FixedZoom
+#check fixedZoomQuotientEquiv
 
 #print axioms finite_qary_list_bound
 #print axioms card_tupleAlphabet
 #print axioms linearTupleCodeword_injective
 #print axioms distinct_linearTupleCodeword_agreement
+#print axioms quotientRepresentative_mkQ
+#print axioms tupleSplitEquiv
+#print axioms fullRankTupleSplitEquiv
+#print axioms fullRankTupleZoom
+#print axioms card_fullRankTuple_eq
+#print axioms fullRankTupleZoom_fiber_card
+#print axioms fullRankTupleMass_ge_half
+#print axioms fixedZoomQuotientEquiv
 
 example :
     (Fintype.card (Fin 1) : Rat) <= 1 / (1 / 4 : Rat)^2 := by

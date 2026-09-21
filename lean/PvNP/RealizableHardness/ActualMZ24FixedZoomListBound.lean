@@ -1,10 +1,12 @@
 import PvNP.RealizableHardness.ActualMaximalPairLadder
 import PvNP.RealizableHardness.ActualQuestionCenterCollisionBound
+import PvNP.RealizableHardness.GaussianRatio
 import Mathlib.Algebra.Order.Chebyshev
 import Mathlib.Algebra.Order.BigOperators.Ring.Finset
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.LinearAlgebra.Dimension.Finite
 import Mathlib.LinearAlgebra.Dual.Lemmas
+import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Card
 import Mathlib.Tactic
 
 namespace PvNP.RealizableHardness.ActualMZ24FixedZoomListBound
@@ -635,6 +637,461 @@ theorem distinct_linearTupleCodeword_agreement
     apply (div_eq_iff (mul_ne_zero ha (by norm_num))).2
     ring
   rw [hbase, div_pow, one_pow]
+
+def qInW
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a)
+    {W : Submodule (ZMod 2) V} (hQW : Q.val ≤ W) :
+    Submodule (ZMod 2) W :=
+  Q.val.comap W.subtype
+
+private theorem d3_quotient_map_dimension
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    (Q L : Submodule (ZMod 2) V) (hQL : Q ≤ L) :
+    Module.finrank (ZMod 2) (L.map Q.mkQ) + Module.finrank (ZMod 2) Q =
+      Module.finrank (ZMod 2) L := by
+  have h := (Q.mkQ.domRestrict L).finrank_range_add_finrank_ker
+  have hk : LinearMap.ker (Q.mkQ.domRestrict L) = Q.comap L.subtype := by
+    ext x
+    simp
+  rw [LinearMap.range_domRestrict, hk] at h
+  rw [(Submodule.comapSubtypeEquivOfLe hQL).finrank_eq] at h
+  exact h
+
+theorem qInW_finrank
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a)
+    {W : Submodule (ZMod 2) V} (hQW : Q.val ≤ W) :
+    Module.finrank (ZMod 2) (qInW Q hQW) = a := by
+  unfold qInW
+  rw [(Submodule.comapSubtypeEquivOfLe hQW).finrank_eq, Q.property]
+
+noncomputable def quotientRepresentative
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a)
+    {W : Submodule (ZMod 2) V} (hQW : Q.val ≤ W)
+    (z : W ⧸ qInW Q hQW) : W :=
+  Function.surjInv (qInW Q hQW).mkQ_surjective z
+
+theorem quotientRepresentative_mkQ
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a)
+    {W : Submodule (ZMod 2) V} (hQW : Q.val ≤ W)
+    (z : W ⧸ qInW Q hQW) :
+    (qInW Q hQW).mkQ (quotientRepresentative Q hQW z) = z := by
+  exact Function.rightInverse_surjInv (qInW Q hQW).mkQ_surjective z
+
+private noncomputable def qInWSplitEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a)
+    {W : Submodule (ZMod 2) V} (hQW : Q.val ≤ W) :
+    W ≃ (qInW Q hQW) × (W ⧸ qInW Q hQW) := by
+  exact {
+    toFun := fun x =>
+      let z := (qInW Q hQW).mkQ x
+      (⟨x - quotientRepresentative Q hQW z, by
+        have hz : (qInW Q hQW).mkQ
+              (x - quotientRepresentative Q hQW z) = 0 := by
+          rw [map_sub, quotientRepresentative_mkQ Q hQW]
+          change (qInW Q hQW).mkQ x -
+            (qInW Q hQW).mkQ x = 0
+          exact sub_self _
+        let hk : LinearMap.ker (qInW Q hQW).mkQ = qInW Q hQW :=
+          Submodule.ker_mkQ _
+        rw [← hk]
+        exact LinearMap.mem_ker.mpr hz⟩, z)
+    invFun := fun p =>
+      (p.1 : W) + quotientRepresentative Q hQW p.2
+    left_inv := by
+      intro x
+      dsimp
+      simp [sub_add_cancel]
+    right_inv := by
+      rintro ⟨q, z⟩
+      have hq : (qInW Q hQW).mkQ (q : W) = 0 := by
+        rw [← LinearMap.mem_ker, Submodule.ker_mkQ]
+        exact q.property
+      have hz : (qInW Q hQW).mkQ
+          ((q : W) + quotientRepresentative Q hQW z) = z := by
+        rw [map_add, hq, quotientRepresentative_mkQ, zero_add]
+      apply Prod.ext
+      · apply Subtype.ext
+        change ((q : W) + quotientRepresentative Q hQW z -
+          quotientRepresentative Q hQW
+            ((qInW Q hQW).mkQ ((q : W) + quotientRepresentative Q hQW z)) : W) = q
+        rw [hz]
+        exact add_sub_cancel_right _ _
+      · exact hz }
+
+def tupleSplitEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a)
+    {W : Submodule (ZMod 2) V} (hQW : Q.val ≤ W) (b : Nat) :
+    Tuple W b ≃
+      (Tuple (qInW Q hQW) b) × (Fin b → (W ⧸ qInW Q hQW)) := by
+  let e := qInWSplitEquiv Q hQW
+  exact {
+    toFun := fun x =>
+      (fun i => (e (x i)).1, fun i => (e (x i)).2)
+    invFun := fun p i => e.symm (p.1 i, p.2 i)
+    left_inv := by
+      intro x
+      funext i
+      simpa using e.symm_apply_apply (x i)
+    right_inv := by
+      intro p
+      apply Prod.ext
+      · funext i
+        exact congrArg Prod.fst (e.apply_symm_apply (p.1 i, p.2 i))
+      · funext i
+        exact congrArg Prod.snd (e.apply_symm_apply (p.1 i, p.2 i)) }
+
+private theorem tupleSplitEquiv_snd
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a)
+    {W : Submodule (ZMod 2) V} (hQW : Q.val ≤ W) (b : Nat)
+    (x : Tuple W b) :
+    (tupleSplitEquiv Q hQW b x).2 =
+      (fun i => (qInW Q hQW).mkQ (x i)) := by
+  rfl
+
+abbrev quotientTuple
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a)
+    {W : Submodule (ZMod 2) V} (hQW : Q.val ≤ W) (b : Nat) :=
+  Fin b → (W ⧸ qInW Q hQW)
+
+def FullRankTuple
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) :
+    Type _ :=
+  {x : Tuple W (d - a) //
+    LinearIndependent (ZMod 2)
+      (fun i => (qInW Q hQW).mkQ (x i))}
+
+def FullRankQuotientTuple
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) :
+    Type _ :=
+  {y : quotientTuple Q hQW (d - a) //
+    LinearIndependent (ZMod 2) y}
+
+def fullRankTupleSplitEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) :
+    FullRankTuple (d := d) Q W hQW ≃
+      (Tuple (qInW Q hQW) (d - a)) ×
+        FullRankQuotientTuple (d := d) Q W hQW := by
+  let e := tupleSplitEquiv Q hQW (d - a)
+  exact {
+    toFun := fun x =>
+      ⟨(e x.1).1, ⟨(e x.1).2, by
+        change LinearIndependent _ ((e x.1).2)
+        rw [tupleSplitEquiv_snd]
+        exact x.2⟩⟩
+    invFun := fun p =>
+      ⟨(e.symm (p.1, p.2.1)), by
+        let he := congrArg Prod.snd (e.apply_symm_apply (p.1, p.2.1))
+        change LinearIndependent _ ((e (e.symm (p.1, p.2.1))).2)
+        rw [he]
+        exact p.2.2⟩
+    left_inv := by
+      intro x
+      apply Subtype.ext
+      simpa using e.symm_apply_apply x.1
+    right_inv := by
+      rintro ⟨p, q⟩
+      have he := e.apply_symm_apply (p, q.1)
+      apply Prod.ext
+      · change (e (e.symm (p, q.1))).1 = p
+        exact congrArg Prod.fst he
+      · apply Subtype.ext
+        change (e (e.symm (p, q.1))).2 = q.1
+        exact congrArg Prod.snd he }
+
+noncomputable instance fullRankQuotientTupleFintype
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) :
+    Fintype (FullRankQuotientTuple (d := d) Q W hQW) := by
+  change Fintype (Frame (W ⧸ qInW Q hQW) (d - a))
+  exact GrassmannCounting.frameFintype
+
+noncomputable instance fullRankTupleFintype
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) :
+    Fintype (FullRankTuple (d := d) Q W hQW) :=
+  Fintype.ofEquiv _ (fullRankTupleSplitEquiv (d := d) Q W hQW).symm
+
+private noncomputable def fullRankQuotientFrameEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) :
+    FullRankQuotientTuple (d := d) Q W hQW ≃
+      Σ R : Grass (W ⧸ qInW Q hQW) (d - a), Frame R.val (d - a) := by
+  change Frame (W ⧸ qInW Q hQW) (d - a) ≃ _
+  exact GrassmannCounting.frameEquiv.symm
+
+private def fullRankQuotientAsFrameEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) :
+    FullRankQuotientTuple (d := d) Q W hQW ≃
+      Frame (W ⧸ qInW Q hQW) (d - a) where
+  toFun y := ⟨y.1, y.2⟩
+  invFun y := ⟨y.1, y.2⟩
+  left_inv y := rfl
+  right_inv y := rfl
+
+def tupleQuotientGrass
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (y : FullRankQuotientTuple (d := d) Q W hQW) :
+    Grass (W ⧸ qInW Q hQW) (d - a) :=
+  ⟨Submodule.span (ZMod 2) (Set.range y.1), by
+    simpa using finrank_span_eq_card y.2⟩
+
+def FixedZoom
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) : Type _ :=
+  {L : Grass V d // Q.val ≤ L.val ∧ L.val ≤ W}
+
+
+private def insideQ
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    {a : Nat} (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) : Grass W a :=
+  ⟨qInW Q hQW, qInW_finrank Q hQW⟩
+
+private def fixedZoomInsideEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) :
+    FixedZoom (d := d) Q W hQW ≃
+      {L : Grass W d // (insideQ Q W hQW).val ≤ L.val} := by
+  exact {
+    toFun := fun L =>
+      ⟨⟨L.1.val.comap W.subtype, by
+          rw [(Submodule.comapSubtypeEquivOfLe L.2.2).finrank_eq,
+            L.1.property]⟩,
+        Submodule.comap_mono L.2.1⟩
+    invFun := fun R =>
+      ⟨⟨R.1.val.map W.subtype, by
+          rw [Submodule.finrank_map_subtype_eq, R.1.property]⟩,
+        by
+          constructor
+          · intro x hx
+            let z : W := ⟨x, hQW hx⟩
+            have hz : z ∈ (insideQ Q W hQW).val := by
+              change x ∈ Q.val
+              exact hx
+            exact ⟨z, R.2 hz, rfl⟩
+          · exact W.map_subtype_le R.1.val⟩
+    left_inv := by
+      intro L
+      apply Subtype.ext
+      apply Subtype.ext
+      exact (Submodule.map_comap_subtype W L.1.val).trans
+        (inf_eq_right.mpr L.2.2)
+    right_inv := by
+      intro R
+      apply Subtype.ext
+      apply Subtype.ext
+      exact Submodule.comap_map_eq_of_injective W.injective_subtype R.1.val }
+
+private noncomputable def d3ContainingQuotientEquiv
+    {U : Type*} [AddCommGroup U] [Module (ZMod 2) U] [Fintype U]
+    {a d : Nat} (Q : Grass U a) (had : a ≤ d) :
+    {L : Grass U d // Q.val ≤ L.val} ≃ Grass (U ⧸ Q.val) (d - a) := by
+  exact {
+    toFun := fun L => ⟨L.1.val.map Q.val.mkQ, by
+      have h := d3_quotient_map_dimension Q.val L.1.val L.2
+      rw [Q.property, L.1.property] at h
+      exact Nat.eq_sub_of_add_eq h⟩
+    invFun := fun R => ⟨⟨R.val.comap Q.val.mkQ, by
+      have h := d3_quotient_map_dimension Q.val (R.val.comap Q.val.mkQ)
+        (Submodule.le_comap_mkQ Q.val R.val)
+      have hm : (R.val.comap Q.val.mkQ).map Q.val.mkQ = R.val :=
+        Submodule.map_comap_eq_self (by simp)
+      rw [hm, R.property, Q.property] at h
+      rw [← h]
+      exact Nat.sub_add_cancel had⟩,
+      Submodule.le_comap_mkQ Q.val R.val⟩
+    left_inv := by
+      intro L
+      apply Subtype.ext
+      apply Subtype.ext
+      simpa [Submodule.comap_map_mkQ] using
+        (sup_eq_right.mpr L.2 : Q.val ⊔ L.1.val = L.1.val)
+    right_inv := by
+      intro R
+      apply Subtype.ext
+      exact Submodule.map_comap_eq_self (by simp) }
+
+noncomputable def fixedZoomQuotientEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) (had : a ≤ d) :
+    FixedZoom (d := d) Q W hQW ≃
+      Grass (W ⧸ qInW Q hQW) (d - a) :=
+  (fixedZoomInsideEquiv Q W hQW).trans
+    (d3ContainingQuotientEquiv (insideQ Q W hQW) had)
+
+theorem card_fullRankTuple_eq
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (hd : d ≤ Module.finrank (ZMod 2) W) :
+    Fintype.card (FullRankTuple (d := d) Q W hQW) =
+      (Fintype.card (qInW Q hQW) : Nat) ^ (d - a) *
+        frameProduct (Module.finrank (ZMod 2) (W ⧸ qInW Q hQW)) (d - a) := by
+  have hquot :
+      Module.finrank (ZMod 2) (W ⧸ qInW Q hQW) =
+        Module.finrank (ZMod 2) W - a := by
+    have h := (qInW Q hQW).finrank_quotient_add_finrank
+    rw [qInW_finrank Q hQW] at h
+    exact Nat.eq_sub_of_add_eq h
+  have hb : d - a ≤ Module.finrank (ZMod 2) (W ⧸ qInW Q hQW) := by
+    rw [hquot]
+    exact Nat.sub_le_sub_right hd a
+  rw [Fintype.card_congr (fullRankTupleSplitEquiv (d := d) Q W hQW)]
+  rw [Fintype.card_prod, Fintype.card_fun, Fintype.card_fin]
+  rw [Fintype.card_congr (fullRankQuotientAsFrameEquiv (d := d) Q W hQW)]
+  rw [GrassmannCounting.card_frame (V := W ⧸ qInW Q hQW) hb]
+
+/- D3b1 scope boundary: this block proves only tuple/quotient/fibre counting
+and the associated mass bound. It does not formalize or claim MZ24 Lemma 5.25,
+a full fixed-zoom list bound, or CMMSA; D3b2 predicate/received-word/list-bound
+transfer remains outstanding. -/
+noncomputable def fullRankTupleDecomposition
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) (had : a ≤ d) :
+    FullRankTuple (d := d) Q W hQW ≃
+      Σ z : FixedZoom (d := d) Q W hQW,
+        Tuple (qInW Q hQW) (d - a) ×
+          Frame ((fixedZoomQuotientEquiv Q W hQW had z).val) (d - a) := by
+  let e := fullRankTupleSplitEquiv (d := d) Q W hQW
+  let g := fullRankQuotientFrameEquiv (d := d) Q W hQW
+  let f := fixedZoomQuotientEquiv Q W hQW had
+  let reorder :
+      (Tuple (qInW Q hQW) (d - a) ×
+        (Σ R : Grass (W ⧸ qInW Q hQW) (d - a), Frame R.val (d - a))) ≃
+      (Σ R : Grass (W ⧸ qInW Q hQW) (d - a),
+        Tuple (qInW Q hQW) (d - a) × Frame R.val (d - a)) := {
+    toFun := fun p => ⟨p.2.1, p.1, p.2.2⟩
+    invFun := fun s => (s.2.1, ⟨s.1, s.2.2⟩)
+    left_inv := by rintro ⟨p, ⟨R, r⟩⟩; rfl
+    right_inv := by rintro ⟨R, p, r⟩; rfl }
+  exact e.trans ((Equiv.prodCongr (Equiv.refl _) g).trans
+    (reorder.trans (Equiv.sigmaCongrLeft f).symm))
+
+noncomputable def fullRankTupleZoom
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (had : a ≤ d) (x : FullRankTuple (d := d) Q W hQW) :
+    FixedZoom (d := d) Q W hQW :=
+  (fullRankTupleDecomposition Q W hQW had x).1
+
+private noncomputable def fullRankTupleFiberEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) (had : a ≤ d)
+    (z : FixedZoom (d := d) Q W hQW) :
+    {x : FullRankTuple (d := d) Q W hQW //
+      fullRankTupleZoom Q W hQW had x = z} ≃
+    Tuple (qInW Q hQW) (d - a) ×
+        Frame ((fixedZoomQuotientEquiv Q W hQW had z).val) (d - a) := by
+  let E := fullRankTupleDecomposition Q W hQW had
+  refine (E.subtypeEquiv (q := fun s => s.1 = z) ?_).trans
+    (Equiv.sigmaSubtype z)
+  intro x
+  rfl
+
+theorem fullRankTupleZoom_fiber_card
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W) (had : a ≤ d)
+    (z : FixedZoom (d := d) Q W hQW) :
+    Fintype.card {x : FullRankTuple (d := d) Q W hQW //
+        fullRankTupleZoom Q W hQW had x = z} =
+      (Fintype.card (qInW Q hQW) : Nat) ^ (d - a) *
+        frameProduct (d - a) (d - a) := by
+  rw [Fintype.card_congr (fullRankTupleFiberEquiv Q W hQW had z)]
+  rw [Fintype.card_prod, Fintype.card_fun, Fintype.card_fin]
+  rw [GrassmannCounting.card_internal_frame]
+
+theorem fullRankTupleMass_ge_half
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (had : a ≤ d)
+    (hlarge : 10 * d ≤ Module.finrank (ZMod 2) W) :
+    (1 / 2 : Rat) ≤
+      (Fintype.card (FullRankTuple (d := d) Q W hQW) : Rat) /
+        Fintype.card (Tuple W (d - a)) := by
+  let n := Module.finrank (ZMod 2) W
+  have haW : a ≤ n := by
+    have h := Submodule.finrank_mono hQW
+    simpa [Q.property, n] using h
+  have hquot :
+      Module.finrank (ZMod 2) (W ⧸ qInW Q hQW) = n - a := by
+    have h := (qInW Q hQW).finrank_quotient_add_finrank
+    rw [qInW_finrank Q hQW] at h
+    simpa [n] using Nat.eq_sub_of_add_eq h
+  have hdW : d ≤ n := by
+    nlinarith
+  by_cases hb0 : d - a = 0
+  · have hcard := card_fullRankTuple_eq Q W hQW hdW
+    have hframe0 (m : Nat) : frameProduct m 0 = 1 := by
+      apply Finset.prod_eq_one
+      intro i hi
+      exact Fin.elim0 i
+    have hcard1 : Fintype.card (FullRankTuple (d := d) Q W hQW) = 1 := by
+      simpa [hb0, hframe0] using hcard
+    rw [hcard1]
+    norm_num [hb0, Tuple]
+  · have hdn : d + 1 ≤ n := by
+      have hadlt : a < d := Nat.lt_of_sub_ne_zero hb0
+      have hdpos : 0 < d := lt_of_le_of_lt (Nat.zero_le a) hadlt
+      nlinarith
+    have hsub : (d + 1) - a ≤ n - a := Nat.sub_le_sub_right hdn a
+    have hgap : d - a + 1 ≤ n - a := by
+      simpa [Nat.sub_add_comm had] using hsub
+    have hnorm := GaussianRatio.normalizedFrame_ge_half hgap
+    have hcard := card_fullRankTuple_eq Q W hQW hdW
+    rw [hquot] at hcard
+    have hqcard : Fintype.card (qInW Q hQW) = 2 ^ a := by
+      simpa [qInW_finrank Q hQW] using
+        (Module.card_eq_pow_finrank (K := ZMod 2) (V := qInW Q hQW))
+    have hwcard : Fintype.card W = 2 ^ n := by
+      simpa [n] using (Module.card_eq_pow_finrank
+        (K := ZMod 2) (V := W))
+    rw [hcard, hqcard, Fintype.card_fun, Fintype.card_fin, hwcard]
+    have hle : d - a ≤ n - a := (Nat.le_succ _).trans hgap
+    have hframe := GaussianRatio.cast_frameProduct
+      (n := n - a) (a := d - a) hle
+    have hsplit : a + (n - a) = n := Nat.add_sub_of_le haW
+    have hexp : a * (d - a) + (n - a) * (d - a) = n * (d - a) := by
+      rw [← Nat.add_mul, hsplit]
+    push_cast
+    rw [show (frameProduct (n - a) (d - a) : Rat) =
+        (2 : Rat) ^ ((n - a) * (d - a)) *
+          GaussianRatio.normalizedFrame (n - a) (d - a) by
+      simpa using hframe]
+    calc
+      (1 / 2 : Rat) ≤ GaussianRatio.normalizedFrame (n - a) (d - a) := hnorm
+      _ = _ := by
+        rw [← pow_mul, ← pow_mul, ← mul_assoc, ← pow_add, hexp]
+        exact (mul_div_cancel_left₀ _ (by positivity)).symm
+
 
 end
 end PvNP.RealizableHardness.ActualMZ24FixedZoomListBound
