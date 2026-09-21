@@ -1,14 +1,16 @@
 import PvNP.RealizableHardness.ActualBinaryGrassmannIncidence
 
-/-! Bounded D3c2c1--D3c2c2 executable-shape checks.
+/-! Bounded D3c2c1--D3c2c3 executable-shape checks.
 
 This companion checks arbitrary-arity genericity, finite reindexing,
-complement transport, bottom Grassmann cardinalities, Gaussian positivity,
-the exact 7/3/1 arithmetic fixtures, and the guarded RegularIncidence
-constructor.  Raw count identities are not dimension-gated; specialized
-normalized formulas retain their stated genericity/distinctness/arity
-hypotheses.  Probability/distribution laws, pointed or top carriers,
-Section 8, and CMMSA are intentionally excluded.
+complement transport, bottom and pointed Grassmann cardinalities, Gaussian
+positivity, guarded RegularIncidence constructors, finite-law transport, and
+intrinsic pointed-law identification.  The 7/3/1 fixtures are arithmetic-only;
+no concrete geometric incidence family is constructed here.  Raw count
+identities are not dimension-gated; specialized normalized formulas retain
+their stated genericity/distinctness/arity hypotheses.  Gaussian ratios,
+pair-subindependence, TV/concentration, actual enlarged-carrier/D3c2e joins,
+advice buckets, Section 8, and CMMSA are intentionally excluded.
 -/
 
 namespace PvNP.RealizableHardness.ActualBinaryGrassmannIncidenceChecks
@@ -54,6 +56,35 @@ attribute [local instance] Classical.propDecidable
 #check bottom_pair_count_nat
 #check bottom_general_count_nat
 #check bottomRegularIncidence
+#check PointedQuery
+#check pointedContained
+#check pointedContainedSet
+#check pointedQueryEquiv
+#check adviceComplement_finrank
+#check pointedQuery_empty_of_not_le
+#check pointedQuery_nonempty
+#check pointedCarrier_card_nat
+#check pointedContained_iff
+#check pointedContained_card_nat
+#check pointedPairContained_card_nat
+#check pointedGeneralContained_card_nat
+#check pointed_singleton_count_nat
+#check pointed_pair_count_nat
+#check pointed_general_count_nat
+#check pointedRegularIncidence
+#check complementBottomRegularIncidence
+#check pointed_bottom_relation_iff
+#check pointed_fibre_equiv
+#check pointed_uniformLaw_pushforward
+#check pointedComponentLawTransport
+#check pointedComponentLawTransport_pushforward
+#check pointedIncidenceMixtureTransport
+#check pointedIncidenceMixtureTransport_pushforward
+#check pointed_bottom_fibreCard_eq
+#check pointedComponentLaw_pushforward
+#check pointedComponentLawTransport_eq_componentLaw
+#check pointedIncidenceMixture_pushforward
+#check pointedIncidenceMixtureTransport_eq_incidenceMixture
 
 #print axioms familyInter_complement
 #print axioms genericUpTo_reindex
@@ -63,6 +94,21 @@ attribute [local instance] Classical.propDecidable
 #print axioms gaussian_pos_of_le
 #print axioms bottomGeneralContained_card_nat
 #print axioms bottomRegularIncidence
+#print axioms adviceComplement_finrank
+#print axioms pointedCarrier_card_nat
+#print axioms pointedContained_iff
+#print axioms pointed_singleton_count_nat
+#print axioms pointed_pair_count_nat
+#print axioms pointed_general_count_nat
+#print axioms pointedRegularIncidence
+#print axioms pointed_uniformLaw_pushforward
+#print axioms pointedComponentLawTransport_pushforward
+#print axioms pointedIncidenceMixtureTransport_pushforward
+#print axioms pointed_bottom_fibreCard_eq
+#print axioms pointedComponentLaw_pushforward
+#print axioms pointedComponentLawTransport_eq_componentLaw
+#print axioms pointedIncidenceMixture_pushforward
+#print axioms pointedIncidenceMixtureTransport_eq_incidenceMixture
 
 variable {V I : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
 variable [Fintype I]
@@ -119,9 +165,8 @@ example {a : Nat} {Q : Grass V a} (C : AdviceComplement Q)
     Function.Injective (complementFamily C W) :=
   complementFamily_injective C W hQW hW
 
-/- Exact Gaussian arithmetic for the GF(2)^3 bottom/singleton/pair window:
-   7 total one-spaces, 3 one-spaces in a hyperplane, and 1 one-space in a
-   codimension-two intersection. -/
+/- Arithmetic-only Gaussian evaluations at dimensions 3, 2, and 1. No concrete
+   geometric incidence family is constructed here. -/
 example : gaussian 3 1 = 7 := by
   norm_num [gaussian, frameProduct, Fin.prod_univ_succ]
 
@@ -148,6 +193,23 @@ example {V I : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
     (hb : b ≤ Module.finrank (ZMod 2) V - 2 * r) :
     ActualFiniteIncidenceSampling.RegularIncidence I (BottomQuery V b) :=
   bottomRegularIncidence W hW hb
+
+/- Repeated arithmetic-only 7/3/1 tuple, followed by the honest negative
+   pointed-dimension gate. -/
+example : gaussian 3 1 = 7 ∧ gaussian 2 1 = 3 ∧ gaussian 1 1 = 1 := by
+  norm_num [gaussian, frameProduct, Fin.prod_univ_succ]
+
+example {a j : Nat} {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    [Fintype V] {Q : Grass V a} (C : AdviceComplement Q)
+    (haj : ¬ a ≤ j) : IsEmpty (PointedQuery Q j) :=
+  pointedQuery_empty_of_not_le C haj
+
+example {a j : Nat} {V : Type*} [AddCommGroup V] [Module (ZMod 2) V]
+    [Fintype V] {Q : Grass V a} (C : AdviceComplement Q)
+    (haj : ¬ a ≤ j) :
+    Nat.card (PointedQuery Q j) = 0 := by
+  letI : IsEmpty (PointedQuery Q j) := pointedQuery_empty_of_not_le C haj
+  simp
 
 end
 end PvNP.RealizableHardness.ActualBinaryGrassmannIncidenceChecks
