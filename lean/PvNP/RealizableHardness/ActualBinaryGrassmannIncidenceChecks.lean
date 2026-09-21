@@ -1,11 +1,14 @@
 import PvNP.RealizableHardness.ActualBinaryGrassmannIncidence
 
-/-! Bounded D3c2c1 executable-shape checks.
+/-! Bounded D3c2c1--D3c2c2 executable-shape checks.
 
-This companion intentionally checks only the first D3c2c1 increment:
-arbitrary-arity genericity, finite reindexing, and complement transport.
-Counts, positivity, regular-incidence laws, and pointed carriers belong to
-the subsequent D3c2c increments and are not asserted here.
+This companion checks arbitrary-arity genericity, finite reindexing,
+complement transport, bottom Grassmann cardinalities, Gaussian positivity,
+the exact 7/3/1 arithmetic fixtures, and the guarded RegularIncidence
+constructor.  Raw count identities are not dimension-gated; specialized
+normalized formulas retain their stated genericity/distinctness/arity
+hypotheses.  Probability/distribution laws, pointed or top carriers,
+Section 8, and CMMSA are intentionally excluded.
 -/
 
 namespace PvNP.RealizableHardness.ActualBinaryGrassmannIncidenceChecks
@@ -37,11 +40,29 @@ attribute [local instance] Classical.propDecidable
 #check familyInter_complement
 #check genericUpTo_complement
 #check complementFamily_injective
+#check BottomQuery
+#check bottomContained
+#check bottomContainedSet
+#check bottomCarrier_card_nat
+#check bottomCarrier_card_fintype
+#check grass_nonempty_of_le
+#check gaussian_pos_of_le
+#check bottomContained_card_nat
+#check bottomPairContained_card_nat
+#check bottomGeneralContained_card_nat
+#check bottom_singleton_count_nat
+#check bottom_pair_count_nat
+#check bottom_general_count_nat
+#check bottomRegularIncidence
 
 #print axioms familyInter_complement
 #print axioms genericUpTo_reindex
 #print axioms genericUpTo_complement
 #print axioms complementFamily_injective
+#print axioms grass_nonempty_of_le
+#print axioms gaussian_pos_of_le
+#print axioms bottomGeneralContained_card_nat
+#print axioms bottomRegularIncidence
 
 variable {V I : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
 variable [Fintype I]
@@ -97,6 +118,36 @@ example {a : Nat} {Q : Grass V a} (C : AdviceComplement Q)
     (hQW : ∀ i, Q.val ≤ W i) (hW : Function.Injective W) :
     Function.Injective (complementFamily C W) :=
   complementFamily_injective C W hQW hW
+
+/- Exact Gaussian arithmetic for the GF(2)^3 bottom/singleton/pair window:
+   7 total one-spaces, 3 one-spaces in a hyperplane, and 1 one-space in a
+   codimension-two intersection. -/
+example : gaussian 3 1 = 7 := by
+  norm_num [gaussian, frameProduct, Fin.prod_univ_succ]
+
+example : gaussian 2 1 = 3 := by
+  norm_num [gaussian, frameProduct, Fin.prod_univ_succ]
+
+example : gaussian 1 1 = 1 := by
+  norm_num [gaussian, frameProduct, Fin.prod_univ_succ]
+
+example : gaussian 0 0 = 1 := gaussian_zero 0
+
+example : gaussian 3 4 = 0 := gaussian_of_lt (by decide)
+
+example {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {b : Nat} (hb : b ≤ Module.finrank (ZMod 2) V) :
+    Nonempty (BottomQuery V b) := by
+  exact grass_nonempty_of_le hb
+
+/- A valid bottom regular-incidence constructor is guarded by the actual
+   two-generic and bottom dimension hypotheses, but not by Nonempty I. -/
+example {V I : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    [Fintype I] {r b : Nat} (W : I → Submodule (ZMod 2) V)
+    (hW : TwoGeneric W r)
+    (hb : b ≤ Module.finrank (ZMod 2) V - 2 * r) :
+    ActualFiniteIncidenceSampling.RegularIncidence I (BottomQuery V b) :=
+  bottomRegularIncidence W hW hb
 
 end
 end PvNP.RealizableHardness.ActualBinaryGrassmannIncidenceChecks
