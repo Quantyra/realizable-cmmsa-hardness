@@ -617,10 +617,10 @@ theorem distinct_linearTupleCodeword_agreement
           linearTupleCodeword b g x = linearTupleCodeword b g' x} =
           Fintype.card (Fin b -> K) := Fintype.card_congr E
       _ = (Fintype.card K)^b := by
-        simp only [Fintype.card_fun, Fintype.card_fin]
+        simpa only [Fintype.card_fun, Fintype.card_fin]
   have hcardOmega : Fintype.card (Tuple W b) =
       (Fintype.card W)^b := by
-    simp only [Tuple, Fintype.card_fun, Fintype.card_fin]
+    simpa only [Tuple, Fintype.card_fun, Fintype.card_fin]
   rw [wordAgreement_eq_count_div,
     ← card_agreement_eq_count, hcardE, hcardOmega, hcardK, hcardW]
   rw [show Module.finrank (ZMod 2) W =
@@ -965,10 +965,10 @@ theorem card_fullRankTuple_eq
   rw [Fintype.card_congr (fullRankQuotientAsFrameEquiv (d := d) Q W hQW)]
   rw [GrassmannCounting.card_frame (V := W ⧸ qInW Q hQW) hb]
 
-/- D3b1 scope boundary: this block proves only tuple/quotient/fibre counting
-and the associated mass bound. It does not formalize or claim MZ24 Lemma 5.25,
-a full fixed-zoom list bound, or CMMSA; D3b2 predicate/received-word/list-bound
-transfer remains outstanding. -/
+/- D3b1/D3b2 scope boundary: this module proves the finite tuple/quotient/fibre
+counting, mass, received-word transfer, and fixed-W functional-list bounds.
+It does not formalize or claim MZ24 Theorem 5.26, CMMSA, or the many-W
+extraction; those remain outside this increment. -/
 noncomputable def fullRankTupleDecomposition
     {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
     {a d : Nat} (Q : Grass V a)
@@ -1008,7 +1008,7 @@ private noncomputable def fullRankTupleFiberEquiv
     {x : FullRankTuple (d := d) Q W hQW //
       fullRankTupleZoom Q W hQW had x = z} ≃
     Tuple (qInW Q hQW) (d - a) ×
-        Frame ((fixedZoomQuotientEquiv Q W hQW had z).val) (d - a) := by
+      Frame ((fixedZoomQuotientEquiv Q W hQW had z).val) (d - a) := by
   let E := fullRankTupleDecomposition Q W hQW had
   refine (E.subtypeEquiv (q := fun s => s.1 = z) ?_).trans
     (Equiv.sigmaSubtype z)
@@ -1091,6 +1091,565 @@ theorem fullRankTupleMass_ge_half
       _ = _ := by
         rw [← pow_mul, ← pow_mul, ← mul_assoc, ← pow_add, hexp]
         exact (mul_div_cancel_left₀ _ (by positivity)).symm
+
+/- D3b2 semantic bridge: the following definitions connect the certified
+tuple/fibre carrier to the actual table and fixed-W functional list bounds.
+This remains bounded to fixed Q,W and does not claim MZ24 Theorem 5.26. -/
+
+private noncomputable def fullRankTupleGeneratedZoom
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (had : a ≤ d) (x : FullRankTuple (d := d) Q W hQW) :
+    FixedZoom (d := d) Q W hQW := by
+  let S : Submodule (ZMod 2) W :=
+    qInW Q hQW ⊔ Submodule.span (ZMod 2) (Set.range x.1)
+  have hqmap : (qInW Q hQW).map (qInW Q hQW).mkQ = ⊥ :=
+    (qInW Q hQW).mkQ_map_self
+  have hmap : S.map (qInW Q hQW).mkQ =
+      Submodule.span (ZMod 2) (Set.range (fun i =>
+        (qInW Q hQW).mkQ (x.1 i))) := by
+    dsimp [S]
+    rw [Submodule.map_sup, hqmap, bot_sup_eq, Submodule.map_span]
+    exact congrArg (Submodule.span (ZMod 2))
+      (Set.range_comp' (qInW Q hQW).mkQ x.1).symm
+  have hdim := d3_quotient_map_dimension
+    (qInW Q hQW) S le_sup_left
+  rw [hmap, qInW_finrank Q hQW, finrank_span_eq_card x.2] at hdim
+  refine ⟨⟨S.map W.subtype, ?_⟩, ?_, ?_⟩
+  · rw [Submodule.finrank_map_subtype_eq, ← hdim]
+    simpa only [Fintype.card_fin] using Nat.sub_add_cancel had
+  · intro z hz
+    refine ⟨⟨z, hQW hz⟩, ?_, rfl⟩
+    exact (le_sup_left : qInW Q hQW ≤ S) hz
+  · change S.map W.subtype ≤ W
+    exact W.map_subtype_le S
+
+private theorem fullRankTupleZoom_map_eq_generated
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (had : a ≤ d) (x : FullRankTuple (d := d) Q W hQW) :
+    fixedZoomQuotientEquiv Q W hQW had
+        (fullRankTupleZoom Q W hQW had x) =
+      fixedZoomQuotientEquiv Q W hQW had
+        (fullRankTupleGeneratedZoom Q W hQW had x) := by
+  let y := (fullRankTupleSplitEquiv (d := d) Q W hQW x).2
+  let yf : Frame (W ⧸ qInW Q hQW) (d - a) := ⟨y.1, y.2⟩
+  have hqmap : (qInW Q hQW).map (qInW Q hQW).mkQ = ⊥ :=
+    (qInW Q hQW).mkQ_map_self
+  have hmap :
+      (qInW Q hQW ⊔ Submodule.span (ZMod 2) (Set.range x.1)).map
+          (qInW Q hQW).mkQ =
+        Submodule.span (ZMod 2) (Set.range (fun i =>
+          (qInW Q hQW).mkQ (x.1 i))) := by
+    rw [Submodule.map_sup, hqmap, bot_sup_eq, Submodule.map_span]
+    exact congrArg (Submodule.span (ZMod 2))
+      (Set.range_comp' (qInW Q hQW).mkQ x.1).symm
+  change
+    fixedZoomQuotientEquiv Q W hQW had
+        ((fullRankTupleDecomposition Q W hQW had x).1) =
+      fixedZoomQuotientEquiv Q W hQW had
+        (fullRankTupleGeneratedZoom Q W hQW had x)
+  simp only [fullRankTupleDecomposition, Equiv.trans_apply,
+    Equiv.sigmaCongrLeft, Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk,
+    Equiv.apply_symm_apply]
+  apply Subtype.ext
+  dsimp [fullRankQuotientFrameEquiv]
+  change
+    (GrassmannCounting.frameEquiv.symm yf).1.val =
+      (((qInW Q hQW ⊔ Submodule.span (ZMod 2) (Set.range x.1)).map
+          W.subtype).comap W.subtype).map (qInW Q hQW).mkQ
+  rw [Submodule.comap_map_eq_of_injective W.injective_subtype, hmap]
+  calc
+    (GrassmannCounting.frameEquiv.symm yf).1.val =
+      Submodule.span (ZMod 2)
+          (Set.range yf.1) := by
+      have hflat :
+          GrassmannCounting.flatten
+              (GrassmannCounting.frameEquiv.symm yf) = yf := by
+        change GrassmannCounting.frameEquiv
+            (GrassmannCounting.frameEquiv.symm yf) = yf
+        exact GrassmannCounting.frameEquiv.apply_symm_apply yf
+      exact
+        (GrassmannCounting.span_flatten
+          (GrassmannCounting.frameEquiv.symm yf).1
+          (GrassmannCounting.frameEquiv.symm yf).2).symm.trans
+          (congrArg
+            (fun f : Frame (W ⧸ qInW Q hQW) (d - a) =>
+              Submodule.span (ZMod 2) (Set.range f.val)) hflat)
+    _ = Submodule.span (ZMod 2) (Set.range (fun i =>
+        (qInW Q hQW).mkQ (x.1 i))) := by
+      dsimp [yf, y]
+      change
+        Submodule.span (ZMod 2)
+            (Set.range ((tupleSplitEquiv Q hQW (d - a) x.1).2)) =
+          Submodule.span (ZMod 2) (Set.range (fun i =>
+            (qInW Q hQW).mkQ (x.1 i)))
+      rw [tupleSplitEquiv_snd]
+
+theorem fullRankTupleZoom_val_eq_generated
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (had : a ≤ d) (x : FullRankTuple (d := d) Q W hQW) :
+    (fullRankTupleZoom Q W hQW had x).1.val =
+      (fullRankTupleGeneratedZoom Q W hQW had x).1.val := by
+  have hz := fullRankTupleZoom_map_eq_generated Q W hQW had x
+  have heq := (fixedZoomQuotientEquiv Q W hQW had).injective hz
+  exact congrArg (fun z : FixedZoom (d := d) Q W hQW => z.1.val) heq
+
+theorem fullRankTupleZoom_coordinate_mem
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat} (Q : Grass V a)
+    (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (had : a ≤ d) (x : FullRankTuple (d := d) Q W hQW)
+    (i : Fin (d - a)) :
+    (x.1 i : V) ∈ (fullRankTupleZoom Q W hQW had x).1.val := by
+  rw [fullRankTupleZoom_val_eq_generated]
+  change (x.1 i : V) ∈
+    (qInW Q hQW ⊔ Submodule.span (ZMod 2) (Set.range x.1)).map W.subtype
+  refine ⟨x.1 i, ?_, rfl⟩
+  exact (show Submodule.span (ZMod 2) (Set.range x.1) ≤
+      qInW Q hQW ⊔ Submodule.span (ZMod 2) (Set.range x.1) from le_sup_right)
+    (Submodule.subset_span (Set.mem_range_self i))
+
+noncomputable def zoomReceivedWord
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) :
+    Tuple W (d - a) → TupleAlphabet (d - a) := by
+  classical
+  exact fun x i =>
+    if had : a ≤ d then
+      if hx : LinearIndependent (ZMod 2)
+          (fun j => (qInW Q hQW).mkQ (x j)) then
+        let y : FullRankTuple (d := d) Q W hQW := ⟨x, hx⟩
+        let L := fullRankTupleZoom Q W hQW had y
+        T L.1 ⟨(x i : V), fullRankTupleZoom_coordinate_mem Q W hQW had y i⟩
+      else 0
+    else 0
+
+private theorem zoomReceivedWord_eq_of_fullRank
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (had : a ≤ d)
+    (x : FullRankTuple (d := d) Q W hQW) (i : Fin (d - a)) :
+    zoomReceivedWord T Q W hQW x.1 i =
+      T (fullRankTupleZoom Q W hQW had x).1
+        ⟨(x.1 i : V), fullRankTupleZoom_coordinate_mem Q W hQW had x i⟩ := by
+  classical
+  rw [zoomReceivedWord]
+  split
+  · next hhad =>
+    split
+    · next hx =>
+      have hx' : hx = x.2 := Subsingleton.elim _ _
+      have hhad' : hhad = had := Subsingleton.elim _ _
+      cases hx'
+      cases hhad'
+      rfl
+    · next hx => exact (hx x.2).elim
+  · next hnot => exact (hnot had).elim
+
+private theorem fullRankTuple_codeword_eq_received_of_agrees
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (had : a ≤ d)
+    (g : Module.Dual (ZMod 2) W)
+    (x : FullRankTuple (d := d) Q W hQW)
+    (hag : AgreesOn (T := T) (P := { W := W, hQW := hQW, g := g })
+      (fullRankTupleZoom Q W hQW had x).1
+      (fullRankTupleZoom Q W hQW had x).2.2) :
+    linearTupleCodeword (d - a) g x.1 = zoomReceivedWord T Q W hQW x.1 := by
+  funext i
+  rw [linearTupleCodeword, zoomReceivedWord_eq_of_fullRank T Q W hQW had x i]
+  exact (hag ⟨(x.1 i : V),
+    fullRankTupleZoom_coordinate_mem Q W hQW had x i⟩).symm
+
+private noncomputable def fullRankTupleAgreeingEquiv
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (had : a ≤ d)
+    (g : Module.Dual (ZMod 2) W) :
+    {x : FullRankTuple (d := d) Q W hQW //
+      AgreesOn (T := T) (P := { W := W, hQW := hQW, g := g })
+        (fullRankTupleZoom Q W hQW had x).1
+        (fullRankTupleZoom Q W hQW had x).2.2} ≃
+      Σ z : AgreeingZoom T Q { W := W, hQW := hQW, g := g },
+        Tuple (qInW Q hQW) (d - a) ×
+          Frame ((fixedZoomQuotientEquiv Q W hQW had z.1).val) (d - a) := by
+  let E := fullRankTupleDecomposition Q W hQW had
+  have hp : ∀ x : FullRankTuple (d := d) Q W hQW,
+      AgreesOn (T := T) (P := { W := W, hQW := hQW, g := g })
+        (fullRankTupleZoom Q W hQW had x).1
+          (fullRankTupleZoom Q W hQW had x).2.2 ↔
+        AgreesOn (T := T) (P := { W := W, hQW := hQW, g := g })
+          (E x).1.1 (E x).1.2.2 := by
+    intro x
+    simp [E, fullRankTupleZoom]
+  exact (E.subtypeEquiv hp).trans
+    (Equiv.subtypeSigmaEquiv
+      (fun z : FixedZoom (d := d) Q W hQW =>
+        Tuple (qInW Q hQW) (d - a) ×
+          Frame ((fixedZoomQuotientEquiv Q W hQW had z).val) (d - a))
+      (fun z : FixedZoom (d := d) Q W hQW =>
+        AgreesOn (T := T) (P := { W := W, hQW := hQW, g := g }) z.1 z.2.2))
+
+private theorem fullRankTuple_agreeing_card
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (had : a ≤ d)
+    (g : Module.Dual (ZMod 2) W) :
+    Fintype.card {x : FullRankTuple (d := d) Q W hQW //
+      AgreesOn (T := T) (P := { W := W, hQW := hQW, g := g })
+        (fullRankTupleZoom Q W hQW had x).1
+        (fullRankTupleZoom Q W hQW had x).2.2} =
+      Fintype.card (AgreeingZoom T Q { W := W, hQW := hQW, g := g }) *
+        ((Fintype.card (qInW Q hQW) : Nat) ^ (d - a) *
+          frameProduct (d - a) (d - a)) := by
+  let P : DecodedPair Q d := { W := W, hQW := hQW, g := g }
+  letI : Finite (FixedZoom (d := d) Q W hQW) :=
+    Finite.of_injective (fun z : FixedZoom (d := d) Q W hQW => z.1)
+      Subtype.val_injective
+  letI : Fintype (FixedZoom (d := d) Q W hQW) := Fintype.ofFinite _
+  letI : Fintype (Zoom (d := d) Q P) := Fintype.ofFinite _
+  letI : Fintype (AgreeingZoom T Q P) := Fintype.ofFinite _
+  rw [Fintype.card_congr (fullRankTupleAgreeingEquiv T Q W hQW had g)]
+  simp only [Fintype.card_sigma, Fintype.card_prod, Fintype.card_fun,
+    Fintype.card_fin]
+  simp_rw [GrassmannCounting.card_internal_frame]
+  simp [Finset.sum_const, mul_assoc, mul_left_comm, mul_comm]
+
+private theorem fullRankTuple_zoom_card_eq
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (had : a ≤ d)
+    (g : Module.Dual (ZMod 2) W) :
+    Fintype.card (FullRankTuple (d := d) Q W hQW) =
+      Fintype.card (Zoom (d := d) Q { W := W, hQW := hQW, g := g }) *
+        ((Fintype.card (qInW Q hQW) : Nat) ^ (d - a) *
+          frameProduct (d - a) (d - a)) := by
+  let P : DecodedPair Q d := { W := W, hQW := hQW, g := g }
+  letI : Finite (FixedZoom (d := d) Q W hQW) :=
+    Finite.of_injective (fun z : FixedZoom (d := d) Q W hQW => z.1)
+      Subtype.val_injective
+  letI : Fintype (FixedZoom (d := d) Q W hQW) := Fintype.ofFinite _
+  change Fintype.card (FullRankTuple (d := d) Q W hQW) =
+    Fintype.card (FixedZoom (d := d) Q W hQW) *
+      ((Fintype.card (qInW Q hQW) : Nat) ^ (d - a) *
+        frameProduct (d - a) (d - a))
+  rw [Fintype.card_congr (fullRankTupleDecomposition Q W hQW had)]
+  simp only [Fintype.card_sigma, Fintype.card_prod, Fintype.card_fun,
+    Fintype.card_fin]
+  simp_rw [GrassmannCounting.card_internal_frame]
+  simp [Finset.sum_const, mul_assoc, mul_left_comm, mul_comm]
+
+private theorem fullRankTuple_word_agreeing_card_ge
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (had : a ≤ d)
+    (g : Module.Dual (ZMod 2) W) :
+    Fintype.card {x : Tuple W (d - a) //
+      linearTupleCodeword (d - a) g x = zoomReceivedWord T Q W hQW x} ≥
+      Fintype.card {x : FullRankTuple (d := d) Q W hQW //
+        AgreesOn (T := T) (P := { W := W, hQW := hQW, g := g })
+          (fullRankTupleZoom Q W hQW had x).1
+          (fullRankTupleZoom Q W hQW had x).2.2} := by
+  let A := {x : FullRankTuple (d := d) Q W hQW //
+    AgreesOn (T := T) (P := { W := W, hQW := hQW, g := g })
+      (fullRankTupleZoom Q W hQW had x).1
+      (fullRankTupleZoom Q W hQW had x).2.2}
+  let B := {x : Tuple W (d - a) //
+    linearTupleCodeword (d - a) g x = zoomReceivedWord T Q W hQW x}
+  let f : A → B := fun x =>
+    ⟨x.1.1,
+      fullRankTuple_codeword_eq_received_of_agrees T Q W hQW had g x.1 x.2⟩
+  have hf : Function.Injective f := by
+    intro x y hxy
+    apply Subtype.ext
+    apply Subtype.ext
+    exact congrArg (fun z : B => z.1) hxy
+  exact Fintype.card_le_of_injective f hf
+
+theorem zoomAgreement_to_wordAgreement
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (had : a ≤ d)
+    (hlarge : 10 * d ≤ Module.finrank (ZMod 2) W)
+    (g : Module.Dual (ZMod 2) W) (beta : Rat)
+    (hag : beta ≤ agreement T Q
+      { W := W, hQW := hQW, g := g }) :
+    beta / 2 ≤ wordAgreement (linearTupleCodeword (d - a) g)
+      (zoomReceivedWord T Q W hQW) := by
+  classical
+  have hU : 0 < Fintype.card (Tuple W (d - a)) := by
+    rw [Fintype.card_fun, Fintype.card_fin]
+    rw [Module.card_eq_pow_finrank (K := ZMod 2) (V := W)]
+    positivity
+  letI : Nonempty (Tuple W (d - a)) := Fintype.card_pos_iff.mp hU
+  by_cases hbeta : beta ≤ 0
+  · have hword : 0 ≤ wordAgreement (linearTupleCodeword (d - a) g)
+        (zoomReceivedWord T Q W hQW) := by
+      rw [wordAgreement_eq_count_div]
+      apply div_nonneg
+      · unfold agreementCount
+        positivity
+      · positivity
+    linarith
+  · have hbeta' : 0 < beta := lt_of_not_ge hbeta
+    let P : DecodedPair Q d := { W := W, hQW := hQW, g := g }
+    have hagP : beta ≤ agreement T Q P := by simpa [P] using hag
+    have hzoom : Fintype.card (Zoom (d := d) Q P) ≠ 0 :=
+      zoom_card_ne_zero_of_pos_le T Q P hbeta' hagP
+    have hag' := agreement_eq_fraction_of_nonempty T Q P hzoom
+    have hmass := fullRankTupleMass_ge_half Q W hQW had hlarge
+    have hgood := fullRankTuple_word_agreeing_card_ge T Q W hQW had g
+    have hagcard := fullRankTuple_agreeing_card T Q W hQW had g
+    have hagcardP :
+        Fintype.card {x : FullRankTuple (d := d) Q W hQW //
+          AgreesOn (T := T) (P := P)
+            (fullRankTupleZoom Q W hQW had x).1
+            (fullRankTupleZoom Q W hQW had x).2.2} =
+          Fintype.card (AgreeingZoom T Q P) *
+            ((Fintype.card (qInW Q hQW) : Nat) ^ (d - a) *
+              frameProduct (d - a) (d - a)) := by
+      simpa [P] using hagcard
+    have hagcardPRat :
+        (Fintype.card {x : FullRankTuple (d := d) Q W hQW //
+          AgreesOn (T := T) (P := P)
+            (fullRankTupleZoom Q W hQW had x).1
+            (fullRankTupleZoom Q W hQW had x).2.2} : Rat) =
+          (Fintype.card (AgreeingZoom T Q P) : Rat) *
+            ((Fintype.card (qInW Q hQW) : Rat) ^ (d - a) *
+              frameProduct (d - a) (d - a)) := by
+      exact_mod_cast hagcardP
+    have hfull := fullRankTuple_zoom_card_eq T Q W hQW had g
+    have hfrac : beta ≤
+        (Fintype.card (AgreeingZoom T Q P) : Rat) /
+          Fintype.card (Zoom (d := d) Q P) := by
+      rw [← hag']
+      exact hagP
+    have hZ : (0 : Rat) < Fintype.card (Zoom (d := d) Q P) := by
+      exact_mod_cast Nat.pos_of_ne_zero hzoom
+    have hA : beta * Fintype.card (Zoom (d := d) Q P) ≤
+        Fintype.card (AgreeingZoom T Q P) :=
+      (le_div_iff₀ hZ).mp hfrac
+    have hU' : (0 : Rat) < Fintype.card (Tuple W (d - a)) := by
+      exact_mod_cast hU
+    have hM : (1 / 2 : Rat) * Fintype.card (Tuple W (d - a)) ≤
+        Fintype.card (FullRankTuple (d := d) Q W hQW) :=
+      (le_div_iff₀ hU').mp hmass
+    have hgood' :
+        (Fintype.card (AgreeingZoom T Q P) : Rat) *
+            ((Fintype.card (qInW Q hQW) : Rat) ^ (d - a) *
+              frameProduct (d - a) (d - a)) ≤
+          Fintype.card {x : Tuple W (d - a) //
+            linearTupleCodeword (d - a) g x =
+              zoomReceivedWord T Q W hQW x} := by
+      rw [← hagcardPRat]
+      exact_mod_cast hgood
+    have hfull' :
+        (Fintype.card (Zoom (d := d) Q P) : Rat) *
+            ((Fintype.card (qInW Q hQW) : Rat) ^ (d - a) *
+              frameProduct (d - a) (d - a)) =
+          Fintype.card (FullRankTuple (d := d) Q W hQW) := by
+      exact_mod_cast hfull.symm
+    have hmul := mul_le_mul_of_nonneg_left hM (le_of_lt hbeta')
+    have hmul' := mul_le_mul_of_nonneg_right hA (by positivity :
+      (0 : Rat) ≤ (Fintype.card (qInW Q hQW) : Rat) ^ (d - a) *
+        frameProduct (d - a) (d - a))
+    have hchain : beta / 2 * Fintype.card (Tuple W (d - a)) ≤
+        Fintype.card {x : Tuple W (d - a) //
+          linearTupleCodeword (d - a) g x =
+            zoomReceivedWord T Q W hQW x} := by
+      calc
+        beta / 2 * Fintype.card (Tuple W (d - a)) ≤
+            beta * Fintype.card (FullRankTuple (d := d) Q W hQW) := by
+              simpa [div_eq_mul_inv, mul_assoc] using hmul
+        _ = beta * (Fintype.card (Zoom (d := d) Q P) *
+            ((Fintype.card (qInW Q hQW) : Rat) ^ (d - a) *
+              frameProduct (d - a) (d - a))) := by rw [hfull']
+        _ ≤ (Fintype.card (AgreeingZoom T Q P) : Rat) *
+            ((Fintype.card (qInW Q hQW) : Rat) ^ (d - a) *
+              frameProduct (d - a) (d - a)) := by
+              simpa [mul_assoc, mul_left_comm, mul_comm] using hmul'
+        _ ≤ _ := hgood'
+    rw [wordAgreement_eq_count_div, ← card_agreement_eq_count]
+    exact (le_div_iff₀ hU').2 hchain
+
+theorem fixedZoom_function_list_le_four_div_sq
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    {Iota : Type*} [Fintype Iota]
+    (g : Iota → Module.Dual (ZMod 2) W)
+    (hinj : Function.Injective g) (beta c : Rat)
+    (had : a ≤ d) (hgap : a < d)
+    (hlarge : 10 * d ≤ Module.finrank (ZMod 2) W)
+    (hc : 0 < c)
+    (hthreshold : 2 / (2 ^ (d - a) : Rat) + c ≤ beta)
+    (hagrees : ∀ i, beta ≤ agreement T Q
+      { W := W, hQW := hQW, g := g i }) :
+    (Fintype.card Iota : Rat) ≤ 4 / c^2 := by
+  have hb : 0 < d - a := Nat.sub_pos_of_lt hgap
+  have hc' : 0 < c / 2 := by positivity
+  have hcode : Function.Injective
+      (fun i => linearTupleCodeword (d - a) (g i)) := by
+    intro i j hij
+    apply hinj
+    exact linearTupleCodeword_injective (W := W) (d - a) hb hij
+  have hpair : ∀ i j, i ≠ j →
+      wordAgreement (linearTupleCodeword (d - a) (g i))
+          (linearTupleCodeword (d - a) (g j)) ≤
+        1 / (Fintype.card (TupleAlphabet (d - a)) : Rat) := by
+    intro i j hne
+    have hgne : g i ≠ g j := fun h => hne (hinj h)
+    simpa [card_tupleAlphabet] using
+      (distinct_linearTupleCodeword_agreement (W := W) (d - a) hb hgne).le
+  have hrecv : ∀ i,
+      1 / (Fintype.card (TupleAlphabet (d - a)) : Rat) + c / 2 ≤
+        wordAgreement (linearTupleCodeword (d - a) (g i))
+          (zoomReceivedWord T Q W hQW) := by
+    intro i
+    rw [card_tupleAlphabet]
+    have hw := zoomAgreement_to_wordAgreement T Q W hQW had hlarge
+      (g i) beta (hagrees i)
+    have ht : 1 / (2 ^ (d - a) : Rat) + c / 2 ≤ beta / 2 := by
+      calc
+        1 / (2 ^ (d - a) : Rat) + c / 2 =
+            (2 / (2 ^ (d - a) : Rat) + c) / 2 := by ring
+        _ ≤ beta / 2 := by
+          exact div_le_div_of_nonneg_right hthreshold (by norm_num)
+    simpa only [Nat.cast_pow, Nat.cast_ofNat] using ht.trans hw
+  have hbound := finite_qary_list_bound
+    (code := fun i => linearTupleCodeword (d - a) (g i))
+    (received := zoomReceivedWord T Q W hQW)
+    hcode (c / 2) hc' hpair hrecv
+  calc
+    (Fintype.card Iota : Rat) ≤ 1 / (c / 2)^2 := hbound
+    _ = 4 / c^2 := by
+      norm_num [div_pow, div_div_eq_mul_div]
+
+theorem fixedZoom_function_list_le_sixteen_div_sq
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    {Iota : Type*} [Fintype Iota]
+    (g : Iota → Module.Dual (ZMod 2) W)
+    (hinj : Function.Injective g) (beta : Rat)
+    (had : a ≤ d) (hgap : a < d)
+    (hlarge : 10 * d ≤ Module.finrank (ZMod 2) W)
+    (hbeta : 0 < beta)
+    (hthreshold : 4 / (2 ^ (d - a) : Rat) < beta)
+    (hagrees : ∀ i, beta ≤ agreement T Q
+      { W := W, hQW := hQW, g := g i }) :
+    (Fintype.card Iota : Rat) ≤ 16 / beta^2 := by
+  have hb : 0 < d - a := Nat.sub_pos_of_lt hgap
+  have hc' : 0 < beta / 4 := by positivity
+  have hcode : Function.Injective
+      (fun i => linearTupleCodeword (d - a) (g i)) := by
+    intro i j hij
+    apply hinj
+    exact linearTupleCodeword_injective (W := W) (d - a) hb hij
+  have hpair : ∀ i j, i ≠ j →
+      wordAgreement (linearTupleCodeword (d - a) (g i))
+          (linearTupleCodeword (d - a) (g j)) ≤
+        1 / (Fintype.card (TupleAlphabet (d - a)) : Rat) := by
+    intro i j hne
+    have hgne : g i ≠ g j := fun h => hne (hinj h)
+    simpa [card_tupleAlphabet] using
+      (distinct_linearTupleCodeword_agreement (W := W) (d - a) hb hgne).le
+  have hrecv : ∀ i,
+      1 / (Fintype.card (TupleAlphabet (d - a)) : Rat) + beta / 4 ≤
+        wordAgreement (linearTupleCodeword (d - a) (g i))
+          (zoomReceivedWord T Q W hQW) := by
+    intro i
+    rw [card_tupleAlphabet]
+    have hw := zoomAgreement_to_wordAgreement T Q W hQW had hlarge
+      (g i) beta (hagrees i)
+    have ht : 1 / (2 ^ (d - a) : Rat) + beta / 4 ≤ beta / 2 := by
+      have hstrict : 4 / (2 ^ (d - a) : Rat) ≤ beta := le_of_lt hthreshold
+      calc
+        1 / (2 ^ (d - a) : Rat) + beta / 4 =
+            (4 / (2 ^ (d - a) : Rat) + beta) / 4 := by ring
+        _ ≤ (beta + beta) / 4 := by
+          have hadd := add_le_add_left hstrict beta
+          simpa [add_comm] using
+            (div_le_div_of_nonneg_right hadd (by norm_num))
+        _ = beta / 2 := by ring
+    simpa only [Nat.cast_pow, Nat.cast_ofNat] using ht.trans hw
+  have hbound := finite_qary_list_bound
+    (code := fun i => linearTupleCodeword (d - a) (g i))
+    (received := zoomReceivedWord T Q W hQW)
+    hcode (beta / 4) hc' hpair hrecv
+  calc
+    (Fintype.card Iota : Rat) ≤ 1 / (beta / 4)^2 := hbound
+    _ = 16 / beta^2 := by
+      norm_num [div_pow, div_div_eq_mul_div]
+
+def AgreeingFunctional
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (beta : Rat) : Type _ :=
+  {g : Module.Dual (ZMod 2) W //
+    beta ≤ agreement T Q { W := W, hQW := hQW, g := g }}
+
+noncomputable instance agreeingFunctionalFintype
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V)
+    (hQW : Q.val ≤ W) (beta : Rat) :
+    Fintype (AgreeingFunctional T Q W hQW beta) := by
+  letI : Finite (Module.Dual (ZMod 2) W) :=
+    Finite.of_injective (fun g => g.toFun) (by
+      intro f g h
+      apply LinearMap.ext
+      exact fun x => congrFun h x)
+  letI : Finite (AgreeingFunctional T Q W hQW beta) :=
+    Finite.of_injective (fun z => z.1) Subtype.val_injective
+  exact Fintype.ofFinite _
+
+theorem card_agreeingFunctional_le_sixteen_div_sq
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {a d : Nat}
+    (T : (L : Grass V d) → Module.Dual (ZMod 2) L.val)
+    (Q : Grass V a) (W : Submodule (ZMod 2) V) (hQW : Q.val ≤ W)
+    (beta : Rat) (had : a ≤ d) (hgap : a < d)
+    (hlarge : 10 * d ≤ Module.finrank (ZMod 2) W)
+    (hbeta : 0 < beta)
+    (hthreshold : 4 / (2 ^ (d - a) : Rat) < beta) :
+    (Fintype.card (AgreeingFunctional T Q W hQW beta) : Rat) ≤
+      16 / beta^2 := by
+  exact fixedZoom_function_list_le_sixteen_div_sq
+    (T := T) (Q := Q) (W := W) (hQW := hQW)
+    (Iota := AgreeingFunctional T Q W hQW beta)
+    (g := fun z : AgreeingFunctional T Q W hQW beta => z.1)
+    (hinj := fun x y hxy => Subtype.ext hxy)
+    (beta := beta) (had := had) (hgap := hgap) (hlarge := hlarge)
+    (hbeta := hbeta) (hthreshold := hthreshold)
+    (hagrees := fun z => z.2)
 
 
 end
