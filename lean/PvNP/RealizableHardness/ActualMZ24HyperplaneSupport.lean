@@ -156,11 +156,78 @@ theorem containingHyperplaneNormalLine_injective (W : Submodule (ZMod 2) V) :
   apply Subspace.dualAnnihilator_inj.mp
   exact congrArg Subtype.val (congrArg Subtype.val hHK)
 
+/-- A line in the annihilator of `A` cuts out a hyperplane containing `A`. -/
+noncomputable def containingHyperplaneOfNormalLine
+    (A : Submodule (ZMod 2) V)
+    (L : {L : Grass (Module.Dual (ZMod 2) V) 1 //
+      L.1 ≤ A.dualAnnihilator}) : ContainingHyperplane A := by
+  letI : Finite (Module.Dual (ZMod 2) V) :=
+    Finite.of_injective (fun g => g.toFun) (by
+      intro f g h
+      apply LinearMap.ext
+      exact fun x => congrFun h x)
+  let H : Submodule (ZMod 2) V := L.1.1.dualCoannihilator
+  have hcod : relativeCodim H = 1 := by
+    rw [← dualAnnihilator_finrank]
+    change Module.finrank (ZMod 2)
+      L.1.1.dualCoannihilator.dualAnnihilator = 1
+    rw [Subspace.dualCoannihilator_dualAnnihilator_eq]
+    exact L.1.2
+  have hAH : A ≤ H :=
+    (Submodule.le_dualAnnihilator_iff_le_dualCoannihilator).mp L.2
+  exact ⟨⟨H, hcod⟩, hAH⟩
+
+/-- Containing hyperplanes are exactly the normal lines in the annihilator. -/
+noncomputable def containingHyperplaneNormalLineEquiv
+    (A : Submodule (ZMod 2) V) :
+    ContainingHyperplane A ≃
+      {L : Grass (Module.Dual (ZMod 2) V) 1 //
+        L.1 ≤ A.dualAnnihilator} where
+  toFun := containingHyperplaneNormalLine A
+  invFun := containingHyperplaneOfNormalLine A
+  left_inv := by
+    intro H
+    apply Subtype.ext
+    apply Subtype.ext
+    exact Subspace.dualAnnihilator_dualCoannihilator_eq
+  right_inv := by
+    intro L
+    apply Subtype.ext
+    apply Subtype.ext
+    exact Subspace.dualCoannihilator_dualAnnihilator_eq
+
 theorem gaussian_one_of_pos {n : Nat} (hn : 0 < n) :
     gaussian n 1 = 2^n - 1 := by
   have hn1 : 1 ≤ n := by omega
   have hn0 : n ≠ 0 := by omega
   simp [gaussian, frameProduct, hn, hn1, hn0]
+
+theorem gaussian_one_all (n : Nat) : gaussian n 1 = 2^n - 1 := by
+  by_cases hn : n = 0
+  · subst n
+    norm_num [gaussian, frameProduct]
+  · exact gaussian_one_of_pos (Nat.pos_of_ne_zero hn)
+
+/-- Exact binary count, including the zero-codimension (`A = ⊤`) case. -/
+theorem card_containingHyperplanes_eq_two_pow_sub_one
+    (A : Submodule (ZMod 2) V) :
+    (containingHyperplanes A).card = 2 ^ relativeCodim A - 1 := by
+  letI : Finite (Module.Dual (ZMod 2) V) :=
+    Finite.of_injective (fun g => g.toFun) (by
+      intro f g h
+      apply LinearMap.ext
+      exact fun x => congrFun h x)
+  calc
+    (containingHyperplanes A).card = Fintype.card (ContainingHyperplane A) := by
+      simp [containingHyperplanes]
+    _ = Fintype.card {L : Grass (Module.Dual (ZMod 2) V) 1 //
+        L.1 ≤ A.dualAnnihilator} :=
+      Fintype.card_congr (containingHyperplaneNormalLineEquiv A)
+    _ = gaussian (Module.finrank (ZMod 2) A.dualAnnihilator) 1 := by
+      simpa only [Nat.card_eq_fintype_card] using
+        (card_contained (a := 1) A.dualAnnihilator)
+    _ = 2 ^ relativeCodim A - 1 := by
+      rw [gaussian_one_all, dualAnnihilator_finrank]
 
 theorem card_containingHyperplanes_lt_two_pow
     (W : Submodule (ZMod 2) V) (hW : W ≠ (⊤ : Submodule (ZMod 2) V)) :
