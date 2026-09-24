@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.ActualStarJointKernel
+
+namespace PvNP.RealizableHardness.ActualStarJointKernelChecks
+
+#check PvNP.RealizableHardness.ActualStarJointKernel.incrementFamily
+#check PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap
+#check PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_range
+#check PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_domain_finrank
+#check PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective
+#check PvNP.RealizableHardness.ActualStarJointKernel.not_jointlyDirect_iff_nonzero_incrementKernel
+#print axioms PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective
+#print axioms PvNP.RealizableHardness.ActualStarJointKernel.not_jointlyDirect_iff_nonzero_incrementKernel
+
+end PvNP.RealizableHardness.ActualStarJointKernelChecks
