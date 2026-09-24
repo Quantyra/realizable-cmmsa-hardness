@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualStarKernelSupport
+
+namespace PvNP.RealizableHardness.ActualStarKernelSupportChecks
+
+#check PvNP.RealizableHardness.ActualStarKernelSupport.kernelSupport
+#check PvNP.RealizableHardness.ActualStarKernelSupport.kernelWitness_has_exact_support_relation
+#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power
+#print axioms PvNP.RealizableHardness.ActualStarKernelSupport.kernelWitness_has_exact_support_relation
+
+end PvNP.RealizableHardness.ActualStarKernelSupportChecks

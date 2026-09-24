@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualStarLineIncidence
+
+namespace PvNP.RealizableHardness.ActualStarLineIncidenceChecks
+
+#check PvNP.RealizableHardness.ActualStarLineIncidence.extensionLaw_contains_fixed_quotient_line
+#print axioms PvNP.RealizableHardness.ActualStarLineIncidence.extensionLaw_contains_fixed_quotient_line
+
+end PvNP.RealizableHardness.ActualStarLineIncidenceChecks
