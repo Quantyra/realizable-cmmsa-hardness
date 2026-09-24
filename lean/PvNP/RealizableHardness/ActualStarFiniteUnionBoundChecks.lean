@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualStarFiniteUnionBound
+import PvNP.RealizableHardness.ActualStarBadMassWitness
+import PvNP.RealizableHardness.ActualStarRelationCount
+
+namespace PvNP.RealizableHardness.ActualStarFiniteUnionBoundChecks
+
+#check PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_mono
+#check PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_biUnion_le_sum
+#check PvNP.RealizableHardness.ActualStarBadMassWitness.not_jointlyDirect_has_supportedLineEvent
+#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power
+#check PvNP.RealizableHardness.ActualStarBadMassWitness.fixedCenter_relationLineEvent_mass
+
+#print axioms PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_mono
+#print axioms PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_biUnion_le_sum
+
+end PvNP.RealizableHardness.ActualStarFiniteUnionBoundChecks
