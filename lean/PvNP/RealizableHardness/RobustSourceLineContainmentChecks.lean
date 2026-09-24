@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.RobustSourceLineContainment
+
+/-! Source-level interface checks for the bounded robust source count. -/
+
+open PvNP.RealizableHardness
+
+#check RobustSourceLineContainment.singleton_upperCount_ratio
+#check RobustSourceLineContainment.linesInside_card
+#check RobustSourceLineContainment.relativeIntervalQuotientEquiv
+#check RobustSourceLineContainment.nontrivial_inf_iff_quotientImages
+#check RobustSourceLineContainment.quotientImageGrass
+#check RobustSourceLineContainment.intervalTransverseException_mass_le_dyadic
+#check RobustSourceLineContainment.transverseException_mass_le_gaussian
+#check RobustSourceLineContainment.transverseException_mass_le_pointRatio
+#print axioms RobustSourceLineContainment.singleton_upperCount_ratio
+#print axioms RobustSourceLineContainment.transverseException_mass_le_pointRatio
+#print axioms RobustSourceLineContainment.intervalTransverseException_mass_le_dyadic
