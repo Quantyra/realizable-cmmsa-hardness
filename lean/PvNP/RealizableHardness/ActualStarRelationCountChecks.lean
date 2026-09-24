@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.ActualStarRelationCount
+
+namespace PvNP.RealizableHardness.ActualStarRelationCountChecks
+
+#check PvNP.RealizableHardness.ActualStarRelationCount.NonzeroTuple
+#check PvNP.RealizableHardness.ActualStarRelationCount.NonzeroRelation
+#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroTuple_card
+#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_tail
+#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power
+#print axioms PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_tail
+#print axioms PvNP.RealizableHardness.ActualStarRelationCount.nonzeroTuple_card
+#print axioms PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power
+
+end PvNP.RealizableHardness.ActualStarRelationCountChecks
