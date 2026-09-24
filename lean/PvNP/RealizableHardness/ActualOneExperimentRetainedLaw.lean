@@ -83,6 +83,18 @@ is empty.  On a nonempty carrier this is exactly `uniformLaw`'s atom. -/
 def uniformZoomAtom (X : Type*) [Fintype X] (x : X) : Rat :=
   if Fintype.card X = 0 then 0 else 1 / Fintype.card X
 
+/-- Actual ambient leaves admitted by the retained local Zoom, for arbitrary W. -/
+def retainedZoomCarrier (s : TripleRestrictionRank.Draw J) (Q : Advice J a)
+    (W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)) : Type _ :=
+  {L : Advice J d // Q.val ≤ L.val ∧ L.val ≤ TripleRestrictionRank.retained s ∧ L.val ≤ W}
+
+noncomputable instance retainedZoomCarrierFintype (s : TripleRestrictionRank.Draw J)
+    (Q : Advice J a) (W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)) :
+    Fintype (retainedZoomCarrier (d := d) s Q W) := by
+  classical
+  unfold retainedZoomCarrier
+  infer_instance
+
 private def pushedUniformZoomMass (hQV : Q.val ≤ localAmbient s)
     (hQW : Q.val ≤ W) (L : Advice J d) : Rat :=
   ∑ z : localZoom (d := d) s Q W hQV hQW,
@@ -242,6 +254,95 @@ theorem retainedW_eq_pushed_uniformZoom
         · exact (heq hEq).elim
         · simp [hEq]
     exact hret.trans hrhs.symm
+
+private def localZoomCarrierEquiv
+    (hQV : Q.val ≤ localAmbient s) (hQW : Q.val ≤ W) :
+    localZoom (d := d) s Q W hQV hQW ≃ retainedZoomCarrier (d := d) s Q W := by
+  classical
+  let e := localToAmbientZoom (d := d) s Q W hQV hQW
+  refine
+    { toFun := fun z => ⟨(e z).1, ?_⟩
+      invFun := fun L => e.symm ⟨L.1, ⟨L.2.1, le_inf L.2.2.1 L.2.2.2⟩⟩
+      left_inv := ?_
+      right_inv := ?_ }
+  · obtain ⟨hQL, hLI⟩ := (e z).2
+    exact ⟨hQL, hLI.trans inf_le_left, hLI.trans inf_le_right⟩
+  · intro z
+    exact e.symm_apply_apply z
+  · intro L
+    apply Subtype.ext
+    change (e (e.symm ⟨L.1, ⟨L.2.1, le_inf L.2.2.1 L.2.2.2⟩⟩)).1 = L.1
+    exact congrArg Subtype.val
+      (e.apply_symm_apply ⟨L.1, ⟨L.2.1, le_inf L.2.2.1 L.2.2.2⟩⟩)
+
+private theorem retainedW_mean_eq_localZoomScore
+    (hQV : Q.val ≤ localAmbient s) (hQW : Q.val ≤ W)
+    (had : a ≤ d) (hd : d ≤ Module.finrank (ZMod 2) (localAmbient s))
+    (f : Advice J d → Rat) :
+    PosteriorReweighting.mean (ZoomOutTransfer.retainedW s Q W) f =
+      ∑ z : localZoom (d := d) s Q W hQV hQW,
+        uniformZoomAtom (localZoom (d := d) s Q W hQV hQW) z *
+          f (localToAdvice (d := d) s Q W hQV hQW z) := by
+  classical
+  let Z := localZoom (d := d) s Q W hQV hQW
+  let e := localToAdvice (d := d) s Q W hQV hQW
+  unfold PosteriorReweighting.mean
+  calc
+    (∑ L : Advice J d, ZoomOutTransfer.retainedW s Q W L * f L) =
+        ∑ L : Advice J d, pushedUniformZoomMass s Q W hQV hQW L * f L := by
+      apply Finset.sum_congr rfl
+      intro L _
+      rw [retainedW_eq_pushed_uniformZoom (d := d) s Q W hQV hQW had hd L]
+    _ = ∑ z : Z, uniformZoomAtom Z z * f (e z) := by
+      simp only [pushedUniformZoomMass]
+      calc
+        (∑ L : Advice J d,
+            (∑ z : Z, (if e z = L then uniformZoomAtom Z z else 0)) * f L) =
+            ∑ L : Advice J d, ∑ z : Z,
+              (if e z = L then uniformZoomAtom Z z else 0) * f L := by
+          apply Finset.sum_congr rfl
+          intro L _
+          rw [Finset.sum_mul]
+        _ = ∑ z : Z, ∑ L : Advice J d,
+              (if e z = L then uniformZoomAtom Z z else 0) * f L := by
+          rw [Finset.sum_comm]
+        _ = ∑ z : Z, uniformZoomAtom Z z * f (e z) := by
+          apply Finset.sum_congr rfl
+          intro z _
+          rw [Finset.sum_eq_single (e z)]
+          · simp
+          · intro L _ hL
+            by_cases hEq : e z = L
+            · exact (hL hEq.symm).elim
+            · simp [hEq]
+          · intro h
+            exact (h (Finset.mem_univ (e z))).elim
+
+/-- Fixed-draw score transport to the public carrier of all agreeing ambient
+leaves.  The statement applies to arbitrary W and uses a zero atom when the
+carrier is empty; it does not assume a positive event or resample the draw. -/
+theorem retainedW_mean_eq_uniformZoomScore
+    (hQE : Q.val ≤ TripleRestrictionRank.retained s)
+    (hQW : Q.val ≤ W) (had : a ≤ d)
+    (hd : d ≤ Module.finrank (ZMod 2) (TripleRestrictionRank.retained s))
+    (f : Advice J d → Rat) :
+    PosteriorReweighting.mean (ZoomOutTransfer.retainedW s Q W) f =
+      ∑ z : retainedZoomCarrier (d := d) s Q W,
+        uniformZoomAtom (retainedZoomCarrier (d := d) s Q W) z * f z.1 := by
+  classical
+  let hQV : Q.val ≤ localAmbient s := hQE
+  let η := localZoomCarrierEquiv (d := d) s Q W hQV hQW
+  have hcard : Fintype.card (localZoom (d := d) s Q W hQV hQW) =
+      Fintype.card (retainedZoomCarrier (d := d) s Q W) :=
+    Fintype.card_congr η
+  rw [retainedW_mean_eq_localZoomScore (d := d) s Q W hQV hQW had hd f]
+  rw [← η.sum_comp (fun z =>
+    uniformZoomAtom (retainedZoomCarrier (d := d) s Q W) z * f z.1)]
+  apply Finset.sum_congr rfl
+  intro z _
+  have hval : (η z).1 = localToAdvice (d := d) s Q W hQV hQW z := by
+    rfl
+  simp [uniformZoomAtom, hcard, hval]
 
 end
 end PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
