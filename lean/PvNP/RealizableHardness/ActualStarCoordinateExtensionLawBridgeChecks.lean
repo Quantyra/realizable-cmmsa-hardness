@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge
+
+open PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge
+
+#check coordinateCenterGrass
+#check domainDrawExtensionEquiv
+#check domainDrawTupleExtensionEquiv
+#check uniformDomainTupleLaw
+#check uniform_domainTuple_pushforward_extensionTupleLaw
+#check extensionTuple_eventMass_eq_preimage
+
+#print axioms domainDrawExtensionEquiv
+#print axioms domainDrawTupleExtensionEquiv
+#print axioms uniform_domainTuple_pushforward_extensionTupleLaw
+#print axioms extensionTuple_eventMass_eq_preimage
