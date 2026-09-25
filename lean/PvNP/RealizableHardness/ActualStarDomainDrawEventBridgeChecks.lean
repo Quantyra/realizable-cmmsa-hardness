@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualStarDomainDrawEventBridge
+
+open PvNP.RealizableHardness.ActualStarDomainDrawEventBridge
+
+#check domainDrawJointImage
+#check domainDrawExtension_quotient_eq
+#check fixedCenterBad_preimage_iff_domainDraw_rankFailure
+
+#print axioms domainDrawExtension_quotient_eq
+#print axioms fixedCenterBad_preimage_iff_domainDraw_rankFailure
