@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualStarSameLawScalarComposition
+
+open PvNP.RealizableHardness.ActualStarSameLawScalarComposition
+
+#check domainDrawRankFailureEvent
+#check selected_domainDraw_rankFailure_mass_lt_threshold
+
+#print axioms selected_domainDraw_rankFailure_mass_lt_threshold
