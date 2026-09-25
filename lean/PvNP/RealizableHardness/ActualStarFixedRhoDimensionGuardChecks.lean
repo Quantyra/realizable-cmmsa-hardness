@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard
+
+open PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard
+
+#check leafT
+#check leafK
+#check badExponent
+#check fixedRho_ambient_dimension_guard
+#check fixedRho_quotient_dimension_guard
+#check selected_fixedRho_quotient_dimension_guard
+#check selected_actual_center_quotient_dimension_guard
+
+#print axioms fixedRho_ambient_dimension_guard
+#print axioms fixedRho_quotient_dimension_guard
+#print axioms selected_fixedRho_quotient_dimension_guard
+#print axioms selected_actual_center_quotient_dimension_guard
