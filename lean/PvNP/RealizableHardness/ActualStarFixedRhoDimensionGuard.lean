@@ -141,9 +141,12 @@ theorem selected_fixedRho_quotient_dimension_guard
   exact fixedRho_quotient_dimension_guard hm hh hdiv hA
 
 /-- The selected scalar guard expressed at the actual `CenterQuotient`
-carrier. The center quotient theorem contributes `2J−t` exactly once; the
-fixed-center scalar theorem must be instantiated on this quotient with zero
-additional center dimension. -/
+carrier. For the source-law application, the scalar ambient is
+`questionCoordinateSpace center`, the fixed subspace is
+`centerSpanInCoordinate center` of rank `J + leafT`, and each leaf has rank
+`J + 2*h`. Their quotient is `CenterQuotient center`, of dimension
+`2*J - leafT`, with quotient increment rank `2*h - leafT`. This theorem proves
+only the numeric guard; law and event transport remain separate. -/
 theorem selected_actual_center_quotient_dimension_guard
     {N m L A : Nat} {I : ActualOccurrenceAllocation.Instance N m}
     (center : QuestionCenter I (blocks A (hBlock L m)) (leafT m (hBlock L m)))
