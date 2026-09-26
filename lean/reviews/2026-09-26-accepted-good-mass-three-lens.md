@@ -18,11 +18,15 @@ GCP replay: `quantyra-lean-builder-01`, detached worktree at `abd32bc`,
 
 ## Three-lens
 
+Withdrawn as a completion of the required experiment. The center in
+`selected_domainDraw_accepted_rankGood` is a parameter, not a draw from
+`centerLaw`. See `2026-09-26-accepted-good-mass-stop.md`.
+
 | Lens | Verdict | Note |
 |------|---------|------|
-| Build/audit | GO | VM Lake exit 0 on the checks module. Axioms of the shipped theorems are `propext`, `Classical.choice`, and `Quot.sound`. |
-| Proof-adversarial | GO | The law is the uniform `DomainDraw` tuple. Both events are the image under `domainDrawTupleExtensionEquiv` of that tuple at `coordinateCenterGrass`. Endpoint guards are lemmas. Bad mass is the fixed-center threshold pulled back by `extensionTuple_eventMass_eq_preimage`, not a `starLaw` average. |
-| Complexity | GO | `w` only witnesses nonemptiness. The defect sits inside `¬ jointlyDirect`, whose mass is `< 2^{-(badExponent+1)}`. `q < successMargin / 2`. |
-| Non-claims | GO | No Theorem 1, Corollary 2, `FP` map, or route-final claim. README and MANUSCRIPT are unchanged. |
+| Build/audit | GO | The module builds. That is not the joint experiment. |
+| Proof-adversarial | INCOMPLETE | A supplied `QuestionCenter` does not draw the center. |
+| Complexity | INCOMPLETE | A nonempty leaf witness does not draw the center from `centerLaw`. |
+| Non-claims | GO | README and MANUSCRIPT are unchanged. Theorem 1 and Corollary 2 are not claimed. |
 
 Full CMMSA remains partial.
