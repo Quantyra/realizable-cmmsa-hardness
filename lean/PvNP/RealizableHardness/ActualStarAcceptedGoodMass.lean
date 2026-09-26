@@ -801,10 +801,9 @@ theorem physicalJoint_draws_center
     Nat.cast_mul, Nat.cast_pow, div_eq_mul_inv, mul_inv, one_mul, one_div]
 
 set_option maxHeartbeats 4000000 in
-/-- Selected same experiment. The center is drawn from `centerLaw` on the
-quotient by the equation span. The leaves are `DomainDraw`s of
-`questionCenterOf question center`, whose transverse subspace is that draw.
-Acceptance and joint directness are events of those leaves. -/
+/-- Domain-draw statement. Not the selected experiment: its leaves have rank
+`J + 2h`, and its acceptance takes labeling tables. The selected statement
+is `selected_transverseLeaf_accepted_rankGood`. -/
 theorem selected_physicalJoint_accepted_rankGood
     {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
     (hA : 1 ≤ A)

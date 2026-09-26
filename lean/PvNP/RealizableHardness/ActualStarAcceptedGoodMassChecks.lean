@@ -1,8 +1,8 @@
 import PvNP.RealizableHardness.ActualStarAcceptedGoodMass
 
-/-! Checks cite the shipped same-experiment mass theorem. The measured center
-is the `centerLaw` draw in `physicalJoint_draws_center`. A supplied-center
-`uniformDomainTupleLaw` statement has a different type and is not this theorem. -/
+/-! Checks cite `selected_transverseLeaf_accepted_rankGood`. Its proof is
+`starLaw` on rank-`2h` transverse leaves. It does not call
+`selected_physicalJoint_accepted_rankGood` or `uniformDomainTupleLaw`. -/
 
 namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
 
