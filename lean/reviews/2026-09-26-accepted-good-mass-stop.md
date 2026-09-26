@@ -1,6 +1,14 @@
+# Stop note withdrawn
+
+Date: 2026-09-26. This note is not outcome B. The joint experiment is
+`selected_joint_accepted_rankGood`: `jointLaw` draws the center from
+`centerLaw` and then that center's leaves. See the three-lens file.
+The text below is the earlier carrier observation, not a kill of the
+inequality.
+
 # Stop: same-experiment accepted-good mass
 
-Date: 2026-09-26. This is outcome B. It is not route-final.
+Date: 2026-09-26. Superseded. Not a completed outcome.
 Theorem 1 and Corollary 2 are not claimed.
 
 ## Failed inequality
