@@ -1,3 +1,4 @@
+import PvNP.RealizableHardness.ActualCertifiedManuscriptParameters
 import PvNP.RealizableHardness.ActualTheorem1
 import Mathlib.Algebra.Order.Archimedean.Basic
 import Mathlib.Algebra.Order.GroupWithZero.Basic
@@ -50,9 +51,24 @@ def ROf (L : Nat) : Nat := 2 ^ (2 * hOf L (mOf L))
 def GammaOf (L : Nat) : Rat :=
   2 * ((3 / 4 : Rat) ^ qOf (mOf L))
 
-def sigmaL (L : Nat) : Nat := (ROf L / 4) / 2
+/-- Alphabet quotient `(ROf/4)/2`. `eight_mul_rofSigma_eq_ROf` needs
+`8 * rofSigma = ROf`. Manuscript `σ_L` is `sigmaL`. -/
+def rofSigma (L : Nat) : Nat := (ROf L / 4) / 2
 
 def gammaL (L : Nat) : Rat := 2 * GammaOf L
+
+/-- Manuscript `σ_L`: the selected `/16`, `/4`, `/2` chain. -/
+noncomputable def manuscriptSigma (L : Nat) : Nat :=
+  ActualCertifiedManuscriptParameters.certifiedSigma L
+
+/-- Manuscript `σ_L`, definitionally `manuscriptSigma`. -/
+noncomputable def sigmaL (L : Nat) : Nat := manuscriptSigma L
+
+theorem sigmaL_eq_manuscriptSigma (L : Nat) : sigmaL L = manuscriptSigma L := rfl
+
+/-- Manuscript `γ_L = 2 Γ` at the selected block. -/
+noncomputable def manuscriptGamma (L : Nat) : Rat :=
+  ActualCertifiedManuscriptParameters.certifiedGamma L
 
 private lemma log2nat_pow_two (k : Nat) : log2nat (2 ^ k) = k := by
   simp [log2nat]
@@ -91,7 +107,7 @@ theorem hOf_le_log2 (L : Nat) : 2 * hOf L (mOf L) ≤ log2nat L := by
     exact Nat.mul_div_le (log2nat num) (2 * bm)
   exact hmul.trans (log2nat_mono (numOf_le L (mOf L)))
 
-theorem sigmaL_le_ROf (L : Nat) : sigmaL L ≤ ROf L :=
+theorem rofSigma_le_ROf (L : Nat) : rofSigma L ≤ ROf L :=
   (Nat.div_le_self (ROf L / 4) 2).trans (Nat.div_le_self (ROf L) 4)
 
 theorem mOf_unbounded : ∀ M, ∃ L0, ∀ L, L0 ≤ L → M ≤ mOf L := by
@@ -182,7 +198,7 @@ private lemma hOf_ge_two {L : Nat} (hL : 256 ≤ mOf L)
     Nat.mul_le_mul_left s hquot
   exact (Nat.le_mul_of_pos_left 2 hspos).trans hprod
 
-theorem sigmaL_ge_one_eventual : ∃ L0, ∀ L, L0 ≤ L → 1 ≤ sigmaL L := by
+theorem rofSigma_ge_one_eventual : ∃ L0, ∀ L, L0 ≤ L → 1 ≤ rofSigma L := by
   obtain ⟨L0, hL0⟩ := mOf_unbounded 256
   refine ⟨L0, ?_⟩
   intro L hLL0
@@ -300,24 +316,32 @@ theorem gammaL_small_eventual (ε : Rat) (hε : 0 < ε) :
     exact lt_of_le_of_lt hle (hstrict.trans_eq h4)
   simpa [gammaL_eq] using hlt
 
+/-- Manuscript leaf `a - 2⌈log₂(a+1)⌉ - c_U`. `Nat.clog 2` is that ceiling. -/
 def adviceLeaf (a cU : Nat) : Nat :=
-  a - 2 * log2nat (a + 1) - cU
+  a - 2 * Nat.clog 2 (a + 1) - cU
 
-def sigmaLearn (a cU : Nat) : Nat := (49 * sigmaL (adviceLeaf a cU)) / 100
+noncomputable def sigmaLearn (a cU : Nat) : Nat :=
+  (49 * manuscriptSigma (adviceLeaf a cU)) / 100
 
-def gammaLearn (a cU : Nat) : Rat := 5 * gammaL (adviceLeaf a cU)
+noncomputable def gammaLearn (a cU : Nat) : Rat :=
+  5 * manuscriptGamma (adviceLeaf a cU)
 
-/-- Conditional headline specialization of `theorem1_realizable_cmmsa` at
-`sigmaL` / `gammaL`. The two `Preserves (1/6)` maps remain hypotheses. -/
+/-- Conditional headline at the manuscript family `manuscriptSigma` /
+`manuscriptGamma`. The two `Preserves (1/6)` maps remain hypotheses, so this
+is not unconditional Theorem 1 or Corollary 2. -/
 theorem theorem1_headline
     {L : Nat}
-    (hσ : 1 ≤ sigmaL L) (hγ0 : 0 < gammaL L) (hγ1 : gammaL L < 1)
+    (hσ : 1 ≤ manuscriptSigma L) (hγ0 : 0 < manuscriptGamma L)
+    (hγ1 : manuscriptGamma L < 1)
     (source : PromiseProblem)
     (hSatSrc : ∃ R : SeededMap,
       Preserves R (PromiseProblem.ofLanguage SAT.language) source (1 / 6) (1 / 6))
     (hSrcCmmsa : ∃ S : SeededMap,
-      Preserves S source (cmmsaPromise L (sigmaL L) (gammaL L) hσ hγ0 hγ1) (1 / 6) (1 / 6)) :
-    RandomizedPromiseNPHard (cmmsaPromise L (sigmaL L) (gammaL L) hσ hγ0 hγ1) :=
+      Preserves S source
+        (cmmsaPromise L (manuscriptSigma L) (manuscriptGamma L) hσ hγ0 hγ1)
+        (1 / 6) (1 / 6)) :
+    RandomizedPromiseNPHard
+      (cmmsaPromise L (manuscriptSigma L) (manuscriptGamma L) hσ hγ0 hγ1) :=
   theorem1_realizable_cmmsa hσ hγ0 hγ1 source hSatSrc hSrcCmmsa
 
 end PvNP.RealizableHardness.ActualHeadlineParameters

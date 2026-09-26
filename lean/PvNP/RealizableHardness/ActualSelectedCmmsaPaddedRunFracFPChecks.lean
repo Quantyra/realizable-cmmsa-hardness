@@ -1,0 +1,29 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaPaddedRunFracFP
+
+/-!
+Interface checks for the original-block fraction walk, exception M-cons,
+and reverse into a weight-tree spine.
+-/
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaPaddedRunFracFPChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaPaddedRunFracFP
+open Complexity
+
+#check origFracListTag_mem_FP
+#check origFracOfZ_mem_FP
+#check packedExcFracTag_mem_FP
+#check excConsListTag_mem_FP
+#check packedWeightTreeTag_mem_FP
+#check packedFracPaddedRunOutputTag_mem_FP
+#check packedFracPaddedRunOutputTag_eq_none
+#check packedFracProducerTree_eq_outputWire
+#check packedFracPaddedRunOutputTag_eq_of_policy_empty
+
+#print axioms origFracListTag_mem_FP
+#print axioms packedWeightTreeTag_mem_FP
+#print axioms packedFracPaddedRunOutputTag_mem_FP
+#print axioms packedFracPaddedRunOutputTag_eq_none
+#print axioms packedFracProducerTree_eq_outputWire
+#print axioms packedFracPaddedRunOutputTag_eq_of_policy_empty
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaPaddedRunFracFPChecks

@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqFormL
+
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqFormLChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqFormL
+
+#check formLFieldBound_covers
+#check formLRawStep_of_nil
+#check formLRawStep_of_cons
+#check formLRun_canonical
+#check acceptedFormulaListFlag_of_formulas
+
+#print axioms formLRawStep_of_cons
+#print axioms formLRun_canonical
+#print axioms acceptedFormulaListFlag_of_formulas
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqFormLChecks

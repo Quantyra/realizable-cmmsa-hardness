@@ -1,0 +1,23 @@
+import PvNP.RealizableHardness.ActualFpMapInterface
+
+/-!
+Checks for the bounded-gap obstruction of an FP map into manuscript
+`cmmsaPromise`. Does not assemble Theorem 1.
+-/
+namespace PvNP.RealizableHardness.ActualFpMapInterfaceChecks
+
+open PvNP.RealizableHardness.ActualFpMapInterface
+
+#check manuscript_fp_map_forbids_bounded_full_sat
+#check manuscript_fp_interface_obstruction_eventual
+#check manuscript_vanishing_gap_excludes_sat_floor
+#check every_fp_manuscript_map_no_sat_vanishes
+#check threeSat_in_P_of_fp_map_if_yes_in_P
+
+#print axioms manuscript_fp_map_forbids_bounded_full_sat
+#print axioms manuscript_fp_interface_obstruction_eventual
+#print axioms manuscript_vanishing_gap_excludes_sat_floor
+#print axioms every_fp_manuscript_map_no_sat_vanishes
+#print axioms threeSat_in_P_of_fp_map_if_yes_in_P
+
+end PvNP.RealizableHardness.ActualFpMapInterfaceChecks

@@ -18,6 +18,7 @@ open PvNP.RealizableHardness.ActualSatToThreeSatSource
 #check satToThreeSat_preserves
 #check satToThreeSat_exists
 #check theorem1_from_threeSat_to_cmmsa
+#check hSrcCmmsa_of_fp_map
 
 #print axioms satToThreeSatMap_apply
 #print axioms satToThreeSat_mapReducesVia
@@ -25,6 +26,7 @@ open PvNP.RealizableHardness.ActualSatToThreeSatSource
 #print axioms satToThreeSat_preserves
 #print axioms satToThreeSat_exists
 #print axioms theorem1_from_threeSat_to_cmmsa
+#print axioms hSrcCmmsa_of_fp_map
 
 noncomputable section
 

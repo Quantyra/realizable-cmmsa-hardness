@@ -1,0 +1,26 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqCheck
+
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqCheckChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqCheck
+open PvNP.RealizableHardness.ActualSelectedCmmsaSelectedMapFP
+
+#check listLenBits_of_weightTree
+#check acceptedFormulaListFlag_of_outputFormulas
+#check acceptedTag_of_outputBits_packed
+#check checkedTreeTag_of_accepted_true
+#check packedFracPaddedRunOutputTag_eq_outputBits_of
+#check packedFracPaddedRunOutputTag_eq_outputBits_of_packed
+#check packedFracPaddedRunOutputTag_eq_checkedOutput_of_accept
+#check paddedRunOutputTag_mem_FP
+#check selectedPairedRun_mem_FP
+#check paddedRunOutputTag_mem_FP_packed
+#check selectedPairedRun_mem_FP_packed
+
+#print axioms acceptedTag_of_outputBits_packed
+#print axioms packedFracPaddedRunOutputTag_eq_outputBits_of_packed
+#print axioms packedFracPaddedRunOutputTag_eq_checkedOutput_of_accept
+#print axioms paddedRunOutputTag_mem_FP
+#print axioms selectedPairedRun_mem_FP
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqCheckChecks

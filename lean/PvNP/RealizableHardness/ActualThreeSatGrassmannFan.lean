@@ -12,7 +12,9 @@ Sat unit is packed `Yes 0` via label `0`.
 The vertex-dependent 2-list (center `{0,1+2^h}`, leaf `j` lights
 `{0, (1+2^h)<<j}`) has only the i-dependent, unconstrained local
 RHS-1 witness `vdFan_eval_rhs1`: it proves neither one global assignment
-nor feasibility/cost.  CMMSA `No` and `hSrcCmmsa` status remain OPEN.
+nor feasibility/cost.  `ActualThreeSatFanQuadKill` gives the global
+4-label palette and shows `fanData` is not manuscript `No` once
+`4 ≤ manuscriptSigma`.
 Not `if-sat`.
 Not `compileRotate` / `sevenCover` / `compileOverlap` / `fourCover`.
 Checking-transducer `mem_FP` is not rebuilt.

@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaSelectedMapFP
+
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaSelectedMapFPChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaSelectedMapFP
+
+#check paddedRunOutputTag_mem_FP
+#check selectedPairedRun_mem_FP
+#check selectedSeededMap
+
+#print axioms paddedRunOutputTag_mem_FP
+#print axioms selectedPairedRun_mem_FP
+#print axioms selectedSeededMap
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaSelectedMapFPChecks

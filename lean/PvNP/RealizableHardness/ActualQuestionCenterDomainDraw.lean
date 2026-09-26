@@ -294,6 +294,46 @@ noncomputable def domainDrawEquiv
       ⟨centerSpanInCoordinate q, centerSpanInCoordinate_finrank q⟩
       (by omega)).trans (Equiv.cast (by rw [hd])))
 
+/-- The public carrier contract for `domainDrawEquiv`: its quotient point is
+the image of the coordinate-restricted domain in the quotient by the full
+fixed center span. This exposes the actual map/comap construction without
+identifying the DomainDraw law with any physical sampler. -/
+private theorem grassCast_val
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] {a b : Nat}
+    (h : a = b) (L : Grass V a) :
+    (cast (congrArg (Grass V) h) L).val = L.val := by
+  cases h
+  rfl
+
+theorem domainDrawEquiv_val
+    {N m J t : Nat} {I : ActualOccurrenceAllocation.Instance N m}
+    (q : QuestionCenter I J t) (h : Nat)
+    (ht : t ≤ 2*h) (hh : h ≤ J) (D : DomainDraw q h) :
+    (domainDrawEquiv q h ht hh D).val =
+      (D.1.comap (questionCoordinateSpace q).subtype).map
+        (centerSpanInCoordinate q).mkQ := by
+  classical
+  let e1 := coordinateContainingEquiv (h := h) q
+  let Q : Grass (questionCoordinateSpace q) (t + J) :=
+    ⟨centerSpanInCoordinate q, centerSpanInCoordinate_finrank q⟩
+  let e2 := containingQuotientEquiv Q (by omega : t + J ≤ J + 2 * h)
+  have hd : (J + 2 * h) - (t + J) = 2 * h - t := by omega
+  have hinner : (e2 (e1 D)).val =
+      (D.1.comap (questionCoordinateSpace q).subtype).map
+        (centerSpanInCoordinate q).mkQ := by
+    rfl
+  have hdef : domainDrawEquiv q h ht hh D = Equiv.cast (by rw [hd]) (e2 (e1 D)) := by
+    simp only [domainDrawEquiv, Equiv.trans_apply, e1, e2]
+    congr 1
+  rw [hdef, Equiv.cast_apply]
+  have hproof :
+      (by rw [hd] :
+        Grass (CenterQuotient q) ((J + 2 * h) - (t + J)) =
+          Grass (CenterQuotient q) (2 * h - t)) =
+        congrArg (Grass (CenterQuotient q)) hd :=
+    Subsingleton.elim _ _
+  rw [hproof, grassCast_val hd, hinner]
+
 private theorem grassNonempty_of_le
     {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Finite V]
     {a : Nat} (ha : a ≤ Module.finrank (ZMod 2) V) :

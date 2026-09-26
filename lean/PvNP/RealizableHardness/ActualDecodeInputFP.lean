@@ -9280,4 +9280,346 @@ private theorem decodeInputTag_mem_FP_of_read
 theorem decodeInputTag_mem_FP : decodeInputTag ∈ Complexity.FP :=
   decodeInputTag_mem_FP_of_read readInputTag_mem_FP
 
+/-! ## Public raw-natural wires
+
+The packed readers above intentionally keep their iterate states private.  The
+executor only needs the two canonical views of a natural: its raw little
+endian bits and its tree encoding.  These wrappers expose exactly those views
+without weakening malformed-input behavior: a failed reader remains `[]`.
+-/
+
+/-- Raw digit reader: on `encode t`, `true :: bs` when `readDigits t = some bs`.
+-/
+def readDigitsRawTag (z : List Bool) : List Bool := readDigitsTag z
+
+theorem readDigitsRawTag_mem_FP : readDigitsRawTag ∈ Complexity.FP := by
+  change readDigitsTag ∈ Complexity.FP
+  exact readDigitsTag_mem_FP
+
+theorem readDigitsRawTag_of_tree (t : CMMSACodec.Tree) :
+    readDigitsRawTag (CMMSACodec.Tree.encode t) =
+      match CMMSACodec.readDigits t with
+      | none => []
+      | some bs => true :: bs := by
+  exact readDigitsTag_of_tree t
+
+/-- Raw little-endian bits of a natural tree, guarded by `true` on success. -/
+def natBitsTag (z : List Bool) : List Bool := readDigitsRawTag z
+
+theorem natBitsTag_mem_FP : natBitsTag ∈ Complexity.FP := by
+  change readDigitsRawTag ∈ Complexity.FP
+  exact readDigitsRawTag_mem_FP
+
+theorem natBitsTag_of_tree (t : CMMSACodec.Tree) :
+    natBitsTag (CMMSACodec.Tree.encode t) =
+      match CMMSACodec.readDigits t with
+      | none => []
+      | some bs => true :: bs := by
+  exact readDigitsRawTag_of_tree t
+
+theorem natBitsTag_of_nat (n : Nat) :
+    natBitsTag (CMMSACodec.Tree.encode (natTree n)) = true :: n.bits := by
+  rw [natBitsTag, readDigitsRawTag_of_tree]
+  simp [natTree]
+
+/-- Encode raw little-endian natural bits as the canonical digit tree. -/
+def natTreeBitsTag (bits : List Bool) : List Bool := encodeDigits bits
+
+theorem natTreeBitsTag_mem_FP : natTreeBitsTag ∈ Complexity.FP := by
+  change encodeDigits ∈ Complexity.FP
+  exact encodeDigits_mem_FP
+
+theorem natTreeBitsTag_of_nat (n : Nat) :
+    natTreeBitsTag n.bits = CMMSACodec.Tree.encode (natTree n) := by
+  simp [natTreeBitsTag, encodeDigits_eq, natTree]
+
+/-! ## Public paired arithmetic wires
+
+The individual arithmetic transducers above are deliberately private because
+their iterate states are implementation details of the packed readers.  The
+executor consumes the canonical two-wire interface instead: every operation
+takes one paired tape, and the exported theorem is the actual Cobham `FP`
+membership proof for that wire.  The value lemmas keep the machine/state layer
+from having to unfold the private iterate implementations.
+-/
+
+def addCanonPair (z : List Bool) : List Bool :=
+  addCanon (pairFst z) (pairSnd z)
+
+theorem addCanonPair_mem_FP : addCanonPair ∈ Complexity.FP := by
+  change (fun z : List Bool => addCanon (pairFst z) (pairSnd z)) ∈ Complexity.FP
+  exact addCanon_mem_FP Cobham.fstBlock_mem_FP Cobham.sndBlock_mem_FP
+
+theorem addCanonPair_bitValue (z : List Bool) :
+    bitValue (addCanonPair z) =
+      bitValue (pairFst z) + bitValue (pairSnd z) := by
+  simpa [addCanonPair] using
+    (addCanon_bitValue (pairFst z) (pairSnd z))
+
+theorem addCanonPair_comp_mem_FP {f : List Bool → List Bool}
+    (hf : f ∈ Complexity.FP) :
+    (fun z => addCanonPair (f z)) ∈ Complexity.FP := by
+  change (addCanonPair ∘ f) ∈ Complexity.FP
+  exact mem_FP_comp hf addCanonPair_mem_FP
+
+theorem addCanonPair_eq_bits (z : List Bool) :
+    addCanonPair z =
+      (bitValue (pairFst z) + bitValue (pairSnd z)).bits := by
+  simpa [addCanonPair] using
+    (addCanon_eq_bits (pairFst z) (pairSnd z))
+
+def subCanonPair (z : List Bool) : List Bool :=
+  subCanon (pairFst z) (pairSnd z)
+
+theorem subCanonPair_mem_FP : subCanonPair ∈ Complexity.FP := by
+  change (fun z : List Bool => subCanon (pairFst z) (pairSnd z)) ∈ Complexity.FP
+  exact subCanon_mem_FP Cobham.fstBlock_mem_FP Cobham.sndBlock_mem_FP
+
+theorem subCanonPair_bitValue (z : List Bool)
+    (h : bitValue (pairSnd z) ≤ bitValue (pairFst z)) :
+    bitValue (subCanonPair z) =
+      bitValue (pairFst z) - bitValue (pairSnd z) := by
+  simpa [subCanonPair] using
+    (subCanon_bitValue (pairFst z) (pairSnd z) h)
+
+theorem subCanonPair_comp_mem_FP {f : List Bool → List Bool}
+    (hf : f ∈ Complexity.FP) :
+    (fun z => subCanonPair (f z)) ∈ Complexity.FP := by
+  change (subCanonPair ∘ f) ∈ Complexity.FP
+  exact mem_FP_comp hf subCanonPair_mem_FP
+
+theorem subCanonPair_on_pair_bitValue (a b : List Bool)
+    (h : bitValue b ≤ bitValue a) :
+    bitValue (subCanonPair (pair a b)) = bitValue a - bitValue b := by
+  simpa only [pairFst_pair, pairSnd_pair] using
+    subCanonPair_bitValue (pair a b) (by
+      simpa only [pairFst_pair, pairSnd_pair] using h)
+
+theorem subCanonPair_eq_bits (z : List Bool)
+    (h : bitValue (pairSnd z) ≤ bitValue (pairFst z)) :
+    subCanonPair z =
+      (bitValue (pairFst z) - bitValue (pairSnd z)).bits := by
+  simpa [subCanonPair] using
+    (subCanon_eq_bits (pairFst z) (pairSnd z) h)
+
+def ltCanonPair (z : List Bool) : List Bool :=
+  ltCanon (pairFst z) (pairSnd z)
+
+theorem ltCanonPair_mem_FP : ltCanonPair ∈ Complexity.FP := by
+  change (fun z : List Bool => ltCanon (pairFst z) (pairSnd z)) ∈ Complexity.FP
+  exact ltCanon_mem_FP Cobham.fstBlock_mem_FP Cobham.sndBlock_mem_FP
+
+theorem ltCanonPair_true_iff (z : List Bool) :
+    ltCanonPair z = [true] ↔
+      bitValue (pairFst z) < bitValue (pairSnd z) := by
+  simpa [ltCanonPair] using
+    (ltCanon_true_iff (pairFst z) (pairSnd z))
+
+theorem ltCanonPair_comp_mem_FP {f : List Bool → List Bool}
+    (hf : f ∈ Complexity.FP) :
+    (fun z => ltCanonPair (f z)) ∈ Complexity.FP := by
+  change (ltCanonPair ∘ f) ∈ Complexity.FP
+  exact mem_FP_comp hf ltCanonPair_mem_FP
+
+theorem ltCanonPair_cases (z : List Bool) :
+    ltCanonPair z = [true] ∨ ltCanonPair z = [false] := by
+  unfold ltCanonPair
+  exact ltCanon_flag (pairFst z) (pairSnd z)
+
+def mulCanonPair (z : List Bool) : List Bool :=
+  mulCanon (pairFst z) (pairSnd z)
+
+theorem mulCanonPair_mem_FP : mulCanonPair ∈ Complexity.FP := by
+  change (fun z : List Bool => mulCanon (pairFst z) (pairSnd z)) ∈ Complexity.FP
+  exact mulCanon_mem_FP Cobham.fstBlock_mem_FP Cobham.sndBlock_mem_FP
+
+theorem mulCanonPair_bitValue (z : List Bool) :
+    bitValue (mulCanonPair z) =
+      bitValue (pairFst z) * bitValue (pairSnd z) := by
+  simpa [mulCanonPair] using
+    (mulCanon_bitValue (pairFst z) (pairSnd z))
+
+theorem mulCanonPair_eq_bits (z : List Bool) :
+    mulCanonPair z =
+      (bitValue (pairFst z) * bitValue (pairSnd z)).bits := by
+  simpa [mulCanonPair] using
+    (mulCanon_eq_bits (pairFst z) (pairSnd z))
+
+theorem mulCanonPair_comp_mem_FP {f : List Bool → List Bool}
+    (hf : f ∈ Complexity.FP) :
+    (fun z => mulCanonPair (f z)) ∈ Complexity.FP := by
+  change (mulCanonPair ∘ f) ∈ Complexity.FP
+  exact mem_FP_comp hf mulCanonPair_mem_FP
+
+def quotBitsPair (z : List Bool) : List Bool :=
+  quotBits (pairFst z) (pairSnd z)
+
+theorem quotBitsPair_mem_FP : quotBitsPair ∈ Complexity.FP := by
+  change (fun z : List Bool => quotBits (pairFst z) (pairSnd z)) ∈ Complexity.FP
+  exact quotBits_mem_FP Cobham.fstBlock_mem_FP Cobham.sndBlock_mem_FP
+
+theorem quotBitsPair_eq_bits (z : List Bool)
+    (h : 0 < bitValue (pairSnd z)) :
+    quotBitsPair z =
+      (bitValue (pairFst z) / bitValue (pairSnd z)).bits := by
+  simpa [quotBitsPair] using
+    (quotBits_eq (pairFst z) (pairSnd z) h)
+
+theorem quotBitsPair_comp_mem_FP {f : List Bool → List Bool}
+    (hf : f ∈ Complexity.FP) :
+    (fun z => quotBitsPair (f z)) ∈ Complexity.FP := by
+  change (quotBitsPair ∘ f) ∈ Complexity.FP
+  exact mem_FP_comp hf quotBitsPair_mem_FP
+
+def gcdBitsPair (z : List Bool) : List Bool := gcdBits z
+
+theorem gcdBitsPair_mem_FP : gcdBitsPair ∈ Complexity.FP := by
+  change gcdBits ∈ Complexity.FP
+  exact gcdBits_mem_FP
+
+theorem gcdBitsPair_odd_pair (a b : List Bool)
+    (ha : a = (bitValue a).bits) (hb : b = (bitValue b).bits)
+    (hne : a ≠ [])
+    (hodd : b = [] ∨ bitValue a % 2 = 1 ∨ bitValue b % 2 = 1) :
+    gcdBitsPair (pair a b) =
+      (Nat.gcd (bitValue a) (bitValue b)).bits := by
+  simpa [gcdBitsPair] using gcdBits_odd_pair a b ha hb hne hodd
+
+def packReducedPair (z : List Bool) : List Bool :=
+  packReduced (pairFst z) (pairSnd z)
+
+theorem packReducedPair_mem_FP : packReducedPair ∈ Complexity.FP := by
+  change (fun z : List Bool => packReduced (pairFst z) (pairSnd z)) ∈ Complexity.FP
+  exact packReduced_mem_FP Cobham.fstBlock_mem_FP Cobham.sndBlock_mem_FP
+
+/-! The node projections are exported as named wires for downstream packed
+state machines.  Their malformed-input behavior is inherited exactly from
+the private splitter: an empty/leaf wire yields `[]`. -/
+
+def nodeLeftTag (z : List Bool) : List Bool := nodeLeft z
+
+theorem nodeLeftTag_mem_FP : nodeLeftTag ∈ Complexity.FP := by
+  change nodeLeft ∈ Complexity.FP
+  exact nodeLeft_mem_FP
+
+theorem nodeLeftTag_of_node (p q : CMMSACodec.Tree) :
+    nodeLeftTag (CMMSACodec.Tree.encode (CMMSACodec.Tree.node p q)) =
+      CMMSACodec.Tree.encode p := by
+  exact nodeLeft_node p q
+
+theorem nodeLeftTag_length_le (z : CMMSACodec.Bits) :
+    (nodeLeftTag z).length ≤ z.length := by
+  exact nodeLeft_length_le z
+
+def nodeRightTag (z : List Bool) : List Bool := nodeRight z
+
+theorem nodeRightTag_mem_FP : nodeRightTag ∈ Complexity.FP := by
+  change nodeRight ∈ Complexity.FP
+  exact nodeRight_mem_FP
+
+theorem nodeRightTag_of_node (p q : CMMSACodec.Tree) :
+    nodeRightTag (CMMSACodec.Tree.encode (CMMSACodec.Tree.node p q)) =
+      CMMSACodec.Tree.encode q := by
+  exact nodeRight_node p q
+
+theorem nodeRightTag_length_le (z : CMMSACodec.Bits) :
+    (nodeRightTag z).length ≤ z.length := by
+  exact nodeRight_length_le z
+
+set_option maxHeartbeats 4000000 in
+theorem readFormulaTag_comp_mem_FP {f : List Bool → List Bool}
+    (hf : f ∈ Complexity.FP) :
+    (fun z => readFormulaTag (f z)) ∈ Complexity.FP := by
+  change (readFormulaTag ∘ f) ∈ Complexity.FP
+  exact mem_FP_comp hf readFormulaTag_mem_FP
+
+/-! Public size bounds for the canonical pair wires.  The splitter itself
+remains private, while downstream packed machines may use these bounds to
+justify their fixed-width state clamps. -/
+
+theorem pairFst_length_le_public (z : List Bool) :
+    (pairFst z).length ≤ z.length := by
+  exact pairFst_length_le z
+
+theorem pairSnd_length_le_public (z : List Bool) :
+    (pairSnd z).length ≤ z.length := by
+  exact pairSnd_length_le z
+
+/-! Public semantic facts for the unreduced positive-fraction walk.  The
+packed validity reader keeps its implementation private, but the executor's
+CDF proof needs the same canonical accumulator and its size invariant. -/
+
+def rowListWire {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N)) : CMMSACodec.Bits :=
+  rowsEnc rows
+
+def cdfFoldAcc {N : Nat} (num den : Nat)
+    (rows : List (FiniteSourceSampler.Row N)) : Nat × Nat :=
+  foldAcc num den rows
+
+def cdfAccumBound (src : CMMSACodec.Bits) : CMMSACodec.Bits :=
+  validBound src
+
+theorem cdfAccumBound_length (src : CMMSACodec.Bits) :
+    (cdfAccumBound src).length = 2 * src.length + 64 := by
+  exact validBound_length src
+
+theorem rowListWire_nil {N : Nat} :
+    rowListWire ([] : List (FiniteSourceSampler.Row N)) = [false] := by
+  rfl
+
+theorem rowListWire_cons {N : Nat} (row : FiniteSourceSampler.Row N)
+    (rows : List (FiniteSourceSampler.Row N)) :
+    rowListWire (row :: rows) =
+      true :: CMMSACodec.Tree.encode (rowTree row) ++ rowListWire rows := by
+  exact rowsEnc_cons_bits row rows
+
+theorem cdfFoldAcc_cons {N : Nat} (num den : Nat)
+    (row : FiniteSourceSampler.Row N)
+    (rows : List (FiniteSourceSampler.Row N)) :
+    cdfFoldAcc num den (row :: rows) =
+      cdfFoldAcc (num * row.1.den + row.1.num.natAbs * den)
+        (den * row.1.den) rows := by
+  rfl
+
+theorem cdfFoldAcc_append {N : Nat} (num den : Nat)
+    (xs ys : List (FiniteSourceSampler.Row N)) :
+    cdfFoldAcc num den (xs ++ ys) =
+      cdfFoldAcc (cdfFoldAcc num den xs).1 (cdfFoldAcc num den xs).2 ys := by
+  exact foldAcc_append num den xs ys
+
+theorem cdfFoldAcc_den_pos {N : Nat} (num den : Nat)
+    (rows : List (FiniteSourceSampler.Row N)) (hden : 0 < den) :
+    0 < (cdfFoldAcc num den rows).2 := by
+  exact foldAcc_den_pos num den rows hden
+
+theorem cdfFoldAcc_ratio_nonneg {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N))
+    (hnn : ∀ r ∈ rows, 0 ≤ r.1) :
+    ((cdfFoldAcc 0 1 rows).1 : Rat) / (cdfFoldAcc 0 1 rows).2 =
+      (rows.map (fun r => r.1)).sum := by
+  exact foldAcc_ratio_nonneg rows hnn
+
+theorem cdfFoldAcc_eq_one_iff {N : Nat}
+    (rows : List (FiniteSourceSampler.Row N))
+    (hnn : ∀ r ∈ rows, 0 ≤ r.1) :
+    (cdfFoldAcc 0 1 rows).1 = (cdfFoldAcc 0 1 rows).2 ↔
+      (rows.map (fun r => r.1)).sum = 1 := by
+  exact foldAcc_eq_one_iff rows hnn
+
+theorem cdfFoldAcc_bits_bound_of_prefix {N : Nat}
+    (all pre rest : List (FiniteSourceSampler.Row N))
+    (hpart : all = pre ++ rest) :
+    (cdfFoldAcc 0 1 pre).1.bits.length ≤
+        (cdfAccumBound (rowListWire all)).length ∧
+    (cdfFoldAcc 0 1 pre).2.bits.length ≤
+        (cdfAccumBound (rowListWire all)).length := by
+  simpa [cdfFoldAcc, rowListWire, cdfAccumBound] using
+    (foldAcc_bits_bound all pre rest hpart)
+
+theorem rowListWire_prefix_le {N : Nat}
+    (xs ys : List (FiniteSourceSampler.Row N)) :
+    (rowListWire xs).length ≤ (rowListWire (xs ++ ys)).length := by
+  exact rowsEnc_prefix_le xs ys
+
 end PvNP.RealizableHardness.ActualDecodeInputFP

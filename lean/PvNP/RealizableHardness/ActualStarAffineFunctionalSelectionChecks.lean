@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualStarAffineFunctionalSelection
+
+open PvNP.RealizableHardness.ActualStarAffineFunctionalSelection
+
+#check FunctionalExtensionFiber
+#check jointDirectSumFunctional_glue
+#check functionalExtensionFiber_card
+
+#print axioms jointDirectSumFunctional_glue
+#print axioms functionalExtensionFiber_card

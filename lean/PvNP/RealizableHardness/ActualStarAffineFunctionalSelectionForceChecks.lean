@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce
+
+/-! Checks for the provisional B50 actual-carrier bridge. -/
+
+#check PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce.domainDraw_rankGood_iff_incrementMap_injective
+#check PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce.leafDifferenceOnQuotient
+
+#print axioms PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce.domainDraw_rankGood_iff_incrementMap_injective
+#print axioms PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce.leafDifferenceOnQuotient

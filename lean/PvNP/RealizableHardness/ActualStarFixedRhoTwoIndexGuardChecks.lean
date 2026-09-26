@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualStarFixedRhoTwoIndexGuard
+
+open PvNP.RealizableHardness.ActualStarFixedRhoTwoIndexGuard
+
+#check fixedRho_quotient_dimension_guard_twoIndex
+#check selected_fixedRho_quotient_dimension_guard_twoIndex
+#check selected_actual_center_quotient_dimension_guard_twoIndex
+
+#print axioms fixedRho_quotient_dimension_guard_twoIndex
+#print axioms selected_fixedRho_quotient_dimension_guard_twoIndex
+#print axioms selected_actual_center_quotient_dimension_guard_twoIndex

@@ -1373,4 +1373,34 @@ theorem runOptionGuardTag_eq (z : List Bool) (x : Input)
   rw [hflag]
   split <;> simp
 
+/-! Public facades for the bounded unary clocks.  The iterate states remain
+private; these names expose only the actual wire and its successful-decode
+agreement needed by the checked executor. -/
+
+def precisionUnaryTag (z : List Bool) : List Bool := precisionUnary z
+
+theorem precisionUnaryTag_mem_FP : precisionUnaryTag ∈ Complexity.FP := by
+  change precisionUnary ∈ Complexity.FP
+  exact precisionUnary_mem_FP
+
+def trialsUnaryTag (z : List Bool) : List Bool := trialsUnary z
+
+theorem trialsUnaryTag_mem_FP : trialsUnaryTag ∈ Complexity.FP := by
+  change trialsUnary ∈ Complexity.FP
+  exact trialsUnary_mem_FP
+
+theorem precisionUnaryTag_some (z : List Bool) (x : Input)
+    (h : decodeInput (pairFst z) = some x) :
+    precisionUnaryTag z =
+      List.replicate (min ((pairSnd z).length + 1) x.precision) false := by
+  change precisionUnary z = _
+  simpa [coinsCap] using (precisionUnary_some z x h)
+
+theorem trialsUnaryTag_some (z : List Bool) (x : Input)
+    (h : decodeInput (pairFst z) = some x) :
+    trialsUnaryTag z =
+      List.replicate (min ((pairSnd z).length + 1) x.trials) false := by
+  change trialsUnary z = _
+  simpa [coinsCap] using (trialsUnary_some z x h)
+
 end PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap

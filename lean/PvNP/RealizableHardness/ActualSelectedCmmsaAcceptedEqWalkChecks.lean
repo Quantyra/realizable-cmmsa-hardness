@@ -1,0 +1,30 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqWalk
+
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqWalkChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqWalk
+
+#check accWFold
+#check accWFold_den
+#check accWFold_num
+#check accWFold_num_zero_one
+#check accWFold_den_zero_one
+#check accWFold_num_eq_den_of_sum
+#check accWBoundedIterate_canonical_prefix
+#check accWBoundedIterate_done
+#check accWBoundedIterate_canonical
+#check accWInit_of_length_le
+#check accWRuler_length
+#check accWRun_canonical
+#check acceptedWeightSumFlag_of_pos_sum
+
+#print axioms accWFold_den
+#print axioms accWFold_num
+#print axioms accWFold_num_eq_den_of_sum
+#print axioms accWBoundedIterate_canonical_prefix
+#print axioms accWBoundedIterate_done
+#print axioms accWBoundedIterate_canonical
+#print axioms accWRun_canonical
+#print axioms acceptedWeightSumFlag_of_pos_sum
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqWalkChecks

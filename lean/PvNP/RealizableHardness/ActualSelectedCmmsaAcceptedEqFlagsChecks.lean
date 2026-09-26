@@ -1,0 +1,19 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqFlags
+
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqFlagsChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqFlags
+
+#check acceptedTag_true_of_output_flags
+#check outputFormulas_length
+#check outputFormulas_cons_of_trials_pos
+#check acceptedFormulasNonemptyFlag_of_outputBits
+#check acceptedBudgetRangeFlag_of_budgetTree
+#check acceptedTag_of_outputBits
+
+#print axioms acceptedTag_true_of_output_flags
+#print axioms acceptedFormulasNonemptyFlag_of_outputBits
+#print axioms acceptedBudgetRangeFlag_of_budgetTree
+#print axioms acceptedTag_of_outputBits
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqFlagsChecks

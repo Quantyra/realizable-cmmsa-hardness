@@ -1,0 +1,354 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaExecutorFP
+
+/-!
+Interface checks for the integrated policy-bounded checked executor.
+
+The checks expose the owned source-selection, repair, rounded-arithmetic,
+tree, acceptance, and packed-output declarations.  No unrestricted
+`runOption_mem_FP` theorem is asserted here; the policy-bounded output FP
+proof remains the next certification obligation.
+-/
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaExecutorFPChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaExecutorFP
+open PvNP.RealizableHardness.ActualSelectedCmmsaSeededMap
+open PvNP.RealizableHardness.ActualDecodeInputFP
+open PvNP.RealizableHardness.ExecutablePipelineInput
+open PvNP.RealizableHardness.ExecutableSamplingPolicy
+open Complexity
+
+#check sourceDraws
+#check repairedFormulas
+#check outputData
+#check outputTree
+#check outputBits
+#check outputAccepted
+#check checkedOutputBits
+#check checkedOutputFromCoins
+#check paddedRunOutputOption
+#check paddedRunOutputTag
+#check decodedInputPayloadTag
+#check decodedInputWeightsTag
+#check decodedInputRowsTag
+#check decodedInputFirstFormulaArg
+#check decodedForwardFormulaTag
+#check decodedForwardFormulaBitsTag
+#check forwardMachinePrefix
+#check machineState
+#check machineOutputTag
+#check packedBudgetMachineState
+#check packedBudgetMachineState_mem_FP
+#check packedBudgetMachineState_value
+#check packedBudgetOutputArg
+#check packedBudgetOutputWire
+#check packedBudgetOutputMachineState_value
+#check packedBudgetOutputWire_value
+#check packedBudgetOutputWire_outputBudget
+#check packedBudgetOutputWire_of_parameters
+#check packedBudgetOutputWire_outputBudget_of_parameters
+#check packedOutputWeightArg
+#check packedOutputWeightMachine
+#check packedOutputWeightMachine_mem_FP
+#check packedOutputWeightMachine_of_coordinate
+#check packedOutputWeightMachine_reads_coordinate
+#check packedOutputWeightListFold
+#check packedOutputWeightListFold_eq_listTree
+#check packedOutputWeightListFoldQ
+#check packedOutputWeightListFoldQ_eq_listTree
+#check packedOutputWeightListFoldQ_reads_outputWeights
+#check packedOutputWeightListFoldStep
+#check packedOutputWeightListFoldStep_mem_FP
+#check packedOutputWeightListFoldStep_of_cons
+#check packedOutputWeightListFoldStep_of_nil
+#check packedOutputWeightListFoldFieldBound
+#check packedOutputWeightListFoldFieldBound_mem_FP
+#check packedOutputWeightListFoldClamp
+#check packedOutputWeightListFoldClamp_mem_FP
+#check packedOutputWeightListFoldPack
+#check packedOutputWeightListFoldPack_mem_FP
+#check packedOutputWeightListFoldSrc
+#check packedOutputWeightListFoldSrc_mem_FP
+#check packedOutputWeightListFoldRem
+#check packedOutputWeightListFoldRem_mem_FP
+#check packedOutputWeightListFoldAcc
+#check packedOutputWeightListFoldAcc_mem_FP
+#check packedOutputWeightListFoldInit
+#check packedOutputWeightListFoldInit_mem_FP
+#check packedOutputWeightListFoldBoundedStep
+#check packedOutputWeightListFoldBoundedStep_mem_FP
+#check packedOutputWeightListFoldRuler
+#check packedOutputWeightListFoldRuler_mem_FP
+#check packedOutputWeightListFoldWidth
+#check packedOutputWeightListFoldWidth_mem_FP
+#check packedOutputWeightListFoldRun
+#check packedOutputWeightListFoldRun_mem_FP
+#check packedOutputWeightListFoldOutput
+#check packedOutputWeightListFoldOutput_mem_FP
+#check packedOutputWeightListFoldBoundedIterate_canonical_prefix
+#check packedOutputWeightListFoldRun_canonical
+#check packedOutputWeightRawArgumentTag
+#check packedOutputWeightRawArgumentTag_mem_FP
+#check packedOutputWeightRawArgumentTag_of_fractionTree
+#check packedOutputWeightRawListStep
+#check packedOutputWeightRawListStep_mem_FP
+#check packedOutputWeightRawListStep_of_cons
+#check packedOutputWeightRawListStep_of_nil
+#check packedOutputWeightRawArgumentListTree
+#check packedOutputWeightRawArgumentListWire
+#check packedOutputWeightRawArgumentListWire_eq_fold
+#check packedOutputWeightRawArgumentListWireQ_eq_foldQ
+#check packedOutputWeightRawListBoundedStep
+#check packedOutputWeightRawListBoundedStep_mem_FP
+#check packedOutputWeightRawListInit
+#check packedOutputWeightRawListInit_mem_FP
+#check packedOutputWeightRawListRuler
+#check packedOutputWeightRawListRuler_mem_FP
+#check packedOutputWeightRawListWidth
+#check packedOutputWeightRawListWidth_mem_FP
+#check packedOutputWeightRawListRun
+#check packedOutputWeightRawListRun_mem_FP
+#check packedOutputWeightRawListOutput
+#check packedOutputWeightRawListOutput_mem_FP
+#check packedOutputWeightRawListRun_canonical
+#check packedOutputWeightRawListRunQ_eq_weightTree
+#check packedOutputWeightCoordinateWireArg
+#check packedOutputWeightCoordinateWire
+#check packedOutputWeightCoordinateWire_mem_FP
+#check packedOutputWeightCoordinateWire_eq_ceilDiv
+#check packedOriginalRepairedArg
+#check packedOriginalRepairedWire
+#check packedOriginalRepairedWire_mem_FP
+#check packedOriginalRepairedWire_eq_bits
+#check packedOriginalRepairedWire_value
+#check packedOriginalRepairedWire_eq_repairedAt_inl
+#check packedExceptionRepairedArg
+#check packedExceptionRepairedWire
+#check packedExceptionRepairedWire_mem_FP
+#check packedExceptionRepairedWire_eq_bits
+#check packedExceptionRepairedWire_value
+#check packedExceptionRepairedWire_eq_repairedAt_inr
+#check packedDyadicThresholdArg
+#check packedDyadicThresholdWire
+#check packedDyadicThresholdWire_mem_FP
+#check packedDyadicThresholdWire_eq_ceilDiv
+#check packedDyadicScaleWire
+#check packedDyadicScaleWire_mem_FP
+#check packedDyadicScaleWire_eq_dyadic
+#check packedFinRepairedArg
+#check packedFinRepairedWire
+#check packedFinRepairedWire_mem_FP
+#check packedFinRepairedWire_eq_bits_lt
+#check packedFinRepairedWire_eq_bits_ge
+#check packedFinNumeratorArg
+#check packedFinNumeratorWire
+#check packedFinNumeratorWire_mem_FP
+#check packedFinNumeratorWire_eq_ceilDiv_lt
+#check packedFinNumeratorWire_eq_ceilDiv_ge
+#check packedNumeratorsOfFn
+#check packedCommonDenominatorOfFn
+#check packedNumeratorDenomPairs
+#check packedWeightPairs
+#check packedNumeratorsOfFn_length
+#check packedCommonDenominatorOfFn_eq_sum
+#check packedNumeratorsOfFn_apply_lt
+#check packedNumeratorsOfFn_apply_ge
+#check packedCommonDenominatorOfFn_eq_commonDenominator
+#check packedNatSumStep
+#check packedNatSumStep_mem_FP
+#check packedNatSumStep_of_nil
+#check packedNatSumStep_of_cons
+#check packedNumeratorDenomPairs_rawRun_eq_weightTree
+#check packedBudgetTreeWire
+#check packedBudgetTreeWire_mem_FP
+#check packedBudgetTreeWire_eq_encode
+#check packedBudgetTreeWire_eq_budgetTree
+#check packedOutputTreeArg
+#check packedOutputTreeWire
+#check packedOutputTreeWire_mem_FP
+#check packedOutputTreeWire_eq_encode
+#check packedOutputTreeWire_eq_outputTree
+#check packedOutputTreeWire_eq_outputData_tree
+-- `packedOutputWeightListTree` is private to the executor module; its public
+-- equality and readback theorems below cover the exported list-tree surface.
+-- The fold-step interface consumes already serialized fraction-tree spines;
+-- the bounded runner consumes an already serialized source list.  The raw
+-- arithmetic-to-list connection remains separate.  The raw adapter below
+-- explicitly parses each canonical numerator/denominator tree before calling
+-- the certified single-coordinate machine.
+#check packedOutputWeightListTree_eq_weightTree
+#check packedOutputWeightListTree_reads_outputWeights
+#check packedOutputWeightMachine_of_parameters
+#check packedOutputWeightListTree_reads_outputWeights_of_parameters
+#check addCanonPair_mem_FP
+#check addCanonPair_bitValue
+#check subCanonPair_mem_FP
+#check subCanonPair_bitValue
+#check ltCanonPair_mem_FP
+#check ltCanonPair_true_iff
+#check mulCanonPair_mem_FP
+#check mulCanonPair_bitValue
+#check quotBitsPair_mem_FP
+#check quotBitsPair_eq_bits
+#check gcdBitsPair_mem_FP
+#check gcdBitsPair_odd_pair
+#check packReducedPair_mem_FP
+#check nodeLeftTag_mem_FP
+#check nodeRightTag_mem_FP
+#check sourceDraws_eq_core
+#check repairedFormulas_eq_core
+#check outputData_eq_core
+#check outputTree_eq_core
+#check outputBits_eq_core
+#check outputAccepted_eq_core
+#check checkedOutputBits_eq_core
+#check checkedOutputFromCoins_eq_runOption_of_decode
+#check paddedRunOutputOption_eq
+#check paddedRunOutputTag_eq_selectedPairedRun
+#check paddedRunOutputOption_bad_input
+#check paddedRunOutputTag_bad_input
+#check paddedRunOutputOption_policy_reject
+#check paddedRunOutputOption_selected
+#check paddedRunOutputTag_selected_valid
+
+#print axioms sourceDraws_eq_core
+#print axioms repairedFormulas_eq_core
+#print axioms outputData_eq_core
+#print axioms outputTree_eq_core
+#print axioms outputBits_eq_core
+#print axioms outputAccepted_eq_core
+#print axioms checkedOutputBits_eq_core
+#print axioms decodedInputPayloadTag_mem_FP
+#print axioms decodedInputWeightsTag_mem_FP
+#print axioms decodedInputRowsTag_mem_FP
+#print axioms decodedInputFirstFormulaArg_mem_FP
+#print axioms decodedForwardFormulaTag_mem_FP
+#print axioms decodedForwardFormulaBitsTag_mem_FP
+#print axioms forwardMachinePrefix_mem_FP
+#print axioms machineOutputTag_eq_paddedRunOutputTag
+#print axioms addCanonPair_mem_FP
+#print axioms subCanonPair_mem_FP
+#print axioms ltCanonPair_mem_FP
+#print axioms mulCanonPair_mem_FP
+#print axioms quotBitsPair_mem_FP
+#print axioms gcdBitsPair_mem_FP
+#print axioms packReducedPair_mem_FP
+#print axioms checkedOutputFromCoins_eq_runOption_of_decode
+#print axioms paddedRunOutputOption_eq
+#print axioms paddedRunOutputTag_eq_selectedPairedRun
+#print axioms packedBudgetMachineState_mem_FP
+#print axioms packedBudgetMachineState_value
+#print axioms packedBudgetOutputMachineState_value
+#print axioms packedBudgetOutputWire_value
+#print axioms packedBudgetOutputWire_outputBudget
+#print axioms packedBudgetOutputWire_of_parameters
+#print axioms packedBudgetOutputWire_outputBudget_of_parameters
+#print axioms packedOutputWeightMachine_mem_FP
+#print axioms packedOutputWeightMachine_of_coordinate
+#print axioms packedOutputWeightMachine_reads_coordinate
+#print axioms packedOutputWeightListFold
+#print axioms packedOutputWeightListFold_eq_listTree
+#print axioms packedOutputWeightListFoldQ
+#print axioms packedOutputWeightListFoldQ_eq_listTree
+#print axioms packedOutputWeightListFoldQ_reads_outputWeights
+#print axioms packedOutputWeightListFoldStep
+#print axioms packedOutputWeightListFoldStep_mem_FP
+#print axioms packedOutputWeightListFoldStep_of_cons
+#print axioms packedOutputWeightListFoldStep_of_nil
+#print axioms packedOutputWeightListFoldFieldBound_mem_FP
+#print axioms packedOutputWeightListFoldClamp_mem_FP
+#print axioms packedOutputWeightListFoldPack_mem_FP
+#print axioms packedOutputWeightListFoldSrc_mem_FP
+#print axioms packedOutputWeightListFoldRem_mem_FP
+#print axioms packedOutputWeightListFoldAcc_mem_FP
+#print axioms packedOutputWeightListFoldInit_mem_FP
+#print axioms packedOutputWeightListFoldBoundedStep_mem_FP
+#print axioms packedOutputWeightListFoldRuler_mem_FP
+#print axioms packedOutputWeightListFoldWidth_mem_FP
+#print axioms packedOutputWeightListFoldRun_mem_FP
+#print axioms packedOutputWeightListFoldOutput_mem_FP
+#print axioms packedOutputWeightListFoldBoundedIterate_canonical_prefix
+#print axioms packedOutputWeightListFoldRun_canonical
+#print axioms packedOutputWeightRawArgumentTag_mem_FP
+#print axioms packedOutputWeightRawArgumentTag_of_fractionTree
+#print axioms packedOutputWeightRawListStep_mem_FP
+#print axioms packedOutputWeightRawListStep_of_cons
+#print axioms packedOutputWeightRawListStep_of_nil
+#print axioms packedOutputWeightRawArgumentListWire_eq_fold
+#print axioms packedOutputWeightRawArgumentListWireQ_eq_foldQ
+#print axioms packedOutputWeightRawListBoundedStep_mem_FP
+#print axioms packedOutputWeightRawListInit_mem_FP
+#print axioms packedOutputWeightRawListRuler_mem_FP
+#print axioms packedOutputWeightRawListWidth_mem_FP
+#print axioms packedOutputWeightRawListRun_mem_FP
+#print axioms packedOutputWeightRawListOutput_mem_FP
+#print axioms packedOutputWeightRawListRun_canonical
+#print axioms packedOutputWeightRawListRunQ_eq_weightTree
+#print axioms packedOutputWeightCoordinateWire_mem_FP
+#print axioms packedOutputWeightCoordinateWire_eq_ceilDiv
+#print axioms packedOriginalRepairedWire_mem_FP
+#print axioms packedOriginalRepairedWire_eq_bits
+#print axioms packedOriginalRepairedWire_value
+#print axioms packedOriginalRepairedWire_eq_repairedAt_inl
+#print axioms packedExceptionRepairedWire_mem_FP
+#print axioms packedExceptionRepairedWire_eq_bits
+#print axioms packedExceptionRepairedWire_value
+#print axioms packedExceptionRepairedWire_eq_repairedAt_inr
+#print axioms packedDyadicThresholdWire_mem_FP
+#print axioms packedDyadicThresholdWire_eq_ceilDiv
+#print axioms packedDyadicScaleWire_mem_FP
+#print axioms packedDyadicScaleWire_eq_dyadic
+#print axioms packedFinRepairedWire_mem_FP
+#print axioms packedFinRepairedWire_eq_bits_lt
+#print axioms packedFinRepairedWire_eq_bits_ge
+#print axioms packedFinNumeratorWire_mem_FP
+#print axioms packedFinNumeratorWire_eq_ceilDiv_lt
+#print axioms packedFinNumeratorWire_eq_ceilDiv_ge
+#print axioms packedNumeratorsOfFn_length
+#print axioms packedCommonDenominatorOfFn_eq_sum
+#print axioms packedNumeratorsOfFn_apply_lt
+#print axioms packedNumeratorsOfFn_apply_ge
+#print axioms packedCommonDenominatorOfFn_eq_commonDenominator
+#print axioms packedNatSumStep_mem_FP
+#print axioms packedNatSumStep_of_nil
+#print axioms packedNatSumStep_of_cons
+#print axioms packedNumeratorDenomPairs_rawRun_eq_weightTree
+#print axioms packedBudgetTreeWire_mem_FP
+#print axioms packedBudgetTreeWire_eq_encode
+#print axioms packedBudgetTreeWire_eq_budgetTree
+#print axioms packedOutputTreeWire_mem_FP
+#print axioms packedOutputTreeWire_eq_encode
+#print axioms packedOutputTreeWire_eq_outputTree
+#print axioms packedOutputTreeWire_eq_outputData_tree
+-- The raw canonical transition, prefix induction, and post-exhaustion fixed
+-- point are private implementation lemmas; the public run theorem above is
+-- the exported canonical/FP boundary for the bounded raw-list runner.
+#print axioms packedOutputWeightListTree_eq_weightTree
+#print axioms packedOutputWeightListTree_reads_outputWeights
+#print axioms packedOutputWeightMachine_of_parameters
+#print axioms packedOutputWeightListTree_reads_outputWeights_of_parameters
+#print axioms paddedRunOutputOption_bad_input
+#print axioms paddedRunOutputTag_bad_input
+#print axioms paddedRunOutputOption_policy_reject
+#print axioms paddedRunOutputOption_selected
+#print axioms paddedRunOutputTag_selected_valid
+
+example (L : Nat) (eps : Rat) : paddedRunOutputTag L eps [] = [] := by
+  apply paddedRunOutputTag_bad_input
+  simpa [pairFst] using decodeInput_empty
+
+example (L : Nat) (eps : Rat) (z : CMMSACodec.Bits) :
+    paddedRunOutputTag L eps z = selectedPairedRun L eps z := by
+  exact paddedRunOutputTag_eq_selectedPairedRun L eps z
+
+example (L : Nat) (eps : Rat) (instanceBits coins : CMMSACodec.Bits)
+    (x : Input)
+    (hdecode : decodeInput instanceBits = some x)
+    (hpolicy : ¬(
+      x.precision = SamplingGuarantee.precision x.source.rows.length eps ∧
+      x.trials = ComputableSampleCount.count x.weights.length (inverseCeil eps) ∧
+      coins.length = coinRuler eps instanceBits.length ∧
+      x.trials * x.precision ≤ coins.length)) :
+    paddedRunOutputOption L eps instanceBits coins = none := by
+  exact paddedRunOutputOption_policy_reject L eps instanceBits coins x hdecode hpolicy
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaExecutorFPChecks

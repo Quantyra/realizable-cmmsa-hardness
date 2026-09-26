@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqWeight
+
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqWeightChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqWeight
+
+#check accWFieldBound_covers
+#check numerators_ne_nil
+#check commonDenominator_pos_of_pos
+#check acceptedWeightSumFlag_of_weightTree
+
+#print axioms accWFieldBound_covers
+#print axioms acceptedWeightSumFlag_of_weightTree
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaAcceptedEqWeightChecks

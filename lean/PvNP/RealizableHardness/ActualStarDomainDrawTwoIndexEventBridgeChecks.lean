@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
+
+open PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
+
+#check domainDrawJointImageArity
+#check fixedCenterBad_preimage_iff_domainDraw_rankFailure_arity
+
+#print axioms domainDrawJointImageArity
+#print axioms fixedCenterBad_preimage_iff_domainDraw_rankFailure_arity

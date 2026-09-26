@@ -50,14 +50,34 @@ theorem satToThreeSat_exists :
         (PromiseProblem.ofLanguage Complexity.SAT.language) threeSatSource (1/6) (1/6) :=
   ⟨satToThreeSatMap, satToThreeSat_preserves⟩
 
-/-- Theorem 1 at σ_L, γ_L, needing only 3SAT → cmmsaPromise Preserves (1/6). -/
+/-- Inhabit path: an FP `MapReducesVia` 3SAT → manuscript `cmmsaPromise`
+lifts to `Preserves (1/6)`. This module does not exhibit such an `f`. -/
+theorem hSrcCmmsa_of_fp_map
+    {L : Nat}
+    (hσ : 1 ≤ manuscriptSigma L) (hγ0 : 0 < manuscriptGamma L)
+    (hγ1 : manuscriptGamma L < 1)
+    (f : List Bool → List Bool) (hf : f ∈ Complexity.FP)
+    (hred : threeSatSource.MapReducesVia
+      (cmmsaPromise L (manuscriptSigma L) (manuscriptGamma L) hσ hγ0 hγ1) f) :
+    ∃ S : RandomizedReduction.SeededMap,
+      RandomizedReduction.Preserves S threeSatSource
+        (cmmsaPromise L (manuscriptSigma L) (manuscriptGamma L) hσ hγ0 hγ1)
+        (1 / 6) (1 / 6) :=
+  ⟨fpSeededMap f hf,
+    preserves_mono (fpSeededMap_preserves f hf _ _ hred)
+      (by norm_num) (by norm_num) (by norm_num) (by norm_num)⟩
+
+/-- Theorem 1 at manuscript `σ_L`, `γ_L`, still needing 3SAT → cmmsaPromise. -/
 theorem theorem1_from_threeSat_to_cmmsa
     {L : Nat}
-    (hσ : 1 ≤ sigmaL L) (hγ0 : 0 < gammaL L) (hγ1 : gammaL L < 1)
+    (hσ : 1 ≤ manuscriptSigma L) (hγ0 : 0 < manuscriptGamma L)
+    (hγ1 : manuscriptGamma L < 1)
     (hSrcCmmsa : ∃ S : RandomizedReduction.SeededMap,
       RandomizedReduction.Preserves S threeSatSource
-        (cmmsaPromise L (sigmaL L) (gammaL L) hσ hγ0 hγ1) (1/6) (1/6)) :
-    RandomizedPromiseNPHard (cmmsaPromise L (sigmaL L) (gammaL L) hσ hγ0 hγ1) :=
+        (cmmsaPromise L (manuscriptSigma L) (manuscriptGamma L) hσ hγ0 hγ1)
+        (1/6) (1/6)) :
+    RandomizedPromiseNPHard
+      (cmmsaPromise L (manuscriptSigma L) (manuscriptGamma L) hσ hγ0 hγ1) :=
   theorem1_headline hσ hγ0 hγ1 threeSatSource satToThreeSat_exists hSrcCmmsa
 
 end PvNP.RealizableHardness.ActualSatToThreeSatSource

@@ -1,0 +1,93 @@
+import PvNP.RealizableHardness.ActualSelectedCmmsaPaddedRunFracEq
+
+namespace PvNP.RealizableHardness.ActualSelectedCmmsaPaddedRunFracEqChecks
+
+open PvNP.RealizableHardness.ActualSelectedCmmsaPaddedRunFracEq
+
+#check origNumClamp_eq_of_length_le
+#check origFracRawStep_nil
+#check origFracRawStep_eq_cons
+#check origFracItem_eq_encode
+#check origFracNumer_eq_ceilDiv
+#check origFracBoundedIterate_canonical_prefix
+#check origFracBoundedIterate_canonical
+#check origFracListTag_canonical
+#check origFracOfZ_canonical
+#check excConsBoundedIterate_canonical
+#check excConsListTag_canonical
+#check packedExcFracTag_eq
+#check packedExcConsOfZ_canonical
+#check packedWeightTreeTag_apply
+#check packedWeightTreeTag_eq_of_list
+#check packedWeightTreeSpine_eq
+#check origFracTrees_append_exceptions_eq_map
+#check origFracNumerators_eq_packedOfFn
+#check origFracNumerators_eq_numerators
+#check packedWeightTreeTag_eq_weightTree_of_numerators
+#check packedFracProducerArg_eq_of_components
+#check packedFracProducerTree_eq_outputBits_of_components
+#check trialMaterializerTag_eq_outputFormulas
+#check origFracCoord_eq_of_lambda_ratio
+#check unreducedLambda_eq_repairLambda
+#check unreducedBudget_eq_repairBudget
+#check origSumTag_canonical
+#check packedOrigSumOfZ_eq
+#check packedCommonDenTag_eq_of_components
+#check packedClippedNumeratorTag_eq_of_components
+#check origNumArgLambda_unreduced
+#check packedExceptionItemOf_eq_unreduced
+#check packedBudgetPairTag_unreduced
+#check origNumArgScale_eq_unreduced
+#check packedClipCeilTag_eq_of_components
+#check packedClipAddTag_eq_of_components
+#check packedOrigSumOfZ_eq_unreduced
+#check packedCommonDenTag_eq_unreduced
+#check origFracSum_add_exceptions_eq_commonDenominator
+#check packedCommonDenTag_eq_commonDenominator
+#check packedWeightTreeTag_eq_weightTree_of_unreduced
+#check roundingScale_eq_unreduced_clog
+#check origNumArgScale_eq_roundingScale
+#check packedWeightTreeTag_eq_weightTree_of_decode
+#check packedBudgetOfZ_eq_unreduced
+#check ceil_scale_unreduced_eq_repairBudget
+#check packedClipCeilTag_eq_ceil_repairBudget
+#check packedClipAddTag_eq_clippedAdd
+#check packedClippedNumeratorTag_eq_clippedNumerator
+#check packedFracProducerTree_eq_outputBits_of_decode
+
+#print axioms origFracRawStep_eq_cons
+#print axioms origFracItem_eq_encode
+#print axioms origFracNumer_eq_ceilDiv
+#print axioms origFracBoundedIterate_canonical
+#print axioms origFracListTag_canonical
+#print axioms packedWeightTreeTag_eq_of_list
+#print axioms packedWeightTreeSpine_eq
+#print axioms origFracNumerators_eq_packedOfFn
+#print axioms origFracNumerators_eq_numerators
+#print axioms packedWeightTreeTag_eq_weightTree_of_numerators
+#print axioms packedFracProducerTree_eq_outputBits_of_components
+#print axioms trialMaterializerTag_eq_outputFormulas
+#print axioms origFracCoord_eq_of_lambda_ratio
+#print axioms unreducedLambda_eq_repairLambda
+#print axioms unreducedBudget_eq_repairBudget
+#print axioms origSumTag_canonical
+#print axioms packedOrigSumOfZ_eq
+#print axioms packedCommonDenTag_eq_of_components
+#print axioms packedClippedNumeratorTag_eq_of_components
+#print axioms origNumArgLambda_unreduced
+#print axioms packedExceptionItemOf_eq_unreduced
+#print axioms packedBudgetPairTag_unreduced
+#print axioms origNumArgScale_eq_unreduced
+#print axioms packedClipCeilTag_eq_of_components
+#print axioms packedClipAddTag_eq_of_components
+#print axioms packedOrigSumOfZ_eq_unreduced
+#print axioms packedCommonDenTag_eq_unreduced
+#print axioms origFracSum_add_exceptions_eq_commonDenominator
+#print axioms packedCommonDenTag_eq_commonDenominator
+#print axioms packedWeightTreeTag_eq_weightTree_of_unreduced
+#print axioms origNumArgScale_eq_roundingScale
+#print axioms packedWeightTreeTag_eq_weightTree_of_decode
+#print axioms packedClippedNumeratorTag_eq_clippedNumerator
+#print axioms packedFracProducerTree_eq_outputBits_of_decode
+
+end PvNP.RealizableHardness.ActualSelectedCmmsaPaddedRunFracEqChecks

@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition
+
+open PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition
+
+#check domainDrawRankFailureEventTwoIndex
+#check selected_domainDraw_rankFailure_mass_lt_threshold_twoIndex
+
+#print axioms selected_domainDraw_rankFailure_mass_lt_threshold_twoIndex
