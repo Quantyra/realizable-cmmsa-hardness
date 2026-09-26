@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualStarAcceptedGoodMass
+
+/-! Checks cite the shipped same-experiment mass theorem. A supplied-center
+`uniformDomainTupleLaw` statement has a different type and is not this theorem. -/
+
+namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
+
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.successMargin
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.successMargin_half
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.starLaw_bad_mass_lt_threshold
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.sameExperiment_accepted_rankGood
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_sameExperiment_accepted_rankGood
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.starLaw_bad_mass_lt_threshold
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.sameExperiment_accepted_rankGood
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_sameExperiment_accepted_rankGood
+
+end PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
