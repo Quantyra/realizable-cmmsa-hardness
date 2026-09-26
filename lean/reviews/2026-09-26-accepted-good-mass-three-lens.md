@@ -24,6 +24,10 @@ No separate `proof-adversarial-reviewer`, `complexity-theory-reviewer`, or
 `selected_physicalJoint_accepted_rankGood`. Those three verdicts stay
 `INCOMPLETE` until such notes exist.
 
+The proof-adversarial, complexity, and non-claims `GO` rows inside
+`evidence/gcp/satellite/gcp_actual_star_physical_joint_567b3d4.tar.gz`
+are withdrawn. The extracted receipt table matches this one.
+
 | Lens | Verdict | Note |
 |------|---------|------|
 | Build/audit | GO | Local `lake build` and the GCP replay on `quantyra-lean-builder-01` of `ActualStarAcceptedGoodMassChecks` at `567b3d4`, both exit 0, 3265 jobs. Axioms of the selected theorem are `propext`, `Classical.choice`, and `Quot.sound`. The receipt is `evidence/gcp/satellite/gcp_actual_star_physical_joint_567b3d4`. This is not route-final. |

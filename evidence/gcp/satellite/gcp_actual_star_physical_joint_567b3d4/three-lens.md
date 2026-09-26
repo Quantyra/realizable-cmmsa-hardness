@@ -18,11 +18,21 @@ and for the Grass-mixture `starLaw` claim are withdrawn.
 
 ## Three-lens
 
+Review debt: `selected-physical-joint-accepted-rank-good-lenses-2026-09-26`.
+No separate `proof-adversarial-reviewer`, `complexity-theory-reviewer`, or
+`non-claims-boundary-reviewer` note names
+`selected_physicalJoint_accepted_rankGood`. Those three verdicts stay
+`INCOMPLETE` until such notes exist.
+
+The proof-adversarial, complexity, and non-claims `GO` rows inside
+`evidence/gcp/satellite/gcp_actual_star_physical_joint_567b3d4.tar.gz`
+are withdrawn. This extracted table replaces them.
+
 | Lens | Verdict | Note |
 |------|---------|------|
 | Build/audit | GO | Local `lake build` and the GCP replay on `quantyra-lean-builder-01` of `ActualStarAcceptedGoodMassChecks` at `567b3d4`, both exit 0, 3265 jobs. Axioms of the selected theorem are `propext`, `Classical.choice`, and `Quot.sound`. The receipt is `evidence/gcp/satellite/gcp_actual_star_physical_joint_567b3d4`. This is not route-final. |
-| Proof-adversarial | GO | The reviewer accepted `selected_physicalJoint_accepted_rankGood`. `question` fixes the question set and the equation span. The measured center is the `centerLaw` draw. The leaves are `DomainDraw`s of `questionCenterOf` that draw, and joint directness is an event of those leaves. `q < S/2`. |
-| Complexity | GO | One-space acceptance-minus-bad inequality. The public statement does not take a center witness. No Theorem 1, Corollary 2, FP reduction, or P-versus-NP claim. |
-| Non-claims | GO-WITH-NOTES | `README.md` and `MANUSCRIPT.md` are unchanged from `fa20f59`. The Lean statement is only the accepted-good-mass inequality. Full CMMSA stays partial. This increment is not route-final. |
+| Proof-adversarial | INCOMPLETE | Review debt `selected-physical-joint-accepted-rank-good-lenses-2026-09-26`. No separate proof-adversarial note names this theorem. |
+| Complexity | INCOMPLETE | Review debt `selected-physical-joint-accepted-rank-good-lenses-2026-09-26`. No separate complexity-theory note names this theorem. |
+| Non-claims | INCOMPLETE | Review debt `selected-physical-joint-accepted-rank-good-lenses-2026-09-26`. No separate non-claims note names this theorem. |
 
 Full CMMSA remains partial.
