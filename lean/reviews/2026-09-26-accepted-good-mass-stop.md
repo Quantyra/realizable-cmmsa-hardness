@@ -1,10 +1,10 @@
 # Stop note withdrawn
 
-Date: 2026-09-26. This note is not outcome B. The joint experiment is
-`selected_joint_accepted_rankGood`: `jointLaw` draws the center from
-`centerLaw` and then that center's leaves. See the three-lens file.
-The text below is the earlier carrier observation, not a kill of the
-inequality.
+Date: 2026-09-26. This note is not outcome B. The same-experiment claim is
+`selected_physicalJoint_accepted_rankGood`. `physicalJointLaw` draws the
+center from `centerLaw` and then `DomainDraw` leaves of
+`questionCenterOf` that center. See the three-lens file. The text below
+is the earlier carrier observation, not a kill of the inequality.
 
 # Stop: same-experiment accepted-good mass
 

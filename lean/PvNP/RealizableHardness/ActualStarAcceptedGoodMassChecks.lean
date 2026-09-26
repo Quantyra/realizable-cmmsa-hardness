@@ -1,6 +1,7 @@
 import PvNP.RealizableHardness.ActualStarAcceptedGoodMass
 
-/-! Checks cite the shipped same-experiment mass theorem. A supplied-center
+/-! Checks cite the shipped same-experiment mass theorem. The measured center
+is the `centerLaw` draw in `physicalJoint_draws_center`. A supplied-center
 `uniformDomainTupleLaw` statement has a different type and is not this theorem. -/
 
 namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
@@ -16,10 +17,16 @@ namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.jointLaw_eq_starLaw
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.jointLaw_draws_center
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_joint_accepted_rankGood
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.questionCenterOf_quotientImage
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.physicalJoint_draws_center
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_physicalJoint_accepted_rankGood
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.starLaw_bad_mass_lt_threshold
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.sameExperiment_accepted_rankGood
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.jointLaw_draws_center
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.physical_domainDraw_eq_center_extension_law
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_joint_accepted_rankGood
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.questionCenterOf_quotientImage
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.physicalJoint_draws_center
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_physicalJoint_accepted_rankGood
 
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks

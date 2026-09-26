@@ -4,14 +4,15 @@ import PvNP.RealizableHardness.ActualSourceStarLaw
 import PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure
 import PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge
 import PvNP.RealizableHardness.ActualStarFixedRhoTwoIndexGuard
+import PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition
+import PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
 
 /-! Same-experiment acceptance minus bad-star mass.
 
-The selected experiment is an ordered `DomainDraw` tuple of one question
-center. `domainDrawTupleExtensionEquiv` identifies that tuple with the
-extensions of `coordinateCenterGrass`, and the pushforward theorem identifies
-the uniform `DomainDraw` law with that center's extension law. Acceptance and
-joint directness are read on that same tuple. `successMargin E = 2^{-E}`.
+The selected experiment draws a center from `centerLaw` on the quotient of
+the question coordinate space by its equation span, then draws `DomainDraw`
+leaves of the question center built from that same draw. Acceptance and joint
+directness are events of those leaves. `successMargin E = 2^{-E}`.
 
 This file does not prove Theorem 1, Corollary 2, or an `FP` reduction.
 -/
@@ -29,6 +30,9 @@ open PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure
 open PvNP.RealizableHardness.ActualQuestionCenterDomainDraw
 open PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard
 open PvNP.RealizableHardness.ActualStarFixedRhoTwoIndexGuard
+open PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition
+open PvNP.RealizableHardness.ActualStarDomainDrawEventBridge
+open PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
 open PvNP.RealizableHardness.GrassmannCounting
 open PvNP.RealizableHardness.ActualBinaryGrassmannSamplingBounds
 open PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
@@ -508,6 +512,504 @@ theorem selected_joint_accepted_rankGood
   exact sameExperiment_accepted_rankGood (V := questionCoordinateSpace ambient)
     (t := J + t0) (d := J + 2 * h) (m := r) (E := badExponent nRows h)
     selected_joint_htd (selected_joint_hdV hA hsel ambient) hk hguard Tcenter Tleaf
+
+/-! The selected sample. `question` fixes the question set and its equation
+span. It is not the measured center. The measured center is a `Grass` point
+of the quotient by that span, drawn from `centerLaw`. -/
+
+def equationInCoordinate {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) :
+    Submodule (ZMod 2) (questionCoordinateSpace question) :=
+  (questionEquationSpan question).comap (questionCoordinateSpace question).subtype
+
+lemma equationInCoordinate_le {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) :
+    questionEquationSpan question ≤ questionCoordinateSpace question :=
+  le_trans le_sup_right (centerEquationSpan_le_coordinateSpace question)
+
+lemma equationInCoordinate_finrank {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) :
+    Module.finrank (ZMod 2) (equationInCoordinate question) = J := by
+  rw [equationInCoordinate,
+    (Submodule.comapSubtypeEquivOfLe (equationInCoordinate_le question)).finrank_eq]
+  exact equationSpan_finrank question
+
+noncomputable def transverseComplement {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) :
+    Submodule (ZMod 2) (questionCoordinateSpace question) :=
+  Classical.choose (Submodule.exists_isCompl (equationInCoordinate question))
+
+lemma transverseComplement_isCompl {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) :
+    IsCompl (equationInCoordinate question) (transverseComplement question) :=
+  Classical.choose_spec (Submodule.exists_isCompl (equationInCoordinate question))
+
+abbrev quotientCenterSpace {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) :=
+  questionCoordinateSpace question ⧸ equationInCoordinate question
+
+instance quotientCenterSpaceFinite {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)] :
+    Finite (quotientCenterSpace question) :=
+  Finite.of_surjective (equationInCoordinate question).mkQ
+    (equationInCoordinate question).mkQ_surjective
+
+lemma quotientCenterSpace_finrank {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)] :
+    Module.finrank (ZMod 2) (quotientCenterSpace question) = 2 * J := by
+  have h := (equationInCoordinate question).finrank_quotient_add_finrank
+  rw [equationInCoordinate_finrank question, coordinateSpace_finrank question] at h
+  have hcomm : J + Module.finrank (ZMod 2) (quotientCenterSpace question) =
+      Module.finrank (ZMod 2) (quotientCenterSpace question) + J := Nat.add_comm _ _
+  have hthree : 3 * J = J + 2 * J := by omega
+  rw [← hcomm, hthree] at h
+  exact Nat.add_left_cancel h
+
+noncomputable def quotientCenterEquiv {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) :
+    quotientCenterSpace question ≃ₗ[ZMod 2] transverseComplement question :=
+  Submodule.quotientEquivOfIsCompl (equationInCoordinate question)
+    (transverseComplement question) (transverseComplement_isCompl question)
+
+noncomputable def liftCenter {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    Grass (transverseComplement question) t :=
+  ⟨center.val.map (quotientCenterEquiv question).toLinearMap, by
+    rw [LinearEquiv.finrank_map_eq]
+    exact center.property⟩
+
+noncomputable def centerInCoordinate {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    Submodule (ZMod 2) (questionCoordinateSpace question) :=
+  (liftCenter question center).val.map (transverseComplement question).subtype
+
+noncomputable def centerAmbient {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    Submodule (ZMod 2) (Ambient I) :=
+  (centerInCoordinate question center).map (questionCoordinateSpace question).subtype
+
+lemma centerAmbient_le {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    centerAmbient question center ≤ questionCoordinateSpace question :=
+  Submodule.map_subtype_le (p := questionCoordinateSpace question)
+    (centerInCoordinate question center)
+
+lemma centerAmbient_finrank {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    Module.finrank (ZMod 2) (centerAmbient question center) = t := by
+  rw [centerAmbient, Submodule.finrank_map_subtype_eq, centerInCoordinate,
+    Submodule.finrank_map_subtype_eq]
+  exact (liftCenter question center).property
+
+lemma centerAmbient_transverse {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    centerAmbient question center ⊓ questionEquationSpan question = ⊥ := by
+  rw [eq_bot_iff]
+  intro x hx
+  rcases Submodule.mem_inf.mp hx with ⟨hxK, hxH⟩
+  have hxC : x ∈ questionCoordinateSpace question := centerAmbient_le question center hxK
+  let z : questionCoordinateSpace question := ⟨x, hxC⟩
+  have hzH : z ∈ equationInCoordinate question := by
+    change (z : Ambient I) ∈ questionEquationSpan question
+    exact hxH
+  have hzS : z ∈ transverseComplement question := by
+    have hzC : z ∈ centerInCoordinate question center := by
+      rw [centerAmbient] at hxK
+      rcases Submodule.mem_map.mp hxK with ⟨y, hy, hyx⟩
+      have hyz : y = z := Subtype.ext hyx
+      simpa [hyz] using hy
+    have hle : centerInCoordinate question center ≤ transverseComplement question :=
+      Submodule.map_subtype_le (p := transverseComplement question)
+        (liftCenter question center).val
+    exact hle hzC
+  have hz0 : z ∈ equationInCoordinate question ⊓ transverseComplement question := ⟨hzH, hzS⟩
+  rw [(transverseComplement_isCompl question).inf_eq_bot] at hz0
+  have hzbot : z = 0 := by simpa using hz0
+  exact congrArg Subtype.val hzbot
+
+/-- The question center of one drawn quotient center. Its question set is the
+fixed question. Its transverse subspace is the lift of the drawn center. -/
+noncomputable def questionCenterOf {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    QuestionCenter I J t where
+  U := question.U
+  goodU := question.goodU
+  card_U := question.card_U
+  K := centerAmbient question center
+  K_le := centerAmbient_le question center
+  finrank_K := centerAmbient_finrank question center
+  transverse := centerAmbient_transverse question center
+
+theorem questionCenterOf_space {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    questionCoordinateSpace (questionCenterOf question center) =
+      questionCoordinateSpace question := rfl
+
+/-- The drawn center is the quotient image of the transverse subspace whose
+`DomainDraw` leaves are sampled. -/
+theorem questionCenterOf_quotientImage {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t) :
+    (centerInCoordinate question center).map (equationInCoordinate question).mkQ =
+      center.val := by
+  let e := quotientCenterEquiv question
+  have hcenter : centerInCoordinate question center =
+      (center.val.map e.toLinearMap).map (transverseComplement question).subtype := rfl
+  rw [hcenter, ← Submodule.map_comp]
+  have hmk : ((equationInCoordinate question).mkQ.comp
+      (transverseComplement question).subtype) = e.symm.toLinearMap :=
+    (Submodule.toLinearMap_symm_quotientEquivOfIsCompl
+      (p := equationInCoordinate question)
+      (q := transverseComplement question)
+      (transverseComplement_isCompl question)).symm
+  rw [hmk, ← Submodule.map_comp]
+  have hinv : e.symm.toLinearMap.comp e.toLinearMap = LinearMap.id :=
+    LinearMap.ext fun v => e.symm_apply_apply v
+  rw [hinv, Submodule.map_id]
+
+abbrev PhysicalJoint {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (h r : Nat) :=
+  Σ center : Grass (quotientCenterSpace question) t,
+    Fin r → DomainDraw (questionCenterOf question center) h
+
+def physicalAccept {N nRows L A : Nat} (r : Nat) {I : Instance N nRows}
+    (sourceHMin : Nat → Nat) (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (question : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    [Finite (questionCoordinateSpace question)]
+    (Tcenter : CenterTable (V := questionCoordinateSpace question)
+      (blocks A (hBlock L nRows) + leafT nRows (hBlock L nRows)))
+    (Tleaf : LeafTable (V := questionCoordinateSpace question)
+      (blocks A (hBlock L nRows) + 2 * hBlock L nRows))
+    (z : PhysicalJoint question (hBlock L nRows) r) : Prop :=
+  selectedLeafAccept sourceHMin hA hsel (questionCenterOf question z.1) Tcenter Tleaf z.2
+
+def physicalRankGood {N nRows L A : Nat} (r : Nat) {I : Instance N nRows}
+    (sourceHMin : Nat → Nat) (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (question : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    [Finite (questionCoordinateSpace question)]
+    (z : PhysicalJoint question (hBlock L nRows) r) : Prop :=
+  jointlyDirect (V := questionCoordinateSpace (questionCenterOf question z.1))
+    ⟨coordinateCenterGrass (questionCenterOf question z.1),
+      selectedLeafEquiv sourceHMin hA hsel (questionCenterOf question z.1) z.2⟩
+
+lemma selected_physicalJoint_nonempty
+    {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (question : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    [Finite (questionCoordinateSpace question)] :
+    Nonempty (PhysicalJoint question (hBlock L nRows) r) := by
+  classical
+  let h := hBlock L nRows
+  let J := blocks A h
+  let t0 := leafT nRows h
+  have ht : t0 ≤ 2 * h := by simpa [t0, h] using leafT_le_two_mul_h nRows h
+  have hh : h ≤ J := by
+    simpa [h, J] using selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)
+  have htV : t0 ≤ 2 * J := le_trans ht (Nat.mul_le_mul_left 2 hh)
+  have hpos : 0 < Fintype.card (Grass (quotientCenterSpace question) t0) := by
+    rw [card_grass, quotientCenterSpace_finrank question]
+    exact gaussian_pos htV
+  let center0 : Grass (quotientCenterSpace question) t0 :=
+    Classical.choice (Fintype.card_pos_iff.mp hpos)
+  have hleaf : Nonempty (DomainDraw (questionCenterOf question center0) h) :=
+    domainDraw_nonempty (questionCenterOf question center0) h ht hh
+  exact ⟨⟨center0, fun _ => Classical.choice hleaf⟩⟩
+
+noncomputable def physicalJointLaw
+    {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (question : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    [Finite (questionCoordinateSpace question)] :
+    FiniteLaw (PhysicalJoint question (hBlock L nRows) r) := by
+  haveI : Nonempty (PhysicalJoint question (hBlock L nRows) r) :=
+    selected_physicalJoint_nonempty r hA hsel question
+  exact uniformLaw _
+
+noncomputable def domainLeafLaw
+    {N m J t h : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) t)
+    (leaf : DomainDraw (questionCenterOf question center) h) :
+    FiniteLaw (DomainDraw (questionCenterOf question center) h) := by
+  haveI : Nonempty (DomainDraw (questionCenterOf question center) h) := ⟨leaf⟩
+  exact uniformLaw _
+
+set_option maxHeartbeats 4000000 in
+theorem physicalJoint_draws_center
+    {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (question : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    [Finite (questionCoordinateSpace question)]
+    (center : Grass (quotientCenterSpace question) (leafT nRows (hBlock L nRows)))
+    (leaves : Fin r → DomainDraw (questionCenterOf question center) (hBlock L nRows)) :
+    (physicalJointLaw r hA hsel question).mass ⟨center, leaves⟩ =
+      (centerLaw center).mass center *
+        ∏ i : Fin r, (domainLeafLaw question center (leaves i)).mass (leaves i) := by
+  classical
+  let h := hBlock L nRows
+  let J := blocks A h
+  let t0 := leafT nRows h
+  have ht : t0 ≤ 2 * h := by simpa [t0, h] using leafT_le_two_mul_h nRows h
+  have hh : h ≤ J := by
+    simpa [h, J] using selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)
+  have hle : 2 * h - t0 ≤ 2 * J - t0 := Nat.sub_le_sub_right (Nat.mul_le_mul_left 2 hh) _
+  haveI : Nonempty (PhysicalJoint question h r) :=
+    selected_physicalJoint_nonempty r hA hsel question
+  haveI : Nonempty (Grass (quotientCenterSpace question) t0) := ⟨center⟩
+  have hleafCard (U : Grass (quotientCenterSpace question) t0) :
+      Fintype.card (DomainDraw (questionCenterOf question U) h) =
+        gaussian (2 * J - t0) (2 * h - t0) := by
+    simpa [J, t0, h] using
+      domainDraw_card (questionCenterOf question U) h ht hh
+  have hcard : Fintype.card (PhysicalJoint question h r) =
+      Fintype.card (Grass (quotientCenterSpace question) t0) *
+        gaussian (2 * J - t0) (2 * h - t0) ^ r := by
+    change Fintype.card (Σ U : Grass (quotientCenterSpace question) t0,
+      Fin r → DomainDraw (questionCenterOf question U) h) = _
+    rw [Fintype.card_sigma]
+    simp_rw [Fintype.card_fun, Fintype.card_fin, hleafCard]
+    simp [Finset.sum_const, Finset.card_univ]
+  have hleaf (i : Fin r) :
+      (domainLeafLaw question center (leaves i)).mass (leaves i) =
+        ((gaussian (2 * J - t0) (2 * h - t0) : ℚ))⁻¹ := by
+    haveI : Nonempty (DomainDraw (questionCenterOf question center) h) := ⟨leaves i⟩
+    rw [domainLeafLaw, uniformLaw_apply, hleafCard center, one_div]
+  have hprod : (∏ i : Fin r, (domainLeafLaw question center (leaves i)).mass (leaves i)) =
+      ((gaussian (2 * J - t0) (2 * h - t0) : ℚ) ^ r)⁻¹ := by
+    simp only [hleaf, Finset.prod_const, Finset.card_univ, Fintype.card_fin, inv_pow]
+  rw [physicalJointLaw, uniformLaw_apply, hcard, centerLaw_apply center center, hprod,
+    Nat.cast_mul, Nat.cast_pow, div_eq_mul_inv, mul_inv, one_mul, one_div]
+
+set_option maxHeartbeats 4000000 in
+/-- Selected same experiment. The center is drawn from `centerLaw` on the
+quotient by the equation span. The leaves are `DomainDraw`s of
+`questionCenterOf question center`, whose transverse subspace is that draw.
+Acceptance and joint directness are events of those leaves. -/
+theorem selected_physicalJoint_accepted_rankGood
+    {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (hr : r ≤ nRows)
+    (question : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    [Finite (questionCoordinateSpace question)]
+    (Tcenter : CenterTable (V := questionCoordinateSpace question)
+      (blocks A (hBlock L nRows) + leafT nRows (hBlock L nRows)))
+    (Tleaf : LeafTable (V := questionCoordinateSpace question)
+      (blocks A (hBlock L nRows) + 2 * hBlock L nRows)) :
+    ∃ q : ℚ,
+      q < successMargin (badExponent nRows (hBlock L nRows)) / 2 ∧
+      eventMass (physicalJointLaw r hA hsel question)
+          (Finset.univ.filter fun z =>
+            physicalAccept r sourceHMin hA hsel question Tcenter Tleaf z ∧
+              physicalRankGood r sourceHMin hA hsel question z) ≥
+        eventMass (physicalJointLaw r hA hsel question)
+          (Finset.univ.filter
+            (physicalAccept r sourceHMin hA hsel question Tcenter Tleaf)) - q := by
+  classical
+  let h := hBlock L nRows
+  let J := blocks A h
+  let t0 := leafT nRows h
+  let ht : t0 ≤ 2 * h := leafT_le_two_mul_h nRows h
+  let hh : h ≤ J := selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)
+  haveI : Nonempty (PhysicalJoint question h r) :=
+    selected_physicalJoint_nonempty r hA hsel question
+  let law := physicalJointLaw r hA hsel question
+  let s : ℚ := 1 / (2 : ℚ) ^ (badExponent nRows h + 1)
+  have hspace (center : Grass (quotientCenterSpace question) t0) :
+      questionCoordinateSpace (questionCenterOf question center) =
+        questionCoordinateSpace question :=
+    questionCenterOf_space question center
+  have hfiber (center : Grass (quotientCenterSpace question) t0) :
+      ((domainDrawRankFailureEventTwoIndex (r := r) (questionCenterOf question center) ht hh).card : ℚ) <
+        s * Fintype.card (Fin r → DomainDraw (questionCenterOf question center) h) := by
+    haveI : Finite (questionCoordinateSpace (questionCenterOf question center)) := by
+      rw [hspace center]
+      infer_instance
+    have hleafNe : Nonempty (DomainDraw (questionCenterOf question center) h) :=
+      domainDraw_nonempty (questionCenterOf question center) h ht hh
+    let witness : Fin r → DomainDraw (questionCenterOf question center) h :=
+      fun _ => Classical.choice hleafNe
+    have hmass := selected_domainDraw_rankFailure_mass_lt_threshold_twoIndex
+      sourceHMin hA hsel hr (questionCenterOf question center) ht hh witness
+    have hratio := eventMass_uniform_eq_card
+      (domainDrawRankFailureEventTwoIndex (r := r) (questionCenterOf question center) ht hh)
+    have hdiv :
+        ((domainDrawRankFailureEventTwoIndex (r := r)
+          (questionCenterOf question center) ht hh).card : ℚ) /
+          Fintype.card (Fin r → DomainDraw (questionCenterOf question center) h) < s := by
+      rw [← hratio]
+      simpa [s, h, uniformDomainTupleLaw] using hmass
+    have hpos : 0 <
+        (Fintype.card (Fin r → DomainDraw (questionCenterOf question center) h) : ℚ) := by
+      exact_mod_cast (Fintype.card_pos :
+        0 < Fintype.card (Fin r → DomainDraw (questionCenterOf question center) h))
+    exact (div_lt_iff₀ hpos).mp hdiv
+  let rankFail : Finset (PhysicalJoint question h r) :=
+    Finset.univ.filter fun z =>
+      z.2 ∈ domainDrawRankFailureEventTwoIndex (r := r) (questionCenterOf question z.1) ht hh
+  have hfailEq : rankFail = (Finset.univ : Finset (Grass (quotientCenterSpace question) t0)).sigma
+      (fun center =>
+        domainDrawRankFailureEventTwoIndex (r := r) (questionCenterOf question center) ht hh) := by
+    ext z
+    rcases z with ⟨center, leaves⟩
+    simp [rankFail, Finset.mem_sigma]
+  have hsum : (∑ center : Grass (quotientCenterSpace question) t0,
+      ((domainDrawRankFailureEventTwoIndex (r := r)
+        (questionCenterOf question center) ht hh).card : ℚ)) <
+      ∑ center : Grass (quotientCenterSpace question) t0,
+        s * (Fintype.card (Fin r → DomainDraw (questionCenterOf question center) h) : ℚ) := by
+    have hposG : 0 < Fintype.card (Grass (quotientCenterSpace question) t0) := by
+      rw [card_grass, quotientCenterSpace_finrank question]
+      exact gaussian_pos (le_trans ht (Nat.mul_le_mul_left 2 hh))
+    let center0 := Classical.choice (Fintype.card_pos_iff.mp hposG)
+    refine Finset.sum_lt_sum ?_ ⟨center0, Finset.mem_univ center0, hfiber center0⟩
+    intro center _
+    exact le_of_lt (hfiber center)
+  have hbadCard : ((rankFail.card : ℕ) : ℚ) =
+      ∑ center : Grass (quotientCenterSpace question) t0,
+        ((domainDrawRankFailureEventTwoIndex (r := r)
+          (questionCenterOf question center) ht hh).card : ℚ) := by
+    have hnat : rankFail.card =
+        ∑ center : Grass (quotientCenterSpace question) t0,
+          (domainDrawRankFailureEventTwoIndex (r := r)
+            (questionCenterOf question center) ht hh).card := by
+      rw [hfailEq, Finset.card_sigma]
+    exact_mod_cast hnat
+  have hfiberSum : (∑ center : Grass (quotientCenterSpace question) t0,
+      (Fintype.card (Fin r → DomainDraw (questionCenterOf question center) h) : ℚ)) =
+      Fintype.card (PhysicalJoint question h r) := by
+    rw [← Nat.cast_sum]
+    congr 1
+    simp only [PhysicalJoint, Fintype.card_sigma, Fintype.card_fun, Fintype.card_fin]
+    rfl
+  have hscaled : (∑ center : Grass (quotientCenterSpace question) t0,
+      s * (Fintype.card (Fin r → DomainDraw (questionCenterOf question center) h) : ℚ)) =
+      s * Fintype.card (PhysicalJoint question h r) := by
+    rw [← Finset.mul_sum, hfiberSum]
+  rw [← hbadCard, hscaled] at hsum
+  have hposΩ : 0 < (Fintype.card (PhysicalJoint question h r) : ℚ) := by
+    exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (PhysicalJoint question h r))
+  have hquot : (rankFail.card : ℚ) / Fintype.card (PhysicalJoint question h r) < s := by
+    rw [div_lt_iff₀ hposΩ]
+    simpa [mul_comm] using hsum
+  have huniform : eventMass law rankFail =
+      (rankFail.card : ℚ) / Fintype.card (PhysicalJoint question h r) := by
+    unfold eventMass law physicalJointLaw
+    refine (Finset.sum_congr rfl fun z _ => uniformLaw_apply _ z).trans ?_
+    rw [Finset.sum_const, nsmul_eq_mul]
+    exact mul_one_div (rankFail.card : ℚ) (Fintype.card (PhysicalJoint question h r))
+  have hbadMass : eventMass law rankFail < s := by
+    rw [huniform]
+    exact hquot
+  have hrankMatch (z : PhysicalJoint question h r) :
+      ¬ physicalRankGood r sourceHMin hA hsel question z ↔ z ∈ rankFail := by
+    rcases z with ⟨center, leaves⟩
+    have hK : leafK nRows h = 2 * h - t0 := by simp [leafK, leafT, h, t0]
+    haveI : Finite (questionCoordinateSpace (questionCenterOf question center)) := by
+      rw [hspace center]
+      infer_instance
+    let qU := questionCenterOf question center
+    let image := domainDrawTupleExtensionEquiv qU h r ht hh leaves
+    have hspan : jointIncrementSpan
+        (⟨coordinateCenterGrass qU, image⟩ :
+          StarTuple (V := questionCoordinateSpace qU) (J + t0) (J + 2 * h) r) =
+        domainDrawJointImageArity qU h ht hh leaves := by
+      unfold jointIncrementSpan domainDrawJointImageArity
+      apply iSup_congr
+      intro i
+      exact domainDrawExtension_quotient_eq qU h ht hh (leaves i)
+    have hequiv : selectedLeafEquiv sourceHMin hA hsel qU leaves = image := by
+      simp [image, selectedLeafEquiv, qU, h]
+    have hdim : (J + 2 * h) - (J + t0) = 2 * h - t0 := by omega
+    simp only [rankFail, Finset.mem_filter, Finset.mem_univ, true_and]
+    unfold physicalRankGood
+    rw [hequiv, jointlyDirect, hspan, hdim]
+    simp only [domainDrawRankFailureEventTwoIndex, Finset.mem_filter, Finset.mem_univ, true_and]
+    have hleafK : leafK nRows (hBlock L nRows) =
+        2 * hBlock L nRows - leafT nRows (hBlock L nRows) := rfl
+    rw [hleafK]
+    simp only [qU, h, t0, ne_eq]
+    rfl
+  let acc : Finset (PhysicalJoint question h r) :=
+    Finset.univ.filter (physicalAccept r sourceHMin hA hsel question Tcenter Tleaf)
+  let good : Finset (PhysicalJoint question h r) :=
+    Finset.univ.filter fun z =>
+      physicalAccept r sourceHMin hA hsel question Tcenter Tleaf z ∧
+        physicalRankGood r sourceHMin hA hsel question z
+  let accBad : Finset (PhysicalJoint question h r) :=
+    Finset.univ.filter fun z =>
+      physicalAccept r sourceHMin hA hsel question Tcenter Tleaf z ∧
+        ¬ physicalRankGood r sourceHMin hA hsel question z
+  have haccBad : accBad ⊆ rankFail := by
+    intro z hz
+    have hnot : ¬ physicalRankGood r sourceHMin hA hsel question z :=
+      (Finset.mem_filter.mp hz).2.2
+    exact (hrankMatch z).mp hnot
+  have hdisj : Disjoint good accBad := by
+    refine Finset.disjoint_left.mpr ?_
+    intro z hz hbadz
+    exact (Finset.mem_filter.mp hbadz).2.2 (Finset.mem_filter.mp hz).2.2
+  have hunion : good ∪ accBad = acc := by
+    ext z
+    simp only [good, acc, accBad, Finset.mem_union, Finset.mem_filter,
+      Finset.mem_univ, true_and]
+    constructor
+    · rintro (⟨ha, _⟩ | ⟨ha, _⟩)
+      · exact ha
+      · exact ha
+    · intro ha
+      by_cases hj : physicalRankGood r sourceHMin hA hsel question z
+      · exact Or.inl ⟨ha, hj⟩
+      · exact Or.inr ⟨ha, hj⟩
+  have hsplit : eventMass law acc = eventMass law good + eventMass law accBad := by
+    unfold eventMass
+    rw [← hunion, Finset.sum_union hdisj]
+  have hle : eventMass law accBad ≤ eventMass law rankFail := eventMass_mono law haccBad
+  have hδ : eventMass law acc - eventMass law good < s := by
+    have hdiff : eventMass law acc - eventMass law good = eventMass law accBad := by
+      linarith [hsplit]
+    linarith [hle, hbadMass]
+  have hsHalf : s = successMargin (badExponent nRows h) / 2 := by
+    rw [successMargin_half]
+  let δ : ℚ := eventMass law acc - eventMass law good
+  have hδ' : δ < successMargin (badExponent nRows h) / 2 := by
+    rw [← hsHalf]
+    exact hδ
+  have hδ0 : 0 ≤ δ := by
+    have hmono : eventMass law good ≤ eventMass law acc := by
+      apply eventMass_mono law
+      intro z hz
+      exact Finset.mem_filter.mpr ⟨Finset.mem_univ z, (Finset.mem_filter.mp hz).2.1⟩
+    exact sub_nonneg.mpr hmono
+  refine ⟨(δ + successMargin (badExponent nRows h) / 2) / 2, ?_, ?_⟩
+  · linarith [hδ']
+  · have hδle : δ ≤ (δ + successMargin (badExponent nRows h) / 2) / 2 := by
+      linarith [hδ0, hδ']
+    have hdef : eventMass law good = eventMass law acc - δ := by simp [δ]
+    have hgoal : eventMass law good ≥
+        eventMass law acc - (δ + successMargin (badExponent nRows h) / 2) / 2 := by
+      linarith [hdef, hδle]
+    simpa [law, acc, good, h] using hgoal
 
 end
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMass
