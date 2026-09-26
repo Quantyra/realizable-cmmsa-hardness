@@ -1,8 +1,9 @@
 import PvNP.RealizableHardness.ActualStarAcceptedGoodMass
 
-/-! Checks cite `selected_transverseLeaf_accepted_rankGood`. Its proof is
-`starLaw` on rank-`2h` transverse leaves. It does not call
-`selected_physicalJoint_accepted_rankGood` or `uniformDomainTupleLaw`. -/
+/-! Checks cite `selected_transverseLeaf_accepted_rankGood`. That theorem is
+not the manuscript physical acceptance inequality: its acceptance event is
+the whole sample. The stop is
+`lean/reviews/2026-09-26-accepted-good-mass-stop.md`. -/
 
 namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
 

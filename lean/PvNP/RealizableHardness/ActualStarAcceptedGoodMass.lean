@@ -1165,10 +1165,9 @@ lemma selected_one_le_leafK
   rw [hK2]
   exact Nat.succ_le_of_lt (Nat.mul_pos (by decide : 0 < 2) hqpos)
 
-/-- Selected physical experiment. The sample is `starLaw` on the complement of
-the equation span: `centerLaw` draws the center, then each leaf is a
-rank-`2h` extension of that center. Acceptance is `transverseLeafAccept`.
-Rank-good is `jointlyDirect` of that same tuple. -/
+/-- Not the required inequality. The sample is `starLaw` on extension tuples.
+`transverseLeafAccept` holds for every sample, so this is a `jointlyDirect`
+bound. The physical acceptance event is `starAccepts`. -/
 theorem selected_transverseLeaf_accepted_rankGood
     {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
     (hA : 1 ≤ A)
