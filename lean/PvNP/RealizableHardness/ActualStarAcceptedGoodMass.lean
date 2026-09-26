@@ -5,6 +5,7 @@ import PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure
 import PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge
 import PvNP.RealizableHardness.ActualStarFixedRhoTwoIndexGuard
 import PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition
+import PvNP.RealizableHardness.ActualPresentedLeafGluing
 import PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
 
 /-! Same-experiment acceptance minus bad-star mass.
@@ -1010,6 +1011,278 @@ theorem selected_physicalJoint_accepted_rankGood
         eventMass law acc - (δ + successMargin (badExponent nRows h) / 2) / 2 := by
       linarith [hdef, hδle]
     simpa [law, acc, good, h] using hgoal
+
+/-- Rank of a complement of the equation span inside the question coordinate space. -/
+lemma transverseComplement_finrank {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)] :
+    Module.finrank (ZMod 2) (transverseComplement question) = 2 * J := by
+  have h := Submodule.finrank_sup_add_finrank_inf_eq
+    (equationInCoordinate question) (transverseComplement question)
+  rw [(transverseComplement_isCompl question).sup_eq_top,
+      (transverseComplement_isCompl question).inf_eq_bot] at h
+  have htop : Module.finrank (ZMod 2)
+      (⊤ : Submodule (ZMod 2) (questionCoordinateSpace question)) =
+      Module.finrank (ZMod 2) (questionCoordinateSpace question) := by
+    simp
+  have hbot : Module.finrank (ZMod 2)
+      (⊥ : Submodule (ZMod 2) (questionCoordinateSpace question)) = 0 := by
+    simp
+  rw [htop, hbot, equationInCoordinate_finrank question,
+      coordinateSpace_finrank question, Nat.add_zero] at h
+  have hthree : 3 * J = J + 2 * J := by omega
+  rw [hthree] at h
+  exact (Nat.add_left_cancel h).symm
+
+instance transverseComplementFinite {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)] :
+    Finite (transverseComplement question) :=
+  Finite.of_injective
+    (fun x : transverseComplement question => (x : questionCoordinateSpace question))
+    Subtype.val_injective
+
+/-- One ordered star of transverse rank-`2h` leaves of a center drawn in the
+complement of the equation span. Each leaf meets that span trivially. -/
+abbrev TransverseLeafStar {N m J t : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (h r : Nat) :=
+  StarTuple (V := transverseComplement question) t (2 * h) r
+
+/-- The leaf, read in the question coordinate space. -/
+def transverseLeafInCoordinate {N m J t h : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    {center : Grass (transverseComplement question) t}
+    (leaf : Extension center (2 * h)) :
+    Submodule (ZMod 2) (questionCoordinateSpace question) :=
+  leaf.val.val.map (transverseComplement question).subtype
+
+/-- Acceptance for this experiment: every leaf is a transverse rank-`2h`
+subspace of the question coordinate space and contains the drawn center.
+No external labeling table is an argument. -/
+def transverseLeafAccept {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (z : TransverseLeafStar question h r) : Prop :=
+  ∀ i : Fin r,
+    Module.finrank (ZMod 2) (transverseLeafInCoordinate question (z.2 i)) = 2 * h ∧
+      transverseLeafInCoordinate question (z.2 i) ⊓ equationInCoordinate question = ⊥ ∧
+      z.1.val.map (transverseComplement question).subtype ≤
+        transverseLeafInCoordinate question (z.2 i)
+
+/-- The sampled rank-`2h` leaf is a `PresentedLeaf`: its subspace is transverse
+to the equation span. -/
+noncomputable def presentedOfTransverseLeaf {N m J t h : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    {center : Grass (transverseComplement question) t}
+    (leaf : Extension center (2 * h)) :
+    ActualPresentedLeafGluing.PresentedLeaf I J h where
+  U := question.U
+  goodU := question.goodU
+  card_U := question.card_U
+  L := (transverseLeafInCoordinate question leaf).map
+    (questionCoordinateSpace question).subtype
+  L_le := Submodule.map_subtype_le (p := questionCoordinateSpace question)
+    (transverseLeafInCoordinate question leaf)
+  finrank_L := by
+    rw [Submodule.finrank_map_subtype_eq, transverseLeafInCoordinate,
+      Submodule.finrank_map_subtype_eq]
+    exact leaf.val.property
+  transverse := by
+    rw [eq_bot_iff]
+    intro x hx
+    rcases Submodule.mem_inf.mp hx with ⟨hxL, hxH⟩
+    rcases Submodule.mem_map.mp hxL with ⟨y, hy, rfl⟩
+    have hyH : y ∈ equationInCoordinate question := by
+      change (y : Ambient I) ∈ questionEquationSpan question
+      exact hxH
+    have hybot : y ∈ transverseLeafInCoordinate question leaf ⊓ equationInCoordinate question :=
+      ⟨hy, hyH⟩
+    have hinter : transverseLeafInCoordinate question leaf ⊓ equationInCoordinate question = ⊥ := by
+      rw [eq_bot_iff]
+      intro w hw
+      rcases Submodule.mem_inf.mp hw with ⟨hwL, hwH⟩
+      rw [transverseLeafInCoordinate] at hwL
+      rcases Submodule.mem_map.mp hwL with ⟨v, hv, rfl⟩
+      have hv0 : (v : questionCoordinateSpace question) ∈
+          equationInCoordinate question ⊓ transverseComplement question :=
+        ⟨hwH, v.property⟩
+      rw [(transverseComplement_isCompl question).inf_eq_bot] at hv0
+      simpa using hv0
+    rw [hinter] at hybot
+    simpa using hybot
+
+theorem transverseLeafAccept_holds {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (z : TransverseLeafStar question h r) :
+    transverseLeafAccept question z := by
+  intro i
+  refine ⟨?_, ?_, ?_⟩
+  · rw [transverseLeafInCoordinate, Submodule.finrank_map_subtype_eq]
+    exact (z.2 i).val.property
+  · rw [eq_bot_iff]
+    intro x hx
+    rcases Submodule.mem_inf.mp hx with ⟨hxL, hxH⟩
+    rw [transverseLeafInCoordinate] at hxL
+    rcases Submodule.mem_map.mp hxL with ⟨y, hy, rfl⟩
+    have hyS : (y : questionCoordinateSpace question) ∈ transverseComplement question := y.property
+    have hyH : (y : questionCoordinateSpace question) ∈ equationInCoordinate question := hxH
+    have hy0 : (y : questionCoordinateSpace question) ∈
+        equationInCoordinate question ⊓ transverseComplement question := ⟨hyH, hyS⟩
+    rw [(transverseComplement_isCompl question).inf_eq_bot] at hy0
+    have : (y : questionCoordinateSpace question) = 0 := by simpa using hy0
+    exact this
+  · intro x hx
+    rw [transverseLeafInCoordinate]
+    rcases Submodule.mem_map.mp hx with ⟨y, hy, rfl⟩
+    have hyL : y ∈ (z.2 i).val.val := (z.2 i).property hy
+    exact Submodule.mem_map_of_mem hyL
+
+lemma selected_one_le_leafK
+    {sourceHMin : Nat → Nat} {L nRows : Nat}
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat)) :
+    1 ≤ leafK nRows (hBlock L nRows) := by
+  let h := hBlock L nRows
+  have hs := selector_spec hsel
+  have hdiv : bOf nRows ∣ h := hs.1.2.2.2.2.2.1
+  have hcut : nRows + 2 ≤ h :=
+    (Nat.le_max_right (sourceHMin nRows) (nRows + 2)).trans hs.1.2.2.2.2.2.2.2.1
+  have hn : 256 ≤ nRows := hs.1.1
+  let qn := h / bOf nRows
+  have hqpos : 0 < qn := by
+    by_contra hq0
+    have hz : qn = 0 := Nat.eq_zero_of_not_pos hq0
+    have hmul := Nat.mul_div_cancel' hdiv
+    have hzero : h = 0 := by simpa [qn, hz] using hmul.symm
+    have hposh : 0 < h :=
+      Nat.lt_of_lt_of_le (by decide : 0 < 258)
+        ((by omega : (258 : Nat) ≤ nRows + 2).trans hcut)
+    omega
+  have hK2 : leafK nRows h = 2 * qn := by
+    have hqle : qn ≤ h := Nat.div_le_self h _
+    have hinner : h - (h - qn) = qn := Nat.sub_sub_self hqle
+    have hmul2 : 2 * h - 2 * (h - qn) = 2 * (h - (h - qn)) :=
+      (Nat.mul_sub_left_distrib 2 h (h - qn)).symm
+    unfold leafK leafT
+    dsimp [qn]
+    rw [hmul2, hinner]
+  rw [hK2]
+  exact Nat.succ_le_of_lt (Nat.mul_pos (by decide : 0 < 2) hqpos)
+
+/-- Selected physical experiment. The sample is `starLaw` on the complement of
+the equation span: `centerLaw` draws the center, then each leaf is a
+rank-`2h` extension of that center. Acceptance is `transverseLeafAccept`.
+Rank-good is `jointlyDirect` of that same tuple. -/
+theorem selected_transverseLeaf_accepted_rankGood
+    {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (hr : r ≤ nRows)
+    (question : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    [Finite (questionCoordinateSpace question)] :
+    ∃ q : ℚ,
+      q < successMargin (badExponent nRows (hBlock L nRows)) / 2 ∧
+      eventMass (starLaw (V := transverseComplement question)
+          (t := leafT nRows (hBlock L nRows))
+          (d := 2 * hBlock L nRows) (m := r)
+          (leafT_le_two_mul_h nRows (hBlock L nRows))
+          (by
+            rw [transverseComplement_finrank question]
+            exact Nat.mul_le_mul_left 2
+              (selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel))))
+          (Finset.univ.filter fun z : TransverseLeafStar question (hBlock L nRows) r =>
+            transverseLeafAccept question z ∧ jointlyDirect z) ≥
+        eventMass (starLaw (V := transverseComplement question)
+          (t := leafT nRows (hBlock L nRows))
+          (d := 2 * hBlock L nRows) (m := r)
+          (leafT_le_two_mul_h nRows (hBlock L nRows))
+          (by
+            rw [transverseComplement_finrank question]
+            exact Nat.mul_le_mul_left 2
+              (selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel))))
+          (Finset.univ.filter (transverseLeafAccept question)) - q := by
+  classical
+  let h := hBlock L nRows
+  let J := blocks A h
+  let t0 := leafT nRows h
+  have htd : t0 ≤ 2 * h := by simpa [t0, h] using leafT_le_two_mul_h nRows h
+  have hh : h ≤ J := by
+    simpa [h, J] using selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)
+  have hdV : 2 * h ≤ Module.finrank (ZMod 2) (transverseComplement question) := by
+    rw [transverseComplement_finrank question]
+    exact Nat.mul_le_mul_left 2 hh
+  have hk : 1 ≤ 2 * h - t0 := by
+    have hK : leafK nRows h = 2 * h - t0 := by simp [leafK, leafT, h, t0]
+    rw [← hK]
+    simpa [h] using selected_one_le_leafK hsel
+  have hguard : r * (2 * h - t0) + badExponent nRows h + 2 ≤
+      Module.finrank (ZMod 2) (transverseComplement question) - t0 := by
+    have hselGuard := selected_actual_center_quotient_dimension_guard_twoIndex
+      (center := question) sourceHMin hA hsel hr
+    rw [centerQuotient_finrank question] at hselGuard
+    rw [transverseComplement_finrank question]
+    have hK : leafK nRows h = 2 * h - t0 := by simp [leafK, leafT, h, t0]
+    simpa [h, t0, hK] using hselGuard
+  let law := starLaw (V := transverseComplement question) (t := t0) (d := 2 * h)
+    (m := r) htd hdV
+  have hbad := starLaw_bad_mass_lt_threshold (V := transverseComplement question)
+    (t := t0) (d := 2 * h) (m := r) (E := badExponent nRows h) htd hdV hk hguard
+  let s : ℚ := 1 / (2 : ℚ) ^ (badExponent nRows h + 1)
+  have hsHalf : s = successMargin (badExponent nRows h) / 2 := by
+    rw [successMargin_half]
+  let bad : Finset (TransverseLeafStar question h r) :=
+    Finset.univ.filter fun z => ¬ jointlyDirect z
+  let good : Finset (TransverseLeafStar question h r) :=
+    Finset.univ.filter fun z => transverseLeafAccept question z ∧ jointlyDirect z
+  let acc : Finset (TransverseLeafStar question h r) :=
+    Finset.univ.filter (transverseLeafAccept question)
+  have haccUniv : acc = Finset.univ := by
+    ext z
+    simp [acc, transverseLeafAccept_holds question z]
+  have hbadMass : eventMass law bad < s := by
+    simpa [law, bad, s, h] using hbad
+  have hdisj : Disjoint good bad := by
+    refine Finset.disjoint_left.mpr ?_
+    intro z hz hbadz
+    exact (Finset.mem_filter.mp hbadz).2 (Finset.mem_filter.mp hz).2.2
+  have hunion : good ∪ bad = acc := by
+    ext z
+    simp only [good, bad, acc, Finset.mem_union, Finset.mem_filter, Finset.mem_univ, true_and]
+    constructor
+    · rintro (⟨ha, _⟩ | _)
+      · exact ha
+      · exact transverseLeafAccept_holds question z
+    · intro ha
+      by_cases hj : jointlyDirect z
+      · exact Or.inl ⟨ha, hj⟩
+      · exact Or.inr hj
+  have hsplit : eventMass law acc = eventMass law good + eventMass law bad := by
+    unfold eventMass
+    rw [← hunion, Finset.sum_union hdisj]
+  have hacc1 : eventMass law acc = 1 := by
+    rw [haccUniv]
+    simpa [eventMass] using law.normalized
+  have hδ : eventMass law acc - eventMass law good < s := by
+    have hdiff : eventMass law acc - eventMass law good = eventMass law bad := by
+      linarith [hsplit]
+    linarith [hdiff, hbadMass]
+  let δ : ℚ := eventMass law acc - eventMass law good
+  have hδ' : δ < successMargin (badExponent nRows h) / 2 := by
+    rw [← hsHalf]
+    exact hδ
+  have hδ0 : 0 ≤ δ := by
+    have hmono : eventMass law good ≤ eventMass law acc := by
+      apply eventMass_mono law
+      intro z hz
+      exact Finset.mem_filter.mpr ⟨Finset.mem_univ z, (Finset.mem_filter.mp hz).2.1⟩
+    exact sub_nonneg.mpr hmono
+  refine ⟨(δ + successMargin (badExponent nRows h) / 2) / 2, ?_, ?_⟩
+  · linarith [hδ']
+  · have hδle : δ ≤ (δ + successMargin (badExponent nRows h) / 2) / 2 := by
+      linarith [hδ0, hδ']
+    have hdef : eventMass law good = eventMass law acc - δ := by simp [δ]
+    have hgoal : eventMass law good ≥
+        eventMass law acc - (δ + successMargin (badExponent nRows h) / 2) / 2 := by
+      linarith [hdef, hδle]
+    simpa [law, acc, good, h, htd, hdV] using hgoal
 
 end
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMass
