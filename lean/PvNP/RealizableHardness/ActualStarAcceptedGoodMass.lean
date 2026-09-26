@@ -367,176 +367,147 @@ def selectedLeafRankGood
   jointlyDirect (V := questionCoordinateSpace center)
     ⟨coordinateCenterGrass center, selectedLeafEquiv sourceHMin hA hsel center draws⟩
 
-/-- Selected experiment: uniform `DomainDraw` leaves of `center`, read at
-`coordinateCenterGrass center`. `leafT ≤ 2h` and `h ≤ blocks` are theorems. -/
-theorem selected_domainDraw_accepted_rankGood
-    {N nRows r L A : Nat}
+/-- A joint draw is one center from `Grass V t` together with that center's
+ordered transverse leaves. -/
+abbrev JointDraw (V : Type*) [AddCommGroup V] [Module (ZMod 2) V] [Finite V]
+    (t d m : Nat) :=
+  StarTuple (V := V) t d m
+
+/-- The joint law is `starLaw`: first `centerLaw`, then the leaf law of that
+same center. -/
+def jointLaw {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Finite V]
+    {t d m : Nat} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V) :
+    FiniteLaw (JointDraw V t d m) :=
+  starLaw (V := V) (t := t) (d := d) (m := m) htd hdV
+
+theorem jointLaw_eq_starLaw
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Finite V]
+    {t d m : Nat} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V) :
+    jointLaw (V := V) (m := m) htd hdV =
+      starLaw (V := V) (t := t) (d := d) (m := m) htd hdV :=
+  rfl
+
+theorem jointLaw_draws_center
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Finite V]
+    {t d m : Nat} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+    (U : Grass V t) (Ls : Fin m → Extension U d) :
+    (jointLaw (V := V) (m := m) htd hdV).mass ⟨U, Ls⟩ =
+      (centerLaw U).mass U *
+        ∏ i : Fin m, (extensionLaw U (Ls i)).mass (Ls i) :=
+  starLaw_atom (V := V) htd hdV U Ls
+
+lemma selected_joint_htd {nRows L A : Nat} :
+    blocks A (hBlock L nRows) + leafT nRows (hBlock L nRows) ≤
+      blocks A (hBlock L nRows) + 2 * hBlock L nRows :=
+  Nat.add_le_add_left (leafT_le_two_mul_h nRows (hBlock L nRows)) _
+
+lemma selected_joint_hdV
+    {N nRows L A : Nat} {sourceHMin : Nat → Nat} {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (ambient : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows))) :
+    blocks A (hBlock L nRows) + 2 * hBlock L nRows ≤
+      Module.finrank (ZMod 2) (questionCoordinateSpace ambient) := by
+  rw [coordinateSpace_finrank ambient]
+  have hh : hBlock L nRows ≤ blocks A (hBlock L nRows) :=
+    selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)
+  have hmul : 2 * hBlock L nRows ≤ 2 * blocks A (hBlock L nRows) :=
+    Nat.mul_le_mul_left 2 hh
+  have hadd : blocks A (hBlock L nRows) + 2 * hBlock L nRows ≤
+      blocks A (hBlock L nRows) + 2 * blocks A (hBlock L nRows) :=
+    Nat.add_le_add_left hmul _
+  have hthree : blocks A (hBlock L nRows) + 2 * blocks A (hBlock L nRows) =
+      3 * blocks A (hBlock L nRows) := by omega
+  rwa [hthree] at hadd
+
+/-- Selected joint experiment. `jointLaw` draws the center from `centerLaw`
+and then that center's leaves. At `coordinateCenterGrass ambient` those
+leaves are the `DomainDraw`s of `ambient`. `leafT ≤ 2h` and `h ≤ blocks`
+are lemmas. -/
+theorem selected_joint_accepted_rankGood
+    {N nRows r L A : Nat} {sourceHMin : Nat → Nat}
     {I : Instance N nRows}
-    (sourceHMin : Nat → Nat) (hA : 1 ≤ A)
+    (hA : 1 ≤ A)
     (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
     (hr : r ≤ nRows)
-    (center : QuestionCenter I (blocks A (hBlock L nRows))
+    (ambient : QuestionCenter I (blocks A (hBlock L nRows))
       (leafT nRows (hBlock L nRows)))
-    [Finite (questionCoordinateSpace center)]
-    (Tcenter : CenterTable (V := questionCoordinateSpace center)
+    [Finite (questionCoordinateSpace ambient)]
+    (Tcenter : CenterTable (V := questionCoordinateSpace ambient)
       (blocks A (hBlock L nRows) + leafT nRows (hBlock L nRows)))
-    (Tleaf : LeafTable (V := questionCoordinateSpace center)
+    (Tleaf : LeafTable (V := questionCoordinateSpace ambient)
       (blocks A (hBlock L nRows) + 2 * hBlock L nRows)) :
-    ∃ w : Fin r → DomainDraw center (hBlock L nRows),
-      ∃ q : ℚ,
-        q < successMargin (badExponent nRows (hBlock L nRows)) / 2 ∧
-        eventMass (uniformDomainTupleLaw center (hBlock L nRows) r w)
-            ((Finset.univ.filter
-              (selectedLeafAccept (r := r) sourceHMin hA hsel center Tcenter Tleaf)).filter
-              (selectedLeafRankGood (r := r) sourceHMin hA hsel center)) ≥
-          eventMass (uniformDomainTupleLaw center (hBlock L nRows) r w)
-            (Finset.univ.filter
-              (selectedLeafAccept (r := r) sourceHMin hA hsel center Tcenter Tleaf)) - q := by
-  classical
+    ∃ q : ℚ,
+      q < successMargin (badExponent nRows (hBlock L nRows)) / 2 ∧
+      goodStarMass (V := questionCoordinateSpace ambient)
+          (t := blocks A (hBlock L nRows) + leafT nRows (hBlock L nRows))
+          (d := blocks A (hBlock L nRows) + 2 * hBlock L nRows)
+          selected_joint_htd (selected_joint_hdV hA hsel ambient) r Tcenter Tleaf ≥
+        acceptanceMass (V := questionCoordinateSpace ambient)
+          (t := blocks A (hBlock L nRows) + leafT nRows (hBlock L nRows))
+          (d := blocks A (hBlock L nRows) + 2 * hBlock L nRows)
+          selected_joint_htd (selected_joint_hdV hA hsel ambient) r Tcenter Tleaf - q := by
   let h := hBlock L nRows
   let J := blocks A h
   let t0 := leafT nRows h
-  have hs := selector_spec hsel
-  have hn : 256 ≤ nRows := hs.1.1
-  have hcut : nRows + 2 ≤ h :=
-    (Nat.le_max_right (sourceHMin nRows) (nRows + 2)).trans hs.1.2.2.2.2.2.2.2.1
-  have hdiv : bOf nRows ∣ h := hs.1.2.2.2.2.2.1
-  have ht : leafT nRows h ≤ 2 * h := leafT_le_two_mul_h nRows h
-  have hh : h ≤ blocks A h :=
-    selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)
-  let U := coordinateCenterGrass center
-  have htd : J + t0 ≤ J + 2 * h := Nat.add_le_add_left (by simpa [t0, h] using ht) J
-  have hdV : J + 2 * h ≤ Module.finrank (ZMod 2) (questionCoordinateSpace center) := by
-    rw [coordinateSpace_finrank center]
-    have hhJ : h ≤ J := by simpa [h, J] using hh
-    have hmul : 2 * h ≤ 2 * J := Nat.mul_le_mul_left 2 hhJ
-    have hadd : J + 2 * h ≤ J + 2 * J := Nat.add_le_add_left hmul J
-    have hthree : J + 2 * J = 3 * J := by omega
-    rwa [hthree] at hadd
-  have hExt : Nonempty (Extension U (J + 2 * h)) := extension_nonempty U htd hdV
-  let leaf0 : Extension U (J + 2 * h) := Classical.choice hExt
-  let e1 := domainDrawExtensionEquiv center h (by simpa [t0, h] using ht) (by simpa [h, J] using hh)
-  let w : Fin r → DomainDraw center h := fun _ => e1.symm leaf0
-  let eT := selectedLeafEquiv (r := r) sourceHMin hA hsel center
-  have hlink := physical_domainDraw_eq_center_extension_law center
-    (leafT_le_two_mul_h nRows h) (selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)) w
-  let s : ℚ := 1 / (2 : ℚ) ^ (badExponent nRows h + 1)
-  have hk : 1 ≤ leafK nRows h := by
-    let qn := h / bOf nRows
-    have hqpos : 0 < qn := by
-      by_contra hq
-      have hz : qn = 0 := Nat.eq_zero_of_not_pos hq
-      have hmul := Nat.mul_div_cancel' hdiv
-      have hzero : h = 0 := by simpa [qn, hz] using hmul.symm
-      have hposh : 0 < h :=
-        Nat.lt_of_lt_of_le (by decide : 0 < 258)
-          ((by omega : (258 : Nat) ≤ nRows + 2).trans hcut)
-      omega
-    have hqle : qn ≤ h := Nat.div_le_self h (bOf nRows)
-    have hinner : h - (h - qn) = qn := Nat.sub_sub_self hqle
-    have hle2 : 2 * (h - qn) ≤ 2 * h := Nat.mul_le_mul_left 2 (Nat.sub_le h qn)
-    have hmul : 2 * h - 2 * (h - qn) = 2 * (h - (h - qn)) :=
-      (Nat.mul_sub_left_distrib 2 h (h - qn)).symm
-    have hK : leafK nRows h = 2 * qn := by
-      unfold leafK leafT
-      dsimp [qn]
-      rw [hmul, hinner]
-    rw [hK]
-    exact Nat.succ_le_of_lt (Nat.mul_pos (by decide : 0 < 2) hqpos)
-  have hleafEq : (J + 2 * h) - (J + t0) = leafK nRows h := by
+  have ht : t0 ≤ 2 * h := by simpa [t0, h] using leafT_le_two_mul_h nRows h
+  have hh : h ≤ J := by
+    simpa [h, J] using selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)
+  have hleaf : (J + 2 * h) - (J + t0) = leafK nRows h := by
     have hsum : (J + t0) + (2 * h - t0) = J + 2 * h := by
-      have hinner : t0 + (2 * h - t0) = 2 * h :=
-        Nat.add_sub_of_le (by simpa [t0, h] using ht)
+      have hinner : t0 + (2 * h - t0) = 2 * h := Nat.add_sub_of_le ht
       rw [Nat.add_assoc, hinner]
     have hcancel : (J + 2 * h) - (J + t0) = 2 * h - t0 := by
       rw [← hsum]
-      exact Nat.add_sub_cancel_left (J + t0) (2 * h - t0)
+      exact Nat.add_sub_cancel_left _ _
     have hK : leafK nRows h = 2 * h - t0 := by simp [leafK, leafT, h, t0]
     rw [hcancel, ← hK]
-  have hkDim : 1 ≤ (J + 2 * h) - (J + t0) := by
-    rw [hleafEq]
-    exact hk
+  have hk : 1 ≤ (J + 2 * h) - (J + t0) := by
+    rw [hleaf]
+    have hs := selector_spec hsel
+    have hdiv : bOf nRows ∣ h := hs.1.2.2.2.2.2.1
+    have hcut : nRows + 2 ≤ h :=
+      (Nat.le_max_right (sourceHMin nRows) (nRows + 2)).trans hs.1.2.2.2.2.2.2.2.1
+    have hn : 256 ≤ nRows := hs.1.1
+    let qn := h / bOf nRows
+    have hqpos : 0 < qn := by
+      by_contra hq0
+      have hz : qn = 0 := Nat.eq_zero_of_not_pos hq0
+      have hmul := Nat.mul_div_cancel' hdiv
+      have hzero : h = 0 := by simpa [qn, hz] using hmul.symm
+      have hposh : 0 < h :=
+        Nat.lt_of_lt_of_le (by decide : 0 < 258) ((by omega : (258 : Nat) ≤ nRows + 2).trans hcut)
+      omega
+    have hK2 : leafK nRows h = 2 * qn := by
+      have hqle : qn ≤ h := Nat.div_le_self h _
+      have hinner : h - (h - qn) = qn := Nat.sub_sub_self hqle
+      have hmul2 : 2 * h - 2 * (h - qn) = 2 * (h - (h - qn)) :=
+        (Nat.mul_sub_left_distrib 2 h (h - qn)).symm
+      unfold leafK leafT
+      dsimp [qn]
+      rw [hmul2, hinner]
+    rw [hK2]
+    exact Nat.succ_le_of_lt (Nat.mul_pos (by decide : 0 < 2) hqpos)
   have hguard : r * ((J + 2 * h) - (J + t0)) + badExponent nRows h + 2 ≤
-      Module.finrank (ZMod 2) (questionCoordinateSpace center ⧸ U.val) := by
+      Module.finrank (ZMod 2) (questionCoordinateSpace ambient) - (J + t0) := by
     have hselGuard := selected_actual_center_quotient_dimension_guard_twoIndex
-      (center := center) sourceHMin hA hsel hr
-    have hdim : Module.finrank (ZMod 2) (questionCoordinateSpace center ⧸ U.val) =
-        Module.finrank (ZMod 2) (CenterQuotient center) := by
-      unfold U coordinateCenterGrass CenterQuotient
-      rfl
-    rw [hleafEq, hdim]
-    simpa [h] using hselGuard
-  let extW : Fin r → Extension U (J + 2 * h) := eT w
-  have hbadExt := fixedCenter_badEvent_mass_lt_threshold
-    (V := questionCoordinateSpace center)
+      (center := ambient) sourceHMin hA hsel hr
+    have hdim : Module.finrank (ZMod 2) (questionCoordinateSpace ambient) - (J + t0) =
+        Module.finrank (ZMod 2) (CenterQuotient ambient) := by
+      rw [coordinateSpace_finrank ambient, centerQuotient_finrank ambient]
+      have ht0 : t0 ≤ 2 * J := by
+        exact le_trans ht (Nat.mul_le_mul_left 2 hh)
+      have hsum : (J + t0) + (2 * J - t0) = 3 * J := by
+        have hinner : t0 + (2 * J - t0) = 2 * J := Nat.add_sub_of_le ht0
+        have hthree : J + 2 * J = 3 * J := by omega
+        rw [Nat.add_assoc, hinner, hthree]
+      rw [← hsum, Nat.add_sub_cancel_left]
+    rw [hleaf, hdim]
+    simpa [h, J, t0] using hselGuard
+  exact sameExperiment_accepted_rankGood (V := questionCoordinateSpace ambient)
     (t := J + t0) (d := J + 2 * h) (m := r) (E := badExponent nRows h)
-    htd hdV hkDim U extW hguard
-  let badExt : Finset (Fin r → Extension U (J + 2 * h)) :=
-    fixedCenterBadEvent (V := questionCoordinateSpace center)
-      (t := J + t0) (d := J + 2 * h) (m := r) U
-  have hpre := extensionTuple_eventMass_eq_preimage center h r
-    (leafT_le_two_mul_h nRows h)
-    (selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel)) w badExt
-  let law := uniformDomainTupleLaw center h r w
-  let acc := Finset.univ.filter (selectedLeafAccept (r := r) sourceHMin hA hsel center Tcenter Tleaf)
-  let both := acc.filter (selectedLeafRankGood (r := r) sourceHMin hA hsel center)
-  let accBad := Finset.univ.filter fun draws : Fin r → DomainDraw center h =>
-    selectedLeafAccept (r := r) sourceHMin hA hsel center Tcenter Tleaf draws ∧
-      ¬ selectedLeafRankGood (r := r) sourceHMin hA hsel center draws
-  let badDom := preimageEvent eT badExt
-  have hbadDom : eventMass law badDom < s := by
-    have hmass : eventMass (extensionTupleLaw U extW) badExt < s := by
-      simpa [s, extW, badExt, h] using hbadExt
-    have heq : eventMass (extensionTupleLaw U extW) badExt = eventMass law badDom := by
-      convert hpre using 1 <;> try rfl
-    exact heq ▸ hmass
-  have hdisj : Disjoint both accBad := by
-    refine Finset.disjoint_left.mpr ?_
-    intro draws hboth hbad
-    simp [both, acc, accBad, Finset.mem_filter] at hboth hbad
-    exact hbad.2 hboth.2
-  have hunion : both ∪ accBad = acc := by
-    ext draws
-    simp only [both, acc, accBad, Finset.mem_union, Finset.mem_filter, Finset.mem_univ, true_and]
-    constructor
-    · rintro (⟨ha, _⟩ | ⟨ha, _⟩) <;> exact ha
-    · intro ha
-      by_cases hj : selectedLeafRankGood (r := r) sourceHMin hA hsel center draws
-      · exact Or.inl ⟨ha, hj⟩
-      · exact Or.inr ⟨ha, hj⟩
-  have hsplit : eventMass law acc = eventMass law both + eventMass law accBad := by
-    unfold eventMass
-    rw [← hunion, Finset.sum_union hdisj]
-  have hsub : accBad ⊆ badDom := by
-    intro draws hd
-    have hnot : ¬ selectedLeafRankGood (r := r) sourceHMin hA hsel center draws :=
-      (Finset.mem_filter.mp hd).2.2
-    have hbadExtMem : eT draws ∈ badExt := by
-      have hpair : ¬ jointlyDirect (V := questionCoordinateSpace center)
-          ⟨coordinateCenterGrass center, eT draws⟩ := by
-        simpa [selectedLeafRankGood, selectedLeafEquiv, eT] using hnot
-      simpa [badExt, fixedCenterBadEvent] using hpair
-    simpa [badDom, preimageEvent] using hbadExtMem
-  have hle : eventMass law accBad ≤ eventMass law badDom := eventMass_mono law hsub
-  have hδ : eventMass law acc - eventMass law both <
-      successMargin (badExponent nRows h) / 2 := by
-    rw [successMargin_half]
-    have hdiff : eventMass law acc - eventMass law both = eventMass law accBad := by
-      linarith [hsplit]
-    linarith [hle, hbadDom, hdiff]
-  let δ : ℚ := eventMass law acc - eventMass law both
-  have hδ0 : 0 ≤ δ := by
-    have hmono : eventMass law both ≤ eventMass law acc := by
-      apply eventMass_mono law
-      intro draws hz
-      exact Finset.mem_of_subset (Finset.filter_subset _ acc) hz
-    simpa [δ] using sub_nonneg.mpr hmono
-  refine ⟨w, (δ + successMargin (badExponent nRows h) / 2) / 2, ?_, ?_⟩
-  · linarith [hδ]
-  · have hδle : δ ≤ (δ + successMargin (badExponent nRows h) / 2) / 2 := by
-      linarith [hδ0, hδ]
-    have hdef : eventMass law both = eventMass law acc - δ := by simp [δ]
-    linarith [hdef, hδle]
+    selected_joint_htd (selected_joint_hdV hA hsel ambient) hk hguard Tcenter Tleaf
 
 end
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMass
