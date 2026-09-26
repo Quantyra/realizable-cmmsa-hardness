@@ -1,0 +1,37 @@
+UTC=2026-09-23T22:56:11Z
+HEAD=de048da45956ef207c0c1dcd38c42b00a5437710
+BASE=de048da45956ef207c0c1dcd38c42b00a5437710
+DIRECT_MAIN_RC=1
+492afc8461d4868867b807fd02ee90a908aee0b925c83c02d04e7fdcf118b225  lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean
+a0f5b35c0a19cfe91549ea85bf142e92cb45f30e492b624abccaade3af45a2ca  lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelectorChecks.lean
+9ad914a4952c377557a50ff1d28d53b7e8990f369ce913239577306143bc2a49  /tmp/s3132-fixed-rho-selector-sol56-r5-20260923T2300Z/evidence/direct-main-r5.log
+4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865  /tmp/s3132-fixed-rho-selector-sol56-r5-20260923T2300Z/evidence/direct-main-r5.rc
+CHECKS_NOT_RUN=direct_main_failed
+REPLAY_NOT_RUN=direct_main_failed
+OLEAN_STABILITY_NOT_RUN=direct_main_failed
+SCANS_NOT_RUN=direct_main_failed
+COMMIT=none
+ACTIONABLE_DIAGNOSTICS_BEGIN
+error: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:117:30: mod_cast has type
+  0 < bOf m
+but is expected to have type
+  ¬bOf m = 0
+error: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:168:56: Application type mismatch: The argument
+  m
+has type
+  WithBot ℕ
+but is expected to have type
+  ℕ
+in the application
+  Admissible (fixedRhoHeightFloor base) L m
+warning: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:172:5: Variable name `H` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _H
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector
+error: build failed
+ACTIONABLE_DIAGNOSTICS_END
+VM_FINAL_STATE=pending_termination

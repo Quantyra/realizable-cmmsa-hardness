@@ -1,0 +1,48 @@
+MODULE=ActualStarFiniteUnionBoundChecks
+CHECK_DIRECTIVES_BEGIN
+7:#check PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_mono
+8:#check PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_biUnion_le_sum
+9:#check PvNP.RealizableHardness.ActualStarBadMassWitness.not_jointlyDirect_has_supportedLineEvent
+10:#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power
+11:#check PvNP.RealizableHardness.ActualStarBadMassWitness.fixedCenter_relationLineEvent_mass
+13:#print axioms PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_mono
+14:#print axioms PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_biUnion_le_sum
+CHECK_DIRECTIVES_END
+SIGNATURE_OUTPUT_BEGIN
+1:PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_mono.{u_1} {Ω : Type u_1} [Fintype Ω]
+4:PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_biUnion_le_sum.{u_1, u_2} {Ω : Type u_1} {Ι : Type u_2}
+7:PvNP.RealizableHardness.ActualStarBadMassWitness.not_jointlyDirect_has_supportedLineEvent.{u_1} {V : Type u_1}
+23:PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power.{u_2} {A : Type u_2} [AddCommGroup A]
+25:PvNP.RealizableHardness.ActualStarBadMassWitness.fixedCenter_relationLineEvent_mass.{u_1} {V : Type u_1}
+SIGNATURE_OUTPUT_END
+AXIOM_NORMALIZED_BEGIN
+AXIOM_REPORT_1=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_2=[propext,  Classical.choice,  Quot.sound]
+AXIOM_NORMALIZED_END
+MODULE=ActualStarSupportCatalogChecks
+CHECK_DIRECTIVES_BEGIN
+5:#check PvNP.RealizableHardness.ActualStarSupportCatalog.SupportRelation
+6:#check PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelationEquiv
+7:#check PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_card_le_power
+8:#check PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelationLines
+9:#check PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_mem_supportedLineEvent
+10:#check PvNP.RealizableHardness.ActualStarSupportCatalog.not_jointlyDirect_has_catalogEvent
+12:#print axioms PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelationEquiv
+13:#print axioms PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_card_le_power
+14:#print axioms PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_mem_supportedLineEvent
+15:#print axioms PvNP.RealizableHardness.ActualStarSupportCatalog.not_jointlyDirect_has_catalogEvent
+CHECK_DIRECTIVES_END
+SIGNATURE_OUTPUT_BEGIN
+1:PvNP.RealizableHardness.ActualStarSupportCatalog.SupportRelation.{u_1, u_2} {A : Type u_1} [AddCommGroup A]
+3:PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelationEquiv.{u_1, u_2} {A : Type u_1} [AddCommGroup A]
+6:PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_card_le_power.{u_1, u_2} {A : Type u_1}
+9:PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelationLines.{u_1, u_2} {A : Type u_1} [AddCommGroup A]
+12:PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_mem_supportedLineEvent.{u_1} {V : Type u_1}
+18:PvNP.RealizableHardness.ActualStarSupportCatalog.not_jointlyDirect_has_catalogEvent.{u_1} {V : Type u_1}
+SIGNATURE_OUTPUT_END
+AXIOM_NORMALIZED_BEGIN
+AXIOM_REPORT_1=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_2=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_3=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_4=[propext,  Classical.choice,  Quot.sound]
+AXIOM_NORMALIZED_END

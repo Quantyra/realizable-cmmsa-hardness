@@ -1,0 +1,46 @@
+CHECK_DIRECTIVES_BEGIN
+7:#check PvNP.RealizableHardness.ActualSourceStarLaw.StarTuple
+8:#check PvNP.RealizableHardness.ActualSourceStarLaw.starTuple_card
+9:#check PvNP.RealizableHardness.ActualSourceStarLaw.centerLaw_apply
+10:#check PvNP.RealizableHardness.ActualSourceStarLaw.extensionLaw_apply
+11:#check PvNP.RealizableHardness.ActualSourceStarLaw.starLaw_atom
+12:#check PvNP.RealizableHardness.ActualSourceStarLaw.accepts
+13:#check PvNP.RealizableHardness.ActualSourceStarLaw.jointIncrementSpan
+14:#check PvNP.RealizableHardness.ActualSourceStarLaw.jointlyDirect
+15:#check PvNP.RealizableHardness.ActualSourceStarLaw.goodStar
+16:#check PvNP.RealizableHardness.ActualSourceStarLaw.acceptanceMass
+17:#check PvNP.RealizableHardness.ActualSourceStarLaw.goodStarMass_eq_joint_sum
+18:#print axioms PvNP.RealizableHardness.ActualSourceStarLaw.starLaw_atom
+19:#print axioms PvNP.RealizableHardness.ActualSourceStarLaw.acceptanceMass_eq_joint_sum
+20:#print axioms PvNP.RealizableHardness.ActualSourceStarLaw.goodStarMass_eq_joint_sum
+CHECK_DIRECTIVES_END
+CHECK_COUNT=11
+SIGNATURE_OUTPUT_BEGIN
+1:PvNP.RealizableHardness.ActualSourceStarLaw.StarTuple.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+3:PvNP.RealizableHardness.ActualSourceStarLaw.starTuple_card.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+7:PvNP.RealizableHardness.ActualSourceStarLaw.centerLaw_apply.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+10:PvNP.RealizableHardness.ActualSourceStarLaw.extensionLaw_apply.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+13:PvNP.RealizableHardness.ActualSourceStarLaw.starLaw_atom.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+18:PvNP.RealizableHardness.ActualSourceStarLaw.accepts.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+21:PvNP.RealizableHardness.ActualSourceStarLaw.jointIncrementSpan.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+23:PvNP.RealizableHardness.ActualSourceStarLaw.jointlyDirect.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+25:PvNP.RealizableHardness.ActualSourceStarLaw.goodStar.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+28:PvNP.RealizableHardness.ActualSourceStarLaw.acceptanceMass.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+31:PvNP.RealizableHardness.ActualSourceStarLaw.goodStarMass_eq_joint_sum.{u_1} {V : Type u_1} [AddCommGroup V]
+SIGNATURE_OUTPUT_END
+AXIOM_DIRECTIVE_COUNT=3
+AXIOM_OUTPUT_BEGIN
+37-        ∏ i, (ActualSourceStarLaw.extensionLaw z.fst (z.snd i)).mass (z.snd i)
+38:'PvNP.RealizableHardness.ActualSourceStarLaw.starLaw_atom' depends on axioms: [propext, Classical.choice, Quot.sound]
+39:'PvNP.RealizableHardness.ActualSourceStarLaw.acceptanceMass_eq_joint_sum' depends on axioms: [propext,
+40- Classical.choice,
+41- Quot.sound]
+42:'PvNP.RealizableHardness.ActualSourceStarLaw.goodStarMass_eq_joint_sum' depends on axioms: [propext,
+43- Classical.choice,
+44- Quot.sound]
+AXIOM_OUTPUT_END
+AXIOM_NORMALIZED_BEGIN
+AXIOM_REPORT_1=[propext, Classical.choice, Quot.sound]
+AXIOM_REPORT_2=[propext, Classical.choice, Quot.sound]
+AXIOM_REPORT_3=[propext, Classical.choice, Quot.sound]
+AXIOM_NORMALIZED_END

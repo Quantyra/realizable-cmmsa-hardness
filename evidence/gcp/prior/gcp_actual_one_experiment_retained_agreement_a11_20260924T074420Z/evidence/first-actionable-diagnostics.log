@@ -1,0 +1,77 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2334/2403] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1897-The difference between `let` and `letI` is that `letI` inlines the value.
+1898-But this is not relevant for proofs because of proof irrelevance.
+1899-
+1900-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1901:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:186:4: failed to synthesize instance of type class
+1902-  Finite (ambientAgreeingFiber Q T P)
+1903-
+1904-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1905-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:185:2: Try this: 
+1906-  letI̵
+1907-
+1908-The goal is a proposition, so `let` is preferred over `letI`.
+1909-The difference between `let` and `letI` is that `letI` inlines the value.
+1910-But this is not relevant for proofs because of proof irrelevance.
+1911-
+1912-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1913:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:192:4: 'change' tactic failed, pattern
+1914-  (∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 else 0) =
+1915-    @Fintype.card { L // ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW }
+1916-      (Subtype.fintype fun L => ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW)
+1917-is not definitionally equal to target
+1918-  (∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 else 0) =
+1919-    @Fintype.card (ambientAgreeingFiber Q T P) this
+1920-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:212:2: Try this: 
+1921-  letI̵
+1922-
+1923-The goal is a proposition, so `let` is preferred over `letI`.
+1924-The difference between `let` and `letI` is that `letI` inlines the value.
+1925-But this is not relevant for proofs because of proof irrelevance.
+--
+1948-The difference between `let` and `letI` is that `letI` inlines the value.
+1949-But this is not relevant for proofs because of proof irrelevance.
+1950-
+1951-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1952:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:228:16: Function expected at
+1953-  Fintype.card_eq_zero_iff.mp hzoom
+1954-but this term has type
+1955-  IsEmpty (Zoom Q P)
+1956-
+1957-Note: Expected a function because this term is being applied to the argument
+1958-  ⟨L, ⟨hQL, hLW⟩⟩
+1959-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:324:2: Try this: 
+1960-  letI̵
+1961-
+1962-The goal is a proposition, so `let` is preferred over `letI`.
+1963-The difference between `let` and `letI` is that `letI` inlines the value.
+1964-But this is not relevant for proofs because of proof irrelevance.
+--
+1974-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1975-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:356:41: `if_neg` has been deprecated: Use `ite_eq_right` instead
+1976-Some required targets logged failures:
+1977-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+1978:error: build failed
+1979-Finished with result: exit-code
+1980-Main processes terminated with: code=exited/status=1
+1981-Service runtime: 45.210s
+1982-CPU time consumed: 19.383s
+1983-Memory peak: 256.0K
+1984-Memory swap peak: 0B

@@ -1,0 +1,154 @@
+236-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+237-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+238-  [apply] ring_nf
+239-  
+240:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+241-    
+242-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+243-⚠ [2335/2403] Replayed PvNP.RealizableHardness.FiniteConcentration
+244-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+247-  Fintype.card_fun
+248-
+249-Hint: Omit it from the simp argument list.
+250-  [apply] simp
+251-
+252-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1777-Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+1778-  [apply] _x
+1779-
+1780-Note: This linter can be disabled with `set_option linter.unusedVariables false`
+1781:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:102:4: 'change' tactic failed, pattern
+1782-  Nat.card (Zoom Q0 P0) = gaussian (Module.finrank (ZMod 2) { x : ↥(localAmbient s) // x ∈ P0.W } - a) (d - a)
+1783-is not definitionally equal to target
+1784-  Nat.card (localZoom s Q W hQV hQW) =
+1785-    gaussian (Module.finrank (ZMod 2) { x : TripleRestrictionRank.Vector J // x ∈ localIntersection s W } - a) (d - a)
+1786:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:110:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+1787-  Module.finrank (ZMod 2) ↥P0.W
+1788-in the target expression
+1789-  Nat.card (localZoom s Q W hQV hQW) = gaussian (Module.finrank (ZMod 2) ↥(localIntersection s W) - a) (d - a)
+1790-
+1791-J a d : ℕ
+1792-s : TripleRestrictionRank.Draw J
+1793-Q : Advice J a
+1794-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1795-hQV : ↑Q ≤ localAmbient s
+1796-hQW : ↑Q ≤ W
+1797-had : a ≤ d
+1798-Q0 : Grass (↥(localAmbient s)) a := localAdvice s Q hQV
+--
+1808-The difference between `let` and `letI` is that `letI` inlines the value.
+1809-But this is not relevant for proofs because of proof irrelevance.
+1810-
+1811-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1812:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:155:72: unsolved goals
+1813-J a d : ℕ
+1814-s : TripleRestrictionRank.Draw J
+1815-Q : Advice J a
+1816-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1817-hQV : ↑Q ≤ localAmbient s
+1818-hQW : ↑Q ≤ W
+1819-had : a ≤ d
+1820-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1821-L : Advice J d
+1822-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1823-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+1824-Q0 : Grass (↥(localAmbient s)) a := localAdvice s Q hQV
+--
+1841-hLE : ↑L ≤ TripleRestrictionRank.retained s
+1842-⊢ gaussian (Module.finrank (ZMod 2) ↥(TripleRestrictionRank.retained s) - a) (d - a) =
+1843-    gaussian (Module.finrank (ZMod 2) ↥(TripleRestrictionRank.retained s) - a) (d - a)
+1844-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:171:51: `if_true` has been deprecated: Use `ite_true` instead
+1845:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:168:74: unsolved goals
+1846-J a d : ℕ
+1847-s : TripleRestrictionRank.Draw J
+1848-Q : Advice J a
+1849-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1850-hQV : ↑Q ≤ localAmbient s
+1851-hQW : ↑Q ≤ W
+1852-had : a ≤ d
+1853-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1854-L : Advice J d
+1855-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1856-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+1857-Q0 : Grass (↥(localAmbient s)) a := localAdvice s Q hQV
+--
+1879-⊢ 1 =
+1880-    ↑(gaussian (Module.finrank (ZMod 2) ↥I - a) (d - a)) /
+1881-      ↑(gaussian (Module.finrank (ZMod 2) ↥(localIntersection s W) - a) (d - a))
+1882-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:176:12: `if_pos` has been deprecated: Use `ite_eq_left` instead
+1883:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:184:14: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+1884-
+1885-case h₀
+1886-J a d : ℕ
+1887-s : TripleRestrictionRank.Draw J
+1888-Q : Advice J a
+1889-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1890-hQV : ↑Q ≤ localAmbient s
+1891-hQW : ↑Q ≤ W
+1892-had : a ≤ d
+1893-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1894-L : Advice J d
+1895-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+--
+1921-hy : y ∈ Finset.univ
+1922-hyz : y ≠ z
+1923-hne : e y ≠ L
+1924-⊢ (if localToAdvice s Q W hQV hQW y = L then uniformZoomAtom (localZoom s Q W hQV hQW) y else 0) = 0
+1925:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:210:42: unsolved goals
+1926-J a d : ℕ
+1927-s : TripleRestrictionRank.Draw J
+1928-Q : Advice J a
+1929-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1930-hQV : ↑Q ≤ localAmbient s
+1931-hQW : ↑Q ≤ W
+1932-had : a ≤ d
+1933-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1934-L : Advice J d
+1935-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1936-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+1937-Q0 : Grass (↥(localAmbient s)) a := localAdvice s Q hQV
+--
+1949-hW : ↑L ≤ W
+1950-hQL : ↑Q ≤ ↑L
+1951-hLE : ¬↑L ≤ E
+1952-⊢ ↑L ≤ TripleRestrictionRank.retained s → incidenceCount s d = 0
+1953:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:216:6: unsolved goals
+1954-case neg
+1955-J a d : ℕ
+1956-s : TripleRestrictionRank.Draw J
+1957-Q : Advice J a
+1958-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1959-hQV : ↑Q ≤ localAmbient s
+1960-hQW : ↑Q ≤ W
+1961-had : a ≤ d
+1962-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1963-L : Advice J d
+1964-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1965-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+--
+1977-hnot : ¬(↑Q ≤ ↑L ∧ ↑L ≤ E ∧ ↑L ≤ W)
+1978-hW : ¬↑L ≤ W
+1979-⊢ (inW W L = true → ConditionedCovering.retainedConditional s Q L = 0) ∨
+1980-    PosteriorReweighting.mass (ConditionedCovering.retainedConditional s Q) (inW W) = 0
+1981:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:227:6: unsolved goals
+1982-case neg
+1983-J a d : ℕ
+1984-s : TripleRestrictionRank.Draw J
+1985-Q : Advice J a
+1986-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1987-hQV : ↑Q ≤ localAmbient s
+1988-hQW : ↑Q ≤ W
+1989-had : a ≤ d
+1990-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1991-L : Advice J d
+1992-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1993-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+--
+2044-
+2045-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+2046-Some required targets logged failures:
+2047-- PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
+2048:error: build failed

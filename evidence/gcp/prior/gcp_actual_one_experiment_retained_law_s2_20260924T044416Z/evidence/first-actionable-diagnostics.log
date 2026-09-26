@@ -1,0 +1,65 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2308/2378] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1806-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+1807-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:173:51: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+1808-
+1809-Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+1810:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:314:10: unsolved goals
+1811-case h₀
+1812-J a d : ℕ
+1813-s : TripleRestrictionRank.Draw J
+1814-Q : Advice J a
+1815-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1816-hQV : ↑Q ≤ localAmbient s
+1817-hQW : ↑Q ≤ W
+1818-had : a ≤ d
+1819-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1820-f : Advice J d → ℚ
+1821-Z : Type := localZoom s Q W hQV hQW
+1822-e : localZoom s Q W hQV hQW → Advice J d := localToAdvice s Q W hQV hQW
+--
+1832-Hint: Omit it from the simp argument list.
+1833-  [apply] simp
+1834-
+1835-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+1836:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:329:74: unsolved goals
+1837-J a d : ℕ
+1838-s : TripleRestrictionRank.Draw J
+1839-Q : Advice J a
+1840-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1841-hQE : ↑Q ≤ TripleRestrictionRank.retained s
+1842-hQW : ↑Q ≤ W
+1843-had : a ≤ d
+1844-hd : d ≤ Module.finrank (ZMod 2) ↥(TripleRestrictionRank.retained s)
+1845-f : Advice J d → ℚ
+1846-hQV : ↑Q ≤ localAmbient s := hQE
+1847-η : localZoom s Q W hQV hQW ≃ retainedZoomCarrier s Q W := localZoomCarrierEquiv s Q W hQV hQW
+1848-hcard : Fintype.card (localZoom s Q W hQV hQW) = Fintype.card (retainedZoomCarrier s Q W)
+--
+1858-                invFun := fun L => (localToAmbientZoom s Q W hQV hQW).symm ⟨↑L, ⋯⟩, left_inv := ⋯, right_inv := ⋯ }
+1859-              z)
+1860-Some required targets logged failures:
+1861-- PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
+1862:error: build failed
+1863-Finished with result: exit-code
+1864-Main processes terminated with: code=exited/status=1
+1865-Service runtime: 1min 2.726s
+1866-CPU time consumed: 19.362s
+1867-Memory peak: 256.0K
+1868-Memory swap peak: 0B

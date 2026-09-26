@@ -1,0 +1,29 @@
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair.{uV, u_1} {V : Type uV}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} {Q : Grass V a} {I : Type u_1} [Fintype I]
+  (P : I → DecodedPair Q d) (c : ℕ) (U : PositiveBucketIndex P c) : DecodedPair Q d
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair_W.{uV, u_1} {V : Type uV}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} {Q : Grass V a} {I : Type u_1} [Fintype I]
+  (P : I → DecodedPair Q d) (c : ℕ) (U : PositiveBucketIndex P c) : (positiveBucketRootPair P c U).W = ↑U
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair_eq_representative.{uV, u_1}
+  {V : Type uV} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} {Q : Grass V a} {I : Type u_1} [Fintype I]
+  (P : I → DecodedPair Q d) (c : ℕ) (U : PositiveBucketIndex P c) :
+  positiveBucketRootPair P c U = P (positiveBucketRepresentative P c U)
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair_agreement.{uV, u_1} {V : Type uV}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} {Q : Grass V a} {I : Type u_1} [Fintype I]
+  (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L) (P : I → DecodedPair Q d) (c : ℕ) (beta : ℚ)
+  (hagr : ∀ (i : I), beta ≤ agreement T Q (P i)) (U : PositiveBucketIndex P c) :
+  beta ≤ agreement T Q (positiveBucketRootPair P c U)
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.zoomToPointedEquiv.{uV, u_1} {V : Type uV} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {I : Type u_1} [Fintype I] (F : EnlargedPointedFamily) (i : I)
+  (P : DecodedPair F.Q (2 * F.h)) (hPW : P.W = F.W i) : Zoom F.Q P ≃ { L // F.regularIncidence.rel i L }
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.zoomToPointed_uniformLaw.{uV, u_1} {V : Type uV}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {I : Type u_1} [Fintype I] (F : EnlargedPointedFamily) (i : I)
+  (P : DecodedPair F.Q (2 * F.h)) (hPW : P.W = F.W i) [Nonempty (Zoom F.Q P)] :
+  pushforward (fun z => ↑((zoomToPointedEquiv F i P hPW) z)) (uniformLaw (Zoom F.Q P)) =
+    componentLaw F.regularIncidence i
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair_eq_representative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.zoomToPointed_uniformLaw' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

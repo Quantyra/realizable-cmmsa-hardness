@@ -1,0 +1,95 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2313/2369] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1806-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+1807-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:166:51: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+1808-
+1809-Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+1810:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:267:4: Type mismatch
+1811-  Eq.symm
+1812-    (congrArg Subtype.val
+1813-      (Equiv.apply_symm_apply e ⟨↑L, ⟨L.property.left, le_inf L.property.right.left L.property.right.right⟩⟩))
+1814-has type
+1815-  ↑⟨↑L, ⋯⟩ = ↑(e (e.symm ⟨↑L, ⋯⟩))
+1816-but is expected to have type
+1817-  ↑((fun z => ⟨↑(e z), ⋯⟩) ((fun L => e.symm ⟨↑L, ⋯⟩) L)) = ↑L
+1818:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:290:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+1819-  (∑ i ∈ ?s, ?f i) * ?a
+1820-in the target expression
+1821-  ∑ L, (∑ z, if localToAdvice s Q W hQV hQW z = L then uniformZoomAtom (localZoom s Q W hQV hQW) z else 0) * f L =
+1822-    ∑ z, uniformZoomAtom Z z * f (e z)
+1823-
+1824-J a d : ℕ
+1825-s : TripleRestrictionRank.Draw J
+1826-Q : Advice J a
+1827-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1828-hQV : ↑Q ≤ localAmbient s
+1829-hQW : ↑Q ≤ W
+1830-had : a ≤ d
+--
+1833-Z : Type := localZoom s Q W hQV hQW
+1834-e : localZoom s Q W hQV hQW → Advice J d := localToAdvice s Q W hQV hQW
+1835-⊢ ∑ L, (∑ z, if localToAdvice s Q W hQV hQW z = L then uniformZoomAtom (localZoom s Q W hQV hQW) z else 0) * f L =
+1836-    ∑ z, uniformZoomAtom Z z * f (e z)
+1837:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:309:8: failed to synthesize instance of type class
+1838-  Fintype (retainedZoomCarrier s Q W)
+1839-
+1840-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1841:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:310:8: failed to synthesize instance of type class
+1842-  Fintype (retainedZoomCarrier s Q W)
+1843-
+1844-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1845:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:315:6: failed to synthesize instance of type class
+1846-  Fintype (retainedZoomCarrier s Q W)
+1847-
+1848-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1849:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:316:4: failed to synthesize instance of type class
+1850-  Fintype (retainedZoomCarrier s Q W)
+1851-
+1852-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1853:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:319:4: failed to synthesize instance of type class
+1854-  Fintype (retainedZoomCarrier s Q W)
+1855-
+1856-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1857:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:318:8: failed to synthesize instance of type class
+1858-  Fintype (retainedZoomCarrier s Q W)
+1859-
+1860-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1861:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:310:74: unsolved goals
+1862-J a d : ℕ
+1863-s : TripleRestrictionRank.Draw J
+1864-Q : Advice J a
+1865-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1866-hQE : ↑Q ≤ TripleRestrictionRank.retained s
+1867-hQW : ↑Q ≤ W
+1868-had : a ≤ d
+1869-hd : d ≤ Module.finrank (ZMod 2) ↥(TripleRestrictionRank.retained s)
+1870-f : Advice J d → ℚ
+1871-hQV : ↑Q ≤ localAmbient s := hQE
+1872-η : localZoom s Q W hQV hQW ≃ retainedZoomCarrier s Q W := localZoomCarrierEquiv s Q W hQV hQW
+1873-hcard : Fintype.card (localZoom s Q W hQV hQW) = sorry
+1874-⊢ ∑ z, uniformZoomAtom (localZoom s Q W hQV hQW) z * f (localToAdvice s Q W hQV hQW z) = ∑ z ∈ sorry, sorry * f ↑z
+1875-Some required targets logged failures:
+1876-- PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
+1877:error: build failed
+1878-Finished with result: exit-code
+1879-Main processes terminated with: code=exited/status=1
+1880-Service runtime: 1min 34.289s
+1881-CPU time consumed: 24.081s
+1882-Memory peak: 256.0K
+1883-Memory swap peak: 0B

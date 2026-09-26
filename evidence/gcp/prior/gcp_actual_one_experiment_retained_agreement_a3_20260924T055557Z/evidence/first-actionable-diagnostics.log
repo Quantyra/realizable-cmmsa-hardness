@@ -1,0 +1,105 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2330/2394] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1807-
+1808-Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+1809-✖ [3258/3258] Building PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement (36s)
+1810-trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/cslib/.lake/build/lib/lean:/tmp/gcp-actual-one-experiment-retained-agreement-a3-20260924T055557Z/checkout/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /tmp/gcp-actual-one-experiment-retained-agreement-a3-20260924T055557Z/checkout/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean -o /tmp/gcp-actual-one-experiment-retained-agreement-a3-20260924T055557Z/checkout/.lake/build/lib/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.olean -i /tmp/gcp-actual-one-experiment-retained-agreement-a3-20260924T055557Z/checkout/.lake/build/lib/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.ilean -c /tmp/gcp-actual-one-experiment-retained-agreement-a3-20260924T055557Z/checkout/.lake/build/ir/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.c --setup /tmp/gcp-actual-one-experiment-retained-agreement-a3-20260924T055557Z/checkout/.lake/build/ir/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.setup.json --json
+1811:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:68:8: failed to synthesize instance of type class
+1812-  Fintype (Zoom Q P)
+1813-
+1814-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1815:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:68:22: failed to synthesize instance of type class
+1816-  Fintype (Zoom Q P)
+1817-
+1818-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1819-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:71:2: Try this: 
+1820-  letI̵
+1821-
+1822-The goal is a proposition, so `let` is preferred over `letI`.
+1823-The difference between `let` and `letI` is that `letI` inlines the value.
+1824-But this is not relevant for proofs because of proof irrelevance.
+1825-
+1826-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1827-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:72:2: Try this: 
+--
+1839-The difference between `have` and `haveI` is that `haveI` inlines the value.
+1840-But this is not relevant for proofs because of proof irrelevance.
+1841-
+1842-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1843:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:75:2: unsolved goals
+1844-case pos
+1845-J a d : ℕ
+1846-Q : Advice J a
+1847-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1848-P : DecodedPair Q d
+1849-this✝¹ : Fintype (Zoom Q P) := zoomFintype Q P
+1850-this✝ : Fintype (AgreeingZoom T Q P) := agreeingZoomFintype T Q P
+1851-hzero : Fintype.card (Zoom Q P) = 0
+1852-this : IsEmpty (Zoom Q P)
+1853-⊢ 0 = ∑ x ∈ sorry (), if AgreesOn T ↑x ⋯ then sorry () else 0
+1854:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:83:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+1855-  {x | ?p x}.card
+1856-in the target expression
+1857-  (∑ z, if AgreesOn T ↑z ⋯ then 1 else 0) = Fintype.card (AgreeingZoom T Q P)
+1858-
+1859-J a d : ℕ
+1860-Q : Advice J a
+1861-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1862-P : DecodedPair Q d
+1863-this✝ : Fintype (Zoom Q P) := zoomFintype Q P
+1864-this : Fintype (AgreeingZoom T Q P) := agreeingZoomFintype T Q P
+1865-hzero : ¬Fintype.card (Zoom Q P) = 0
+1866-⊢ (∑ z, if AgreesOn T ↑z ⋯ then 1 else 0) = Fintype.card (AgreeingZoom T Q P)
+1867-
+1868-Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+1869:Full error:
+1870-  Application type mismatch: The argument
+1871-    Q
+1872-  has type
+1873-    Advice J a
+1874-  but is expected to have type
+1875-    Grass (TripleRestrictionRank.Vector J) a
+1876-  in the application
+1877-    @Zoom (TripleRestrictionRank.Vector J) Pi.addCommGroup
+1878-      (Pi.Function.module (TripleRestrictionRank.Coord J) (ZMod 2) (ZMod 2)) a Q
+1879-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:92:39: `if_false` has been deprecated: Use `ite_false` instead
+1880-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:77:10: This simp argument is unused:
+1881-  uniformZoomAtom
+--
+1898-The difference between `let` and `letI` is that `letI` inlines the value.
+1899-But this is not relevant for proofs because of proof irrelevance.
+1900-
+1901-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1902:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:115:10: Application type mismatch: The argument
+1903-  le_inf z.property.right.left z.property.right.right
+1904-has type
+1905-  ↑↑z ≤ TripleRestrictionRank.retained s ⊓ P.W
+1906-but is expected to have type
+1907-  ↑↑z ≤ DecodedPair.W (?m.132 z)
+1908-in the application
+1909-  AgreesOn T ↑z ⋯
+1910-Some required targets logged failures:
+1911-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+1912:error: build failed
+1913-Finished with result: exit-code
+1914-Main processes terminated with: code=exited/status=1
+1915-Service runtime: 43.205s
+1916-CPU time consumed: 15.241s
+1917-Memory peak: 256.0K
+1918-Memory swap peak: 0B

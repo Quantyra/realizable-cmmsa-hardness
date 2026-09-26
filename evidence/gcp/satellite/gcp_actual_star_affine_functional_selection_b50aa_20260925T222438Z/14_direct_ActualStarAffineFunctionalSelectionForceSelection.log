@@ -1,0 +1,30 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:28:4: error: Type mismatch: After simplification, term
+  hKH
+ has type
+  K ⊓ H = ⊥
+but is expected to have type
+  Disjoint K H
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:34:48: error: Type mismatch
+  LinearEquiv.ofInjective j hj
+has type
+  (↥K × ↥H) ≃ₗ[ZMod 2] ↥j.range
+but is expected to have type
+  ↥K × ↥H ≃ₗ[ZMod 2] ↥j.range
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:36:24: error(lean.invalidField): Invalid field `symm`: The environment does not contain `Prod.symm`, so it is not possible to project the field `symm` from an expression
+  e
+of type `↥K × ↥H ≃ₗ[ZMod 2] ↥j.range`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:24:53: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+K H : Submodule (ZMod 2) V
+hKH : K ⊓ H = ⊥
+g : ↥K →ₗ[ZMod 2] ZMod 2
+ψ : ↥H →ₗ[ZMod 2] ZMod 2
+j : ↥K × ↥H →ₗ[ZMod 2] V := K.subtype.coprod H.subtype
+hdisj : Disjoint K.subtype.range H.subtype.range
+hker : j.ker = ⊥
+hj : Function.Injective ⇑j
+e : ↥K × ↥H ≃ₗ[ZMod 2] ↥j.range := sorry
+⊢ ∃ F, F ∘ₗ K.subtype = g ∧ F ∘ₗ H.subtype = ψ

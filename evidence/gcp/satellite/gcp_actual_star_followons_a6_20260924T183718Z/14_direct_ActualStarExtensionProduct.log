@@ -1,0 +1,72 @@
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:101:4: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [extensionTupleLaw, uniformLaw_apply, extensionLaw_apply, Finset.prod_const]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:127:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:155:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eventMass (uniformLaw (Fin m → Extension U d)) {x | ∀ (i : Fin m), P i (x i)}
+in the target expression
+  eventMass (uniformLaw (Fin m → Extension U d)) {Ls | ∀ (i : Fin m), P i (Ls i)} =
+    (↑(gaussian (d - t) 1) / ↑(gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^ S.card
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d m : ℕ
+htd : t ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+hk : 1 ≤ d - t
+U : Grass V t
+witness : Fin m → Extension U d
+S : Finset (Fin m)
+K : ↥S → Grass (V ⧸ ↑U) 1
+this : Nonempty (Extension U d) := extension_nonempty U htd hdV
+P : Fin m → Extension U d → Prop :=
+  fun i L => if hi : i ∈ S then ↑(K ⟨i, hi⟩) ≤ ↑((upperQuotientEquiv U htd) L) else True
+hpred :
+  ∀ (Ls : Fin m → Extension U d),
+    (∀ (i : Fin m), P i (Ls i)) ↔ ∀ (i : ↥S), ↑(K i) ≤ ↑((upperQuotientEquiv U htd) (Ls ↑i))
+hfilter : {Ls | ∀ (i : Fin m), P i (Ls i)} = {Ls | ∀ (i : ↥S), ↑(K i) ≤ ↑((upperQuotientEquiv U htd) (Ls ↑i))}
+hgeneric :
+  eventMass (uniformLaw (Fin m → Extension U d)) {x | ∀ (i : Fin m), P i (x i)} =
+    ∏ i, eventMass (uniformLaw (Extension U d)) (Finset.filter (P i) Finset.univ)
+⊢ eventMass (uniformLaw (Fin m → Extension U d)) {Ls | ∀ (i : Fin m), P i (Ls i)} =
+    (↑(gaussian (d - t) 1) / ↑(gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^ S.card
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    U
+  has type
+    Grass V t
+  but is expected to have type
+    { Q // Module.finrank (ZMod 2) ↥Q = t }
+  in the application
+    ↑U
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:207:64: error(lean.unknownIdentifier): Unknown identifier `hS`
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:240:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d m : ℕ
+htd : t ≤ d
+U : Grass V t
+witness : Fin m → Extension U d
+S : Finset (Fin m)
+hS : S = ∅
+K : ↥S → Grass (V ⧸ ↑U) 1
+Ls : Fin m → Extension U d
+⊢ (∀ (i : ↥S), ↑(K i) ≤ ↑((upperQuotientEquiv U htd) (Ls ↑i))) ↔ True

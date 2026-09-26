@@ -1,0 +1,59 @@
+236-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+237-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+238-  [apply] ring_nf
+239-  
+240:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+241-    
+242-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+243-⚠ [2308/2374] Replayed PvNP.RealizableHardness.FiniteConcentration
+244-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+247-  Fintype.card_fun
+248-
+249-Hint: Omit it from the simp argument list.
+250-  [apply] simp
+251-
+252-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1777-Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+1778-  [apply] _x
+1779-
+1780-Note: This linter can be disabled with `set_option linter.unusedVariables false`
+1781:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:102:4: Type mismatch: After simplification, term
+1782-  hcount
+1783- has type
+1784-  @Fintype.card
+1785-      { L //
+1786-        ↑(restrictGrass (localAmbient s) Q hQV) ≤ ↑L ∧
+1787-          ↑L ≤ (localDecodedPair (localAmbient s) Q (ambientPair s Q W hQV hQW) hQV ⋯).W }
+1788-      (Subtype.fintype fun L =>
+1789-        ↑(restrictGrass (localAmbient s) Q hQV) ≤ ↑L ∧
+1790-          ↑L ≤ (localDecodedPair (localAmbient s) Q (ambientPair s Q W hQV hQW) hQV ⋯).W) =
+1791-    gaussian (Module.finrank (ZMod 2) ↥(localDecodedPair (localAmbient s) Q (ambientPair s Q W hQV hQW) hQV ⋯).W - a)
+1792-      (d - a)
+1793-but is expected to have type
+--
+1805-But this is not relevant for proofs because of proof irrelevance.
+1806-
+1807-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1808-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:169:51: `if_true` has been deprecated: Use `ite_true` instead
+1809:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:171:6: 'change' tactic failed, pattern
+1810-  1 =
+1811-    ↑(gaussian (Module.finrank (ZMod 2) ↥I - a) (d - a)) /
+1812-      ↑(gaussian (Module.finrank (ZMod 2) ↥(localIntersection s W) - a) (d - a))
+1813-is not definitionally equal to target
+1814-  1 / ↑(gaussian (Module.finrank (ZMod 2) ↥E - a) (d - a)) /
+1815-      (↑(gaussian (Module.finrank (ZMod 2) ↥I - a) (d - a)) / ↑(gaussian (Module.finrank (ZMod 2) ↥E - a) (d - a))) =
+1816-    1 / ↑(gaussian (Module.finrank (ZMod 2) ↥(localIntersection s W) - a) (d - a))
+1817-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:182:12: `if_pos` has been deprecated: Use `ite_eq_left` instead
+1818-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:221:20: `if_neg` has been deprecated: Use `ite_eq_right` instead
+1819-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:226:14: This simp argument is unused:
+1820-  ZoomOutTransfer.condition
+1821-
+--
+1831-
+1832-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+1833-Some required targets logged failures:
+1834-- PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
+1835:error: build failed

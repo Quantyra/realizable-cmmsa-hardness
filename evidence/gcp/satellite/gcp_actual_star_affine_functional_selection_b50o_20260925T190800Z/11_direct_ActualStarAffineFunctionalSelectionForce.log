@@ -1,0 +1,38 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:51:7: error(lean.unknownIdentifier): Unknown identifier `upperQuotientEquiv`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:73:77: error: unexpected token 'set_option'; expected 'lemma'
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:88:55: error: Application type mismatch: The argument
+  hx
+[Error pretty printing: (deterministic) timeout at `whnf`, maximum number of heartbeats (1000000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.(invalid MessageData.lazy, missing context)]
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:88:43: error: Application type mismatch: The argument
+  ↑x
+has type
+  V
+but is expected to have type
+  Submodule ?m.261 ?m.262
+in the application
+  Submodule.Quotient.mk_eq_zero ↑x
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:101:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HasQuotient (↥L) (Type u_1)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:104:4: error(lean.unknownIdentifier): Unknown constant `LinearMap.liftQ`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:80:63: error: unsolved goals
+N m J t h : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+S L : Submodule (ZMod 2) V
+hSL : S ≤ L
+T : ↥L →ₗ[ZMod 2] ZMod 2
+base : V →ₗ[ZMod 2] ZMod 2
+hagree : T ∘ₗ Submodule.inclusion hSL = base ∘ₗ S.subtype
+q : ↥L →ₗ[ZMod 2] V ⧸ S := S.mkQ.domRestrict L
+δ : ↥L →ₗ[ZMod 2] ZMod 2 := T - base ∘ₗ L.subtype
+hker : q.ker ≤ δ.ker
+e : sorry := sorry
+descended : ↥L ⧸ q.ker →ₗ[ZMod 2] ZMod 2 := sorry
+⊢ ↥(S.mkQ.domRestrict L).range →ₗ[ZMod 2] ZMod 2

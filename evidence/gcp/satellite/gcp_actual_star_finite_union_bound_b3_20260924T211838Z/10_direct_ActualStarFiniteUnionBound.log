@@ -1,0 +1,38 @@
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:21:21: error(lean.invalidField): Invalid field `mass_nonneg`: The environment does not contain `PvNP.RealizableHardness.ActualFiniteLaw.FiniteLaw.mass_nonneg`, so it is not possible to project the field `mass_nonneg` from an expression
+  μ
+of type `FiniteLaw Ω`
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:32:63: error: unsolved goals
+Ω : Type u_1
+Ι : Type u_2
+inst✝¹ : Fintype Ω
+inst✝ : Fintype Ι
+μ : FiniteLaw Ω
+E : Ι → Finset Ω
+⊢ ∑ x ∈ Finset.univ.biUnion E, μ.mass x = ∑ x, if ∃ a, x ∈ E a then μ.mass x else 0
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:41:18: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:42:18: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:42:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if x ∈ E i then ?m.180 else ?m.181
+in the target expression
+  μ.mass x ≤ ∑ i, if x ∈ E i then μ.mass x else 0
+
+case pos
+Ω : Type u_1
+Ι : Type u_2
+inst✝¹ : Fintype Ω
+inst✝ : Fintype Ι
+μ : FiniteLaw Ω
+E : Ι → Finset Ω
+x : Ω
+hx : x ∈ Finset.univ
+hu : x ∈ Finset.univ.biUnion E
+i : Ι
+hi : x ∈ E i
+⊢ μ.mass x ≤ ∑ i, if x ∈ E i then μ.mass x else 0
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:47:18: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:49:38: error(lean.invalidField): Invalid field `mass_nonneg`: The environment does not contain `PvNP.RealizableHardness.ActualFiniteLaw.FiniteLaw.mass_nonneg`, so it is not possible to project the field `mass_nonneg` from an expression
+  μ
+of type `FiniteLaw Ω`
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:49:38: error(lean.invalidField): Invalid field `mass_nonneg`: The environment does not contain `PvNP.RealizableHardness.ActualFiniteLaw.FiniteLaw.mass_nonneg`, so it is not possible to project the field `mass_nonneg` from an expression
+  μ
+of type `FiniteLaw Ω`

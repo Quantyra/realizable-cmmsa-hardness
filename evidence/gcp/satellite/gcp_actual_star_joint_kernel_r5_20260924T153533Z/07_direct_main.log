@@ -1,0 +1,53 @@
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:38:0: warning: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_range`:
+  [Finite V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Finite V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:66:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:67:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:76:56: error: Application type mismatch: The argument
+  f
+has type
+  @LinearMap (ZMod 2) (ZMod 2) Field.toSemifield.toDivisionSemiring.toSemiring
+    Field.toSemifield.toDivisionSemiring.toSemiring (RingHom.id (ZMod 2)) (⨁ (i : Fin m), ↥(incrementFamily z i))
+    (V ⧸ ↑z.fst) (DirectSum.instAddCommMonoid (Fin m) fun i => ↥(incrementFamily z i))
+    (Submodule.Quotient.addCommMonoid ↑z.fst) DirectSum.instModule (Submodule.Quotient.module ↑z.fst)
+but is expected to have type
+  @LinearMap ?m.178 ?m.178 DivisionRing.toDivisionSemiring.toSemiring DivisionRing.toDivisionSemiring.toSemiring
+    (RingHom.id ?m.178) ?m.179 ?m.183 AddCommGroup.toAddCommMonoid AddCommGroup.toAddCommMonoid ?m.182 ?m.185
+in the application
+  LinearMap.finrank_range_add_finrank_ker f
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:79:68: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:59:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:113:36: error: Application type mismatch: The argument
+  hbot'
+has type
+  (incrementSumMap z).ker = ⊥
+but is expected to have type
+  LinearMap.ker ?m.156 = ⊥
+in the application
+  LinearMap.ker_eq_bot.mp hbot'
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:99:8: error: (kernel) unknown constant 'PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective'

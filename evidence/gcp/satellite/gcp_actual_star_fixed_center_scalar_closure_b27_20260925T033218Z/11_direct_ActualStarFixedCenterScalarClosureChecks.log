@@ -1,0 +1,24 @@
+PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure.supportStratifiedBound_le_powerRatio.{u_1} {A : Type u_1}
+  [AddCommGroup A] [Fintype A] (m k N : ℕ) (hcard : Fintype.card A = 2 ^ N) (hk : 1 ≤ k) (hkn : k ≤ N) :
+  ActualStarFixedCenterNumericalClosure.supportStratifiedBound A m
+      (↑(GrassmannCounting.gaussian k 1) / ↑(GrassmannCounting.gaussian N 1)) ≤
+    2 ^ (m * k) / (2 ^ N - 1)
+PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure.powerRatio_lt_threshold {m k N E : ℕ}
+  (hguard : m * k + E + 2 ≤ N) : 2 ^ (m * k) / (2 ^ N - 1) < 1 / 2 ^ (E + 1)
+PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure.fixedCenter_badEvent_mass_lt_threshold.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m E : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+  (hk : 1 ≤ d - t) (U : GrassmannCounting.Grass V t) [Fintype (V ⧸ ↑U)]
+  (witness : Fin m → ActualSourceStarLaw.Extension U d)
+  (hguard : m * (d - t) + E + 2 ≤ Module.finrank (ZMod 2) (V ⧸ ↑U)) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+      (ActualStarFixedCenterFirstMoment.fixedCenterBadEvent U) <
+    1 / 2 ^ (E + 1)
+'PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure.supportStratifiedBound_le_powerRatio' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure.powerRatio_lt_threshold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure.fixedCenter_badEvent_mass_lt_threshold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

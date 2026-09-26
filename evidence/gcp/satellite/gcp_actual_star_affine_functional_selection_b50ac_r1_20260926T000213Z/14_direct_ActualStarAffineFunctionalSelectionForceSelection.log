@@ -1,0 +1,53 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:28:53: error: unsolved goals
+case refine_2
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+K H : Submodule (ZMod 2) V
+hKH : K ⊓ H = ⊥
+g : ↥K →ₗ[ZMod 2] ZMod 2
+ψ : ↥H →ₗ[ZMod 2] ZMod 2
+j : ↥K × ↥H →ₗ[ZMod 2] V := K.subtype.coprod H.subtype
+hdisj : Disjoint K.subtype.range H.subtype.range
+hker : j.ker = ⊥
+hj : Function.Injective ⇑j
+e : (↥K × ↥H) ≃ₗ[ZMod 2] ↥j.range := LinearEquiv.ofInjective j hj
+label : ↥j.range →ₗ[ZMod 2] ZMod 2 := g.coprod ψ ∘ₗ ↑e.symm
+F : V →ₗ[ZMod 2] ZMod 2
+hF : F ∘ₗ j.range.subtype = label
+⊢ F ∘ₗ H.subtype = ψ
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:94:4: error: Type mismatch
+  hsum
+has type
+  k + h = ↑x
+but is expected to have type
+  ↑((Submodule.inclusion ⋯) x) = ↑((Submodule.inclusion hKL) k' + (Submodule.inclusion hHL) h')
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:101:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  base (K.subtype k') + base (H.subtype h') = base ((K ⊔ H).subtype x)
+
+V : Type u_1
+inst✝¹ : AddCommGroup V
+inst✝ : Module (ZMod 2) V
+K H L : Submodule (ZMod 2) V
+hKL : K ≤ L
+hHL : H ≤ L
+T : ↥L →ₗ[ZMod 2] ZMod 2
+base : V →ₗ[ZMod 2] ZMod 2
+hTK : T ∘ₗ Submodule.inclusion hKL = base ∘ₗ K.subtype
+hTH : T ∘ₗ Submodule.inclusion hHL = base ∘ₗ H.subtype
+x : ↥(K ⊔ H)
+k : V
+hk : k ∈ K
+h : V
+hh : h ∈ H
+hsum : k + h = ↑x
+k' : ↥K := ⟨k, hk⟩
+h' : ↥H := ⟨h, hh⟩
+hincl : (Submodule.inclusion ⋯) x = (Submodule.inclusion hKL) k' + (Submodule.inclusion hHL) h'
+hTk : T ((Submodule.inclusion hKL) k') = base (K.subtype k')
+hTh : T ((Submodule.inclusion hHL) h') = base (H.subtype h')
+⊢ base (K.subtype k') + base (H.subtype h') = base ((K ⊔ H).subtype x)
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:125:20: error: unexpected token 'matches'; expected '_' or identifier

@@ -1,0 +1,112 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2322/2394] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1807-
+1808-Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+1809-✖ [3258/3258] Building PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement (54s)
+1810-trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/cslib/.lake/build/lib/lean:/tmp/gcp-actual-one-experiment-retained-agreement-a1-20260924T052939Z/checkout/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /tmp/gcp-actual-one-experiment-retained-agreement-a1-20260924T052939Z/checkout/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean -o /tmp/gcp-actual-one-experiment-retained-agreement-a1-20260924T052939Z/checkout/.lake/build/lib/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.olean -i /tmp/gcp-actual-one-experiment-retained-agreement-a1-20260924T052939Z/checkout/.lake/build/lib/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.ilean -c /tmp/gcp-actual-one-experiment-retained-agreement-a1-20260924T052939Z/checkout/.lake/build/ir/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.c --setup /tmp/gcp-actual-one-experiment-retained-agreement-a1-20260924T052939Z/checkout/.lake/build/ir/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.setup.json --json
+1811:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:48:14: unexpected token ':='; expected '⟩'
+1812:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:42:73: Application type mismatch: The argument
+1813-  P
+1814-has type
+1815-  DecodedPair Q d
+1816-but is expected to have type
+1817-  Advice J ?m.31
+1818-in the application
+1819-  retainedPair s P
+1820:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:46:31: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+1821:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:61:26: Application type mismatch: The argument
+1822-  hL
+1823-has type
+1824-  ↑L ≤ TripleRestrictionRank.retained s ⊓ P.W
+1825-but is expected to have type
+1826-  ↑L ≤ DecodedPair.W ?m.52
+1827-in the application
+1828-  AgreesOn T L hL
+1829:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:67:8: failed to synthesize instance of type class
+1830-  Fintype (Zoom Q P)
+1831-
+1832-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1833:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:67:22: failed to synthesize instance of type class
+1834-  Fintype (Zoom Q P)
+1835-
+1836-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1837:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:70:19: failed to synthesize instance of type class
+1838-  Fintype (Zoom Q P)
+1839-
+1840-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1841:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:101:24: Invalid argument name `s` for function `decodedPairScore`
+1842-
+1843-Hint: Perhaps you meant one of the following parameter names:
+1844-  • `J`: s̵J̲
+1845-  • `a`: s̵a̲
+1846-  • `d`: s̵d̲
+1847-  • `P`: s̵P̲
+1848-  • `L`: s̵L̲
+1849:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:102:45: Application type mismatch: The argument
+1850-  P
+1851-has type
+1852-  DecodedPair Q d
+1853-but is expected to have type
+1854-  Advice J ?m.49
+1855-in the application
+1856-  retainedPair s P
+1857:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:105:34: Application type mismatch: The argument
+1858-  P
+1859-has type
+1860-  DecodedPair Q d
+1861-but is expected to have type
+1862-  Advice J ?m.68
+1863-in the application
+1864-  retainedPair s P
+1865:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:102:55: unsolved goals
+1866-J a d : ℕ
+1867-s : TripleRestrictionRank.Draw J
+1868-Q : Advice J a
+1869-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1870-P : DecodedPair Q d
+1871-hQE : ↑Q ≤ TripleRestrictionRank.retained s
+1872-had : a ≤ d
+1873-hd : d ≤ Module.finrank (ZMod 2) ↥(TripleRestrictionRank.retained s)
+1874-C : Type := retainedZoomCarrier s Q P.W
+1875-⊢ mean (retainedW s Q P.W) sorry = agreement T Q sorry
+1876:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:139:41: Application type mismatch: The argument
+1877-  P
+1878-has type
+1879-  DecodedPair Q d
+1880-but is expected to have type
+1881-  Advice J ?m.24
+1882-in the application
+1883-  retainedPair s P
+1884:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:143:33: Application type mismatch: The argument
+1885-  P
+1886-has type
+1887-  DecodedPair Q d
+1888-but is expected to have type
+1889-  Advice J ?m.51
+1890-in the application
+1891-  retainedPair s P
+1892-Some required targets logged failures:
+1893-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+1894:error: build failed
+1895-Finished with result: exit-code
+1896-Main processes terminated with: code=exited/status=1
+1897-Service runtime: 1min 1.711s
+1898-CPU time consumed: 17.115s
+1899-Memory peak: 256.0K
+1900-Memory swap peak: 0B

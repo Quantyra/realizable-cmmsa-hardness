@@ -1,0 +1,23 @@
+PvNP.RealizableHardness.ActualStarJointKernel.incrementFamily.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m) (i : Fin m) : Submodule (ZMod 2) (V ⧸ ↑z.fst)
+PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m) :
+  (DirectSum (Fin m) fun i => ↥(ActualStarJointKernel.incrementFamily z i)) →ₗ[ZMod 2] V ⧸ ↑z.fst
+PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_range.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m) :
+  (ActualStarJointKernel.incrementSumMap z).range = ActualSourceStarLaw.jointIncrementSpan z
+PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_domain_finrank.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m) :
+  Module.finrank (ZMod 2) (DirectSum (Fin m) fun i => ↥(ActualStarJointKernel.incrementFamily z i)) = m * (d - t)
+PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m) :
+  ActualSourceStarLaw.jointlyDirect z ↔ Function.Injective ⇑(ActualStarJointKernel.incrementSumMap z)
+PvNP.RealizableHardness.ActualStarJointKernel.not_jointlyDirect_iff_nonzero_incrementKernel.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m) :
+  ¬ActualSourceStarLaw.jointlyDirect z ↔ ∃ x, x ≠ 0 ∧ (ActualStarJointKernel.incrementSumMap z) x = 0
+'PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarJointKernel.not_jointlyDirect_iff_nonzero_incrementKernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

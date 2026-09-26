@@ -1,0 +1,48 @@
+466-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+467-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+468-  [apply] ring_nf
+469-  
+470:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+471-    
+472-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+473-⚠ [3209/3263] Replayed PvNP.RealizableHardness.FiniteConcentration
+474-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+475-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+476-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+477-  Fintype.card_fun
+478-
+479-Hint: Omit it from the simp argument list.
+480-  [apply] simp
+481-
+482-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1961-
+1962-Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+1963-✖ [3263/3263] Building PvNP.RealizableHardness.ActualMZ24FixedRhoRetainedSpecialization (62s)
+1964-trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/cslib/.lake/build/lib/lean:/tmp/s3132-fixed-rho-retained-sol56-r1-20260924T003622Z/checkout/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /tmp/s3132-fixed-rho-retained-sol56-r1-20260924T003622Z/checkout/lean/PvNP/RealizableHardness/ActualMZ24FixedRhoRetainedSpecialization.lean -o /tmp/s3132-fixed-rho-retained-sol56-r1-20260924T003622Z/checkout/.lake/build/lib/lean/PvNP/RealizableHardness/ActualMZ24FixedRhoRetainedSpecialization.olean -i /tmp/s3132-fixed-rho-retained-sol56-r1-20260924T003622Z/checkout/.lake/build/lib/lean/PvNP/RealizableHardness/ActualMZ24FixedRhoRetainedSpecialization.ilean -c /tmp/s3132-fixed-rho-retained-sol56-r1-20260924T003622Z/checkout/.lake/build/ir/PvNP/RealizableHardness/ActualMZ24FixedRhoRetainedSpecialization.c --setup /tmp/s3132-fixed-rho-retained-sol56-r1-20260924T003622Z/checkout/.lake/build/ir/PvNP/RealizableHardness/ActualMZ24FixedRhoRetainedSpecialization.setup.json --json
+1965:error: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoRetainedSpecialization.lean:31:0: type of theorem `PvNP.RealizableHardness.ActualMZ24FixedRhoRetainedSpecialization.fixedRho_retained_extraction_of_excessive_family` is not a proposition
+1966-  {Aof base : ℕ → ℕ} →
+1967-    (H : DominatingSamplingCutoff Aof Rof base) →
+1968-      (L m a0 c : ℕ) →
+1969-        (hsel : selector (fixedRhoHeightFloor base) L = ↑m) →
+1970-          (draw : Draw (blocks (Aof m) (hBlock L m))) →
+1971-            (Q0 : Grass (↥(retained draw)) a0) →
+1972-              (T0 : (X : Grass (↥(retained draw)) (2 * hBlock L m)) → Module.Dual (ZMod 2) ↥↑X) →
+1973-                {K : Type u_1} →
+1974-                  [inst : Fintype K] →
+1975-                    (P : K → DecodedPair Q0 (2 * hBlock L m)) →
+1976-                      (beta : ℚ) →
+1977-                        (hP : Function.Injective P) →
+--
+1987-                                        RetainedGenericExtractionOutput ⋯ L m (Dof m) a0 hsel draw Q0 T0 P beta hP ⋯
+1988-                                          hagr
+1989-Some required targets logged failures:
+1990-- PvNP.RealizableHardness.ActualMZ24FixedRhoRetainedSpecialization
+1991:error: build failed
+--
+1-UTC=2026-09-24T00:43:13Z
+2:RESULT=FAIL
+3:REASON=direct_main_failed
+4-COMMIT=none
+5-1fe4dbec1a680c52ced9288bc52901546b50357d02d08b4ba79da2a9156e6bac  /tmp/s3132-fixed-rho-retained-sol56-r1-20260924T003622Z/incoming/ActualMZ24FixedRhoRetainedSpecialization.lean
+6-d42e8f2e12b89188b34a7acf33236a7e690546723907e2cd9edaa3e48e858090  /tmp/s3132-fixed-rho-retained-sol56-r1-20260924T003622Z/incoming/ActualMZ24FixedRhoRetainedSpecializationChecks.lean

@@ -1,0 +1,102 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:199:35: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  SupSet (Type u_1)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:200:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype { G // ∀ (i : ι) (x : ↥(Q i)), G ((Q i).subtype x) = (label i) x }
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:204:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:205:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:211:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:216:10: error: Function expected at
+  DirectSum.range_coeLinearMap
+but this term has type
+  (DirectSum.coeLinearMap ?m.221).range = ⨆ i, ?m.221 i
+
+Note: Expected a function because this term is being applied to the argument
+  Q
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:236:6: error: Type mismatch
+  Eq.trans (G.property i z) (Eq.symm (hglued i z))
+has type
+  ↑G (DFunLike.coe.{u_1 + 1, u_1 + 1, u_1 + 1} (Q i).subtype z) = glued ((Q i).subtype z)
+but is expected to have type
+  ↑G
+      (DFunLike.coe.{max (u_1 + 1) ((max u_1 u_2) + 1), (max u_1 u_2) + 1, u_1 + 1} j
+        ((DirectSum.lof (ZMod 2) ι (fun i => ↥(Q i)) i) z)) =
+    glued (j ((DirectSum.lof (ZMod 2) ι (fun i => ↥(Q i)) i) z))
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:240:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑G ∘ₗ j) y
+in the target expression
+  ↑G (j y) = glued (j y)
+
+W : Type u_1
+inst✝³ : AddCommGroup W
+inst✝² : Module (ZMod 2) W
+inst✝¹ : Finite W
+ι : Type u_2
+inst✝ : Fintype ι
+Q : ι → Submodule (ZMod 2) W
+hjoint : Function.Injective ⇑(DirectSum.coeLinearMap Q)
+label : (i : ι) → ↥(Q i) →ₗ[ZMod 2] ZMod 2
+r : ℕ
+hR : sorry = r
+this✝¹ : Fintype W := Fintype.ofFinite W
+this✝ : Finite (Module.Dual (ZMod 2) W) :=
+  Finite.of_injective (fun f => f.toFun) fun ⦃f g⦄ h => LinearMap.ext fun x => congrFun h x
+this : Fintype (Module.Dual (ZMod 2) W) := Fintype.ofFinite (Module.Dual (ZMod 2) W)
+j : (⨁ (i : ι), ↥(Q i)) →ₗ[ZMod 2] W := DirectSum.coeLinearMap Q
+R : Submodule (ZMod 2) W := j.range
+hrange : R = ⨆ i, Q i
+hR' : Module.finrank (ZMod 2) ↥R = r
+glued : W →ₗ[ZMod 2] ZMod 2
+hglued : ∀ (i : ι) (x : ↥(Q i)), glued ((Q i).subtype x) = (label i) x
+δ : ↥R →ₗ[ZMod 2] ZMod 2 := glued ∘ₗ R.subtype
+matchFiber : Type (max 0 u_1) := { G // ∀ (i : ι) (x : ↥(Q i)), G ((Q i).subtype x) = (label i) x }
+extFiber : Type u_1 := FunctionalExtensionFiber R δ
+G : matchFiber
+x : ↥R
+y : ⨁ (i : ι), ↥(Q i)
+hy : j y = ↑x
+hmaps : ↑G ∘ₗ j = glued ∘ₗ j
+hxy : (↑G ∘ₗ j) y = (glued ∘ₗ j) y
+⊢ ↑G (j y) = glued (j y)
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    G
+  has type
+    matchFiber
+  but is expected to have type
+    { G // ∀ (i : ι) (x : ↥(Q i)), G ↑x = (label i) x }
+  in the application
+    ↑G
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:235:39: warning: This simp argument is unused:
+  DirectSum.coeLinearMap_lof
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

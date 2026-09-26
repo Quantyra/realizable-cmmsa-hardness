@@ -1,0 +1,33 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:29:8: error: Invalid rewrite argument: Expected an equality or iff proof or definition name, but `joint` is a value of type
+  (⨁ (b : Bool), ↥(Q b)) →ₗ[ZMod 2] V
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:41:13: error(lean.unknownIdentifier): Unknown constant `Finset.sum_bool`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:39:63: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+K H : Submodule (ZMod 2) V
+hKH : K ⊓ H = ⊥
+g : ↥K →ₗ[ZMod 2] ZMod 2
+ψ : ↥H →ₗ[ZMod 2] ZMod 2
+Q : Bool → Submodule (ZMod 2) V := fun b => if b = true then H else K
+joint : (⨁ (b : Bool), ↥(Q b)) →ₗ[ZMod 2] V := DirectSum.coeLinearMap Q
+hrange : joint.range = K ⊔ H
+hrangeDim : Module.finrank (ZMod 2) ↥joint.range = Module.finrank (ZMod 2) ↥K + Module.finrank (ZMod 2) ↥H
+⊢ Module.finrank (ZMod 2) ↥H + Module.finrank (ZMod 2) ↥K = Module.finrank (ZMod 2) ↥K + Module.finrank (ZMod 2) ↥H
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:49:63: error: Application type mismatch: The argument
+  ψ
+has type
+  ↥H →ₗ[ZMod 2] ZMod 2
+but is expected to have type
+  ↥(Q b) →ₗ[ZMod 2] ZMod 2
+in the application
+  ite (b = true) ψ
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:50:52: error: Application type mismatch: The argument
+  hjoint
+has type
+  Function.Injective ⇑joint
+but is expected to have type
+  Function.Injective ⇑(DirectSum.coeLinearMap Q)
+in the application
+  jointDirectSumFunctional_glue Q hjoint

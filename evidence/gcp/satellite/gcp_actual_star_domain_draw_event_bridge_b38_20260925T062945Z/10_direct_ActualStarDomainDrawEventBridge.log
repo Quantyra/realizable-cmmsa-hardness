@@ -1,0 +1,140 @@
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:44:8: error: Application type mismatch: The argument
+  ↑((domainDrawExtensionEquiv center h ht hh) D)
+has type
+  Grass (↥(questionCoordinateSpace center)) (J + 2 * h)
+but is expected to have type
+  { L // ↑(coordinateCenterGrass center) ≤ ↑L }
+in the application
+  (upperQuotientEquiv (coordinateCenterGrass center) ?m.44) ↑((domainDrawExtensionEquiv center h ht hh) D)
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:43:61: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b + c - d ≥ 1
+  a ≥ 0
+  a - c ≤ 0
+  2*a - b ≥ 0
+where
+ a := ↑h
+ b := ↑t
+ c := ↑J
+ d := ↑?m.38
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:57:10: error: Application type mismatch: The argument
+  ↑((domainDrawExtensionEquiv center h ht hh) D)
+has type
+  Grass (↥(questionCoordinateSpace center)) (J + 2 * h)
+but is expected to have type
+  { L // ↑U ≤ ↑L }
+in the application
+  (upperQuotientEquiv U ?m.179) ↑((domainDrawExtensionEquiv center h ht hh) D)
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:58:44: error: unsolved goals
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+hdim : 2 * h - t = J + 2 * h - (J + t)
+eRank : Grass (CenterQuotient center) (2 * h - t) ≃
+  Grass (↥(questionCoordinateSpace center) ⧸ ↑U) (J + 2 * h - (J + t)) :=
+  Equiv.cast ⋯
+⊢ (Equiv.cast ⋯).symm ((upperQuotientEquiv U ⋯) (sorry ())) = (domainDrawEquiv center h ht hh) D
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:41:17: warning: This simp argument is unused:
+  CenterQuotient
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [coordinateCenterGrass]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:59:17: warning: This simp argument is unused:
+  domainDrawExtensionEquiv
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [eRank, Equiv.trans_apply, Equiv.apply_symm_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:59:43: warning: This simp argument is unused:
+  Equiv.trans_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [eRank, domainDrawExtensionEquiv, Equiv.apply_symm_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:60:6: warning: This simp argument is unused:
+  Equiv.apply_symm_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [eRank, domainDrawExtensionEquiv, Equiv.trans_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:89:51: error: Tactic `unfold` failed to unfold `incrementFamily` in
+  ⨆ i, Submodule.map (↑⟨U, leaves⟩.fst).mkQ ↑↑(⟨U, leaves⟩.snd i) = ⨆ i, ↑((domainDrawEquiv center h ht hh) (draws i))
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:96:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  jointIncrementSpan ⟨U, leaves⟩
+in the target expression
+  draws ∈
+      {x |
+        (domainDrawTupleExtensionEquiv center h m ht hh) x ∈
+          {Ls |
+            ¬Module.finrank (ZMod 2) ↥(jointIncrementSpan ⟨coordinateCenterGrass center, Ls⟩) =
+                m * (J + 2 * h - (J + t))}} ↔
+    Module.finrank (ZMod 2) ↥(domainDrawJointImage center h ht hh draws) ≠ m * (2 * h - t)
+
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+inst✝³ : Finite ↥(questionCoordinateSpace center)
+inst✝² : Finite (CenterQuotient center)
+inst✝¹ : Fintype (Fin m → DomainDraw center h)
+inst✝ : Fintype (Fin m → Extension (coordinateCenterGrass center) (J + 2 * h))
+draws : Fin m → DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+leaves : Fin m → Extension (coordinateCenterGrass center) (J + 2 * h) :=
+  (domainDrawTupleExtensionEquiv center h m ht hh) draws
+hspan : jointIncrementSpan ⟨U, leaves⟩ = domainDrawJointImage center h ht hh draws
+hdim : J + 2 * h - (J + t) = 2 * h - t
+⊢ draws ∈
+      {x |
+        (domainDrawTupleExtensionEquiv center h m ht hh) x ∈
+          {Ls |
+            ¬Module.finrank (ZMod 2) ↥(jointIncrementSpan ⟨coordinateCenterGrass center, Ls⟩) =
+                m * (J + 2 * h - (J + t))}} ↔
+    Module.finrank (ZMod 2) ↥(domainDrawJointImage center h ht hh draws) ≠ m * (2 * h - t)
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    coordinateCenterGrass center
+  has type
+    Grass (↥(questionCoordinateSpace center)) (J + t)
+  but is expected to have type
+    { Q // Module.finrank (ZMod 2) ↥Q = J + t }
+  in the application
+    ↑(coordinateCenterGrass center)
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:94:28: warning: This simp argument is unused:
+  Finset.mem_filter
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [preimageEvent, Finset.mem_univ, true_and, fixedCenterBadEvent, jointlyDirect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:94:47: warning: This simp argument is unused:
+  Finset.mem_univ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [preimageEvent, Finset.mem_filter, true_and, fixedCenterBadEvent, jointlyDirect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:94:64: warning: This simp argument is unused:
+  true_and
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [preimageEvent, Finset.mem_filter, Finset.mem_univ, fixedCenterBadEvent, jointlyDirect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

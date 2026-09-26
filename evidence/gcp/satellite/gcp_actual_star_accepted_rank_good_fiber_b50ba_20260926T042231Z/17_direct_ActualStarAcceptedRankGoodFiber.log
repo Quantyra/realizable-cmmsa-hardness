@@ -1,0 +1,20 @@
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:95:48: error: Tactic `rfl` failed: The left-hand side
+  Submodule.map (centerSpanInCoordinate center).mkQ (Submodule.comap (questionCoordinateSpace center).subtype ↑D)
+is not definitionally equal to the right-hand side
+  ↑(cast ⋯
+      ((PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.containingQuotientEquiv✝
+          ⟨centerSpanInCoordinate center, ⋯⟩ ⋯)
+        ((PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.coordinateContainingEquiv✝ center) D)))
+
+N nRows J t : ℕ
+I : Instance N nRows
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+⊢ Submodule.map (centerSpanInCoordinate center).mkQ (Submodule.comap (questionCoordinateSpace center).subtype ↑D) =
+    ↑(cast ⋯
+        ((PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.containingQuotientEquiv✝
+            ⟨centerSpanInCoordinate center, ⋯⟩ ⋯)
+          ((PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.coordinateContainingEquiv✝ center) D)))

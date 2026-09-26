@@ -1,0 +1,209 @@
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:28:48: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HSMul Type FixtureV ?m.10
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:30:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:33:4: error: (kernel) unknown constant 'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransportChecks.adviceLine_finrank'
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:36:2: error: Tactic `apply` failed: could not unify the conclusion of `Submodule.span_le.mpr`
+  Submodule.span ?m.4 ?m.9 ≤ ?m.10
+with the goal
+  adviceLine ≤ coordinateHyperplane
+
+Note: The full type of `Submodule.span_le.mpr` is
+  ?m.9 ⊆ ↑?m.10 → Submodule.span ?m.4 ?m.9 ≤ ?m.10
+
+⊢ adviceLine ≤ coordinateHyperplane
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:44:25: error: Application type mismatch: The argument
+  Module.finrank (ZMod 2)
+has type
+  (M : Type ?u.8) → [inst : Semiring (ZMod 2)] → [inst_1 : AddCommMonoid M] → [Module (ZMod 2) M] → ℕ
+but is expected to have type
+  Submodule (ZMod 2) FixtureV → ?m.11
+in the application
+  congrArg (Module.finrank (ZMod 2))
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:57:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 1
+  a ≥ 1
+where
+ a := ↑(Module.finrank (ZMod 2) ActualMZ24HyperplaneSupportChecks.FixtureV)
+ b := ↑(Module.finrank (ZMod 2) ↥coordinateHyperplane)
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:55:20: warning: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [FixtureV]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:62:16: error: Application type mismatch: The argument
+  (LinearMap.proj (ZMod 2)) ?m.31
+has type
+  ?m.20 (ZMod 2)
+but is expected to have type
+  FixtureV →ₛₗ[?m.16] ?m.9
+in the application
+  LinearMap.ker ((LinearMap.proj (ZMod 2)) ?m.31)
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:65:4: error: Type mismatch
+  (LinearMap.proj (ZMod 2)) ?m.20
+has type
+  ?m.9 (ZMod 2)
+but is expected to have type
+  Module.Dual (ZMod 2) FixtureV
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:74:56: error(lean.unknownIdentifier): Unknown identifier `coordinateFormOne_ne_zero`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:73:67: error: unsolved goals
+⊢ Module.finrank (ZMod 2) ↥planeOne = 2
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:86:30: error: unsolved goals
+h : planeOneGrass = planeGrass
+hsub : planeOne = coordinateHyperplane
+e0 : FixtureV := fun i => if i = 0 then 1 else 0
+⊢ (fun i => if i = 0 then 1 else 0) ∈ sorry
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:87:10: warning: declaration uses `sorry`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:93:32: error: Application type mismatch: The argument
+  LinearMap.id
+has type
+  ?m.19 →ₗ[?m.18] ?m.19
+but is expected to have type
+  Module.Dual (ZMod 2) ↥↑L
+in the application
+  if L = planeGrass then 0 else LinearMap.id
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:95:55: error: Type mismatch
+  sameTable planeOneGrass
+has type
+  Module.Dual (ZMod 2) ↥↑planeOneGrass
+but is expected to have type
+  Module.Dual (ZMod 2) ↥↑planeGrass
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:95:82: error: unsolved goals
+⊢ sorry ()
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:96:8: warning: declaration uses `sorry`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:96:8: warning: This simp argument is unused:
+  sameTable
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [planes_ne]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:96:19: warning: This simp argument is unused:
+  planes_ne
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [sameTable]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:98:4: error: (kernel) application type mismatch
+  DecodedPair.mk coordinateHyperplane advice_le_plane
+argument has type
+  adviceLine ≤ coordinateHyperplane
+but function has type
+  ↑adviceGrass ≤ coordinateHyperplane → Module.Dual (ZMod 2) ↥coordinateHyperplane → DecodedPair adviceGrass 2
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:103:23: error: (kernel) application type mismatch
+  And.intro advice_le_plane
+argument has type
+  adviceLine ≤ coordinateHyperplane
+but function has type
+  failed to pretty print expression (use 'set_option pp.rawOnError true' for raw representation)
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:106:0: error: (kernel) application type mismatch
+  localGrass coordinateHyperplane adviceGrass advice_le_plane
+argument has type
+  adviceLine ≤ coordinateHyperplane
+but function has type
+  ↑adviceGrass ≤ coordinateHyperplane → Grass (↥coordinateHyperplane) 1
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:116:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Nonempty
+    (Zoom (localGrass coordinateHyperplane adviceGrass advice_le_plane)
+      (localDecodedPair coordinateHyperplane adviceGrass planePair advice_le_plane ⋯))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:114:0: error: (kernel) application type mismatch
+  localGrass coordinateHyperplane adviceGrass advice_le_plane
+argument has type
+  adviceLine ≤ coordinateHyperplane
+but function has type
+  ↑adviceGrass ≤ coordinateHyperplane → Grass (↥coordinateHyperplane) 1
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:123:0: error: (kernel) application type mismatch
+  localGrass coordinateHyperplane adviceGrass advice_le_plane
+argument has type
+  adviceLine ≤ coordinateHyperplane
+but function has type
+  ↑adviceGrass ≤ coordinateHyperplane → Grass (↥coordinateHyperplane) 1
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:137:4: error: (kernel) application type mismatch
+  DecodedPair.mk adviceLine emptyZoomPair._proof_1
+argument has type
+  ↑adviceGrass ≤ ↑adviceGrass
+but function has type
+  ↑adviceGrass ≤ adviceLine → Module.Dual (ZMod 2) ↥adviceLine → DecodedPair adviceGrass 2
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:145:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Module.finrank (ZMod 2) ↥adviceLine
+in the target expression
+  Module.finrank (ZMod 2) ↥↑↑z ≤ Module.finrank (ZMod 2) ↥emptyZoomPair.W
+
+z : Zoom adviceGrass emptyZoomPair
+hrank : Module.finrank (ZMod 2) ↥↑↑z ≤ Module.finrank (ZMod 2) ↥emptyZoomPair.W
+⊢ False
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:149:31: error: Application type mismatch: The argument
+  not_nonempty_iff.mpr ?m.17
+has type
+  ¬Nonempty ?m.14
+but is expected to have type
+  IsEmpty (Zoom adviceGrass emptyZoomPair)
+in the application
+  Fintype.card_eq_zero_iff.mpr (not_nonempty_iff.mpr ?m.17)
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:149:54: error: unsolved goals
+⊢ IsEmpty ?m.14
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:151:0: error: (kernel) application type mismatch
+  localGrass coordinateHyperplane adviceGrass advice_le_plane
+argument has type
+  adviceLine ≤ coordinateHyperplane
+but function has type
+  ↑adviceGrass ≤ coordinateHyperplane → Grass (↥coordinateHyperplane) 1
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.liftQuery.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] {d : ℕ} (E : Submodule (ZMod 2) V) (L : Grass (↥E) d) : Grass V d
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.localGrass.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {a : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a) (hQE : ↑Q ≤ E) : Grass (↥E) a
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.localDecodedPair.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a) (P : DecodedPair Q d)
+  (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) : DecodedPair (localGrass E Q hQE) d
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.restrictedTable.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] {d : ℕ} (E : Submodule (ZMod 2) V) (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L)
+  (L : Grass (↥E) d) : Module.Dual (ZMod 2) ↥↑L
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.zoomRestrictionEquiv.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a) (P : DecodedPair Q d)
+  (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) : Zoom Q P ≃ Zoom (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE)
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreeingZoomRestrictionEquiv.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a)
+  (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L) (P : DecodedPair Q d) (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) :
+  AgreeingZoom T Q P ≃ AgreeingZoom (restrictedTable E T) (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE)
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreement_restrict_eq.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a)
+  (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L) (P : DecodedPair Q d) (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) :
+  agreement T Q P = agreement (restrictedTable E T) (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE)
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.uniformLaw_zoomRestriction.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a)
+  (P : DecodedPair Q d) (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) [Nonempty (Zoom Q P)] :
+  pushforward (⇑(zoomRestrictionEquiv E Q P hQE hWE)) (uniformLaw (Zoom Q P)) =
+    uniformLaw (Zoom (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE))
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreement_le_complement.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a)
+  (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L) (P : DecodedPair Q d) (hQE : ↑Q ≤ E) (hWE : P.W ≤ E)
+  (C : AdviceComplement (localGrass E Q hQE)) (had : a ≤ d) (hb : a + (d - a) = d) :
+  agreement T Q P ≤
+    agreement (complementTable (restrictedTable E T) C had hb) (bottomGrass C.A)
+      (complementPair C (localDecodedPair E Q P hQE hWE))
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.zoomRestrictionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreeingZoomRestrictionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreement_restrict_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.uniformLaw_zoomRestriction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreement_le_complement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

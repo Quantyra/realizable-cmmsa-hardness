@@ -1,0 +1,55 @@
+PvNP.RealizableHardness.ActualStarExtensionProduct.eventMass_uniform_filter_function.{u_2} (Ω : Type u_2) [Fintype Ω]
+  [Nonempty Ω] (P : Ω → Prop) [DecidablePred P] :
+  ActualFiniteLaw.eventMass (ActualFiniteLaw.uniformLaw Ω) (Finset.filter P Finset.univ) =
+    ↑(Finset.filter P Finset.univ).card / ↑(Fintype.card Ω)
+PvNP.RealizableHardness.ActualStarExtensionProduct.uniformFunction_cylinder_eventMass.{u_2, u_3} {I : Type u_2}
+  {Ω : Type u_3} [Fintype I] [DecidableEq I] [Fintype Ω] [Nonempty Ω] (P : I → Ω → Prop) [(i : I) → DecidablePred (P i)]
+  [DecidablePred fun x => ∀ (i : I), P i (x i)] :
+  ActualFiniteLaw.eventMass (ActualFiniteLaw.uniformLaw (I → Ω)) {x | ∀ (i : I), P i (x i)} =
+    ∏ i, ActualFiniteLaw.eventMass (ActualFiniteLaw.uniformLaw Ω) (Finset.filter (P i) Finset.univ)
+PvNP.RealizableHardness.ActualStarExtensionProduct.extensionTupleLaw.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (U : GrassmannCounting.Grass V t)
+  (witness : Fin m → ActualSourceStarLaw.Extension U d) :
+  ActualFiniteLaw.FiniteLaw (Fin m → ActualSourceStarLaw.Extension U d)
+PvNP.RealizableHardness.ActualStarExtensionProduct.extensionTupleLaw_atom.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (U : GrassmannCounting.Grass V t)
+  (witness Ls : Fin m → ActualSourceStarLaw.Extension U d) :
+  (ActualStarExtensionProduct.extensionTupleLaw U witness).mass Ls =
+    ∏ i, (ActualSourceStarLaw.extensionLaw U (witness i)).mass (Ls i)
+PvNP.RealizableHardness.ActualStarExtensionProduct.supportedLineEvent.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (S : Finset (Fin m)) (U : GrassmannCounting.Grass V t)
+  (K : ↥S → GrassmannCounting.Grass (V ⧸ ↑U) 1) : Finset (Fin m → ActualSourceStarLaw.Extension U d)
+PvNP.RealizableHardness.ActualStarExtensionProduct.fixedCenter_supportedLine_eventMass.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+  (hk : 1 ≤ d - t) (U : GrassmannCounting.Grass V t) (witness : Fin m → ActualSourceStarLaw.Extension U d)
+  (S : Finset (Fin m)) (K : ↥S → GrassmannCounting.Grass (V ⧸ ↑U) 1) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+      (ActualStarExtensionProduct.supportedLineEvent htd S U K) =
+    (↑(GrassmannCounting.gaussian (d - t) 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^
+      S.card
+PvNP.RealizableHardness.ActualStarExtensionProduct.fixedCenter_emptySupport_eventMass.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (U : GrassmannCounting.Grass V t)
+  (witness : Fin m → ActualSourceStarLaw.Extension U d) (S : Finset (Fin m)) (hS : S = ∅)
+  (K : ↥S → GrassmannCounting.Grass (V ⧸ ↑U) 1) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+      (ActualStarExtensionProduct.supportedLineEvent htd S U K) =
+    1
+PvNP.RealizableHardness.ActualStarExtensionProduct.fixedCenter_supportedLine_eventMass_zeroIncrement.{u_1}
+  {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d)
+  (hdV : d ≤ Module.finrank (ZMod 2) V) (hkt : d - t = 0) (U : GrassmannCounting.Grass V t)
+  (witness : Fin m → ActualSourceStarLaw.Extension U d) (S : Finset (Fin m)) (hS : S.Nonempty)
+  (K : ↥S → GrassmannCounting.Grass (V ⧸ ↑U) 1) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+        (ActualStarExtensionProduct.supportedLineEvent htd S U K) =
+      (↑(GrassmannCounting.gaussian (d - t) 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^
+        S.card ∧
+    1 ≤ Module.finrank (ZMod 2) (V ⧸ ↑U) ∧ GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1 ≠ 0
+'PvNP.RealizableHardness.ActualStarExtensionProduct.uniformFunction_cylinder_eventMass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarExtensionProduct.fixedCenter_supportedLine_eventMass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarExtensionProduct.fixedCenter_supportedLine_eventMass_zeroIncrement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

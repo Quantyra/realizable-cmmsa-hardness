@@ -1,0 +1,70 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2321/2386] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1831-The difference between `have` and `haveI` is that `haveI` inlines the value.
+1832-But this is not relevant for proofs because of proof irrelevance.
+1833-
+1834-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1835:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:91:6: 'change' tactic failed, pattern
+1836-  (∑ z, if AgreesOn T ↑z ⋯ then 1 else 0) =
+1837-    @Fintype.card { z // AgreesOn T ↑z ⋯ } (Subtype.fintype fun z => AgreesOn T ↑z ⋯)
+1838-is not definitionally equal to target
+1839-  (∑ z, if AgreesOn T ↑z ⋯ then 1 else 0) = @Fintype.card (AgreeingZoom T Q P) this
+1840-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:102:39: `if_false` has been deprecated: Use `ite_false` instead
+1841:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:105:4: No goals to be solved
+1842-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:85:27: This simp argument is unused:
+1843-  hzero
+1844-
+1845-Hint: Omit it from the simp argument list.
+1846-  [apply] simp [uniformZoomAtom]
+1847-
+1848-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+1849-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:121:2: Try this: 
+1850-  letI̵
+1851-
+1852-The goal is a proposition, so `let` is preferred over `letI`.
+1853-The difference between `let` and `letI` is that `letI` inlines the value.
+1854-But this is not relevant for proofs because of proof irrelevance.
+1855-
+1856-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1857:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:147:59: Invalid argument name `s` for function `agreement_eq_uniformScore_sum`
+1858-
+1859-Hint: Perhaps you meant one of the following parameter names:
+1860-  • `J`: s̵J̲
+1861-  • `a`: s̵a̲
+1862-  • `d`: s̵d̲
+1863-  • `P`: s̵P̲
+1864:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:143:32: Application type mismatch: The argument
+1865-  z
+1866-has type
+1867-  C
+1868-but is expected to have type
+1869-  Zoom Q (retainedPair s Q P hQE)
+1870-in the application
+1871-  e.symm z
+1872:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:146:13: Invalid argument: Variable `T` is not a proposition or let-declaration
+1873:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:146:16: Invalid argument: Variable `Q` is not a proposition or let-declaration
+1874-Some required targets logged failures:
+1875-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+1876:error: build failed
+1877-Finished with result: exit-code
+1878-Main processes terminated with: code=exited/status=1
+1879-Service runtime: 56.747s
+1880-CPU time consumed: 19.197s
+1881-Memory peak: 256.0K
+1882-Memory swap peak: 0B

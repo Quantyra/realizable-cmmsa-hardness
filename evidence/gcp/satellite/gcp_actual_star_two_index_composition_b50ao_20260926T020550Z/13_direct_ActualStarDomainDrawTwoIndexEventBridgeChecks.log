@@ -1,0 +1,25 @@
+PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge.domainDrawJointImageArity {N nRows J t r : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N nRows}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) (h : ℕ) (ht : t ≤ 2 * h)
+  (hh : h ≤ J) (draws : Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h) :
+  Submodule (ZMod 2) (PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.CenterQuotient center)
+PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge.fixedCenterBad_preimage_iff_domainDraw_rankFailure_arity
+  {N nRows J t r : ℕ} {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N nRows}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) (h : ℕ) (ht : t ≤ 2 * h)
+  (hh : h ≤ J) [Finite ↥(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionCoordinateSpace center)]
+  [Finite (PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.CenterQuotient center)]
+  [Fintype (Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h)]
+  (draws : Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h) :
+  draws ∈
+      PvNP.RealizableHardness.ActualFiniteLaw.preimageEvent
+        (⇑(PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.domainDrawTupleExtensionEquiv center h r ht
+            hh))
+        (PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenterBadEvent
+          (PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.coordinateCenterGrass center)) ↔
+    Module.finrank (ZMod 2) ↥(domainDrawJointImageArity center h ht hh draws) ≠ r * (2 * h - t)
+'PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge.domainDrawJointImageArity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge.fixedCenterBad_preimage_iff_domainDraw_rankFailure_arity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

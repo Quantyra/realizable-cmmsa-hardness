@@ -1,0 +1,100 @@
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:44:25: error: Application type mismatch: The argument
+  Module.finrank (ZMod 2)
+has type
+  (M : Type ?u.8) → [inst : Semiring (ZMod 2)] → [inst_1 : AddCommMonoid M] → [Module (ZMod 2) M] → ℕ
+but is expected to have type
+  Submodule (ZMod 2) FixtureV → ?m.11
+in the application
+  congrArg (Module.finrank (ZMod 2))
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:57:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 1
+  a ≥ 1
+where
+ a := ↑(Module.finrank (ZMod 2) ActualMZ24HyperplaneSupportChecks.FixtureV)
+ b := ↑(Module.finrank (ZMod 2) ↥coordinateHyperplane)
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:55:20: warning: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [FixtureV]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:68:12: error: typeclass instance problem is stuck, it is often due to metavariables
+  Fin 3 → Module ?m.33 (ZMod 2)
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:78:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 1
+  a ≥ 1
+where
+ a := ↑(Module.finrank (ZMod 2) (Fin 3 → ZMod 2))
+ b := ↑(Module.finrank (ZMod 2) ↥planeOne)
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:76:20: warning: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [FixtureV]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:106:25: error: Application type mismatch: The argument
+  h
+has type
+  sameTable planeOneGrass = 0
+but is expected to have type
+  ?m.36 = ?m.37
+in the application
+  congrFun h
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransportChecks.lean:135:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Nonempty
+    (Zoom (localGrass coordinateHyperplane adviceGrass advice_le_plane)
+      (localDecodedPair coordinateHyperplane adviceGrass planePair advice_le_plane ⋯))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.liftQuery.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] {d : ℕ} (E : Submodule (ZMod 2) V) (L : Grass (↥E) d) : Grass V d
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.localGrass.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {a : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a) (hQE : ↑Q ≤ E) : Grass (↥E) a
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.localDecodedPair.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a) (P : DecodedPair Q d)
+  (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) : DecodedPair (localGrass E Q hQE) d
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.restrictedTable.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] {d : ℕ} (E : Submodule (ZMod 2) V) (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L)
+  (L : Grass (↥E) d) : Module.Dual (ZMod 2) ↥↑L
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.zoomRestrictionEquiv.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a) (P : DecodedPair Q d)
+  (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) : Zoom Q P ≃ Zoom (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE)
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreeingZoomRestrictionEquiv.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a)
+  (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L) (P : DecodedPair Q d) (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) :
+  AgreeingZoom T Q P ≃ AgreeingZoom (restrictedTable E T) (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE)
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreement_restrict_eq.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a)
+  (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L) (P : DecodedPair Q d) (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) :
+  agreement T Q P = agreement (restrictedTable E T) (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE)
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.uniformLaw_zoomRestriction.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a)
+  (P : DecodedPair Q d) (hQE : ↑Q ≤ E) (hWE : P.W ≤ E) [Nonempty (Zoom Q P)] :
+  pushforward (⇑(zoomRestrictionEquiv E Q P hQE hWE)) (uniformLaw (Zoom Q P)) =
+    uniformLaw (Zoom (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE))
+PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreement_le_complement.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} (E : Submodule (ZMod 2) V) (Q : Grass V a)
+  (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L) (P : DecodedPair Q d) (hQE : ↑Q ≤ E) (hWE : P.W ≤ E)
+  (C : AdviceComplement (localGrass E Q hQE)) (had : a ≤ d) (hb : a + (d - a) = d) :
+  agreement T Q P ≤
+    agreement (complementTable (restrictedTable E T) C had hb) (bottomGrass C.A)
+      (complementPair C (localDecodedPair E Q P hQE hWE))
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.zoomRestrictionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreeingZoomRestrictionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreement_restrict_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.uniformLaw_zoomRestriction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.agreement_le_complement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

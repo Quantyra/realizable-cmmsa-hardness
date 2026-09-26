@@ -1,0 +1,75 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2312/2364] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1831-The difference between `have` and `haveI` is that `haveI` inlines the value.
+1832-But this is not relevant for proofs because of proof irrelevance.
+1833-
+1834-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1835:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:91:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+1836-  {x | ?p x}.card
+1837-in the target expression
+1838-  (∑ z, if AgreesOn T ↑z ⋯ then 1 else 0) = Fintype.card { z // AgreesOn T ↑z ⋯ }
+1839-
+1840-J a d : ℕ
+1841-Q : Advice J a
+1842-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1843-P : DecodedPair Q d
+1844-this✝ : Fintype (Zoom Q P) := zoomFintype Q P
+1845-this : Fintype (AgreeingZoom T Q P) := agreeingZoomFintype T Q P
+1846-hzero : ¬Fintype.card (Zoom Q P) = 0
+1847-⊢ (∑ z, if AgreesOn T ↑z ⋯ then 1 else 0) = Fintype.card { z // AgreesOn T ↑z ⋯ }
+1848-
+1849-Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+1850:Full error:
+1851-  Application type mismatch: The argument
+1852-    Q
+1853-  has type
+1854-    Advice J a
+1855-  but is expected to have type
+1856-    Grass (TripleRestrictionRank.Vector J) a
+1857-  in the application
+1858-    @Zoom (TripleRestrictionRank.Vector J) Pi.addCommGroup
+1859-      (Pi.Function.module (TripleRestrictionRank.Coord J) (ZMod 2) (ZMod 2)) a Q
+1860-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:103:39: `if_false` has been deprecated: Use `ite_false` instead
+1861-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:85:27: This simp argument is unused:
+1862-  hzero
+--
+1872-The difference between `let` and `letI` is that `letI` inlines the value.
+1873-But this is not relevant for proofs because of proof irrelevance.
+1874-
+1875-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1876:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:146:6: Type mismatch: After simplification, term
+1877-  hs
+1878- has type
+1879-  decodedPairScore Q T P ↑z = if AgreesOn T ↑z ⋯ then 1 else 0
+1880-but is expected to have type
+1881-  (if Fintype.card (Zoom Q (retainedPair s Q P hQE)) = 0 then 0
+1882-    else (↑(Fintype.card (Zoom Q (retainedPair s Q P hQE))))⁻¹ * decodedPairScore Q T P ↑z) =
+1883-    if AgreesOn T ↑({ toFun := fun z => ⟨↑z, ⋯⟩, invFun := fun z => ⟨↑z, ⋯⟩, left_inv := ⋯, right_inv := ⋯ } z) ⋯ then
+1884-      if Fintype.card (Zoom Q (retainedPair s Q P hQE)) = 0 then 0
+1885-      else (↑(Fintype.card (Zoom Q (retainedPair s Q P hQE))))⁻¹
+1886-    else 0
+1887-Some required targets logged failures:
+1888-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+1889:error: build failed
+1890-Finished with result: exit-code
+1891-Main processes terminated with: code=exited/status=1
+1892-Service runtime: 1min 31.676s
+1893-CPU time consumed: 23.910s
+1894-Memory peak: 256.0K
+1895-Memory swap peak: 0B

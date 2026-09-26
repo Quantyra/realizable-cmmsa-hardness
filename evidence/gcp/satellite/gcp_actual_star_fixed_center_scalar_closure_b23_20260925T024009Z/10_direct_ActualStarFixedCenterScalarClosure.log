@@ -1,0 +1,28 @@
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:47:17: error(lean.unknownIdentifier): Unknown identifier `PvNP.RealizableHardness.ActualMZ24HyperplaneSupport.gaussian_one_eq_pow_sub_one`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:63:6: error: invalid 'calc' step, left-hand side is
+  y ^ (s - 1) * x ^ s * y : ℚ
+but is expected to be
+  y ^ (s - 1) * y : ℚ
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:64:6: error: invalid 'calc' step, right-hand side is
+  x ^ s * y ^ s : ℚ
+but is expected to be
+  y ^ s : ℚ
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:131:27: error: not a positivity goal
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:148:2: error: Tactic `apply` failed: could not unify the conclusion of `(lt_div_iff₀ hz).mpr`
+  ?m.589 < ?m.590 / 2 ^ (E + 1)
+with the goal
+  2 ^ (k * m) < (2 ^ (E + 1))⁻¹ * (2 ^ N - 1)
+
+Note: The full type of `(lt_div_iff₀ hz).mpr` is
+  ?m.589 * 2 ^ (E + 1) < ?m.590 → ?m.589 < ?m.590 / 2 ^ (E + 1)
+
+m k N E : ℕ
+hguard : m * k + E + 2 ≤ N
+hNpow : 2 ^ (m * k + E + 2) ≤ 2 ^ N
+hsep : 2 ^ (m * k + E + 2) - 1 > 2 ^ (m * k + E + 1)
+hyNat : 2 ^ N - 1 > 2 ^ (m * k + E + 1)
+hy : 2 ^ N - 1 > 2 ^ (m * k + E + 1)
+hz : 0 < 2 ^ (E + 1)
+hmul : 2 ^ (m * k) * 2 ^ (E + 1) = 2 ^ (m * k + E + 1)
+hypos : 0 < 2 ^ N - 1
+⊢ 2 ^ (k * m) < (2 ^ (E + 1))⁻¹ * (2 ^ N - 1)

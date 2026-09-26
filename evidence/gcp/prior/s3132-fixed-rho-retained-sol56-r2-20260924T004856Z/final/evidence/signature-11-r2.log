@@ -1,0 +1,15 @@
+info: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoRetainedSpecializationChecks.lean:11:0: PvNP.RealizableHardness.ActualMZ24FixedRhoRetainedSpecialization.fixedRho_retained_extraction_of_excessive_family.{u_1}
+  {Aof base : ℕ → ℕ} (H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof Rof base) (L m a0 c : ℕ)
+  (hsel : ActualCmmsaAdmissibilitySelector.selector (fixedRhoHeightFloor base) L = ↑m)
+  (draw : TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (hBlock L m)))
+  (Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0)
+  (T0 :
+    (X : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) (2 * hBlock L m)) → Module.Dual (ZMod 2) ↥↑X)
+  {K : Type u_1} [Fintype K] (P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * hBlock L m)) (beta : ℚ)
+  (hP : Function.Injective P) (hdecoderCap : a0 + c ≤ Rof m)
+  (hcodim : ∀ (i : K), ActualMaximalPairLadder.codim (P i).W ≤ c) (hm : 256 ≤ m) (hbeta : 0 < beta)
+  (hthreshold : 4 / 2 ^ (2 * hBlock L m - a0) < beta)
+  (hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i))
+  (hexcessive : 16 * (1 + ↑(Rof m) * 2 ^ inputExponent (Dof m) (Rof m) (hBlock L m)) < beta ^ 2 * ↑(Fintype.card K)) :
+  have guards := ⋯;
+  RetainedGenericExtractionOutput ⋯ L m (Dof m) a0 hsel draw Q0 T0 P beta hP ⋯ hagr

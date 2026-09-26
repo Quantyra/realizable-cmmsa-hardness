@@ -1,0 +1,217 @@
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.Ecap (D R c h : ℕ) : ℕ
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.L5 (c h r' D : ℕ) : ℕ
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.L6 (c h r' D a0 : ℕ) : ℕ
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.Ecap_addback (D R c h : ℕ)
+  (hguard : 3 * c ≤ 100 * R ^ 2 * h * D ^ 5 / (c + 1)) : Ecap D R c h + 3 * c = 100 * R ^ 2 * h * D ^ 5 / (c + 1)
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.L6_addback (c h r' D a0 : ℕ) : L6 c h r' D a0 = L5 c h r' D + a0
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.height_pos.{u_2} {Aof budget totalHMin : ℕ → ℕ} {Lsrc m D a0 : ℕ}
+  {K : Type u_2} [Fintype K] {H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof budget totalHMin}
+  {hsel : ActualCmmsaAdmissibilitySelector.selector totalHMin Lsrc = ↑m}
+  {draw :
+    TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (ActualCmmsaParameterReconciliation.hBlock Lsrc m))}
+  {Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0}
+  {T0 :
+    (L :
+        GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw))
+          (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)) →
+      Module.Dual (ZMod 2) ↥↑L}
+  {P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)} {beta : ℚ}
+  {hP : Function.Injective P} {had_gap : a0 < 2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m}
+  {hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i)}
+  (O :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap
+      hagr)
+  (hD : 0 < D) : 0 < ActualCmmsaParameterReconciliation.hBlock Lsrc m
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.cap_sensitive_J_count.{u_2} {Aof budget totalHMin : ℕ → ℕ}
+  {Lsrc m D a0 : ℕ} {K : Type u_2} [Fintype K]
+  {H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof budget totalHMin}
+  {hsel : ActualCmmsaAdmissibilitySelector.selector totalHMin Lsrc = ↑m}
+  {draw :
+    TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (ActualCmmsaParameterReconciliation.hBlock Lsrc m))}
+  {Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0}
+  {T0 :
+    (L :
+        GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw))
+          (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)) →
+      Module.Dual (ZMod 2) ↥↑L}
+  {P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)} {beta : ℚ}
+  {hP : Function.Injective P} {had_gap : a0 < 2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m}
+  {hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i)}
+  (O :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap
+      hagr)
+  (hD : 0 < D) : 2 ^ Ecap D (budget m) O.c (ActualCmmsaParameterReconciliation.hBlock Lsrc m) < O.J.card
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.guarded_loss_ledger.{u_2} {Aof budget totalHMin : ℕ → ℕ}
+  {Lsrc m D a0 : ℕ} {K : Type u_2} [Fintype K]
+  {H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof budget totalHMin}
+  {hsel : ActualCmmsaAdmissibilitySelector.selector totalHMin Lsrc = ↑m}
+  {draw :
+    TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (ActualCmmsaParameterReconciliation.hBlock Lsrc m))}
+  {Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0}
+  {T0 :
+    (L :
+        GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw))
+          (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)) →
+      Module.Dual (ZMod 2) ↥↑L}
+  {P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)} {beta : ℚ}
+  {hP : Function.Injective P} {had_gap : a0 < 2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m}
+  {hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i)}
+  (O :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap
+      hagr)
+  (hD : 0 < D) (hR : 2 ≤ budget m) (hc : 1 ≤ O.c) (hcr : O.c ≤ budget m) (hr' : 1 ≤ O.T.r) (hr'c : O.T.r ≤ O.c)
+  (hreserve :
+    3 * budget m + 1000 * (budget m + 1) * D ^ 5 + a0 + 5 ≤ 10 * ActualCmmsaParameterReconciliation.hBlock Lsrc m) :
+  50 * O.c * ActualCmmsaParameterReconciliation.hBlock Lsrc m * D ^ 5 +
+      L6 O.c (ActualCmmsaParameterReconciliation.hBlock Lsrc m) O.T.r D a0 ≤
+    Ecap D (budget m) O.c (ActualCmmsaParameterReconciliation.hBlock Lsrc m)
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.complementCandidateEvent.{u_2} {Aof budget totalHMin : ℕ → ℕ}
+  {Lsrc m D a0 : ℕ} {K : Type u_2} [Fintype K]
+  {H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof budget totalHMin}
+  {hsel : ActualCmmsaAdmissibilitySelector.selector totalHMin Lsrc = ↑m}
+  {draw :
+    TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (ActualCmmsaParameterReconciliation.hBlock Lsrc m))}
+  {Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0}
+  {T0 :
+    (L :
+        GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw))
+          (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)) →
+      Module.Dual (ZMod 2) ↥↑L}
+  {P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)} {beta : ℚ}
+  {hP : Function.Injective P} {had_gap : a0 < 2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m}
+  {hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i)}
+  (O :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap
+      hagr)
+  (j :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta
+      hP had_gap hagr O) :
+  Finset
+    (ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P
+        beta hP had_gap hagr O).complementCarrier
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.complementCandidatePair_W_eq.{u_2} {Aof budget totalHMin : ℕ → ℕ}
+  {Lsrc m D a0 : ℕ} {K : Type u_2} [Fintype K]
+  {H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof budget totalHMin}
+  {hsel : ActualCmmsaAdmissibilitySelector.selector totalHMin Lsrc = ↑m}
+  {draw :
+    TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (ActualCmmsaParameterReconciliation.hBlock Lsrc m))}
+  {Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0}
+  {T0 :
+    (L :
+        GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw))
+          (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)) →
+      Module.Dual (ZMod 2) ↥↑L}
+  {P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)} {beta : ℚ}
+  {hP : Function.Injective P} {had_gap : a0 < 2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m}
+  {hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i)}
+  (O :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap
+      hagr)
+  (j :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta
+      hP had_gap hagr O) :
+  (ActualMZ24ComplementRestriction.complementPair O.C
+        (ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.adapterLocalPair H Lsrc m D a0 hsel draw Q0
+          T0 P beta hP had_gap hagr O j)).W =
+    ActualMZ24ComplementRestriction.complementSubspace O.C
+      ((ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.selectedFamily H Lsrc m D a0 hsel draw Q0 T0
+            P beta hP had_gap hagr O).W
+        j)
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.complementCandidateEvent_mass_ge.{u_2}
+  {Aof budget totalHMin : ℕ → ℕ} {Lsrc m D a0 : ℕ} {K : Type u_2} [Fintype K]
+  {H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof budget totalHMin}
+  {hsel : ActualCmmsaAdmissibilitySelector.selector totalHMin Lsrc = ↑m}
+  {draw :
+    TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (ActualCmmsaParameterReconciliation.hBlock Lsrc m))}
+  {Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0}
+  {T0 :
+    (L :
+        GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw))
+          (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)) →
+      Module.Dual (ZMod 2) ↥↑L}
+  {P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)} {beta : ℚ}
+  {hP : Function.Injective P} {had_gap : a0 < 2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m}
+  {hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i)}
+  (O :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap
+      hagr)
+  (j :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta
+      hP had_gap hagr O) :
+  beta ≤
+    eventMass
+      (ActualFiniteIncidenceSampling.componentLaw
+        (ActualBinaryGrassmannIncidence.complementBottomRegularIncidence
+          (ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.selectedFamily H Lsrc m D a0 hsel draw Q0
+              T0 P beta hP had_gap hagr O).C
+          (ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.selectedFamily H Lsrc m D a0 hsel draw Q0
+              T0 P beta hP had_gap hagr O).W
+          ⋯ ⋯ ⋯)
+        j)
+      (complementCandidateEvent O j)
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.complementAgreementCarrierEvent.{u_2}
+  {Aof budget totalHMin : ℕ → ℕ} {Lsrc m D a0 : ℕ} {K : Type u_2} [Fintype K]
+  {H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof budget totalHMin}
+  {hsel : ActualCmmsaAdmissibilitySelector.selector totalHMin Lsrc = ↑m}
+  {draw :
+    TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (ActualCmmsaParameterReconciliation.hBlock Lsrc m))}
+  {Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0}
+  {T0 :
+    (L :
+        GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw))
+          (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)) →
+      Module.Dual (ZMod 2) ↥↑L}
+  {P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)} {beta : ℚ}
+  {hP : Function.Injective P} {had_gap : a0 < 2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m}
+  {hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i)}
+  (O :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap
+      hagr)
+  (j :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta
+      hP had_gap hagr O) :
+  Finset
+    (ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P
+        beta hP had_gap hagr O).complementCarrier
+PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.complementCandidateEvent_subset_agreement.{u_2}
+  {Aof budget totalHMin : ℕ → ℕ} {Lsrc m D a0 : ℕ} {K : Type u_2} [Fintype K]
+  {H : ActualMZ24RetainedSamplingProducer.DominatingSamplingCutoff Aof budget totalHMin}
+  {hsel : ActualCmmsaAdmissibilitySelector.selector totalHMin Lsrc = ↑m}
+  {draw :
+    TripleRestrictionRank.Draw (SamplerParameters.blocks (Aof m) (ActualCmmsaParameterReconciliation.hBlock Lsrc m))}
+  {Q0 : GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw)) a0}
+  {T0 :
+    (L :
+        GrassmannCounting.Grass (↥(TripleRestrictionRank.retained draw))
+          (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)) →
+      Module.Dual (ZMod 2) ↥↑L}
+  {P : K → ActualMaximalPairLadder.DecodedPair Q0 (2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m)} {beta : ℚ}
+  {hP : Function.Injective P} {had_gap : a0 < 2 * ActualCmmsaParameterReconciliation.hBlock Lsrc m}
+  {hagr : ∀ (i : K), beta ≤ ActualMaximalPairLadder.agreement T0 Q0 (P i)}
+  (O :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap
+      hagr)
+  (j :
+    ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta
+      hP had_gap hagr O) :
+  complementCandidateEvent O j ⊆ complementAgreementCarrierEvent O j
+'PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.height_pos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.cap_sensitive_J_count' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.guarded_loss_ledger' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.Ecap_addback' depends on axioms: [propext]
+'PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.L6_addback' depends on axioms: [propext]
+'PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.complementCandidateEvent_mass_ge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.complementCandidatePair_W_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24D3c5Precomposition.complementCandidateEvent_subset_agreement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

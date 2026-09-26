@@ -1,0 +1,16 @@
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelection.FunctionalExtensionFiber.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module (ZMod 2) W] (S : Submodule (ZMod 2) W) (f : ↥S →ₗ[ZMod 2] ZMod 2) : Type u_1
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelection.jointDirectSumFunctional_glue.{u_1, u_2} {Z : Type u_1}
+  [AddCommGroup Z] [Module (ZMod 2) Z] [Finite Z] {ι : Type u_2} [Fintype ι] (Q : ι → Submodule (ZMod 2) Z)
+  (hjoint : Function.Injective ⇑(DirectSum.coeLinearMap Q)) (label : (i : ι) → ↥(Q i) →ₗ[ZMod 2] ZMod 2) :
+  ∃ glued, ∀ (i : ι) (x : ↥(Q i)), glued ((Q i).subtype x) = (label i) x
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelection.functionalExtensionFiber_card.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module (ZMod 2) W] [Finite W] {s : ℕ} (S : Submodule (ZMod 2) W) (f : ↥S →ₗ[ZMod 2] ZMod 2)
+  (hS : Module.finrank (ZMod 2) ↥S = s) :
+  Fintype.card (FunctionalExtensionFiber S f) = 2 ^ (Module.finrank (ZMod 2) W - s)
+'PvNP.RealizableHardness.ActualStarAffineFunctionalSelection.jointDirectSumFunctional_glue' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarAffineFunctionalSelection.functionalExtensionFiber_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

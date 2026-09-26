@@ -1,0 +1,80 @@
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:192:51: warning: This simp argument is unused:
+  Nat.add_left_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Nat.succ_mul, Nat.add_assoc, Nat.add_comm] at h'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:285:20: warning: Variable name `hh` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hh
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:307:42: error: unsolved goals
+N m J t : ℕ
+I : Instance N m
+q : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw q h
+C : Submodule (ZMod 2) (Ambient I) := questionCoordinateSpace q
+S : Submodule (ZMod 2) ↥(questionCoordinateSpace q) := centerSpanInCoordinate q
+⊢ ↑(cast ⋯
+        ({ toFun := fun L => ⟨Submodule.map (centerSpanInCoordinate q).mkQ ↑↑L, ⋯⟩,
+            invFun := fun R => ⟨⟨Submodule.comap (centerSpanInCoordinate q).mkQ ↑R, ⋯⟩, ⋯⟩, left_inv := ⋯,
+            right_inv := ⋯ }
+          ({ toFun := fun D => ⟨⟨Submodule.comap (questionCoordinateSpace q).subtype ↑D, ⋯⟩, ⋯⟩,
+              invFun := fun L => ⟨Submodule.map (questionCoordinateSpace q).subtype ↑↑L, ⋯⟩, left_inv := ⋯,
+              right_inv := ⋯ }
+            D))) =
+    Submodule.map (centerSpanInCoordinate q).mkQ (Submodule.comap (questionCoordinateSpace q).subtype ↑D)
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:312:29: warning: This simp argument is unused:
+  C
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, coordinateContainingEquiv, containingQuotientEquiv, S, Equiv.trans_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:312:32: warning: This simp argument is unused:
+  S
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, coordinateContainingEquiv, containingQuotientEquiv, C, Equiv.trans_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:338:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:349:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:352:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:423:51: warning: This simp argument is unused:
+  Nat.add_left_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Nat.succ_mul, Nat.add_assoc, Nat.add_comm] at h'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualQuestionCenterDomainDraw.lean:458:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`

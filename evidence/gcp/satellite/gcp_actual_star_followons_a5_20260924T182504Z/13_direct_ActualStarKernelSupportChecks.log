@@ -1,0 +1,15 @@
+PvNP.RealizableHardness.ActualStarKernelSupport.kernelSupport.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  {t d m : ℕ} {z : ActualSourceStarLaw.StarTuple t d m}
+  (x : DirectSum (Fin m) fun i => ↥(ActualStarJointKernel.incrementFamily z i)) : Finset (Fin m)
+PvNP.RealizableHardness.ActualStarKernelSupport.kernelWitness_has_exact_support_relation.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m)
+  (x : DirectSum (Fin m) fun i => ↥(ActualStarJointKernel.incrementFamily z i)) (hx : x ≠ 0)
+  (hker : (ActualStarJointKernel.incrementSumMap z) x = 0) :
+  ∃ S,
+    2 ≤ S.card ∧
+      ∃ v, (∀ (i : ↥S), v i ≠ 0) ∧ (∀ (i : ↥S), v i ∈ ActualStarJointKernel.incrementFamily z ↑i) ∧ ∑ i, v i = 0
+PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power.{u_2} {A : Type u_2} [AddCommGroup A]
+  [Fintype A] (n : ℕ) : Fintype.card (ActualStarRelationCount.NonzeroRelation (n + 1)) ≤ (Fintype.card A - 1) ^ n
+'PvNP.RealizableHardness.ActualStarKernelSupport.kernelWitness_has_exact_support_relation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

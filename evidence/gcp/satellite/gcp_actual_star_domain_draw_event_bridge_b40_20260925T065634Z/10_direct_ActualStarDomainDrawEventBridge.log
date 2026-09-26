@@ -1,0 +1,90 @@
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:43:19: error: unsolved goals
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+⊢ J + 2 * h - (J + t) = 2 * h - t
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:52:16: error: unsolved goals
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+⊢ J + 2 * h - (J + t) = 2 * h - t
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:59:44: error: unsolved goals
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+eRank : Grass (↥(questionCoordinateSpace center) ⧸ ↑U) (J + 2 * h - (J + t)) ≃
+  Grass (CenterQuotient center) (2 * h - t) :=
+  Equiv.cast ⋯
+had : J + t ≤ J + 2 * h
+⊢ cast ⋯
+      ((upperQuotientEquiv U had)
+        ((upperQuotientEquiv (coordinateCenterGrass center) ⋯).symm (cast ⋯ ((domainDrawEquiv center h ht hh) D)))) =
+    (domainDrawEquiv center h ht hh) D
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:102:51: error: unsolved goals
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+inst✝³ : Finite ↥(questionCoordinateSpace center)
+inst✝² : Finite (CenterQuotient center)
+inst✝¹ : Fintype (Fin m → DomainDraw center h)
+inst✝ : Fintype (Fin m → Extension (coordinateCenterGrass center) (J + 2 * h))
+draws : Fin m → DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+leaves : Fin m → Extension (coordinateCenterGrass center) (J + 2 * h) :=
+  (domainDrawTupleExtensionEquiv center h m ht hh) draws
+hspan : jointIncrementSpan ⟨coordinateCenterGrass center, leaves⟩ = domainDrawJointImage center h ht hh draws
+hdim : J + 2 * h - (J + t) = 2 * h - t
+⊢ draws ∈
+      {x |
+        (fun i => (domainDrawExtensionEquiv center h ht hh) (x i)) ∈
+          fixedCenterBadEvent (coordinateCenterGrass center)} ↔
+    (fun i => (domainDrawExtensionEquiv center h ht hh) (draws i)) ∈ fixedCenterBadEvent (coordinateCenterGrass center)
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:108:25: error: unsolved goals
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+inst✝³ : Finite ↥(questionCoordinateSpace center)
+inst✝² : Finite (CenterQuotient center)
+inst✝¹ : Fintype (Fin m → DomainDraw center h)
+inst✝ : Fintype (Fin m → Extension (coordinateCenterGrass center) (J + 2 * h))
+draws : Fin m → DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+leaves : Fin m → Extension (coordinateCenterGrass center) (J + 2 * h) :=
+  (domainDrawTupleExtensionEquiv center h m ht hh) draws
+hspan : jointIncrementSpan ⟨coordinateCenterGrass center, leaves⟩ = domainDrawJointImage center h ht hh draws
+hdim : J + 2 * h - (J + t) = 2 * h - t
+hpre :
+  draws ∈
+      preimageEvent (⇑(domainDrawTupleExtensionEquiv center h m ht hh))
+        (fixedCenterBadEvent (coordinateCenterGrass center)) ↔
+    leaves ∈ fixedCenterBadEvent (coordinateCenterGrass center)
+⊢ ¬Module.finrank (ZMod 2) ↥(jointIncrementSpan ⟨coordinateCenterGrass center, leaves⟩) = m * (2 * h - t) ↔
+    ¬Module.finrank (ZMod 2) ↥(domainDrawJointImage center h ht hh draws) = m * (2 * h - t)
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:109:46: warning: This simp argument is unused:
+  hspan
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fixedCenterBadEvent, jointlyDirect, hdim]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

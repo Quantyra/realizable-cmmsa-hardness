@@ -1,0 +1,47 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2308/2348] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1905-The difference between `let` and `letI` is that `letI` inlines the value.
+1906-But this is not relevant for proofs because of proof irrelevance.
+1907-
+1908-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1909:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:196:4: Tactic `rfl` failed: The left-hand side
+1910-  ∑ L,
+1911-    @ite ℕ (∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW)
+1912-      (@exists_prop_decidable (↑Q ≤ ↑L) (fun hQL => ∃ (hLW : ↑L ≤ P.W), AgreesOn T L hLW)
+1913-        (Classical.propDecidable (↑Q ≤ ↑L)) fun h => exists_prop_decidable (AgreesOn T L))
+1914-      1 0
+1915-is not definitionally equal to the right-hand side
+1916-  ∑ a_1,
+1917-    @ite ℕ (∃ (_ : ↑Q ≤ ↑a_1) (hLW : ↑a_1 ≤ P.W), AgreesOn T a_1 hLW)
+1918-      (@exists_prop_decidable (↑Q ≤ ↑a_1) (fun hQL => ∃ (hLW : ↑a_1 ≤ P.W), AgreesOn T a_1 hLW)
+1919-        (Classical.propDecidable (↑Q ≤ ↑a_1)) fun h =>
+1920-        (fun a_2 => Classical.propDecidable (∃ (hLW : ↑a_2 ≤ P.W), AgreesOn T a_2 hLW)) a_1)
+1921-      1 0
+--
+2009-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+2010-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:354:41: `if_neg` has been deprecated: Use `ite_eq_right` instead
+2011-Some required targets logged failures:
+2012-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+2013:error: build failed
+2014-Finished with result: exit-code
+2015-Main processes terminated with: code=exited/status=1
+2016-Service runtime: 1min 7.995s
+2017-CPU time consumed: 22.996s
+2018-Memory peak: 256.0K
+2019-Memory swap peak: 0B

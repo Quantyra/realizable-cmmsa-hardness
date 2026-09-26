@@ -1,0 +1,139 @@
+236-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+237-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+238-  [apply] ring_nf
+239-  
+240:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+241-    
+242-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+243-⚠ [2321/2390] Replayed PvNP.RealizableHardness.FiniteConcentration
+244-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+247-  Fintype.card_fun
+248-
+249-Hint: Omit it from the simp argument list.
+250-  [apply] simp
+251-
+252-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1771-
+1772-Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+1773-✖ [3257/3257] Building PvNP.RealizableHardness.ActualOneExperimentRetainedLaw (50s)
+1774-trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/mz24-fixed-rho-de048da/.lake/packages/cslib/.lake/build/lib/lean:/tmp/gcp-actual-one-experiment-retained-law-20260924T020235Z/checkout/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /tmp/gcp-actual-one-experiment-retained-law-20260924T020235Z/checkout/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean -o /tmp/gcp-actual-one-experiment-retained-law-20260924T020235Z/checkout/.lake/build/lib/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.olean -i /tmp/gcp-actual-one-experiment-retained-law-20260924T020235Z/checkout/.lake/build/lib/lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.ilean -c /tmp/gcp-actual-one-experiment-retained-law-20260924T020235Z/checkout/.lake/build/ir/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.c --setup /tmp/gcp-actual-one-experiment-retained-law-20260924T020235Z/checkout/.lake/build/ir/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.setup.json --json
+1775:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:54:2: don't know how to synthesize implicit argument `d`
+1776-  @Zoom (↥(localAmbient s)) (localAmbient s).addCommGroup AddSubgroupClass.instZModModule a (localAdvice s Q hQV)
+1777-    (?m.28 s Q W localZoom hQV hQW) (localPair s Q W hQV hQW)
+1778-context:
+1779-J a d : ℕ
+1780-s : TripleRestrictionRank.Draw J
+1781-Q : Advice J a
+1782-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1783-hQV : ↑Q ≤ localAmbient s
+1784-hQW : ↑Q ≤ W
+1785-⊢ ℕ
+1786:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:54:30: don't know how to synthesize implicit argument `d`
+1787-  @localPair J a (?m.28 s Q W localZoom hQV hQW) s Q W ⋯ ⋯
+1788-context:
+1789-J a d : ℕ
+1790-s : TripleRestrictionRank.Draw J
+1791-Q : Advice J a
+1792-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1793-hQV : ↑Q ≤ localAmbient s
+1794-hQW : ↑Q ≤ W
+1795-⊢ ℕ
+1796:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:58:30: don't know how to synthesize implicit argument `d`
+1797-  @Zoom (TripleRestrictionRank.Vector J) Pi.addCommGroup
+1798-    (Pi.Function.module (TripleRestrictionRank.Coord J) (ZMod 2) (ZMod 2)) a Q (?m.25 hQV hQW)
+1799-    (ambientPair s Q W hQV hQW)
+1800-context:
+1801-J a d : ℕ
+1802-s : TripleRestrictionRank.Draw J
+1803-Q : Advice J a
+1804-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1805-hQV : ↑Q ≤ localAmbient s
+1806-hQW : ↑Q ≤ W
+1807-⊢ ℕ
+1808-
+1809-Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+1810:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:58:38: don't know how to synthesize implicit argument `d`
+1811-  @ambientPair J a (?m.25 hQV hQW) s Q W ⋯ ⋯
+1812-context:
+1813-J a d : ℕ
+1814-s : TripleRestrictionRank.Draw J
+1815-Q : Advice J a
+1816-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1817-hQV : ↑Q ≤ localAmbient s
+1818-hQW : ↑Q ≤ W
+1819-⊢ ℕ
+1820-
+1821-Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+1822:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:59:2: Type mismatch
+1823-  (zoomRestrictionEquiv (localAmbient s) Q (ambientPair s Q W hQV hQW) hQV ⋯).symm
+1824-has type
+1825-  Zoom (localGrass (localAmbient s) Q hQV) (localDecodedPair (localAmbient s) Q (ambientPair s Q W hQV hQW) hQV ⋯) ≃
+1826-    Zoom Q (ambientPair s Q W hQV hQW)
+1827-but is expected to have type
+1828-  localZoom s Q W hQV hQW → Zoom Q (ambientPair s Q W hQV hQW)
+1829:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:64:12: Unknown identifier `localToAmbientZoom`
+1830-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:68:45: Variable name `x` is not explicitly referenced.
+1831-
+1832-Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+1833-  [apply] _x
+1834-
+1835-Note: This linter can be disabled with `set_option linter.unusedVariables false`
+1836:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:73:4: failed to synthesize instance of type class
+1837-  Fintype (localZoom s Q W hQV hQW)
+1838-
+1839-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1840:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:75:6: failed to synthesize instance of type class
+1841-  Fintype (localZoom s Q W hQV hQW)
+1842-
+1843-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1844:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:79:4: failed to synthesize instance of type class
+1845-  Fintype (localZoom s Q W hQV hQW)
+1846-
+1847-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1848:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:82:19: unsolved goals
+1849-J a d : ℕ
+1850-s : TripleRestrictionRank.Draw J
+1851-Q : Advice J a
+1852-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1853-hQV : ↑Q ≤ localAmbient s
+1854-hQW : ↑Q ≤ W
+1855-had : a ≤ d
+1856-Q0 : Grass (↥(localAmbient s)) a := localAdvice s Q hQV
+1857-⊢ sorry = gaussian (Module.finrank (ZMod 2) ↥(restrictToAmbient (localAmbient s) (localIntersection s W) ⋯) - a) (d - a)
+1858:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:106:12: don't know how to synthesize implicit argument `d`
+1859-  @localPair J a ?m.50 s Q W ⋯ ⋯
+1860-context:
+1861-J a d : ℕ
+1862-s : TripleRestrictionRank.Draw J
+1863-Q : Advice J a
+1864-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1865-hQV : ↑Q ≤ localAmbient s
+1866-hQW : ↑Q ≤ W
+1867-had : a ≤ d
+1868-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1869-L : Advice J d
+1870-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := ⋯
+1871-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := ⋯
+1872-Q0 : Grass (↥(localAmbient s)) a := ⋯
+1873-⊢ ℕ
+1874:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:106:6: failed to infer `let` declaration type
+1875:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:101:47: unsolved goals
+1876-J a d : ℕ
+1877-s : TripleRestrictionRank.Draw J
+1878-Q : Advice J a
+1879-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1880-hQV : ↑Q ≤ localAmbient s
+1881-hQW : ↑Q ≤ W
+1882-had : a ≤ d
+1883-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1884-L : Advice J d
+1885-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1886-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+1887-Q0 : Grass (↥(localAmbient s)) a := localAdvice s Q hQV
+1888-⊢ retainedW s Q W L = pushedUniformZoomMass s Q W hQV hQW L
+1889-Some required targets logged failures:
+1890-- PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
+1891:error: build failed

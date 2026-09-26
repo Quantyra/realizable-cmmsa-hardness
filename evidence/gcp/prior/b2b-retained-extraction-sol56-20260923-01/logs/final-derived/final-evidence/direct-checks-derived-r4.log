@@ -1,0 +1,271 @@
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair.{uV, u_1} {V : Type uV}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} {Q : Grass V a} {I : Type u_1} [Fintype I]
+  (P : I → DecodedPair Q d) (c : ℕ) (U : PositiveBucketIndex P c) : DecodedPair Q d
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair_W.{uV, u_1} {V : Type uV}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} {Q : Grass V a} {I : Type u_1} [Fintype I]
+  (P : I → DecodedPair Q d) (c : ℕ) (U : PositiveBucketIndex P c) : (positiveBucketRootPair P c U).W = ↑U
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair_eq_representative.{uV, u_1}
+  {V : Type uV} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} {Q : Grass V a} {I : Type u_1} [Fintype I]
+  (P : I → DecodedPair Q d) (c : ℕ) (U : PositiveBucketIndex P c) :
+  positiveBucketRootPair P c U = P (positiveBucketRepresentative P c U)
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair_agreement.{uV, u_1} {V : Type uV}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {a d : ℕ} {Q : Grass V a} {I : Type u_1} [Fintype I]
+  (T : (L : Grass V d) → Module.Dual (ZMod 2) ↥↑L) (P : I → DecodedPair Q d) (c : ℕ) (beta : ℚ)
+  (hagr : ∀ (i : I), beta ≤ agreement T Q (P i)) (U : PositiveBucketIndex P c) :
+  beta ≤ agreement T Q (positiveBucketRootPair P c U)
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.zoomToPointedEquiv.{uV, u_1} {V : Type uV} [AddCommGroup V]
+  [Module (ZMod 2) V] [Fintype V] {I : Type u_1} [Fintype I] (F : EnlargedPointedFamily) (i : I)
+  (P : DecodedPair F.Q (2 * F.h)) (hPW : P.W = F.W i) : Zoom F.Q P ≃ { L // F.regularIncidence.rel i L }
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.zoomToPointed_uniformLaw.{uV, u_1} {V : Type uV}
+  [AddCommGroup V] [Module (ZMod 2) V] [Fintype V] {I : Type u_1} [Fintype I] (F : EnlargedPointedFamily) (i : I)
+  (P : DecodedPair F.Q (2 * F.h)) (hPW : P.W = F.W i) [Nonempty (Zoom F.Q P)] :
+  pushforward (fun z => ↑((zoomToPointedEquiv F i P hPW) z)) (uniformLaw (Zoom F.Q P)) =
+    componentLaw F.regularIncidence i
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.outputSelectedFamily.{u_1} {Aof budget totalHMin : ℕ → ℕ}
+  (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ) (hsel : selector totalHMin Lsrc = ↑m)
+  (draw : Draw (blocks (Aof m) (hBlock Lsrc m))) (Q0 : Grass (↥(retained draw)) a0) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (had_gap : a0 < 2 * hBlock Lsrc m) (c : ℕ) (hc : c ≤ budget m)
+  (T :
+    PhaseATerminal (fun U => ↑U) Q0 c (Fintype.card (PositiveBucketIndex P c))
+      (ActualMZ24PhaseAStopping.phaseARoot (Fintype.card (PositiveBucketIndex P c)) c))
+  (J : Finset (PhaseAGeometry.Index (fun U => ↑U) Q0 T.toPhaseAGeometry))
+  (C : ActualMZ24ComplementRestriction.AdviceComplement (PhaseAGeometry.QE (fun U => ↑U) Q0 T.toPhaseAGeometry))
+  (WJ : ↥J → Submodule (ZMod 2) ↥T.E)
+  (WJ_eq : ∀ (j : ↥J), WJ j = PhaseAGeometry.family (fun U => ↑U) Q0 T.toPhaseAGeometry ↑j)
+  (arity_generic :
+    ActualBinaryGrassmannIncidence.GenericUpTo
+      (ActualMZ24MaximalGenericSubfamily.carrierFamily (PhaseAGeometry.family (fun U => ↑U) Q0 T.toPhaseAGeometry) J)
+      (tD D) T.r) :
+  EnlargedPointedFamily
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.rootPair_eq_representative.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr)
+  (j : FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) :
+  rootPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j =
+    P (representative H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j)
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.localPair_W_eq.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr)
+  (j : FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) :
+  (localPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j).W = O.WJ j
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.localAgreement_eq_source.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr)
+  (j : FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) :
+  agreement T0 Q0 (rootPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j) =
+    agreement (ActualMZ24TerminalAgreementTransport.restrictedTable O.T.E T0)
+      (PhaseAGeometry.QE (fun U => ↑U) Q0 O.T.toPhaseAGeometry)
+      (localPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j)
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.complementAgreement_ge.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr)
+  (j : FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) :
+  beta ≤
+    agreement
+      (ActualMZ24ComplementRestriction.complementTable (ActualMZ24TerminalAgreementTransport.restrictedTable O.T.E T0)
+        O.C ⋯ ⋯)
+      (ActualMZ24ComplementRestriction.bottomGrass O.C.A)
+      (ActualMZ24ComplementRestriction.complementPair O.C
+        (localPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j))
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.selectedFamily.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr) : EnlargedPointedFamily
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.adapterLocalPair_W_eq.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr)
+  (j : FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) :
+  (adapterLocalPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j).W =
+    (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O).W j
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.adapterTable.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr)
+  (L :
+    Grass (↥(selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O).E)
+      (2 * (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O).h)) :
+  Module.Dual (ZMod 2) ↥↑L
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.adapterComponentLaw.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr)
+  (j : FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) :
+  pushforward
+      (fun z =>
+        ↑((zoomToPointedEquiv (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) j
+              (adapterLocalPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j) ⋯)
+            z))
+      (uniformLaw
+        (Zoom (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O).Q
+          (adapterLocalPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j))) =
+    componentLaw (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O).regularIncidence j
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.adapterAgreementEventMass.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr)
+  (j : FinalIndex H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) :
+  eventMass (componentLaw (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O).regularIncidence j)
+      (pointedAgreementEvent (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O) j
+        (adapterLocalPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j) ⋯
+        (adapterTable H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O)) =
+    eventMass
+      (uniformLaw
+        (Zoom (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O).Q
+          (adapterLocalPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j)))
+      (agreeingEvent (adapterTable H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O)
+        (selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O).Q
+        (adapterLocalPair H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O j))
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.retainedGenericExtraction.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (hD : 0 < D)
+  (had_gap : a0 < 2 * hBlock Lsrc m) (hlarge : ∀ (i : K), 10 * (2 * hBlock Lsrc m) ≤ Module.finrank (ZMod 2) ↥(P i).W)
+  (hbeta : 0 < beta) (hthreshold : 4 / 2 ^ (2 * hBlock Lsrc m - a0) < beta)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i)) (hcodim : ∀ (i : K), codim (P i).W ≤ budget m)
+  (hforce : 16 * (1 + ↑(budget m) * 2 ^ inputExponent D (budget m) (hBlock Lsrc m)) < beta ^ 2 * ↑(Fintype.card K)) :
+  RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.bucket_lower.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} {H : DominatingSamplingCutoff Aof budget totalHMin} {Lsrc m D a0 : ℕ}
+  {hsel : selector totalHMin Lsrc = ↑m} {draw : Draw (blocks (Aof m) (hBlock Lsrc m))}
+  {Q0 : Grass (↥(retained draw)) a0}
+  {T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L} {K : Type u_1} [Fintype K]
+  {P : K → DecodedPair Q0 (2 * hBlock Lsrc m)} {beta : ℚ} {hPinj : Function.Injective P}
+  {had_gap : a0 < 2 * hBlock Lsrc m} {hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i)}
+  (self : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hPinj had_gap hagr) :
+  2 ^ inputExponent D (budget m) (hBlock Lsrc m) < self.B.card
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.terminal_card.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} {H : DominatingSamplingCutoff Aof budget totalHMin} {Lsrc m D a0 : ℕ}
+  {hsel : selector totalHMin Lsrc = ↑m} {draw : Draw (blocks (Aof m) (hBlock Lsrc m))}
+  {Q0 : Grass (↥(retained draw)) a0}
+  {T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L} {K : Type u_1} [Fintype K]
+  {P : K → DecodedPair Q0 (2 * hBlock Lsrc m)} {beta : ℚ} {hPinj : Function.Injective P}
+  {had_gap : a0 < 2 * hBlock Lsrc m} {hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i)}
+  (self : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hPinj had_gap hagr) :
+  Fintype.card (PositiveBucketIndex P self.c) ≤
+    ActualMZ24PhaseAStopping.phaseABudget self.c * self.T.C.card ^ (self.c + 1)
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.fixed_ambient_card.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} {H : DominatingSamplingCutoff Aof budget totalHMin} {Lsrc m D a0 : ℕ}
+  {hsel : selector totalHMin Lsrc = ↑m} {draw : Draw (blocks (Aof m) (hBlock Lsrc m))}
+  {Q0 : Grass (↥(retained draw)) a0}
+  {T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L} {K : Type u_1} [Fintype K]
+  {P : K → DecodedPair Q0 (2 * hBlock Lsrc m)} {beta : ℚ} {hPinj : Function.Injective P}
+  {had_gap : a0 < 2 * hBlock Lsrc m} {hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i)}
+  (self : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hPinj had_gap hagr) :
+  Fintype.card (PositiveBucketIndex P self.c) ≤
+    2 ^ (3 * self.c * genericityPower D self.c) * self.J.card ^ genericityPower D self.c
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.QE_map_recovery.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} {H : DominatingSamplingCutoff Aof budget totalHMin} {Lsrc m D a0 : ℕ}
+  {hsel : selector totalHMin Lsrc = ↑m} {draw : Draw (blocks (Aof m) (hBlock Lsrc m))}
+  {Q0 : Grass (↥(retained draw)) a0}
+  {T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L} {K : Type u_1} [Fintype K]
+  {P : K → DecodedPair Q0 (2 * hBlock Lsrc m)} {beta : ℚ} {hPinj : Function.Injective P}
+  {had_gap : a0 < 2 * hBlock Lsrc m} {hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i)}
+  (self : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hPinj had_gap hagr) :
+  Submodule.map self.T.E.subtype ↑(PhaseAGeometry.QE (fun U => ↑U) Q0 self.T.toPhaseAGeometry) = ↑Q0
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.selectedFamily.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr) : EnlargedPointedFamily
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.sampling.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} {H : DominatingSamplingCutoff Aof budget totalHMin} {Lsrc m D a0 : ℕ}
+  {hsel : selector totalHMin Lsrc = ↑m} {draw : Draw (blocks (Aof m) (hBlock Lsrc m))}
+  {Q0 : Grass (↥(retained draw)) a0}
+  {T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L} {K : Type u_1} [Fintype K]
+  {P : K → DecodedPair Q0 (2 * hBlock Lsrc m)} {beta : ℚ} {hPinj : Function.Injective P}
+  {had_gap : a0 < 2 * hBlock Lsrc m} {hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i)}
+  (self : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hPinj had_gap hagr) :
+  let F := outputSelectedFamily H Lsrc m D a0 hsel draw Q0 P had_gap self.c ⋯ self.T self.J self.C self.WJ ⋯ ⋯;
+  SourceSamplingBounds F
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.final_E1.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} {H : DominatingSamplingCutoff Aof budget totalHMin} {Lsrc m D a0 : ℕ}
+  {hsel : selector totalHMin Lsrc = ↑m} {draw : Draw (blocks (Aof m) (hBlock Lsrc m))}
+  {Q0 : Grass (↥(retained draw)) a0}
+  {T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L} {K : Type u_1} [Fintype K]
+  {P : K → DecodedPair Q0 (2 * hBlock Lsrc m)} {beta : ℚ} {hPinj : Function.Injective P}
+  {had_gap : a0 < 2 * hBlock Lsrc m} {hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i)}
+  (self : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hPinj had_gap hagr) :
+  2 ^ geometricOutputExponent D self.c (hBlock Lsrc m) < self.J.card
+PvNP.RealizableHardness.ActualMZ24RetainedGenericExtractionChecks.selectedFamily_scalar_and_data_identity.{u_1}
+  {Aof budget totalHMin : ℕ → ℕ} (H : DominatingSamplingCutoff Aof budget totalHMin) (Lsrc m D a0 : ℕ)
+  (hsel : selector totalHMin Lsrc = ↑m) (draw : Draw (blocks (Aof m) (hBlock Lsrc m)))
+  (Q0 : Grass (↥(retained draw)) a0)
+  (T0 : (L : Grass (↥(retained draw)) (2 * hBlock Lsrc m)) → Module.Dual (ZMod 2) ↥↑L) {K : Type u_1} [Fintype K]
+  (P : K → DecodedPair Q0 (2 * hBlock Lsrc m)) (beta : ℚ) (hP : Function.Injective P) (had_gap : a0 < 2 * hBlock Lsrc m)
+  (hagr : ∀ (i : K), beta ≤ agreement T0 Q0 (P i))
+  (O : RetainedGenericExtractionOutput H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr) :
+  let F := selectedFamily H Lsrc m D a0 hsel draw Q0 T0 P beta hP had_gap hagr O;
+  F.E = O.T.E ∧
+    F.a = a0 ∧
+      F.h = hBlock Lsrc m ∧
+        F.r = budget m ∧
+          F.r' = O.T.r ∧
+            F.c = O.c ∧
+              F.t = tD D ∧ F.Q = PhaseAGeometry.QE (fun U => ↑U) Q0 O.T.toPhaseAGeometry ∧ F.C = O.C ∧ F.W = O.WJ
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.positiveBucketRootPair_eq_representative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.zoomToPointed_uniformLaw' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.adapterComponentLaw' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.RetainedGenericExtractionOutput.adapterAgreementEventMass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.outputSelectedFamily' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtractionChecks.selectedFamily_scalar_and_data_identity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualMZ24RetainedGenericExtraction.retainedGenericExtraction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

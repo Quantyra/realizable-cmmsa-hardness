@@ -1,0 +1,39 @@
+PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_mono.{u_1} {Ω : Type u_1} [Fintype Ω]
+  (μ : ActualFiniteLaw.FiniteLaw Ω) {E F : Finset Ω} (hEF : E ⊆ F) :
+  ActualFiniteLaw.eventMass μ E ≤ ActualFiniteLaw.eventMass μ F
+PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_biUnion_le_sum.{u_1, u_2} {Ω : Type u_1} {Ι : Type u_2}
+  [Fintype Ω] [Fintype Ι] (μ : ActualFiniteLaw.FiniteLaw Ω) (E : Ι → Finset Ω) :
+  ActualFiniteLaw.eventMass μ (Finset.univ.biUnion E) ≤ ∑ i, ActualFiniteLaw.eventMass μ (E i)
+PvNP.RealizableHardness.ActualStarBadMassWitness.not_jointlyDirect_has_supportedLineEvent.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (z : ActualSourceStarLaw.StarTuple t d m)
+  (hbad : ¬ActualSourceStarLaw.jointlyDirect z) :
+  ∃ S,
+    2 ≤ S.card ∧
+      ∃ v,
+        (∀ (i : ↥S), v i ≠ 0) ∧
+          (∀ (i : ↥S), v i ∈ ActualStarJointKernel.incrementFamily z ↑i) ∧
+            ∑ i, v i = 0 ∧
+              ∀ (hv : ∀ (i : ↥S), v i ≠ 0),
+                (∀ (i : ↥S),
+                    ↑(ActualStarBadMassWitness.quotientVectorLine (v i) ⋯) ≤
+                      ↑((GrassmannFlagPosterior.upperQuotientEquiv z.fst htd) (z.snd ↑i))) ∧
+                  z.snd ∈
+                    ActualStarExtensionProduct.supportedLineEvent htd S z.fst fun i =>
+                      ActualStarBadMassWitness.quotientVectorLine (v i) ⋯
+PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power.{u_2} {A : Type u_2} [AddCommGroup A]
+  [Fintype A] (n : ℕ) : Fintype.card (ActualStarRelationCount.NonzeroRelation (n + 1)) ≤ (Fintype.card A - 1) ^ n
+PvNP.RealizableHardness.ActualStarBadMassWitness.fixedCenter_relationLineEvent_mass.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+  (hk : 1 ≤ d - t) (U : GrassmannCounting.Grass V t) (witness : Fin m → ActualSourceStarLaw.Extension U d)
+  (S : Finset (Fin m)) (v : ↥S → V ⧸ ↑U) (hnz : ∀ (i : ↥S), v i ≠ 0) (hsum : ∑ i, v i = 0) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+      (ActualStarExtensionProduct.supportedLineEvent htd S U fun i =>
+        ActualStarBadMassWitness.quotientVectorLine (v i) ⋯) =
+    (↑(GrassmannCounting.gaussian (d - t) 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^
+      S.card
+'PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_mono' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarFiniteUnionBound.eventMass_biUnion_le_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,46 @@
+PvNP.RealizableHardness.RobustSourceLineContainment.singleton_upperCount_ratio.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] (K : GrassmannCounting.Grass V 1) {d : ℕ} (hd₁ : 1 ≤ d)
+  (hdV : d ≤ Module.finrank (ZMod 2) V) :
+  ↑(GrassmannFlagPosterior.upperCount K d) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) V) d) =
+    ↑(GrassmannCounting.gaussian d 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) V) 1)
+PvNP.RealizableHardness.RobustSourceLineContainment.linesInside_card.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {j : ℕ} (H : GrassmannCounting.Grass V j) :
+  Fintype.card (RobustSourceLineContainment.linesInside H) = GrassmannCounting.gaussian j 1
+PvNP.RealizableHardness.RobustSourceLineContainment.relativeIntervalQuotientEquiv.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {a d : ℕ} (W : Submodule (ZMod 2) V) (Q : GrassmannCounting.Grass V a) (hQ : ↑Q ≤ W)
+  (had : a ≤ d) :
+  { L // ↑Q ≤ ↑L ∧ ↑L ≤ W } ≃ GrassmannCounting.Grass (↥W ⧸ ↑(GrassmannFlagPosterior.insideAdvice W Q hQ)) (d - a)
+PvNP.RealizableHardness.RobustSourceLineContainment.nontrivial_inf_iff_quotientImages.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {a : ℕ} (Q : GrassmannCounting.Grass V a) (L H : Submodule (ZMod 2) V)
+  (hQL : ↑Q ≤ L) (hQH : ↑Q ⊓ H = ⊥) : L ⊓ H ≠ ⊥ ↔ Submodule.map (↑Q).mkQ L ⊓ Submodule.map (↑Q).mkQ H ≠ ⊥
+PvNP.RealizableHardness.RobustSourceLineContainment.quotientImageGrass.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {a j : ℕ} (Q : GrassmannCounting.Grass V a) (H : Submodule (ZMod 2) V)
+  (hQH : ↑Q ⊓ H = ⊥) (hH : Module.finrank (ZMod 2) ↥H = j) : GrassmannCounting.Grass (V ⧸ ↑Q) j
+PvNP.RealizableHardness.RobustSourceLineContainment.intervalTransverseException_mass_le_dyadic.{u_2} {a j : ℕ}
+  {W : Type u_2} [AddCommGroup W] [Module (ZMod 2) W] [Finite W] (Q : GrassmannCounting.Grass W a)
+  (H : GrassmannCounting.Grass W j) {d : ℕ} (had : a ≤ d) (hd : d ≤ Module.finrank (ZMod 2) W) (hQH : ↑Q ⊓ ↑H = ⊥)
+  (hbd : 1 ≤ d - a) (hslack : j + (d - a) + 1 ≤ Module.finrank (ZMod 2) W - a) :
+  ↑(Fintype.card (RobustSourceLineContainment.intervalTransverseCarrier Q H d)) /
+      ↑(Fintype.card (RobustSourceLineContainment.intervalCarrier Q d)) ≤
+    1 / 2 ^ (Module.finrank (ZMod 2) W - a - j - (d - a) - 1)
+PvNP.RealizableHardness.RobustSourceLineContainment.transverseException_mass_le_gaussian.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {j : ℕ} (H : GrassmannCounting.Grass V j) {d : ℕ} (hd₁ : 1 ≤ d)
+  (hdV : d ≤ Module.finrank (ZMod 2) V) :
+  ↑{L | ↑L ⊓ ↑H ≠ ⊥}.card / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(GrassmannCounting.gaussian j 1) * ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) /
+      ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) V) d)
+PvNP.RealizableHardness.RobustSourceLineContainment.transverseException_mass_le_pointRatio.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {j : ℕ} (H : GrassmannCounting.Grass V j) {d : ℕ} (hd₁ : 1 ≤ d)
+  (hdV : d ≤ Module.finrank (ZMod 2) V) :
+  ↑{L | ↑L ⊓ ↑H ≠ ⊥}.card / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(GrassmannCounting.gaussian j 1) * ↑(GrassmannCounting.gaussian d 1) /
+      ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) V) 1)
+'PvNP.RealizableHardness.RobustSourceLineContainment.singleton_upperCount_ratio' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.RobustSourceLineContainment.transverseException_mass_le_pointRatio' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.RobustSourceLineContainment.intervalTransverseException_mass_le_dyadic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

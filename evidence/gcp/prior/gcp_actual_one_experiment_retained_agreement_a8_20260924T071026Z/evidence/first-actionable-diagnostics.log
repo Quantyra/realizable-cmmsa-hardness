@@ -1,0 +1,187 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2308/2352] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1859-Note: This linter can be disabled with `set_option linter.unusedTactic false`
+1860-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:107:8: this tactic is never executed
+1861-
+1862-Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+1863:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:113:12: Unknown identifier `card_relativeUpper`
+1864:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:111:60: unsolved goals
+1865-J a d : ℕ
+1866-Q : Advice J a
+1867-P : DecodedPair Q d
+1868-had : a ≤ d
+1869-⊢ Fintype.card (Zoom Q P) = gaussian (Module.finrank (ZMod 2) ↥P.W - a) (d - a)
+1870:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:132:18: Tactic `unfold` failed to unfold `ambientW` in
+1871-  condition (ConditionedCovering.ambientConditional Q) (inW P.W) L =
+1872-    if ↑Q ≤ ↑L ∧ ↑L ≤ P.W then 1 / ↑(Fintype.card (Zoom Q P)) else 0
+1873-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:145:23: Variable name `hQL` is not explicitly referenced.
+1874-
+1875-Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+1876-  [apply] _hQL
+1877-
+1878-Note: This linter can be disabled with `set_option linter.unusedVariables false`
+1879:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:168:6: failed to synthesize instance of type class
+1880-  Fintype (AgreeingZoom T Q P)
+1881-
+1882-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1883:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:175:8: failed to synthesize instance of type class
+1884-  Fintype A
+1885-
+1886-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1887:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:179:2: No goals to be solved
+1888:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:188:24: Unknown identifier `ambientConditional`
+1889:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:219:52: Invalid argument name `T` for function `ambientW_apply_uniformZoom`
+1890-
+1891-Hint: Perhaps you meant one of the following parameter names:
+1892-  • `J`: T̵J̲
+1893-  • `a`: T̵a̲
+1894-  • `d`: T̵d̲
+1895-  • `P`: T̵P̲
+1896-  • `had`: T̵h̲a̲d̲
+1897-  • `hdJ`: T̵h̲d̲J̲
+1898-  • `hzoom`: T̵h̲z̲o̲o̲m̲
+1899-  • `L`: T̵L̲
+1900:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:219:8: unsolved goals
+1901-case pos
+1902-J a d : ℕ
+1903-Q : Advice J a
+1904-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1905-P : DecodedPair Q d
+1906-had : a ≤ d
+1907-hdJ : d ≤ J
+1908-hzoom : ¬Fintype.card (Zoom Q P) = 0
+1909-hcard : Fintype.card (Zoom Q P) = gaussian (Module.finrank (ZMod 2) ↥P.W - a) (d - a)
+1910-hGpos : ↑(gaussian (Module.finrank (ZMod 2) ↥P.W - a) (d - a)) ≠ 0
+1911-hApos : ↑(gaussian (3 * J - a) (d - a)) ≠ 0
+1912-L : Advice J d
+1913-hQL : ↑Q ≤ ↑L
+1914-hLW : ↑L ≤ P.W
+1915-hAgree : AgreesOn T L hLW
+1916-⊢ ambientW Q P.W L = (↑(Fintype.card (Zoom Q P)))⁻¹
+1917:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:221:52: Invalid argument name `T` for function `ambientW_apply_uniformZoom`
+1918-
+1919-Hint: Perhaps you meant one of the following parameter names:
+1920-  • `J`: T̵J̲
+1921-  • `a`: T̵a̲
+1922-  • `d`: T̵d̲
+1923-  • `P`: T̵P̲
+1924-  • `had`: T̵h̲a̲d̲
+1925-  • `hdJ`: T̵h̲d̲J̲
+1926-  • `hzoom`: T̵h̲z̲o̲o̲m̲
+1927-  • `L`: T̵L̲
+1928:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:223:50: Invalid argument name `T` for function `ambientW_apply_uniformZoom`
+1929-
+1930-Hint: Perhaps you meant one of the following parameter names:
+1931-  • `J`: T̵J̲
+1932-  • `a`: T̵a̲
+1933-  • `d`: T̵d̲
+1934-  • `P`: T̵P̲
+1935-  • `had`: T̵h̲a̲d̲
+1936-  • `hdJ`: T̵h̲d̲J̲
+1937-  • `hzoom`: T̵h̲z̲o̲o̲m̲
+1938-  • `L`: T̵L̲
+1939:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:225:50: Invalid argument name `T` for function `ambientW_apply_uniformZoom`
+1940-
+1941-Hint: Perhaps you meant one of the following parameter names:
+1942-  • `J`: T̵J̲
+1943-  • `a`: T̵a̲
+1944-  • `d`: T̵d̲
+1945-  • `P`: T̵P̲
+1946-  • `had`: T̵h̲a̲d̲
+1947-  • `hdJ`: T̵h̲d̲J̲
+1948-  • `hzoom`: T̵h̲z̲o̲o̲m̲
+1949-  • `L`: T̵L̲
+1950:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:225:6: unsolved goals
+1951-case pos
+1952-J a d : ℕ
+1953-Q : Advice J a
+1954-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1955-P : DecodedPair Q d
+1956-had : a ≤ d
+1957-hdJ : d ≤ J
+1958-hzoom : ¬Fintype.card (Zoom Q P) = 0
+1959-hcard : Fintype.card (Zoom Q P) = gaussian (Module.finrank (ZMod 2) ↥P.W - a) (d - a)
+1960-hGpos : ↑(gaussian (Module.finrank (ZMod 2) ↥P.W - a) (d - a)) ≠ 0
+1961-hApos : ↑(gaussian (3 * J - a) (d - a)) ≠ 0
+1962-L : Advice J d
+1963-hQL : ¬↑Q ≤ ↑L
+1964-hLW : ↑L ≤ P.W
+1965-⊢ AgreesOn T L ⋯ → ambientW Q P.W L = 0
+1966:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:227:50: Invalid argument name `T` for function `ambientW_apply_uniformZoom`
+1967-
+1968-Hint: Perhaps you meant one of the following parameter names:
+1969-  • `J`: T̵J̲
+1970-  • `a`: T̵a̲
+1971-  • `d`: T̵d̲
+1972-  • `P`: T̵P̲
+1973-  • `had`: T̵h̲a̲d̲
+1974-  • `hdJ`: T̵h̲d̲J̲
+1975-  • `hzoom`: T̵h̲z̲o̲o̲m̲
+1976-  • `L`: T̵L̲
+1977:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:234:11: failed to synthesize instance of type class
+1978-  Fintype (AgreeingZoom T Q P)
+1979-
+1980-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1981:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:247:11: failed to synthesize instance of type class
+1982-  Fintype (AgreeingZoom T Q P)
+1983-
+1984-Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+1985:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:258:14: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+1986-  ∑ i ∈ ?s, ?a * ?f i
+1987-in the target expression
+1988-  (∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 / ↑(Fintype.card (Zoom Q P)) else 0) =
+1989-    1 / ↑(Fintype.card (Zoom Q P)) * ∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 else 0
+1990-
+1991-J a d : ℕ
+1992-Q : Advice J a
+1993-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1994-P : DecodedPair Q d
+1995-had : a ≤ d
+1996-hdJ : d ≤ J
+1997-hzoom : ¬Fintype.card (Zoom Q P) = 0
+--
+2008-⊢ (∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 / ↑(Fintype.card (Zoom Q P)) else 0) =
+2009-    1 / ↑(Fintype.card (Zoom Q P)) * ∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 else 0
+2010-
+2011-Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+2012:Full error:
+2013-  Application type mismatch: The argument
+2014-    Q
+2015-  has type
+2016-    Advice J a
+2017-  but is expected to have type
+2018-    { Q // Module.finrank (ZMod 2) ↥Q = a }
+2019-  in the application
+2020-    ↑Q
+2021-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:282:2: Try this: 
+2022-  letI̵
+2023-
+2024-The goal is a proposition, so `let` is preferred over `letI`.
+--
+2036-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+2037-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:314:41: `if_neg` has been deprecated: Use `ite_eq_right` instead
+2038-Some required targets logged failures:
+2039-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+2040:error: build failed
+2041-Finished with result: exit-code
+2042-Main processes terminated with: code=exited/status=1
+2043-Service runtime: 41.928s
+2044-CPU time consumed: 17.259s
+2045-Memory peak: 256.0K
+2046-Memory swap peak: 0B

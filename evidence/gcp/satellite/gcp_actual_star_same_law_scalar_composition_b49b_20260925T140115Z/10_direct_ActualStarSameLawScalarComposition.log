@@ -1,0 +1,67 @@
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:67:43: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≤ -1
+  d ≥ 0
+  d ≥ 0
+  d + e ≥ 0
+  c ≥ 0
+  c - d - e ≥ 0
+  b ≥ 0
+  b - 2*d - 2*e ≤ 0
+  a ≥ 1
+where
+ a := ↑A
+ b := ↑(leafT m (hBlock L m))
+ c := ↑(blocks A (hBlock L m))
+ d := ↑(h - h / bOf m)
+ e := ↑h / ↑(bOf m)
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:71:58: error: Application type mismatch: The argument
+  hs.left.right.right.right.right.right.right.left
+has type
+  m ∣ hBlock L m
+but is expected to have type
+  max (sourceHMin m) (m + 2) ≤ h
+in the application
+  LE.le.trans (Nat.le_max_right (sourceHMin m) (m + 2)) hs.left.right.right.right.right.right.right.left
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:73:27: error: Type mismatch
+  hs.left.right.right.right.right.left
+has type
+  q m * (m + 1) * RBlock L m + 1 ≤ L
+but is expected to have type
+  bOf m ∣ h
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:92:16: error(lean.unknownIdentifier): Unknown identifier `fixedCenterBadEvent`
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:62:56: error: unsolved goals
+N m L A : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+sourceHMin : ℕ → ℕ
+hA : 1 ≤ A
+hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m
+center : QuestionCenter I (blocks A (hBlock L m)) (leafT m (hBlock L m))
+ht✝ : leafT m (hBlock L m) ≤ 2 * hBlock L m
+hh : hBlock L m ≤ blocks A (hBlock L m)
+inst✝¹ : Finite ↥(questionCoordinateSpace center)
+inst✝ : Fintype (Fin m → DomainDraw center (hBlock L m))
+witness : Fin m → DomainDraw center (hBlock L m)
+h : ℕ := hBlock L m
+J : ℕ := blocks A h
+t : ℕ := leafT m h
+ht : t ≤ 2 * h := id (Decidable.byContradiction fun a => sorry a)
+hs :
+  Admissible (fun n => max (sourceHMin n) (n + 2)) L m ∧
+    ∀ (n : ℕ), Admissible (fun n => max (sourceHMin n) (n + 2)) L n → n ≤ m
+hm : 256 ≤ m
+hcut : m + 2 ≤ h
+hhpos : 0 < h
+hdiv : bOf m ∣ h
+hqpos : 0 < h / bOf m
+hk : 1 ≤ leafK m h
+hguard : m * leafK m (hBlock L m) + badExponent m (hBlock L m) + 2 ≤ Module.finrank (ZMod 2) (CenterQuotient center)
+U : GrassmannCounting.Grass (↥(questionCoordinateSpace center)) (blocks A (hBlock L m) + leafT m (hBlock L m)) :=
+  coordinateCenterGrass center
+drawsToLeaves : (Fin m → DomainDraw center h) ≃
+  (Fin m → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L m) + 2 * h)) :=
+  domainDrawTupleExtensionEquiv center h m ht hh
+extWitness : Fin m → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L m) + 2 * h) :=
+  drawsToLeaves witness
+⊢ eventMass (uniformDomainTupleLaw center (hBlock L m) m witness) (domainDrawRankFailureEvent center ht✝ hh) <
+    1 / 2 ^ (badExponent m (hBlock L m) + 1)

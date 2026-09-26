@@ -1,0 +1,31 @@
+CHECK_DIRECTIVES_BEGIN
+5:#check PvNP.RealizableHardness.ActualStarJointKernel.incrementFamily
+6:#check PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap
+7:#check PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_range
+8:#check PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_domain_finrank
+9:#check PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective
+10:#check PvNP.RealizableHardness.ActualStarJointKernel.not_jointlyDirect_iff_nonzero_incrementKernel
+11:#print axioms PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective
+12:#print axioms PvNP.RealizableHardness.ActualStarJointKernel.not_jointlyDirect_iff_nonzero_incrementKernel
+CHECK_DIRECTIVES_END
+SIGNATURE_OUTPUT_BEGIN
+1:PvNP.RealizableHardness.ActualStarJointKernel.incrementFamily.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+3:PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+6:PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_range.{u_1} {V : Type u_1} [AddCommGroup V]
+9:PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_domain_finrank.{u_1} {V : Type u_1} [AddCommGroup V]
+12:PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective.{u_1} {V : Type u_1}
+15:PvNP.RealizableHardness.ActualStarJointKernel.not_jointlyDirect_iff_nonzero_incrementKernel.{u_1} {V : Type u_1}
+SIGNATURE_OUTPUT_END
+AXIOM_OUTPUT_BEGIN
+17-  ¬ActualSourceStarLaw.jointlyDirect z ↔ ∃ x, x ≠ 0 ∧ (ActualStarJointKernel.incrementSumMap z) x = 0
+18:'PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective' depends on axioms: [propext,
+19- Classical.choice,
+20- Quot.sound]
+21:'PvNP.RealizableHardness.ActualStarJointKernel.not_jointlyDirect_iff_nonzero_incrementKernel' depends on axioms: [propext,
+22- Classical.choice,
+23- Quot.sound]
+AXIOM_OUTPUT_END
+AXIOM_NORMALIZED_BEGIN
+AXIOM_REPORT_1=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_2=[propext,  Classical.choice,  Quot.sound]
+AXIOM_NORMALIZED_END

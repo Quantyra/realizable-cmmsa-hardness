@@ -1,0 +1,73 @@
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:106:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:117:4: error: Type mismatch: After simplification, term
+  hguard
+ has type
+  @LE.le ℕ instLENat (m * leafK m (hBlock L m) + badExponent m (hBlock L m) + 2)
+    (Module.finrank (ZMod 2) (↥(questionCoordinateSpace center) ⧸ centerSpanInCoordinate center))
+but is expected to have type
+  @LE.le ℕ instLENat (m * leafK m (hBlock L m) + badExponent m (hBlock L m) + 2)
+    (Module.finrank (ZMod 2) (↥(questionCoordinateSpace center) ⧸ centerSpanInCoordinate center))
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:125:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  r ≥ 0
+  p ≥ 0
+  o ≥ 0
+  o - p - r ≥ 2
+  n ≥ 1
+  l ≥ 0
+  k ≥ 0
+  j ≥ 0
+  i ≥ 0
+  i - j - k ≥ 2
+  g ≥ 1
+  f ≥ 1
+  e ≥ 256
+  d ≥ 0
+  c ≥ 0
+  b ≥ 1
+  b - d ≤ 0
+  b - e ≥ 2
+  b - l ≤ 0
+  2*b - c ≥ 0
+  2*b - 3*d + l ≥ 1
+  2*b - n ≥ 0
+  a ≥ 1
+where
+ a := ↑A
+ b := ↑(hBlock L m)
+ c := ↑(leafT m (hBlock L m))
+ d := ↑(blocks A (hBlock L m))
+ e := ↑m
+ f := ↑h / ↑(bOf m)
+ g := ↑(leafK m h)
+ i := ↑(Module.finrank (ZMod 2) (CenterQuotient center))
+ j := ↑m * ↑(leafK m (hBlock L m))
+ k := ↑(badExponent m (hBlock L m))
+ l := ↑(blocks A h)
+ n := ↑(leafK m (hBlock L m))
+ o := ↑(Module.finrank (ZMod 2) (↥(questionCoordinateSpace center) ⧸ ↑U))
+ p := ↑m * ↑(J + 2 * h - (J + t))
+ r := ↑(badExponent m h)
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:140:2: error: Type mismatch: After simplification, term
+  hscalar
+ has type
+  @LT.lt ℚ Rat.instLT
+    (eventMass
+      (extensionTupleLaw ⟨centerSpanInCoordinate center, ⋯⟩
+        ((domainDrawTupleExtensionEquiv center (hBlock L m) m ht hh) witness))
+      (fixedCenterBadEvent ⟨centerSpanInCoordinate center, ⋯⟩))
+    (2 ^ (badExponent m (hBlock L m) + 1))⁻¹
+but is expected to have type
+  @LT.lt ℚ Rat.instLT
+    (eventMass
+      (extensionTupleLaw ⟨centerSpanInCoordinate center, ⋯⟩
+        ((domainDrawTupleExtensionEquiv center (hBlock L m) m ht hh) witness))
+      badExt)
+    (2 ^ (badExponent m (hBlock L m) + 1))⁻¹

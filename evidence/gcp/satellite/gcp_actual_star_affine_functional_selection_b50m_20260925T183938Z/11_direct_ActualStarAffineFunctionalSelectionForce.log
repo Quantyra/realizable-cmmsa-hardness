@@ -1,0 +1,68 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:50:4: error: Type mismatch: After simplification, term
+  Eq.symm hi
+ has type
+  ↑((domainDrawEquiv center h ht hh) (draws i)) =
+    ↑((GrassmannFlagPosterior.upperQuotientEquiv ⟨centerSpanInCoordinate center, ⋯⟩ ⋯)
+        (((domainDrawEquiv center h ht hh).trans
+            ((Equiv.cast ⋯).trans
+              (GrassmannFlagPosterior.upperQuotientEquiv ⟨centerSpanInCoordinate center, ⋯⟩ ⋯).symm))
+          (draws i)))
+but is expected to have type
+  Submodule.map (centerSpanInCoordinate center).mkQ
+      ↑↑({
+              toFun := fun draws i =>
+                ((domainDrawEquiv center h ht hh).trans
+                    ((Equiv.cast ⋯).trans
+                      (GrassmannFlagPosterior.upperQuotientEquiv ⟨centerSpanInCoordinate center, ⋯⟩ ⋯).symm))
+                  (draws i),
+              invFun := fun leaves i =>
+                (((GrassmannFlagPosterior.upperQuotientEquiv ⟨centerSpanInCoordinate center, ⋯⟩ ⋯).symm.symm.trans
+                        (Equiv.cast ⋯).symm).trans
+                    (domainDrawEquiv center h ht hh).symm)
+                  (leaves i),
+              left_inv := ⋯, right_inv := ⋯ }
+            draws i) =
+    ↑((domainDrawEquiv center h ht hh) (draws i))
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:64:29: error: Application type mismatch: The argument
+  hgood.mpr hgood'
+has type
+  jointlyDirect z
+but is expected to have type
+  Function.Injective ⇑(incrementSumMap z)
+in the application
+  hkernel.mpr (hgood.mpr hgood')
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:66:8: error: Type mismatch
+  DirectSum.coeLinearMap fun i => ↑((domainDrawEquiv center h ht hh) (draws i))
+has type
+  (DirectSum (Fin m) fun i => ↥↑((domainDrawEquiv center h ht hh) (draws i))) →ₗ[ZMod 2] CenterQuotient center
+but is expected to have type
+  (DirectSum (Fin m) fun i => ↥(incrementFamily z i)) →ₗ[ZMod 2] ↥(questionCoordinateSpace center) ⧸ ↑z.fst
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:74:8: error: Type mismatch
+  DirectSum.coeLinearMap fun i => ↑((domainDrawEquiv center h ht hh) (draws i))
+has type
+  (DirectSum (Fin m) fun i => ↥↑((domainDrawEquiv center h ht hh) (draws i))) →ₗ[ZMod 2] CenterQuotient center
+but is expected to have type
+  (DirectSum (Fin m) fun i => ↥(incrementFamily z i)) →ₗ[ZMod 2] ↥(questionCoordinateSpace center) ⧸ ↑z.fst
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:78:19: error: Application type mismatch: The argument
+  hkernel.mp ?m.370
+has type
+  Function.Injective ⇑(incrementSumMap z)
+but is expected to have type
+  jointlyDirect z
+in the application
+  hgood.mp (hkernel.mp ?m.370)
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:78:42: error: Invalid argument: Variable `hmaps` is not a proposition or let-declaration
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:78:35: error: Type mismatch: After simplification, term
+  hinj
+ has type
+  Function.Injective ⇑(DirectSum.coeLinearMap fun i => ↑((domainDrawEquiv center h ht hh) (draws i)))
+but is expected to have type
+  jointlyDirect z
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:91:65: error: Application type mismatch: The argument
+  hSL
+has type
+  S ≤ L
+but is expected to have type
+  L ≤ S
+in the application
+  Submodule.inclusion hSL

@@ -1,0 +1,41 @@
+236-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+237-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+238-  [apply] ring_nf
+239-  
+240:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+241-    
+242-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+243-⚠ [2323/2390] Replayed PvNP.RealizableHardness.FiniteConcentration
+244-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+247-  Fintype.card_fun
+248-
+249-Hint: Omit it from the simp argument list.
+250-  [apply] simp
+251-
+252-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1777-Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+1778-  [apply] _x
+1779-
+1780-Note: This linter can be disabled with `set_option linter.unusedVariables false`
+1781:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:108:8: Type mismatch
+1782-  hcount
+1783-has type
+1784-  Nat.card { L // ↑Q0 ≤ ↑L ∧ ↑L ≤ P0.W } = gaussian (Module.finrank (ZMod 2) ↥P0.W - a) (d - a)
+1785-but is expected to have type
+1786-  Fintype.card (Zoom Q0 P0) = gaussian (Module.finrank (ZMod 2) ↥P0.W - a) (d - a)
+1787-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:142:4: Try this: 
+1788-  letI̵
+1789-
+1790-The goal is a proposition, so `let` is preferred over `letI`.
+1791-The difference between `let` and `letI` is that `letI` inlines the value.
+1792-But this is not relevant for proofs because of proof irrelevance.
+1793-
+--
+1813-
+1814-Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+1815-Some required targets logged failures:
+1816-- PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
+1817:error: build failed

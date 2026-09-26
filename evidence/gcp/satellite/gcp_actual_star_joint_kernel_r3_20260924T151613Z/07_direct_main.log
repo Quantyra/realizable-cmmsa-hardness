@@ -1,0 +1,38 @@
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:37:0: warning: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_range`:
+  [Finite V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Finite V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:59:57: error: unexpected token 'set_option'; expected 'lemma'
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:71:16: error: Application type mismatch: The argument
+  f
+has type
+  @LinearMap (ZMod 2) (ZMod 2) Field.toSemifield.toDivisionSemiring.toSemiring
+    Field.toSemifield.toDivisionSemiring.toSemiring (RingHom.id (ZMod 2)) (⨁ (i : Fin m), ↥(incrementFamily z i))
+    (V ⧸ ↑z.fst) (DirectSum.instAddCommMonoid (Fin m) fun i => ↥(incrementFamily z i))
+    (Submodule.Quotient.addCommMonoid ↑z.fst) DirectSum.instModule (Submodule.Quotient.module ↑z.fst)
+but is expected to have type
+  @LinearMap ?m.99 ?m.99 DivisionRing.toDivisionSemiring.toSemiring DivisionRing.toDivisionSemiring.toSemiring
+    (RingHom.id ?m.99) ?m.100 ?m.104 AddCommGroup.toAddCommMonoid AddCommGroup.toAddCommMonoid ?m.103 ?m.106
+in the application
+  LinearMap.finrank_range_add_finrank_ker f
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:74:68: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (500000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:61:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (500000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:100:63: error: Application type mismatch: The argument
+  hbot
+has type
+  (incrementSumMap z).ker = ⊥
+but is expected to have type
+  LinearMap.ker ?m.94 = ⊥
+in the application
+  LinearMap.ker_eq_bot.mp hbot
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:89:8: error: (kernel) unknown constant 'PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective'

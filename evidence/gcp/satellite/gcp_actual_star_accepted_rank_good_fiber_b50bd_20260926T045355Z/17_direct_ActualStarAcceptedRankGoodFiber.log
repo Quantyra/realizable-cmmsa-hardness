@@ -1,0 +1,43 @@
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:118:70: error: unsolved goals
+N nRows J t : ℕ
+I : Instance N nRows
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+C : Submodule (ZMod 2) (Ambient I) := questionCoordinateSpace center
+S : Submodule (ZMod 2) ↥(questionCoordinateSpace center) := centerSpanInCoordinate center
+L : Submodule (ZMod 2) ↥C := Submodule.comap C.subtype ↑D
+hSL : S ≤ L
+hLrank : Module.finrank (ZMod 2) ↥L = J + 2 * h
+hmaprank : Module.finrank (ZMod 2) ↥(Submodule.map S.mkQ L) = 2 * h - t
+candidate : Grass (CenterQuotient center) (2 * h - t) := ⟨Submodule.map S.mkQ L, hmaprank⟩
+⊢ (⇑(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.coordinateContainingEquiv✝ center).symm ∘
+        ⇑(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.containingQuotientEquiv✝
+                ⟨centerSpanInCoordinate center, ⋯⟩ ⋯).symm ∘
+          ⇑(Equiv.cast ⋯).symm)
+      ⟨Submodule.map (centerSpanInCoordinate center).mkQ (Submodule.comap (questionCoordinateSpace center).subtype ↑D),
+        hmaprank⟩ =
+    D
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:119:47: warning: This simp argument is unused:
+  hSL
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, C, S, L, Submodule.comap_map_mkQ, Submodule.map_comap_eq_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:120:6: warning: This simp argument is unused:
+  Submodule.comap_map_mkQ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, C, S, L, hSL, Submodule.map_comap_eq_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:120:31: warning: This simp argument is unused:
+  Submodule.map_comap_eq_self
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, C, S, L, hSL, Submodule.comap_map_mkQ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

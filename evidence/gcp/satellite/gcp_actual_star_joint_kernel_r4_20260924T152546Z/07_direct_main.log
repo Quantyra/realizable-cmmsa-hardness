@@ -1,0 +1,81 @@
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:37:0: warning: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_range`:
+  [Finite V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Finite V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:65:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:71:16: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  FiniteDimensional (ZMod 2) (⨁ (i : Fin m), ↥(incrementFamily z i))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:74:39: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Module.Finite (ZMod 2) ↥f.ker
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:69:2: error: unsolved goals
+case mp.refine_1
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d m : ℕ
+z : StarTuple t d m
+hrange : (incrementSumMap z).range = jointIncrementSpan z
+hdomain : Module.finrank (ZMod 2) (⨁ (i : Fin m), ↥(incrementFamily z i)) = m * (d - t)
+this : AddCommGroup (⨁ (i : Fin m), ↥(incrementFamily z i)) := ⋯
+f : (⨁ (i : Fin m), ↥(incrementFamily z i)) →ₗ[ZMod 2] V ⧸ ↑z.fst := ⋯
+hdirect : jointlyDirect z
+hkerdim : Module.finrank (ZMod 2) ↥f.ker = 0
+⊢ Module.Finite (ZMod 2) ↥f.ker
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:81:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  FiniteDimensional (ZMod 2) (⨁ (i : Fin m), ↥(incrementFamily z i))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:82:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  0 + ?a
+in the target expression
+  Module.finrank (ZMod 2) ↥f.range + 0 = Module.finrank (ZMod 2) (⨁ (i : Fin m), ↥(incrementFamily z i))
+
+case mpr
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d m : ℕ
+z : StarTuple t d m
+hrange : (incrementSumMap z).range = jointIncrementSpan z
+hdomain : Module.finrank (ZMod 2) (⨁ (i : Fin m), ↥(incrementFamily z i)) = m * (d - t)
+this : AddCommGroup (⨁ (i : Fin m), ↥(incrementFamily z i)) := inferInstance
+f : (⨁ (i : Fin m), ↥(incrementFamily z i)) →ₗ[ZMod 2] V ⧸ ↑z.fst := incrementSumMap z
+hinj : Function.Injective ⇑(incrementSumMap z)
+hker : f.ker = ⊥
+hkerdim : Module.finrank (ZMod 2) ↥f.ker = 0
+h : Module.finrank (ZMod 2) ↥f.range + 0 = Module.finrank (ZMod 2) (⨁ (i : Fin m), ↥(incrementFamily z i))
+⊢ jointlyDirect z
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    z.fst
+  has type
+    Grass V t
+  but is expected to have type
+    { Q // Module.finrank (ZMod 2) ↥Q = t }
+  in the application
+    ↑z.fst
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:100:63: error: Application type mismatch: The argument
+  hbot
+has type
+  (incrementSumMap z).ker = ⊥
+but is expected to have type
+  LinearMap.ker ?m.117 = ⊥
+in the application
+  LinearMap.ker_eq_bot.mp hbot

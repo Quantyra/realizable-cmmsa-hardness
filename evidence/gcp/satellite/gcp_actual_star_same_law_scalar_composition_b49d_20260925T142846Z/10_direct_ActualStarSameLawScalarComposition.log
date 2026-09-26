@@ -1,0 +1,121 @@
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:105:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:111:4: error: Type mismatch: After simplification, term
+  hguard
+ has type
+  @LE.le ℕ instLENat (m * (2 * hBlock L m - leafT m (hBlock L m)) + badExponent m (hBlock L m) + 2)
+    (Module.finrank (ZMod 2) (↥(questionCoordinateSpace center) ⧸ centerSpanInCoordinate center))
+but is expected to have type
+  @LE.le ℕ instLENat (m * (2 * h - t) + badExponent m h + 2)
+    (Module.finrank (ZMod 2) (↥(questionCoordinateSpace center) ⧸ centerSpanInCoordinate center))
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:120:4: error: Application type mismatch: The argument
+  hk
+has type
+  1 ≤ leafK m h
+but is expected to have type
+  1 ≤ J + 2 * h - (J + t)
+in the application
+  fixedCenter_badEvent_mass_lt_threshold htd ?m.516 hk
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:119:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  r ≥ 0
+  p ≥ 0
+  o ≥ 0
+  o - p - r ≥ 2
+  n ≥ 0
+  l ≥ 0
+  k ≥ 0
+  j ≥ 0
+  i ≥ 0
+  i - j - k ≥ 2
+  g ≥ 1
+  f ≥ 1
+  e ≥ 256
+  d ≥ 0
+  c ≥ 0
+  b ≥ 1
+  b - d ≤ 0
+  b - e ≥ 2
+  2*b - c ≥ 0
+  2*b - 3*d + l ≥ 1
+  2*b - n ≥ 0
+  a ≥ 1
+where
+ a := ↑A
+ b := ↑(hBlock L m)
+ c := ↑(leafT m (hBlock L m))
+ d := ↑(blocks A (hBlock L m))
+ e := ↑m
+ f := ↑h / ↑(bOf m)
+ g := ↑(leafK m h)
+ i := ↑(Module.finrank (ZMod 2) (CenterQuotient center))
+ j := ↑m * ↑(leafK m (hBlock L m))
+ k := ↑(badExponent m (hBlock L m))
+ l := ↑(blocks A h)
+ n := ↑(2 * h - t)
+ o := ↑(Module.finrank (ZMod 2) (↥(questionCoordinateSpace center) ⧸ ↑U))
+ p := ↑m * ↑(J + 2 * h - (J + t))
+ r := ↑(badExponent m h)
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:125:19: error(lean.unknownIdentifier): Unknown identifier `extensionTupleLaw`
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:125:61: error: unsolved goals
+N m L A : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+sourceHMin : ℕ → ℕ
+hA : 1 ≤ A
+hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m
+center : QuestionCenter I (blocks A (hBlock L m)) (leafT m (hBlock L m))
+ht : leafT m (hBlock L m) ≤ 2 * hBlock L m
+hh : hBlock L m ≤ blocks A (hBlock L m)
+inst✝¹ : Finite ↥(questionCoordinateSpace center)
+inst✝ : Fintype (Fin m → DomainDraw center (hBlock L m))
+witness : Fin m → DomainDraw center (hBlock L m)
+h : ℕ := hBlock L m
+J : ℕ := blocks A h
+t : ℕ := leafT m h
+hs :
+  Admissible (fun n => max (sourceHMin n) (n + 2)) L m ∧
+    ∀ (n : ℕ), Admissible (fun n => max (sourceHMin n) (n + 2)) L n → n ≤ m
+hm : 256 ≤ m
+hcut : m + 2 ≤ h
+hhpos : 0 < h
+hdiv : bOf m ∣ h
+hqpos : 0 < h / bOf m
+hk : 1 ≤ leafK m h
+hguard : m * leafK m (hBlock L m) + badExponent m (hBlock L m) + 2 ≤ Module.finrank (ZMod 2) (CenterQuotient center)
+htd : J + t ≤ J + 2 * h
+U : GrassmannCounting.Grass (↥(questionCoordinateSpace center)) (blocks A (hBlock L m) + leafT m (hBlock L m)) :=
+  coordinateCenterGrass center
+drawsToLeaves : (Fin m → DomainDraw center h) ≃
+  (Fin m → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L m) + 2 * h)) :=
+  domainDrawTupleExtensionEquiv center h m ht hh
+extWitness : Fin m → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L m) + 2 * h) :=
+  drawsToLeaves witness
+badExt : Finset (Fin m → ActualSourceStarLaw.Extension U (J + 2 * h)) := fixedCenterBadEvent U
+badDomain : Finset (Fin m → DomainDraw center h) := preimageEvent (⇑drawsToLeaves) badExt
+rankBad : Finset (Fin m → DomainDraw center (hBlock L m)) := domainDrawRankFailureEvent center ht hh
+hevents : rankBad = badDomain
+this : Fintype (CenterQuotient center) := Fintype.ofFinite (CenterQuotient center)
+hdim : J + 2 * h - (J + t) = 2 * h - t
+hguard' :
+  m * (J + 2 * h - (J + t)) + badExponent m h + 2 ≤ Module.finrank (ZMod 2) (↥(questionCoordinateSpace center) ⧸ ↑U)
+hscalar :
+  eventMass (ActualStarExtensionProduct.extensionTupleLaw U extWitness) (fixedCenterBadEvent U) <
+    1 / 2 ^ (badExponent m h + 1)
+htransport :
+  eventMass
+      (ActualStarExtensionProduct.extensionTupleLaw (coordinateCenterGrass center)
+        ((domainDrawTupleExtensionEquiv center h m ht hh) witness))
+      badExt =
+    eventMass (uniformDomainTupleLaw center h m witness)
+      (preimageEvent (⇑(domainDrawTupleExtensionEquiv center h m ht hh)) badExt)
+⊢ eventMass
+      (ActualStarExtensionProduct.extensionTupleLaw (coordinateCenterGrass center)
+        ((domainDrawTupleExtensionEquiv center h m ht hh) witness))
+      badExt =
+    eventMass sorry badExt

@@ -1,0 +1,59 @@
+PvNP.RealizableHardness.ActualStarSameLawScalarComposition.domainDrawRankFailureEvent {N m L A : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center :
+    PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I
+      (PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m))
+      (PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT m
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)))
+  (ht :
+    PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT m
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) ≤
+      2 * PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)
+  (hh :
+    PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m ≤
+      PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)) :
+  Finset
+    (Fin m →
+      PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m))
+PvNP.RealizableHardness.ActualStarSameLawScalarComposition.selected_domainDraw_rankFailure_mass_lt_threshold
+  {N m L A : ℕ} {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m} (sourceHMin : ℕ → ℕ) (hA : 1 ≤ A)
+  (hsel :
+    PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector.selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m)
+  (center :
+    PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I
+      (PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m))
+      (PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT m
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)))
+  (ht :
+    PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT m
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) ≤
+      2 * PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)
+  (hh :
+    PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m ≤
+      PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m))
+  [Finite ↥(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionCoordinateSpace center)]
+  [Fintype
+      (Fin m →
+        PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center
+          (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m))]
+  (witness :
+    Fin m →
+      PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)) :
+  PvNP.RealizableHardness.ActualFiniteLaw.eventMass
+      (PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.uniformDomainTupleLaw center
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) m witness)
+      (domainDrawRankFailureEvent center ht hh) <
+    1 /
+      2 ^
+        (PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.badExponent m
+            (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) +
+          1)
+'PvNP.RealizableHardness.ActualStarSameLawScalarComposition.selected_domainDraw_rankFailure_mass_lt_threshold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

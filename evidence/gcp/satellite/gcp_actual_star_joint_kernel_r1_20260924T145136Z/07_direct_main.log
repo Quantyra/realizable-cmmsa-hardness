@@ -1,0 +1,66 @@
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:33:5: error: expected token
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:38:2: warning: Unused tactic linter: `change
+  LinearMap.range (DirectSum.coeLinearMap (incrementFamily z)) = ⨆ i : Fin m, incrementFamily z i` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:40:2: warning: Unused tactic linter: `exact DirectSum.range_coeLinearMap (incrementFamily z)` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:38:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:40:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:43:29: error: expected token
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:62:2: warning: Unused tactic linter: `have hrange := incrementSumMap_range (V := V) (t := t) (d := d) z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:63:2: warning: Unused tactic linter: `have hdomain := incrementSumMap_domain_finrank (V := V) (t := t) (d := d) z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:64:2: warning: Unused tactic linter: `let f := incrementSumMap z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:65:2: warning: Unused tactic linter: `constructor` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:66:2: warning: Unused tactic linter: `·
+  intro hdirect
+  have hkerdim : Module.finrank (ZMod 2) (LinearMap.ker f) = 0 :=
+    by
+    have h := f.finrank_range_add_finrank_ker
+    rw [hrange, hdirect, hdomain] at h
+    omega
+  have hker : LinearMap.ker f = ⊥ := Submodule.finrank_eq_zero.mp hkerdim
+  exact LinearMap.ker_eq_bot.mp hker` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:73:2: warning: Unused tactic linter: `·
+  intro hinj
+  have hker : LinearMap.ker f = ⊥ := LinearMap.ker_eq_bot.mpr hinj
+  have hkerdim : Module.finrank (ZMod 2) (LinearMap.ker f) = 0 := by rw [hker, finrank_bot]
+  have h := f.finrank_range_add_finrank_ker
+  rw [hkerdim, zero_add, hrange, hdomain] at h
+  exact h` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:62:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:63:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:64:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:65:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:66:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:73:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:87:13: error: expected token

@@ -1,0 +1,82 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2328/2394] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1905-The difference between `let` and `letI` is that `letI` inlines the value.
+1906-But this is not relevant for proofs because of proof irrelevance.
+1907-
+1908-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1909:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:193:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+1910-  Fintype.card { x // ?p x }
+1911-in the target expression
+1912-  (∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 else 0) = Fintype.card (ambientAgreeingFiber Q T P)
+1913-
+1914-J a d : ℕ
+1915-Q : Advice J a
+1916-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1917-P : DecodedPair Q d
+1918-this✝³ : Fintype (TripleRestrictionRank.Vector J) := id (id inferInstance)
+1919-this✝² : Fintype (Advice J d) := inferInstance
+1920-this✝¹ : Fintype (Zoom Q P) := zoomFintype Q P
+1921-this✝ : Fintype (AgreeingZoom T Q P) := agreeingZoomFintype T Q P
+1922-this : Fintype (ambientAgreeingFiber Q T P) := id inferInstance
+1923-⊢ (∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 else 0) = Fintype.card (ambientAgreeingFiber Q T P)
+1924-
+1925-Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+1926:Full error:
+1927-  Application type mismatch: The argument
+1928-    Q
+1929-  has type
+1930-    Advice J a
+1931-  but is expected to have type
+1932-    { Q // Module.finrank (ZMod 2) ↥Q = a }
+1933-  in the application
+1934-    ↑Q
+1935-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:206:2: Try this: 
+1936-  letI̵
+1937-
+1938-The goal is a proposition, so `let` is preferred over `letI`.
+--
+1971-The difference between `have` and `haveI` is that `haveI` inlines the value.
+1972-But this is not relevant for proofs because of proof irrelevance.
+1973-
+1974-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1975:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:223:28: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+1976-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:319:2: Try this: 
+1977-  letI̵
+1978-
+1979-The goal is a proposition, so `let` is preferred over `letI`.
+1980-The difference between `let` and `letI` is that `letI` inlines the value.
+1981-But this is not relevant for proofs because of proof irrelevance.
+1982-
+1983-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1984-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:342:6: Try this: 
+1985-  letI̵
+1986-
+1987-The goal is a proposition, so `let` is preferred over `letI`.
+--
+1991-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1992-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:351:41: `if_neg` has been deprecated: Use `ite_eq_right` instead
+1993-Some required targets logged failures:
+1994-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+1995:error: build failed
+1996-Finished with result: exit-code
+1997-Main processes terminated with: code=exited/status=1
+1998-Service runtime: 49.083s
+1999-CPU time consumed: 21.900s
+2000-Memory peak: 256.0K
+2001-Memory swap peak: 0B

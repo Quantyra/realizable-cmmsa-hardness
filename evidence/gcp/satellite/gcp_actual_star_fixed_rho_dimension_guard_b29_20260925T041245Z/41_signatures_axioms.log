@@ -1,0 +1,29 @@
+MODULE=ActualStarFixedRhoDimensionGuardChecks
+CHECK_DIRECTIVES_BEGIN
+5:#check leafT
+6:#check leafK
+7:#check badExponent
+8:#check fixedRho_ambient_dimension_guard
+9:#check fixedRho_quotient_dimension_guard
+10:#check selected_fixedRho_quotient_dimension_guard
+11:#check selected_actual_center_quotient_dimension_guard
+13:#print axioms fixedRho_ambient_dimension_guard
+14:#print axioms fixedRho_quotient_dimension_guard
+15:#print axioms selected_fixedRho_quotient_dimension_guard
+16:#print axioms selected_actual_center_quotient_dimension_guard
+CHECK_DIRECTIVES_END
+SIGNATURE_OUTPUT_BEGIN
+1:PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT (m h : ℕ) : ℕ
+2:PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafK (m h : ℕ) : ℕ
+3:PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.badExponent (m h : ℕ) : ℕ
+4:PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.fixedRho_ambient_dimension_guard {m A h : ℕ} (hm : 256 ≤ m)
+7:PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.fixedRho_quotient_dimension_guard {m A h : ℕ} (hm : 256 ≤ m)
+10:PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.selected_fixedRho_quotient_dimension_guard (sourceHMin : ℕ → ℕ)
+21:PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.selected_actual_center_quotient_dimension_guard {N m L A : ℕ}
+SIGNATURE_OUTPUT_END
+AXIOM_NORMALIZED_BEGIN
+AXIOM_REPORT_1=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_2=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_3=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_4=[propext,  Classical.choice,  Quot.sound]
+AXIOM_NORMALIZED_END

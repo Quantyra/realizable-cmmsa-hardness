@@ -1,0 +1,53 @@
+lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:36:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:38:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:63:76: error: Type mismatch
+  hcardNat
+has type
+  Nat.card { L // ↑K ≤ ↑L } = gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U) - 1) (d - t - 1)
+but is expected to have type
+  Nat.card goodGrass = gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) (d - t - 1)
+lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:65:4: error: Type mismatch: After simplification, term
+  hcard
+ has type
+  Fintype.card goodGrass = gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) (d - t - 1)
+but is expected to have type
+  Fintype.card goodGrass = gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U) - 1) (d - t - 1)
+lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:83:60: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d : ℕ
+htd : t ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+U : Grass V t
+witness : Extension U d
+K : Grass (V ⧸ ↑U) 1
+hk : 1 ≤ d - t
+this✝ : Finite (V ⧸ ↑U) := Finite.of_surjective (⇑(↑U).mkQ) (Submodule.mkQ_surjective ↑U)
+this : Fintype (V ⧸ ↑U) := Fintype.ofFinite (V ⧸ ↑U)
+e : Extension U d ≃ Grass (V ⧸ ↑U) (d - t) := upperQuotientEquiv U htd
+good : Finset (Extension U d) := {L | ↑K ≤ ↑(e L)}
+goodExt : Type (max 0 u_1) := { L // ↑K ≤ ↑(e L) }
+goodGrass : Type (max 0 u_1) := { R // ↑K ≤ ↑R }
+hgoodCard : good.card = Fintype.card goodGrass
+hgoodCount : Fintype.card goodGrass = upperCount K (d - t)
+hqdim : Module.finrank (ZMod 2) (V ⧸ ↑U) = Module.finrank (ZMod 2) V - t
+hcarrier : Fintype.card (Extension U d) = gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) (d - t)
+⊢ ↑good.card * (↑(Fintype.card (Extension U d)))⁻¹ = ↑good.card / ↑(Fintype.card (Extension U d))
+lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:86:28: error(lean.unknownIdentifier): Unknown identifier `gaussian_pos`
+lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:88:28: error(lean.unknownIdentifier): Unknown identifier `gaussian_pos`

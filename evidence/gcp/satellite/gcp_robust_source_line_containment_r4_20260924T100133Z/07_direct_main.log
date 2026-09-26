@@ -1,0 +1,331 @@
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:37:4: error: `dsimp` made no progress
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:44:2: error: `dsimp` made no progress
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:55:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (linesInside H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:60:32: error(lean.unknownIdentifier): Unknown identifier `target`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:61:16: error(lean.unknownIdentifier): Unknown identifier `target`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:62:21: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+K : ?m.27
+⊢ ?m.29 K
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:63:22: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+K : ?m.31
+⊢ ?m.33 K
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:55:51: error: unsolved goals
+case e
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+Q0 : Grass V 0 := ⟨⊥, ⋯⟩
+target : Type (max 0 u_1) := { K // ↑Q0 ≤ ↑K ∧ ↑K ≤ ↑H }
+⊢ linesInside H ≃ target
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+Q0 : Grass V 0 := ⟨⊥, ⋯⟩
+target : Type (max 0 u_1) := { K // ↑Q0 ≤ ↑K ∧ ↑K ≤ ↑H }
+e : linesInside H ≃ target := ?e
+⊢ sorry = gaussian j 1
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:53:0: error: internal exception #3
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:64:2: error: unexpected token 'have'; expected command
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:112:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.462 ?m.463 = 0
+in the target expression
+  y - x ∈ ↑Q
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+a : ℕ
+Q : Grass V a
+L H : Submodule (ZMod 2) V
+hQL : ↑Q ≤ L
+hQH : ↑Q ⊓ H = ⊥
+h : Submodule.map (↑Q).mkQ L ⊓ Submodule.map (↑Q).mkQ H ≠ ⊥
+z : V ⧸ ↑Q
+hz : z ∈ Submodule.map (↑Q).mkQ L ⊓ Submodule.map (↑Q).mkQ H
+hzne : z ≠ 0
+x : V
+hxL : x ∈ L
+hxz : (↑Q).mkQ x = z
+y : V
+hyH : y ∈ H
+hyz : (↑Q).mkQ y = z
+⊢ y - x ∈ ↑Q
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Q
+  has type
+    Grass V a
+  but is expected to have type
+    { Q // Module.finrank (ZMod 2) ↥Q = a }
+  in the application
+    ↑Q
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:177:22: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (linesInside H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:198:17: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (linesInside H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:199:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (linesInside H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:202:11: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (linesInside H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:207:15: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+d : ℕ
+hd₁ : 1 ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+F : linesInside H → Finset (Grass V d) := fun K => {L | ↑↑K ≤ ↑L}
+bad : Finset (Grass V d) := {L | ↑L ⊓ ↑H ≠ ⊥}
+hfiber : ∀ (K : linesInside H), (F K).card = gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)
+hcover : bad ⊆ Finset.univ.biUnion F
+⊢ (sorry ()).card = sorry () ∨ gaussian (Module.finrank (ZMod 2) V - 1) (d - 1) = 0
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:213:27: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (linesInside H)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:214:72: error(lean.unknownIdentifier): Unknown identifier `hunion`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:218:2: error: Tactic `apply` failed: could not unify the conclusion of `(div_le_div_iff_of_pos_right hden).mpr`
+  ?m.572 / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤ ?m.573 / ↑(gaussian (Module.finrank (ZMod 2) V) d)
+with the goal
+  Fintype (linesInside H)
+
+Note: The full type of `(div_le_div_iff_of_pos_right hden).mpr` is
+  ?m.572 ≤ ?m.573 →
+    ?m.572 / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤ ?m.573 / ↑(gaussian (Module.finrank (ZMod 2) V) d)
+
+case refine_2.refine_1
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+d : ℕ
+hd₁ : 1 ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+F : linesInside H → Finset (Grass V d) := fun K => {L | ↑↑K ≤ ↑L}
+bad : Finset (Grass V d) := {L | ↑L ⊓ ↑H ≠ ⊥}
+hfiber : ∀ (K : linesInside H), (F K).card = gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)
+hcover : bad ⊆ Finset.univ.biUnion F
+hcard : bad.card ≤ (Finset.univ.biUnion F).card
+hcard' : ↑bad.card ≤ ↑(gaussian j 1) * ↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1))
+hden : 0 < ↑(gaussian (Module.finrank (ZMod 2) V) d)
+⊢ Fintype (linesInside H)
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:235:4: error: `dsimp` made no progress
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:254:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) / ↑(gaussian (Module.finrank (ZMod 2) V) d)
+in the target expression
+  ↑{L | ¬↑L ⊓ ↑H = ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * ↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) / ↑(gaussian (Module.finrank (ZMod 2) V) d)
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+d : ℕ
+hd₁ : 1 ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+hmass :
+  ↑{L | ¬↑L ⊓ ↑H = ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * ↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) / ↑(gaussian (Module.finrank (ZMod 2) V) d)
+n : ℕ := Module.finrank (ZMod 2) V
+hflag :
+  gaussian (Module.finrank (ZMod 2) V) 1 * gaussian (Module.finrank (ZMod 2) V - 1) (d - 1) =
+    gaussian (Module.finrank (ZMod 2) V) d * gaussian d 1
+hcast :
+  ↑(gaussian (Module.finrank (ZMod 2) V) 1) * ↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) =
+    ↑(gaussian (Module.finrank (ZMod 2) V) d) * ↑(gaussian d 1)
+hden : ¬↑(gaussian (Module.finrank (ZMod 2) V) d) = 0
+hden1 : ¬↑(gaussian (Module.finrank (ZMod 2) V) 1) = 0
+hr :
+  ↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) / ↑(gaussian (Module.finrank (ZMod 2) V) d) =
+    ↑(gaussian d 1) / ↑(gaussian (Module.finrank (ZMod 2) V) 1)
+this :
+  ↑{L | ¬↑L ⊓ ↑H = ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * ↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) / ↑(gaussian (Module.finrank (ZMod 2) V) d)
+⊢ ↑{L | ¬↑L ⊓ ↑H = ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * (↑(gaussian d 1) / ↑(gaussian (Module.finrank (ZMod 2) V) 1))
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    L
+  has type
+    Grass V d
+  but is expected to have type
+    { Q // Module.finrank (ZMod 2) ↥Q = d }
+  in the application
+    ↑L
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:295:37: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+d : ℕ
+hd₁ : 1 ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+hslack : j + d + 1 ≤ Module.finrank (ZMod 2) V
+n : ℕ := Module.finrank (ZMod 2) V
+hratio :
+  ↑{L | ↑L ⊓ ↑H ≠ ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * ↑(gaussian d 1) / ↑(gaussian (Module.finrank (ZMod 2) V) 1)
+hjp : 0 ≤ 2 ^ j
+hdp : 0 ≤ 2 ^ d
+hpow : 2 ^ j * 2 ^ d = 2 ^ (j + d)
+hleft : 2 ^ j - 1 ≤ 2 ^ j
+hright : 2 ^ d - 1 ≤ 2 ^ d
+⊢ 1 ≤ ?m.301
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:301:37: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+d : ℕ
+hd₁ : 1 ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+hslack : j + d + 1 ≤ Module.finrank (ZMod 2) V
+n : ℕ := Module.finrank (ZMod 2) V
+hratio :
+  ↑{L | ↑L ⊓ ↑H ≠ ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * ↑(gaussian d 1) / ↑(gaussian (Module.finrank (ZMod 2) V) 1)
+hjp : 0 ≤ 2 ^ j
+hdp : 0 ≤ 2 ^ d
+hpow : 2 ^ j * 2 ^ d = 2 ^ (j + d)
+hleft : 2 ^ j - 1 ≤ 2 ^ j
+hright : 2 ^ d - 1 ≤ 2 ^ d
+hleft' : 0 ≤ 2 ^ j - 1
+⊢ 1 ≤ ?m.355
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:338:35: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+d : ℕ
+hd₁ : 1 ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+hslack : j + d + 1 ≤ Module.finrank (ZMod 2) V
+n : ℕ := Module.finrank (ZMod 2) V
+hratio :
+  ↑{L | ↑L ⊓ ↑H ≠ ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * ↑(gaussian d 1) / ↑(gaussian (Module.finrank (ZMod 2) V) 1)
+hnum : ↑(gaussian j 1) * ↑(gaussian d 1) ≤ 2 ^ (j + d)
+hn₁ : 1 ≤ n
+hdenpow : 2 ^ (n - 1) ≤ ↑(gaussian n 1)
+hE : n = j + d + (n - j - d - 1) + 1
+hpowE : 2 ^ (j + d) * 2 ^ (n - j - d - 1) = 2 ^ (n - 1)
+htarget : ↑(gaussian j 1) * ↑(gaussian d 1) * 2 ^ (n - j - d - 1) ≤ ↑(gaussian n 1)
+⊢ 1 ≤ ?m.881
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:363:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype { L // ↑Q ≤ ↑L ∧ ↑L ⊓ ↑H ≠ ⊥ }
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:365:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype { L // ↑Q ≤ ↑L }
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:379:15: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:380:16: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:384:12: error(lean.unknownIdentifier): Unknown identifier `e.left_inv`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:387:12: error(lean.unknownIdentifier): Unknown identifier `e.right_inv`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:375:4: error: Type mismatch: After simplification, term
+  nontrivial_inf_iff_quotientImages Q (↑↑L) (↑H) L.property hQH
+ has type
+  Iff (¬↑↑L ⊓ ↑H = ⊥) ¬Submodule.map (↑Q).mkQ ↑↑L ⊓ Submodule.map (↑Q).mkQ ↑H = ⊥
+but is expected to have type
+  Iff (¬↑↑L ⊓ ↑H = ⊥) ¬↑((upperQuotientEquiv Q had) L) ⊓ Submodule.map (↑Q).mkQ ↑H = ⊥
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:367:61: error: unsolved goals
+case badEquiv
+a j : ℕ
+W : Type u_2
+inst✝² : AddCommGroup W
+inst✝¹ : Module (ZMod 2) W
+inst✝ : Finite W
+Q : Grass W a
+H : Grass W j
+d : ℕ
+had : a ≤ d
+hd : d ≤ Module.finrank (ZMod 2) W
+hQH : ↑Q ⊓ ↑H = ⊥
+hbd : 1 ≤ d - a
+hslack : j + (d - a) + 1 ≤ Module.finrank (ZMod 2) W - a
+carrier : Type (max 0 u_2) := { L // ↑Q ≤ ↑L }
+bad : Type (max 0 u_2) := { L // ↑↑L ⊓ ↑H ≠ ⊥ }
+Hq : Grass (W ⧸ ↑Q) j := quotientImageGrass Q (↑H) hQH ⋯
+e : { L // ↑Q ≤ ↑L } ≃ Grass (W ⧸ ↑Q) (d - a) := upperQuotientEquiv Q had
+hbad : ∀ (L : carrier), ↑↑L ⊓ ↑H ≠ ⊥ ↔ ↑(e L) ⊓ ↑Hq ≠ ⊥
+badQ : Type (max 0 u_2) := { R // ↑R ⊓ ↑Hq ≠ ⊥ }
+⊢ bad ≃ badQ
+
+a j : ℕ
+W : Type u_2
+inst✝² : AddCommGroup W
+inst✝¹ : Module (ZMod 2) W
+inst✝ : Finite W
+Q : Grass W a
+H : Grass W j
+d : ℕ
+had : a ≤ d
+hd : d ≤ Module.finrank (ZMod 2) W
+hQH : ↑Q ⊓ ↑H = ⊥
+hbd : 1 ≤ d - a
+hslack : j + (d - a) + 1 ≤ Module.finrank (ZMod 2) W - a
+carrier : Type (max 0 u_2) := { L // ↑Q ≤ ↑L }
+bad : Type (max 0 u_2) := { L // ↑↑L ⊓ ↑H ≠ ⊥ }
+Hq : Grass (W ⧸ ↑Q) j := quotientImageGrass Q (↑H) hQH ⋯
+e : { L // ↑Q ≤ ↑L } ≃ Grass (W ⧸ ↑Q) (d - a) := upperQuotientEquiv Q had
+hbad : ∀ (L : carrier), ↑↑L ⊓ ↑H ≠ ⊥ ↔ ↑(e L) ⊓ ↑Hq ≠ ⊥
+badQ : Type (max 0 u_2) := { R // ↑R ⊓ ↑Hq ≠ ⊥ }
+badEquiv : bad ≃ badQ := ?badEquiv
+⊢ sorry / sorry ≤ 1 / 2 ^ (Module.finrank (ZMod 2) W - a - j - (d - a) - 1)
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:352:0: error: internal exception #3
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:388:2: error: unexpected token 'have'; expected command

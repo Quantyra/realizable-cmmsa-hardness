@@ -1,0 +1,38 @@
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:41:8: error: Function expected at
+  DirectSum.range_coeLinearMap
+but this term has type
+  (DirectSum.coeLinearMap ?m.76).range = ⨆ i, ?m.76 i
+
+Note: Expected a function because this term is being applied to the argument
+  (incrementFamily z)
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:69:16: error: Application type mismatch: The argument
+  f
+has type
+  @LinearMap (ZMod 2) (ZMod 2) Field.toSemifield.toDivisionSemiring.toSemiring
+    Field.toSemifield.toDivisionSemiring.toSemiring (RingHom.id (ZMod 2)) (⨁ (i : Fin m), ↥(incrementFamily z i))
+    (V ⧸ ↑z.fst) (DirectSum.instAddCommMonoid (Fin m) fun i => ↥(incrementFamily z i))
+    (Submodule.Quotient.addCommMonoid ↑z.fst) DirectSum.instModule (Submodule.Quotient.module ↑z.fst)
+but is expected to have type
+  @LinearMap ?m.75 ?m.75 DivisionRing.toDivisionSemiring.toSemiring DivisionRing.toDivisionSemiring.toSemiring
+    (RingHom.id ?m.75) ?m.76 ?m.80 AddCommGroup.toAddCommMonoid AddCommGroup.toAddCommMonoid ?m.79 ?m.82
+in the application
+  LinearMap.finrank_range_add_finrank_ker f
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:72:68: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:58:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:96:36: error: Application type mismatch: The argument
+  hbot
+has type
+  (incrementSumMap z).ker = ⊥
+but is expected to have type
+  LinearMap.ker ?m.88 = ⊥
+in the application
+  LinearMap.ker_eq_bot.mp hbot
+lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:85:8: error: (kernel) unknown constant 'PvNP.RealizableHardness.ActualStarJointKernel.jointlyDirect_iff_incrementSumMap_injective'

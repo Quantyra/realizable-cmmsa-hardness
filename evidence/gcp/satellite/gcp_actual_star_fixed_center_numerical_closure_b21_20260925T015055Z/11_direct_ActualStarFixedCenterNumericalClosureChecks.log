@@ -1,0 +1,19 @@
+PvNP.RealizableHardness.ActualStarFixedCenterNumericalClosure.supportStratifiedBound.{u_1} (A : Type u_1)
+  [AddCommGroup A] [Fintype A] (m : ℕ) (p : ℚ) : ℚ
+PvNP.RealizableHardness.ActualStarFixedCenterNumericalClosure.candidateSum_le_supportStratifiedBound.{u_1}
+  {A : Type u_1} [AddCommGroup A] [Module (ZMod 2) A] [Fintype A] (m : ℕ) (p : ℚ) (hp : 0 ≤ p) :
+  ∑ c, p ^ c.fst.card ≤ ActualStarFixedCenterNumericalClosure.supportStratifiedBound A m p
+PvNP.RealizableHardness.ActualStarFixedCenterNumericalClosure.fixedCenter_badEvent_mass_le_supportStratifiedBound.{u_1}
+  {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d)
+  (hdV : d ≤ Module.finrank (ZMod 2) V) (hk : 1 ≤ d - t) (U : GrassmannCounting.Grass V t) [Fintype (V ⧸ ↑U)]
+  (witness : Fin m → ActualSourceStarLaw.Extension U d) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+      (ActualStarFixedCenterFirstMoment.fixedCenterBadEvent U) ≤
+    ActualStarFixedCenterNumericalClosure.supportStratifiedBound (V ⧸ ↑U) m
+      (↑(GrassmannCounting.gaussian (d - t) 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1))
+'PvNP.RealizableHardness.ActualStarFixedCenterNumericalClosure.candidateSum_le_supportStratifiedBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarFixedCenterNumericalClosure.fixedCenter_badEvent_mass_le_supportStratifiedBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

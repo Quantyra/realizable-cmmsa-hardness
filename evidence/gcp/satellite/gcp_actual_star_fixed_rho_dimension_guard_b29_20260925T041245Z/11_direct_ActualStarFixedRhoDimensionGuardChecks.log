@@ -1,0 +1,46 @@
+PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT (m h : ℕ) : ℕ
+PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafK (m h : ℕ) : ℕ
+PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.badExponent (m h : ℕ) : ℕ
+PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.fixedRho_ambient_dimension_guard {m A h : ℕ} (hm : 256 ≤ m)
+  (hh : m + 2 ≤ h) (hdiv : PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.bOf m ∣ h) (hA : 1 ≤ A) :
+  leafT m h + m * leafK m h + badExponent m h + 2 ≤ 2 * PvNP.RealizableHardness.SamplerParameters.blocks A h
+PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.fixedRho_quotient_dimension_guard {m A h : ℕ} (hm : 256 ≤ m)
+  (hh : m + 2 ≤ h) (hdiv : PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.bOf m ∣ h) (hA : 1 ≤ A) :
+  m * leafK m h + badExponent m h + 2 ≤ 2 * PvNP.RealizableHardness.SamplerParameters.blocks A h - leafT m h
+PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.selected_fixedRho_quotient_dimension_guard (sourceHMin : ℕ → ℕ)
+  {L m A : ℕ} (hA : 1 ≤ A)
+  (hsel :
+    PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector.selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m) :
+  m * leafK m (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) +
+        badExponent m (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) +
+      2 ≤
+    2 *
+        PvNP.RealizableHardness.SamplerParameters.blocks A
+          (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) -
+      leafT m (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)
+PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.selected_actual_center_quotient_dimension_guard {N m L A : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center :
+    PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I
+      (PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m))
+      (leafT m (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)))
+  (sourceHMin : ℕ → ℕ) (hA : 1 ≤ A)
+  (hsel :
+    PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector.selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m) :
+  m * leafK m (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) +
+        badExponent m (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m) +
+      2 ≤
+    Module.finrank (ZMod 2) (PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.CenterQuotient center)
+'PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.fixedRho_ambient_dimension_guard' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.fixedRho_quotient_dimension_guard' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.selected_fixedRho_quotient_dimension_guard' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.selected_actual_center_quotient_dimension_guard' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

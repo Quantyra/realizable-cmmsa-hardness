@@ -1,0 +1,47 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2321/2390] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1905-The difference between `let` and `letI` is that `letI` inlines the value.
+1906-But this is not relevant for proofs because of proof irrelevance.
+1907-
+1908-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1909:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:192:67: unsolved goals
+1910-J a d : ℕ
+1911-Q : Advice J a
+1912-T : (L : Advice J d) → Module.Dual (ZMod 2) ↥↑L
+1913-P : DecodedPair Q d
+1914-this✝³ : Fintype (TripleRestrictionRank.Vector J) := id (id inferInstance)
+1915-this✝² : Fintype (Advice J d) := inferInstance
+1916-this✝¹ : Fintype (Zoom Q P) := zoomFintype Q P
+1917-this✝ : Fintype (AgreeingZoom T Q P) := agreeingZoomFintype T Q P
+1918-this : Fintype (ambientAgreeingFiber Q T P) := id inferInstance
+1919-⊢ (∑ L, if ∃ (_ : ↑Q ≤ ↑L) (hLW : ↑L ≤ P.W), AgreesOn T L hLW then 1 else 0) =
+1920-    ∑ a_1, if ∃ (_ : ↑Q ≤ ↑a_1) (hLW : ↑a_1 ≤ P.W), AgreesOn T a_1 hLW then 1 else 0
+1921-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:195:34: This simp argument is unused:
+--
+1996-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1997-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreement.lean:353:41: `if_neg` has been deprecated: Use `ite_eq_right` instead
+1998-Some required targets logged failures:
+1999-- PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement
+2000:error: build failed
+2001-Finished with result: exit-code
+2002-Main processes terminated with: code=exited/status=1
+2003-Service runtime: 1min 5.077s
+2004-CPU time consumed: 23.435s
+2005-Memory peak: 456.0K
+2006-Memory swap peak: 0B

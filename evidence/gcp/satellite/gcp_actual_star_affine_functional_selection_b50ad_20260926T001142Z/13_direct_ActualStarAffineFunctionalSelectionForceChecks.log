@@ -1,0 +1,24 @@
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce.domainDraw_rankGood_iff_incrementMap_injective
+  {N m J t h : ℕ} {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) (ht : t ≤ 2 * h) (hh : h ≤ J)
+  [Finite ↥(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionCoordinateSpace center)]
+  (draws : Fin m → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h) :
+  let U := PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.coordinateCenterGrass center;
+  have leaves :=
+    (PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.domainDrawTupleExtensionEquiv center h m ht hh)
+      draws;
+  have z := ⟨U, leaves⟩;
+  Module.finrank (ZMod 2)
+        ↥(PvNP.RealizableHardness.ActualStarDomainDrawEventBridge.domainDrawJointImage center h ht hh draws) =
+      m * (2 * h - t) ↔
+    Function.Injective ⇑(PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap z)
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce.leafDifferenceOnQuotient.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] (S L : Submodule (ZMod 2) V) (hSL : S ≤ L) (T : ↥L →ₗ[ZMod 2] ZMod 2)
+  (base : V →ₗ[ZMod 2] ZMod 2) (hagree : T ∘ₗ Submodule.inclusion hSL = base ∘ₗ S.subtype) :
+  ↥(S.mkQ.domRestrict L).range →ₗ[ZMod 2] ZMod 2
+'PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce.domainDraw_rankGood_iff_incrementMap_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce.leafDifferenceOnQuotient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

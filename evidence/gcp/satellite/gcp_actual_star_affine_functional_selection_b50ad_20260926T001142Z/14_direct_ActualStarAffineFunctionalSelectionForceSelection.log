@@ -1,0 +1,58 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:117:4: error: Type mismatch: After simplification, term
+  Eq.symm hsum
+ has type
+  ↑x = k + h
+but is expected to have type
+  k + h = ↑x
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:145:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ ?m.95, ∑ y ∈ ?m.96, ?m.97 x y
+in the target expression
+  ∑ g, (Finset.filter (matchesCandidate g) E).card = ∑ x ∈ E, Fintype.card { g // matchesCandidate g x }
+
+Ω : Type u_1
+G : Type u_2
+inst✝³ : Fintype Ω
+inst✝² : Nonempty Ω
+inst✝¹ : Fintype G
+inst✝ : Nonempty G
+E : Finset Ω
+matchesCandidate : G → Ω → Prop
+M : ℕ
+hcount : ∀ x ∈ E, Fintype.card { g // matchesCandidate g x } = M
+count : G → ℕ := fun g => (Finset.filter (matchesCandidate g) E).card
+⊢ ∑ g, (Finset.filter (matchesCandidate g) E).card = ∑ x ∈ E, Fintype.card { g // matchesCandidate g x }
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:172:42: error: unsolved goals
+Ω : Type u_1
+G : Type u_2
+inst✝³ : Fintype Ω
+inst✝² : Nonempty Ω
+inst✝¹ : Fintype G
+inst✝ : Nonempty G
+E : Finset Ω
+matchesCandidate : G → Ω → Prop
+M : ℕ
+hcount : ∀ x ∈ E, Fintype.card { g // matchesCandidate g x } = M
+count : G → ℕ := fun g => (Finset.filter (matchesCandidate g) E).card
+hsum : ∑ g, count g = E.card * M
+hsumQ : ∑ g, ↑(count g) = ↑E.card * ↑M
+avg : ℚ := ↑E.card * ↑M / ↑(Fintype.card G)
+hG : ↑(Fintype.card G) ≠ 0
+havg : ∑ _g, avg = ∑ g, ↑(count g)
+g : G
+_hg : g ∈ Finset.univ
+hsel : avg ≤ ↑(count g)
+hΩ : ↑(Fintype.card Ω) ≠ 0
+hΩpos : 0 < ↑(Fintype.card Ω)
+⊢ ↑(Finset.filter (matchesCandidate g) E).card * (↑(Fintype.card Ω))⁻¹ =
+    ↑(Finset.filter (matchesCandidate g) E).card / ↑(Fintype.card Ω)
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:185:8: error: Invalid projection: Projections cannot be used on functions, and
+  div_le_div_iff₀ hΩpos
+has function type
+  0 < ?m.352 → (?m.349 / ↑(Fintype.card Ω) ≤ ?m.351 / ?m.352 ↔ ?m.349 * ?m.352 ≤ ?m.351 * ↑(Fintype.card Ω))
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:175:42: warning: This simp argument is unused:
+  hΩ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Finset.sum_const, nsmul_eq_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

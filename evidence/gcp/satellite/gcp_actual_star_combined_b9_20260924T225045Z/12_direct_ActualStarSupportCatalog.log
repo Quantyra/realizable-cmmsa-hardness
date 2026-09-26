@@ -1,0 +1,47 @@
+lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean:96:29: error: Invalid argument name `V` for function
+lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean:99:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean:115:14: error(lean.unknownIdentifier): Unknown identifier `ActualStarJointKernel.jointlyDirect`
+lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean:118:33: error: Invalid argument name `V` for function
+lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean:121:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean:123:2: error: Tactic `generalize` failed: result is not type correct
+  (∃ S,
+      2 ≤ S.card ∧
+        ∃ v,
+          (∀ (i : ↥S), v i ≠ 0) ∧
+            (∀ (i : ↥S), v i ∈ ActualStarJointKernel.incrementFamily z ↑i) ∧
+              ∑ i, v i = 0 ∧
+                ∀ (hv : ∀ (i : ↥S), v i ≠ 0),
+                  (∀ (i : ↥S),
+                      ↑(quotientVectorLine (v i) ⋯) ≤
+                        ↑((GrassmannFlagPosterior.upperQuotientEquiv z.fst htd) (z.snd ↑i))) ∧
+                    z.snd ∈
+                      ActualStarExtensionProduct.supportedLineEvent htd S z.fst fun i => quotientVectorLine (v i) ⋯) →
+    ∃ S, 2 ≤ S.card ∧ ∃ r, z.snd ∈ ?m.34
+
+x✝ : Sort u_2
+supportedLineEvent : x✝
+V : Type u_1
+inst✝³ : AddCommGroup V
+inst✝² : Module (ZMod 2) V
+inst✝¹ : Finite V
+t d m : ℕ
+htd : t ≤ d
+z : StarTuple t d m
+inst✝ : Fintype (V ⧸ ↑z.fst)
+hbad : ¬sorry
+this : Finite (V ⧸ ↑z.fst) := Finite.of_surjective (⇑(↑z.fst).mkQ) (Submodule.mkQ_surjective ↑z.fst)
+⊢ ∃ S, 2 ≤ S.card ∧ ∃ r, z.snd ∈ ?m.34

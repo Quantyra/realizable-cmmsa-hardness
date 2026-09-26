@@ -1,0 +1,36 @@
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:61:44: error: unsolved goals
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+eRank : Grass (↥(questionCoordinateSpace center) ⧸ ↑U) (J + 2 * h - (J + t)) ≃
+  Grass (CenterQuotient center) (2 * h - t) :=
+  Equiv.cast ⋯
+had : J + t ≤ J + 2 * h
+⊢ ↑(cast ⋯
+        ((upperQuotientEquiv U had)
+          ((upperQuotientEquiv (coordinateCenterGrass center) ⋯).symm (cast ⋯ ((domainDrawEquiv center h ht hh) D))))) =
+    ↑((domainDrawEquiv center h ht hh) D)
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:97:4: error: Type mismatch: After simplification, term
+  domainDrawExtension_quotient_eq center h ht hh (draws i)
+ has type
+  ↑(cast ⋯
+        ((upperQuotientEquiv (coordinateCenterGrass center) ⋯) ((domainDrawExtensionEquiv center h ht hh) (draws i)))) =
+    ↑((domainDrawEquiv center h ht hh) (draws i))
+but is expected to have type
+  ↑((upperQuotientEquiv U ⋯) ((domainDrawExtensionEquiv center h ht hh) (draws i))) =
+    ↑((domainDrawEquiv center h ht hh) (draws i))
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:106:4: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:67:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.

@@ -1,0 +1,60 @@
+PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.coordinateCenterGrass {N m J t : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) :
+  PvNP.RealizableHardness.GrassmannCounting.Grass
+    (↥(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionCoordinateSpace center)) (J + t)
+PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.domainDrawExtensionEquiv {N m J t : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) (h : ℕ) (ht : t ≤ 2 * h)
+  (hh : h ≤ J) :
+  PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h ≃
+    PvNP.RealizableHardness.ActualSourceStarLaw.Extension (coordinateCenterGrass center) (J + 2 * h)
+PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.domainDrawTupleExtensionEquiv {N m J t : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) (h r : ℕ) (ht : t ≤ 2 * h)
+  (hh : h ≤ J) :
+  (Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h) ≃
+    (Fin r → PvNP.RealizableHardness.ActualSourceStarLaw.Extension (coordinateCenterGrass center) (J + 2 * h))
+PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.uniformDomainTupleLaw {N m J t : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) (h r : ℕ)
+  [Fintype (Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h)]
+  (witness : Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h) :
+  PvNP.RealizableHardness.ActualFiniteLaw.FiniteLaw
+    (Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h)
+PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.uniform_domainTuple_pushforward_extensionTupleLaw
+  {N m J t : ℕ} {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) (h r : ℕ) (ht : t ≤ 2 * h)
+  (hh : h ≤ J) [Finite ↥(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionCoordinateSpace center)]
+  [Fintype (Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h)]
+  (witness : Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h) :
+  PvNP.RealizableHardness.ActualFiniteLaw.pushforward (⇑(domainDrawTupleExtensionEquiv center h r ht hh))
+      (uniformDomainTupleLaw center h r witness) =
+    PvNP.RealizableHardness.ActualStarExtensionProduct.extensionTupleLaw (coordinateCenterGrass center)
+      ((domainDrawTupleExtensionEquiv center h r ht hh) witness)
+PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.extensionTuple_eventMass_eq_preimage {N m J t : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t) (h r : ℕ) (ht : t ≤ 2 * h)
+  (hh : h ≤ J) [Finite ↥(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionCoordinateSpace center)]
+  [Fintype (Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h)]
+  (witness : Fin r → PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center h)
+  (E :
+    Finset (Fin r → PvNP.RealizableHardness.ActualSourceStarLaw.Extension (coordinateCenterGrass center) (J + 2 * h))) :
+  PvNP.RealizableHardness.ActualFiniteLaw.eventMass
+      (PvNP.RealizableHardness.ActualStarExtensionProduct.extensionTupleLaw (coordinateCenterGrass center)
+        ((domainDrawTupleExtensionEquiv center h r ht hh) witness))
+      E =
+    PvNP.RealizableHardness.ActualFiniteLaw.eventMass (uniformDomainTupleLaw center h r witness)
+      (PvNP.RealizableHardness.ActualFiniteLaw.preimageEvent (⇑(domainDrawTupleExtensionEquiv center h r ht hh)) E)
+'PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.domainDrawExtensionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.domainDrawTupleExtensionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.uniform_domainTuple_pushforward_extensionTupleLaw' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.extensionTuple_eventMass_eq_preimage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

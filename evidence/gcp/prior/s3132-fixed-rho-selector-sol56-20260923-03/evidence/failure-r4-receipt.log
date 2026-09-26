@@ -1,0 +1,47 @@
+UTC=2026-09-23T22:33:28Z
+VM=quantyra-lean-builder-01
+PROJECT=quantyra-lean-cert-20260915
+ZONE=us-central1-a
+HEAD=de048da45956ef207c0c1dcd38c42b00a5437710
+BASE=de048da45956ef207c0c1dcd38c42b00a5437710
+DIRECT_MAIN_RC=1
+MAIN_SHA256=bb61a89efab6753840c8e57f965fb6d6e6cef256c9fa217106ad8583de4829da
+CHECKS_SHA256=ba3658594be00a07133b1845368b59b1e9ebc5e8378e1cf7ae323db680a862e9
+DIRECT_MAIN_LOG_SHA256=021c23c0806da81fdc85f719ba33f7967743173a8fa3094475686caa4c28c206
+DIRECT_MAIN_RC_SHA256=4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865
+ACTIONABLE_DIAGNOSTICS_BEGIN
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:110:54: error: unsolved goals
+L m : ℕ
+hmpos : 0 < m
+hbpos : 0 < bOf m
+hbne : ↑(bOf m) ≠ 0
+hdvd : bOf m ∣ hBlock L m
+hcancel : bOf m * (hBlock L m / bOf m) = hBlock L m
+hcancelCast : ↑(hBlock L m) = ↑(bOf m * (hBlock L m / bOf m))
+⊢ ↑(bOf m * (hBlock L m / bOf m)) = ↑(bOf m) * NNRat.divNat (bOf m * (hBlock L m / bOf m)) (bOf m)
+lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:101:2: error: unsolved goals
+case pos
+L m : ℕ
+hmpos : 0 < m
+hbpos : 0 < bOf m
+hbne : ↑(bOf m) ≠ 0
+hdvd : bOf m ∣ hBlock L m
+hcancel : bOf m * (hBlock L m / bOf m) = hBlock L m
+hcancelCast : ↑(hBlock L m) = ↑(bOf m * (hBlock L m / bOf m))
+hcancelRat : ↑(hBlock L m) = ↑(bOf m) * (↑(hBlock L m) / ↑(bOf m))
+⊢ ↑(hBlock L m) = ↑(bOf m) * ↑(hBlock L m / bOf m)
+lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:162:5: warning: Variable name `H` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _H
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ACTIONABLE_DIAGNOSTICS_END
+CHECKS_NOT_RUN=direct_main_failed
+REPLAY_NOT_RUN=direct_main_failed
+OLEAN_STABILITY_NOT_RUN=direct_main_failed
+AUDITS_NOT_RUN=direct_main_failed
+SCANS_NOT_RUN=direct_main_failed
+COMMIT=none
+VM_FINAL_STATE=pending_termination

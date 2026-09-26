@@ -1,0 +1,95 @@
+236-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+237-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+238-  [apply] ring_nf
+239-  
+240:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+241-    
+242-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+243-⚠ [2308/2353] Replayed PvNP.RealizableHardness.FiniteConcentration
+244-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+247-  Fintype.card_fun
+248-
+249-Hint: Omit it from the simp argument list.
+250-  [apply] simp
+251-
+252-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1777-Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+1778-  [apply] _x
+1779-
+1780-Note: This linter can be disabled with `set_option linter.unusedVariables false`
+1781:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:102:4: Type mismatch: After simplification, term
+1782-  hcount
+1783- has type
+1784-  Fintype.card
+1785-      { L //
+1786-        ↑(restrictGrass (localAmbient s) Q hQV) ≤ ↑L ∧
+1787-          ↑L ≤ (localDecodedPair (localAmbient s) Q (ambientPair s Q W hQV hQW) hQV ⋯).W } =
+1788-    gaussian (Module.finrank (ZMod 2) ↥(localDecodedPair (localAmbient s) Q (ambientPair s Q W hQV hQW) hQV ⋯).W - a)
+1789-      (d - a)
+1790-but is expected to have type
+1791-  Nat.card
+1792-      (Zoom (restrictGrass (localAmbient s) Q hQV)
+1793-        (localDecodedPair (localAmbient s) Q (ambientPair s Q W hQV hQW) hQV ⋯)) =
+--
+1800-The difference between `let` and `letI` is that `letI` inlines the value.
+1801-But this is not relevant for proofs because of proof irrelevance.
+1802-
+1803-Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+1804:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:153:72: unsolved goals
+1805-J a d : ℕ
+1806-s : TripleRestrictionRank.Draw J
+1807-Q : Advice J a
+1808-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1809-hQV : ↑Q ≤ localAmbient s
+1810-hQW : ↑Q ≤ W
+1811-had : a ≤ d
+1812-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1813-L : Advice J d
+1814-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1815-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+1816-Q0 : Grass (↥(localAmbient s)) a := localAdvice s Q hQV
+--
+1833-hLE : ↑L ≤ TripleRestrictionRank.retained s
+1834-⊢ gaussian (Module.finrank (ZMod 2) ↥(TripleRestrictionRank.retained s) - a) (d - a) =
+1835-    gaussian (Module.finrank (ZMod 2) ↥(TripleRestrictionRank.retained s) - a) (d - a)
+1836-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:169:51: `if_true` has been deprecated: Use `ite_true` instead
+1837:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:166:74: unsolved goals
+1838-J a d : ℕ
+1839-s : TripleRestrictionRank.Draw J
+1840-Q : Advice J a
+1841-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1842-hQV : ↑Q ≤ localAmbient s
+1843-hQW : ↑Q ≤ W
+1844-had : a ≤ d
+1845-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1846-L : Advice J d
+1847-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1848-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+1849-Q0 : Grass (↥(localAmbient s)) a := localAdvice s Q hQV
+--
+1872-    ↑(gaussian (Module.finrank (ZMod 2) ↥I - a) (d - a)) /
+1873-      ↑(gaussian (Module.finrank (ZMod 2) ↥(localIntersection s W) - a) (d - a))
+1874-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:175:12: `if_pos` has been deprecated: Use `ite_eq_left` instead
+1875-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:214:20: `if_neg` has been deprecated: Use `ite_eq_right` instead
+1876:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:220:6: unsolved goals
+1877-case neg
+1878-J a d : ℕ
+1879-s : TripleRestrictionRank.Draw J
+1880-Q : Advice J a
+1881-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1882-hQV : ↑Q ≤ localAmbient s
+1883-hQW : ↑Q ≤ W
+1884-had : a ≤ d
+1885-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1886-L : Advice J d
+1887-E : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localAmbient s
+1888-I : Submodule (ZMod 2) (TripleRestrictionRank.Vector J) := localIntersection s W
+--
+1916-
+1917-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+1918-Some required targets logged failures:
+1919-- PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
+1920:error: build failed

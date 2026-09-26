@@ -1,0 +1,15 @@
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:147:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a * ?b⁻¹
+in the target expression
+  2 ^ (k * m) < (2 ^ (E + 1))⁻¹ * (2 ^ N - 1)
+
+m k N E : ℕ
+hguard : m * k + E + 2 ≤ N
+hNpow : 2 ^ (m * k + E + 2) ≤ 2 ^ N
+hsep : 2 ^ (m * k + E + 2) - 1 > 2 ^ (m * k + E + 1)
+hyNat : 2 ^ N - 1 > 2 ^ (m * k + E + 1)
+hy : 2 ^ N - 1 > 2 ^ (m * k + E + 1)
+hz : 0 < 2 ^ (E + 1)
+hmul : 2 ^ (m * k) * 2 ^ (E + 1) = 2 ^ (m * k + E + 1)
+hypos : 0 < 2 ^ N - 1
+⊢ 2 ^ (k * m) < (2 ^ (E + 1))⁻¹ * (2 ^ N - 1)

@@ -1,0 +1,77 @@
+lean/PvNP/RealizableHardness/ActualStarSameLawTwoIndexComposition.lean:102:17: error: don't know how to synthesize implicit argument `r`
+  @domainDrawRankFailureEventTwoIndex N nRows ?m.350 L A I center ⋯ ⋯
+context:
+N nRows r L A : ℕ
+I : Instance N nRows
+sourceHMin : ℕ → ℕ
+hA : 1 ≤ A
+hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = ↑nRows
+hr : r ≤ nRows
+center : QuestionCenter I (blocks A (hBlock L nRows)) (leafT nRows (hBlock L nRows))
+ht : leafT nRows (hBlock L nRows) ≤ 2 * hBlock L nRows
+hh : hBlock L nRows ≤ blocks A (hBlock L nRows)
+inst✝¹ : Finite ↥(questionCoordinateSpace center)
+inst✝ : Fintype (Fin r → DomainDraw center (hBlock L nRows))
+witness : Fin r → DomainDraw center (hBlock L nRows)
+h : ℕ := ⋯
+J : ℕ := ⋯
+t : ℕ := ⋯
+hs :
+  Admissible (fun n => max (sourceHMin n) (n + 2)) L nRows ∧
+    ∀ (n : ℕ), Admissible (fun n => max (sourceHMin n) (n + 2)) L n → n ≤ nRows
+hnRows : 256 ≤ nRows
+hcut : nRows + 2 ≤ h
+hdiv : bOf nRows ∣ h
+hqpos : 0 < h / bOf nRows
+hk : 1 ≤ leafK nRows h
+hguard :
+  r * leafK nRows (hBlock L nRows) + badExponent nRows (hBlock L nRows) + 2 ≤
+    Module.finrank (ZMod 2) (CenterQuotient center)
+htd : J + t ≤ J + 2 * h
+drawsToLeaves : (Fin r → DomainDraw center h) ≃
+  (Fin r → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L nRows) + 2 * h)) := ⋯
+extWitness : Fin r →
+  ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L nRows) + 2 * h) := ⋯
+badExt : Finset (Fin r → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (J + 2 * h)) := ⋯
+badDomain : Finset (Fin r → DomainDraw center h) := ⋯
+⊢ ℕ
+lean/PvNP/RealizableHardness/ActualStarSameLawTwoIndexComposition.lean:102:6: error: failed to infer `let` declaration type
+lean/PvNP/RealizableHardness/ActualStarSameLawTwoIndexComposition.lean:66:64: error: unsolved goals
+N nRows r L A : ℕ
+I : Instance N nRows
+sourceHMin : ℕ → ℕ
+hA : 1 ≤ A
+hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = ↑nRows
+hr : r ≤ nRows
+center : QuestionCenter I (blocks A (hBlock L nRows)) (leafT nRows (hBlock L nRows))
+ht : leafT nRows (hBlock L nRows) ≤ 2 * hBlock L nRows
+hh : hBlock L nRows ≤ blocks A (hBlock L nRows)
+inst✝¹ : Finite ↥(questionCoordinateSpace center)
+inst✝ : Fintype (Fin r → DomainDraw center (hBlock L nRows))
+witness : Fin r → DomainDraw center (hBlock L nRows)
+h : ℕ := hBlock L nRows
+J : ℕ := blocks A h
+t : ℕ := leafT nRows h
+hs :
+  Admissible (fun n => max (sourceHMin n) (n + 2)) L nRows ∧
+    ∀ (n : ℕ), Admissible (fun n => max (sourceHMin n) (n + 2)) L n → n ≤ nRows
+hnRows : 256 ≤ nRows
+hcut : nRows + 2 ≤ h
+hdiv : bOf nRows ∣ h
+hqpos : 0 < h / bOf nRows
+hk : 1 ≤ leafK nRows h
+hguard :
+  r * leafK nRows (hBlock L nRows) + badExponent nRows (hBlock L nRows) + 2 ≤
+    Module.finrank (ZMod 2) (CenterQuotient center)
+htd : J + t ≤ J + 2 * h
+drawsToLeaves : (Fin r → DomainDraw center h) ≃
+  (Fin r → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L nRows) + 2 * h)) :=
+  domainDrawTupleExtensionEquiv center h r ht hh
+extWitness : Fin r → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L nRows) + 2 * h) :=
+  drawsToLeaves witness
+badExt : Finset (Fin r → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (J + 2 * h)) :=
+  fixedCenterBadEvent (coordinateCenterGrass center)
+badDomain : Finset (Fin r → DomainDraw center h) := preimageEvent (⇑drawsToLeaves) badExt
+⊢ eventMass (uniformDomainTupleLaw center (hBlock L nRows) r witness)
+      (domainDrawRankFailureEventTwoIndex center ht hh) <
+    1 / 2 ^ (badExponent nRows (hBlock L nRows) + 1)

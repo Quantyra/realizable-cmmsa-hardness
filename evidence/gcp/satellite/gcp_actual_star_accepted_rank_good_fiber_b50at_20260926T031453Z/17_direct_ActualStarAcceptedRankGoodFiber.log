@@ -1,0 +1,49 @@
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:80:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  drawPresentation_domain center h D ▸ PresentedLeaf.H_le_domain Q
+in the target expression
+  let v := drawVertex center h D;
+  let f := ↑(T v);
+  let Q := drawPresentation center h D;
+  f ∘ₗ Submodule.inclusion ⋯ = Classical.choose ⋯
+
+N nRows J t h : ℕ
+I : Instance N nRows
+center : QuestionCenter I J t
+D : DomainDraw center h
+T : ActualCliqueCollisionTransfer.LeafTable I J h
+v : LeafVertex I J h := drawVertex center h D
+f : RawLeafLabel I ↑v := ↑(T v)
+P : PresentedLeaf I J h := Classical.choose ⋯
+hP : (Classical.choose ⋯).domain = ↑v := Classical.choose (Classical.choose_spec (T v).property)
+hD' : (Classical.choose ⋯).domain = ↑D := Eq.trans hP (drawVertex_val center h D)
+Q : PresentedLeaf I J h := drawPresentation center h D
+hQ : Q.domain = ↑D
+hfP : RespectsAt P hP f
+hfQ : RespectsAt Q hQ f
+hHQ : Q.H ≤ ↑D := hQ ▸ PresentedLeaf.H_le_domain Q
+l : ↥Q.H →ₗ[ZMod 2] ZMod 2 := f ∘ₗ Submodule.inclusion hHQ
+ψ : ↥(equationSpan I.support center.U) →ₗ[ZMod 2] ZMod 2 := Classical.choose ⋯
+hψ :
+  (fun psi => ∀ (e : I.RowId) (he : e ∈ center.U), psi ⟨equationVector I.support e, ⋯⟩ = I.rowRhs e)
+      (Classical.choose ⋯) ∧
+    ∀ (y : ↥(equationSpan I.support center.U) →ₗ[ZMod 2] ZMod 2),
+      (fun psi => ∀ (e : I.RowId) (he : e ∈ center.U), psi ⟨equationVector I.support e, ⋯⟩ = I.rowRhs e) y →
+        y = Classical.choose ⋯
+hlrows : ∀ (e : I.RowId) (he : e ∈ center.U), l ⟨equationVector I.support e, ⋯⟩ = I.rowRhs e
+huniq : l = Classical.choose ⋯
+hHQ_eq : hHQ = ⋯
+⊢ let v := drawVertex center h D;
+  let f := ↑(T v);
+  let Q := drawPresentation center h D;
+  f ∘ₗ Submodule.inclusion ⋯ = Classical.choose ⋯
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    v
+  has type
+    LeafVertex I J h
+  but is expected to have type
+    { D // ∃ P, P.domain = D }
+  in the application
+    ↑v

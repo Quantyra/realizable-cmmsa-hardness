@@ -1,0 +1,34 @@
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForceSelection.exists_functional_extending_disjoint_pair.{u_1}
+  {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V] [Finite V] (K H : Submodule (ZMod 2) V) (hKH : K ⊓ H = ⊥)
+  (g : ↥K →ₗ[ZMod 2] ZMod 2) (ψ : ↥H →ₗ[ZMod 2] ZMod 2) : ∃ F, F ∘ₗ K.subtype = g ∧ F ∘ₗ H.subtype = ψ
+'PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForceSelection.exists_functional_extending_disjoint_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForceSelection.exists_uniform_match_mass_ge.{u_1, u_2}
+  {Ω : Type u_1} {G : Type u_2} [Fintype Ω] [Nonempty Ω] [Fintype G] [Nonempty G] (E : Finset Ω)
+  (matchesCandidate : G → Ω → Prop) (M : ℕ) (hcount : ∀ x ∈ E, Fintype.card { g // matchesCandidate g x } = M) :
+  ∃ g,
+    PvNP.RealizableHardness.ActualFiniteLaw.eventMass (PvNP.RealizableHardness.ActualFiniteLaw.uniformLaw Ω)
+        (Finset.filter (matchesCandidate g) E) ≥
+      ↑E.card / ↑(Fintype.card Ω) * (↑M / ↑(Fintype.card G))
+'PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForceSelection.exists_uniform_match_mass_ge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForceSelection.exists_questionCenter_baseFunctional
+  {N m J t : ℕ} {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m}
+  (center : PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I J t)
+  (g : ↥center.K →ₗ[ZMod 2] ZMod 2)
+  (ψ : ↥(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionEquationSpan center) →ₗ[ZMod 2] ZMod 2) :
+  ∃ F,
+    F ∘ₗ center.K.subtype = g ∧
+      F ∘ₗ (PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionEquationSpan center).subtype = ψ
+'PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForceSelection.exists_questionCenter_baseFunctional' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForceSelection.leaf_agrees_with_base_on_sup.{u_1}
+  {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V] (K H L : Submodule (ZMod 2) V) (hKL : K ≤ L) (hHL : H ≤ L)
+  (T : ↥L →ₗ[ZMod 2] ZMod 2) (base : V →ₗ[ZMod 2] ZMod 2) (hTK : T ∘ₗ Submodule.inclusion hKL = base ∘ₗ K.subtype)
+  (hTH : T ∘ₗ Submodule.inclusion hHL = base ∘ₗ H.subtype) : T ∘ₗ Submodule.inclusion ⋯ = base ∘ₗ (K ⊔ H).subtype
+'PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForceSelection.leaf_agrees_with_base_on_sup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

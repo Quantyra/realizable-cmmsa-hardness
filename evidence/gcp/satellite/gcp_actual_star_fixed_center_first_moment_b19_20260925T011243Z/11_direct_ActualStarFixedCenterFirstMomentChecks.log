@@ -1,0 +1,29 @@
+PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.CandidateCatalog.{u_1} (A : Type u_1) [AddCommGroup A]
+  [Fintype A] (m : ℕ) : Type u_1
+PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.candidateLineEvent.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (U : GrassmannCounting.Grass V t) [Fintype (V ⧸ ↑U)]
+  (c : ActualStarFixedCenterFirstMoment.CandidateCatalog (V ⧸ ↑U) m) :
+  Finset (Fin m → ActualSourceStarLaw.Extension U d)
+PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenterBadEvent.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (U : GrassmannCounting.Grass V t) :
+  Finset (Fin m → ActualSourceStarLaw.Extension U d)
+PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_subset_catalogUnion.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (U : GrassmannCounting.Grass V t)
+  [Fintype (V ⧸ ↑U)] :
+  ActualStarFixedCenterFirstMoment.fixedCenterBadEvent U ⊆
+    Finset.univ.biUnion (ActualStarFixedCenterFirstMoment.candidateLineEvent htd U)
+PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_mass_le_candidateSum.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+  (hk : 1 ≤ d - t) (U : GrassmannCounting.Grass V t) [Fintype (V ⧸ ↑U)]
+  (witness : Fin m → ActualSourceStarLaw.Extension U d) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+      (ActualStarFixedCenterFirstMoment.fixedCenterBadEvent U) ≤
+    ∑ c,
+      (↑(GrassmannCounting.gaussian (d - t) 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^
+        c.fst.card
+'PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_subset_catalogUnion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_mass_le_candidateSum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

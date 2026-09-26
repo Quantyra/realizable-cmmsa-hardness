@@ -1,0 +1,45 @@
+lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:28:5: warning: Variable name `r` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _r
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:57:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:76:21: error: unexpected token 'set_option'; expected 'lemma'
+lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:91:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:100:4: error: Type mismatch
+  eventMass_biUnion_le_sum (extensionTupleLaw U witness) (candidateLineEvent htd U)
+has type
+  eventMass (extensionTupleLaw U witness)
+      (@Finset.biUnion (CandidateCatalog (V ⧸ ↑U) m) (Fin m → Extension U d)
+        (fun a b => Classical.propDecidable (a = b)) Finset.univ (candidateLineEvent htd U)) ≤
+    ∑ i, eventMass (extensionTupleLaw U witness) (candidateLineEvent htd U i)
+but is expected to have type
+  eventMass (extensionTupleLaw U witness)
+      (@Finset.biUnion (CandidateCatalog (V ⧸ ↑U) m) (Fin m → Extension U d) (fun a b => Fintype.decidablePiFintype a b)
+        Finset.univ (candidateLineEvent htd U)) ≤
+    ∑ c, eventMass (extensionTupleLaw U witness) (candidateLineEvent htd U c)
+lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:127:6: error: Type mismatch: After simplification, term
+  hmass
+ has type
+  @Eq ℚ
+    (eventMass (extensionTupleLaw U witness)
+      (supportedLineEvent htd c.fst U fun i => quotientVectorLine (↑((supportRelationEquiv c.fst) ↑c.snd) i) ⋯))
+    ((↑(gaussian (d - t) 1) / ↑(gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^ c.fst.card)
+but is expected to have type
+  @Eq ℚ (eventMass (extensionTupleLaw U witness) (supportedLineEvent htd c.fst U (supportRelationLines c.fst ↑c.snd)))
+    ((↑(gaussian (d - t) 1) / ↑(gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^ c.fst.card)

@@ -1,0 +1,174 @@
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:69:34: error(lean.unknownIdentifier): Unknown identifier `Q0.val`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:68:33: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:64:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:61:51: error: unsolved goals
+case e
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+Q0 : Grass V 0 := ⟨⊥, ⋯⟩
+this : Finite { K // ↑Q0 ≤ ↑K ∧ ↑K ≤ ↑H } := Finite.of_injective (fun K => ↑K) Subtype.val_injective
+⊢ linesInside H ≃ { K // ↑Q0 ≤ ↑K ∧ ↑K ≤ ↑H }
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+Q0 : Grass V 0 := ⟨⊥, ⋯⟩
+this : Finite { K // ↑Q0 ≤ ↑K ∧ ↑K ≤ ↑H } := Finite.of_injective (fun K => ↑K) Subtype.val_injective
+e : linesInside H ≃ { K // ↑Q0 ≤ ↑K ∧ ↑K ≤ ↑H } := ?e
+⊢ Fintype.card (linesInside H) = gaussian j 1
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:59:0: error: internal exception #3
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:73:2: error: unexpected token 'have'; expected command
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:98:0: warning: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.RobustSourceLineContainment.nontrivial_inf_iff_quotientImages`:
+  [Finite V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Finite V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:222:47: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+d : ℕ
+hd₁ : 1 ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+F : linesInside H → Finset (Grass V d) := fun K => {L | ↑↑K ≤ ↑L}
+bad : Finset (Grass V d) := {L | ↑L ⊓ ↑H ≠ ⊥}
+hfiber : ∀ (K : linesInside H), (F K).card = gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)
+L : Grass V d
+hL : ↑L ⊓ ↑H ≠ ⊥
+x : V
+hx : x ∈ ↑L ⊓ ↑H
+hxne : x ≠ 0
+hxL : x ∈ ↑L
+hxH : x ∈ ↑H
+K : Grass V 1 := ⟨ZMod 2 ∙ x, ⋯⟩
+hKH : ↑K ≤ ↑H
+hKL : ↑K ≤ ↑L
+Kline : linesInside H := ⟨K, hKH⟩
+hK : Kline ∈ Finset.univ
+⊢ ↑↑Kline ≤ ↑L
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:205:8: error: (kernel) unknown constant 'PvNP.RealizableHardness.RobustSourceLineContainment.linesInside_card'
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:243:13: warning: This simp argument is unused:
+  hKL
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [F]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:301:55: error: Type mismatch
+  hmass
+has type
+  ↑{L | ↑L ⊓ ↑H ≠ ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * ↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) / ↑(gaussian (Module.finrank (ZMod 2) V) d)
+but is expected to have type
+  ↑{L | ↑L ⊓ ↑H ≠ ⊥}.card / ↑(gaussian (Module.finrank (ZMod 2) V) d) ≤
+    ↑(gaussian j 1) * (↑(gaussian (Module.finrank (ZMod 2) V - 1) (d - 1)) / ↑(gaussian (Module.finrank (ZMod 2) V) d))
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:383:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b + c ≥ -1
+  a ≥ 1
+  a - b - c ≥ 2
+where
+ a := ↑(Module.finrank (ZMod 2) V)
+ b := ↑j
+ c := ↑(n - (j + (d + 1)))
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:430:22: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:431:23: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:424:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:427:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:428:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:413:61: error: unsolved goals
+case badEquiv
+a j : ℕ
+W : Type u_2
+inst✝² : AddCommGroup W
+inst✝¹ : Module (ZMod 2) W
+inst✝ : Finite W
+Q : Grass W a
+H : Grass W j
+d : ℕ
+had : a ≤ d
+hd : d ≤ Module.finrank (ZMod 2) W
+hQH : ↑Q ⊓ ↑H = ⊥
+hbd : 1 ≤ d - a
+hslack : j + (d - a) + 1 ≤ Module.finrank (ZMod 2) W - a
+carrier : Type u_2 := intervalCarrier Q d
+bad : Type u_2 := intervalTransverseCarrier Q H d
+Hq : Grass (W ⧸ ↑Q) j := quotientImageGrass Q (↑H) hQH ⋯
+e : { L // ↑Q ≤ ↑L } ≃ Grass (W ⧸ ↑Q) (d - a) := upperQuotientEquiv Q had
+hbad : ∀ (L : carrier), ↑↑L ⊓ ↑H ≠ ⊥ ↔ ↑(e L) ⊓ ↑Hq ≠ ⊥
+this✝¹ : Finite (W ⧸ ↑Q) := Finite.of_surjective (⇑(↑Q).mkQ) (Submodule.mkQ_surjective ↑Q)
+badQ : Type (max 0 u_2) := { R // ↑R ⊓ ↑Hq ≠ ⊥ }
+this✝ : Finite badQ := Finite.of_injective (fun R => ↑R) Subtype.val_injective
+this : Fintype badQ := Fintype.ofFinite badQ
+⊢ bad ≃ badQ
+
+a j : ℕ
+W : Type u_2
+inst✝² : AddCommGroup W
+inst✝¹ : Module (ZMod 2) W
+inst✝ : Finite W
+Q : Grass W a
+H : Grass W j
+d : ℕ
+had : a ≤ d
+hd : d ≤ Module.finrank (ZMod 2) W
+hQH : ↑Q ⊓ ↑H = ⊥
+hbd : 1 ≤ d - a
+hslack : j + (d - a) + 1 ≤ Module.finrank (ZMod 2) W - a
+carrier : Type u_2 := intervalCarrier Q d
+bad : Type u_2 := intervalTransverseCarrier Q H d
+Hq : Grass (W ⧸ ↑Q) j := quotientImageGrass Q (↑H) hQH ⋯
+e : { L // ↑Q ≤ ↑L } ≃ Grass (W ⧸ ↑Q) (d - a) := upperQuotientEquiv Q had
+hbad : ∀ (L : carrier), ↑↑L ⊓ ↑H ≠ ⊥ ↔ ↑(e L) ⊓ ↑Hq ≠ ⊥
+this✝¹ : Finite (W ⧸ ↑Q) := Finite.of_surjective (⇑(↑Q).mkQ) (Submodule.mkQ_surjective ↑Q)
+badQ : Type (max 0 u_2) := { R // ↑R ⊓ ↑Hq ≠ ⊥ }
+this✝ : Finite badQ := Finite.of_injective (fun R => ↑R) Subtype.val_injective
+this : Fintype badQ := Fintype.ofFinite badQ
+badEquiv : bad ≃ badQ := ?badEquiv
+⊢ ↑(Fintype.card (intervalTransverseCarrier Q H d)) / ↑(Fintype.card (intervalCarrier Q d)) ≤
+    1 / 2 ^ (Module.finrank (ZMod 2) W - a - j - (d - a) - 1)
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:435:12: error(lean.unknownIdentifier): Unknown identifier `e.left_inv`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:438:12: error(lean.unknownIdentifier): Unknown identifier `e.right_inv`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:399:0: error: internal exception #3
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:439:2: error: unexpected token 'have'; expected command

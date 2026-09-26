@@ -1,0 +1,47 @@
+237-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+238-info: lean/PvNP/RealizableHardness/BernoulliMGF.lean:101:4: Try this:
+239-  [apply] ring_nf
+240-  
+241:  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+242-    
+243-  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+244-⚠ [2325/2392] Replayed PvNP.RealizableHardness.FiniteConcentration
+245-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+246-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+247-warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+248-  Fintype.card_fun
+249-
+250-Hint: Omit it from the simp argument list.
+251-  [apply] simp
+252-
+253-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+--
+1806-Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+1807-warning: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:173:51: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+1808-
+1809-Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+1810:error: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedLaw.lean:315:18: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+1811-
+1812-case h₀
+1813-J a d : ℕ
+1814-s : TripleRestrictionRank.Draw J
+1815-Q : Advice J a
+1816-W : Submodule (ZMod 2) (TripleRestrictionRank.Vector J)
+1817-hQV : ↑Q ≤ localAmbient s
+1818-hQW : ↑Q ≤ W
+1819-had : a ≤ d
+1820-hd : d ≤ Module.finrank (ZMod 2) ↥(localAmbient s)
+1821-f : Advice J d → ℚ
+1822-Z : Type := localZoom s Q W hQV hQW
+--
+1828-hL : L ≠ e z
+1829-⊢ (if e z = L then uniformZoomAtom Z z else 0) * f L = 0
+1830-Some required targets logged failures:
+1831-- PvNP.RealizableHardness.ActualOneExperimentRetainedLaw
+1832:error: build failed
+1833-Finished with result: exit-code
+1834-Main processes terminated with: code=exited/status=1
+1835-Service runtime: 46.239s
+1836-CPU time consumed: 17.724s
+1837-Memory peak: 256.0K
+1838-Memory swap peak: 0B

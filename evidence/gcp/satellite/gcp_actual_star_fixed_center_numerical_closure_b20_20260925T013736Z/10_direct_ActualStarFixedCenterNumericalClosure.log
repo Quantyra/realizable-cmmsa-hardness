@@ -1,0 +1,39 @@
+lean/PvNP/RealizableHardness/ActualStarFixedCenterNumericalClosure.lean:49:25: error: failed to solve universe constraint
+  1 =?= max 1 (u_1 + 1)
+while trying to unify
+  Type : Type 1
+with
+  Type (max 0 u_1) : Type (max 1 (u_1 + 1))
+lean/PvNP/RealizableHardness/ActualStarFixedCenterNumericalClosure.lean:50:18: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarFixedCenterNumericalClosure.lean:60:20: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarFixedCenterNumericalClosure.lean:64:9: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarFixedCenterNumericalClosure.lean:64:31: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarFixedCenterNumericalClosure.lean:65:14: error(lean.unknownIdentifier): Unknown constant `Fintype.sum_const`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterNumericalClosure.lean:64:67: error: unsolved goals
+A : Type u_1
+inst✝² : AddCommGroup A
+inst✝¹ : Module (ZMod 2) A
+inst✝ : Fintype A
+m : ℕ
+p : ℚ
+hp : 0 ≤ p
+S : Finset (Fin m)
+hSmem : S ∈ Finset.univ
+hS : 2 ≤ S.card
+R : Type := sorry
+hcount : sorry ≤ (Fintype.card A - 1) ^ (S.card - 1)
+hcountQ : sorry ≤ ↑(Fintype.card A - 1) ^ (S.card - 1)
+⊢ ↑(sorry ()).card = sorry () ∨ p = 0 ∧ ¬S = ∅
+lean/PvNP/RealizableHardness/ActualStarFixedCenterNumericalClosure.lean:73:68: error: unexpected token 'set_option'; expected 'lemma'

@@ -1,0 +1,43 @@
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:42:48: error: unsolved goals
+N m J t : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+U : Grass (↥(questionCoordinateSpace center)) (J + t) := coordinateCenterGrass center
+hdim : J + 2 * h - (J + t) = 2 * h - t
+had : J + t ≤ J + 2 * h
+⊢ ↑(cast ⋯ ((domainDrawEquiv center h ht hh) D)) = ↑((domainDrawEquiv center h ht hh) D)
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:46:8: warning: This simp argument is unused:
+  U
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hdim, had, domainDrawExtensionEquiv, Equiv.trans_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:46:11: warning: This simp argument is unused:
+  hdim
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [U, had, domainDrawExtensionEquiv, Equiv.trans_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:46:17: warning: This simp argument is unused:
+  had
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [U, hdim, domainDrawExtensionEquiv, Equiv.trans_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:87:4: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:48:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.

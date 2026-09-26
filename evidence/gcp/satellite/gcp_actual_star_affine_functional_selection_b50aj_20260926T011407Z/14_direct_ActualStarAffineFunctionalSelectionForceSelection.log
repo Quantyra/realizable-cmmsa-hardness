@@ -1,0 +1,70 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:224:33: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  SupSet ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:238:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:239:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:245:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:250:37: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  SupSet ι
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:272:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (DirectSum.of (fun j => ↥(Q j)) i) z
+in the target expression
+  ↑G (j ((DirectSum.lof (ZMod 2) ι (fun j => ↥(Q j)) i) z)) =
+    glued (j ((DirectSum.lof (ZMod 2) ι (fun j => ↥(Q j)) i) z))
+
+W : Type u_1
+inst✝³ : AddCommGroup W
+inst✝² : Module (ZMod 2) W
+inst✝¹ : Finite W
+ι : Type u_2
+inst✝ : Fintype ι
+Q : ι → Submodule (ZMod 2) W
+hjoint : Function.Injective ⇑(DirectSum.coeLinearMap Q)
+label : (i : ι) → ↥(Q i) →ₗ[ZMod 2] ZMod 2
+r : ℕ
+hR : Module.finrank (ZMod 2) ↥(matchingFunctionalSpan Q) = r
+this✝¹ : Fintype W := Fintype.ofFinite W
+this✝ : Finite (Module.Dual (ZMod 2) W) :=
+  Finite.of_injective (fun f => f.toFun) fun ⦃f g⦄ h => LinearMap.ext fun x => congrFun h x
+this : Fintype (Module.Dual (ZMod 2) W) := Fintype.ofFinite (Module.Dual (ZMod 2) W)
+j : (⨁ (i : ι), ↥(Q i)) →ₗ[ZMod 2] W := DirectSum.coeLinearMap Q
+R : Submodule (ZMod 2) W := j.range
+hrange : R = matchingFunctionalSpan Q
+hR' : Module.finrank (ZMod 2) ↥R = r
+glued : W →ₗ[ZMod 2] ZMod 2
+hglued : ∀ (i : ι) (x : ↥(Q i)), glued ((Q i).subtype x) = (label i) x
+δ : ↥R →ₗ[ZMod 2] ZMod 2 := glued ∘ₗ R.subtype
+matchFiber : Type (max 0 u_1) := { G // ∀ (i : ι) (x : ↥(Q i)), G ((Q i).subtype x) = (label i) x }
+extFiber : Type u_1 := FunctionalExtensionFiber R δ
+G : matchFiber
+x : ↥R
+y : ⨁ (i : ι), ↥(Q i)
+hy : j y = ↑x
+i : ι
+z : ↥(Q i)
+⊢ ↑G (j ((DirectSum.lof (ZMod 2) ι (fun j => ↥(Q j)) i) z)) =
+    glued (j ((DirectSum.lof (ZMod 2) ι (fun j => ↥(Q j)) i) z))

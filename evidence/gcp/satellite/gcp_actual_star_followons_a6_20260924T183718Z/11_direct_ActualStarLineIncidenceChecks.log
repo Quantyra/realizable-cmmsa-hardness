@@ -1,0 +1,10 @@
+PvNP.RealizableHardness.ActualStarLineIncidence.extensionLaw_contains_fixed_quotient_line.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+  (U : GrassmannCounting.Grass V t) (witness : ActualSourceStarLaw.Extension U d)
+  (K : GrassmannCounting.Grass (V ⧸ ↑U) 1) (hk : 1 ≤ d - t) :
+  ActualFiniteLaw.eventMass (ActualSourceStarLaw.extensionLaw U witness)
+      {L | ↑K ≤ ↑((GrassmannFlagPosterior.upperQuotientEquiv U htd) L)} =
+    ↑(GrassmannCounting.gaussian (d - t) 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)
+'PvNP.RealizableHardness.ActualStarLineIncidence.extensionLaw_contains_fixed_quotient_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

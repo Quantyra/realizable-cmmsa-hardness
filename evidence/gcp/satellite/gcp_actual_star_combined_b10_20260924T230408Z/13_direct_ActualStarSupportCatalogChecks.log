@@ -1,0 +1,37 @@
+PvNP.RealizableHardness.ActualStarSupportCatalog.SupportRelation.{u_1, u_2} {A : Type u_1} [AddCommGroup A]
+  {α : Type u_2} (S : Finset α) : Type (max 0 u_1 u_2)
+PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelationEquiv.{u_1, u_2} {A : Type u_1} [AddCommGroup A]
+  [Fintype A] {α : Type u_2} (S : Finset α) :
+  ActualStarRelationCount.NonzeroRelation S.card ≃ ActualStarSupportCatalog.SupportRelation S
+PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_card_le_power.{u_1, u_2} {A : Type u_1}
+  [AddCommGroup A] [Fintype A] {α : Type u_2} (S : Finset α) (hS : 2 ≤ S.card) :
+  Fintype.card (ActualStarSupportCatalog.SupportRelation S) ≤ (Fintype.card A - 1) ^ (S.card - 1)
+PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelationLines.{u_1, u_2} {A : Type u_1} [AddCommGroup A]
+  [Module (ZMod 2) A] [Fintype A] {α : Type u_2} (S : Finset α) (r : ActualStarRelationCount.NonzeroRelation S.card) :
+  ↥S → GrassmannCounting.Grass A 1
+PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_mem_supportedLineEvent.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (z : ActualSourceStarLaw.StarTuple t d m)
+  (S : Finset (Fin m)) (hS : 2 ≤ S.card) [Fintype (V ⧸ ↑z.fst)] (r : ActualStarRelationCount.NonzeroRelation S.card)
+  (hincrement :
+    ∀ (i : ↥S), ↑((ActualStarSupportCatalog.supportRelationEquiv S) r) i ∈ ActualStarJointKernel.incrementFamily z ↑i) :
+  z.snd ∈ ActualStarExtensionProduct.supportedLineEvent htd S z.fst (ActualStarSupportCatalog.supportRelationLines S r)
+PvNP.RealizableHardness.ActualStarSupportCatalog.not_jointlyDirect_has_catalogEvent.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (z : ActualSourceStarLaw.StarTuple t d m)
+  [Fintype (V ⧸ ↑z.fst)] (hbad : ¬ActualSourceStarLaw.jointlyDirect z) :
+  ∃ S,
+    2 ≤ S.card ∧
+      ∃ r,
+        z.snd ∈
+          ActualStarExtensionProduct.supportedLineEvent htd S z.fst (ActualStarSupportCatalog.supportRelationLines S r)
+'PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelationEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_card_le_power' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarSupportCatalog.supportRelation_mem_supportedLineEvent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarSupportCatalog.not_jointlyDirect_has_catalogEvent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

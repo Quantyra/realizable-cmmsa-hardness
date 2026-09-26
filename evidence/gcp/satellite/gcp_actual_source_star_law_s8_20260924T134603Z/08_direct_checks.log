@@ -1,0 +1,44 @@
+PvNP.RealizableHardness.ActualSourceStarLaw.StarTuple.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  (t d m : ℕ) : Type u_1
+PvNP.RealizableHardness.ActualSourceStarLaw.starTuple_card.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  [Finite V] {t d m : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V) :
+  Fintype.card (ActualSourceStarLaw.StarTuple t d m) =
+    Fintype.card (GrassmannCounting.Grass V t) * GrassmannCounting.gaussian (Module.finrank (ZMod 2) V - t) (d - t) ^ m
+PvNP.RealizableHardness.ActualSourceStarLaw.centerLaw_apply.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  [Finite V] {t : ℕ} (witness x : GrassmannCounting.Grass V t) :
+  (ActualSourceStarLaw.centerLaw witness).mass x = 1 / ↑(Fintype.card (GrassmannCounting.Grass V t))
+PvNP.RealizableHardness.ActualSourceStarLaw.extensionLaw_apply.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  [Finite V] {t d : ℕ} (U : GrassmannCounting.Grass V t) (witness x : ActualSourceStarLaw.Extension U d) :
+  (ActualSourceStarLaw.extensionLaw U witness).mass x = 1 / ↑(Fintype.card (ActualSourceStarLaw.Extension U d))
+PvNP.RealizableHardness.ActualSourceStarLaw.starLaw_atom.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  [Finite V] {t d m : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V) (U : GrassmannCounting.Grass V t)
+  (Ls : Fin m → ActualSourceStarLaw.Extension U d) :
+  (ActualSourceStarLaw.starLaw htd hdV).mass ⟨U, Ls⟩ =
+    (ActualSourceStarLaw.centerLaw U).mass U * ∏ i, (ActualSourceStarLaw.extensionLaw U (Ls i)).mass (Ls i)
+PvNP.RealizableHardness.ActualSourceStarLaw.accepts.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  {t d m : ℕ} (Tcenter : ActualSourceStarLaw.CenterTable t) (Tleaf : ActualSourceStarLaw.LeafTable d)
+  (z : ActualSourceStarLaw.StarTuple t d m) : Prop
+PvNP.RealizableHardness.ActualSourceStarLaw.jointIncrementSpan.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m) : Submodule (ZMod 2) (V ⧸ ↑z.fst)
+PvNP.RealizableHardness.ActualSourceStarLaw.jointlyDirect.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m) : Prop
+PvNP.RealizableHardness.ActualSourceStarLaw.goodStar.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  {t d m : ℕ} (Tcenter : ActualSourceStarLaw.CenterTable t) (Tleaf : ActualSourceStarLaw.LeafTable d)
+  (z : ActualSourceStarLaw.StarTuple t d m) : Prop
+PvNP.RealizableHardness.ActualSourceStarLaw.acceptanceMass.{u_1} {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V]
+  [Finite V] {t d : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V) (m : ℕ)
+  (Tcenter : ActualSourceStarLaw.CenterTable t) (Tleaf : ActualSourceStarLaw.LeafTable d) : ℚ
+PvNP.RealizableHardness.ActualSourceStarLaw.goodStarMass_eq_joint_sum.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+  (Tcenter : ActualSourceStarLaw.CenterTable t) (Tleaf : ActualSourceStarLaw.LeafTable d) :
+  ActualSourceStarLaw.goodStarMass htd hdV m Tcenter Tleaf =
+    ∑ z with (ActualSourceStarLaw.goodStar Tcenter Tleaf) z,
+      (ActualSourceStarLaw.centerLaw z.fst).mass z.fst *
+        ∏ i, (ActualSourceStarLaw.extensionLaw z.fst (z.snd i)).mass (z.snd i)
+'PvNP.RealizableHardness.ActualSourceStarLaw.starLaw_atom' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PvNP.RealizableHardness.ActualSourceStarLaw.acceptanceMass_eq_joint_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSourceStarLaw.goodStarMass_eq_joint_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,61 @@
+PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition.domainDrawRankFailureEventTwoIndex {N nRows r L A : ℕ}
+  {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N nRows}
+  (center :
+    PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I
+      (PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows))
+      (PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT nRows
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows)))
+  (ht :
+    PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT nRows
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows) ≤
+      2 * PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows)
+  (hh :
+    PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows ≤
+      PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows)) :
+  Finset
+    (Fin r →
+      PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows))
+PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition.selected_domainDraw_rankFailure_mass_lt_threshold_twoIndex
+  {N nRows r L A : ℕ} {I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N nRows} (sourceHMin : ℕ → ℕ)
+  (hA : 1 ≤ A)
+  (hsel :
+    PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector.selector (fun n => max (sourceHMin n) (n + 2)) L = ↑nRows)
+  (hr : r ≤ nRows)
+  (center :
+    PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.QuestionCenter I
+      (PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows))
+      (PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT nRows
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows)))
+  (ht :
+    PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT nRows
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows) ≤
+      2 * PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows)
+  (hh :
+    PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows ≤
+      PvNP.RealizableHardness.SamplerParameters.blocks A
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows))
+  [Finite ↥(PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.questionCoordinateSpace center)]
+  [Fintype
+      (Fin r →
+        PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center
+          (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows))]
+  (witness :
+    Fin r →
+      PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.DomainDraw center
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows)) :
+  PvNP.RealizableHardness.ActualFiniteLaw.eventMass
+      (PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge.uniformDomainTupleLaw center
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows) r witness)
+      (domainDrawRankFailureEventTwoIndex center ht hh) <
+    1 /
+      2 ^
+        (PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.badExponent nRows
+            (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L nRows) +
+          1)
+'PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition.selected_domainDraw_rankFailure_mass_lt_threshold_twoIndex' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

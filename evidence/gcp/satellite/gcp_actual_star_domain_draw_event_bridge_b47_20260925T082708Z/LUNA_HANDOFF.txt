@@ -1,0 +1,25 @@
+ROUTE=GPT-6_LUNA_SOLE_LEAN_CODE_AUTHOR
+RUN=gcp_actual_star_domain_draw_event_bridge_b47_20260925T082708Z
+RESULT=FAIL
+FAILED_STAGE=direct_ActualStarDomainDrawEventBridge
+FROZEN_MAIN_SHA256=21A9B5B8D8B221D0064CE75DC0D82E8964FE0A2D9D71AC7452A55EA43ED21EAE
+FROZEN_CHECKS_SHA256=C9E6A1BE50E97A2EA0E4F9E2A034E8DE15C9276C2B7A7681919E58B285562AB1
+LEAN_CODE_EDITED_BY_ORCHESTRATOR=NO
+FULL_COMPILER_LOG_BEGIN
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:64:2: error: Type mismatch: After simplification, term
+  hcastVal
+ has type
+  @Eq (Submodule (ZMod 2) (↥(questionCoordinateSpace center) ⧸ ↑(coordinateCenterGrass center)))
+    ↑(cast ⋯ ((domainDrawEquiv center h ht hh) D)) ↑((domainDrawEquiv center h ht hh) D)
+but is expected to have type
+  @Eq (Submodule (ZMod 2) (↥(questionCoordinateSpace center) ⧸ ↑(coordinateCenterGrass center)))
+    ↑(cast ⋯ ((domainDrawEquiv center h ht hh) D)) ↑((domainDrawEquiv center h ht hh) D)
+lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:84:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+FULL_COMPILER_LOG_END

@@ -1,0 +1,24 @@
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:106:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:143:2: error: Type mismatch: After simplification, term
+  hscalar
+ has type
+  @LT.lt ℚ Rat.instLT
+    (eventMass
+      (extensionTupleLaw ⟨centerSpanInCoordinate center, ⋯⟩
+        ((domainDrawTupleExtensionEquiv center (hBlock L m) m ht hh) witness))
+      (fixedCenterBadEvent ⟨centerSpanInCoordinate center, ⋯⟩))
+    (2 ^ (badExponent m (hBlock L m) + 1))⁻¹
+but is expected to have type
+  @LT.lt ℚ Rat.instLT
+    (eventMass
+      (extensionTupleLaw ⟨centerSpanInCoordinate center, ⋯⟩
+        ((domainDrawTupleExtensionEquiv center (hBlock L m) m ht hh) witness))
+      badExt)
+    (2 ^ (badExponent m (hBlock L m) + 1))⁻¹

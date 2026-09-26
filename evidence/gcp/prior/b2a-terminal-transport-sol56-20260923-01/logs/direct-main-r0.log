@@ -1,0 +1,67 @@
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:37:0: warning: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.liftQuery_map_apply`:
+  [Fintype V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:41:0: warning: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.restrict_liftQuery`:
+  [Fintype V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:44:25: warning: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:80:0: warning: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.restrictedTable_apply`:
+  [Fintype V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:145:4: error: Type mismatch: After simplification, term
+  hx
+ has type
+  (T ↑z) x₀ = P.g ⟨↑x₀, ⋯⟩
+but is expected to have type
+  (T ⟨Submodule.map E.subtype ↑↑((zoomRestrictionEquiv E Q P hQE hWE) z), ⋯⟩)
+      ((Submodule.equivMapOfInjective E.subtype ⋯ ↑↑((zoomRestrictionEquiv E Q P hQE hWE) z)) x) =
+    (P.g ∘ₗ ↑(Submodule.comapSubtypeEquivOfLe hWE)) ⟨↑x, ⋯⟩
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:151:4: error: Type mismatch: After simplification, term
+  hx
+ has type
+  (⇑(T ⟨Submodule.map E.subtype ↑↑((zoomRestrictionEquiv E Q P hQE hWE) z), ⋯⟩) ∘
+        ⇑(Submodule.equivMapOfInjective E.subtype ⋯ ↑↑((zoomRestrictionEquiv E Q P hQE hWE) z)))
+      xₑ =
+    (P.g ∘ₗ ↑(Submodule.comapSubtypeEquivOfLe hWE)) ⟨↑xₑ, ⋯⟩
+but is expected to have type
+  (T ↑z) x = P.g ⟨↑x, ⋯⟩
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:163:73: error: Application type mismatch: The argument
+  z
+has type
+  AgreeingZoom T Q P
+but is expected to have type
+  Zoom Q P
+in the application
+  agreesOn_iff_restricted E Q T P hQE hWE z
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:165:30: error: Type mismatch: After simplification, term
+  z.property
+ has type
+  AgreesOn (restrictedTable E T) ↑↑z ⋯
+but is expected to have type
+  AgreesOn (restrictedTable E T) ↑((zoomRestrictionEquiv E Q P hQE hWE) (e.symm ↑z)) ⋯
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:204:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Nonempty (Zoom (localGrass E Q hQE) (localDecodedPair E Q P hQE hWE))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualMZ24TerminalAgreementTransport.lean:206:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`

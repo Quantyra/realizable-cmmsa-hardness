@@ -1,0 +1,70 @@
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:116:18: error(lean.unknownIdentifier): Unknown identifier `Grass`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:117:70: error: unsolved goals
+N nRows J t : ℕ
+I : Instance N nRows
+center : QuestionCenter I J t
+h : ℕ
+ht : t ≤ 2 * h
+hh : h ≤ J
+D : DomainDraw center h
+C : Submodule (ZMod 2) (Ambient I) := questionCoordinateSpace center
+S : Submodule (ZMod 2) ↥(questionCoordinateSpace center) := centerSpanInCoordinate center
+L : Submodule (ZMod 2) ↥C := Submodule.comap C.subtype ↑D
+hSL : S ≤ L
+hLrank : Module.finrank (ZMod 2) ↥L = J + 2 * h
+hmaprank : Module.finrank (ZMod 2) ↥(Submodule.map S.mkQ L) = 2 * h - t
+candidate : sorry := sorry
+⊢ (PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.coordinateContainingEquiv✝ center).symm
+      ((PvNP.RealizableHardness.ActualQuestionCenterDomainDraw.containingQuotientEquiv✝
+            ⟨centerSpanInCoordinate center, ⋯⟩ ⋯).symm
+        ((Equiv.cast ⋯).symm (sorry ()))) =
+    D
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:118:27: warning: This simp argument is unused:
+  candidate
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, C, S, L, hSL, Submodule.comap_map_mkQ, Submodule.map_comap_eq_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:118:38: warning: This simp argument is unused:
+  C
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, S, L, hSL, Submodule.comap_map_mkQ, Submodule.map_comap_eq_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:118:41: warning: This simp argument is unused:
+  S
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, C, L, hSL, Submodule.comap_map_mkQ, Submodule.map_comap_eq_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:118:44: warning: This simp argument is unused:
+  L
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, C, S, hSL, Submodule.comap_map_mkQ, Submodule.map_comap_eq_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:118:47: warning: This simp argument is unused:
+  hSL
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, C, S, L, Submodule.comap_map_mkQ, Submodule.map_comap_eq_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:119:6: warning: This simp argument is unused:
+  Submodule.comap_map_mkQ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, C, S, L, hSL, Submodule.map_comap_eq_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAcceptedRankGoodFiber.lean:119:31: warning: This simp argument is unused:
+  Submodule.map_comap_eq_self
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainDrawEquiv, candidate, C, S, L, hSL, Submodule.comap_map_mkQ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,63 @@
+PvNP.RealizableHardness.ActualStarBadMassWitness.quotientVectorLine.{u_2} {A : Type u_2} [AddCommGroup A]
+  [Module (ZMod 2) A] (v : A) (hv : v ≠ 0) : GrassmannCounting.Grass A 1
+PvNP.RealizableHardness.ActualStarBadMassWitness.exactSupport_relation_mem_supportedLineEvent.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (z : ActualSourceStarLaw.StarTuple t d m)
+  (S : Finset (Fin m)) (hS : 2 ≤ S.card) (v : ↥S → V ⧸ ↑z.fst) (hnz : ∀ (i : ↥S), v i ≠ 0)
+  (hincrement : ∀ (i : ↥S), v i ∈ ActualStarJointKernel.incrementFamily z ↑i) (hsum : ∑ i, v i = 0) :
+  (∀ (i : ↥S),
+      ↑(ActualStarBadMassWitness.quotientVectorLine (v i) ⋯) ≤
+        ↑((GrassmannFlagPosterior.upperQuotientEquiv z.fst htd) (z.snd ↑i))) ∧
+    z.snd ∈
+      ActualStarExtensionProduct.supportedLineEvent htd S z.fst fun i =>
+        ActualStarBadMassWitness.quotientVectorLine (v i) ⋯
+PvNP.RealizableHardness.ActualStarBadMassWitness.not_jointlyDirect_has_supportedLineEvent.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (z : ActualSourceStarLaw.StarTuple t d m)
+  (hbad : ¬ActualSourceStarLaw.jointlyDirect z) :
+  ∃ S,
+    2 ≤ S.card ∧
+      ∃ v,
+        (∀ (i : ↥S), v i ≠ 0) ∧
+          (∀ (i : ↥S), v i ∈ ActualStarJointKernel.incrementFamily z ↑i) ∧
+            ∑ i, v i = 0 ∧
+              ∀ (hv : ∀ (i : ↥S), v i ≠ 0),
+                (∀ (i : ↥S),
+                    ↑(ActualStarBadMassWitness.quotientVectorLine (v i) ⋯) ≤
+                      ↑((GrassmannFlagPosterior.upperQuotientEquiv z.fst htd) (z.snd ↑i))) ∧
+                  z.snd ∈
+                    ActualStarExtensionProduct.supportedLineEvent htd S z.fst fun i =>
+                      ActualStarBadMassWitness.quotientVectorLine (v i) ⋯
+PvNP.RealizableHardness.ActualStarBadMassWitness.fixedCenter_relationLineEvent_mass.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+  (hk : 1 ≤ d - t) (U : GrassmannCounting.Grass V t) (witness : Fin m → ActualSourceStarLaw.Extension U d)
+  (S : Finset (Fin m)) (v : ↥S → V ⧸ ↑U) (hnz : ∀ (i : ↥S), v i ≠ 0) (hsum : ∑ i, v i = 0) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+      (ActualStarExtensionProduct.supportedLineEvent htd S U fun i =>
+        ActualStarBadMassWitness.quotientVectorLine (v i) ⋯) =
+    (↑(GrassmannCounting.gaussian (d - t) 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^
+      S.card
+PvNP.RealizableHardness.ActualStarKernelSupport.kernelWitness_has_exact_support_relation.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (z : ActualSourceStarLaw.StarTuple t d m)
+  (x : DirectSum (Fin m) fun i => ↥(ActualStarJointKernel.incrementFamily z i)) (hx : x ≠ 0)
+  (hker : (ActualStarJointKernel.incrementSumMap z) x = 0) :
+  ∃ S,
+    2 ≤ S.card ∧
+      ∃ v, (∀ (i : ↥S), v i ≠ 0) ∧ (∀ (i : ↥S), v i ∈ ActualStarJointKernel.incrementFamily z ↑i) ∧ ∑ i, v i = 0
+PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power.{u_2} {A : Type u_2} [AddCommGroup A]
+  [Fintype A] (n : ℕ) : Fintype.card (ActualStarRelationCount.NonzeroRelation (n + 1)) ≤ (Fintype.card A - 1) ^ n
+PvNP.RealizableHardness.ActualStarExtensionProduct.fixedCenter_supportedLine_eventMass.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [Finite V] {t d m : ℕ} (htd : t ≤ d) (hdV : d ≤ Module.finrank (ZMod 2) V)
+  (hk : 1 ≤ d - t) (U : GrassmannCounting.Grass V t) (witness : Fin m → ActualSourceStarLaw.Extension U d)
+  (S : Finset (Fin m)) (K : ↥S → GrassmannCounting.Grass (V ⧸ ↑U) 1) :
+  ActualFiniteLaw.eventMass (ActualStarExtensionProduct.extensionTupleLaw U witness)
+      (ActualStarExtensionProduct.supportedLineEvent htd S U K) =
+    (↑(GrassmannCounting.gaussian (d - t) 1) / ↑(GrassmannCounting.gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^
+      S.card
+'PvNP.RealizableHardness.ActualStarBadMassWitness.exactSupport_relation_mem_supportedLineEvent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarBadMassWitness.not_jointlyDirect_has_supportedLineEvent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualStarBadMassWitness.fixedCenter_relationLineEvent_mass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

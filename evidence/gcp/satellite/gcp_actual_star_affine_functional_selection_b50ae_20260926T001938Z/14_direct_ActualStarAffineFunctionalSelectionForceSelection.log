@@ -1,0 +1,21 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:143:82: error: unsolved goals
+Ω : Type u_1
+G : Type u_2
+inst✝³ : Fintype Ω
+inst✝² : Nonempty Ω
+inst✝¹ : Fintype G
+inst✝ : Nonempty G
+E : Finset Ω
+matchesCandidate : G → Ω → Prop
+M : ℕ
+hcount : ∀ x ∈ E, Fintype.card { g // matchesCandidate g x } = M
+count : G → ℕ := fun g => (Finset.filter (matchesCandidate g) E).card
+x : Ω
+hx : x ∈ E
+⊢ {x_1 | matchesCandidate x_1 x}.card = Fintype.card { g // matchesCandidate g x }
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:186:44: error: Type mismatch: After simplification, term
+  hsel
+ has type
+  ↑E.card * ↑M / ↑(Fintype.card G) ≤ ↑(count g)
+but is expected to have type
+  ↑E.card * ↑M / ↑(Fintype.card G) * ↑(Fintype.card Ω) ≤ ↑(count g) * ↑(Fintype.card Ω)

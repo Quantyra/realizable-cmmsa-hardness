@@ -1,0 +1,59 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:51:4: error: Type mismatch: After simplification, term
+  hi
+ has type
+  @Eq (Submodule (ZMod 2) (↥(questionCoordinateSpace center) ⧸ centerSpanInCoordinate center))
+    ↑((GrassmannFlagPosterior.upperQuotientEquiv ⟨centerSpanInCoordinate center, ⋯⟩ ⋯)
+        (((domainDrawEquiv center h ht hh).trans
+            ((Equiv.cast ⋯).trans
+              (GrassmannFlagPosterior.upperQuotientEquiv ⟨centerSpanInCoordinate center, ⋯⟩ ⋯).symm))
+          (draws i)))
+    ↑((domainDrawEquiv center h ht hh) (draws i))
+but is expected to have type
+  @Eq (Submodule (ZMod 2) (↥(questionCoordinateSpace center) ⧸ centerSpanInCoordinate center))
+    (Submodule.map (centerSpanInCoordinate center).mkQ
+      ↑↑({
+              toFun := fun draws i =>
+                ((domainDrawEquiv center h ht hh).trans
+                    ((Equiv.cast ⋯).trans
+                      (GrassmannFlagPosterior.upperQuotientEquiv ⟨centerSpanInCoordinate center, ⋯⟩ ⋯).symm))
+                  (draws i),
+              invFun := fun leaves i =>
+                (((GrassmannFlagPosterior.upperQuotientEquiv ⟨centerSpanInCoordinate center, ⋯⟩ ⋯).symm.symm.trans
+                        (Equiv.cast ⋯).symm).trans
+                    (domainDrawEquiv center h ht hh).symm)
+                  (leaves i),
+              left_inv := ⋯, right_inv := ⋯ }
+            draws i))
+    ↑((domainDrawEquiv center h ht hh) (draws i))
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:65:22: error: Application type mismatch: The argument
+  hgood.mpr hgood'
+has type
+  jointlyDirect z
+but is expected to have type
+  Function.Injective ⇑(incrementSumMap z)
+in the application
+  hkernel.mpr (hgood.mpr hgood')
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:67:31: error: Application type mismatch: The argument
+  hinj
+has type
+  Function.Injective
+    ⇑(incrementSumMap ⟨coordinateCenterGrass center, (domainDrawTupleExtensionEquiv center h m ht hh) draws⟩)
+but is expected to have type
+  jointlyDirect z
+in the application
+  hkernel.mp hinj
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:85:55: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:87:4: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForce.lean:77:63: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.

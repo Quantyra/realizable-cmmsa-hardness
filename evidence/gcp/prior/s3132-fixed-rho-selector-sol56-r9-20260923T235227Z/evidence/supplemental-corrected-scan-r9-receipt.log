@@ -1,0 +1,131 @@
+RECEIPT_TYPE=SUPPLEMENTAL_CORRECTED_SCAN_R9
+UTC=2026-09-24T00:13:37Z
+RESULT=PASS
+SCOPE=local_read_only_source_and_log_parsing_only
+ORIGINAL_R9_RESULT=FAIL
+ORIGINAL_R9_FAILURE=theorem_signature_scan_incomplete
+ORIGINAL_FAILURE_EVIDENCE_IMMUTABLE=true
+ORIGINAL_RUN_CLAIMED_GREEN=false
+LEAN_OR_LAKE_RUN_LOCALLY=false
+VM_USED_FOR_SUPPLEMENT=false
+COMMIT=none
+
+PURPOSE
+This supplemental receipt corrects only the r9 wrapper scan. The original r9
+failure receipt, final orchestration receipt, run-r9.done marker, empty extracted
+signature file, and all other original evidence remain authoritative and
+unchanged as records of the original failed wrapper verdict. This supplement
+does not rewrite, erase, supersede, or describe the original run as green.
+
+FROZEN_SOURCE_PINS
+MAIN_SHA256=4B4FC16E62EBC6A8DC96AD7E5A89E4A71A56437266E4DEDECF1085ABC289FA7E
+CHECKS_SHA256=E5A4BC89EB3A5546512B6D9FE035287EEBCBF67B162D72CA407A7E608ECD5947
+EXPECTED_BASE=de048da45956ef207c0c1dcd38c42b00a5437710
+WORKTREE_HEAD_AT_GCP_RUN=de048da45956ef207c0c1dcd38c42b00a5437710
+SOURCE_PIN_RESULT=PASS
+
+CORRECTED_SIGNATURE_SCAN_LOGIC
+1. Read the frozen Checks source as numbered lines.
+2. Select every line matching ^[[:space:]]*#check[[:space:]]+([A-Za-z0-9_'.]+)[[:space:]]*$.
+3. Require exactly the 27 resulting directives on source lines 11 through 37;
+   the source itself, not a hard-coded minimum, determines the expected count.
+4. For each pair (sourceLine, checkName), find exactly one direct-checks-r9.log
+   record whose first line matches:
+   ^info: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelectorChecks[.]lean:<sourceLine>:0: (?<decl>[^ ]+)
+5. Remove an optional Lean universe suffix .{...} from decl, take the terminal
+   component after the final period, and require it to equal checkName exactly.
+6. Fail on a missing record, duplicate record, name mismatch, unexpected source
+   #check directive, or unexpected target signature record.
+
+The original wrapper instead expected PvNP at column 1 of the log and required
+at least 28 matches. Lean 4.34 emitted the signatures after an info/source-location
+prefix, and the frozen source contains exactly 27 #check directives. Therefore
+the original extraction count 0 and minimum 28 were wrapper assumptions, not
+missing signatures.
+
+NAME_BY_NAME_SIGNATURE_COMPARISON
+source=11 log=1964 name=manuscriptXi emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.manuscriptXi result=PASS
+source=12 log=1965 name=fixedRho emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho result=PASS
+source=13 log=1966 name=fixedDeltaCount emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedDeltaCount result=PASS
+source=14 log=1967 name=Dof emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.Dof result=PASS
+source=15 log=1968 name=Rof emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.Rof result=PASS
+source=16 log=1969 name=fixedRho_pos emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_pos result=PASS
+source=17 log=1970 name=fixedRho_le_xi_div_4000 emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_le_xi_div_4000 result=PASS
+source=18 log=1972 name=fixedRho_le_one_div_4000 emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_le_one_div_4000 result=PASS
+source=19 log=1974 name=thousand_mul_fixedRho_le_xi_div_four emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.thousand_mul_fixedRho_le_xi_div_four result=PASS
+source=20 log=1976 name=fixedDeltaCount_eq emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedDeltaCount_eq result=PASS
+source=21 log=1978 name=fixedRho_eq_inverse_bOf emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_eq_inverse_bOf result=PASS
+source=22 log=1980 name=Dof_eq_denominator_deltaCount emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.Dof_eq_denominator_deltaCount result=PASS
+source=23 log=1982 name=Rof_eq_ten_Dof emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.Rof_eq_ten_Dof result=PASS
+source=24 log=1983 name=Rof_eq_ten_m_div_fixedRho emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.Rof_eq_ten_m_div_fixedRho result=PASS
+source=25 log=1985 name=Rof_integral emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.Rof_integral result=PASS
+source=26 log=1986 name=two_le_Rof emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.two_le_Rof result=PASS
+source=27 log=1987 name=bOf_dvd_hBlock_fixed emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.bOf_dvd_hBlock_fixed result=PASS
+source=28 log=1988 name=fixedRho_hBlock_integral emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_hBlock_integral result=PASS
+source=29 log=1990 name=twice_complement_fixedRho_hBlock_integral emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.twice_complement_fixedRho_hBlock_integral result=PASS
+source=30 log=1992 name=fixedRho_source_cap_guard_spec emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_source_cap_guard_spec result=PASS
+source=31 log=1994 name=fixedRhoHeightFloor emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRhoHeightFloor result=PASS
+source=32 log=1995 name=fixedRhoCutoff emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRhoCutoff result=PASS
+source=33 log=1998 name=fixedRho_selector_eventually_exists emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_selector_eventually_exists result=PASS
+source=34 log=2000 name=fixedRho_selector_eventually_ge_256 emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_selector_eventually_ge_256 result=PASS
+source=35 log=2007 name=fixedRho_selected_reserve emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_selected_reserve result=PASS
+source=36 log=2010 name=FixedRhoSelectedGuardBundle emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.FixedRhoSelectedGuardBundle.{u_1} result=PASS
+source=37 log=2016 name=fixedRho_selected_guard_bundle emitted=PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector.fixedRho_selected_guard_bundle.{u_1} result=PASS
+SOURCE_CHECK_COUNT=27
+EMITTED_MATCH_COUNT=27
+NAME_BY_NAME_SIGNATURE_RESULT=PASS
+
+TARGET_AXIOM_REPORTS
+The corrected parser groups each target #print axioms header with its continued
+lines through the closing bracket, then compares the complete list. Each of the
+six reports contains exactly [propext, Classical.choice, Quot.sound], with no
+additional axiom.
+source=66 logs=2024-2026 name=fixedRho_hBlock_integral axioms=[propext,Classical.choice,Quot.sound] result=PASS
+source=67 logs=2027-2029 name=twice_complement_fixedRho_hBlock_integral axioms=[propext,Classical.choice,Quot.sound] result=PASS
+source=68 logs=2030-2032 name=Rof_eq_ten_m_div_fixedRho axioms=[propext,Classical.choice,Quot.sound] result=PASS
+source=69 logs=2033-2035 name=fixedRho_selector_eventually_ge_256 axioms=[propext,Classical.choice,Quot.sound] result=PASS
+source=70 logs=2036-2038 name=fixedRho_selected_reserve axioms=[propext,Classical.choice,Quot.sound] result=PASS
+source=71 logs=2039-2041 name=fixedRho_selected_guard_bundle axioms=[propext,Classical.choice,Quot.sound] result=PASS
+TARGET_AXIOM_REPORT_COUNT=6
+TARGET_AXIOM_RESULT=PASS
+
+GCP_COMPILATION_AND_REPLAY_EVIDENCE
+The following are preserved results from the original GCP run, not commands
+rerun by this supplemental local parser.
+DIRECT_MAIN_RC=0
+DIRECT_CHECKS_RC=0
+FORCED_COMBINED_RC=0
+INDEPENDENT_REPLAY_RC=0
+OLEAN_STABILITY_RC=0
+FORBIDDEN_SHORTCUT_SCAN=PASS
+COMBINED_MAIN_OLEAN_SHA256=8CE9B68BB776EF8D5944B69CAB7F5EEF0B9A5D299A6D80AAB0EE72F34601749D
+REPLAY_MAIN_OLEAN_SHA256=8CE9B68BB776EF8D5944B69CAB7F5EEF0B9A5D299A6D80AAB0EE72F34601749D
+COMBINED_CHECKS_OLEAN_SHA256=C4A76FA2C347BA5CC1F0173774FC8D5025DD256D254E3866F14CAE94559518D3
+REPLAY_CHECKS_OLEAN_SHA256=C4A76FA2C347BA5CC1F0173774FC8D5025DD256D254E3866F14CAE94559518D3
+MAIN_OLEAN_COMBINED_EQUALS_REPLAY=true
+CHECKS_OLEAN_COMBINED_EQUALS_REPLAY=true
+
+EVIDENCE_FILES_READ
+incoming-hashes-r9.log
+installed-hashes-r9.log
+direct-main-r9.rc
+direct-checks-r9.rc
+direct-checks-r9.log
+forced-combined-r9.rc
+independent-replay-r9.rc
+olean-stability-r9.rc
+olean-hashes-combined-normalized-r9.log
+olean-hashes-replay-normalized-r9.log
+forbidden-shortcuts-r9.log
+axiom-scan-r9.log
+failure-r9-receipt.log
+final-orchestration-r9.log
+run-r9.done
+
+OUTCOME
+SUPPLEMENTAL_CORRECTED_SCAN=PASS
+WRAPPER_FAILURE_CURED_ONLY=true
+ORIGINAL_R9_FAILURE_PRESERVED=true
+COMPILATION_REESTABLISHED_BY_SUPPLEMENT=false
+REMAINING_BLOCKER_WITHIN_CORRECTED_WRAPPER_SCAN=none
+BROADER_SCOPE=All broader S3132 and full-theorem obligations are outside this supplemental receipt; this is not route-final certification and makes no full-theorem claim.

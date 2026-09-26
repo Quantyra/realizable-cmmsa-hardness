@@ -1,0 +1,34 @@
+CHECK_DIRECTIVES_BEGIN
+5:#check PvNP.RealizableHardness.ActualStarRelationCount.NonzeroTuple
+6:#check PvNP.RealizableHardness.ActualStarRelationCount.NonzeroRelation
+7:#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroTuple_card
+8:#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_tail
+9:#check PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power
+10:#print axioms PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_tail
+11:#print axioms PvNP.RealizableHardness.ActualStarRelationCount.nonzeroTuple_card
+12:#print axioms PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power
+CHECK_DIRECTIVES_END
+SIGNATURE_OUTPUT_BEGIN
+1:PvNP.RealizableHardness.ActualStarRelationCount.NonzeroTuple.{u_1} {A : Type u_1} [AddCommGroup A] (n : ℕ) : Type u_1
+2:PvNP.RealizableHardness.ActualStarRelationCount.NonzeroRelation.{u_1} {A : Type u_1} [AddCommGroup A] (n : ℕ) : Type u_1
+3:PvNP.RealizableHardness.ActualStarRelationCount.nonzeroTuple_card.{u_2} {A : Type u_2} [AddCommGroup A] [Fintype A]
+5:PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_tail.{u_2} {A : Type u_2} [AddCommGroup A]
+8:PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power.{u_2} {A : Type u_2} [AddCommGroup A]
+SIGNATURE_OUTPUT_END
+AXIOM_OUTPUT_BEGIN
+9-  [Fintype A] (n : ℕ) : Fintype.card (ActualStarRelationCount.NonzeroRelation (n + 1)) ≤ (Fintype.card A - 1) ^ n
+10:'PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_tail' depends on axioms: [propext,
+11- Classical.choice,
+12- Quot.sound]
+13:'PvNP.RealizableHardness.ActualStarRelationCount.nonzeroTuple_card' depends on axioms: [propext,
+14- Classical.choice,
+15- Quot.sound]
+16:'PvNP.RealizableHardness.ActualStarRelationCount.nonzeroRelation_card_le_power' depends on axioms: [propext,
+17- Classical.choice,
+18- Quot.sound]
+AXIOM_OUTPUT_END
+AXIOM_NORMALIZED_BEGIN
+AXIOM_REPORT_1=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_2=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_3=[propext,  Classical.choice,  Quot.sound]
+AXIOM_NORMALIZED_END

@@ -1,0 +1,32 @@
+info: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreementChecks.lean:7:0: PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement.decodedPairScore {J a d : ℕ}
+  (Q : PvNP.RealizableHardness.GrassmannIncidence.Advice J a)
+  (T : (L : PvNP.RealizableHardness.GrassmannIncidence.Advice J d) → Module.Dual (ZMod 2) ↥↑L)
+  (P : PvNP.RealizableHardness.ActualMaximalPairLadder.DecodedPair Q d)
+  (L : PvNP.RealizableHardness.GrassmannIncidence.Advice J d) : ℚ
+info: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreementChecks.lean:8:0: PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement.retainedPair {J a d : ℕ}
+  (s : PvNP.RealizableHardness.TripleRestrictionRank.Draw J) (Q : PvNP.RealizableHardness.GrassmannIncidence.Advice J a)
+  (P : PvNP.RealizableHardness.ActualMaximalPairLadder.DecodedPair Q d)
+  (hQE : ↑Q ≤ PvNP.RealizableHardness.TripleRestrictionRank.retained s) :
+  PvNP.RealizableHardness.ActualMaximalPairLadder.DecodedPair Q d
+info: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreementChecks.lean:9:0: PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement.retainedW_mean_eq_retainedPair_agreement {J a d : ℕ}
+  (s : PvNP.RealizableHardness.TripleRestrictionRank.Draw J) (Q : PvNP.RealizableHardness.GrassmannIncidence.Advice J a)
+  (T : (L : PvNP.RealizableHardness.GrassmannIncidence.Advice J d) → Module.Dual (ZMod 2) ↥↑L)
+  (P : PvNP.RealizableHardness.ActualMaximalPairLadder.DecodedPair Q d)
+  (hQE : ↑Q ≤ PvNP.RealizableHardness.TripleRestrictionRank.retained s) (had : a ≤ d)
+  (hd : d ≤ Module.finrank (ZMod 2) ↥(PvNP.RealizableHardness.TripleRestrictionRank.retained s)) :
+  PvNP.RealizableHardness.PosteriorReweighting.mean (PvNP.RealizableHardness.ZoomOutTransfer.retainedW s Q P.W)
+      (decodedPairScore Q T P) =
+    PvNP.RealizableHardness.ActualMaximalPairLadder.agreement T Q (retainedPair s Q P hQE)
+info: lean/PvNP/RealizableHardness/ActualOneExperimentRetainedAgreementChecks.lean:10:0: PvNP.RealizableHardness.ActualOneExperimentRetainedAgreement.retainedPair_agreement_eq_terminalLocal {J a d : ℕ}
+  (s : PvNP.RealizableHardness.TripleRestrictionRank.Draw J) (Q : PvNP.RealizableHardness.GrassmannIncidence.Advice J a)
+  (T : (L : PvNP.RealizableHardness.GrassmannIncidence.Advice J d) → Module.Dual (ZMod 2) ↥↑L)
+  (P : PvNP.RealizableHardness.ActualMaximalPairLadder.DecodedPair Q d)
+  (hQE : ↑Q ≤ PvNP.RealizableHardness.TripleRestrictionRank.retained s) :
+  PvNP.RealizableHardness.ActualMaximalPairLadder.agreement T Q (retainedPair s Q P hQE) =
+    PvNP.RealizableHardness.ActualMaximalPairLadder.agreement
+      (PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.restrictedTable
+        (PvNP.RealizableHardness.TripleRestrictionRank.retained s) T)
+      (PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.localGrass
+        (PvNP.RealizableHardness.TripleRestrictionRank.retained s) Q hQE)
+      (PvNP.RealizableHardness.ActualMZ24TerminalAgreementTransport.localDecodedPair
+        (PvNP.RealizableHardness.TripleRestrictionRank.retained s) Q (retainedPair s Q P hQE) hQE ⋯)

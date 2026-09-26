@@ -1,0 +1,37 @@
+UTC=2026-09-23T22:19:54Z
+VM=quantyra-lean-builder-01
+PROJECT=quantyra-lean-cert-20260915
+ZONE=us-central1-a
+BASE=de048da45956ef207c0c1dcd38c42b00a5437710
+DIRECT_MAIN_RC=1
+MAIN_SHA256=a6acb3c1bba824c3ffcbdee59c86268eb0b3fe02c9501a230aab80a59ca298dc
+CHECKS_SHA256=ba3658594be00a07133b1845368b59b1e9ebc5e8378e1cf7ae323db680a862e9
+DIRECT_MAIN_LOG_SHA256=93dc4307a41928499ab2013cf7e870acce564a02c900f4b0b5924d46883360ef
+ACTIONABLE_DIAGNOSTICS_BEGIN
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+error: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:107:6: mod_cast has type
+  hBlock L m = bOf m * (hBlock L m / bOf m)
+but is expected to have type
+  ↑(hBlock L m) = ↑(bOf m) * NNRat.divNat (hBlock L m) (bOf m)
+error: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:101:2: unsolved goals
+case pos
+L m : ℕ
+hmpos : 0 < m
+hbpos : 0 < bOf m
+hbne : ↑(bOf m) ≠ 0
+hdvd : bOf m ∣ hBlock L m
+hcancel : bOf m * (hBlock L m / bOf m) = hBlock L m
+hcancelRat : ↑(hBlock L m) = ↑(bOf m) * (↑(hBlock L m) / ↑(bOf m))
+⊢ ↑(hBlock L m) = ↑(bOf m) * ↑(hBlock L m / bOf m)
+warning: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:157:5: Variable name `H` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _H
+
+ACTIONABLE_DIAGNOSTICS_END
+CHECKS_NOT_RUN=direct main failed
+REPLAY_NOT_RUN=direct main failed
+SCANS_NOT_RUN=direct main failed
+COMMIT=none
+VM_FINAL_STATE=TERMINATED (after evidence transfer)

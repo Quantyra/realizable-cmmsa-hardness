@@ -1,0 +1,35 @@
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:35:10: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:36:67: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:38:6: error: Tactic `apply` failed: could not unify the conclusion of `@Finset.single_le_sum`
+  ?f ?a ≤ ∑ x ∈ ?s, ?f x
+with the goal
+  (if x ∈ E i then μ.mass x else 0) ≤ ∑ i_1, if x ∈ E i_1 then if x ∈ E i then μ.mass x else 0 else 0
+
+Note: The full type of `@Finset.single_le_sum` is
+  ∀ {ι : Type ?u.64} {N : Type ?u.63} [inst : AddCommMonoid N] [inst_1 : Preorder N] {f : ι → N} {s : Finset ι}
+    [AddLeftMono N], (∀ i ∈ s, 0 ≤ f i) → ∀ {a : ι}, a ∈ s → f a ≤ ∑ x ∈ s, f x
+
+case pos
+Ω : Type u_1
+Ι : Type u_2
+inst✝¹ : Fintype Ω
+inst✝ : Fintype Ι
+μ : FiniteLaw Ω
+E : Ι → Finset Ω
+U : Finset Ω := Finset.univ.biUnion E
+x : Ω
+hu : x ∈ U
+i : Ι
+hiU : i ∈ Finset.univ
+hi : x ∈ E i
+hterm : (if x ∈ E i then μ.mass x else 0) = μ.mass x
+⊢ (if x ∈ E i then μ.mass x else 0) ≤ ∑ i_1, if x ∈ E i_1 then if x ∈ E i then μ.mass x else 0 else 0
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:44:10: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:58:66: error: Application type mismatch: The argument
+  Finset.subset_univ
+has type
+  ∀ (s : Finset ?m.295), s ⊆ Finset.univ
+but is expected to have type
+  U ⊆ Finset.univ
+in the application
+  Finset.sum_le_sum_of_subset_of_nonneg Finset.subset_univ

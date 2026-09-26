@@ -1,0 +1,89 @@
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:37:64: error(lean.invalidField): Invalid field notation: Type of
+  L
+is not known; cannot resolve field `val`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AddUnits.val`
+  • `Char.val`
+  • `DerivedWanted.val`
+  • `Fin.val`
+  • `Finset.val`
+  • `IntermediateField.val`
+  • `NonScalar.val`
+  • `PNat.val`
+  • `Subalgebra.val`
+  • `SubalgebraClass.val`
+  • `Subtype.val`
+  • `Units.val`
+  • `ZMod.val`
+  • `Array.Mem.val`
+  • `Lean.ExprStructEq.val`
+  • `NumberField.RingOfIntegers.val`
+  • `OrderHom.Subtype.val`
+  • `ST.Out.val`
+  • `Valuation.IsUniformizer.val`
+  • `Valuation.Uniformizer.val`
+  • `Vector.Mem.val`
+  • `Lean.Doc.Parser.val`
+  • `Lean.Doc.WithSyntax.val`
+  • `Lean.Elab.FieldInfo.val`
+  • `Lean.Language.DynamicSnapshot.val`
+  • `Lean.Language.SyntaxGuarded.val`
+  • `Lean.Meta.InstanceEntry.val`
+  • `Lean.Server.WithRpcRef.val`
+  • `Std.Time.Timestamp.val`
+  • `Std.Time.WallTime.val`
+  • `Batteries.BinomialHeap.Imp.FindMin.val`
+  • `Lean.Elab.ComputedFields.Context.val`
+  • `Lean.Elab.Term.LetRecToLift.val`
+  • `Lean.Elab.Term.NamedArg.val`
+  • `Lean.Meta.Match.Example.val`
+  • `Lean.Meta.Match.Pattern.val`
+  • `Lean.Meta.Sym.BitVecValue.val`
+  • `Lean.Meta.Sym.FinValue.val`
+  • `Lean.Meta.SynthInstance.Instance.val`
+  • `Mathlib.Tactic.Determinant.Cert.val`
+  • `Std.Time.Internal.UnitVal.val`
+  • `Lean.Meta.Try.Collector.InductionCandidate.val`
+  • `Mathlib.Tactic.Ring.Common.Result.val`
+  • `Lean.Meta.Grind.Arith.Cutsat.SymbolicBound.val`
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:94:6: error: Type mismatch
+  extensionTupleLaw (coordinateCenterGrass center) ((domainDrawTupleExtensionEquiv center h r ht hh) witness)
+has type
+  @FiniteLaw (Fin r → Extension (coordinateCenterGrass center) (J + 2 * h))
+    (@Pi.instFintype (Fin r) (fun a => Extension (coordinateCenterGrass center) (J + 2 * h)) (instDecidableEqFin r)
+      (Fin.fintype r) fun a => Subtype.fintype fun L => ↑(coordinateCenterGrass center) ≤ ↑L)
+but is expected to have type
+  @FiniteLaw (Fin r → Extension (coordinateCenterGrass center) (J + 2 * h))
+    (@Pi.instFintype (Fin r) (fun a => Extension (coordinateCenterGrass center) (J + 2 * h)) (instDecidableEqFin r)
+      (Fin.fintype r) fun a => extensionFintype center h)
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:100:9: error: Type mismatch
+  pushforward (⇑(domainDrawTupleExtensionEquiv center h r ht hh)) (uniformLaw (Fin r → DomainDraw center h)) =
+    uniformLaw (Fin r → Extension (coordinateCenterGrass center) (J + 2 * h))
+has type
+  Prop
+of sort `Type` but is expected to have type
+  Sort u_1
+of sort `Type u_1`
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:116:4: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  @Pi.instFintype (Fin r) (fun a => Extension (coordinateCenterGrass center) (J + 2 * h)) (instDecidableEqFin r)
+    (Fin.fintype r) fun a => extensionFintype center h
+inferred
+  @Pi.instFintype (Fin r) (fun a => Extension (coordinateCenterGrass center) (J + 2 * h)) (instDecidableEqFin r)
+    (Fin.fintype r) fun a => Subtype.fintype fun L => ↑(coordinateCenterGrass center) ≤ ↑L
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:121:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:122:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`

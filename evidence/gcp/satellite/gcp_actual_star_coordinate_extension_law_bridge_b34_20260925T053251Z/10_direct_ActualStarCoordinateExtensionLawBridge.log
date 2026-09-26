@@ -1,0 +1,40 @@
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:88:6: error: Type mismatch
+  extensionTupleLaw (coordinateCenterGrass center) ((domainDrawTupleExtensionEquiv center h r ht hh) witness)
+has type
+  @FiniteLaw (Fin r → Extension (coordinateCenterGrass center) (J + 2 * h))
+    (@Pi.instFintype (Fin r) (fun a => Extension (coordinateCenterGrass center) (J + 2 * h)) (instDecidableEqFin r)
+      (Fin.fintype r) fun a => Subtype.fintype fun L => ↑(coordinateCenterGrass center) ≤ ↑L)
+but is expected to have type
+  @FiniteLaw (Fin r → Extension (coordinateCenterGrass center) (J + 2 * h))
+    (@Pi.instFintype (Fin r) (fun a => Extension (coordinateCenterGrass center) (J + 2 * h)) (instDecidableEqFin r)
+      (Fin.fintype r) fun a => inst✝)
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:94:9: error: Type mismatch
+  pushforward (⇑(domainDrawTupleExtensionEquiv center h r ht hh)) (uniformLaw (Fin r → DomainDraw center h)) =
+    uniformLaw (Fin r → Extension (coordinateCenterGrass center) (J + 2 * h))
+has type
+  Prop
+of sort `Type` but is expected to have type
+  Sort u_1
+of sort `Type u_1`
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:111:4: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  @Pi.instFintype (Fin r) (fun a => Extension (coordinateCenterGrass center) (J + 2 * h)) (instDecidableEqFin r)
+    (Fin.fintype r) fun a => inst✝
+inferred
+  @Pi.instFintype (Fin r) (fun a => Extension (coordinateCenterGrass center) (J + 2 * h)) (instDecidableEqFin r)
+    (Fin.fintype r) fun a => Subtype.fintype fun L => ↑(coordinateCenterGrass center) ≤ ↑L
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:116:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:117:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`

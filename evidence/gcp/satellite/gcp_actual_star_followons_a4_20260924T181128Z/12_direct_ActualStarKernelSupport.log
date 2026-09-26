@@ -1,0 +1,36 @@
+lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:49:71: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d m : ℕ
+z : StarTuple t d m
+x : ⨁ (i : Fin m), ↥(incrementFamily z i)
+hx : x ≠ 0
+hker : (incrementSumMap z) x = 0
+S : Finset (Fin m) := kernelSupport x
+hxsupport : ∀ (i : Fin m), i ∈ S ↔ x i ≠ 0
+j : Fin m
+⊢ x j = ∑ x_1, ((DirectSum.of (fun j => ↥(incrementFamily z j)) x_1) (x x_1)) j
+lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:57:78: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d m : ℕ
+z : StarTuple t d m
+x : ⨁ (i : Fin m), ↥(incrementFamily z i)
+hx : x ≠ 0
+hker : (incrementSumMap z) x = 0
+S : Finset (Fin m) := kernelSupport x
+hxsupport : ∀ (i : Fin m), i ∈ S ↔ x i ≠ 0
+hdecomp : x = ∑ i, (DirectSum.of (fun j => ↥(incrementFamily z j)) i) (x i)
+⊢ (incrementSumMap z) (∑ i, (DirectSum.of (fun j => ↥(incrementFamily z j)) i) (x i)) =
+    (incrementSumMap z)
+      (∑ i,
+        (DirectSum.of (fun j => ↥(incrementFamily z j)) i)
+          ((∑ i, (DirectSum.of (fun j => ↥(incrementFamily z j)) i) (x i)) i))
+lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:99:4: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information

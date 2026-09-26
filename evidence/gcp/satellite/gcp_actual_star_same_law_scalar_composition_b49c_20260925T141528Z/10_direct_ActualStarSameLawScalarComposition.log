@@ -1,0 +1,70 @@
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:95:16: error: don't know how to synthesize implicit argument `d`
+  @fixedCenterBadEvent (↥(questionCoordinateSpace center)) (questionCoordinateSpace center).addCommGroup
+    AddSubgroupClass.instZModModule ⋯ (blocks A (hBlock L m) + leafT m (hBlock L m)) ?m.339 m U
+context:
+N m L A : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+sourceHMin : ℕ → ℕ
+hA : 1 ≤ A
+hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m
+center : QuestionCenter I (blocks A (hBlock L m)) (leafT m (hBlock L m))
+ht : leafT m (hBlock L m) ≤ 2 * hBlock L m
+hh : hBlock L m ≤ blocks A (hBlock L m)
+inst✝¹ : Finite ↥(questionCoordinateSpace center)
+inst✝ : Fintype (Fin m → DomainDraw center (hBlock L m))
+witness : Fin m → DomainDraw center (hBlock L m)
+h : ℕ := ⋯
+J : ℕ := ⋯
+t : ℕ := ⋯
+hs :
+  Admissible (fun n => max (sourceHMin n) (n + 2)) L m ∧
+    ∀ (n : ℕ), Admissible (fun n => max (sourceHMin n) (n + 2)) L n → n ≤ m
+hm : 256 ≤ m
+hcut : m + 2 ≤ h
+hhpos : 0 < h
+hdiv : bOf m ∣ h
+hqpos : 0 < h / bOf m
+hk : 1 ≤ leafK m h
+hguard : m * leafK m (hBlock L m) + badExponent m (hBlock L m) + 2 ≤ Module.finrank (ZMod 2) (CenterQuotient center)
+htd : J + t ≤ J + 2 * h
+U : GrassmannCounting.Grass (↥(questionCoordinateSpace center)) (blocks A (hBlock L m) + leafT m (hBlock L m)) := ⋯
+drawsToLeaves : (Fin m → DomainDraw center h) ≃
+  (Fin m → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L m) + 2 * h)) := ⋯
+extWitness : Fin m → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L m) + 2 * h) := ⋯
+⊢ ℕ
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:95:6: error: failed to infer `let` declaration type
+lean/PvNP/RealizableHardness/ActualStarSameLawScalarComposition.lean:63:56: error: unsolved goals
+N m L A : ℕ
+I : ActualOccurrenceAllocation.Instance N m
+sourceHMin : ℕ → ℕ
+hA : 1 ≤ A
+hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m
+center : QuestionCenter I (blocks A (hBlock L m)) (leafT m (hBlock L m))
+ht : leafT m (hBlock L m) ≤ 2 * hBlock L m
+hh : hBlock L m ≤ blocks A (hBlock L m)
+inst✝¹ : Finite ↥(questionCoordinateSpace center)
+inst✝ : Fintype (Fin m → DomainDraw center (hBlock L m))
+witness : Fin m → DomainDraw center (hBlock L m)
+h : ℕ := hBlock L m
+J : ℕ := blocks A h
+t : ℕ := leafT m h
+hs :
+  Admissible (fun n => max (sourceHMin n) (n + 2)) L m ∧
+    ∀ (n : ℕ), Admissible (fun n => max (sourceHMin n) (n + 2)) L n → n ≤ m
+hm : 256 ≤ m
+hcut : m + 2 ≤ h
+hhpos : 0 < h
+hdiv : bOf m ∣ h
+hqpos : 0 < h / bOf m
+hk : 1 ≤ leafK m h
+hguard : m * leafK m (hBlock L m) + badExponent m (hBlock L m) + 2 ≤ Module.finrank (ZMod 2) (CenterQuotient center)
+htd : J + t ≤ J + 2 * h
+U : GrassmannCounting.Grass (↥(questionCoordinateSpace center)) (blocks A (hBlock L m) + leafT m (hBlock L m)) :=
+  coordinateCenterGrass center
+drawsToLeaves : (Fin m → DomainDraw center h) ≃
+  (Fin m → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L m) + 2 * h)) :=
+  domainDrawTupleExtensionEquiv center h m ht hh
+extWitness : Fin m → ActualSourceStarLaw.Extension (coordinateCenterGrass center) (blocks A (hBlock L m) + 2 * h) :=
+  drawsToLeaves witness
+⊢ eventMass (uniformDomainTupleLaw center (hBlock L m) m witness) (domainDrawRankFailureEvent center ht hh) <
+    1 / 2 ^ (badExponent m (hBlock L m) + 1)

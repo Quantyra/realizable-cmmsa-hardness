@@ -1,0 +1,26 @@
+lean/PvNP/RealizableHardness/ActualStarFixedRhoDimensionGuard.lean:89:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  h - 1000 * q + 1000 * q
+in the target expression
+  2 * m * (1000 * q + (h - 1000 * q)) = 2 * m * h
+
+m A h : ℕ
+hm : 256 ≤ m
+hh : m + 2 ≤ h
+hdiv : bOf m ∣ h
+hA : 1 ≤ A
+q : ℕ := h / bOf m
+b : ℕ := bOf m
+hmpos : 0 < m
+hmsq : m ≤ m ^ 2
+hbpos : 0 < b
+hb1000 : 1000 ≤ b
+hb3m : 3 * m ≤ b
+hmod : h % b = 0
+hdecomp : b * q = h
+hqpos : 0 < q
+hqle : q ≤ h
+h1000q : 1000 * q ≤ h
+h2m3 : 2 * m + 3 ≤ h
+hinc : leafK m h = 2 * q
+hq1000 : q ≤ 1000 * q
+⊢ 2 * m * (1000 * q + (h - 1000 * q)) = 2 * m * h

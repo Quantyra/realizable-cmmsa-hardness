@@ -1,0 +1,126 @@
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:19:5: error: unknown namespace `PvNP.RealizableHardness.RobustSourceLineContainment`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:43:17: error(lean.unknownIdentifier): Unknown identifier `gaussian_one_eq_pow_sub_one`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:44:4: error: mod_cast has type
+  Fintype.card A - 1 = gaussian N 1
+but is expected to have type
+  ↑(Fintype.card A - 1) = y
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:47:10: error(lean.unknownIdentifier): Unknown identifier `gaussian_one_cast`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:50:10: error(lean.unknownIdentifier): Unknown identifier `gaussian_one_cast`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:56:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a ^ ?n * ?a
+in the target expression
+  y ^ (s - 1) * x ^ s * y = x ^ s * y ^ s
+
+A : Type u_1
+inst✝¹ : AddCommGroup A
+inst✝ : Fintype A
+m k N : ℕ
+hcard : Fintype.card A = 2 ^ N
+hk : 1 ≤ k
+hkn : k ≤ N
+x : ℚ := ↑(gaussian k 1)
+y : ℚ := ↑(gaussian N 1)
+hy : 0 < y
+hcardRel : ↑(Fintype.card A - 1) = y
+hx : x = 2 ^ k - 1
+hyPow : y = 2 ^ N - 1
+s : ℕ
+hs : 2 ≤ s
+hsub : s - 1 + 1 = s
+⊢ y ^ (s - 1) * x ^ s * y = x ^ s * y ^ s
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:69:12: error: No goals to be solved
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:80:4: error: Tactic `apply` failed: could not unify the conclusion of `@Finset.sum_le_sum`
+  ∑ i ∈ ?s, ?f i ≤ ∑ i ∈ ?s, ?g i
+with the goal
+  (∑ S, if 2 ≤ S.card then ↑(Fintype.card A - 1) ^ (S.card - 1) * (x / y) ^ S.card else 0) ≤ (1 + x) ^ m / y
+
+Note: The full type of `@Finset.sum_le_sum` is
+  ∀ {ι : Type ?u.273} {N : Type ?u.272} [inst : AddCommMonoid N] [inst_1 : Preorder N] {f g : ι → N} {s : Finset ι}
+    [AddLeftMono N], (∀ i ∈ s, f i ≤ g i) → ∑ i ∈ s, f i ≤ ∑ i ∈ s, g i
+
+A : Type u_1
+inst✝¹ : AddCommGroup A
+inst✝ : Fintype A
+m k N : ℕ
+hcard : Fintype.card A = 2 ^ N
+hk : 1 ≤ k
+hkn : k ≤ N
+x : ℚ := ↑(gaussian k 1)
+y : ℚ := ↑(gaussian N 1)
+hy : 0 < y
+hcardRel : ↑(Fintype.card A - 1) = y
+hx : x = 2 ^ k - 1
+hyPow : y = 2 ^ N - 1
+hcancel : ∀ (s : ℕ), 2 ≤ s → y ^ (s - 1) * (x / y) ^ s = x ^ s / y
+hsubsetSum : ∑ S, x ^ S.card = (1 + x) ^ m
+⊢ (∑ S, if 2 ≤ S.card then ↑(Fintype.card A - 1) ^ (S.card - 1) * (x / y) ^ S.card else 0) ≤ (1 + x) ^ m / y
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:100:36: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n * ?m
+in the target expression
+  (2 ^ k) ^ m / (2 ^ N - 1) = (2 ^ m) ^ k / (2 ^ N - 1)
+
+A : Type u_1
+inst✝¹ : AddCommGroup A
+inst✝ : Fintype A
+m k N : ℕ
+hcard : Fintype.card A = 2 ^ N
+hk : 1 ≤ k
+hkn : k ≤ N
+x : ℚ := ↑(gaussian k 1)
+y : ℚ := ↑(gaussian N 1)
+hy : 0 < y
+hcardRel : ↑(Fintype.card A - 1) = y
+hx : x = 2 ^ k - 1
+hyPow : y = 2 ^ N - 1
+hcancel : ∀ (s : ℕ), 2 ≤ s → y ^ (s - 1) * (x / y) ^ s = x ^ s / y
+hsubsetSum : ∑ S, x ^ S.card = (1 + x) ^ m
+hsumBound : supportStratifiedBound A m (x / y) ≤ (1 + x) ^ m / y
+hpow : 1 + x = 2 ^ k
+⊢ (2 ^ k) ^ m / (2 ^ N - 1) = (2 ^ m) ^ k / (2 ^ N - 1)
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:75:37: warning: This simp argument is unused:
+  Finset.mem_powerset
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Finset.prod_const] at hS ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:117:4: error: mod_cast has type
+  2 ^ N - 1 > 2 ^ (m * k + E + 1)
+but is expected to have type
+  ↑(2 ^ (m * k + E + 1)) < Int.subNatNat (2 ^ N) 1
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:124:4: error: No goals to be solved
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:125:25: error: linarith failed to find a contradiction
+m k N E : ℕ
+hguard : m * k + E + 2 ≤ N
+hNpow : 2 ^ (m * k + E + 2) ≤ 2 ^ N
+hsep : 2 ^ (m * k + E + 2) - 1 > 2 ^ (m * k + E + 1)
+hyNat : 2 ^ N - 1 > 2 ^ (m * k + E + 1)
+hy : 2 ^ N - 1 > 2 ^ (m * k + E + 1)
+hz : 0 < 2 ^ (E + 1)
+hmul : 2 ^ (m * k) * 2 ^ (E + 1) = 2 ^ (m * k + E + 1)
+a✝ : 2 ^ N - 1 ≤ 0
+⊢ False
+failed
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:127:2: error: Tactic `apply` failed: could not unify the conclusion of `(div_lt_iff₀ hz).mpr`
+  ?m.473 / 2 ^ (E + 1) < ?m.472
+with the goal
+  2 ^ (k * m) < (2 ^ (E + 1))⁻¹ * (2 ^ N - 1)
+
+Note: The full type of `(div_lt_iff₀ hz).mpr` is
+  ?m.473 < ?m.472 * 2 ^ (E + 1) → ?m.473 / 2 ^ (E + 1) < ?m.472
+
+m k N E : ℕ
+hguard : m * k + E + 2 ≤ N
+hNpow : 2 ^ (m * k + E + 2) ≤ 2 ^ N
+hsep : 2 ^ (m * k + E + 2) - 1 > 2 ^ (m * k + E + 1)
+hyNat : 2 ^ N - 1 > 2 ^ (m * k + E + 1)
+hy : 2 ^ N - 1 > 2 ^ (m * k + E + 1)
+hz : 0 < 2 ^ (E + 1)
+hmul : 2 ^ (m * k) * 2 ^ (E + 1) = 2 ^ (m * k + E + 1)
+⊢ 2 ^ (k * m) < (2 ^ (E + 1))⁻¹ * (2 ^ N - 1)
+lean/PvNP/RealizableHardness/ActualStarFixedCenterScalarClosure.lean:155:8: error: typeclass instance problem is stuck
+  Fintype ?m.190
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Fintype` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.

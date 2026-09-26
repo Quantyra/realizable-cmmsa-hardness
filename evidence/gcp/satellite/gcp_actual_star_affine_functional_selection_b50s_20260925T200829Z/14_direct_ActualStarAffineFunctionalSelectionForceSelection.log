@@ -1,0 +1,59 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:26:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:41:63: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+K H : Submodule (ZMod 2) V
+hKH : K ⊓ H = ⊥
+g : ↥K →ₗ[ZMod 2] ZMod 2
+ψ : ↥H →ₗ[ZMod 2] ZMod 2
+this : DecidableEq Bool := fun a b => Classical.propDecidable (a = b)
+Q : Bool → Submodule (ZMod 2) V := fun b => if b = true then H else K
+joint : (⨁ (b : Bool), ↥(Q b)) →ₗ[ZMod 2] V := DirectSum.coeLinearMap Q
+hrange : joint.range = K ⊔ H
+hrangeDim : Module.finrank (ZMod 2) ↥joint.range = Module.finrank (ZMod 2) ↥K + Module.finrank (ZMod 2) ↥H
+⊢ Module.finrank (ZMod 2) ↥(if false = true then H else K) + Module.finrank (ZMod 2) ↥(if true = true then H else K) =
+    Module.finrank (ZMod 2) ↥K + Module.finrank (ZMod 2) ↥H
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:56:15: error: Type mismatch
+  g
+has type
+  ↥K →ₗ[ZMod 2] ZMod 2
+but is expected to have type
+  ↥(Q false) →ₗ[ZMod 2] ZMod 2
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:57:14: error: Type mismatch
+  ψ
+has type
+  ↥H →ₗ[ZMod 2] ZMod 2
+but is expected to have type
+  ↥(Q true) →ₗ[ZMod 2] ZMod 2
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:62:36: error: Application type mismatch: The argument
+  x
+has type
+  ↥K
+but is expected to have type
+  ↥(Q false)
+in the application
+  hF false x
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:65:35: error: Application type mismatch: The argument
+  x
+has type
+  ↥H
+but is expected to have type
+  ↥(Q true)
+in the application
+  hF true x
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:47:4: error: (kernel) application type mismatch
+  id (Eq.refl true)
+argument has type
+  true = true
+but function has type
+  decide ({ lowerBound := some 1, upperBound := some 0 }.isImpossible = true) = true →
+    decide ({ lowerBound := some 1, upperBound := some 0 }.isImpossible = true) = true

@@ -1,0 +1,31 @@
+RUN=gcp_actual_star_joint_kernel_r2_20260924T150451Z
+RESULT=FAIL
+FAILURE_CLASS=THEOREM
+FAILED_STAGE=direct_main
+HARNESS_EXIT_CODE=49
+LEAN_EXIT_CODE=1
+COMMIT=d6e59e2eca47031a31b0795587b4df2cea9540ba
+MAIN_SHA256=528520d7e11a2c0c5b87255ed23f8f9013fe428783d0ce25ded0123a6f0b8e8b
+CHECKS_SHA256=38cd8e0488cae0bb8c5892fce6dba6cb26a6f14bfca8b70c913be595ed42f761
+OVERLAY_COUNT=2
+DEPENDENCY_BUILD_RC=0
+NETWORK_DENIED=PASS
+VM_FINAL_STATUS=TERMINATED
+
+PRIMARY_ERRORS:
+1. ActualStarJointKernel.lean:41:8 applies DirectSum.range_coeLinearMap to incrementFamily z, but the theorem is already an equality with implicit arguments.
+2. ActualStarJointKernel.lean:69:16 cannot infer the expected division-ring/module parameters for f.finrank_range_add_finrank_ker.
+3. ActualStarJointKernel.lean:96:36 cannot infer the linear map expected by LinearMap.ker_eq_bot.mp hbot.
+
+DOWNSTREAM_ERRORS:
+1. Deterministic heartbeat timeouts at lines 72 and 58.
+2. Unknown jointlyDirect_iff_incrementSumMap_injective at line 85 after the preceding theorem failed.
+
+NOT_RUN_AFTER_RED=direct_checks,combined_forced_build,replay,olean_stability,signature_axiom_scan,forbidden_shortcut_scan
+EVIDENCE_MANIFEST_VERIFIED=PASS
+REMOTE_ARCHIVE_SHA256=d06fc382304dcf9a1ecc11366cafd4c225b730123f55ecddf423df1902c50b67
+
+POST_RUN_WORKSPACE_NOTE:
+The local main source changed concurrently after the frozen overlay was uploaded.
+POST_RUN_LOCAL_MAIN_SHA256=cdc0c9726d486f07f14367db09e4fc14d66dc76cb622f0e10ec31ffc1b93a455
+The R2 artifact and remote compilation retain the requested 528520d7e11a2c0c5b87255ed23f8f9013fe428783d0ce25ded0123a6f0b8e8b source exactly.

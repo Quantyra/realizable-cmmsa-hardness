@@ -1,0 +1,47 @@
+lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:48:36: error: Type mismatch
+  (DirectSum.of ?m.123 i) ?m.130
+has type
+  ⨁ (i : Fin m), ?m.123 i
+but is expected to have type
+  ⨁ (i : Fin m), ↥(incrementFamily z i)
+lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:65:8: error: Tactic `apply` failed: could not unify the conclusion of `Finset.sum_subset (Finset.subset_univ S)`
+  ∑ x ∈ S, ?m.196 x = ∑ x, ?m.196 x
+with the goal
+  ∑ i, ↑(x i) = ∑ i ∈ S, ↑(x i)
+
+Note: The full type of `Finset.sum_subset (Finset.subset_univ S)` is
+  (∀ x ∈ Finset.univ, x ∉ S → ?m.196 x = 0) → ∑ x ∈ S, ?m.196 x = ∑ x, ?m.196 x
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d m : ℕ
+z : StarTuple t d m
+x : ⨁ (i : Fin m), ↥(incrementFamily z i)
+hx : x ≠ 0
+hker : (incrementSumMap z) x = 0
+S : Finset (Fin m) := ⋯
+hxsupport : ∀ (i : Fin m), i ∈ S ↔ x i ≠ 0
+hsumAll : ∑ i, ↑(x i) = 0
+⊢ ∑ i, ↑(x i) = ∑ i ∈ S, ↑(x i)
+lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:80:49: error: Application type mismatch: The argument
+  hne
+has type
+  ¬x i = 0
+but is expected to have type
+  ¬¬x i ≠ 0
+in the application
+  not_not.mp hne
+lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:94:4: error: Type mismatch
+  (hxsupport ↑i).mp i.property
+has type
+  x ↑i ≠ 0
+but is expected to have type
+  (fun i => ↑(x ↑i)) i ≠ 0
+lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:97:4: error: Type mismatch: After simplification, term
+  hsumSupport
+ has type
+  ∑ x_1 ∈ S, ↑(x x_1) = 0
+but is expected to have type
+  ∑ i ∈ S.attach, ↑(x ↑i) = 0

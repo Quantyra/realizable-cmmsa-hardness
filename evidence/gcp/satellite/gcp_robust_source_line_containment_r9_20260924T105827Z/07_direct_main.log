@@ -1,0 +1,126 @@
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:64:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:61:51: error: unsolved goals
+case e
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+Q0 : Grass V 0 := ⟨⊥, ⋯⟩
+this : Finite { K // ⊥ ≤ ↑K ∧ ↑K ≤ ↑H } := Finite.of_injective (fun K => ↑K) Subtype.val_injective
+⊢ linesInside H ≃ { K // ⊥ ≤ ↑K ∧ ↑K ≤ ↑H }
+
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+j : ℕ
+H : Grass V j
+Q0 : Grass V 0 := ⟨⊥, ⋯⟩
+this : Finite { K // ⊥ ≤ ↑K ∧ ↑K ≤ ↑H } := Finite.of_injective (fun K => ↑K) Subtype.val_injective
+e : linesInside H ≃ { K // ⊥ ≤ ↑K ∧ ↑K ≤ ↑H } := ?e
+⊢ Fintype.card (linesInside H) = gaussian j 1
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:59:0: error: internal exception #3
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:75:2: error: unexpected token 'have'; expected command
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:100:0: warning: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.RobustSourceLineContainment.nontrivial_inf_iff_quotientImages`:
+  [Finite V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Finite V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:207:8: error: (kernel) unknown constant 'PvNP.RealizableHardness.RobustSourceLineContainment.linesInside_card'
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:443:65: error(lean.unknownIdentifier): Unknown identifier `Hq.val`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:451:68: error(lean.unknownIdentifier): Unknown identifier `Hq.val`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:441:6: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:444:6: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:450:6: error: Type mismatch
+  (upperQuotientEquiv Q had).left_inv ↑L
+has type
+  (upperQuotientEquiv Q had).invFun ((upperQuotientEquiv Q had).toFun ↑L) = ↑L
+but is expected to have type
+  ↑(?m.245 L) = ↑(?m.246 L)
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:431:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:434:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:435:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:420:61: error: unsolved goals
+case badEquiv
+a j : ℕ
+W : Type u_2
+inst✝² : AddCommGroup W
+inst✝¹ : Module (ZMod 2) W
+inst✝ : Finite W
+Q : Grass W a
+H : Grass W j
+d : ℕ
+had : a ≤ d
+hd : d ≤ Module.finrank (ZMod 2) W
+hQH : ↑Q ⊓ ↑H = ⊥
+hbd : 1 ≤ d - a
+hslack : j + (d - a) + 1 ≤ Module.finrank (ZMod 2) W - a
+carrier : Type u_2 := intervalCarrier Q d
+bad : Type u_2 := intervalTransverseCarrier Q H d
+Hq : Grass (W ⧸ ↑Q) j := quotientImageGrass Q (↑H) hQH ⋯
+e : { L // ↑Q ≤ ↑L } ≃ Grass (W ⧸ ↑Q) (d - a) := upperQuotientEquiv Q had
+hbad : ∀ (L : carrier), ↑↑L ⊓ ↑H ≠ ⊥ ↔ ↑(e L) ⊓ ↑Hq ≠ ⊥
+this✝¹ : Finite (W ⧸ ↑Q) := Finite.of_surjective (⇑(↑Q).mkQ) (Submodule.mkQ_surjective ↑Q)
+badQ : Type (max 0 u_2) := { R // ↑R ⊓ ↑Hq ≠ ⊥ }
+this✝ : Finite badQ := Finite.of_injective (fun R => ↑R) Subtype.val_injective
+this : Fintype badQ := Fintype.ofFinite badQ
+⊢ { L // ↑↑L ⊓ ↑H ≠ ⊥ } ≃ { R // ↑R ⊓ ↑Hq ≠ ⊥ }
+
+a j : ℕ
+W : Type u_2
+inst✝² : AddCommGroup W
+inst✝¹ : Module (ZMod 2) W
+inst✝ : Finite W
+Q : Grass W a
+H : Grass W j
+d : ℕ
+had : a ≤ d
+hd : d ≤ Module.finrank (ZMod 2) W
+hQH : ↑Q ⊓ ↑H = ⊥
+hbd : 1 ≤ d - a
+hslack : j + (d - a) + 1 ≤ Module.finrank (ZMod 2) W - a
+carrier : Type u_2 := intervalCarrier Q d
+bad : Type u_2 := intervalTransverseCarrier Q H d
+Hq : Grass (W ⧸ ↑Q) j := quotientImageGrass Q (↑H) hQH ⋯
+e : { L // ↑Q ≤ ↑L } ≃ Grass (W ⧸ ↑Q) (d - a) := upperQuotientEquiv Q had
+hbad : ∀ (L : carrier), ↑↑L ⊓ ↑H ≠ ⊥ ↔ ↑(e L) ⊓ ↑Hq ≠ ⊥
+this✝¹ : Finite (W ⧸ ↑Q) := Finite.of_surjective (⇑(↑Q).mkQ) (Submodule.mkQ_surjective ↑Q)
+badQ : Type (max 0 u_2) := { R // ↑R ⊓ ↑Hq ≠ ⊥ }
+this✝ : Finite badQ := Finite.of_injective (fun R => ↑R) Subtype.val_injective
+this : Fintype badQ := Fintype.ofFinite badQ
+badEquiv : { L // ↑↑L ⊓ ↑H ≠ ⊥ } ≃ { R // ↑R ⊓ ↑Hq ≠ ⊥ } := ?badEquiv
+⊢ ↑(Fintype.card (intervalTransverseCarrier Q H d)) / ↑(Fintype.card (intervalCarrier Q d)) ≤
+    1 / 2 ^ (Module.finrank (ZMod 2) W - a - j - (d - a) - 1)
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:406:0: error: internal exception #3
+lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:454:2: error: unexpected token 'have'; expected command

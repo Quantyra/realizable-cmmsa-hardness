@@ -1,0 +1,38 @@
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+⚠ [3211/3262] Replayed PvNP.RealizableHardness.FiniteConcentration
+warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:180:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:184:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+warning: lean/PvNP/RealizableHardness/FiniteConcentration.lean:220:22: This simp argument is unused:
+  Fintype.card_fun
+
+--
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+error: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:117:8: failed to synthesize instance of type class
+  DivisionSemiring ℕ
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:117:40: Application type mismatch: The argument
+  hbpos
+has type
+  @OfNat.ofNat ℕ 0 (instOfNatNat 0) < bOf m
+but is expected to have type
+  @OfNat.ofNat ℕ 0 Zero.toOfNat0 < ↑(bOf m)
+in the application
+  Nat.ne_of_gt hbpos
+warning: lean/PvNP/RealizableHardness/ActualMZ24FixedRhoPointwiseSelector.lean:172:5: Variable name `H` is not explicitly referenced.
+--
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector
+error: build failed
+--
+UTC=2026-09-23T23:18:06Z
+RESULT=FAIL
+REASON=direct_main_failed
+COMMIT=none
+1210bd14c406557617979d3ad06b16dabd3f5d9c87cb5cdb424a591f93b0f639  /tmp/s3132-fixed-rho-selector-sol56-r6-retry1-20260923T231500Z/incoming/ActualMZ24FixedRhoPointwiseSelector.lean
+a0f5b35c0a19cfe91549ea85bf142e92cb45f30e492b624abccaade3af45a2ca  /tmp/s3132-fixed-rho-selector-sol56-r6-retry1-20260923T231500Z/incoming/ActualMZ24FixedRhoPointwiseSelectorChecks.lean

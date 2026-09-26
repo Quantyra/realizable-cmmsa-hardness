@@ -1,0 +1,21 @@
+MODULE=ActualStarFixedCenterFirstMomentChecks
+CHECK_DIRECTIVES_BEGIN
+5:#check PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.CandidateCatalog
+6:#check PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.candidateLineEvent
+7:#check PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenterBadEvent
+8:#check PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_subset_catalogUnion
+9:#check PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_mass_le_candidateSum
+11:#print axioms PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_subset_catalogUnion
+12:#print axioms PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_mass_le_candidateSum
+CHECK_DIRECTIVES_END
+SIGNATURE_OUTPUT_BEGIN
+1:PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.CandidateCatalog.{u_1} (A : Type u_1) [AddCommGroup A]
+3:PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.candidateLineEvent.{u_1} {V : Type u_1} [AddCommGroup V]
+7:PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenterBadEvent.{u_1} {V : Type u_1} [AddCommGroup V]
+10:PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_subset_catalogUnion.{u_1} {V : Type u_1}
+15:PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment.fixedCenter_badEvent_mass_le_candidateSum.{u_1} {V : Type u_1}
+SIGNATURE_OUTPUT_END
+AXIOM_NORMALIZED_BEGIN
+AXIOM_REPORT_1=[propext,  Classical.choice,  Quot.sound]
+AXIOM_REPORT_2=[propext,  Classical.choice,  Quot.sound]
+AXIOM_NORMALIZED_END

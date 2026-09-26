@@ -1,0 +1,81 @@
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:101:4: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [extensionTupleLaw, uniformLaw_apply, extensionLaw_apply, Finset.prod_const]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:127:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:128:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:169:40: error: Type mismatch
+  hgeneric
+has type
+  eventMass
+      (@uniformLaw (Fin m → Extension U d)
+        (@Pi.instFintype (Fin m) (fun a => Extension U d) (fun a b => Classical.propDecidable (a = b)) (Fin.fintype m)
+          fun a => Subtype.fintype fun L => ↑U ≤ ↑L)
+        ⋯)
+      {x | ∀ (i : Fin m), P i (x i)} =
+    ∏ i, eventMass (uniformLaw (Extension U d)) (Finset.filter (P i) Finset.univ)
+but is expected to have type
+  eventMass
+      (@uniformLaw (Fin m → Extension U d)
+        (@Pi.instFintype (Fin m) (fun a => Extension U d) this✝ (Fin.fintype m) fun a =>
+          Subtype.fintype fun L => ↑U ≤ ↑L)
+        ⋯)
+      {Ls | ∀ (i : Fin m), P i (Ls i)} =
+    ∏ i, eventMass (uniformLaw (Extension U d)) (Finset.filter (P i) Finset.univ)
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:181:10: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:186:10: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:190:52: error: unsolved goals
+V : Type u_1
+inst✝² : AddCommGroup V
+inst✝¹ : Module (ZMod 2) V
+inst✝ : Finite V
+t d m : ℕ
+htd : t ≤ d
+hdV : d ≤ Module.finrank (ZMod 2) V
+hk : 1 ≤ d - t
+U : Grass V t
+witness : Fin m → Extension U d
+S : Finset (Fin m)
+K : ↥S → Grass (V ⧸ ↑U) 1
+this✝ : DecidableEq (Fin m) := instDecidableEqFin m
+this : Nonempty (Extension U d) := extension_nonempty U htd hdV
+P : Fin m → Extension U d → Prop :=
+  fun i L => if hi : i ∈ S then ↑(K ⟨i, hi⟩) ≤ ↑((upperQuotientEquiv U htd) L) else True
+hpred :
+  ∀ (Ls : Fin m → Extension U d),
+    (∀ (i : Fin m), P i (Ls i)) ↔ ∀ (i : ↥S), ↑(K i) ≤ ↑((upperQuotientEquiv U htd) (Ls ↑i))
+hfilter : {Ls | ∀ (i : Fin m), P i (Ls i)} = {Ls | ∀ (i : ↥S), ↑(K i) ≤ ↑((upperQuotientEquiv U htd) (Ls ↑i))}
+hgeneric :
+  eventMass (uniformLaw (Fin m → Extension U d)) {x | ∀ (i : Fin m), P i (x i)} =
+    ∏ i, eventMass (uniformLaw (Extension U d)) (Finset.filter (P i) Finset.univ)
+hmassFactor :
+  eventMass (uniformLaw (Fin m → Extension U d)) {Ls | ∀ (i : ↥S), ↑(K i) ≤ ↑((upperQuotientEquiv U htd) (Ls ↑i))} =
+    ∏ i, eventMass (uniformLaw (Extension U d)) (Finset.filter (P i) Finset.univ)
+p : ℚ := ↑(gaussian (d - t) 1) / ↑(gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)
+hcoord :
+  ∀ (i : Fin m), eventMass (uniformLaw (Extension U d)) (Finset.filter (P i) Finset.univ) = if i ∈ S then p else 1
+⊢ ↑(gaussian (d - t) 1) ^ S.card / ↑(gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1) ^ S.card =
+    (↑(gaussian (d - t) 1) / ↑(gaussian (Module.finrank (ZMod 2) (V ⧸ ↑U)) 1)) ^ S.card
+lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:209:19: warning: Variable name `hdV` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hdV
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`

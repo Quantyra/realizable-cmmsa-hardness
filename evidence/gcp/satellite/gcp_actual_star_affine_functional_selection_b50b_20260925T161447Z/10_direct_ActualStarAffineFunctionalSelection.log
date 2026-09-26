@@ -1,0 +1,163 @@
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:34:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:35:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:37:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:53:57: error: unsolved goals
+Z : Type u_1
+inst✝³ : AddCommGroup Z
+inst✝² : Module (ZMod 2) Z
+inst✝¹ : Finite Z
+ι : Type u_2
+inst✝ : Fintype ι
+Q : ι → Submodule (ZMod 2) Z
+hjoint : Function.Injective ⇑(DirectSum.coeLinearMap Q)
+label : (i : ι) → ↥(Q i) →ₗ[ZMod 2] ZMod 2
+this✝¹ : Module.Finite (ZMod 2) Z := Module.Finite.of_finite
+this✝ : Finite (⨁ (i : ι), ↥(Q i)) := Finite.of_injective (⇑(DirectSum.coeLinearMap Q)) hjoint
+this : Module.Finite (ZMod 2) (⨁ (i : ι), ↥(Q i)) := Module.Finite.of_finite
+jointMap : (⨁ (i : ι), ↥(Q i)) →ₗ[ZMod 2] Z := DirectSum.coeLinearMap Q
+hker : jointMap.ker = ⊥ := LinearMap.ker_eq_bot.mpr hjoint
+e : (⨁ (i : ι), ↥(Q i)) ≃ₗ[ZMod 2] ↥jointMap.range :=
+  (jointMap.ker.quotEquivOfEqBot hker).symm ≪≫ₗ jointMap.quotKerEquivRange
+labelSum : (⨁ (i : ι), ↥(Q i)) →ₗ[ZMod 2] ZMod 2 := DirectSum.toModule (ZMod 2) ι (ZMod 2) label
+onRange : ↥jointMap.range →ₗ[ZMod 2] ZMod 2 := labelSum ∘ₗ ↑e.symm
+glued : Z →ₗ[ZMod 2] ZMod 2
+hglued : glued ∘ₗ jointMap.range.subtype = onRange
+i : ι
+x : ↥(Q i)
+⊢ (DirectSum.coeLinearMap Q) ?m.424 = (DirectSum.coeLinearMap Q) ?m.412
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:53:37: error: Application type mismatch: The argument
+  (DirectSum.of ?m.417 i) ?m.423
+has type
+  ⨁ (i : ι), ?m.417 i
+but is expected to have type
+  ⨁ (i : ι), ↥(Q i)
+in the application
+  Exists.intro ((DirectSum.of ?m.417 i) ?m.423)
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:97:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:98:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:99:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:106:29: error: Application type mismatch: The argument
+  F.property
+has type
+  ↑F ∘ₗ S.subtype = f
+but is expected to have type
+  ?m.181 = ?m.182
+in the application
+  congrFun F.property
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:118:17: error(lean.unknownIdentifier): Unknown constant `Submodule.Quotient.eq_zero_iff_mem`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:120:29: error: Application type mismatch: The argument
+  hF0
+has type
+  F0 ∘ₗ S.subtype = f
+but is expected to have type
+  ?m.294 = ?m.295
+in the application
+  congrFun hF0
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:135:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (Module.Dual (ZMod 2) (W ⧸ S))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:95:45: error: unsolved goals
+W : Type u_1
+inst✝² : AddCommGroup W
+inst✝¹ : Module (ZMod 2) W
+inst✝ : Finite W
+s : ℕ
+S : Submodule (ZMod 2) W
+f : ↥S →ₗ[ZMod 2] ZMod 2
+hS : Module.finrank (ZMod 2) ↥S = s
+this✝¹ : Module.Finite (ZMod 2) W := Module.Finite.of_finite
+this✝ : Module.Finite (ZMod 2) (W ⧸ S) := inferInstance
+this : Fintype W := Fintype.ofFinite W
+F0 : W →ₗ[ZMod 2] ZMod 2 := ⋯.choose
+hF0 : F0 ∘ₗ S.subtype = f
+toDual : FunctionalExtensionFiber S f → Module.Dual (ZMod 2) (W ⧸ S) := fun F => S.liftQ (↑F - F0) ⋯
+fromDual : Module.Dual (ZMod 2) (W ⧸ S) → FunctionalExtensionFiber S f := fun G => ⟨F0 + G ∘ₗ S.mkQ, ⋯⟩
+hleft : Function.LeftInverse fromDual toDual
+hright : Function.RightInverse fromDual toDual
+e : FunctionalExtensionFiber S f ≃ Module.Dual (ZMod 2) (W ⧸ S) := Equiv.ofBijective toDual ⋯
+⊢ Fintype.card (FunctionalExtensionFiber S f) = 2 ^ (Module.finrank (ZMod 2) W - s)
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:126:28: warning: This simp argument is unused:
+  Submodule.liftQ_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fromDual, toDual, LinearMap.sub_apply, hF0, sub_add_cancel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:126:51: warning: This simp argument is unused:
+  LinearMap.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fromDual, toDual, Submodule.liftQ_apply, hF0, sub_add_cancel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:127:6: warning: This simp argument is unused:
+  hF0
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fromDual, toDual, Submodule.liftQ_apply, LinearMap.sub_apply, sub_add_cancel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:127:11: warning: This simp argument is unused:
+  sub_add_cancel
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fromDual, toDual, Submodule.liftQ_apply, LinearMap.sub_apply, hF0]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:131:28: warning: This simp argument is unused:
+  Submodule.liftQ_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fromDual, toDual, LinearMap.sub_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:131:51: warning: This simp argument is unused:
+  LinearMap.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fromDual, toDual, Submodule.liftQ_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
