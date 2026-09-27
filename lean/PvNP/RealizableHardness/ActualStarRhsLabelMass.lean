@@ -452,5 +452,202 @@ theorem selected_classRep_accept_rankGood_pos
       linarith
     simpa [law] using hpos
 
+/-- A question center is determined by its equation set and its transverse
+center, so there are only finitely many. -/
+instance questionCenterFinite {N m J t : Nat} {I : Instance N m} :
+    Finite (QuestionCenter I J t) := by
+  classical
+  haveI : Fintype I.RowId := inferInstance
+  haveI : Fintype (I.GlobalVar → ZMod 2) := inferInstance
+  haveI : Finite (Submodule (ZMod 2) (I.GlobalVar → ZMod 2)) := by
+    refine Finite.of_injective
+        (fun S : Submodule (ZMod 2) (I.GlobalVar → ZMod 2) =>
+          (S : Set (I.GlobalVar → ZMod 2))) ?_
+    intro S T hST
+    exact SetLike.coe_injective hST
+  refine Finite.of_injective
+      (fun q : QuestionCenter I J t => (q.U, q.K)) ?_
+  intro a b h
+  cases a
+  cases b
+  cases congrArg Prod.fst h
+  cases congrArg Prod.snd h
+  rfl
+
+noncomputable instance questionCenterFintype {N m J t : Nat} {I : Instance N m} :
+    Fintype (QuestionCenter I J t) :=
+  Fintype.ofFinite _
+
+/-- One drawn question center, then a class-representative star on that center. -/
+abbrev DrawnCenter {N m : Nat} (J t h : Nat) (I : Instance N m) :=
+  Σ q : QuestionCenter I J t, RepStar h q t
+
+/-- Uniform draw of a question center, then `classRepLaw` on the center that
+was drawn. -/
+noncomputable def drawnCenterLaw
+    {N m : Nat} (J t h : Nat) {I : Instance N m}
+    (hQ : Nonempty (QuestionCenter I J t))
+    (htd : t ≤ 2 * h)
+    (hdV : ∀ q : QuestionCenter I J t,
+      2 * h ≤ Module.finrank (ZMod 2) (transverseComplement q)) :
+    FiniteLaw (DrawnCenter J t h I) := by
+  classical
+  let Q := QuestionCenter I J t
+  have hcard : (Fintype.card Q : ℚ) ≠ 0 := by
+    exact_mod_cast (Fintype.card_ne_zero : Fintype.card Q ≠ 0)
+  let weight : ℚ := 1 / (Fintype.card Q : ℚ)
+  exact
+    { mass := fun s =>
+        weight * (classRepLaw h s.1 htd (hdV s.1)).mass s.2
+      nonneg := fun s =>
+        mul_nonneg (div_nonneg (by norm_num) (by exact_mod_cast
+          (Nat.zero_le (Fintype.card Q)))) ((classRepLaw h s.1 htd (hdV s.1)).nonneg s.2)
+      normalized := by
+        have huniv : (Finset.univ : Finset (DrawnCenter J t h I)) =
+            (Finset.univ : Finset Q).sigma (fun _ => Finset.univ) := by
+          ext s
+          simp [DrawnCenter]
+        rw [huniv, Finset.sum_sigma]
+        have hinner : ∀ q : Q,
+            ∑ p : RepStar h q t, weight * (classRepLaw h q htd (hdV q)).mass p = weight := by
+          intro q
+          rw [← Finset.mul_sum, mass_sum (classRepLaw h q htd (hdV q)), mul_one]
+        simp only [hinner]
+        simp [weight, Finset.sum_const, Finset.card_univ, nsmul_eq_mul] }
+
+/-- The frozen two-leaf inequality after the question center is drawn by the
+law instead of supplied. `hQ` says the population is nonempty; the law then
+draws uniformly from that population. -/
+theorem selected_drawnCenter_accept_rankGood_pos
+    {N nRows L A : Nat} {sourceHMin : Nat → Nat}
+    {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (hQ : Nonempty (QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))) :
+    let hh := hBlock L nRows
+    let t := leafT nRows hh
+    let E := badExponent nRows hh
+    ∃ r : ℚ,
+      r < successMargin E / 2 ∧
+        eventMass (drawnCenterLaw (blocks A hh) t hh hQ
+            (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+            (fun q => selected_leafRank_le_complement hA hsel q))
+          (Finset.univ.filter fun s : DrawnCenter (blocks A hh) t hh I =>
+            classRepAccepts hh s.1 s.2 ∧ jointlyDirect s.2.1) ≥
+          eventMass (drawnCenterLaw (blocks A hh) t hh hQ
+              (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+              (fun q => selected_leafRank_le_complement hA hsel q))
+            (Finset.univ.filter fun s : DrawnCenter (blocks A hh) t hh I =>
+              classRepAccepts hh s.1 s.2) - r ∧
+        0 < eventMass (drawnCenterLaw (blocks A hh) t hh hQ
+            (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+            (fun q => selected_leafRank_le_complement hA hsel q))
+          (Finset.univ.filter fun s : DrawnCenter (blocks A hh) t hh I =>
+            classRepAccepts hh s.1 s.2 ∧ jointlyDirect s.2.1) := by
+  intro hh t E
+  classical
+  let J := blocks A hh
+  let Q := QuestionCenter I J t
+  let htd := selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel
+  let hdV : ∀ q : Q, 2 * hh ≤ Module.finrank (ZMod 2) (transverseComplement q) :=
+    fun q => selected_leafRank_le_complement hA hsel q
+  let law := drawnCenterLaw (blocks A hh) t hh hQ htd hdV
+  let weight : ℚ := 1 / (Fintype.card Q : ℚ)
+  let μ (q : Q) := classRepLaw hh q htd (hdV q)
+  let inter (q : Q) := Finset.univ.filter fun p : RepStar hh q t =>
+    classRepAccepts hh q p ∧ jointlyDirect p.1
+  let acc (q : Q) := Finset.univ.filter fun p : RepStar hh q t =>
+    classRepAccepts hh q p
+  have hacc1q (q : Q) : eventMass (μ q) (acc q) = 1 := by
+    have huniv : acc q = Finset.univ := by
+      refine Finset.ext fun p => ?_
+      refine ⟨fun _ => Finset.mem_univ _, fun _ => ?_⟩
+      exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, classRepAccepts_all hh q p⟩
+    rw [huniv]
+    exact eventMass_univ (μ q)
+  have hgt (q : Q) :
+      eventMass (μ q) (inter q) > 1 - successMargin E / 2 := by
+    obtain ⟨rq, hrq, hineq, _hpos⟩ :=
+      selected_classRep_accept_rankGood_pos hA hsel q
+    have hacc : eventMass (μ q) (acc q) = 1 := hacc1q q
+    have hineq' :
+        eventMass (μ q) (inter q) ≥ 1 - rq := by
+      have hineq1 := hineq
+      rw [hacc] at hineq1
+      simpa [μ, inter, acc, hh, t, E, J, Q, htd, hdV] using hineq1
+    have hgap : 1 - successMargin E / 2 < 1 - rq := by
+      have := hrq
+      linarith
+    exact lt_of_lt_of_le hgap hineq'
+  have hsplitI :
+      Finset.univ.filter (fun s : DrawnCenter (blocks A hh) t hh I =>
+        classRepAccepts hh s.1 s.2 ∧ jointlyDirect s.2.1) =
+        (Finset.univ : Finset Q).sigma (fun q => inter q) := by
+    ext s
+    simp [DrawnCenter, inter]
+  have hsplitA :
+      Finset.univ.filter (fun s : DrawnCenter (blocks A hh) t hh I => classRepAccepts hh s.1 s.2) =
+        (Finset.univ : Finset Q).sigma (fun q => acc q) := by
+    ext s
+    simp [DrawnCenter, acc]
+  have hmass (q : Q) (p : RepStar hh q t) :
+      law.mass ⟨q, p⟩ = weight * (μ q).mass p := by
+    unfold law drawnCenterLaw weight μ
+    rfl
+  have havgI : eventMass law
+      (Finset.univ.filter fun s : DrawnCenter (blocks A hh) t hh I =>
+        classRepAccepts hh s.1 s.2 ∧ jointlyDirect s.2.1) =
+      ∑ q : Q, weight * eventMass (μ q) (inter q) := by
+    unfold eventMass
+    rw [hsplitI, Finset.sum_sigma]
+    refine Finset.sum_congr rfl ?_
+    intro q _
+    rw [Finset.sum_congr rfl (fun p _ => hmass q p), ← Finset.mul_sum]
+  have havgA : eventMass law
+      (Finset.univ.filter fun s : DrawnCenter (blocks A hh) t hh I => classRepAccepts hh s.1 s.2) =
+      ∑ q : Q, weight * eventMass (μ q) (acc q) := by
+    unfold eventMass
+    rw [hsplitA, Finset.sum_sigma]
+    refine Finset.sum_congr rfl ?_
+    intro q _
+    rw [Finset.sum_congr rfl (fun p _ => hmass q p), ← Finset.mul_sum]
+  have hacc1 : eventMass law
+      (Finset.univ.filter fun s : DrawnCenter (blocks A hh) t hh I => classRepAccepts hh s.1 s.2) = 1 := by
+    rw [havgA]
+    simp only [hacc1q, mul_one]
+    have hcard : (Fintype.card Q : ℚ) ≠ 0 := by
+      exact_mod_cast (Fintype.card_ne_zero : Fintype.card Q ≠ 0)
+    simp [weight, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  have hbelow : ∑ q : Q, weight * (1 - successMargin E / 2) = 1 - successMargin E / 2 := by
+    have hcard : (Fintype.card Q : ℚ) ≠ 0 := by
+      exact_mod_cast (Fintype.card_ne_zero : Fintype.card Q ≠ 0)
+    simp [weight, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  have hIgt : eventMass law
+      (Finset.univ.filter fun s : DrawnCenter (blocks A hh) t hh I =>
+        classRepAccepts hh s.1 s.2 ∧ jointlyDirect s.2.1) >
+      1 - successMargin E / 2 := by
+    rw [havgI]
+    have hsum : ∑ q : Q, weight * eventMass (μ q) (inter q) >
+        ∑ q : Q, weight * (1 - successMargin E / 2) := by
+      refine Finset.sum_lt_sum ?_ ?_
+      · intro q _
+        exact mul_le_mul_of_nonneg_left (le_of_lt (hgt q))
+          (div_nonneg (by norm_num) (by exact_mod_cast (Nat.zero_le (Fintype.card Q))))
+      · have hposQ : 0 < Fintype.card Q := Fintype.card_pos_iff.mpr hQ
+        obtain ⟨q0⟩ := hQ
+        refine ⟨q0, Finset.mem_univ _, ?_⟩
+        exact mul_lt_mul_of_pos_left (hgt q0)
+          (div_pos (by norm_num) (by exact_mod_cast hposQ))
+    rw [hbelow] at hsum
+    exact hsum
+  refine ⟨1 - eventMass law (Finset.univ.filter fun s : DrawnCenter (blocks A hh) t hh I =>
+      classRepAccepts hh s.1 s.2 ∧ jointlyDirect s.2.1), ?_, ?_, ?_⟩
+  · linarith [hIgt]
+  · rw [hacc1]
+    linarith
+  · have hhalf := successMargin_half_lt_one E
+    linarith [hIgt, hhalf]
+
 end
 end PvNP.RealizableHardness.ActualStarRhsLabelMass
