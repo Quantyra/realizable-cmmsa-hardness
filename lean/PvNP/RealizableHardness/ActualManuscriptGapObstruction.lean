@@ -9,10 +9,13 @@ value is at least `2`, so a second uniform symbol fits in `σ_L` times a
 one-hot budget.
 
 A fixed positive CSP-value ceiling misses the manuscript HN endpoint
-`(8 σ_L)^{m+1} ζ ≤ 5/8` once `L` is large. That is the numerical room a
-soundness proof has to beat. This file does not construct that soundness,
-does not construct `MapReducesVia`, and does not prove Theorem 1 or
-Corollary 2.
+`(8 σ_L)^{m+1} ζ ≤ 5/8` once `L` is large. The soundness theorem has to
+beat the shrinking ceiling
+`ζ ≤ (5/8) / (8 σ_L)^{m+1}`.
+The manuscript gap-root bound `ζ ≤ gapRoot^{-(m+1)}` is a stronger
+sufficient condition at the same endpoint. This file does not construct
+that soundness, does not construct `MapReducesVia`, and does not prove
+Theorem 1 or Corollary 2.
 -/
 namespace PvNP.RealizableHardness.ActualManuscriptGapObstruction
 
@@ -138,5 +141,127 @@ theorem constant_csp_ceiling_misses_manuscript_hn (c : Rat) (hc : 0 < c) :
             (ActualCertifiedManuscriptParameters.certifiedM L + 1) * c :=
         mul_le_mul_of_nonneg_right hpow hc.le
   exact not_le_of_gt hbig
+
+/-- The inequality a manuscript-zeta soundness proof has to beat.
+`witness_mass_le_three_quarters` asks for `(8 ρ)^{arity+1} ζ ≤ 5/8`
+at `ρ = manuscriptSigma` and arity `certifiedM`. -/
+theorem manuscript_hn_zeta_ceiling_meets_endpoint
+    (L : Nat) (zeta : Rat)
+    (hbase : 0 < (8 : Rat) * (manuscriptSigma L : Rat))
+    (hz : zeta ≤ (5 : Rat) / 8 /
+        (((8 : Rat) * (manuscriptSigma L : Rat)) ^
+          (ActualCertifiedManuscriptParameters.certifiedM L + 1))) :
+    ((8 : Rat) * (manuscriptSigma L : Rat)) ^
+        (ActualCertifiedManuscriptParameters.certifiedM L + 1) * zeta
+      ≤ (5 : Rat) / 8 := by
+  set base := ((8 : Rat) * (manuscriptSigma L : Rat)) ^
+    (ActualCertifiedManuscriptParameters.certifiedM L + 1)
+  have hden : 0 < base := pow_pos hbase _
+  have hmul : zeta * base ≤ (5 : Rat) / 8 := (le_div_iff₀ hden).mp hz
+  simpa [base, mul_comm] using hmul
+
+/-- That ceiling is eventually smaller than every positive constant.
+This is the same numerical room as `constant_csp_ceiling_misses_manuscript_hn`. -/
+theorem manuscript_hn_zeta_ceiling_lt_constant (c : Rat) (hc : 0 < c) :
+    ∃ L0, ∀ L, L0 ≤ L →
+      (5 : Rat) / 8 /
+        (((8 : Rat) * (manuscriptSigma L : Rat)) ^
+          (ActualCertifiedManuscriptParameters.certifiedM L + 1))
+        < c := by
+  obtain ⟨L0, hL0⟩ := constant_csp_ceiling_misses_manuscript_hn c hc
+  refine ⟨L0, ?_⟩
+  intro L hL
+  set base := ((8 : Rat) * (manuscriptSigma L : Rat)) ^
+    (ActualCertifiedManuscriptParameters.certifiedM L + 1)
+  have hgt : (5 : Rat) / 8 < base * c := not_le.mp (hL0 L hL)
+  have hpos : 0 < base := by
+    have hprod : 0 < base * c := lt_trans (by norm_num : (0 : Rat) < 5 / 8) hgt
+    exact (mul_pos_iff_of_pos_right hc).mp hprod
+  exact (div_lt_iff₀ hpos).mpr (by simpa [base, mul_comm] using hgt)
+
+/-- `ζ ≤ gapRoot^{-(m+1)}` meets the same endpoint for every large `L`.
+It is stronger than the sharp ceiling: `8 σ_L = gapRoot / 16`, so the
+product is at most `16^{-(m+1)}`. -/
+theorem manuscript_gapRoot_zeta_meets_hn_endpoint :
+    ∃ L0, ∀ L, L0 ≤ L → ∀ zeta : Rat,
+      zeta ≤
+        ((ActualCmmsaParameterReconciliation.gapRoot L
+            (ActualCertifiedManuscriptParameters.certifiedM L) : Rat) ^
+          (ActualCertifiedManuscriptParameters.certifiedM L + 1))⁻¹ →
+      ((8 : Rat) * (manuscriptSigma L : Rat)) ^
+          (ActualCertifiedManuscriptParameters.certifiedM L + 1) * zeta
+        ≤ (5 : Rat) / 8 := by
+  obtain ⟨L0, hL0⟩ :=
+    ActualCertifiedManuscriptParameters.certified_parameters_eventually 256
+  refine ⟨L0, ?_⟩
+  intro L hL zeta hz
+  obtain ⟨m, _hsel, hm256, hAd, hM, hσ⟩ := hL0 L hL
+  have hmpos : 0 < m := by omega
+  have hdiv : m ∣ ActualCmmsaParameterReconciliation.hBlock L m :=
+    hAd.2.2.2.2.2.2.1
+  have h8 : 8 ≤ ActualCmmsaParameterReconciliation.sigmaBase L m :=
+    hAd.2.2.2.2.2.2.2.2
+  have hrat :=
+    ActualCertifiedManuscriptParameters.eight_sigmaFinal_rat hmpos hdiv h8
+  have hσeq : manuscriptSigma L =
+      ActualCmmsaParameterReconciliation.sigmaFinal L m := by
+    simpa [manuscriptSigma] using hσ
+  have hMeq : ActualCertifiedManuscriptParameters.certifiedM L = m := hM
+  have hbase :
+      (8 : Rat) * (manuscriptSigma L : Rat) =
+        (ActualCmmsaParameterReconciliation.gapRoot L m : Rat) / 16 := by
+    rw [hσeq]
+    have hcast :
+        (8 : Rat) * (ActualCmmsaParameterReconciliation.sigmaFinal L m : Rat) =
+          (8 * ActualCmmsaParameterReconciliation.sigmaFinal L m : Rat) := by
+      norm_cast
+    rw [hcast, hrat]
+  obtain ⟨he7, _⟩ :=
+    ActualCertifiedManuscriptParameters.sigmaFinal_two_pow hmpos hdiv h8
+  have hgap_nat :
+      2 ^ 7 ≤ ActualCmmsaParameterReconciliation.gapRoot L m := by
+    simpa [ActualCmmsaParameterReconciliation.gapRoot] using
+      Nat.pow_le_pow_right (by decide : 0 < 2) he7
+  set g : Rat := (ActualCmmsaParameterReconciliation.gapRoot L m : Rat)
+  have hg : (0 : Rat) < g := by
+    have h128 : (0 : Nat) < ActualCmmsaParameterReconciliation.gapRoot L m :=
+      lt_of_lt_of_le (by decide : 0 < 128) hgap_nat
+    have hcast :
+        (0 : Rat) < (ActualCmmsaParameterReconciliation.gapRoot L m : Rat) :=
+      Nat.cast_pos.mpr h128
+    simpa [g] using hcast
+  have hz' : zeta ≤ (g ^ (m + 1))⁻¹ := by
+    rw [hMeq] at hz
+    simpa [g] using hz
+  have hnonneg : 0 ≤ (g / 16) ^ (m + 1) := by positivity
+  have hcancel :
+      (g / 16) ^ (m + 1) * (g ^ (m + 1))⁻¹ = ((1 : Rat) / 16) ^ (m + 1) := by
+    have hg0 : g ≠ 0 := ne_of_gt hg
+    calc
+      (g / 16) ^ (m + 1) * (g ^ (m + 1))⁻¹
+          = (g ^ (m + 1) / 16 ^ (m + 1)) * (g ^ (m + 1))⁻¹ := by rw [div_pow]
+      _ = (g ^ (m + 1) * (g ^ (m + 1))⁻¹) / 16 ^ (m + 1) := by
+        rw [div_mul_eq_mul_div]
+      _ = 1 / 16 ^ (m + 1) := by
+        rw [mul_inv_cancel₀ (pow_ne_zero _ hg0)]
+      _ = ((1 : Rat) / 16) ^ (m + 1) := by
+        rw [one_div, ← inv_pow, one_div]
+  have hprod :
+      ((8 : Rat) * (manuscriptSigma L : Rat)) ^ (m + 1) * zeta ≤
+        ((1 : Rat) / 16) ^ (m + 1) := by
+    calc
+      ((8 : Rat) * (manuscriptSigma L : Rat)) ^ (m + 1) * zeta
+          = (g / 16) ^ (m + 1) * zeta := by rw [hbase]
+      _ ≤ (g / 16) ^ (m + 1) * (g ^ (m + 1))⁻¹ :=
+        mul_le_mul_of_nonneg_left hz' hnonneg
+      _ = ((1 : Rat) / 16) ^ (m + 1) := hcancel
+  have hsmall : ((1 : Rat) / 16) ^ (m + 1) ≤ (5 : Rat) / 8 := by
+    have hle : ((1 : Rat) / 16) ^ (m + 1) ≤ (1 : Rat) / 16 := by
+      simpa [pow_one] using
+        (pow_le_pow_of_le_one (by norm_num : (0 : Rat) ≤ 1 / 16)
+          (by norm_num : (1 : Rat) / 16 ≤ 1) (Nat.le_add_left 1 m))
+    linarith
+  rw [hMeq]
+  exact hprod.trans hsmall
 
 end PvNP.RealizableHardness.ActualManuscriptGapObstruction

@@ -110,6 +110,37 @@ private theorem sigmaFinal_eq_pow {L m : Nat} (hm : 0 < m)
   have hshift : e - 6 = (e - 7) + 1 := by omega
   rw [hshift, pow_succ, Nat.mul_div_cancel _ (by decide : 0 < 2)]
 
+/-- Admissible blocks satisfy `σ_final = 2^(e-7)` at `e = 2 (h/m) (m-1)`. -/
+theorem sigmaFinal_two_pow {L m : Nat}
+    (hm : 0 < m) (hdiv : m ∣ hBlock L m) (h8 : 8 ≤ sigmaBase L m) :
+    7 ≤ 2 * (hBlock L m / m) * (m - 1) ∧
+      sigmaFinal L m =
+        2 ^ (2 * (hBlock L m / m) * (m - 1) - 7) := by
+  simpa using sigmaFinal_eq_pow (L := L) (m := m) hm hdiv h8
+
+/-- At those blocks, `8 σ_final = gapRoot / 16`. -/
+theorem sixteen_mul_eight_sigmaFinal_eq_gapRoot {L m : Nat}
+    (hm : 0 < m) (hdiv : m ∣ hBlock L m) (h8 : 8 ≤ sigmaBase L m) :
+    16 * (8 * sigmaFinal L m) = gapRoot L m := by
+  obtain ⟨he7, hpow⟩ := sigmaFinal_two_pow hm hdiv h8
+  set e := 2 * (hBlock L m / m) * (m - 1)
+  have hgap : gapRoot L m = 2 ^ e := rfl
+  rw [hpow, hgap]
+  have h8pow : (8 : Nat) = 2 ^ 3 := by decide
+  have h16pow : (16 : Nat) = 2 ^ 4 := by decide
+  rw [h8pow, h16pow, ← pow_add, ← pow_add]
+  congr 1
+  omega
+
+theorem eight_sigmaFinal_rat {L m : Nat}
+    (hm : 0 < m) (hdiv : m ∣ hBlock L m) (h8 : 8 ≤ sigmaBase L m) :
+    (8 * sigmaFinal L m : Rat) = (gapRoot L m : Rat) / 16 := by
+  have hnat := sixteen_mul_eight_sigmaFinal_eq_gapRoot hm hdiv h8
+  have hcast : (16 : Rat) * (8 * sigmaFinal L m : Rat) = (gapRoot L m : Rat) := by
+    exact_mod_cast hnat
+  rw [eq_div_iff (by norm_num : (16 : Rat) ≠ 0), mul_comm]
+  exact hcast
+
 theorem certifiedSigma_pos_le_log :
     ∃ L0, ∀ L, L0 ≤ L →
       0 < certifiedSigma L ∧ log2nat (certifiedSigma L) ≤ log2nat L := by
