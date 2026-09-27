@@ -1,4 +1,4 @@
-# Accepted-good-mass inequality for starAcceptsCenter
+# Accepted-good-mass inequality for the labelled transverse star
 
 Date: 2026-09-26. Theorem 1 and Corollary 2 are not claimed.
 The increment is not route-final. Full CMMSA stays partial.
@@ -7,7 +7,7 @@ or conditional wrapper is opened.
 
 ## Inequality
 
-`Pr[starAcceptsCenter ∧ jointlyDirect] ≥ Pr[starAcceptsCenter] − r`
+`Pr[labelledTransverseAccepts ∧ jointlyDirect] ≥ Pr[labelledTransverseAccepts] − r`
 with `r < S/2`, where `S = 2^{-E}` and
 `E = badExponent nRows (hBlock L nRows)`, at
 `selector (fun n => max (sourceHMin n) (n + 2)) L = nRows`,
@@ -15,31 +15,29 @@ with `r < S/2`, where `S = 2^{-E}` and
 and two leaves.
 
 Lean theorem:
-`selected_transverseStar_starAcceptsCenter_rankGood`.
+`selected_labelledTransverse_accepts_rankGood`.
 
 ## Same experiment
 
-`starLaw` on `transverseComplement` of one question. `centerLaw` draws
-the center. The two leaves are independent uniform extensions of that
-center, presented as leaves of the question. `transverseStarAcceptsCenter` calls `starAcceptsCenter` on the presented
-leaves of both extensions. `transverseStarAcceptsCenter_imp_equal` proves
-acceptance implies those extensions are equal, so the event is contained
-in the equal-extension event. Rank-good is `jointlyDirect` of the same
-draw. The bad-star event is the negation of `jointlyDirect`.
+`labelledTransverseLaw` on `transverseComplement` of one question.
+The geometry is one `starLaw` draw: `centerLaw` draws the center and the
+two leaves are independent uniform extensions. The same draw carries a
+center functional and one functional on each leaf. `labelledTransverseAccepts`
+restricts each of those leaf functionals along that leaf's inclusion of the
+center and requires equality with the drawn center functional. Rank-good is
+`jointlyDirect` of that geometry. The bad-star event is its negation.
 
-The rank-good intersection is empty. The unconditional equal-extension
-mass is `1 / gaussian(2 * J − t, leafK)`, and acceptance is at most that
-mass. `selected_extensionCount_gt_halfMargin` proves the count is strictly
-larger than `2^{E+1}`, so the acceptance mass is strictly below `S/2`.
-The witness `r` is the acceptance mass. The fixed-star conditional
-`2^{-4 (h − h / bOf nRows)}` is not this probability.
+`r` is that bad-star mass. `starLaw_bad_mass_lt_threshold`, discharged at
+these parameters, puts it strictly below `S/2`. The fixed-star conditional
+`2^{-4 (h − h / bOf nRows)}` is not this acceptance probability.
+`transverseStarAcceptsCenter` uses one canonical label and is not this claim.
 
 ## Build
 
 `lake build --old PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks`
 on `quantyra-lean-builder-01` exited 0 (3272 jobs) at
-`b647f47feec70d8b1c8f11e040c842ba86022b70`. Receipt:
-`evidence/gcp/satellite/gcp_actual_star_starAcceptsCenter_b647f47`.
+`4a9dc01011265dcce62710eeb86b6a3136264939`. Receipt:
+`evidence/gcp/satellite/gcp_actual_star_labelledTransverse_4a9dc01`.
 Axioms: `propext`, `Classical.choice`, `Quot.sound`. No `sorry`.
 
 ## Three-lens
@@ -47,9 +45,9 @@ Axioms: `propext`, `Classical.choice`, `Quot.sound`. No `sorry`.
 | Lens | Verdict |
 |------|---------|
 | Build/audit | GO |
-| Proof-adversarial | GO-WITH-NOTES |
+| Proof-adversarial | GO |
 | Complexity | GO-WITH-NOTES |
-| Non-claims | GO-WITH-NOTES |
+| Non-claims | GO |
 
 The table is `lean/reviews/2026-09-26-accepted-good-mass-three-lens.md`.
 The increment is not route-final.
