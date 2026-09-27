@@ -13,11 +13,21 @@ open PvNP.RealizableHardness.ActualFpMapInterface
 #check manuscript_vanishing_gap_excludes_sat_floor
 #check every_fp_manuscript_map_no_sat_vanishes
 #check threeSat_in_P_of_fp_map_if_yes_in_P
+#check budget_one_sigma_covers_every_assignment
+
+example {L : Nat} (i : PvNP.RealizableHardness.CMMSACodec.Instance L)
+    (hσ : 1 ≤ ActualHeadlineParameters.manuscriptSigma L)
+    (hb : i.data.budget = 1)
+    (x : Fin i.data.weights.length → Bool) :
+    i.data.cost x ≤
+      (ActualHeadlineParameters.manuscriptSigma L : Rat) * i.data.budget :=
+  budget_one_sigma_covers_every_assignment i hσ hb x
 
 #print axioms manuscript_fp_map_forbids_bounded_full_sat
 #print axioms manuscript_fp_interface_obstruction_eventual
 #print axioms manuscript_vanishing_gap_excludes_sat_floor
 #print axioms every_fp_manuscript_map_no_sat_vanishes
 #print axioms threeSat_in_P_of_fp_map_if_yes_in_P
+#print axioms budget_one_sigma_covers_every_assignment
 
 end PvNP.RealizableHardness.ActualFpMapInterfaceChecks

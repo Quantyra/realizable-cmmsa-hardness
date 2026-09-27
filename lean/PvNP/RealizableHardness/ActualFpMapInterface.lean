@@ -204,5 +204,38 @@ theorem threeSat_in_P_of_fp_map_if_yes_in_P
       exact Set.disjoint_left.mp target.disjoint (by simpa [target] using hz) hfno
   simpa [heq] using hpre
 
+/-- At budget `1` and `σ_L ≥ 1`, every coordinate assignment is inside the
+no-side budget. An FP map that uses this budget has to push every
+assignment's satisfaction strictly below `manuscriptGamma`. -/
+theorem budget_one_sigma_covers_every_assignment
+    {L : Nat} (i : Instance L)
+    (hσ : 1 ≤ manuscriptSigma L)
+    (hb : i.data.budget = 1)
+    (x : Fin i.data.weights.length → Bool) :
+    i.data.cost x ≤ (manuscriptSigma L : Rat) * i.data.budget := by
+  have hvalid := Instance.valid i
+  have hsumW : i.data.weights.sum = 1 := hvalid.2.1
+  have hpos : ∀ w ∈ i.data.weights, 0 < w := hvalid.1
+  have hle : i.data.cost x ≤ ∑ v, i.data.coordinateWeights v := by
+    unfold Data.cost weight
+    refine Finset.sum_le_sum ?_
+    intro v _
+    by_cases hx : x v
+    · simp [hx]
+    · have hw : 0 < i.data.coordinateWeights v :=
+        hpos _ (List.get_mem i.data.weights v)
+      simp [hx]
+      exact le_of_lt hw
+  have hget : ∑ v, i.data.coordinateWeights v = i.data.weights.sum := by
+    simp [Data.coordinateWeights, List.sum_ofFn, List.ofFn_get]
+  have hcost : i.data.cost x ≤ 1 := by
+    calc
+      i.data.cost x ≤ ∑ v, i.data.coordinateWeights v := hle
+      _ = i.data.weights.sum := hget
+      _ = 1 := hsumW
+  rw [hb]
+  have hσ1 : (1 : Rat) ≤ (manuscriptSigma L : Rat) := Nat.one_le_cast.mpr hσ
+  exact hcost.trans (by simpa using hσ1)
+
 end
 end PvNP.RealizableHardness.ActualFpMapInterface
