@@ -204,9 +204,9 @@ theorem starLaw_bad_mass_lt_threshold
   rw [huniform]
   simpa [s] using hquot
 
-/-- Exponent comparison for the uniform label law on one fixed equal-domain
-star. `4 * (h - h / bOf m)` is `2 * leafT m h`. It sits strictly below
-`badExponent m h + 1`, so `2^{-4(h - h/bOf m)} > 2^{-(badExponent m h + 1)}`. -/
+/-- Exponent comparison on one fixed equal-domain star.
+`4 * (h - h / bOf m) = 2 * leafT m h` is strictly below `badExponent m h + 1`.
+This does not lower-bound acceptance on the joint source law. -/
 theorem agreementExponent_lt_badExponent
     {m h : Nat} (hm : 256 ≤ m) (hdiv : bOf m ∣ h) (hq : 0 < h / bOf m) :
     4 * (h - h / bOf m) < badExponent m h + 1 := by
