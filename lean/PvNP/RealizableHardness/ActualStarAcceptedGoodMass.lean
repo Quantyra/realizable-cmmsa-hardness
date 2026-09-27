@@ -10,17 +10,15 @@ import PvNP.RealizableHardness.ActualStarAcceptance
 import PvNP.RealizableHardness.ActualPredrawLeafTable
 import PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
 
-/-! Equal-extension mass on one joint two-leaf source law.
+/-! Accepted-good mass on one joint two-leaf source law.
 
-`selected_transverseStar_equalLeaf_accepted_rankGood` states
-`Pr[equalLeaf ∧ jointlyDirect] ≥ Pr[equalLeaf] − r` with `r < S/2`.
-The sample space is `starLaw` on the transverse complement of one question:
-`centerLaw` draws the center and the two leaves are independent uniform
-extensions of that center. `jointlyDirect` is the rank-good event of that
-draw. The bad-star event of the same draw is its negation.
-The mass event is equal extensions, not `starAcceptsCenter`.
-`leafVertex_rel_sameH_iff_domain` is a separate fact: same-question
-`LeafVertex.Rel` is equal domains. It is not the mass event.
+`selected_labelledTransverse_accepts_rankGood` is the claim. Its sample is
+`starLaw` on the transverse complement of one question, together with a
+center functional and a center-restriction for each of the two drawn
+leaves. Acceptance is the source `accepts` test on both leaves. Rank-good
+is `jointlyDirect` of that same geometry, and the bad-star event is its
+negation. `transverseStarAcceptsCenter` uses one canonical label and is
+not this claim.
 
 This file does not prove Theorem 1, Corollary 2, or an `FP` reduction.
 -/
@@ -1081,6 +1079,324 @@ theorem selected_transverseStar_starAcceptsCenter_rankGood
   refine ⟨eventMass law acc, hltS, ?_⟩
   rw [hgood0]
   linarith
+
+/-- On one probability space, accepted rank-good mass is at least acceptance
+minus the bad-star mass. -/
+lemma eventMass_accept_rankGood_ge
+    {Omega : Type*} [Fintype Omega] (mu : FiniteLaw Omega)
+    (accept rankGood : Omega → Prop) :
+    eventMass mu (Finset.univ.filter fun z => accept z ∧ rankGood z) ≥
+      eventMass mu (Finset.univ.filter accept) -
+        eventMass mu (Finset.univ.filter fun z => ¬ rankGood z) := by
+  classical
+  let A := Finset.univ.filter accept
+  let G := Finset.univ.filter fun z => accept z ∧ rankGood z
+  let B := Finset.univ.filter fun z => accept z ∧ ¬ rankGood z
+  let Bad := Finset.univ.filter fun z => ¬ rankGood z
+  have hGB : Disjoint G B := by
+    rw [Finset.disjoint_left]
+    intro z hzG hzB
+    have hG := (Finset.mem_filter.mp hzG).2
+    have hB := (Finset.mem_filter.mp hzB).2
+    exact hB.2 hG.2
+  have hunion : G ∪ B = A := by
+    ext z
+    constructor
+    · intro hz
+      rcases Finset.mem_union.mp hz with hzG | hzB
+      · exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hzG).2.1⟩
+      · exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hzB).2.1⟩
+    · intro hzA
+      have ha := (Finset.mem_filter.mp hzA).2
+      by_cases hg : rankGood z
+      · exact Finset.mem_union.mpr (Or.inl (Finset.mem_filter.mpr ⟨Finset.mem_univ _, ha, hg⟩))
+      · exact Finset.mem_union.mpr (Or.inr (Finset.mem_filter.mpr ⟨Finset.mem_univ _, ha, hg⟩))
+  have hBsub : B ⊆ Bad := by
+    intro z hz
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hz).2.2⟩
+  have hsplit : eventMass mu A = eventMass mu G + eventMass mu B := by
+    unfold eventMass
+    have hsum := Finset.sum_union (f := mu.mass) hGB
+    simpa [hunion] using hsum
+  have hBle : eventMass mu B ≤ eventMass mu Bad := eventMass_mono mu hBsub
+  linarith
+
+/-- A geometry event has the same mass after an independent uniform label draw. -/
+lemma uniform_fst_eventMass
+    {G L : Type*} [Fintype G] [Fintype L] [Nonempty G] [Nonempty L]
+    (p : G → Prop) :
+    eventMass (uniformLaw (G × L))
+        (Finset.univ.filter fun w : G × L => p w.1) =
+      eventMass (uniformLaw G) (Finset.univ.filter p) := by
+  classical
+  have hprod : (Finset.univ.filter fun w : G × L => p w.1) =
+      (Finset.univ.filter p) ×ˢ (Finset.univ : Finset L) := by
+    ext w
+    simp [Finset.mem_product]
+  have hcard : ((Finset.univ.filter fun w : G × L => p w.1).card : ℚ) =
+      ((Finset.univ.filter p).card : ℚ) * Fintype.card L := by
+    rw [hprod, Finset.card_product, Finset.card_univ]
+    norm_cast
+  have htot : (Fintype.card (G × L) : ℚ) =
+      (Fintype.card G : ℚ) * Fintype.card L := by
+    rw [Fintype.card_prod]
+    norm_cast
+  unfold eventMass
+  rw [Finset.sum_congr rfl (fun w _ => uniformLaw_apply (G × L) w),
+    Finset.sum_const, nsmul_eq_mul, mul_one_div, hcard, htot]
+  rw [Finset.sum_congr rfl (fun g _ => uniformLaw_apply G g),
+    Finset.sum_const, nsmul_eq_mul, mul_one_div]
+  field_simp
+
+/-- Center functional read in one basis of the drawn center. The basis is the
+coordinate chart; the value `c` is the drawn label. -/
+noncomputable def drawnCenterMap (U : Grass V t) (c : Fin t → ZMod 2) :
+    U.val →ₗ[ZMod 2] ZMod 2 :=
+  if h : 0 < t then
+    haveI : Module.Finite (ZMod 2) U.val :=
+      Module.finite_of_finrank_pos (by rw [U.property]; exact h)
+    (Module.finBasisOfFinrankEq (ZMod 2) U.val U.property).constr (ZMod 2) c
+  else
+    0
+
+/-- Leaf functional read in one basis of that drawn leaf. -/
+noncomputable def drawnLeafMap (L : Grass V d) (c : Fin d → ZMod 2) :
+    L.val →ₗ[ZMod 2] ZMod 2 :=
+  if h : 0 < d then
+    haveI : Module.Finite (ZMod 2) L.val :=
+      Module.finite_of_finrank_pos (by rw [L.property]; exact h)
+    (Module.finBasisOfFinrankEq (ZMod 2) L.val L.property).constr (ZMod 2) c
+  else
+    0
+
+/-- Drawn center label and one functional label for every leaf. -/
+abbrev LabelPack (t d m : Nat) := (Fin t → ZMod 2) × (Fin m → Fin d → ZMod 2)
+
+/-- One `starLaw` geometry together with labels drawn in that same experiment. -/
+abbrev LabelledTransverse (t d m : Nat) :=
+  StarTuple (V := V) t d m × LabelPack t d m
+
+/-- Source `accepts` test for the drawn labels. For each drawn leaf, the leaf
+functional restricts along that leaf's inclusion of the center and equals the
+drawn center functional. Both leaves are tested. Equality of the two
+extensions is not a hypothesis. -/
+def labelledTransverseAccepts (w : LabelledTransverse (V := V) t d m) : Prop :=
+  ∀ i,
+    (drawnLeafMap (V := V) (w.1.2 i).val (w.2.2 i)).comp
+        (Submodule.inclusion (w.1.2 i).property) =
+      drawnCenterMap (V := V) w.1.1 w.2.1
+
+/-- Uniform law on one star geometry and its drawn center and leaf labels. -/
+noncomputable def labelledTransverseLaw (htd : t ≤ d)
+    (hdV : d ≤ Module.finrank (ZMod 2) V) :
+    FiniteLaw (LabelledTransverse (V := V) t d m) := by
+  classical
+  have hcenter : 0 < Fintype.card (Grass V t) := by
+    rw [card_grass]
+    exact gaussian_pos (le_trans htd hdV)
+  let U : Grass V t := Classical.choice (Fintype.card_pos_iff.mp hcenter)
+  haveI : Nonempty (Fin m → Extension U d) :=
+    ⟨fun _ => Classical.choice (extension_nonempty U htd hdV)⟩
+  haveI : Nonempty (StarTuple (V := V) t d m) := ⟨⟨U, Classical.choice inferInstance⟩⟩
+  haveI : Nonempty (LabelPack t d m) := ⟨(fun _ => 0), fun _ _ => 0⟩
+  haveI : Nonempty (LabelledTransverse (V := V) t d m) :=
+    ⟨Classical.choice inferInstance, Classical.choice inferInstance⟩
+  exact uniformLaw _
+
+/-- The fixed-center bad-mass guard holds for two leaves in the transverse complement. -/
+lemma selected_twoLeaf_badMass_guard
+    {nRows L A : Nat} {sourceHMin : Nat → Nat}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat)) :
+    2 * leafK nRows (hBlock L nRows) + badExponent nRows (hBlock L nRows) + 2 ≤
+      2 * blocks A (hBlock L nRows) - leafT nRows (hBlock L nRows) := by
+  have hs := selector_spec hsel
+  have hn : 256 ≤ nRows := hs.1.1
+  have hdiv : bOf nRows ∣ hBlock L nRows := hs.1.2.2.2.2.2.1
+  have hcut : nRows + 2 ≤ hBlock L nRows :=
+    (Nat.le_max_right (sourceHMin nRows) (nRows + 2)).trans hs.1.2.2.2.2.2.2.2.1
+  let h := hBlock L nRows
+  have hh : 258 ≤ h := by omega
+  have h16 : 16 ≤ h := by omega
+  have hmle : nRows ≤ h := by omega
+  let qv := h / bOf nRows
+  have hbpos : 0 < bOf nRows := by unfold bOf; nlinarith
+  have hmul : bOf nRows * qv = h := by simpa [h, qv] using (Nat.mul_div_cancel' hdiv)
+  have hqpos : 0 < qv := by
+    have hnz : qv ≠ 0 := by
+      intro hz
+      have : h = 0 := by simpa [hz] using hmul.symm
+      omega
+    exact Nat.one_le_iff_ne_zero.mpr hnz
+  have hqle : qv ≤ h := by
+    calc
+      qv ≤ bOf nRows * qv := Nat.le_mul_of_pos_left qv hbpos
+      _ = h := hmul
+  have h1000 : 1000 * qv ≤ h := by
+    have hb : 1000 ≤ bOf nRows := by unfold bOf; nlinarith
+    calc
+      1000 * qv ≤ bOf nRows * qv := Nat.mul_le_mul_right qv hb
+      _ = h := hmul
+  have hkdef : leafK nRows h = 2 * qv := by
+    unfold leafK leafT
+    omega
+  have hKlin : 2 * leafK nRows h ≤ 4 * h := by
+    rw [hkdef]
+    omega
+  have hE : badExponent nRows h ≤ 2 * h ^ 2 := by
+    unfold badExponent
+    have hrest : h - 1000 * qv ≤ h := Nat.sub_le _ _
+    have hcoe : 2 * nRows ≤ 2 * h := Nat.mul_le_mul_left 2 hmle
+    have h1 : (2 * nRows) * (h - 1000 * qv) ≤ (2 * h) * h := by
+      calc
+        (2 * nRows) * (h - 1000 * qv) ≤ (2 * h) * (h - 1000 * qv) :=
+          Nat.mul_le_mul_right _ hcoe
+        _ ≤ (2 * h) * h := Nat.mul_le_mul_left _ hrest
+    have hrewrite : 2 * nRows * (h - 1000 * (h / bOf nRows)) =
+        (2 * nRows) * (h - 1000 * qv) := by simp [qv, Nat.mul_assoc]
+    have hsq : (2 * h) * h = 2 * h ^ 2 := by ring
+    rw [hrewrite]
+    exact h1.trans (le_of_eq hsq)
+  have htpos : leafT nRows h ≤ 2 * h := by
+    unfold leafT
+    exact Nat.mul_le_mul_left 2 (Nat.sub_le _ _)
+  have hsum : 2 * leafK nRows h + badExponent nRows h + 2 + leafT nRows h ≤
+      7 * h ^ 2 := by
+    have hpoly : 4 * h + 2 * h ^ 2 + 2 + 2 * h ≤ 7 * h ^ 2 := by nlinarith [hh]
+    omega
+  have h7 : 7 * h ^ 2 < 2 ^ h := seven_sq_lt_two_pow h16
+  have hsqh : h ≤ h ^ 2 := by
+    have : h * 1 ≤ h * h := Nat.mul_le_mul_left h (by omega : 1 ≤ h)
+    simpa [pow_two, Nat.mul_one] using this
+  have hexp : h ^ 2 ≤ A * h ^ 2 := Nat.le_mul_of_pos_left (h ^ 2) hA
+  have hpow : 2 ^ h ≤ 2 ^ (h ^ 2) := Nat.pow_le_pow_right (by decide : 0 < 2) hsqh
+  have hAexp : 2 ^ (h ^ 2) ≤ 2 ^ (A * h ^ 2) :=
+    Nat.pow_le_pow_right (by decide : 0 < 2) hexp
+  have htower : 2 ^ (A * h ^ 2) < blocks A h := by
+    unfold blocks
+    exact Nat.pow_lt_pow_right (by decide : 1 < 2) (Nat.lt_two_pow_self)
+  have hpolyJ : 7 * h ^ 2 < blocks A h :=
+    h7.trans (hpow.trans_lt (hAexp.trans_lt htower))
+  have hfit : 2 * leafK nRows h + badExponent nRows h + 2 + leafT nRows h ≤
+      2 * blocks A h := by
+    exact hsum.trans (Nat.le_trans (Nat.le_of_lt hpolyJ)
+      (Nat.le_mul_of_pos_left (blocks A h) (by decide : 0 < 2)))
+  exact Nat.le_sub_of_add_le (by
+    simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using hfit)
+
+/-- On the transverse two-leaf law, with a center functional and both leaf
+restrictions drawn in the same experiment,
+`Pr[accept ∧ jointlyDirect] ≥ Pr[accept] − r` for `r` equal to the bad-star
+mass, and that mass is strictly below `S/2`. -/
+theorem selected_labelledTransverse_accepts_rankGood
+    {N nRows L A : Nat} {sourceHMin : Nat → Nat}
+    {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (q : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows))) :
+    let h := hBlock L nRows
+    let t := leafT nRows h
+    let d := 2 * h
+    let E := badExponent nRows h
+    ∃ r : ℚ,
+      r < successMargin E / 2 ∧
+        eventMass (labelledTransverseLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+            (selected_leafT_le_leafRank hsel)
+            (selected_leafRank_le_complement hA hsel q))
+            (Finset.univ.filter fun w : LabelledTransverse (V := transverseComplement q) t d 2 =>
+              labelledTransverseAccepts (V := transverseComplement q) (m := 2) w ∧
+                jointlyDirect (m := 2) w.1) ≥
+          eventMass (labelledTransverseLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+              (selected_leafT_le_leafRank hsel)
+              (selected_leafRank_le_complement hA hsel q))
+              (Finset.univ.filter fun w : LabelledTransverse (V := transverseComplement q) t d 2 =>
+                labelledTransverseAccepts (V := transverseComplement q) (m := 2) w) - r := by
+  intro h t d E
+  have htd : t ≤ d := by
+    simpa [t, d, h] using selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel
+  have hdV : d ≤ Module.finrank (ZMod 2) (transverseComplement q) := by
+    simpa [d, h] using selected_leafRank_le_complement hA hsel q
+  have hk : 1 ≤ d - t := by
+    have hlt : t < d := by
+      simpa [t, d, h] using selected_leafT_lt_leafRank (nRows := nRows) (L := L) hsel
+    omega
+  have hguard : 2 * (d - t) + E + 2 ≤
+      Module.finrank (ZMod 2) (transverseComplement q) - t := by
+    have hbase := selected_twoLeaf_badMass_guard (nRows := nRows) (L := L) (A := A)
+      (sourceHMin := sourceHMin) hA hsel
+    have hidx : Module.finrank (ZMod 2) (transverseComplement q) - t =
+        2 * blocks A h - leafT nRows h := by rw [transverseComplement_finrank q]
+    have hkidx : d - t = leafK nRows h := by unfold d leafK t; rfl
+    simpa [E, h, hidx, hkidx] using hbase
+  let G := StarTuple (V := transverseComplement q) t d 2
+  let Lab := LabelPack t d 2
+  haveI : Nonempty G := by
+    have hcenter : 0 < Fintype.card (Grass (transverseComplement q) t) := by
+      rw [card_grass]
+      exact gaussian_pos (le_trans htd hdV)
+    let U : Grass (transverseComplement q) t :=
+      Classical.choice (Fintype.card_pos_iff.mp hcenter)
+    haveI : Nonempty (Fin 2 → Extension U d) :=
+      ⟨fun _ => Classical.choice (extension_nonempty U htd hdV)⟩
+    exact ⟨⟨U, Classical.choice inferInstance⟩⟩
+  haveI : Nonempty Lab := ⟨(fun _ => 0), fun _ _ => 0⟩
+  haveI : Nonempty (G × Lab) := ⟨Classical.choice inferInstance, Classical.choice inferInstance⟩
+  let law := labelledTransverseLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+    (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+    (selected_leafRank_le_complement hA hsel q)
+  have hbad : eventMass law
+      (Finset.univ.filter fun w : G × Lab => ¬ jointlyDirect w.1) <
+      successMargin E / 2 := by
+    classical
+    let badG : Finset G := Finset.univ.filter fun z => ¬ jointlyDirect z
+    let badF : Finset (G × Lab) := Finset.univ.filter fun w => ¬ jointlyDirect w.1
+    have hgeom : eventMass (starLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+          htd hdV) badG < successMargin E / 2 := by
+      rw [successMargin_half]
+      simpa [badG, G, E] using starLaw_bad_mass_lt_threshold
+        (V := transverseComplement q) (t := t) (d := d) (m := 2) (E := E)
+        htd hdV hk hguard
+    have hstarCard : eventMass (starLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+          htd hdV) badG = (badG.card : ℚ) / Fintype.card G := by
+      unfold eventMass
+      rw [Finset.sum_congr rfl (fun z _ =>
+        starLaw_mass (V := transverseComplement q) (t := t) (d := d) (m := 2) htd hdV z)]
+      rw [Finset.sum_const, nsmul_eq_mul, mul_one_div]
+    have hlawCard : eventMass law badF = (badF.card : ℚ) / Fintype.card (G × Lab) := by
+      unfold eventMass
+      have hpoint : ∀ w ∈ badF, law.mass w = (1 : ℚ) / Fintype.card (G × Lab) := by
+        intro w _
+        unfold law labelledTransverseLaw
+        exact uniformLaw_apply (G × Lab) w
+      rw [Finset.sum_congr rfl hpoint, Finset.sum_const, nsmul_eq_mul, mul_one_div]
+    have hprod : badF = badG ×ˢ (Finset.univ : Finset Lab) := by
+      ext w
+      simp [badF, badG, Finset.mem_product]
+    have hnum : (badF.card : ℚ) = (badG.card : ℚ) * Fintype.card Lab := by
+      rw [hprod, Finset.card_product, Finset.card_univ]
+      norm_cast
+    have hden : (Fintype.card (G × Lab) : ℚ) =
+        (Fintype.card G : ℚ) * Fintype.card Lab := by
+      rw [Fintype.card_prod]
+      norm_cast
+    have hL : (Fintype.card Lab : ℚ) ≠ 0 := by
+      exact_mod_cast (Fintype.card_ne_zero : Fintype.card Lab ≠ 0)
+    have hsame : eventMass law badF =
+        eventMass (starLaw (V := transverseComplement q) (t := t) (d := d) (m := 2) htd hdV) badG := by
+      rw [hlawCard, hstarCard, hnum, hden]
+      field_simp
+    have hgoal : eventMass law
+        (Finset.univ.filter fun w : G × Lab => ¬ jointlyDirect w.1) =
+        eventMass law badF := by
+      rfl
+    rw [hgoal, hsame]
+    exact hgeom
+  refine ⟨eventMass law (Finset.univ.filter fun w : G × Lab => ¬ jointlyDirect w.1), hbad, ?_⟩
+  simpa [law, G, Lab, labelledTransverseAccepts] using
+    eventMass_accept_rankGood_ge law
+      (fun w : G × Lab => labelledTransverseAccepts (V := transverseComplement q) (m := 2) w)
+      (fun w : G × Lab => jointlyDirect (m := 2) w.1)
 
 end
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMass
