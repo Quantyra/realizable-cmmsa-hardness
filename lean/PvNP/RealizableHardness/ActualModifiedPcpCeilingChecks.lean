@@ -19,6 +19,7 @@ open ActualHeadlineParameters
 #check modifiedPcp_exponent_eq
 #check modifiedPcpDenom_rblock_pow
 #check modified_pcp_ceiling_meets_hn_endpoint
+#check modified_pcp_ceiling_meets_hn_endpoint_real
 
 example : 2 ^ (2 * 5 * (3 ^ 2 - 1)) = (2 ^ (2 * 5 * (3 - 1))) ^ (3 + 1) :=
   pow_gap_identity 3 5
@@ -37,5 +38,6 @@ example :
 #print axioms modifiedPcpDenom_eq_gapRoot_pow
 #print axioms modifiedPcp_exponent_eq
 #print axioms modified_pcp_ceiling_meets_hn_endpoint
+#print axioms modified_pcp_ceiling_meets_hn_endpoint_real
 
 end PvNP.RealizableHardness.ActualModifiedPcpCeilingChecks

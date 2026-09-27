@@ -92,4 +92,33 @@ theorem modified_pcp_ceiling_meets_hn_endpoint :
   rw [hcast]
   exact hz
 
+lemma one_le_modifiedPcpDenom (L m : Nat) : 1 ≤ modifiedPcpDenom L m := by
+  unfold modifiedPcpDenom
+  exact Nat.one_le_two_pow
+
+/-- The same endpoint with real arithmetic, at `ζ = 1 / modifiedPcpDenom`. -/
+theorem modified_pcp_ceiling_meets_hn_endpoint_real :
+    ∃ L0, ∀ L, L0 ≤ L →
+      ((8 : ℝ) * (manuscriptSigma L : ℝ)) ^ (certifiedM L + 1) *
+        ((modifiedPcpDenom L (certifiedM L) : ℝ))⁻¹ ≤ (5 : ℝ) / 8 := by
+  obtain ⟨L0, hL0⟩ := modified_pcp_ceiling_meets_hn_endpoint
+  refine ⟨L0, ?_⟩
+  intro L hL
+  have hdenPos : (0 : Rat) < modifiedPcpDenom L (certifiedM L) := by
+    exact_mod_cast one_le_modifiedPcpDenom L (certifiedM L)
+  have hrat := hL0 L hL ((modifiedPcpDenom L (certifiedM L) : Rat))⁻¹ le_rfl
+  have hcast := Rat.cast_le (K := ℝ).mpr hrat
+  have hRHS : (((5 : Rat) / 8 : Rat) : ℝ) = (5 : ℝ) / 8 := by
+    rw [Rat.cast_div, Rat.cast_ofNat, Rat.cast_ofNat]
+  have hprod :
+      ((((8 : Rat) * (manuscriptSigma L : Rat)) ^ (certifiedM L + 1) *
+          ((modifiedPcpDenom L (certifiedM L) : Rat))⁻¹ : Rat) : ℝ) =
+        ((8 : ℝ) * (manuscriptSigma L : ℝ)) ^ (certifiedM L + 1) *
+          ((modifiedPcpDenom L (certifiedM L) : ℝ))⁻¹ := by
+    rw [Rat.cast_mul, Rat.cast_pow, Rat.cast_mul, Rat.cast_ofNat, Rat.cast_natCast,
+      Rat.cast_inv]
+    rfl
+  rw [← hRHS, ← hprod]
+  exact hcast
+
 end PvNP.RealizableHardness.ActualModifiedPcpCeiling
