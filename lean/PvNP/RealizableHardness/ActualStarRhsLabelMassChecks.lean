@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualStarRhsLabelMass
+
+/-! Checks for the explicit right-hand-side leaf-label inequality.
+The checked statement carries `r < successMargin E / 2` and positive
+accepted rank-good mass. -/
+
+namespace PvNP.RealizableHardness.ActualStarRhsLabelMassChecks
+
+#check PvNP.RealizableHardness.ActualStarRhsLabelMass.presented_zeroRhsLabel_restricts
+#check PvNP.RealizableHardness.ActualStarRhsLabelMass.rhsLeafAccepts
+#check PvNP.RealizableHardness.ActualStarRhsLabelMass.rhsLeafAccepts_all
+#check PvNP.RealizableHardness.ActualStarRhsLabelMass.selected_rhsLabel_accept_rankGood_pos
+#print axioms PvNP.RealizableHardness.ActualStarRhsLabelMass.selected_rhsLabel_accept_rankGood_pos
+
+end PvNP.RealizableHardness.ActualStarRhsLabelMassChecks
