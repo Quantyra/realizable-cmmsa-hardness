@@ -1,6 +1,8 @@
 import Complexitylib.Classes.PCP.Internal.AlgGapAll
 import Complexitylib.Classes.PCP.Internal.AlgPCP
+import PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
 import PvNP.RealizableHardness.ActualHeadlineParameters
+import PvNP.RealizableHardness.ActualManuscriptGapObstruction
 
 /-!
 Dinur soundness for every unsatisfiable 3CNF, repeated to the manuscript
@@ -13,6 +15,8 @@ fraction `s` of the edges has `q`-fold independent edge-test value `s ^ q`.
 and `independentEdgeDecoder` is the test. For every leaf bound `L`,
 
 `(8 * manuscriptSigma L)^(certifiedM L + 1) * s^q ≤ 5/8`.
+`gapRootReps` chooses a second count so the same test is at most
+`gapRoot^{-(certifiedM+1)}`, which shrinks with `L`.
 
 This is the gap graph's repeated edge test. It does not build a `SeededMap`,
 does not discharge `hSrcCmmsa`, and does not prove Theorem 1 or Corollary 2.
@@ -24,7 +28,9 @@ open Complexity.SAT
 open Dinur
 open ConstraintGraph
 open ActualCertifiedManuscriptParameters
+open ActualCmmsaParameterReconciliation
 open ActualHeadlineParameters
+open ActualManuscriptGapObstruction
 
 set_option autoImplicit false
 
@@ -199,6 +205,168 @@ theorem every_unsat_threeCnf_manuscript_zeta
       manuscriptZeta φ L a ≤ (5 : Rat) / 8 := by
   simpa [manuscriptZeta, manuscriptGap] using
     every_unsat_threeCnf_meets_manuscript_hn algF algHd φ h3 hunsat L a
+
+/-- Repetitions enough that the edge-test value is at most `gapRoot^{-(m+1)}`. -/
+theorem gapRootReps_exists (F : FinBase) (hd : 1 < F.deg) (L : Nat) :
+    ∃ q : Nat,
+      (1 - (amplifier (F.toFamily hd)).gap) ^ q ≤
+        ((gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1))⁻¹ := by
+  set r : Rat := 1 - (amplifier (F.toFamily hd)).gap
+  set target : Rat :=
+    ((gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1))⁻¹
+  have hroot : (0 : Rat) < gapRoot L (certifiedM L) := by
+    have hone : 1 ≤ gapRoot L (certifiedM L) := by
+      simpa [gapRoot] using
+        (Nat.one_le_two_pow :
+          1 ≤ 2 ^ (2 * (hBlock L (certifiedM L) / certifiedM L) * (certifiedM L - 1)))
+    exact_mod_cast hone
+  have htarget : 0 < target := by
+    dsimp [target]
+    positivity
+  have hr1 : r < 1 := by
+    have hg : 0 < (amplifier (F.toFamily hd)).gap :=
+      (amplifier (F.toFamily hd)).gap_pos
+    dsimp [r]
+    linarith
+  obtain ⟨q, hq⟩ := exists_pow_lt_of_lt_one htarget hr1
+  exact ⟨q, le_of_lt hq⟩
+
+noncomputable def gapRootReps (F : FinBase) (hd : 1 < F.deg) (L : Nat) : Nat :=
+  Classical.choose (gapRootReps_exists F hd L)
+
+theorem gapRootReps_spec (F : FinBase) (hd : 1 < F.deg) (L : Nat) :
+    (1 - (amplifier (F.toFamily hd)).gap) ^ gapRootReps F hd L ≤
+      ((gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1))⁻¹ :=
+  Classical.choose_spec (gapRootReps_exists F hd L)
+
+/-- Decoder whose value is at most `gapRoot^{-(m+1)}`. The repetition count is
+`gapRootReps`, chosen above from the amplifier gap and the block. -/
+noncomputable def gapRootZeta (φ : CNF) (L : Nat)
+    (a : (manuscriptGap φ).Assignment) : Rat :=
+  independentEdgeDecoder (manuscriptGap φ) (gapRootReps algF algHd L) a
+
+/-- Every unsatisfiable 3CNF has gap-graph edge-test value at most
+`gapRoot^{-(certifiedM+1)}`. The decoder is `gapRootZeta`. -/
+theorem every_unsat_threeCnf_gapRoot_score
+    (φ : CNF) (h3 : φ.Is3CNF) (hunsat : ¬ φ.Satisfiable) (L : Nat)
+    (a : (manuscriptGap φ).Assignment) :
+    gapRootZeta φ L a ≤
+      ((gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1))⁻¹ := by
+  set q := gapRootReps algF algHd L
+  have hpow :=
+    every_unsat_threeCnf_powered_ceiling algF algHd φ h3 hunsat q a
+  have hdec : gapRootZeta φ L a = satFrac _ a ^ q := by
+    simp [gapRootZeta, manuscriptGap, independentEdgeDecoder, q]
+  rw [hdec]
+  exact hpow.trans (by simpa [q] using gapRootReps_spec algF algHd L)
+
+/-- On admissible blocks, `gapRoot` is at least `2^1020`. -/
+theorem gapRoot_ge_two_pow_1020 :
+    ∃ L0, ∀ L, L0 ≤ L → 2 ^ 1020 ≤ gapRoot L (certifiedM L) := by
+  obtain ⟨L0, hL0⟩ := certified_parameters_eventually 256
+  refine ⟨L0, ?_⟩
+  intro L hL
+  obtain ⟨m, _, hm256, hAd, hM, _⟩ := hL0 L hL
+  have hmpos : 0 < m := by omega
+  have hdiv : m ∣ hBlock L m := hAd.2.2.2.2.2.2.1
+  have hsrc : manuscriptSourceFloor m ≤ hBlock L m := hAd.2.2.2.2.2.2.2.1
+  have hfloor : m + 2 ≤ hBlock L m := by
+    simpa [manuscriptSourceFloor] using hsrc
+  have hq : 2 ≤ hBlock L m / m := by
+    by_contra hlt
+    have hle : hBlock L m ≤ m := by
+      calc
+        hBlock L m = (hBlock L m / m) * m := (Nat.div_mul_cancel hdiv).symm
+        _ ≤ 1 * m := Nat.mul_le_mul_right m (by omega)
+        _ = m := by simp
+    omega
+  have hm1 : 255 ≤ m - 1 := by omega
+  have he : 1020 ≤ 2 * (hBlock L m / m) * (m - 1) := by
+    have hmul : 2 * 2 ≤ 2 * (hBlock L m / m) := Nat.mul_le_mul_left 2 hq
+    have hprod :
+        2 * 2 * 255 ≤ 2 * (hBlock L m / m) * (m - 1) := by
+      calc
+        2 * 2 * 255 ≤ 2 * (hBlock L m / m) * 255 := Nat.mul_le_mul_right 255 hmul
+        _ ≤ 2 * (hBlock L m / m) * (m - 1) := Nat.mul_le_mul_left _ hm1
+    exact (by decide : 1020 ≤ 2 * 2 * 255).trans hprod
+  have hpow : 2 ^ 1020 ≤ 2 ^ (2 * (hBlock L m / m) * (m - 1)) :=
+    Nat.pow_le_pow_right (by decide : 0 < 2) he
+  simpa [gapRoot, hM] using hpow
+
+/-- The `gapRoot^{-(m+1)}` score ceiling falls below every positive constant. -/
+theorem gapRoot_pow_inv_eventually_lt (c : Rat) (hc : 0 < c) :
+    ∃ L0, ∀ L, L0 ≤ L →
+      ((gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1))⁻¹ < c := by
+  obtain ⟨k, hk⟩ := exists_pow_lt_of_lt_one hc (by norm_num : ((1 : Rat) / 2) < 1)
+  obtain ⟨Lσ, hσ⟩ := gapRoot_ge_two_pow_1020
+  obtain ⟨Lm, hL⟩ := certified_parameters_eventually (max k 256)
+  refine ⟨max Lσ Lm, ?_⟩
+  intro L hLmax
+  have hroot : 2 ^ 1020 ≤ gapRoot L (certifiedM L) :=
+    hσ L (le_trans (Nat.le_max_left _ _) hLmax)
+  obtain ⟨m, _, hm, _, hM, _⟩ := hL L (le_trans (Nat.le_max_right _ _) hLmax)
+  have hmk : k ≤ m := le_trans (Nat.le_max_left _ _) hm
+  have hge2 : (2 : Rat) ≤ gapRoot L (certifiedM L) := by
+    have h2 : 2 ≤ 2 ^ 1020 := by
+      have : 1 ≤ 1020 := by decide
+      exact Nat.le_trans (by decide : 2 ≤ 2 ^ 1) (Nat.pow_le_pow_right (by decide) this)
+    exact_mod_cast h2.trans hroot
+  have hm1 : k ≤ certifiedM L + 1 := by
+    rw [hM]
+    omega
+  have hpow : (2 : Rat) ^ (certifiedM L + 1) ≤
+      (gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1) :=
+    pow_le_pow_left₀ (by norm_num) hge2 _
+  have htwoPos : (0 : Rat) < (2 : Rat) ^ (certifiedM L + 1) := by positivity
+  have hgapPos : (0 : Rat) < (gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1) := by
+    positivity
+  have hinv : ((gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1))⁻¹ ≤
+      ((2 : Rat) ^ (certifiedM L + 1))⁻¹ := by
+    have hdiv := (one_div_le_one_div hgapPos htwoPos).mpr hpow
+    simpa [one_div] using hdiv
+  have hhalf : ((2 : Rat) ^ (certifiedM L + 1))⁻¹ = ((1 : Rat) / 2) ^ (certifiedM L + 1) := by
+    rw [inv_eq_one_div]
+    nth_rw 1 [← one_pow (certifiedM L + 1)]
+    exact (div_pow (1 : Rat) 2 (certifiedM L + 1)).symm
+  have hsmall : ((1 : Rat) / 2) ^ (certifiedM L + 1) ≤ ((1 : Rat) / 2) ^ k := by
+    have hsplit : certifiedM L + 1 = k + (certifiedM L + 1 - k) := by omega
+    rw [hsplit, pow_add]
+    have hrest : ((1 : Rat) / 2) ^ (certifiedM L + 1 - k) ≤ 1 :=
+      pow_le_one₀ (by norm_num) (by norm_num)
+    have hmul :
+        ((1 : Rat) / 2) ^ k * ((1 : Rat) / 2) ^ (certifiedM L + 1 - k) ≤
+          ((1 : Rat) / 2) ^ k * 1 :=
+      mul_le_mul_of_nonneg_left hrest (by positivity)
+    simpa [mul_one] using hmul
+  have hlt : ((1 : Rat) / 2) ^ k < c := hk
+  calc
+    ((gapRoot L (certifiedM L) : Rat) ^ (certifiedM L + 1))⁻¹
+        ≤ ((2 : Rat) ^ (certifiedM L + 1))⁻¹ := hinv
+    _ = ((1 : Rat) / 2) ^ (certifiedM L + 1) := hhalf
+    _ ≤ ((1 : Rat) / 2) ^ k := hsmall
+    _ < c := hlt
+
+/-- The shrinking decoder value itself falls below every positive constant. -/
+theorem every_unsat_threeCnf_gapRoot_score_shrinks
+    (φ : CNF) (h3 : φ.Is3CNF) (hunsat : ¬ φ.Satisfiable) (c : Rat) (hc : 0 < c) :
+    ∃ L0, ∀ L, L0 ≤ L → ∀ a : (manuscriptGap φ).Assignment,
+      gapRootZeta φ L a < c := by
+  obtain ⟨L0, hL0⟩ := gapRoot_pow_inv_eventually_lt c hc
+  refine ⟨L0, ?_⟩
+  intro L hL a
+  exact lt_of_le_of_lt (every_unsat_threeCnf_gapRoot_score φ h3 hunsat L a) (hL0 L hL)
+
+/-- For every large leaf bound, this shrinking score meets the manuscript HN endpoint. -/
+theorem every_unsat_threeCnf_gapRoot_score_meets_hn
+    (φ : CNF) (h3 : φ.Is3CNF) (hunsat : ¬ φ.Satisfiable) :
+    ∃ L0, ∀ L, L0 ≤ L → ∀ a : (manuscriptGap φ).Assignment,
+      ((8 : Rat) * (manuscriptSigma L : Rat)) ^ (certifiedM L + 1) *
+        gapRootZeta φ L a ≤ (5 : Rat) / 8 := by
+  obtain ⟨L0, hL0⟩ := manuscript_gapRoot_zeta_meets_hn_endpoint
+  refine ⟨L0, ?_⟩
+  intro L hL a
+  exact hL0 L hL (gapRootZeta φ L a)
+    (every_unsat_threeCnf_gapRoot_score φ h3 hunsat L a)
 
 /-- The same bound for every sufficiently large leaf bound. -/
 theorem every_unsat_threeCnf_manuscript_zeta_large
