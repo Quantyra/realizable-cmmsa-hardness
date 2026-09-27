@@ -36,6 +36,20 @@ The witness `r` is the acceptance mass. The fixed-star conditional
 
 ## Build
 
-Local `lake build PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks`
-exited 0 (3272 jobs). Axioms: `propext`, `Classical.choice`, `Quot.sound`.
-No `sorry`.
+`lake build --old PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks`
+on `quantyra-lean-builder-01` exited 0 (3272 jobs) at
+`b647f47feec70d8b1c8f11e040c842ba86022b70`. Receipt:
+`evidence/gcp/satellite/gcp_actual_star_starAcceptsCenter_b647f47`.
+Axioms: `propext`, `Classical.choice`, `Quot.sound`. No `sorry`.
+
+## Three-lens
+
+| Lens | Verdict |
+|------|---------|
+| Build/audit | GO |
+| Proof-adversarial | GO-WITH-NOTES |
+| Complexity | GO-WITH-NOTES |
+| Non-claims | GO-WITH-NOTES |
+
+The table is `lean/reviews/2026-09-26-accepted-good-mass-three-lens.md`.
+The increment is not route-final.

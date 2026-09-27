@@ -1,0 +1,26 @@
+RESULT=PASS
+COMMIT=b647f47feec70d8b1c8f11e040c842ba86022b70
+VM=quantyra-lean-builder-01
+ZONE=us-central1-a
+PROJECT=quantyra-lean-cert-20260915
+LEAN=4.34.0-rc2
+COMMAND=lake build --old PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
+LAKE_EXIT=0
+JOBS=3272
+AUDIT_SCOPE=STARACCEPTSCENTER_ACCEPTED_GOOD_MASS_ONLY
+LAW=starLaw on transverseComplement of one QuestionCenter
+INEQUALITY=eventMass(transverseStarAcceptsCenter and jointlyDirect) >= eventMass(transverseStarAcceptsCenter) - r AND r < successMargin E / 2
+SUCCESS_MARGIN=2^(-E)
+CENTER=z.1 drawn by starLaw
+LEAVES=two independent extensions in transverseComplement, presented by vertexOfGrass
+ACCEPT=transverseStarAcceptsCenter
+RANK_GOOD=jointlyDirect of that same StarTuple
+BAD_STAR=negation of jointlyDirect
+INTERSECTION=empty
+ACCEPT_MASS_BOUND=at most 1/gaussian(finrank-t, d-t) which is strictly below S/2
+FIXED_STAR_CONDITIONAL=NOT_USED
+THEOREM_1=NOT_CLAIMED
+COROLLARY_2=NOT_CLAIMED
+ROUTE_FINAL=NO
+FULL_CMMSA=PARTIAL
+AXIOMS=propext Classical.choice Quot.sound
