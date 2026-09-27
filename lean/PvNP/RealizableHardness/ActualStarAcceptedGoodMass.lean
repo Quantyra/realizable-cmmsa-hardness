@@ -1398,5 +1398,86 @@ theorem selected_labelledTransverse_accepts_rankGood
       (fun w : G × Lab => labelledTransverseAccepts (V := transverseComplement q) (m := 2) w)
       (fun w : G × Lab => jointlyDirect (m := 2) w.1)
 
+/-- The transverse summand is recovered from the presented domain, so equal
+domains are equal extensions. -/
+lemma complementToAmbient_injective {N m J t : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t) :
+    Function.Injective (complementToAmbient q) := by
+  intro S T hST
+  have houter := Submodule.map_injective_of_injective
+    (questionCoordinateSpace q).injective_subtype
+  have hinner := Submodule.map_injective_of_injective
+    (transverseComplement q).injective_subtype
+  exact hinner (houter (by simpa [complementToAmbient] using hST))
+
+lemma vertexOfGrass_eq_of_domain {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (L M : Grass (transverseComplement q) (2 * h))
+    (hdom : (vertexOfGrass q L).1 = (vertexOfGrass q M).1) : L = M := by
+  let W : Submodule (ZMod 2) (Ambient I) := complementToAmbient q ⊤
+  have hrecover (X : Grass (transverseComplement q) (2 * h)) :
+      complementToAmbient q X.val =
+        (vertexOfGrass q X).1 ⊓ W := by
+    have hL : complementToAmbient q X.val ≤ W := complementToAmbient_mono q le_top
+    have hH : questionEquationSpan q ⊓ W = ⊥ := by
+      simpa [W, inf_comm] using complementToAmbient_inf_equation q ⊤
+    have hdomX : (vertexOfGrass q X).1 =
+        complementToAmbient q X.val ⊔ questionEquationSpan q := by
+      simp [vertexOfGrass, presentedOfGrass, PresentedLeaf.domain, PresentedLeaf.H,
+        questionEquationSpan]
+    rw [hdomX]
+    have hmod : (complementToAmbient q X.val ⊔ questionEquationSpan q) ⊓ W =
+        complementToAmbient q X.val ⊔ (questionEquationSpan q ⊓ W) :=
+      sup_inf_assoc_of_le (questionEquationSpan q) hL
+    rw [hmod, hH, sup_bot_eq]
+  have himage : complementToAmbient q L.val = complementToAmbient q M.val := by
+    rw [hrecover L, hrecover M, hdom]
+  have hval : L.val = M.val := complementToAmbient_injective q himage
+  exact Subtype.ext hval
+
+/-- Same-question `Rel` identifies the two presented extensions. -/
+lemma vertexOfGrass_eq_of_rel {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (L M : Grass (transverseComplement q) (2 * h))
+    (hrel : LeafVertex.Rel (vertexOfGrass q L) (vertexOfGrass q M)) : L = M := by
+  have hH : vertexH (vertexOfGrass q L) = vertexH (vertexOfGrass q M) := by
+    rw [vertexOfGrass_H q L, vertexOfGrass_H q M]
+  exact vertexOfGrass_eq_of_domain q L M
+    ((leafVertex_rel_sameH_iff_domain hH).1 hrel)
+
+/-- At two leaves, `starAcceptsCenter` requires `LeafVertex.Rel`, and that
+relation forces the extensions to coincide. Coincident extensions are not
+`jointlyDirect`. The label is irrelevant: the relation already contradicts
+rank-good. -/
+theorem selector_starAcceptsCenter_not_jointlyDirect
+    {N nRows L A : Nat} {sourceHMin : Nat → Nat}
+    {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (q : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    (z : StarTuple (V := transverseComplement q)
+      (leafT nRows (hBlock L nRows)) (2 * hBlock L nRows) 2)
+    (c : LeafVertex I (blocks A (hBlock L nRows)) (hBlock L nRows))
+    (hH : vertexH c = questionEquationSpan q)
+    (hrel : ∀ i, LeafVertex.Rel c
+      (vertexOfGrass q (z.2 i).val)) :
+    ¬ jointlyDirect z := by
+  have htd : leafT nRows (hBlock L nRows) ≤ 2 * hBlock L nRows :=
+    selected_leafT_le_leafRank hsel
+  have hlt : leafT nRows (hBlock L nRows) < 2 * hBlock L nRows :=
+    selected_leafT_lt_leafRank hsel
+  have hdom0 : (vertexOfGrass q (z.2 0).val).1 = c.1 :=
+    ((leafVertex_rel_sameH_iff_domain (by
+      rw [vertexOfGrass_H q (z.2 0).val, hH])).1 (LeafVertex.Rel.symm (hrel 0)))
+  have hdom1 : (vertexOfGrass q (z.2 1).val).1 = c.1 :=
+    ((leafVertex_rel_sameH_iff_domain (by
+      rw [vertexOfGrass_H q (z.2 1).val, hH])).1 (LeafVertex.Rel.symm (hrel 1)))
+  have hleaves : (z.2 0).val = (z.2 1).val := by
+    apply vertexOfGrass_eq_of_domain q
+    exact hdom0.trans hdom1.symm
+  have hext : z.2 0 = z.2 1 := Subtype.ext hleaves
+  exact equalPair_not_jointlyDirect (V := transverseComplement q) htd hlt z hext
+
 end
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMass
