@@ -1,8 +1,7 @@
 import PvNP.RealizableHardness.ActualStarAcceptedGoodMass
 
-/-! The shipped claim is the stop in
-`lean/reviews/2026-09-26-accepted-good-mass-stop.md`.
-`starLaw_bad_mass_lt_threshold` is an input bound, not that claim. -/
+/-! Checks for the joint-source equal-leaf inequality on the transverse complement.
+`starLaw_bad_mass_lt_threshold` remains an input bound, not the claim. -/
 
 namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
 
@@ -10,7 +9,18 @@ namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.successMargin_half
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.starLaw_bad_mass_lt_threshold
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.agreementExponent_lt_badExponent
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.starLaw_equalPair_mass
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.jointPair_equalLeaf_accepted_rankGood
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.gaussian_gt_succ_pow
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_extensionCount_gt_halfMargin
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.leafVertex_rel_sameH_iff_domain
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.starAcceptsCenter_queries_share_domain
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.transverseComplement_finrank
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_transverseStar_equalLeaf_accepted_rankGood
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.starLaw_bad_mass_lt_threshold
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.agreementExponent_lt_badExponent
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.jointPair_equalLeaf_accepted_rankGood
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_extensionCount_gt_halfMargin
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_transverseStar_equalLeaf_accepted_rankGood
 
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
