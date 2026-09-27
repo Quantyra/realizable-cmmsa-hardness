@@ -14,6 +14,14 @@ open PvNP.RealizableHardness.ActualFpMapInterface
 #check every_fp_manuscript_map_no_sat_vanishes
 #check threeSat_in_P_of_fp_map_if_yes_in_P
 #check budget_one_sigma_covers_every_assignment
+#check formula_eval_all_true
+#check not_no_of_budget_one
+
+example {L sig : Nat} {gam : Rat}
+    (i : PvNP.RealizableHardness.CMMSACodec.Instance L)
+    (hσ : 1 ≤ sig) (hγ : gam < 1) (hb : i.data.budget = 1) :
+    ¬ PvNP.RealizableHardness.CMMSACodec.No (sig : Rat) gam i :=
+  not_no_of_budget_one i hσ hγ hb
 
 example {L : Nat} (i : PvNP.RealizableHardness.CMMSACodec.Instance L)
     (hσ : 1 ≤ ActualHeadlineParameters.manuscriptSigma L)
@@ -29,5 +37,7 @@ example {L : Nat} (i : PvNP.RealizableHardness.CMMSACodec.Instance L)
 #print axioms every_fp_manuscript_map_no_sat_vanishes
 #print axioms threeSat_in_P_of_fp_map_if_yes_in_P
 #print axioms budget_one_sigma_covers_every_assignment
+#print axioms formula_eval_all_true
+#print axioms not_no_of_budget_one
 
 end PvNP.RealizableHardness.ActualFpMapInterfaceChecks

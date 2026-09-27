@@ -204,6 +204,68 @@ theorem threeSat_in_P_of_fp_map_if_yes_in_P
       exact Set.disjoint_left.mp target.disjoint (by simpa [target] using hz) hfno
   simpa [heq] using hpre
 
+theorem formula_eval_all_true {V : Type*} (p : Formula V) :
+    Formula.eval (fun _ => true) p = true := by
+  induction p <;> simp [Formula.eval, *]
+
+/-- Every positive formula list is fully satisfied by the all-true assignment. -/
+theorem satisfaction_all_true {L : Nat} (i : Instance L) :
+    i.data.satisfaction (fun _ => true) = 1 := by
+  have hne : i.data.formulas ≠ [] := (Instance.valid i).2.2.1
+  have hlen : 0 < i.data.formulas.length := List.length_pos_iff_ne_nil.mpr hne
+  have hform : ∀ j : Fin i.data.formulas.length,
+      Formula.eval (fun _ => true) (i.data.indexedFormulas j) = true := by
+    intro j
+    simpa [Data.indexedFormulas] using formula_eval_all_true (i.data.formulas.get j)
+  have havg : average (fun j : Fin i.data.formulas.length =>
+      Formula.eval (fun _ => true) (i.data.indexedFormulas j)) = 1 := by
+    have heq : (fun j : Fin i.data.formulas.length =>
+        Formula.eval (fun _ => true) (i.data.indexedFormulas j)) = fun _ => true :=
+      funext hform
+    haveI : Nonempty (Fin i.data.formulas.length) := ⟨⟨0, hlen⟩⟩
+    rw [heq]
+    exact average_true (I := Fin i.data.formulas.length)
+  simpa [Data.satisfaction] using havg
+
+/-- A budget-`1` instance is not `No` at `σ ≥ 1` and `γ < 1`, because the
+all-true assignment costs `1` and satisfies every positive formula. -/
+theorem not_no_of_budget_one
+    {L sig : Nat} {gam : Rat} (i : Instance L)
+    (hσ : 1 ≤ sig) (hγ : gam < 1) (hb : i.data.budget = 1) :
+    ¬ No (sig : Rat) gam i := by
+  intro hN
+  let x : Fin i.data.weights.length → Bool := fun _ => true
+  have hcost1 : i.data.cost x = 1 := by
+    have hsumW : i.data.weights.sum = 1 := (Instance.valid i).2.1
+    have hpos : ∀ w ∈ i.data.weights, 0 < w := (Instance.valid i).1
+    have hle : i.data.cost x ≤ ∑ v, i.data.coordinateWeights v := by
+      unfold Data.cost weight
+      refine Finset.sum_le_sum ?_
+      intro v _
+      by_cases hx : x v
+      · simp [hx]
+      · have hw : 0 < i.data.coordinateWeights v :=
+          hpos _ (List.get_mem i.data.weights v)
+        simp [hx]
+        exact le_of_lt hw
+    have hget : ∑ v, i.data.coordinateWeights v = i.data.weights.sum := by
+      simp [Data.coordinateWeights, List.ofFn_get]
+    have hge : ∑ v, i.data.coordinateWeights v ≤ i.data.cost x := by
+      unfold Data.cost weight
+      refine Finset.sum_le_sum ?_
+      intro v _
+      simp [x]
+    have heq : i.data.cost x = ∑ v, i.data.coordinateWeights v :=
+      le_antisymm hle hge
+    simpa [heq, hget] using hsumW
+  have hsat : i.data.satisfaction x = 1 := satisfaction_all_true i
+  have hleσ : i.data.cost x ≤ (sig : Rat) * i.data.budget := by
+    rw [hcost1, hb, mul_one]
+    exact Nat.one_le_cast.mpr hσ
+  have hlt := hN x hleσ
+  rw [hsat] at hlt
+  exact not_lt_of_gt hγ hlt
+
 /-- At budget `1` and `σ_L ≥ 1`, every coordinate assignment is inside the
 no-side budget. An FP map that uses this budget has to push every
 assignment's satisfaction strictly below `manuscriptGamma`. -/
