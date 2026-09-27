@@ -224,5 +224,233 @@ theorem selected_rhsLabel_accept_rankGood_pos
       linarith
     simpa [law] using hpos
 
+open scoped BigOperators
+
+/-- One uniform draw from the `LeafVertex.Rel` class of a transverse leaf. -/
+abbrev ClassRep {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (L : Grass (transverseComplement q) (2 * h)) :=
+  {w : LeafVertex I J h // w ∈ relClass (vertexOfGrass q L)}
+
+/-- A star together with one class representative for each of its two leaves.
+The leaf rank is `2 * h`, so each leaf lands in `ClassRep`. -/
+abbrev RepStar {N m J t : Nat} (h : Nat) {I : Instance N m}
+    (q : QuestionCenter I J t) (t0 : Nat) :=
+  Σ z : StarTuple (V := transverseComplement q) t0 (2 * h) 2,
+    (i : Fin 2) → ClassRep q (z.2 i).val
+
+instance classRepFinite {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (L : Grass (transverseComplement q) (2 * h)) : Finite (ClassRep q L) := by
+  infer_instance
+
+noncomputable instance classRepFintype {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (L : Grass (transverseComplement q) (2 * h)) : Fintype (ClassRep q L) :=
+  Fintype.ofFinite _
+
+/-- Acceptance after drawing each leaf's representative from its `Rel` class.
+The drawn vertex lies in that class, and the identity leaf's right-hand-side
+label still restricts to zero on the transverse summand. -/
+def classRepAccepts {N m J t : Nat} (h : Nat) {I : Instance N m}
+    (q : QuestionCenter I J t) {t0 : Nat}
+    (p : RepStar h q t0) : Prop :=
+  ∀ i, (p.2 i).val ∈ relClass (vertexOfGrass q (p.1.2 i).val) ∧
+    (grass_zeroRhsWitness q (p.1.2 i).val).transverseZero
+
+theorem classRepAccepts_all {N m J t : Nat} (h : Nat) {I : Instance N m}
+    (q : QuestionCenter I J t) {t0 : Nat}
+    (p : RepStar h q t0) : classRepAccepts h q p := by
+  intro i
+  exact ⟨(p.2 i).property, (grass_zeroRhsWitness q (p.1.2 i).val).transverseZero_holds⟩
+
+lemma card_fin2_pi {β : Fin 2 → Type*} [∀ i, Fintype (β i)] :
+    (Fintype.card (∀ i, β i) : ℚ) = ∏ i, (Fintype.card (β i) : ℚ) := by
+  rw [Fintype.card_pi]
+  norm_cast
+
+/-- Geometry from `starLaw`, then an independent uniform representative from
+each leaf's `Rel` class. Class sizes may differ; the geometry marginal does
+not. -/
+noncomputable def classRepLaw {N m J t : Nat} (h : Nat) {I : Instance N m}
+    (q : QuestionCenter I J t) {t0 : Nat}
+    (htd : t0 ≤ 2 * h) (hdV : 2 * h ≤ Module.finrank (ZMod 2) (transverseComplement q)) :
+    FiniteLaw (RepStar h q t0) := by
+  let G := StarTuple (V := transverseComplement q) t0 (2 * h) 2
+  let star := starLaw (V := transverseComplement q) (t := t0) (d := 2 * h) (m := 2) htd hdV
+  let fiberCard (z : G) : ℚ :=
+    ∏ i : Fin 2, (Fintype.card (ClassRep q (z.2 i).val) : ℚ)
+  have hpos (z : G) : 0 < fiberCard z := by
+    refine Finset.prod_pos ?_
+    intro i _
+    have hw : (relClass (vertexOfGrass q (z.2 i).val)).Nonempty :=
+      relClass_nonempty (vertexOfGrass q (z.2 i).val)
+    have : 0 < Fintype.card (ClassRep q (z.2 i).val) := by
+      refine Fintype.card_pos_iff.mpr ?_
+      obtain ⟨w, hw⟩ := hw
+      exact ⟨⟨w, hw⟩⟩
+    exact_mod_cast this
+  exact
+    { mass := fun p => star.mass p.1 / fiberCard p.1
+      nonneg := fun p => div_nonneg (star.nonneg p.1) (le_of_lt (hpos p.1))
+      normalized := by
+        classical
+        have huniv : (Finset.univ : Finset (RepStar h q t0)) =
+            (Finset.univ : Finset G).sigma (fun _ => Finset.univ) := by
+          ext p
+          simp [RepStar]
+        have hsum :
+            ∑ p : RepStar h q t0, star.mass p.1 / fiberCard p.1 =
+              ∑ z : G, ∑ reps : (i : Fin 2) → ClassRep q (z.2 i).val,
+                star.mass z / fiberCard z := by
+          rw [huniv, Finset.sum_sigma]
+        rw [hsum]
+        have hfiber : ∀ z : G,
+            ∑ reps : (i : Fin 2) → ClassRep q (z.2 i).val,
+              star.mass z / fiberCard z = star.mass z := by
+          intro z
+          have hc : fiberCard z ≠ 0 := ne_of_gt (hpos z)
+          have hcard : (Fintype.card ((i : Fin 2) → ClassRep q (z.2 i).val) : ℚ) =
+              fiberCard z :=
+            card_fin2_pi (β := fun i => ClassRep q (z.2 i).val)
+          rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, hcard]
+          exact mul_div_cancel₀ (star.mass z) hc
+        simp [hfiber, star, G, mass_sum] }
+
+/-- On the frozen two-leaf sample, drawing each representative uniformly from
+its `LeafVertex.Rel` class keeps `Pr[accept ∧ rankGood] ≥ Pr[accept] − r`
+with `r < S/2` and positive intersection mass. -/
+theorem selected_classRep_accept_rankGood_pos
+    {N nRows L A : Nat} {sourceHMin : Nat → Nat}
+    {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (q : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows))) :
+    let hh := hBlock L nRows
+    let t := leafT nRows hh
+    let d := 2 * hh
+    let E := badExponent nRows hh
+    ∃ r : ℚ,
+      r < successMargin E / 2 ∧
+        eventMass (classRepLaw hh q
+            (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+            (selected_leafRank_le_complement hA hsel q))
+          (Finset.univ.filter fun p : RepStar hh q t =>
+            classRepAccepts hh q p ∧ jointlyDirect p.1) ≥
+          eventMass (classRepLaw hh q
+              (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+              (selected_leafRank_le_complement hA hsel q))
+            (Finset.univ.filter fun p : RepStar hh q t =>
+              classRepAccepts hh q p) - r ∧
+        0 < eventMass (classRepLaw hh q
+            (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+            (selected_leafRank_le_complement hA hsel q))
+          (Finset.univ.filter fun p : RepStar hh q t =>
+            classRepAccepts hh q p ∧ jointlyDirect p.1) := by
+  intro hh t d E
+  have hk : 1 ≤ d - t := by
+    have hlt : t < d := by
+      simpa [t, d, hh] using selected_leafT_lt_leafRank (nRows := nRows) (L := L) hsel
+    omega
+  have hguard : 2 * (d - t) + E + 2 ≤
+      Module.finrank (ZMod 2) (transverseComplement q) - t := by
+    have hbase := selected_twoLeaf_badMass_guard (nRows := nRows) (L := L) (A := A)
+      (sourceHMin := sourceHMin) hA hsel
+    have hidx : Module.finrank (ZMod 2) (transverseComplement q) - t =
+        2 * blocks A hh - leafT nRows hh := by rw [transverseComplement_finrank q]
+    have hkidx : d - t = leafK nRows hh := by unfold d leafK t; rfl
+    simpa [E, hh, hidx, hkidx] using hbase
+  let law := classRepLaw hh q
+    (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+    (selected_leafRank_le_complement hA hsel q)
+  let star := starLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+    (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+    (selected_leafRank_le_complement hA hsel q)
+  have hbadStar : eventMass star
+      (Finset.univ.filter fun z : StarTuple (V := transverseComplement q) t d 2 =>
+        ¬ jointlyDirect z) < successMargin E / 2 := by
+    rw [successMargin_half]
+    simpa [star, E] using starLaw_bad_mass_lt_threshold
+      (V := transverseComplement q) (t := t) (d := d) (m := 2) (E := E)
+      (selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel)
+      (selected_leafRank_le_complement hA hsel q) hk hguard
+  have haccUniv : Finset.univ.filter
+      (fun p : RepStar hh q t => classRepAccepts hh q p) = Finset.univ := by
+    refine Finset.ext fun p => ?_
+    refine ⟨fun _ => Finset.mem_univ _, fun _ => ?_⟩
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, classRepAccepts_all hh q p⟩
+  have hbadEq : eventMass law
+      (Finset.univ.filter fun p : RepStar hh q t => ¬ jointlyDirect p.1) =
+      eventMass star
+        (Finset.univ.filter fun z : StarTuple (V := transverseComplement q) t d 2 =>
+          ¬ jointlyDirect z) := by
+    classical
+    let G := StarTuple (V := transverseComplement q) t d 2
+    have hsigma :
+        Finset.univ.filter (fun p : RepStar hh q t => ¬ jointlyDirect p.1) =
+          (Finset.univ.filter (fun z : G => ¬ jointlyDirect z)).sigma
+            (fun _ => Finset.univ) := by
+      ext p
+      simp [RepStar]
+    unfold eventMass
+    rw [hsigma, Finset.sum_sigma]
+    refine Finset.sum_congr rfl ?_
+    intro z hz
+    have hpoint : ∀ reps : (i : Fin 2) → ClassRep q (z.2 i).val,
+        law.mass ⟨z, reps⟩ = star.mass z /
+          ∏ i : Fin 2, (Fintype.card (ClassRep q (z.2 i).val) : ℚ) := by
+      intro reps
+      unfold law classRepLaw
+      rfl
+    rw [Finset.sum_congr rfl (fun reps _ => hpoint reps), Finset.sum_const,
+      Finset.card_univ, nsmul_eq_mul]
+    have hcard : (Fintype.card ((i : Fin 2) → ClassRep q (z.2 i).val) : ℚ) =
+        ∏ i : Fin 2, (Fintype.card (ClassRep q (z.2 i).val) : ℚ) :=
+      card_fin2_pi (β := fun i => ClassRep q (z.2 i).val)
+    rw [hcard]
+    have hc : (∏ i : Fin 2, (Fintype.card (ClassRep q (z.2 i).val) : ℚ)) ≠ 0 := by
+      refine Finset.prod_ne_zero_iff.mpr ?_
+      intro i _
+      have hw := relClass_nonempty (vertexOfGrass q (z.2 i).val)
+      have : 0 < Fintype.card (ClassRep q (z.2 i).val) := by
+        refine Fintype.card_pos_iff.mpr ?_
+        obtain ⟨w, hw⟩ := hw
+        exact ⟨⟨w, hw⟩⟩
+      exact_mod_cast (Nat.ne_of_gt this)
+    exact mul_div_cancel₀ (star.mass z) hc
+  have hineq := eventMass_accept_rankGood_ge law
+    (fun p : RepStar hh q t => classRepAccepts hh q p)
+    (fun p : RepStar hh q t => jointlyDirect p.1)
+  have hacc1 : eventMass law
+      (Finset.univ.filter fun p : RepStar hh q t => classRepAccepts hh q p) = 1 := by
+    rw [haccUniv]
+    exact eventMass_univ law
+  have hbad : eventMass law
+      (Finset.univ.filter fun p : RepStar hh q t => ¬ jointlyDirect p.1) <
+      successMargin E / 2 := by
+    rw [hbadEq]
+    exact hbadStar
+  have hrlt : eventMass law
+      (Finset.univ.filter fun p : RepStar hh q t => ¬ jointlyDirect p.1) < 1 :=
+    hbad.trans (successMargin_half_lt_one E)
+  refine ⟨eventMass law (Finset.univ.filter fun p => ¬ jointlyDirect p.1), hbad, ?_, ?_⟩
+  · have hineq' := hineq
+    rw [hacc1] at hineq'
+    rw [hacc1]
+    simpa [law] using hineq'
+  · have hge : eventMass law
+        (Finset.univ.filter fun p : RepStar hh q t =>
+          classRepAccepts hh q p ∧ jointlyDirect p.1) ≥
+        1 - eventMass law (Finset.univ.filter fun p => ¬ jointlyDirect p.1) := by
+      have hineq' := hineq
+      rw [hacc1] at hineq'
+      exact hineq'
+    have hpos : 0 < eventMass law
+        (Finset.univ.filter fun p : RepStar hh q t =>
+          classRepAccepts hh q p ∧ jointlyDirect p.1) := by
+      linarith
+    simpa [law] using hpos
+
 end
 end PvNP.RealizableHardness.ActualStarRhsLabelMass
