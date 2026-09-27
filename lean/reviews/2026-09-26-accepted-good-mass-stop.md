@@ -2,8 +2,10 @@
 
 Date: 2026-09-26. Outcome B. Theorem 1 and Corollary 2 are not claimed.
 No replacement carrier, palette, or conditional wrapper is opened.
-`selected_presented_starAccepts_rankGood` is withdrawn. It divides `starLaw`
-by a label-fibre card, and its acceptance compares one leaf with itself.
+`selected_presented_starAccepts_rankGood` is deleted. It divided `starLaw`
+by a label-fibre card, and its acceptance compared one leaf with itself.
+The GCP receipt `gcp_actual_star_presented_starAccepts_b4da0c3` replays that
+deleted wrapper. It is not a pass of the inequality below.
 
 ## Failed inequality
 
