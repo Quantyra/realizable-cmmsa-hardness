@@ -1,4 +1,5 @@
 import Complexitylib.Classes.PCP.Internal.AlgGapAll
+import Complexitylib.Classes.PCP.Internal.AlgPCP
 import PvNP.RealizableHardness.ActualHeadlineParameters
 
 /-!
@@ -180,5 +181,31 @@ theorem every_unsat_threeCnf_meets_manuscript_hn
     simpa [q, base] using manuscriptReps_spec F hd L
   rw [hdec]
   exact hle.trans (by simpa [mul_comm] using hspec)
+
+/-- Gap graph of one 3CNF on the library expander base. -/
+noncomputable def manuscriptGap (φ : CNF) : ConstraintGraph DinurAlpha :=
+  gapAllG algF algHd (fun _ => List.replicate (3 * φ.length) true)
+    (Φ := fun _ => φ) ([] : List Bool)
+
+/-- Decoder: the `q`-fold independent edge test. `q` is `manuscriptReps`. -/
+noncomputable def manuscriptZeta (φ : CNF) (L : Nat)
+    (a : (manuscriptGap φ).Assignment) : Rat :=
+  independentEdgeDecoder (manuscriptGap φ) (manuscriptReps algF algHd L) a
+
+theorem every_unsat_threeCnf_manuscript_zeta
+    (φ : CNF) (h3 : φ.Is3CNF) (hunsat : ¬ φ.Satisfiable) (L : Nat)
+    (a : (manuscriptGap φ).Assignment) :
+    ((8 : Rat) * (manuscriptSigma L : Rat)) ^ (certifiedM L + 1) *
+      manuscriptZeta φ L a ≤ (5 : Rat) / 8 := by
+  simpa [manuscriptZeta, manuscriptGap] using
+    every_unsat_threeCnf_meets_manuscript_hn algF algHd φ h3 hunsat L a
+
+/-- The same bound for every sufficiently large leaf bound. -/
+theorem every_unsat_threeCnf_manuscript_zeta_large
+    (φ : CNF) (h3 : φ.Is3CNF) (hunsat : ¬ φ.Satisfiable) :
+    ∃ L0, ∀ L, L0 ≤ L → ∀ a : (manuscriptGap φ).Assignment,
+      ((8 : Rat) * (manuscriptSigma L : Rat)) ^ (certifiedM L + 1) *
+        manuscriptZeta φ L a ≤ (5 : Rat) / 8 :=
+  ⟨0, fun L _ a => every_unsat_threeCnf_manuscript_zeta φ h3 hunsat L a⟩
 
 end PvNP.RealizableHardness.ActualDinurShrinkingCeiling

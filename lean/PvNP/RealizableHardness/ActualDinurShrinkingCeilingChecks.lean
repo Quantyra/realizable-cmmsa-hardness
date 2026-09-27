@@ -10,6 +10,14 @@ open Dinur
 #check every_unsat_threeCnf_powered_ceiling
 #check manuscript_block_ceiling_shrinks
 #check every_unsat_threeCnf_meets_manuscript_hn
+#check every_unsat_threeCnf_manuscript_zeta_large
+
+example (φ : CNF) (h3 : φ.Is3CNF) (hunsat : ¬ φ.Satisfiable) :
+    ∃ L0, ∀ L, L0 ≤ L → ∀ a : (manuscriptGap φ).Assignment,
+      ((8 : Rat) * (ActualHeadlineParameters.manuscriptSigma L : Rat)) ^
+          (ActualCertifiedManuscriptParameters.certifiedM L + 1) *
+        manuscriptZeta φ L a ≤ (5 : Rat) / 8 :=
+  every_unsat_threeCnf_manuscript_zeta_large φ h3 hunsat
 
 example (F : FinBase) (hd : 1 < F.deg)
     (φ : CNF) (h3 : φ.Is3CNF) (hunsat : ¬ φ.Satisfiable) (L : Nat)
@@ -25,5 +33,7 @@ example (F : FinBase) (hd : 1 < F.deg)
 #print axioms manuscript_block_ceiling_shrinks
 #print axioms manuscriptReps_spec
 #print axioms every_unsat_threeCnf_meets_manuscript_hn
+#print axioms every_unsat_threeCnf_manuscript_zeta
+#print axioms every_unsat_threeCnf_manuscript_zeta_large
 
 end PvNP.RealizableHardness.ActualDinurShrinkingCeilingChecks
