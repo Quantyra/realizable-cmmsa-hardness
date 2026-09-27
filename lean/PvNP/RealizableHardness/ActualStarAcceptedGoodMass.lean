@@ -12,13 +12,15 @@ import PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
 
 /-! Accepted-good mass on one joint two-leaf source law.
 
-`selected_labelledTransverse_accepts_rankGood` is the claim. Its sample is
+`selected_restrictionToK_accept_rankGood_pos` is the claim. Its sample is
 `starLaw` on the transverse complement of one question, together with a
-center functional and a center-restriction for each of the two drawn
-leaves. Acceptance is the source `accepts` test on both leaves. Rank-good
-is `jointlyDirect` of that same geometry, and the bad-star event is its
-negation. `transverseStarAcceptsCenter` uses one canonical label and is
-not this claim.
+center functional and one functional on each of the two drawn leaves.
+Acceptance is the identity-representative restriction-to-K test: each leaf
+functional restricts along the center inclusion and equals the center
+functional. Rank-good is `jointlyDirect` of that same geometry. The
+subtracted term is strictly below `S/2`, and the accepted rank-good event
+has positive mass. `starAcceptsCenter` and `LeafVertex.Rel` are not this
+acceptance event.
 
 This file does not prove Theorem 1, Corollary 2, or an `FP` reduction.
 -/
@@ -50,6 +52,7 @@ open PvNP.RealizableHardness.SamplerParameters
 
 noncomputable section
 attribute [local instance] Classical.propDecidable
+set_option maxHeartbeats 2000000
 
 variable {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Finite V]
 variable {t d m E : Nat}
@@ -61,6 +64,17 @@ theorem successMargin_half (E : Nat) :
     successMargin E / 2 = 1 / (2 : ℚ) ^ (E + 1) := by
   unfold successMargin
   rw [div_div, ← pow_succ]
+
+theorem successMargin_half_lt_one (E : Nat) :
+    successMargin E / 2 < 1 := by
+  rw [successMargin_half]
+  have hpos : (0 : ℚ) < (2 : ℚ) ^ (E + 1) := by positivity
+  rw [div_lt_one hpos]
+  have htwo : (2 : ℚ) ≤ (2 : ℚ) ^ (E + 1) := by
+    have hpow : (2 : ℚ) ^ 1 ≤ (2 : ℚ) ^ (E + 1) :=
+      pow_le_pow_right₀ (by norm_num : (1 : ℚ) ≤ 2) (by omega : 1 ≤ E + 1)
+    simpa using hpow
+  exact lt_of_lt_of_le (by norm_num : (1 : ℚ) < 2) htwo
 
 lemma eventMass_nonneg {Omega : Type*} [Fintype Omega]
     (mu : FiniteLaw Omega) (S : Finset Omega) : 0 ≤ eventMass mu S := by
@@ -1148,6 +1162,21 @@ lemma uniform_fst_eventMass
     Finset.sum_const, nsmul_eq_mul, mul_one_div]
   field_simp
 
+lemma eventMass_pos_of_uniform_atom
+    {Omega : Type*} [Fintype Omega] [Nonempty Omega]
+    (mu : FiniteLaw Omega)
+    (hmass : ∀ x, mu.mass x = (1 : ℚ) / Fintype.card Omega)
+    {S : Finset Omega} {x : Omega} (hx : x ∈ S) :
+    0 < eventMass mu S := by
+  have hpoint : 0 < mu.mass x := by
+    rw [hmass x]
+    exact div_pos (by norm_num : (0 : ℚ) < 1)
+      (by exact_mod_cast (Fintype.card_pos : 0 < Fintype.card Omega))
+  have hle : mu.mass x ≤ eventMass mu S := by
+    unfold eventMass
+    exact Finset.single_le_sum (fun y _ => mu.nonneg y) hx
+  exact lt_of_lt_of_le hpoint hle
+
 /-- Center functional read in one basis of the drawn center. The basis is the
 coordinate chart; the value `c` is the drawn label. -/
 noncomputable def drawnCenterMap (U : Grass V t) (c : Fin t → ZMod 2) :
@@ -1168,6 +1197,30 @@ noncomputable def drawnLeafMap (L : Grass V d) (c : Fin d → ZMod 2) :
     (Module.finBasisOfFinrankEq (ZMod 2) L.val L.property).constr (ZMod 2) c
   else
     0
+
+lemma drawnCenterMap_zero (U : Grass V t) :
+    drawnCenterMap (V := V) U (fun _ => 0) = 0 := by
+  unfold drawnCenterMap
+  by_cases ht : 0 < t
+  · simp only [ht, dite_true]
+    haveI : Module.Finite (ZMod 2) U.val :=
+      Module.finite_of_finrank_pos (by rw [U.property]; exact ht)
+    let b := Module.finBasisOfFinrankEq (ZMod 2) U.val U.property
+    change b.constr (ZMod 2) (fun _ : Fin t => (0 : ZMod 2)) = 0
+    exact b.constr_eq (ZMod 2) (fun _ => rfl)
+  · simp [ht]
+
+lemma drawnLeafMap_zero (L : Grass V d) :
+    drawnLeafMap (V := V) L (fun _ => 0) = 0 := by
+  unfold drawnLeafMap
+  by_cases hd : 0 < d
+  · simp only [hd, dite_true]
+    haveI : Module.Finite (ZMod 2) L.val :=
+      Module.finite_of_finrank_pos (by rw [L.property]; exact hd)
+    let b := Module.finBasisOfFinrankEq (ZMod 2) L.val L.property
+    change b.constr (ZMod 2) (fun _ : Fin d => (0 : ZMod 2)) = 0
+    exact b.constr_eq (ZMod 2) (fun _ => rfl)
+  · simp [hd]
 
 /-- Drawn center label and one functional label for every leaf. -/
 abbrev LabelPack (t d m : Nat) := (Fin t → ZMod 2) × (Fin m → Fin d → ZMod 2)
@@ -1287,7 +1340,8 @@ lemma selected_twoLeaf_badMass_guard
 /-- On the transverse two-leaf law, with a center functional and both leaf
 restrictions drawn in the same experiment,
 `Pr[accept ∧ jointlyDirect] ≥ Pr[accept] − r` for `r` equal to the bad-star
-mass, and that mass is strictly below `S/2`. -/
+mass, that mass is strictly below `S/2`, and the intersection has positive
+mass. -/
 theorem selected_labelledTransverse_accepts_rankGood
     {N nRows L A : Nat} {sourceHMin : Nat → Nat}
     {I : Instance N nRows}
@@ -1311,7 +1365,13 @@ theorem selected_labelledTransverse_accepts_rankGood
               (selected_leafT_le_leafRank hsel)
               (selected_leafRank_le_complement hA hsel q))
               (Finset.univ.filter fun w : LabelledTransverse (V := transverseComplement q) t d 2 =>
-                labelledTransverseAccepts (V := transverseComplement q) (m := 2) w) - r := by
+                labelledTransverseAccepts (V := transverseComplement q) (m := 2) w) - r ∧
+        0 < eventMass (labelledTransverseLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+            (selected_leafT_le_leafRank hsel)
+            (selected_leafRank_le_complement hA hsel q))
+            (Finset.univ.filter fun w : LabelledTransverse (V := transverseComplement q) t d 2 =>
+              labelledTransverseAccepts (V := transverseComplement q) (m := 2) w ∧
+                jointlyDirect (m := 2) w.1) := by
   intro h t d E
   have htd : t ≤ d := by
     simpa [t, d, h] using selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel
@@ -1392,11 +1452,93 @@ theorem selected_labelledTransverse_accepts_rankGood
       rfl
     rw [hgoal, hsame]
     exact hgeom
-  refine ⟨eventMass law (Finset.univ.filter fun w : G × Lab => ¬ jointlyDirect w.1), hbad, ?_⟩
-  simpa [law, G, Lab, labelledTransverseAccepts] using
-    eventMass_accept_rankGood_ge law
-      (fun w : G × Lab => labelledTransverseAccepts (V := transverseComplement q) (m := 2) w)
-      (fun w : G × Lab => jointlyDirect (m := 2) w.1)
+  have hineq := eventMass_accept_rankGood_ge law
+    (fun w : G × Lab => labelledTransverseAccepts (V := transverseComplement q) (m := 2) w)
+    (fun w : G × Lab => jointlyDirect (m := 2) w.1)
+  have hbadLtOne : eventMass law
+      (Finset.univ.filter fun w : G × Lab => ¬ jointlyDirect w.1) < 1 :=
+    hbad.trans (successMargin_half_lt_one E)
+  have hex : ∃ z : G, jointlyDirect z := by
+    by_contra hall
+    have hall' : ∀ z : G, ¬ jointlyDirect z := by
+      intro z hz
+      exact hall ⟨z, hz⟩
+    have hfilter : Finset.univ.filter (fun w : G × Lab => ¬ jointlyDirect w.1) =
+        Finset.univ := by
+      ext w
+      simp [hall' w.1]
+    rw [hfilter, eventMass_univ] at hbadLtOne
+    exact lt_irrefl (1 : ℚ) hbadLtOne
+  obtain ⟨z, hz⟩ := hex
+  let w0 : G × Lab := (z, (fun _ => (0 : ZMod 2), fun _ _ => (0 : ZMod 2)))
+  have hleaf (i : Fin 2) :
+      drawnLeafMap (V := transverseComplement q) (w0.1.2 i).val (w0.2.2 i) = 0 := by
+    have hcoord : w0.2.2 i = fun _ => (0 : ZMod 2) := rfl
+    rw [hcoord]
+    exact drawnLeafMap_zero (V := transverseComplement q) (w0.1.2 i).val
+  have hcenter : drawnCenterMap (V := transverseComplement q) w0.1.1 w0.2.1 = 0 := by
+    have hcoord : w0.2.1 = fun _ => (0 : ZMod 2) := rfl
+    rw [hcoord]
+    exact drawnCenterMap_zero (V := transverseComplement q) w0.1.1
+  have hacc : labelledTransverseAccepts (V := transverseComplement q) (m := 2) w0 := by
+    intro i
+    rw [hleaf i, hcenter]
+    exact LinearMap.zero_comp _
+  have hmem : w0 ∈ Finset.univ.filter fun w : G × Lab =>
+      labelledTransverseAccepts (V := transverseComplement q) (m := 2) w ∧
+        jointlyDirect (m := 2) w.1 :=
+    Finset.mem_filter.mpr ⟨Finset.mem_univ _, hacc, hz⟩
+  have hmass : ∀ x, law.mass x = (1 : ℚ) / Fintype.card (G × Lab) := by
+    intro x
+    unfold law labelledTransverseLaw
+    exact uniformLaw_apply (G × Lab) x
+  have hpos := eventMass_pos_of_uniform_atom law hmass hmem
+  refine ⟨eventMass law (Finset.univ.filter fun w : G × Lab => ¬ jointlyDirect w.1),
+    hbad, ?_, ?_⟩
+  · simpa [law, G, Lab, labelledTransverseAccepts] using hineq
+  · simpa [law, G, Lab, labelledTransverseAccepts] using hpos
+
+/-- Identity-representative restriction-to-K test. The drawn extension is the
+queried leaf, so acceptance does not use `LeafVertex.Rel` or
+`starAcceptsCenter`. The zero coordinate functional is the zero linear map,
+so its restriction to `K` is zero. -/
+abbrev restrictionToKAccepts (w : LabelledTransverse (V := V) t d m) : Prop :=
+  labelledTransverseAccepts (V := V) (m := m) w
+
+/-- The frozen two-leaf sample has positive accepted rank-good mass.
+`restrictionToKAccepts` is `labelledTransverseAccepts`. Dimension and
+endpoint guards are discharged from the selector. -/
+theorem selected_restrictionToK_accept_rankGood_pos
+    {N nRows L A : Nat} {sourceHMin : Nat → Nat}
+    {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (q : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows))) :
+    let h := hBlock L nRows
+    let t := leafT nRows h
+    let d := 2 * h
+    let E := badExponent nRows h
+    ∃ r : ℚ,
+      r < successMargin E / 2 ∧
+        eventMass (labelledTransverseLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+            (selected_leafT_le_leafRank hsel)
+            (selected_leafRank_le_complement hA hsel q))
+            (Finset.univ.filter fun w : LabelledTransverse (V := transverseComplement q) t d 2 =>
+              restrictionToKAccepts (V := transverseComplement q) (m := 2) w ∧
+                jointlyDirect (m := 2) w.1) ≥
+          eventMass (labelledTransverseLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+              (selected_leafT_le_leafRank hsel)
+              (selected_leafRank_le_complement hA hsel q))
+              (Finset.univ.filter fun w : LabelledTransverse (V := transverseComplement q) t d 2 =>
+                restrictionToKAccepts (V := transverseComplement q) (m := 2) w) - r ∧
+        0 < eventMass (labelledTransverseLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+            (selected_leafT_le_leafRank hsel)
+            (selected_leafRank_le_complement hA hsel q))
+            (Finset.univ.filter fun w : LabelledTransverse (V := transverseComplement q) t d 2 =>
+              restrictionToKAccepts (V := transverseComplement q) (m := 2) w ∧
+                jointlyDirect (m := 2) w.1) :=
+  selected_labelledTransverse_accepts_rankGood hA hsel q
 
 /-- The transverse summand is recovered from the presented domain, so equal
 domains are equal extensions. -/
