@@ -11,6 +11,6 @@ Full CMMSA stays partial.
 | Lens | Verdict | Note |
 |------|---------|------|
 | Build/audit | GO | `lake build PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks` exits 0. The checks file cites `starLaw_bad_mass_lt_threshold` only as an input, not as the claim. |
-| Proof-adversarial | NO-GO | `starAcceptsCenter` and joint directness of two same-question rank-`2h` leaves are disjoint. The stop names that kill at `r = 2`. |
-| Complexity | NO-GO | Dividing `starLaw` by a label card does not make a `PresentedLeaf` sampler. The equal-domain locus where acceptance can hold has agreement mass above `S/2`. |
+| Proof-adversarial | NO-GO | On the uniform law over label triples of one fixed equal-domain star, rank-good is empty and `Pr[accept] = 2^{-2·leafT} > S/2`. |
+| Complexity | NO-GO | That probability is the law of the whole sample space, not `Pr[equal domain]` times a conditional probability. `agreementExponent_lt_badExponent` checks the exponent. |
 | Non-claims | INCOMPLETE | No separate non-claims review of the stop. The stop text does not claim Theorem 1, Corollary 2, or route-final. |

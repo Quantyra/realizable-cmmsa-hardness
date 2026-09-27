@@ -204,5 +204,59 @@ theorem starLaw_bad_mass_lt_threshold
   rw [huniform]
   simpa [s] using hquot
 
+/-- Exponent comparison for the uniform label law on one fixed equal-domain
+star. `4 * (h - h / bOf m)` is `2 * leafT m h`. It sits strictly below
+`badExponent m h + 1`, so `2^{-4(h - h/bOf m)} > 2^{-(badExponent m h + 1)}`. -/
+theorem agreementExponent_lt_badExponent
+    {m h : Nat} (hm : 256 ≤ m) (hdiv : bOf m ∣ h) (hq : 0 < h / bOf m) :
+    4 * (h - h / bOf m) < badExponent m h + 1 := by
+  have hb : bOf m = 4000 * m ^ 2 := rfl
+  let q : Nat := h / bOf m
+  have hqpos : 0 < q := hq
+  have hmul : bOf m * q = h := Nat.mul_div_cancel' hdiv
+  have hm1 : 1 ≤ m := le_trans (by decide : (1 : Nat) ≤ 256) hm
+  have hb1000 : 1000 ≤ bOf m := by
+    rw [hb]
+    have hsq : 1 ≤ m ^ 2 := Nat.one_le_pow 2 m hm1
+    have h4 : 1 ≤ 4 * m ^ 2 := by omega
+    have := Nat.mul_le_mul_left 1000 h4
+    have hr : 1000 * (4 * m ^ 2) = 4000 * m ^ 2 := by ring
+    omega
+  have h1 : 1 ≤ bOf m := le_trans (by decide : (1 : Nat) ≤ 1000) hb1000
+  have hleaf : h - q = q * (bOf m - 1) := by
+    rw [← hmul, Nat.mul_comm (bOf m) q]
+    simpa [Nat.mul_one] using (Nat.mul_sub_left_distrib q (bOf m) 1).symm
+  have hK : h - 1000 * q = q * (bOf m - 1000) := by
+    rw [← hmul, Nat.mul_comm (bOf m) q, Nat.mul_comm 1000 q]
+    exact (Nat.mul_sub_left_distrib q (bOf m) 1000).symm
+  have hcore : 4 * (bOf m - 1) < 2 * m * (bOf m - 1000) := by
+    have hlt4 : 4 * (bOf m - 1) < 4 * bOf m := by
+      have hbpos : 0 < bOf m := by omega
+      have hsub : bOf m - 1 < bOf m := Nat.sub_lt hbpos (by decide : 0 < 1)
+      exact Nat.mul_lt_mul_of_pos_left hsub (by decide : 0 < 4)
+    have h512 : 4 * bOf m ≤ 512 * (bOf m - 1000) := by
+      have h508 : 512 * 1000 ≤ 508 * bOf m := by
+        have hbmin : 4000 * 256 ^ 2 ≤ bOf m := by
+          rw [hb]
+          exact Nat.mul_le_mul_left 4000 (Nat.pow_le_pow_left hm 2)
+        have hnum : 512 * 1000 ≤ 508 * (4000 * 256 ^ 2) := by decide
+        exact le_trans hnum (Nat.mul_le_mul_left 508 hbmin)
+      have hsub : 1000 ≤ bOf m := hb1000
+      have hsplit : 512 * bOf m = 4 * bOf m + 508 * bOf m := by omega
+      have hsubeq : 512 * bOf m - 512 * 1000 = 512 * (bOf m - 1000) := by
+        rw [← Nat.mul_sub_left_distrib]
+      omega
+    have hright : 512 * (bOf m - 1000) ≤ 2 * m * (bOf m - 1000) :=
+      Nat.mul_le_mul_right _ (by omega : 512 ≤ 2 * m)
+    omega
+  unfold badExponent
+  rw [hleaf, hK]
+  have hmulq : 4 * (q * (bOf m - 1)) < 2 * m * (q * (bOf m - 1000)) := by
+    calc
+      4 * (q * (bOf m - 1)) = q * (4 * (bOf m - 1)) := by ring
+      _ < q * (2 * m * (bOf m - 1000)) := Nat.mul_lt_mul_of_pos_left hcore hqpos
+      _ = 2 * m * (q * (bOf m - 1000)) := by ring
+  omega
+
 end
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMass
