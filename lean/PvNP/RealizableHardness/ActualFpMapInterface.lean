@@ -377,5 +377,26 @@ theorem not_no_of_uniform_one_hot_budget
   rw [hone] at hmul
   simpa using hmul
 
+/-- For every fixed alphabet `A ≤ 2^1013`, a uniform one-hot budget is
+eventually not a manuscript `No` instance. `σ_L` passes `A`, so the all-true
+assignment enters the `σ` budget. -/
+theorem fixed_alphabet_one_hot_eventually_not_no
+    (A : Nat) (hA : 0 < A) (hAbound : A ≤ 2 ^ 1013) :
+    ∃ L0, ∀ L, L0 ≤ L →
+      ∀ i : Instance L,
+        (1 : Rat) / (A : Rat) ≤ i.data.budget →
+        i.data.cost (fun _ => true) = 1 →
+        ¬ No (manuscriptSigma L) (manuscriptGamma L) i := by
+  obtain ⟨Lσ, hσ⟩ := manuscriptSigma_ge_pow1013
+  obtain ⟨Lγ, hγ⟩ := certifiedGamma_pos_lt_one_eventual
+  refine ⟨max Lσ Lγ, ?_⟩
+  intro L hL i hb hall
+  have hσL : 2 ^ 1013 ≤ manuscriptSigma L :=
+    hσ L (le_trans (Nat.le_max_left _ _) hL)
+  have hγL : manuscriptGamma L < 1 := by
+    have hpair := hγ L (le_trans (Nat.le_max_right _ _) hL)
+    simpa [manuscriptGamma] using hpair.2
+  exact not_no_of_uniform_one_hot_budget i hA (hAbound.trans hσL) hγL hb hall
+
 end
 end PvNP.RealizableHardness.ActualFpMapInterface

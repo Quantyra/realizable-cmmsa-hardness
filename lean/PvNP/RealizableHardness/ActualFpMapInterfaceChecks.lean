@@ -18,6 +18,17 @@ open PvNP.RealizableHardness.ActualFpMapInterface
 #check not_no_of_budget_one
 #check manuscriptSigma_ge_pow1013
 #check not_no_of_uniform_one_hot_budget
+#check fixed_alphabet_one_hot_eventually_not_no
+
+example (A : Nat) (hA : 0 < A) (hAbound : A ≤ 2 ^ 1013) :
+    ∃ L0, ∀ L, L0 ≤ L →
+      ∀ i : PvNP.RealizableHardness.CMMSACodec.Instance L,
+        (1 : Rat) / (A : Rat) ≤ i.data.budget →
+        i.data.cost (fun _ => true) = 1 →
+        ¬ PvNP.RealizableHardness.CMMSACodec.No
+          (ActualHeadlineParameters.manuscriptSigma L)
+          (ActualHeadlineParameters.manuscriptGamma L) i :=
+  fixed_alphabet_one_hot_eventually_not_no A hA hAbound
 
 example :
     ∃ L0, ∀ L, L0 ≤ L → 2 ^ 1013 ≤ ActualHeadlineParameters.manuscriptSigma L :=
@@ -47,5 +58,6 @@ example {L : Nat} (i : PvNP.RealizableHardness.CMMSACodec.Instance L)
 #print axioms not_no_of_budget_one
 #print axioms manuscriptSigma_ge_pow1013
 #print axioms not_no_of_uniform_one_hot_budget
+#print axioms fixed_alphabet_one_hot_eventually_not_no
 
 end PvNP.RealizableHardness.ActualFpMapInterfaceChecks
