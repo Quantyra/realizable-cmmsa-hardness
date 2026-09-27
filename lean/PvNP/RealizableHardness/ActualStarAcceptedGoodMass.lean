@@ -12,14 +12,10 @@ import PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
 
 /-! Same-experiment acceptance minus bad-star mass.
 
-`selected_presented_starAccepts_rankGood` is the selected inequality.
-Its sample carries a transverse star, the rank-`2h` `PresentedLeaf` of each
-extension, and a source label and a query label on those leaves. The center
-marginal is `centerLaw`. Acceptance is `starAccepts`. Rank-good is
-`jointlyDirect` of that same star. `successMargin E = 2^{-E}`.
-
-`selected_transverseLeaf_accepted_rankGood` is an earlier geometric bound.
-Its acceptance event holds for every sample, so it is not this inequality.
+The inequalities in this file are not the required presented-leaf experiment.
+`selected_presented_starAccepts_rankGood` divides `starLaw` by a label card
+and compares a leaf with itself. The stop is
+`lean/reviews/2026-09-26-accepted-good-mass-stop.md`.
 
 This file does not prove Theorem 1, Corollary 2, or an `FP` reduction.
 -/
@@ -1596,11 +1592,11 @@ lemma physicalPresented_bad_mass_eq {N m J t h r : Nat} {I : Instance N m}
   rw [hsm, Finset.card_univ, nsmul_eq_mul]
   exact mul_div_cancel₀ (star.mass z) hc
 
-/-- Selected same-experiment bound. The sample is one transverse star together
-with source and query labels on its presented rank-`2h` leaves. `centerLaw`
-charges the center, `starAccepts` is acceptance, and `jointlyDirect` is the
-bad-star event of that same star. The dimension and endpoint guards are the
-ones named in the proof. This is not Theorem 1 or Corollary 2. -/
+/-- Withdrawn as the required inequality. The carrier is still `starLaw` on
+extension tuples, and `labelledAccept` compares one leaf with itself.
+`starAcceptsCenter` of one source against a distinct query leaf is the
+physical event, and for two leaves it is disjoint from joint directness.
+See `lean/reviews/2026-09-26-accepted-good-mass-stop.md`. -/
 theorem selected_presented_starAccepts_rankGood
     {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
     (hA : 1 ≤ A)
