@@ -838,5 +838,249 @@ theorem selected_transverseStar_equalLeaf_accepted_rankGood
   exact jointPair_equalLeaf_accepted_rankGood (V := transverseComplement q)
     (t := t) (d := d) (E := E) htd hdV hlt hcount
 
+/-- Push a subspace of the transverse complement out to the question ambient. -/
+def complementToAmbient {N m J t : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (S : Submodule (ZMod 2) (transverseComplement q)) :
+    Submodule (ZMod 2) (Ambient I) :=
+  (S.map (transverseComplement q).subtype).map (questionCoordinateSpace q).subtype
+
+lemma complementToAmbient_finrank {N m J t : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (S : Submodule (ZMod 2) (transverseComplement q)) :
+    Module.finrank (ZMod 2) (complementToAmbient q S) =
+      Module.finrank (ZMod 2) S := by
+  unfold complementToAmbient
+  rw [Submodule.finrank_map_subtype_eq, Submodule.finrank_map_subtype_eq]
+
+lemma complementToAmbient_le {N m J t : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (S : Submodule (ZMod 2) (transverseComplement q)) :
+    complementToAmbient q S ≤ questionCoordinateSpace q := by
+  unfold complementToAmbient
+  exact Submodule.map_subtype_le (questionCoordinateSpace q)
+    (S.map (transverseComplement q).subtype)
+
+lemma complementToAmbient_mono {N m J t : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    {S T : Submodule (ZMod 2) (transverseComplement q)} (hST : S ≤ T) :
+    complementToAmbient q S ≤ complementToAmbient q T := by
+  unfold complementToAmbient
+  exact Submodule.map_mono (Submodule.map_mono hST)
+
+lemma complementToAmbient_inf_equation {N m J t : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (S : Submodule (ZMod 2) (transverseComplement q)) :
+    complementToAmbient q S ⊓ questionEquationSpan q = ⊥ := by
+  apply le_antisymm
+  · intro x hx
+    rcases Submodule.mem_map.mp hx.1 with ⟨y, hy, hxy⟩
+    rcases Submodule.mem_map.mp hy with ⟨s, hs, hys⟩
+    have hyEq : y ∈ equationInCoordinate q := by
+      rw [equationInCoordinate, Submodule.mem_comap]
+      simpa [hxy] using hx.2
+    have hyComp : y ∈ transverseComplement q := by
+      rw [← hys]
+      exact Submodule.coe_mem s
+    have hzero : y ∈ (⊥ : Submodule (ZMod 2) (questionCoordinateSpace q)) := by
+      rw [← (transverseComplement_isCompl q).disjoint.eq_bot]
+      exact ⟨hyEq, hyComp⟩
+    have hy0 : y = 0 := by simpa using hzero
+    have hx0 : x = 0 := by
+      rw [← hxy, hy0]
+      exact map_zero (questionCoordinateSpace q).subtype
+    simpa [Submodule.mem_bot] using hx0
+  · exact bot_le
+
+noncomputable def presentedOfGrass {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (L : Grass (transverseComplement q) (2 * h)) :
+    PresentedLeaf I J h :=
+  { U := q.U
+    goodU := q.goodU
+    card_U := q.card_U
+    L := complementToAmbient q L.val
+    L_le := complementToAmbient_le q L.val
+    finrank_L := by rw [complementToAmbient_finrank, L.property]
+    transverse := complementToAmbient_inf_equation q L.val }
+
+noncomputable def vertexOfGrass {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (L : Grass (transverseComplement q) (2 * h)) :
+    LeafVertex I J h :=
+  ⟨(presentedOfGrass q L).domain, ⟨presentedOfGrass q L, rfl⟩⟩
+
+lemma vertexOfGrass_H {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (L : Grass (transverseComplement q) (2 * h)) :
+    vertexH (vertexOfGrass q L) = questionEquationSpan q := by
+  have hH := vertexH_eq_of_presentation (vertexOfGrass q L) (presentedOfGrass q L) rfl
+  simpa [presentedOfGrass, PresentedLeaf.H, questionEquationSpan] using hH
+
+noncomputable def drawnCenterSub {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (U : Grass (transverseComplement q) t)
+    (L : Grass (transverseComplement q) (2 * h))
+    (hUL : U.val ≤ L.val) :
+    CenterSubspace (vertexOfGrass q L) t :=
+  { K := complementToAmbient q U.val
+    le_domain := by
+      have hleaf : complementToAmbient q U.val ≤ (presentedOfGrass q L).L := by
+        simpa [presentedOfGrass] using complementToAmbient_mono q hUL
+      exact hleaf.trans (le_sup_left :
+        (presentedOfGrass q L).L ≤ (presentedOfGrass q L).domain)
+    transverse := by
+      rw [vertexOfGrass_H q L]
+      simpa [questionEquationSpan] using complementToAmbient_inf_equation q U.val
+    finrank := by rw [complementToAmbient_finrank, U.property] }
+
+noncomputable def canonicalLeafLabel {N m J h : Nat} {I : Instance N m}
+    (v : LeafVertex I J h) : LeafLabel v :=
+  Classical.choice (ActualPredrawLeafTable.leafLabel_nonempty (nRows := m) v)
+
+lemma starAcceptsCenter_self {N m J h k n : Nat} {I : Instance N m}
+    (v : LeafVertex I J h) (C : CenterSubspace v k) (φ : LeafLabel v) :
+    starAcceptsCenter v C φ (fun _ : Fin n => v) (fun _ => LeafVertex.Rel.refl v)
+      (fun _ => C) (fun _ => rfl) (fun _ => φ) := by
+  rw [starAcceptsCenter_iff_starAccepts]
+  refine starAccepts_of_source_agrees _ _ _ _ _ _ _ _ ?_
+  intro _
+  have hmap : Submodule.inclusion (le_of_eq (rfl : C.K = C.K).symm) = LinearMap.id :=
+    LinearMap.ext fun _ => rfl
+  rw [hmap, LinearMap.comp_id]
+
+/-- `starAcceptsCenter` of the two presented leaves of one `starLaw` draw.
+The source vertex is the first leaf and the queries are both presented leaves.
+The test is available only when those leaves are the same domain. -/
+def transverseStarAcceptsCenter {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (z : StarTuple (V := transverseComplement q) t (2 * h) 2) : Prop :=
+  ∃ heq : z.2 0 = z.2 1,
+    starAcceptsCenter
+      (vertexOfGrass q (z.2 0).val)
+      (drawnCenterSub q z.1 (z.2 0).val (z.2 0).property)
+      (canonicalLeafLabel (vertexOfGrass q (z.2 0).val))
+      (fun i => vertexOfGrass q (z.2 i).val)
+      (fun i => by
+        have hz : z.2 i = z.2 0 := by
+          fin_cases i
+          · rfl
+          · exact heq.symm
+        have hv : vertexOfGrass q (z.2 i).val = vertexOfGrass q (z.2 0).val := by
+          simp [hz]
+        exact hv ▸ LeafVertex.Rel.refl _)
+      (fun i => drawnCenterSub q z.1 (z.2 i).val (z.2 i).property)
+      (fun _ => by simp [drawnCenterSub])
+      (fun i => by
+        have hz : z.2 i = z.2 0 := by
+          fin_cases i
+          · rfl
+          · exact heq.symm
+        have hv : vertexOfGrass q (z.2 i).val = vertexOfGrass q (z.2 0).val := by
+          simp [hz]
+        exact hv ▸ canonicalLeafLabel (vertexOfGrass q (z.2 0).val))
+
+lemma transverseStarAcceptsCenter_imp_equal {N m J t h : Nat} {I : Instance N m}
+    (q : QuestionCenter I J t)
+    (z : StarTuple (V := transverseComplement q) t (2 * h) 2) :
+    transverseStarAcceptsCenter q z → z.2 0 = z.2 1 := by
+  rintro ⟨heq, _⟩
+  exact heq
+
+/-- On one joint source draw, `Pr[starAcceptsCenter ∧ rankGood] ≥ Pr[starAcceptsCenter] − r`
+with `r < S/2`. Rank-good is `jointlyDirect` of that draw. The bad-star event is
+its negation. -/
+theorem selected_transverseStar_starAcceptsCenter_rankGood
+    {N nRows L A : Nat} {sourceHMin : Nat → Nat}
+    {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (q : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows))) :
+    let h := hBlock L nRows
+    let t := leafT nRows h
+    let d := 2 * h
+    let E := badExponent nRows h
+    ∃ r : ℚ,
+      r < successMargin E / 2 ∧
+        eventMass (starLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+            (selected_leafT_le_leafRank hsel)
+            (selected_leafRank_le_complement hA hsel q))
+          (Finset.univ.filter fun z : StarTuple (V := transverseComplement q) t d 2 =>
+            transverseStarAcceptsCenter q z ∧ jointlyDirect z) ≥
+        eventMass (starLaw (V := transverseComplement q) (t := t) (d := d) (m := 2)
+            (selected_leafT_le_leafRank hsel)
+            (selected_leafRank_le_complement hA hsel q))
+          (Finset.univ.filter fun z : StarTuple (V := transverseComplement q) t d 2 =>
+            transverseStarAcceptsCenter q z) - r := by
+  intro h t d E
+  have htd : t ≤ d := by
+    simpa [t, d, h] using selected_leafT_le_leafRank (nRows := nRows) (L := L) hsel
+  have hlt : t < d := by
+    simpa [t, d, h] using selected_leafT_lt_leafRank (nRows := nRows) (L := L) hsel
+  have hdV : d ≤ Module.finrank (ZMod 2) (transverseComplement q) := by
+    simpa [d, h] using selected_leafRank_le_complement hA hsel q
+  let law := starLaw (V := transverseComplement q) (t := t) (d := d) (m := 2) htd hdV
+  let acc := Finset.univ.filter fun z : StarTuple (V := transverseComplement q) t d 2 =>
+    transverseStarAcceptsCenter q z
+  let good := Finset.univ.filter fun z : StarTuple (V := transverseComplement q) t d 2 =>
+    transverseStarAcceptsCenter q z ∧ jointlyDirect z
+  let eqv := Finset.univ.filter fun z : StarTuple (V := transverseComplement q) t d 2 =>
+    z.2 0 = z.2 1
+  have hsub : acc ⊆ eqv := by
+    intro z hz
+    have hz' := Finset.mem_filter.mp hz
+    exact Finset.mem_filter.mpr ⟨hz'.1, transverseStarAcceptsCenter_imp_equal q z hz'.2⟩
+  have hempty : good = ∅ := by
+    ext z
+    constructor
+    · intro hz
+      have hz' := Finset.mem_filter.mp hz
+      have heq : z.2 0 = z.2 1 := transverseStarAcceptsCenter_imp_equal q z hz'.2.1
+      exact (equalPair_not_jointlyDirect (V := transverseComplement q) htd hlt z heq hz'.2.2).elim
+    · intro hz
+      simp at hz
+  have hgood0 : eventMass law good = 0 := by simp [hempty, eventMass]
+  have heqMass : eventMass law eqv =
+      1 / (gaussian (Module.finrank (ZMod 2) (transverseComplement q) - t) (d - t) : ℚ) :=
+    starLaw_equalPair_mass (V := transverseComplement q) htd hdV
+  have haccLe : eventMass law acc ≤ eventMass law eqv := by
+    unfold eventMass
+    refine Finset.sum_le_sum_of_subset_of_nonneg hsub ?_
+    intro z _ _
+    haveI : Nonempty (StarTuple (V := transverseComplement q) t d 2) := ⟨z⟩
+    have hmass := starLaw_mass (V := transverseComplement q) (m := 2) htd hdV z
+    have hcard : 0 < Fintype.card (StarTuple (V := transverseComplement q) t d 2) :=
+      Fintype.card_pos
+    have : 0 ≤ law.mass z := by
+      rw [hmass]
+      positivity
+    simpa [law] using this
+  have hcount : 2 ^ (E + 1) <
+      gaussian (Module.finrank (ZMod 2) (transverseComplement q) - t) (d - t) := by
+    have hbase := selected_extensionCount_gt_halfMargin (nRows := nRows) (L := L)
+      (A := A) (sourceHMin := sourceHMin) hA hsel
+    have hidx : Module.finrank (ZMod 2) (transverseComplement q) - t =
+        2 * blocks A h - leafT nRows h := by rw [transverseComplement_finrank q]
+    have hkidx : d - t = leafK nRows h := by unfold d leafK t; rfl
+    simpa [E, h, hidx, hkidx] using hbase
+  have hltS : eventMass law acc < successMargin E / 2 := by
+    have hltEq : eventMass law eqv < successMargin E / 2 := by
+      rw [heqMass, successMargin_half]
+      have hg : (2 : ℚ) ^ (E + 1) <
+          gaussian (Module.finrank (ZMod 2) (transverseComplement q) - t) (d - t) := by
+        exact_mod_cast hcount
+      have hg0 : (0 : ℚ) <
+          gaussian (Module.finrank (ZMod 2) (transverseComplement q) - t) (d - t) := by
+        exact_mod_cast (gaussian_pos (by omega : d - t ≤
+          Module.finrank (ZMod 2) (transverseComplement q) - t))
+      have hpos : (0 : ℚ) < (2 : ℚ) ^ (E + 1) := by positivity
+      rw [one_div, one_div]
+      exact (inv_lt_inv₀ hg0 hpos).mpr hg
+    exact lt_of_le_of_lt haccLe hltEq
+  refine ⟨eventMass law acc, hltS, ?_⟩
+  rw [hgood0]
+  linarith
+
 end
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMass
