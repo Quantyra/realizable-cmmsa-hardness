@@ -16,6 +16,12 @@ open PvNP.RealizableHardness.ActualFpMapInterface
 #check budget_one_sigma_covers_every_assignment
 #check formula_eval_all_true
 #check not_no_of_budget_one
+#check manuscriptSigma_ge_pow1013
+#check not_no_of_uniform_one_hot_budget
+
+example :
+    ∃ L0, ∀ L, L0 ≤ L → 2 ^ 1013 ≤ ActualHeadlineParameters.manuscriptSigma L :=
+  manuscriptSigma_ge_pow1013
 
 example {L sig : Nat} {gam : Rat}
     (i : PvNP.RealizableHardness.CMMSACodec.Instance L)
@@ -39,5 +45,7 @@ example {L : Nat} (i : PvNP.RealizableHardness.CMMSACodec.Instance L)
 #print axioms budget_one_sigma_covers_every_assignment
 #print axioms formula_eval_all_true
 #print axioms not_no_of_budget_one
+#print axioms manuscriptSigma_ge_pow1013
+#print axioms not_no_of_uniform_one_hot_budget
 
 end PvNP.RealizableHardness.ActualFpMapInterfaceChecks

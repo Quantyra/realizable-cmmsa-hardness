@@ -299,5 +299,83 @@ theorem budget_one_sigma_covers_every_assignment
   have hσ1 : (1 : Rat) ≤ (manuscriptSigma L : Rat) := Nat.one_le_cast.mpr hσ
   exact hcost.trans (by simpa using hσ1)
 
+/-- Admissible manuscript blocks have `σ_L ≥ 2^1013`. -/
+theorem manuscriptSigma_ge_pow1013 :
+    ∃ L0, ∀ L, L0 ≤ L → 2 ^ 1013 ≤ manuscriptSigma L := by
+  obtain ⟨L0, hL0⟩ := certified_parameters_eventually 256
+  refine ⟨L0, ?_⟩
+  intro L hL
+  obtain ⟨m, _, hm256, hAd, _, hσ⟩ := hL0 L hL
+  have hmpos : 0 < m := by omega
+  have hdiv : m ∣ ActualCmmsaParameterReconciliation.hBlock L m := hAd.2.2.2.2.2.2.1
+  have hsrc : manuscriptSourceFloor m ≤ ActualCmmsaParameterReconciliation.hBlock L m :=
+    hAd.2.2.2.2.2.2.2.1
+  have h8 : 8 ≤ ActualCmmsaParameterReconciliation.sigmaBase L m :=
+    hAd.2.2.2.2.2.2.2.2
+  have hfloor : m + 2 ≤ ActualCmmsaParameterReconciliation.hBlock L m := by
+    simpa [manuscriptSourceFloor] using hsrc
+  have hq : 2 ≤ ActualCmmsaParameterReconciliation.hBlock L m / m := by
+    by_contra hlt
+    have hle : ActualCmmsaParameterReconciliation.hBlock L m ≤ m := by
+      calc
+        ActualCmmsaParameterReconciliation.hBlock L m
+            = (ActualCmmsaParameterReconciliation.hBlock L m / m) * m :=
+          (Nat.div_mul_cancel hdiv).symm
+        _ ≤ 1 * m := Nat.mul_le_mul_right m (by omega)
+        _ = m := by simp
+    omega
+  obtain ⟨_, hpow⟩ := sigmaFinal_two_pow hmpos hdiv h8
+  have hm1 : 255 ≤ m - 1 := by omega
+  have he : 1020 ≤ 2 * (ActualCmmsaParameterReconciliation.hBlock L m / m) * (m - 1) := by
+    have hmul : 2 * 2 ≤ 2 * (ActualCmmsaParameterReconciliation.hBlock L m / m) :=
+      Nat.mul_le_mul_left 2 hq
+    have hprod :
+        2 * 2 * 255 ≤
+          2 * (ActualCmmsaParameterReconciliation.hBlock L m / m) * (m - 1) := by
+      calc
+        2 * 2 * 255 ≤
+            2 * (ActualCmmsaParameterReconciliation.hBlock L m / m) * 255 :=
+          Nat.mul_le_mul_right 255 hmul
+        _ ≤ 2 * (ActualCmmsaParameterReconciliation.hBlock L m / m) * (m - 1) :=
+          Nat.mul_le_mul_left _ hm1
+    exact (by decide : 1020 ≤ 2 * 2 * 255).trans hprod
+  rw [manuscriptSigma, hσ, hpow]
+  have hshift :
+      1013 ≤ 2 * (ActualCmmsaParameterReconciliation.hBlock L m / m) * (m - 1) - 7 := by
+    omega
+  exact Nat.pow_le_pow_right (by decide : 0 < 2) hshift
+
+/-- If the all-true assignment sits in the `σ` budget, the instance is not `No`
+at `γ < 1`. -/
+theorem not_no_when_all_true_in_scope
+    {L sig : Nat} {gam : Rat} (i : Instance L)
+    (hγ : gam < 1)
+    (hcover : i.data.cost (fun _ => true) ≤ (sig : Rat) * i.data.budget) :
+    ¬ No (sig : Rat) gam i := by
+  intro hN
+  have hsat : i.data.satisfaction (fun _ => true) = 1 := satisfaction_all_true i
+  have hlt := hN (fun _ => true) hcover
+  rw [hsat] at hlt
+  exact not_lt_of_gt hγ hlt
+
+/-- A uniform one-hot budget of `1 / A` cannot be `No` once `σ ≥ A`.
+The all-true assignment then costs no more than `σ` times that budget, and it
+satisfies every positive formula. -/
+theorem not_no_of_uniform_one_hot_budget
+    {L A sig : Nat} {gam : Rat} (i : Instance L)
+    (hA : 0 < A) (hσ : A ≤ sig) (hγ : gam < 1)
+    (hb : (1 : Rat) / (A : Rat) ≤ i.data.budget)
+    (hall : i.data.cost (fun _ => true) = 1) :
+    ¬ No (sig : Rat) gam i := by
+  apply not_no_when_all_true_in_scope i hγ
+  rw [hall]
+  have hσR : (A : Rat) ≤ (sig : Rat) := Nat.cast_le.mpr hσ
+  have hmul : (A : Rat) * ((1 : Rat) / (A : Rat)) ≤ (sig : Rat) * i.data.budget :=
+    mul_le_mul hσR hb (by positivity) (by positivity)
+  have hAne : (A : Rat) ≠ 0 := by exact_mod_cast hA.ne'
+  have hone : (A : Rat) * ((1 : Rat) / (A : Rat)) = 1 := by field_simp [hAne]
+  rw [hone] at hmul
+  simpa using hmul
+
 end
 end PvNP.RealizableHardness.ActualFpMapInterface
