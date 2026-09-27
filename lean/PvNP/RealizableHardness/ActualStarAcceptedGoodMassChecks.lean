@@ -1,9 +1,9 @@
 import PvNP.RealizableHardness.ActualStarAcceptedGoodMass
 
-/-! Checks cite `selected_transverseLeaf_accepted_rankGood`. That theorem is
-not the manuscript physical acceptance inequality: its acceptance event is
-the whole sample. The stop is
-`lean/reviews/2026-09-26-accepted-good-mass-stop.md`. -/
+/-! Checks cite `selected_presented_starAccepts_rankGood`. Acceptance in that
+statement is `starAccepts` on the presented rank-`2h` leaves of the same
+draw that `jointlyDirect` reads. `selected_transverseLeaf_accepted_rankGood`
+remains the earlier whole-sample bound and is not this inequality. -/
 
 namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
 
@@ -24,6 +24,10 @@ namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.presentedOfTransverseLeaf
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.transverseLeafAccept_holds
 #check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_transverseLeaf_accepted_rankGood
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.physicalPresentedLeaf
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.labelledAccept_eq_starAccepts
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.physicalPresentedLaw_center
+#check PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_presented_starAccepts_rankGood
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.starLaw_bad_mass_lt_threshold
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.sameExperiment_accepted_rankGood
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.jointLaw_draws_center
@@ -33,5 +37,9 @@ namespace PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.physicalJoint_draws_center
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_physicalJoint_accepted_rankGood
 #print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_transverseLeaf_accepted_rankGood
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.labelledAccept_eq_starAccepts
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.physicalPresentedLaw_center
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.physicalPresented_bad_mass_eq
+#print axioms PvNP.RealizableHardness.ActualStarAcceptedGoodMass.selected_presented_starAccepts_rankGood
 
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks

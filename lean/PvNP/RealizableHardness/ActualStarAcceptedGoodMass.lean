@@ -6,14 +6,20 @@ import PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge
 import PvNP.RealizableHardness.ActualStarFixedRhoTwoIndexGuard
 import PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition
 import PvNP.RealizableHardness.ActualPresentedLeafGluing
+import PvNP.RealizableHardness.ActualStarAcceptance
+import PvNP.RealizableHardness.ActualPredrawLeafTable
 import PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge
 
 /-! Same-experiment acceptance minus bad-star mass.
 
-The selected experiment draws a center from `centerLaw` on the quotient of
-the question coordinate space by its equation span, then draws `DomainDraw`
-leaves of the question center built from that same draw. Acceptance and joint
-directness are events of those leaves. `successMargin E = 2^{-E}`.
+`selected_presented_starAccepts_rankGood` is the selected inequality.
+Its sample carries a transverse star, the rank-`2h` `PresentedLeaf` of each
+extension, and a source label and a query label on those leaves. The center
+marginal is `centerLaw`. Acceptance is `starAccepts`. Rank-good is
+`jointlyDirect` of that same star. `successMargin E = 2^{-E}`.
+
+`selected_transverseLeaf_accepted_rankGood` is an earlier geometric bound.
+Its acceptance event holds for every sample, so it is not this inequality.
 
 This file does not prove Theorem 1, Corollary 2, or an `FP` reduction.
 -/
@@ -1281,6 +1287,466 @@ theorem selected_transverseLeaf_accepted_rankGood
         eventMass law acc - (δ + successMargin (badExponent nRows h) / 2) / 2 := by
       linarith [hdef, hδle]
     simpa [law, acc, good, h, htd, hdV] using hgoal
+
+open PvNP.RealizableHardness.ActualPresentedLeafGluing
+
+/-- The domain vertex of one presented transverse leaf. -/
+def vertexOfPresented {N m J h : Nat} {I : Instance N m}
+    (P : PresentedLeaf I J h) : LeafVertex I J h :=
+  ⟨P.domain, ⟨P, rfl⟩⟩
+
+/-- Center subspace carried by a presented leaf of a drawn complement center. -/
+noncomputable def presentedCenterSubspace {N m J t h : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    {center : Grass (transverseComplement question) t}
+    (leaf : Extension center (2 * h)) :
+    CenterSubspace (vertexOfPresented (presentedOfTransverseLeaf question leaf)) t :=
+  let P := presentedOfTransverseLeaf question leaf
+  let K : Submodule (ZMod 2) (Ambient I) :=
+    (center.val.map (transverseComplement question).subtype).map
+      (questionCoordinateSpace question).subtype
+  { K := K
+    le_domain := by
+      intro x hx
+      have hleaf : center.val.map (transverseComplement question).subtype ≤
+          transverseLeafInCoordinate question leaf :=
+        (transverseLeafAccept_holds question
+          (⟨center, fun _ : Fin 1 => leaf⟩ : TransverseLeafStar question h 1) ⟨0, by decide⟩).2.2
+      rcases Submodule.mem_map.mp hx with ⟨y, hy, hyx⟩
+      have hyL : y ∈ transverseLeafInCoordinate question leaf := hleaf hy
+      have hxL : (questionCoordinateSpace question).subtype y ∈ P.L := by
+        have hmap := Submodule.mem_map_of_mem (f := (questionCoordinateSpace question).subtype)
+          hyL
+        simpa [P, presentedOfTransverseLeaf] using hmap
+      have hxL' : x ∈ P.L := by simpa [hyx] using hxL
+      exact (show P.L ≤ P.domain from le_sup_left) hxL'
+    transverse := by
+      rw [vertexH_eq_of_presentation (vertexOfPresented P) P rfl]
+      have hKL : K ≤ P.L := by
+        intro x hx
+        have hleaf : center.val.map (transverseComplement question).subtype ≤
+            transverseLeafInCoordinate question leaf :=
+          (transverseLeafAccept_holds question
+            (⟨center, fun _ : Fin 1 => leaf⟩ : TransverseLeafStar question h 1)
+            ⟨0, by decide⟩).2.2
+        rcases Submodule.mem_map.mp hx with ⟨y, hy, hyx⟩
+        have hyL : y ∈ transverseLeafInCoordinate question leaf := hleaf hy
+        have hxL : (questionCoordinateSpace question).subtype y ∈ P.L := by
+          simpa [P, presentedOfTransverseLeaf] using
+            Submodule.mem_map_of_mem (f := (questionCoordinateSpace question).subtype) hyL
+        simpa [hyx] using hxL
+      rw [eq_bot_iff]
+      intro x hx
+      have hxLH : x ∈ P.L ⊓ P.H := ⟨hKL hx.1, hx.2⟩
+      have hbot : P.L ⊓ P.H = ⊥ := by
+        simpa [PresentedLeaf.H] using P.transverse
+      rw [hbot] at hxLH
+      simpa using hxLH
+    finrank := by
+      dsimp [K]
+      rw [Submodule.finrank_map_subtype_eq, Submodule.finrank_map_subtype_eq]
+      exact center.property }
+
+/-- Source and queried labels of one transverse star. They are part of the
+sample, not arguments of the inequality. -/
+abbrev LabelFiber {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (z : TransverseLeafStar question h r) :=
+  (∀ i : Fin r, LeafLabel (vertexOfPresented
+      (presentedOfTransverseLeaf question (z.2 i)))) ×
+  (∀ i : Fin r, LeafLabel (vertexOfPresented
+      (presentedOfTransverseLeaf question (z.2 i))))
+
+abbrev LabelledTransverse {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)] :=
+  Σ z : TransverseLeafStar question h r, LabelFiber question z
+
+/-- Rank-`2h` presented leaf of one coordinate of the labelled draw. -/
+def physicalPresentedLeaf {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (x : LabelledTransverse question (h := h) (r := r)) (i : Fin r) :
+    PresentedLeaf I J h :=
+  presentedOfTransverseLeaf question (x.1.2 i)
+
+/-- Physical acceptance: `starAccepts` on the presented leaves of this draw.
+The source label and the query label are coordinates of the sample. -/
+def labelledAccept {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (x : LabelledTransverse question (h := h) (r := r)) : Prop :=
+  starAccepts
+    (fun i => vertexOfPresented (physicalPresentedLeaf question x i))
+    (fun i => vertexOfPresented (physicalPresentedLeaf question x i))
+    (fun i => LeafVertex.Rel.refl _)
+    (fun i => presentedCenterSubspace question (x.1.2 i))
+    (fun i => presentedCenterSubspace question (x.1.2 i))
+    (fun _ => rfl)
+    x.2.1
+    x.2.2
+
+theorem labelledAccept_eq_starAccepts {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (x : LabelledTransverse question (h := h) (r := r)) :
+    labelledAccept question x =
+      starAccepts
+        (fun i => vertexOfPresented (physicalPresentedLeaf question x i))
+        (fun i => vertexOfPresented (physicalPresentedLeaf question x i))
+        (fun i => LeafVertex.Rel.refl _)
+        (fun i => presentedCenterSubspace question (x.1.2 i))
+        (fun i => presentedCenterSubspace question (x.1.2 i))
+        (fun _ => rfl)
+        x.2.1
+        x.2.2 :=
+  rfl
+
+lemma finite_presented_domain {N m J t h : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    {center : Grass (transverseComplement question) t}
+    (leaf : Extension center (2 * h)) :
+    Finite (presentedOfTransverseLeaf question leaf).domain := by
+  let P := presentedOfTransverseLeaf question leaf
+  refine Finite.of_injective
+    (fun x : P.domain => (⟨x.1, ?_⟩ : questionCoordinateSpace question)) ?_
+  · exact P.domain_le_coordinateSpace x.2
+  · intro a b hab
+    apply Subtype.ext
+    exact congrArg (Subtype.val : questionCoordinateSpace question → Ambient I) hab
+
+lemma finite_presented_label {N m J t h : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    {center : Grass (transverseComplement question) t}
+    (leaf : Extension center (2 * h)) :
+    Finite (LeafLabel (vertexOfPresented (presentedOfTransverseLeaf question leaf))) := by
+  haveI := finite_presented_domain question leaf
+  let v := vertexOfPresented (presentedOfTransverseLeaf question leaf)
+  have hfin : Finite (v.1 → ZMod 2) := inferInstance
+  refine Finite.of_injective (fun φ : LeafLabel v => (φ.1.toFun : v.1 → ZMod 2)) ?_
+  intro a b hab
+  apply Subtype.ext
+  apply LinearMap.ext
+  intro x
+  exact congrFun hab x
+
+lemma labelFiber_nonempty {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (z : TransverseLeafStar question h r) :
+    Nonempty (LabelFiber question z) := by
+  classical
+  exact ⟨
+    (fun i => Classical.choice
+      (PvNP.RealizableHardness.ActualPredrawLeafTable.leafLabel_nonempty
+        (vertexOfPresented (presentedOfTransverseLeaf question (z.2 i))))),
+    (fun i => Classical.choice
+      (PvNP.RealizableHardness.ActualPredrawLeafTable.leafLabel_nonempty
+        (vertexOfPresented (presentedOfTransverseLeaf question (z.2 i)))))⟩
+
+noncomputable def labelFiberFintype {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (z : TransverseLeafStar question h r) :
+    Fintype (LabelFiber question z) := by
+  classical
+  let srcTy : Fin r → Type := fun i =>
+    LeafLabel (vertexOfPresented (presentedOfTransverseLeaf question (z.2 i)))
+  exact @instFintypeProd (∀ i, srcTy i) (∀ i, srcTy i)
+    (@Pi.instFintype (Fin r) srcTy inferInstance inferInstance
+      (fun i => by
+        have := finite_presented_label question (z.2 i)
+        exact Fintype.ofFinite (srcTy i)))
+    (@Pi.instFintype (Fin r) srcTy inferInstance inferInstance
+      (fun i => by
+        have := finite_presented_label question (z.2 i)
+        exact Fintype.ofFinite (srcTy i)))
+
+noncomputable instance labelledTransverseFintype {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)] :
+    Fintype (LabelledTransverse question (h := h) (r := r)) where
+  elems := (Finset.univ : Finset (TransverseLeafStar question h r)).sigma
+    (fun z => (labelFiberFintype question z).elems)
+  complete := by
+    intro x
+    exact Finset.mem_sigma.mpr
+      ⟨Finset.mem_univ x.1, (labelFiberFintype question x.1).complete x.2⟩
+
+/-- Conditional uniform labels on the presented leaves of one `starLaw` draw.
+`starLaw` charges the center by `centerLaw` and then the rank-`2h` extensions
+of that center. The label fibre is the pair of `LeafLabel` tuples on the
+presented leaves of that same draw, not a constant supplied to the theorem. -/
+noncomputable def physicalPresentedLaw {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (htd : t ≤ 2 * h)
+    (hdV : 2 * h ≤ Module.finrank (ZMod 2) (transverseComplement question)) :
+    @FiniteLaw (LabelledTransverse question (h := h) (r := r))
+      (labelledTransverseFintype question) := by
+  letI : Fintype (LabelledTransverse question (h := h) (r := r)) :=
+    labelledTransverseFintype question
+  haveI (z : TransverseLeafStar question h r) : Fintype (LabelFiber question z) :=
+    labelFiberFintype question z
+  exact
+    { mass := fun x =>
+        (starLaw (V := transverseComplement question) (t := t) (d := 2 * h) (m := r)
+          htd hdV).mass x.1 / ((labelFiberFintype question x.1).card : ℚ)
+      nonneg := by
+        intro x
+        have : Nonempty (LabelFiber question x.1) := labelFiber_nonempty question x.1
+        letI : Fintype (LabelFiber question x.1) := labelFiberFintype question x.1
+        have hpos : (0 : ℚ) < Fintype.card (LabelFiber question x.1) := by
+          exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (LabelFiber question x.1))
+        exact div_nonneg
+          ((starLaw (V := transverseComplement question) (t := t) (d := 2 * h) (m := r)
+            htd hdV).nonneg x.1) hpos.le
+      normalized := by
+        classical
+        let star := starLaw (V := transverseComplement question) (t := t) (d := 2 * h)
+          (m := r) htd hdV
+        have hsum :
+            (∑ x ∈ (labelledTransverseFintype question).elems,
+              star.mass x.1 / ((labelFiberFintype question x.1).card : ℚ)) =
+            ∑ z : TransverseLeafStar question h r, star.mass z := by
+          have helems : (labelledTransverseFintype question).elems =
+              (Finset.univ : Finset (TransverseLeafStar question h r)).sigma
+                (fun z => (labelFiberFintype question z).elems) := by
+            rfl
+          rw [helems, Finset.sum_sigma]
+          refine Finset.sum_congr rfl ?_
+          intro z _
+          have hc : ((labelFiberFintype question z).card : ℚ) ≠ 0 := by
+            have : Nonempty (LabelFiber question z) := labelFiber_nonempty question z
+            letI : Fintype (LabelFiber question z) := labelFiberFintype question z
+            exact_mod_cast (Fintype.card_ne_zero : Fintype.card (LabelFiber question z) ≠ 0)
+          have hsm := Finset.sum_const
+            (s := (labelFiberFintype question z).elems)
+            (b := star.mass z / ((labelFiberFintype question z).card : ℚ))
+          have hcard : ((labelFiberFintype question z).elems.card : ℚ) =
+              ((labelFiberFintype question z).card : ℚ) := rfl
+          rw [hsm, nsmul_eq_mul, hcard]
+          exact mul_div_cancel₀ (star.mass z) hc
+        have huniv : (labelledTransverseFintype question).elems =
+            (Finset.univ : Finset (LabelledTransverse question (h := h) (r := r))) := by
+          rfl
+        rw [← huniv, hsum]
+        simpa using star.normalized }
+
+theorem physicalPresentedLaw_mass {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (htd : t ≤ 2 * h)
+    (hdV : 2 * h ≤ Module.finrank (ZMod 2) (transverseComplement question))
+    (x : LabelledTransverse question (h := h) (r := r)) :
+    (physicalPresentedLaw question htd hdV).mass x =
+      (starLaw (V := transverseComplement question) (t := t) (d := 2 * h) (m := r)
+        htd hdV).mass x.1 / ((labelFiberFintype question x.1).card : ℚ) :=
+  rfl
+
+theorem physicalPresentedLaw_center {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (htd : t ≤ 2 * h)
+    (hdV : 2 * h ≤ Module.finrank (ZMod 2) (transverseComplement question))
+    (x : LabelledTransverse question (h := h) (r := r)) :
+    (physicalPresentedLaw question htd hdV).mass x =
+      ((centerLaw x.1.1).mass x.1.1 *
+        ∏ i : Fin r, (extensionLaw x.1.1 (x.1.2 i)).mass (x.1.2 i)) /
+        ((labelFiberFintype question x.1).card : ℚ) := by
+  rw [physicalPresentedLaw_mass, starLaw_atom]
+
+lemma physicalPresented_bad_mass_eq {N m J t h r : Nat} {I : Instance N m}
+    (question : QuestionCenter I J t) [Finite (questionCoordinateSpace question)]
+    (htd : t ≤ 2 * h)
+    (hdV : 2 * h ≤ Module.finrank (ZMod 2) (transverseComplement question)) :
+    eventMass (physicalPresentedLaw question (h := h) (r := r) htd hdV)
+        ((labelledTransverseFintype question (h := h) (r := r)).elems.filter
+          fun x : LabelledTransverse question (h := h) (r := r) =>
+            ¬ jointlyDirect (m := r) x.1) =
+      eventMass (starLaw (V := transverseComplement question) (t := t) (d := 2 * h) (m := r)
+          htd hdV)
+        (Finset.univ.filter fun z : TransverseLeafStar question h r => ¬ jointlyDirect z) := by
+  classical
+  letI : Fintype (LabelledTransverse question (h := h) (r := r)) :=
+    labelledTransverseFintype question
+  letI (z : TransverseLeafStar question h r) : Fintype (LabelFiber question z) :=
+    labelFiberFintype question z
+  let star := starLaw (V := transverseComplement question) (t := t) (d := 2 * h) (m := r) htd hdV
+  let badX : Finset (LabelledTransverse question (h := h) (r := r)) :=
+    (labelledTransverseFintype question (h := h) (r := r)).elems.filter
+      fun x => ¬ jointlyDirect (m := r) x.1
+  let badZ : Finset (TransverseLeafStar question h r) :=
+    Finset.univ.filter fun z => ¬ jointlyDirect (m := r) z
+  have heq : badX = badZ.sigma (fun _ => Finset.univ) := by
+    ext x
+    refine ⟨?_, ?_⟩
+    · intro hx
+      have hx' := Finset.mem_filter.mp hx
+      exact Finset.mem_sigma.mpr
+        ⟨Finset.mem_filter.mpr ⟨Finset.mem_univ x.1, hx'.2⟩, Finset.mem_univ x.2⟩
+    · intro hx
+      have hx' := Finset.mem_sigma.mp hx
+      have hz := Finset.mem_filter.mp hx'.1
+      exact Finset.mem_filter.mpr
+        ⟨(labelledTransverseFintype question (h := h) (r := r)).complete x, hz.2⟩
+  change (∑ x ∈ badX, (physicalPresentedLaw question (h := h) (r := r) htd hdV).mass x) =
+    ∑ z ∈ badZ, star.mass z
+  rw [heq, Finset.sum_sigma]
+  refine Finset.sum_congr rfl ?_
+  intro z _
+  have hc : ((labelFiberFintype question z).card : ℚ) ≠ 0 := by
+    have : Nonempty (LabelFiber question z) := labelFiber_nonempty question z
+    letI : Fintype (LabelFiber question z) := labelFiberFintype question z
+    exact_mod_cast (Fintype.card_ne_zero : Fintype.card (LabelFiber question z) ≠ 0)
+  simp_rw [physicalPresentedLaw_mass]
+  have hsm := Finset.sum_const
+    (s := (Finset.univ : Finset (LabelFiber question z)))
+    (b := star.mass z / ((labelFiberFintype question z).card : ℚ))
+  rw [hsm, Finset.card_univ, nsmul_eq_mul]
+  exact mul_div_cancel₀ (star.mass z) hc
+
+/-- Selected same-experiment bound. The sample is one transverse star together
+with source and query labels on its presented rank-`2h` leaves. `centerLaw`
+charges the center, `starAccepts` is acceptance, and `jointlyDirect` is the
+bad-star event of that same star. The dimension and endpoint guards are the
+ones named in the proof. This is not Theorem 1 or Corollary 2. -/
+theorem selected_presented_starAccepts_rankGood
+    {N nRows L A : Nat} (r : Nat) {sourceHMin : Nat → Nat} {I : Instance N nRows}
+    (hA : 1 ≤ A)
+    (hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = (nRows : WithBot Nat))
+    (hr : r ≤ nRows)
+    (question : QuestionCenter I (blocks A (hBlock L nRows))
+      (leafT nRows (hBlock L nRows)))
+    [Finite (questionCoordinateSpace question)] :
+    ∃ q : ℚ,
+      q < successMargin (badExponent nRows (hBlock L nRows)) / 2 ∧
+      @eventMass (LabelledTransverse question (h := hBlock L nRows) (r := r))
+          (labelledTransverseFintype question)
+          (physicalPresentedLaw question
+            (leafT_le_two_mul_h nRows (hBlock L nRows))
+            (by
+              rw [transverseComplement_finrank question]
+              exact Nat.mul_le_mul_left 2
+                (selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel))))
+          ((labelledTransverseFintype question).elems.filter fun x =>
+            starAccepts
+              (fun i => vertexOfPresented (physicalPresentedLeaf question x i))
+              (fun i => vertexOfPresented (physicalPresentedLeaf question x i))
+              (fun i => LeafVertex.Rel.refl _)
+              (fun i => presentedCenterSubspace question (x.1.2 i))
+              (fun i => presentedCenterSubspace question (x.1.2 i))
+              (fun _ => rfl)
+              x.2.1 x.2.2 ∧ jointlyDirect x.1) ≥
+        @eventMass (LabelledTransverse question (h := hBlock L nRows) (r := r))
+          (labelledTransverseFintype question)
+          (physicalPresentedLaw question
+            (leafT_le_two_mul_h nRows (hBlock L nRows))
+            (by
+              rw [transverseComplement_finrank question]
+              exact Nat.mul_le_mul_left 2
+                (selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel))))
+          ((labelledTransverseFintype question).elems.filter fun x =>
+            starAccepts
+              (fun i => vertexOfPresented (physicalPresentedLeaf question x i))
+              (fun i => vertexOfPresented (physicalPresentedLeaf question x i))
+              (fun i => LeafVertex.Rel.refl _)
+              (fun i => presentedCenterSubspace question (x.1.2 i))
+              (fun i => presentedCenterSubspace question (x.1.2 i))
+              (fun _ => rfl)
+              x.2.1 x.2.2) - q := by
+  classical
+  let h := hBlock L nRows
+  let J := blocks A h
+  let t0 := leafT nRows h
+  let htd : t0 ≤ 2 * h := leafT_le_two_mul_h nRows h
+  let hdV : 2 * h ≤ Module.finrank (ZMod 2) (transverseComplement question) := by
+    rw [transverseComplement_finrank question]
+    exact Nat.mul_le_mul_left 2
+      (selected_hBlock_le_blocks hA (selected_one_le_hBlock hsel))
+  have hk : 1 ≤ 2 * h - t0 := by
+    have hK : leafK nRows h = 2 * h - t0 := by simp [leafK, leafT, h, t0]
+    rw [← hK]
+    simpa [h] using selected_one_le_leafK hsel
+  have hguard : r * (2 * h - t0) + badExponent nRows h + 2 ≤
+      Module.finrank (ZMod 2) (transverseComplement question) - t0 := by
+    have hselGuard := selected_actual_center_quotient_dimension_guard_twoIndex
+      (center := question) sourceHMin hA hsel hr
+    rw [centerQuotient_finrank question] at hselGuard
+    rw [transverseComplement_finrank question]
+    have hK : leafK nRows h = 2 * h - t0 := by simp [leafK, leafT, h, t0]
+    simpa [h, t0, hK] using hselGuard
+  letI : Fintype (LabelledTransverse question (h := h) (r := r)) :=
+    labelledTransverseFintype question
+  haveI (z : TransverseLeafStar question h r) : Fintype (LabelFiber question z) :=
+    labelFiberFintype question z
+  let law := physicalPresentedLaw question (h := h) (r := r) htd hdV
+  have hbadEq := physicalPresented_bad_mass_eq question (h := h) (r := r) htd hdV
+  have hbadStar := starLaw_bad_mass_lt_threshold (V := transverseComplement question)
+    (t := t0) (d := 2 * h) (m := r) (E := badExponent nRows h) htd hdV hk hguard
+  let s : ℚ := 1 / (2 : ℚ) ^ (badExponent nRows h + 1)
+  have hsHalf : s = successMargin (badExponent nRows h) / 2 := by
+    rw [successMargin_half]
+  let bad : Finset (LabelledTransverse question (h := h) (r := r)) :=
+    (labelledTransverseFintype question (h := h) (r := r)).elems.filter
+      fun x => ¬ jointlyDirect (m := r) x.1
+  let good : Finset (LabelledTransverse question (h := h) (r := r)) :=
+    (labelledTransverseFintype question (h := h) (r := r)).elems.filter
+      fun x => labelledAccept question x ∧ jointlyDirect (m := r) x.1
+  let acc : Finset (LabelledTransverse question (h := h) (r := r)) :=
+    (labelledTransverseFintype question (h := h) (r := r)).elems.filter (labelledAccept question)
+  let accBad : Finset (LabelledTransverse question (h := h) (r := r)) :=
+    (labelledTransverseFintype question (h := h) (r := r)).elems.filter
+      fun x => labelledAccept question x ∧ ¬ jointlyDirect (m := r) x.1
+  have hbadMass : eventMass law bad < s := by
+    have hstar : eventMass (starLaw (V := transverseComplement question) (t := t0)
+        (d := 2 * h) (m := r) htd hdV)
+        (Finset.univ.filter fun z : TransverseLeafStar question h r => ¬ jointlyDirect (m := r) z) < s := by
+      simpa [s, h, t0] using hbadStar
+    exact (show eventMass law bad =
+        eventMass (starLaw (V := transverseComplement question) (t := t0) (d := 2 * h) (m := r)
+          htd hdV)
+          (Finset.univ.filter fun z : TransverseLeafStar question h r =>
+            ¬ jointlyDirect (m := r) z) from hbadEq).trans_lt hstar
+  have hdisj : Disjoint good accBad := by
+    refine Finset.disjoint_left.mpr ?_
+    intro x hx hbadx
+    exact (Finset.mem_filter.mp hbadx).2.2 (Finset.mem_filter.mp hx).2.2
+  have hunion : good ∪ accBad = acc := by
+    ext x
+    constructor
+    · intro hx
+      rcases Finset.mem_union.mp hx with hx | hx
+      · exact Finset.mem_filter.mpr
+          ⟨(Finset.mem_filter.mp hx).1, (Finset.mem_filter.mp hx).2.1⟩
+      · exact Finset.mem_filter.mpr
+          ⟨(Finset.mem_filter.mp hx).1, (Finset.mem_filter.mp hx).2.1⟩
+    · intro hx
+      have hx' := Finset.mem_filter.mp hx
+      by_cases hj : jointlyDirect (m := r) x.1
+      · exact Finset.mem_union.mpr (Or.inl (Finset.mem_filter.mpr ⟨hx'.1, hx'.2, hj⟩))
+      · exact Finset.mem_union.mpr (Or.inr (Finset.mem_filter.mpr ⟨hx'.1, hx'.2, hj⟩))
+  have hsplit : eventMass law acc = eventMass law good + eventMass law accBad := by
+    unfold eventMass
+    rw [← hunion, Finset.sum_union hdisj]
+  have hle : eventMass law accBad ≤ eventMass law bad := by
+    apply eventMass_mono law
+    intro x hx
+    exact Finset.mem_filter.mpr ⟨(Finset.mem_filter.mp hx).1, (Finset.mem_filter.mp hx).2.2⟩
+  have hδlt : eventMass law acc - eventMass law good < s := by
+    have hdiff : eventMass law acc - eventMass law good = eventMass law accBad := by
+      linarith [hsplit]
+    linarith [hdiff, hle, hbadMass]
+  let δ : ℚ := eventMass law acc - eventMass law good
+  have hδ' : δ < successMargin (badExponent nRows h) / 2 := by
+    rw [← hsHalf]
+    exact hδlt
+  have hδ0 : 0 ≤ δ := by
+    have hmono : eventMass law good ≤ eventMass law acc := by
+      apply eventMass_mono law
+      intro x hx
+      exact Finset.mem_filter.mpr ⟨(Finset.mem_filter.mp hx).1, (Finset.mem_filter.mp hx).2.1⟩
+    exact sub_nonneg.mpr hmono
+  refine ⟨(δ + successMargin (badExponent nRows h) / 2) / 2, ?_, ?_⟩
+  · linarith [hδ']
+  · have hδle : δ ≤ (δ + successMargin (badExponent nRows h) / 2) / 2 := by
+      linarith [hδ0, hδ']
+    have hdef : eventMass law good = eventMass law acc - δ := by simp [δ]
+    have hgoal : eventMass law good ≥
+        eventMass law acc - (δ + successMargin (badExponent nRows h) / 2) / 2 := by
+      linarith [hdef, hδle]
+    simp only [law, acc, good, h, htd, hdV, labelledAccept] at hgoal
+    exact hgoal
 
 end
 end PvNP.RealizableHardness.ActualStarAcceptedGoodMass

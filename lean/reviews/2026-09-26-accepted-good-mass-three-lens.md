@@ -1,19 +1,19 @@
 # Accepted-good-mass three-lens
 
-Date: 2026-09-26. Outcome B. The required inequality is not this table's theorem.
-`selected_transverseLeaf_accepted_rankGood` measures `starLaw` on extension
-tuples. `transverseLeafAccept` holds for every sample, so the proved bound
-has acceptance mass 1. The physical acceptance event is `starAccepts`.
-See `lean/reviews/2026-09-26-accepted-good-mass-stop.md`.
+Date: 2026-09-26. Theorem: `selected_presented_starAccepts_rankGood`.
+The sample is `physicalPresentedLaw`. Acceptance is `starAccepts` on the
+presented rank-`2h` leaves. Rank-good is `jointlyDirect` of that same star.
+`physicalPresentedLaw_center` charges the center by `centerLaw`.
 This is not route-final. Theorem 1 and Corollary 2 are not claimed.
+Full CMMSA stays partial.
 
 ## Three-lens
 
 | Lens | Verdict | Note |
 |------|---------|------|
-| Build/audit | GO | Local `lake build` and the GCP replay at `4d346bb` exited 0. That build is the `jointlyDirect` bound, not the physical `PresentedLeaf` acceptance inequality. |
-| Proof-adversarial | NO-GO | Acceptance is proved for every sample and set equal to `Finset.univ`. |
-| Complexity | NO-GO | The measured carrier is `starLaw` on `Extension`, not a `PresentedLeaf` law. `presentedOfTransverseLeaf` is not the sample space. |
-| Non-claims | INCOMPLETE | No separate non-claims note. The stop does not claim Theorem 1, Corollary 2, or route-final. |
+| Build/audit | GO | Local `lake build PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks` exited 0 (3272 jobs). Axioms of the theorem: `propext`, `Classical.choice`, `Quot.sound`. GCP replay of this theorem is a separate receipt. |
+| Proof-adversarial | GO | `lean/reviews/2026-09-26-presented-starAccepts-proof-adversarial.md` names `selected_presented_starAccepts_rankGood`. |
+| Complexity | GO-WITH-NOTES | `lean/reviews/2026-09-26-presented-starAccepts-complexity.md` names `selected_presented_starAccepts_rankGood`. The bound is the gap below half the success margin. It is not an FP reduction. |
+| Non-claims | GO | `lean/reviews/2026-09-26-presented-starAccepts-non-claims.md` names `selected_presented_starAccepts_rankGood`. Public `README.md` and `MANUSCRIPT.md` are unchanged. |
 
-Full CMMSA remains partial.
+Review debt for route-final use: the manuscript producer, Theorem 1, and Corollary 2 remain open.
