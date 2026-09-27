@@ -1,0 +1,21 @@
+RESULT=PASS
+COMMIT=b4da0c31718131065f927adf85771db172523050
+VM=quantyra-lean-builder-01
+ZONE=us-central1-a
+PROJECT=quantyra-lean-cert-20260915
+LEAN=4.34.0-rc2
+COMMAND=lake build PvNP.RealizableHardness.ActualStarAcceptedGoodMassChecks
+LAKE_EXIT=0
+JOBS=3272
+AUDIT_SCOPE=PRESENTED_STARACCEPTS_ACCEPTED_GOOD_MASS_ONLY
+LAW=physicalPresentedLaw
+INEQUALITY=eventMass(starAccepts and jointlyDirect) >= eventMass(starAccepts) - q AND q < successMargin E / 2
+SUCCESS_MARGIN=2^(-E)
+CENTER=centerLaw via physicalPresentedLaw_center
+LEAVES=PresentedLeaf rank 2*hBlock of the same transverse star
+ACCEPT=starAccepts
+RANK_GOOD=jointlyDirect of that same star
+THEOREM_1=NOT_CLAIMED
+COROLLARY_2=NOT_CLAIMED
+ROUTE_FINAL=NO
+FULL_CMMSA=PARTIAL
