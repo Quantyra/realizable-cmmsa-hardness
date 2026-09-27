@@ -8,8 +8,10 @@ Uniform compiled stars, repeated under manuscript gamma.
 `3/4` inside the normalized cost ball, once every labeling has score at most
 `zeta` and `(8ρ)^{m+1} ζ ≤ 5/8`. `product_average_lt_certifiedGamma_index`
 turns that rational average into a `q`-fold AND strictly below
-`certifiedGamma`. The score bound stays a hypothesis: this file does not read
-a 3CNF, does not build a `SeededMap`, and does not inhabit `hSrcCmmsa`.
+`certifiedGamma`. An accepting labeling has one-hot cost equal to the
+normalized budget and q-fold satisfaction `1`. The score bound stays a
+hypothesis: this file does not read a 3CNF, does not build a `SeededMap`,
+and does not inhabit `hSrcCmmsa`.
 -/
 namespace PvNP.RealizableHardness.ActualCompiledProduct
 
@@ -125,6 +127,65 @@ theorem uniform_compiled_product_lt_certifiedGamma
     Rat.cast_le.mp hleR
   exact product_average_lt_certifiedGamma_index
     (compiledFormula edges hcompile) Z hq hle
+
+/-- One true coordinate per vertex, at the labeling `l`. -/
+def oneHot (l : Labeling Sigma) : (Σ v, Sigma v) → Bool :=
+  fun p => decide (p.2 = l p.1)
+
+omit [Fintype V] [∀ (v : V), Nonempty (Sigma v)] in
+theorem selected_oneHot (l : Labeling Sigma) (v : V) :
+    selected (oneHot l) v = {l v} := by
+  classical
+  ext a
+  unfold selected oneHot
+  simp [Finset.mem_filter]
+
+omit [Fintype E] [Nonempty E] in
+theorem accepting_compiles (edges : E → Star V Sigma m) (l : Labeling Sigma)
+    (hacc : ∀ e, (edges e).accepts l) (e : E) :
+    (compile (edges e)).isSome = true := by
+  cases h : compile (edges e) with
+  | some _ => rfl
+  | none => exact ((compile_eq_none_iff (edges e)).mp h ⟨l, hacc e⟩).elim
+
+theorem uniform_accepting_cost (edges : E → Star V Sigma m) (l : Labeling Sigma)
+    (hacc : ∀ e, (edges e).accepts l) :
+    assignmentCost uniformEdge edges (oneHot l) = starBudget uniformEdge edges ∧
+      compiledSatisfaction uniformEdge edges (oneHot l) = 1 := by
+  have hA : ∀ v, selected (oneHot l) v = {l v} := fun v => selected_oneHot l v
+  have hcost : assignmentCost uniformEdge edges (oneHot l) =
+      starBudget uniformEdge edges := by
+    rw [assignmentCost_eq_selectedWeight]
+    simp only [selectedWeight, variableWeight, hA, Finset.sum_singleton, starBudget]
+    rw [← Finset.sum_div, occurrenceWeight_sum uniformEdge uniformEdge_sum edges]
+  have hsat : compiledSatisfaction uniformEdge edges (oneHot l) = 1 := by
+    rw [compiledSatisfaction_eq_witnessMass]
+    have hw : ∀ e, (edges e).listWitness (selected (oneHot l)) := by
+      intro e
+      refine ⟨l, hacc e, ?_⟩
+      intro j
+      rw [hA]
+      exact Finset.mem_singleton_self _
+    unfold eventMass
+    simp [hw, uniformEdge_sum]
+  exact ⟨hcost, hsat⟩
+
+theorem uniform_accepting_product (edges : E → Star V Sigma m) (l : Labeling Sigma)
+    (hacc : ∀ e, (edges e).accepts l) {q : Nat} (hq : 0 < q) :
+    average (fun ι : Fin q → E =>
+        Formula.eval (oneHot l)
+          (andAll (fun j =>
+              compiledFormula edges (accepting_compiles edges l hacc) (ι j)) hq)) = 1 := by
+  have hsat := (uniform_accepting_cost edges l hacc).2
+  have hcast :=
+    uniform_average_eq_compiledSatisfaction edges (accepting_compiles edges l hacc) (oneHot l)
+  have hbase : average (fun e =>
+      Formula.eval (oneHot l)
+        (compiledFormula edges (accepting_compiles edges l hacc) e)) = 1 := by
+    apply Rat.cast_injective (α := ℝ)
+    rw [hcast, hsat]
+    simp
+  rw [average_andAll_pow_index _ _ hq, hbase, one_pow]
 
 end
 

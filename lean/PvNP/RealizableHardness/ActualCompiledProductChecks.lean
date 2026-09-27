@@ -57,9 +57,32 @@ example {L : Nat}
   uniform_compiled_product_lt_certifiedGamma toyEdges toyEdges_compile
     rho zeta hrho hvalue hparam hq Z hcost
 
+example :
+    compiledSatisfaction uniformEdge toyEdges (oneHot (fun _ : Bool => false)) = 1 :=
+  (uniform_accepting_cost toyEdges (fun _ : Bool => false) (by
+    intro _ i
+    fin_cases i
+    rfl)).2
+
+example :
+    average (fun ι : Fin 2 → Unit =>
+        Formula.eval (oneHot (fun _ : Bool => false))
+          (andAll (fun j =>
+              compiledFormula toyEdges
+                (accepting_compiles toyEdges (fun _ : Bool => false) (by
+                  intro _ i
+                  fin_cases i
+                  rfl)) (ι j)) (by decide))) = 1 :=
+  uniform_accepting_product toyEdges (fun _ : Bool => false) (by
+    intro _ i
+    fin_cases i
+    rfl) (by decide)
+
 #print axioms uniformEdge_sum
 #print axioms uniform_average_eq_compiledSatisfaction
 #print axioms uniform_compiled_product_lt_certifiedGamma
+#print axioms uniform_accepting_cost
+#print axioms uniform_accepting_product
 
 end
 
