@@ -207,6 +207,60 @@ theorem product_average_lt_certifiedGamma {L M : Nat} {V : Type*}
     nlinarith
   exact lt_trans hlt hγ
 
+theorem average_andAll_pow_index {V I : Type*} [Fintype I] [Nonempty I]
+    {q : Nat} (F : I → Formula V) (x : V → Bool) (hq : 0 < q) :
+    average (fun ι : Fin q → I =>
+        Formula.eval x (andAll (fun j => F (ι j)) hq)) =
+      average (fun i : I => Formula.eval x (F i)) ^ q := by
+  classical
+  let ind : I → Rat := fun i => if Formula.eval x (F i) then 1 else 0
+  have hind : ∀ ι : Fin q → I,
+      (if Formula.eval x (andAll (fun j => F (ι j)) hq) then (1 : Rat) else 0) =
+        ∏ j, ind (ι j) := by
+    intro ι
+    by_cases h : ∀ j, Formula.eval x (F (ι j)) = true
+    · rw [(eval_andAll (fun j => F (ι j)) hq x).2 h]
+      simp [ind, h]
+    · obtain ⟨j, hj⟩ := not_forall.mp h
+      have hfalse : (if Formula.eval x (F (ι j)) then (1 : Rat) else 0) = 0 := by
+        cases hev : Formula.eval x (F (ι j))
+        · simp
+        · exact absurd hev hj
+      have hallfalse :
+          Formula.eval x (andAll (fun k => F (ι k)) hq) = false := by
+        cases hev : Formula.eval x (andAll (fun k => F (ι k)) hq)
+        · rfl
+        · exact absurd ((eval_andAll (fun k => F (ι k)) hq x).1 hev j) hj
+      have hleft :
+          (if Formula.eval x (andAll (fun k => F (ι k)) hq) = true then (1 : Rat) else 0) = 0 := by
+        simp [hallfalse]
+      exact hleft.trans (Finset.prod_eq_zero (Finset.mem_univ j) (by simpa [ind] using hfalse)).symm
+  unfold average
+  have hcard : (Fintype.card (Fin q → I) : Rat) = (Fintype.card I : Rat) ^ q := by
+    rw [Fintype.card_fun, Fintype.card_fin]
+    norm_cast
+  have hnum :
+      (∑ ι : Fin q → I,
+          if Formula.eval x (andAll (fun j => F (ι j)) hq) then (1 : Rat) else 0) =
+        (∑ i : I, ind i) ^ q := by
+    rw [Fintype.sum_pow ind q]
+    refine Finset.sum_congr rfl ?_
+    intro ι _
+    exact hind ι
+  rw [hnum, hcard, div_pow]
+
+theorem product_average_lt_certifiedGamma_index
+    {L : Nat} {V I : Type*} [Fintype I] [Nonempty I]
+    (F : I → Formula V) (x : V → Bool)
+    (hq : 0 < q (certifiedM L))
+    (hbase : average (fun i : I => Formula.eval x (F i)) ≤ (3 : Rat) / 4) :
+    average (fun ι : Fin (q (certifiedM L)) → I =>
+        Formula.eval x (andAll (fun j => F (ι j)) hq)) < certifiedGamma L := by
+  rw [average_andAll_pow_index F x hq]
+  exact lt_of_le_of_lt
+    (pow_le_pow_left₀ (average_nonneg _) hbase (q (certifiedM L)))
+    (by simpa [certifiedGamma] using three_four_pow_lt_gammaFinal (certifiedM L))
+
 theorem q_certifiedM_eventually_pos :
     ∃ L0, ∀ L, L0 ≤ L → 0 < q (certifiedM L) := by
   obtain ⟨L0, hL0⟩ := certified_parameters_eventually 1
