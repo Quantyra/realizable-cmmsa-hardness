@@ -1,3 +1,4 @@
+import Complexitylib.Classes.PCP.Internal.Dinur
 import PvNP.RealizableHardness.ActualFpMapInterface
 
 /-!
@@ -6,6 +7,7 @@ Checks for the bounded-gap obstruction of an FP map into manuscript
 -/
 namespace PvNP.RealizableHardness.ActualFpMapInterfaceChecks
 
+open Complexity
 open PvNP.RealizableHardness.ActualFpMapInterface
 
 #check manuscript_fp_map_forbids_bounded_full_sat
@@ -19,6 +21,8 @@ open PvNP.RealizableHardness.ActualFpMapInterface
 #check manuscriptSigma_ge_pow1013
 #check not_no_of_uniform_one_hot_budget
 #check fixed_alphabet_one_hot_eventually_not_no
+#check dinurAlpha_card
+#check dinur_alphabet_one_hot_eventually_not_no
 
 example (A : Nat) (hA : 0 < A) (hAbound : A ≤ 2 ^ 1013) :
     ∃ L0, ∀ L, L0 ≤ L →
@@ -29,6 +33,19 @@ example (A : Nat) (hA : 0 < A) (hAbound : A ≤ 2 ^ 1013) :
           (ActualHeadlineParameters.manuscriptSigma L)
           (ActualHeadlineParameters.manuscriptGamma L) i :=
   fixed_alphabet_one_hot_eventually_not_no A hA hAbound
+
+example :
+    ∃ L0, ∀ L, L0 ≤ L →
+      ∀ i : PvNP.RealizableHardness.CMMSACodec.Instance L,
+        (1 : Rat) / (Fintype.card DinurAlpha : Rat) ≤ i.data.budget →
+        i.data.cost (fun _ => true) = 1 →
+        ¬ PvNP.RealizableHardness.CMMSACodec.No
+          (ActualHeadlineParameters.manuscriptSigma L)
+          (ActualHeadlineParameters.manuscriptGamma L) i :=
+  dinur_alphabet_one_hot_eventually_not_no
+
+example : Fintype.card DinurAlpha = 2 ^ 23 :=
+  dinurAlpha_card
 
 example :
     ∃ L0, ∀ L, L0 ≤ L → 2 ^ 1013 ≤ ActualHeadlineParameters.manuscriptSigma L :=
@@ -59,5 +76,7 @@ example {L : Nat} (i : PvNP.RealizableHardness.CMMSACodec.Instance L)
 #print axioms manuscriptSigma_ge_pow1013
 #print axioms not_no_of_uniform_one_hot_budget
 #print axioms fixed_alphabet_one_hot_eventually_not_no
+#print axioms dinurAlpha_card
+#print axioms dinur_alphabet_one_hot_eventually_not_no
 
 end PvNP.RealizableHardness.ActualFpMapInterfaceChecks

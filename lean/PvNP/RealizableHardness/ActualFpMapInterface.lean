@@ -2,6 +2,8 @@ import PvNP.RealizableHardness.ActualCMMSARandomizedReduction
 import PvNP.RealizableHardness.ActualCertifiedManuscriptParameters
 import PvNP.RealizableHardness.ActualSatToThreeSatSource
 import Complexitylib.Classes.P.Preimage
+import Complexitylib.Classes.PCP.Internal.BaseAlg
+import Complexitylib.Classes.PCP.Internal.Dinur
 
 /-!
 Interface obstruction for a same-function `FP` map into manuscript
@@ -16,9 +18,10 @@ is the obstruction of `hSrcCmmsa_of_fp_map` on this bounded-gap branch.
 no-budget excludes every satisfying coordinate. A positive satisfaction
 floor independent of `L` also fails once `manuscriptGamma` drops below
 that floor. An `FP` map whose target yes-set lies in `P` would put
-3SAT in `P`; that yes-set is not shown to lie in `P`. This file does not
-prove `¬ ∃ f, f ∈ FP ∧ MapReducesVia`, and it does not assemble Theorem 1
-or Corollary 2.
+3SAT in `P`; that yes-set is not shown to lie in `P`. Dinur's alphabet has
+`2^23` symbols, so a uniform one-hot budget on it is eventually not
+manuscript `No`. This file does not prove `¬ ∃ f, f ∈ FP ∧ MapReducesVia`,
+and it does not assemble Theorem 1 or Corollary 2.
 -/
 namespace PvNP.RealizableHardness.ActualFpMapInterface
 
@@ -397,6 +400,31 @@ theorem fixed_alphabet_one_hot_eventually_not_no
     have hpair := hγ L (le_trans (Nat.le_max_right _ _) hL)
     simpa [manuscriptGamma] using hpair.2
   exact not_no_of_uniform_one_hot_budget i hA (hAbound.trans hσL) hγL hb hall
+
+/-- Dinur's gap-graph alphabet is `GapAlpha`, with `2^23` symbols. -/
+theorem dinurAlpha_card :
+    Fintype.card DinurAlpha = 2 ^ 23 := by
+  simpa [DinurAlpha, GapAlpha, MultiTest.Alpha] using card_gapAlpha
+
+theorem dinurAlpha_le_pow1013 :
+    Fintype.card DinurAlpha ≤ 2 ^ 1013 := by
+  rw [dinurAlpha_card]
+  exact Nat.pow_le_pow_right (by decide : 0 < 2) (by decide : 23 ≤ 1013)
+
+/-- A uniform one-hot budget on the Dinur alphabet is eventually not manuscript
+`No`. `σ_L` exceeds `2^23`, so the all-true assignment enters the no-scope.
+The gap-graph edge test is not packed by this budget. -/
+theorem dinur_alphabet_one_hot_eventually_not_no :
+    ∃ L0, ∀ L, L0 ≤ L →
+      ∀ i : Instance L,
+        (1 : Rat) / (Fintype.card DinurAlpha : Rat) ≤ i.data.budget →
+        i.data.cost (fun _ => true) = 1 →
+        ¬ No (manuscriptSigma L) (manuscriptGamma L) i := by
+  have hA : 0 < Fintype.card DinurAlpha := by
+    rw [dinurAlpha_card]
+    decide
+  exact fixed_alphabet_one_hot_eventually_not_no _
+    hA dinurAlpha_le_pow1013
 
 end
 end PvNP.RealizableHardness.ActualFpMapInterface
