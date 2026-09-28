@@ -11,6 +11,10 @@ open PvNP.RealizableHardness.BinaryMatrixLineTranslation
 #check affineKernelFraction_eq_invTwo_pow_rank_of_not_hybridLineSelected
 #check lineTranslationMultiplier_eq_hybrid
 #check lineTranslationAverage_character_explicit
+#check lineTranslationAverage_rankProjection
+#check hybridLineFilter_rankProjection_eq_sub_translation
+#check lineP_character
+#check lineP_rankProjection_eq_hybridLineFilter
 #check lineP
 
 #print axioms lineTranslationAverage_character
@@ -22,3 +26,7 @@ open PvNP.RealizableHardness.BinaryMatrixLineTranslation
 #print axioms affineKernelFraction_eq_invTwo_pow_rank_of_not_hybridLineSelected
 #print axioms lineTranslationMultiplier_eq_hybrid
 #print axioms lineTranslationAverage_character_explicit
+#print axioms lineTranslationAverage_rankProjection
+#print axioms hybridLineFilter_rankProjection_eq_sub_translation
+#print axioms lineP_character
+#print axioms lineP_rankProjection_eq_hybridLineFilter

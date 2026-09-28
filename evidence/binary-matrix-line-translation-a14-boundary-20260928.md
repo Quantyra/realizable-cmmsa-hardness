@@ -37,10 +37,15 @@ proves no such vector exists when the hybrid selector holds. Thus
 `lineTranslationMultiplier_eq_hybrid` establishes both character multipliers
 of (A13) for the actual average.
 
-The first remaining comparison is the full (A13) function identity at a
-fixed input rank, followed by the (A14) output rank projection. The latter
-must aggregate Fourier collisions after raw restriction on the reduced
-matrix space. The source theorem `lineTranslationAverage_character_explicit`
-is only a character eigenvalue statement; it is not yet the full (A13) or
-(A14) identity for arbitrary functions. No A14 or A22 claim is made here,
-and this result does not reduce the numeric NO-soundness gap.
+`hybridLineFilter_rankProjection_eq_sub_translation` now proves the full
+function-level (A13) identity for the actual average at every input rank,
+including rank zero. The manuscript uses the identity at `j≥1`.
+`lineP_rankProjection_eq_hybridLineFilter` also proves that the actual
+polynomial `P_{j+1}` equals the hybrid filter on each input rank `j` and
+`j+1` before restriction.
+
+The first remaining comparison for (A14) is the output rank projection of
+the raw restriction of `P_{j+1}f`. It must aggregate Fourier collisions on
+the reduced matrix space and show that no other input ranks contribute to
+output rank `j`. No A14 or A22 claim is made here, and this result does not
+reduce the numeric NO-soundness gap.

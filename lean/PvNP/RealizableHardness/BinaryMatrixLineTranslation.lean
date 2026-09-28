@@ -316,7 +316,7 @@ theorem lineTranslationMultiplier_eq_hybrid {n d : ℕ}
     exact affineKernelFraction_eq_invTwo_pow_rank_of_not_hybridLineSelected Y hY
 
 /-- The manuscript polynomial `P_{j+1}=(I-2^{j+1}E)(I-2^j E)`.
-The successor index makes the stated `j ≥ 1` boundary explicit. -/
+The input index is any natural number; manuscript uses `P_k` at `k≥1`. -/
 def lineIminusE {n d : ℕ} (a : ℝ)
     (f : BinaryMatrix n (d + 1) → ℝ) :
     BinaryMatrix n (d + 1) → ℝ :=
@@ -351,6 +351,246 @@ theorem lineTranslationAverage_character_explicit {n d : ℕ}
       (if hybridLineSelected Y then 0 else ((2 : ℝ)⁻¹) ^ Y.rank) *
         character Y M := by
   rw [lineTranslationAverage_character, lineTranslationMultiplier_eq_hybrid]
+
+theorem lineTranslationAverage_add {n d : ℕ}
+    (f g : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    lineTranslationAverage (fun N => f N + g N) M =
+      lineTranslationAverage f M + lineTranslationAverage g M := by
+  unfold lineTranslationAverage
+  simp only [Finset.sum_add_distrib]
+  ring
+
+theorem lineTranslationAverage_mul {n d : ℕ}
+    (a : ℝ) (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    lineTranslationAverage (fun N => a * f N) M =
+      a * lineTranslationAverage f M := by
+  unfold lineTranslationAverage
+  simp only [← Finset.mul_sum]
+  ring
+
+theorem lineTranslationAverage_finset_sum {n d : ℕ}
+    {α : Type*} (s : Finset α)
+    (g : α → BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    lineTranslationAverage (fun N => ∑ a ∈ s, g a N) M =
+      ∑ a ∈ s, lineTranslationAverage (g a) M := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp [lineTranslationAverage]
+  | @insert a s ha ih =>
+      simp only [Finset.sum_insert ha]
+      rw [lineTranslationAverage_add, ih]
+
+theorem lineTranslationAverage_rankProjection {n d j : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    lineTranslationAverage (rankProjection j f) M =
+      ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter
+          (fun Y => Y.rank = j),
+        fourierCoeff f Y * lineTranslationMultiplier Y * character Y M := by
+  unfold rankProjection
+  rw [lineTranslationAverage_finset_sum]
+  apply Finset.sum_congr rfl
+  intro Y _
+  rw [lineTranslationAverage_mul, lineTranslationAverage_character]
+  ring
+
+private theorem lineFilter_scalar_at_rank {n d j : ℕ}
+    (Y : BinaryMatrix n (d + 1)) (hY : Y.rank = j) :
+    (if hybridLineSelected Y then (1 : ℝ) else 0) =
+      1 - (2 : ℝ) ^ j * lineTranslationMultiplier Y := by
+  rw [lineTranslationMultiplier_eq_hybrid]
+  by_cases hs : hybridLineSelected Y
+  · simp [hs]
+  · simp only [if_neg hs, hY]
+    have hp : (2 : ℝ) ^ j * ((2 : ℝ)⁻¹) ^ j = 1 := by
+      rw [← mul_pow]
+      norm_num
+    rw [hp]
+    ring
+
+/-- Function-level Appendix (A13) for the actual final-line translation
+average. It holds also at rank zero; the manuscript uses it at `j ≥ 1`. -/
+theorem hybridLineFilter_rankProjection_eq_sub_translation {n d j : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    hybridLineFilter (rankProjection j f) M =
+      rankProjection j f M -
+        (2 : ℝ) ^ j * lineTranslationAverage (rankProjection j f) M := by
+  let s : Finset (BinaryMatrix n (d + 1)) :=
+    Finset.univ.filter (fun Y => Y.rank = j)
+  have hL : hybridLineFilter (rankProjection j f) M =
+      ∑ Y ∈ s, (if hybridLineSelected Y then
+        fourierCoeff f Y * character Y M else 0) := by
+    unfold hybridLineFilter
+    simp_rw [fourierCoeff_rankProjection]
+    simp only [s, Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro Y _
+    by_cases hs : hybridLineSelected Y <;>
+      by_cases hr : Y.rank = j <;> simp [s, hs, hr]
+  rw [hL, lineTranslationAverage_rankProjection]
+  unfold rankProjection
+  change (∑ Y ∈ s, if hybridLineSelected Y then
+      fourierCoeff f Y * character Y M else 0) =
+    (∑ Y ∈ s, fourierCoeff f Y * character Y M) -
+      (2 : ℝ) ^ j *
+        (∑ Y ∈ s, fourierCoeff f Y * lineTranslationMultiplier Y * character Y M)
+  rw [Finset.mul_sum, ← Finset.sum_sub_distrib]
+  apply Finset.sum_congr rfl
+  intro Y hYs
+  have hY : Y.rank = j := (Finset.mem_filter.mp hYs).2
+  have hs := lineFilter_scalar_at_rank Y hY
+  split_ifs with hsel
+  · simp [hsel] at hs
+    rw [lineTranslationMultiplier_eq_zero_of_hybridLineSelected Y hsel]
+    ring
+  · simp [hsel] at hs
+    calc
+      (0 : ℝ) =
+        (1 - (2 : ℝ) ^ j * lineTranslationMultiplier Y) *
+          (fourierCoeff f Y * character Y M) := by rw [← hs]; ring
+      _ = fourierCoeff f Y * character Y M -
+            (2 : ℝ) ^ j *
+              (fourierCoeff f Y * lineTranslationMultiplier Y * character Y M) := by ring
+
+private theorem lineIminusE_add {n d : ℕ} (a : ℝ)
+    (f g : BinaryMatrix n (d + 1) → ℝ) (M : BinaryMatrix n (d + 1)) :
+    lineIminusE a (fun N => f N + g N) M =
+      lineIminusE a f M + lineIminusE a g M := by
+  unfold lineIminusE
+  rw [lineTranslationAverage_add]
+  ring
+
+private theorem lineIminusE_mul {n d : ℕ} (a b : ℝ)
+    (f : BinaryMatrix n (d + 1) → ℝ) (M : BinaryMatrix n (d + 1)) :
+    lineIminusE a (fun N => b * f N) M = b * lineIminusE a f M := by
+  unfold lineIminusE
+  rw [lineTranslationAverage_mul]
+  ring
+
+private theorem lineIminusE_finset_sum {n d : ℕ} (a : ℝ)
+    {α : Type*} (s : Finset α)
+    (g : α → BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    lineIminusE a (fun N => ∑ x ∈ s, g x N) M =
+      ∑ x ∈ s, lineIminusE a (g x) M := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp [lineIminusE, lineTranslationAverage]
+  | @insert x s hx ih =>
+      simp only [Finset.sum_insert hx]
+      rw [lineIminusE_add, ih]
+
+private theorem lineP_finset_sum {n d j : ℕ}
+    {α : Type*} (s : Finset α)
+    (g : α → BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    lineP j (fun N => ∑ x ∈ s, g x N) M =
+      ∑ x ∈ s, lineP j (g x) M := by
+  unfold lineP
+  have hinner : lineIminusE ((2 : ℝ) ^ j) (fun N => ∑ x ∈ s, g x N) =
+      fun N => ∑ x ∈ s, lineIminusE ((2 : ℝ) ^ j) (g x) N := by
+    funext N
+    exact lineIminusE_finset_sum _ s g N
+  rw [hinner]
+  exact lineIminusE_finset_sum _ s _ M
+
+private theorem lineP_mul {n d j : ℕ}
+    (b : ℝ) (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    lineP j (fun N => b * f N) M = b * lineP j f M := by
+  unfold lineP
+  have hinner : lineIminusE ((2 : ℝ) ^ j) (fun N => b * f N) =
+      fun N => b * lineIminusE ((2 : ℝ) ^ j) f N := by
+    funext N
+    exact lineIminusE_mul _ b f N
+  rw [hinner]
+  exact lineIminusE_mul _ _ _ _
+
+theorem lineP_character {n d j : ℕ}
+    (Y M : BinaryMatrix n (d + 1)) :
+    lineP j (character Y) M =
+      (1 - (2 : ℝ) ^ (j + 1) * lineTranslationMultiplier Y) *
+      (1 - (2 : ℝ) ^ j * lineTranslationMultiplier Y) *
+        character Y M := by
+  unfold lineP lineIminusE
+  have hinner (N : BinaryMatrix n (d + 1)) :
+      character Y N - (2 : ℝ) ^ j * lineTranslationAverage (character Y) N =
+      (1 - (2 : ℝ) ^ j * lineTranslationMultiplier Y) * character Y N := by
+    rw [lineTranslationAverage_character]
+    ring
+  simp_rw [hinner]
+  rw [lineTranslationAverage_mul, lineTranslationAverage_character]
+  ring
+
+theorem lineP_rankProjection {n d j k : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1)) :
+    lineP j (rankProjection k f) M =
+      ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter
+          (fun Y => Y.rank = k),
+        fourierCoeff f Y *
+          ((1 - (2 : ℝ) ^ (j + 1) * lineTranslationMultiplier Y) *
+            (1 - (2 : ℝ) ^ j * lineTranslationMultiplier Y)) *
+          character Y M := by
+  unfold rankProjection
+  rw [lineP_finset_sum]
+  apply Finset.sum_congr rfl
+  intro Y _
+  rw [lineP_mul, lineP_character]
+  ring
+
+private theorem lineP_scalar_at_adjacent_rank {n d j : ℕ}
+    (Y : BinaryMatrix n (d + 1))
+    (hr : Y.rank = j ∨ Y.rank = j + 1) :
+    (1 - (2 : ℝ) ^ (j + 1) * lineTranslationMultiplier Y) *
+      (1 - (2 : ℝ) ^ j * lineTranslationMultiplier Y) =
+        if hybridLineSelected Y then 1 else 0 := by
+  rw [lineTranslationMultiplier_eq_hybrid]
+  by_cases hs : hybridLineSelected Y
+  · simp [hs]
+  · simp only [if_neg hs]
+    rcases hr with hr | hr
+    · rw [hr]
+      have hp : (2 : ℝ) ^ j * ((2 : ℝ)⁻¹) ^ j = 1 := by
+        rw [← mul_pow]
+        norm_num
+      rw [hp]
+      ring
+    · rw [hr]
+      have hp : (2 : ℝ) ^ (j + 1) * ((2 : ℝ)⁻¹) ^ (j + 1) = 1 := by
+        rw [← mul_pow]
+        norm_num
+      rw [hp]
+      ring
+
+/-- On each of the two input ranks that can feed Appendix (A14), the
+actual manuscript polynomial `P_{j+1}` equals the hybrid Fourier filter.
+This is an input-spectrum equality, before raw restriction and collision
+aggregation. -/
+theorem lineP_rankProjection_eq_hybridLineFilter {n d j k : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n (d + 1))
+    (hk : k = j ∨ k = j + 1) :
+    lineP j (rankProjection k f) M =
+      hybridLineFilter (rankProjection k f) M := by
+  rw [lineP_rankProjection]
+  unfold hybridLineFilter
+  simp_rw [fourierCoeff_rankProjection]
+  simp only [Finset.sum_filter]
+  apply Finset.sum_congr rfl
+  intro Y _
+  by_cases hr : Y.rank = k
+  · have hradj : Y.rank = j ∨ Y.rank = j + 1 := by
+      rcases hk with hj | hj
+      · exact Or.inl (hr.trans hj)
+      · exact Or.inr (hr.trans hj)
+    rw [lineP_scalar_at_adjacent_rank Y hradj]
+    by_cases hs : hybridLineSelected Y <;> simp [hr, hs, mul_assoc]
+  · simp [hr]
 
 end
 end PvNP.RealizableHardness.BinaryMatrixLineTranslation
