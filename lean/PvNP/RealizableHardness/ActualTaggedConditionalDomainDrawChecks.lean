@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualTaggedConditionalDomainDraw
+
+open PvNP.RealizableHardness.ActualTaggedConditionalDomainDraw
+
+#check taggedDomainDraw_card
+#check taggedDomainDraw_has_leaf
+#check taggedDomainDraw_leaf_domain
+#check taggedLeafDomainFiber_card
+#check uniform_taggedLeafDomain_pushforward
+
+#print axioms taggedDomainDraw_card
+#print axioms taggedDomainDraw_has_leaf
+#print axioms taggedDomainDraw_leaf_domain
+#print axioms taggedLeafDomainFiber_card
+#print axioms uniform_taggedLeafDomain_pushforward
