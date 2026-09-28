@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualTaggedCanonicalNoComparison
+
+open PvNP.RealizableHardness.ActualTaggedCanonicalNoComparison
+
+#check tagged_physical_le_canonical_plus_collision
+#print axioms tagged_physical_le_canonical_plus_collision
