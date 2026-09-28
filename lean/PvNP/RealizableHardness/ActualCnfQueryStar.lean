@@ -197,6 +197,37 @@ theorem enc_accepts_witness {φ : CNF} {m R : Nat} [NeZero R] (h3 : φ.Is3CNF)
   simpa [qStar, qCenter, qLeaf, edgeClause, edgeWitness, edgeShift] using
     enc_proj_zero (m := m) (R := R) h3 α c k h i
 
+/-- Private ports can satisfy every clause literal independently, even when
+the 3CNF has no global satisfying assignment. -/
+def localLiteralLabel {φ : CNF} {m R : Nat} (h3 : φ.Is3CNF) :
+    QueryVtx φ m → QSym R := fun v =>
+  match v with
+  | Sum.inl (c, i) =>
+      if hi : i.val < 3 then
+        (0, encBit (clauseLit h3 c ⟨i.val, hi⟩).sign)
+      else (0, 1)
+  | Sum.inr _ => (0, 1)
+
+theorem localLiteralLabel_accepts_zero {φ : CNF} {m R : Nat} [NeZero R]
+    (h3 : φ.Is3CNF) (c : Fin φ.length) (k : Fin 3) :
+    (qStar (m := m) (R := R) h3
+      (c, k, zeroShift (m := m) (R := R))).accepts
+        (localLiteralLabel (m := m) (R := R) h3) := by
+  intro i
+  simp only [qStar, qProj, qLeaf, qPort, qCenter, edgeClause, edgeWitness,
+    edgeShift, zeroShift, localLiteralLabel, add_zero]
+  by_cases hi : i.val < 3
+  · simp only [hi, dite_true]
+    by_cases hk : i.val = k.val
+    · have hhold : holdsLit (clauseLit h3 c ⟨i.val, hi⟩)
+          (encBit (clauseLit h3 c ⟨i.val, hi⟩).sign) = true := by
+        cases h : (clauseLit h3 c ⟨i.val, hi⟩).sign <;>
+          simp [holdsLit, encBit, h, Nat.mod_eq_of_lt]
+      have hik : (⟨i.val, hi⟩ : Fin 3) = k := Fin.ext hk
+      simpa [gateBit, hk, hik] using hhold
+    · simp [gateBit, hk]
+  · simp [hi]
+
 theorem enc_accepts_of_sat {φ : CNF} {m R : Nat} [NeZero R] (_hm : 3 ≤ m)
     (h3 : φ.Is3CNF) (α : Assignment) (hα : CNF.eval α φ = true) (c : Fin φ.length) :
     ∃ k : Fin 3,
@@ -294,6 +325,44 @@ theorem cnfQuery_score_le {φ : CNF} {m R : Nat} [NeZero R]
     have h3nz : (3 : ℝ) ≠ 0 := by norm_num
     field_simp [hpos3.ne', h3nz, hposR.ne']
   exact le_trans hdiv (le_of_eq hform)
+
+/-- The private-port labeling attains the counting ceiling on every nonempty
+3CNF. Its score therefore does not distinguish satisfiable inputs. -/
+theorem localLiteralLabel_score_eq {φ : CNF} {m R : Nat} [NeZero R]
+    (h3 : φ.Is3CNF) (hφ : 0 < φ.length) :
+    score uniformEdge (qEdges (m := m) (R := R) h3)
+      (localLiteralLabel (m := m) (R := R) h3) = ((R : ℝ) ^ m)⁻¹ := by
+  classical
+  let accepted := Finset.univ.filter fun e : QEdge φ m R =>
+    (qStar h3 e).accepts (localLiteralLabel (m := m) (R := R) h3)
+  let zeroEdge : Fin φ.length × Fin 3 → QEdge φ m R :=
+    fun p => (p.1, p.2, zeroShift (m := m) (R := R))
+  have hsub : Finset.univ.image zeroEdge ⊆ accepted := by
+    intro e he
+    obtain ⟨p, _, rfl⟩ := Finset.mem_image.mp he
+    simp only [accepted, Finset.mem_filter, Finset.mem_univ, true_and]
+    exact localLiteralLabel_accepts_zero h3 p.1 p.2
+  have hinj : Function.Injective zeroEdge := by
+    intro p q he
+    exact Prod.ext (congrArg edgeClause he) (congrArg edgeWitness he)
+  have hlow : φ.length * 3 ≤ accepted.card := by
+    have hcard : (Finset.univ.image zeroEdge).card = φ.length * 3 := by
+      rw [Finset.card_image_of_injective _ hinj, Finset.card_univ,
+        Fintype.card_prod, Fintype.card_fin, Fintype.card_fin]
+    rw [← hcard]
+    exact Finset.card_le_card hsub
+  have hupp : accepted.card ≤ φ.length * 3 := by
+    simpa [accepted] using
+      (accepting_card_le (m := m) (R := R) h3 hφ
+        (localLiteralLabel (m := m) (R := R) h3))
+  have hcount : accepted.card = φ.length * 3 := le_antisymm hupp hlow
+  rw [score_div h3 hφ]
+  change (accepted.card : ℝ) / (Fintype.card (QEdge φ m R) : ℝ) = _
+  rw [hcount, edge_card (φ := φ) (m := m) (R := R)]
+  push_cast
+  have hφ0 : (φ.length : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hφ)
+  have hR0 : (R : ℝ) ^ m ≠ 0 := pow_ne_zero _ (by exact_mod_cast (NeZero.ne R))
+  field_simp
 
 theorem cnfQuery_score_lt_one {φ : CNF} {m R : Nat} [NeZero R]
     (hm : 0 < m) (hR : 1 < R) (h3 : φ.Is3CNF) (hφ : 0 < φ.length)
