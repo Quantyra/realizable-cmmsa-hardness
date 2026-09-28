@@ -1,9 +1,9 @@
 import PvNP.RealizableHardness.BinaryMatrixFourier
 
-/-! Coordinate candidate for the first domain-line derivative in Appendix A1/A14.
-The selected frequency has one more rank than its induced frequency. Identification
-of `selectedLastColumn` with the manuscript's hybrid subspace selector remains
-to be proved; no A1/A14 theorem is asserted by this module. -/
+/-! Coordinate first domain-line derivative in Appendix A1/A14.
+The selected frequency has one more rank than its induced frequency.
+`BinaryMatrixHybridSelector` identifies this selector with the manuscript's
+full-domain hybrid line selector. No A1/A14 theorem is asserted by this module. -/
 namespace PvNP.RealizableHardness.BinaryMatrixFirstDerivative
 
 open BinaryMatrixFourier
@@ -64,8 +64,8 @@ theorem selectedLastColumn_rank_shift {n d : ℕ}
   omega
 
 /-- A concrete Fourier-filtered raw restriction at one fixed domain line.
-The filter is expressed by rank increase; its equivalence with the hybrid
-subspace selector is the next exact bridge. -/
+The filter is expressed by rank increase; `BinaryMatrixHybridSelector`
+proves its equivalence with the full-domain hybrid line selector. -/
 def lastColumnDerivative {n d : ℕ} (t : Fin n → ZMod 2)
     (f : BinaryMatrix n (d + 1) → ℝ) (M : BinaryMatrix n d) : ℝ :=
   ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter selectedLastColumn,
