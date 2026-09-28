@@ -1,0 +1,64 @@
+PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedCenterOver_nonempty {N m : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m) (copies : ℕ) {J t : ℕ}
+  (U : PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedGoodU I copies J) (ht : t ≤ 2 * J) :
+  Nonempty (PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedCenterOver I copies t U)
+PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedLeafOver_nonempty {N m : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m) (copies : ℕ) {J t h : ℕ}
+  (U : PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedGoodU I copies J)
+  (K : PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedCenterOver I copies t U) (ht : t ≤ 2 * h)
+  (hh : h ≤ J) :
+  Nonempty
+    (PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedLeafOver I copies h
+      (PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.questionOf I copies U K))
+PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.ordered_sample_exists_selected_of_padding {N m : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m) {J t h k T : ℕ} (hT : 4 ≤ T) (hm : 0 < m)
+  (ht : t ≤ 2 * h) (hh : h ≤ J)
+  (C :
+    PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance.TaggedCenterTable I
+      (PvNP.RealizableHardness.ActualQuestionMassBridge.actualPaddingCopies J T))
+  (raw :
+    PvNP.RealizableHardness.ActualTaggedPresentedSelection.TaggedRawVertexTable I
+      (PvNP.RealizableHardness.ActualQuestionMassBridge.actualPaddingCopies J T) J h) :
+  let copies := PvNP.RealizableHardness.ActualQuestionMassBridge.actualPaddingCopies J T;
+  ∃ s,
+    PvNP.RealizableHardness.ActualTaggedPresentedSelection.taggedPhysicalMass I copies
+        (paddedOrderedStarLaw I hT hm ht hh).mass
+        (PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.sampledStar I copies) C raw ≤
+      PvNP.RealizableHardness.ActualTaggedPresentedSelection.taggedSelectedMass I copies
+          (paddedOrderedStarLaw I hT hm ht hh).mass
+          (PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.sampledStar I copies) C raw s +
+        PvNP.RealizableHardness.ActualTaggedPresentedSelection.taggedClassCollisionMass I copies
+          (paddedOrderedStarLaw I hT hm ht hh).mass
+          (PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.sampledStar I copies)
+PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedCoordinate_finrank {N m : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m) (copies : ℕ) {J t : ℕ}
+  (q : PvNP.RealizableHardness.ActualTaggedFixedCenterGeometry.TaggedQuestionCenter I copies J t) :
+  Module.finrank (ZMod 2) ↥(PvNP.RealizableHardness.ActualTaggedFixedCenterGeometry.coordinateSpaceOf I copies q) =
+    3 * J
+PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedEquation_finrank {N m : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m) (copies : ℕ) {J t : ℕ}
+  (q : PvNP.RealizableHardness.ActualTaggedFixedCenterGeometry.TaggedQuestionCenter I copies J t) :
+  Module.finrank (ZMod 2) ↥(PvNP.RealizableHardness.ActualTaggedFixedCenterGeometry.equationSpanOf I copies q) = J
+PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedComplement_finrank {N m : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m) (copies : ℕ) {J t : ℕ}
+  (q : PvNP.RealizableHardness.ActualTaggedFixedCenterGeometry.TaggedQuestionCenter I copies J t) :
+  Module.finrank (ZMod 2) ↥(PvNP.RealizableHardness.ActualTaggedFixedCenterGeometry.transverseComplement I copies q) =
+    2 * J
+'PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedCenterOver_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedLeafOver_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.ordered_sample_exists_selected_of_padding' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedCoordinate_finrank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedEquation_finrank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty.taggedComplement_finrank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
