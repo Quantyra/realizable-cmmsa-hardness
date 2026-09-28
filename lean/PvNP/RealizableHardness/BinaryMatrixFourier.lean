@@ -69,6 +69,12 @@ def Pseudorandom {n d : ℕ} (r : ℕ) (δ : ℝ)
   ∀ R : AffineRestriction n d,
     R.budget ≤ r → R.fibre.Nonempty → R.density f ≤ δ
 
+/-- The manuscript premise quantifies over restrictions of nominal budget exactly `r`. -/
+def PseudorandomExact {n d : ℕ} (r : ℕ) (δ : ℝ)
+    (f : BinaryMatrix n d → Bool) : Prop :=
+  ∀ R : AffineRestriction n d,
+    R.budget = r → R.fibre.Nonempty → R.density f ≤ δ
+
 def wholeRestriction (n d : ℕ) : AffineRestriction n d where
   columns := 0
   rows := 0
@@ -95,6 +101,35 @@ theorem wholeRestriction_density_eq_mean {n d : ℕ}
     (f : BinaryMatrix n d → Bool) :
     (wholeRestriction n d).density f = uniformMean (indicator f) := by
   simp [AffineRestriction.density, wholeRestriction_fibre, uniformMean, indicator]
+
+def exactWholeRestriction (n d r : ℕ) : AffineRestriction n d where
+  columns := 0
+  rows := r
+  rightDirections := 0
+  rightValues := 0
+  leftDirections := 0
+  leftValues := 0
+
+@[simp] theorem exactWholeRestriction_budget (n d r : ℕ) :
+    (exactWholeRestriction n d r).budget = r := by
+  simp [exactWholeRestriction, AffineRestriction.budget]
+
+@[simp] theorem exactWholeRestriction_fibre (n d r : ℕ) :
+    (exactWholeRestriction n d r).fibre = Finset.univ := by
+  ext M
+  simp only [AffineRestriction.fibre, Finset.mem_filter, Finset.mem_univ, true_and]
+  change (M * (0 : Matrix (Fin d) (Fin 0) (ZMod 2)) = 0 ∧
+    (0 : Matrix (Fin r) (Fin n) (ZMod 2)) * M = 0) ↔ True
+  simp
+
+theorem boolean_mean_le_of_exact {n d r : ℕ} {δ : ℝ}
+    (f : BinaryMatrix n d → Bool) (h : PseudorandomExact r δ f) :
+    uniformMean (indicator f) ≤ δ := by
+  have hd := h (exactWholeRestriction n d r) (by simp) (by
+    rw [exactWholeRestriction_fibre]
+    exact Finset.univ_nonempty)
+  simpa [AffineRestriction.density, exactWholeRestriction_fibre,
+    uniformMean, indicator] using hd
 
 theorem boolean_mean_le_of_pseudorandom {n d r : ℕ} {δ : ℝ}
     (f : BinaryMatrix n d → Bool) (h : Pseudorandom r δ f) :
@@ -202,6 +237,28 @@ theorem binary_hc_rankZero {n d r p : ℕ} {δ : ℝ}
     linarith
   have hpow := Real.self_le_rpow_of_le_one hδ₀ hδ₁ hexp
   simpa using hbase.trans hpow
+
+/-- Exact-budget manuscript premise; zero equations furnish a consistent
+budget-`r` whole-space restriction even when either matrix dimension is zero. -/
+theorem binary_hc_rankZero_exact {n d r p : ℕ} {δ : ℝ}
+    (f : BinaryMatrix n d → Bool)
+    (hp : 4 ≤ p) (_hdyadic : ∃ s : ℕ, p = 2 ^ s)
+    (hδ₀ : 0 ≤ δ) (hδ₁ : δ ≤ 1)
+    (h : PseudorandomExact r δ f) :
+    lpNorm p (rankProjection 0 (indicator f)) ≤
+      (2 : ℝ) ^ (500 * 0 ^ 2 * p) * δ ^ (1 - 2 / (p : ℝ)) := by
+  have hpn : p ≠ 0 := by omega
+  have hmean := uniformMean_indicator_nonneg f
+  have hbase : lpNorm p (rankProjection 0 (indicator f)) ≤ δ := by
+    rw [lpNorm, lpMoment_rankProjection_zero, one_div,
+      Real.pow_rpow_inv_natCast (abs_nonneg _) hpn,
+      abs_of_nonneg hmean]
+    exact boolean_mean_le_of_exact f h
+  have hexp : (1 : ℝ) - 2 / (p : ℝ) ≤ 1 := by
+    have hp0 : (0 : ℝ) ≤ (p : ℝ) := Nat.cast_nonneg _
+    have hdiv : 0 ≤ (2 : ℝ) / (p : ℝ) := div_nonneg (by norm_num) hp0
+    linarith
+  simpa using hbase.trans (Real.self_le_rpow_of_le_one hδ₀ hδ₁ hexp)
 
 end
 end PvNP.RealizableHardness.BinaryMatrixFourier
