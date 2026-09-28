@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.ActualTaggedFixedUDensityForce
+
+open PvNP.RealizableHardness.ActualTaggedFixedUDensityForce
+
+#check conditionalCanonicalDensity
+#check conditionalCanonicalDensity_nonneg_le_one
+#check ordered_canonical_eq_uniformU_mean
+#check ordered_physical_forces_high_density_U
+
+#print axioms conditionalCanonicalDensity_nonneg_le_one
+#print axioms ordered_canonical_eq_uniformU_mean
+#print axioms ordered_physical_forces_high_density_U
