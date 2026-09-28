@@ -3,12 +3,14 @@ import PvNP.RealizableHardness.BinaryMatrixHybridSelector
 open PvNP.RealizableHardness.BinaryMatrixHybridSelector
 
 #check selectedLastColumn_iff_hybrid
+#check rank_eq_drop_add_hybrid_indicator
 #check fourierCoeff_hybridLineFilter
 #check hybridLineDerivative_eq_restrict_filter
 #check lastColumnDerivative_eq_hybridLineDerivative
 #check hybridLineDerivative_rankProjection
 
 #print axioms selectedLastColumn_iff_hybrid
+#print axioms rank_eq_drop_add_hybrid_indicator
 #print axioms fourierCoeff_hybridLineFilter
 #print axioms lastColumnDerivative_eq_hybridLineDerivative
 #print axioms hybridLineDerivative_rankProjection

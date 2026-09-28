@@ -1,4 +1,5 @@
 import PvNP.RealizableHardness.BinaryMatrixHybridSelector
+import Mathlib.FieldTheory.Finiteness
 
 namespace PvNP.RealizableHardness.BinaryMatrixLineTranslation
 
@@ -100,6 +101,158 @@ theorem lineFrequency_ne_zero_of_hybridLineSelected {n d : ℕ}
     simp
   exact one_ne_zero (hleft.symm.trans (hpair.trans hright))
 
+private def zeroLast {d : ℕ} (φ : Fin d → ZMod 2) :
+    Fin (d + 1) → ZMod 2 := Fin.snoc φ 0
+
+private theorem lineFunctional_eq_zeroLast_add_basis {d : ℕ}
+    (φ : Fin d → ZMod 2) :
+    lineFunctional φ = zeroLast φ + Pi.single (Fin.last d) (1 : ZMod 2) := by
+  funext j
+  induction j using Fin.lastCases with
+  | last => simp [lineFunctional, zeroLast]
+  | cast j => simp [lineFunctional, zeroLast]
+
+private theorem full_mulVec_zeroLast {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) (φ : Fin d → ZMod 2) :
+    Y.mulVec (zeroLast φ) = (dropLastFrequency Y).mulVec φ := by
+  funext i
+  simp [Matrix.mulVec, dotProduct, zeroLast, dropLastFrequency,
+    Fin.sum_univ_castSucc]
+
+private theorem full_mulVec_lastBasis {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) :
+    Y.mulVec (Pi.single (Fin.last d) (1 : ZMod 2)) =
+      lastFrequencyColumn Y := by
+  funext i
+  simp [Matrix.mulVec, dotProduct, lastFrequencyColumn, Pi.single_apply]
+
+private theorem lineFrequency_eq_drop_add_last {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) (φ : Fin d → ZMod 2) :
+    lineFrequency Y φ =
+      (dropLastFrequency Y).mulVec φ + lastFrequencyColumn Y := by
+  unfold lineFrequency
+  rw [lineFunctional_eq_zeroLast_add_basis, Matrix.mulVec_add,
+    full_mulVec_zeroLast, full_mulVec_lastBasis]
+
+theorem exists_lineFrequency_zero_of_not_hybridLineSelected {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) (hY : ¬ hybridLineSelected Y) :
+    ∃ φ : Fin d → ZMod 2, lineFrequency Y φ = 0 := by
+  let A := (dropLastFrequency Y).mulVecLin
+  let B := Y.mulVecLin
+  have hle : LinearMap.range A ≤ LinearMap.range B := by
+    rintro v ⟨φ, rfl⟩
+    exact ⟨zeroLast φ, by simpa [A, B] using
+      full_mulVec_zeroLast Y φ⟩
+  have hrank : Y.rank = (dropLastFrequency Y).rank := by
+    rw [rank_eq_drop_add_hybrid_indicator]
+    simp [hybridLineSelected] at hY
+    simp [hY]
+  have heq : LinearMap.range A = LinearMap.range B := by
+    apply Submodule.eq_of_le_of_finrank_le hle
+    change (dropLastFrequency Y).rank ≥ Y.rank
+    omega
+  have hb : lastFrequencyColumn Y ∈ LinearMap.range B := by
+    exact ⟨Pi.single (Fin.last d) (1 : ZMod 2),
+      by simpa [B] using full_mulVec_lastBasis Y⟩
+  rw [← heq] at hb
+  obtain ⟨φ, hφ⟩ := hb
+  refine ⟨φ, ?_⟩
+  rw [lineFrequency_eq_drop_add_last]
+  have hφ' : (dropLastFrequency Y).mulVec φ = lastFrequencyColumn Y := hφ
+  rw [hφ']
+  funext i
+  have htwo : (2 : ZMod 2) = 0 := by decide
+  calc
+    lastFrequencyColumn Y i + lastFrequencyColumn Y i =
+        (2 : ZMod 2) * lastFrequencyColumn Y i := (two_mul _).symm
+    _ = 0 := by simp [htwo]
+
+private theorem affineKernel_card_eq_ker {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1))
+    (φ₀ : Fin d → ZMod 2) (hφ₀ : lineFrequency Y φ₀ = 0) :
+    Fintype.card {φ : Fin d → ZMod 2 // lineFrequency Y φ = 0} =
+      Fintype.card (LinearMap.ker (dropLastFrequency Y).mulVecLin) := by
+  let A := (dropLastFrequency Y).mulVecLin
+  have hline (φ : Fin d → ZMod 2) :
+      lineFrequency Y φ = 0 ↔ A φ = A φ₀ := by
+    have h0 := hφ₀
+    rw [lineFrequency_eq_drop_add_last] at h0
+    rw [lineFrequency_eq_drop_add_last]
+    constructor
+    · intro h
+      apply add_right_cancel (b := lastFrequencyColumn Y)
+      exact h.trans h0.symm
+    · intro h
+      change (dropLastFrequency Y).mulVec φ =
+        (dropLastFrequency Y).mulVec φ₀ at h
+      rw [h]
+      exact h0
+  let e : {φ : Fin d → ZMod 2 // lineFrequency Y φ = 0} ≃
+      LinearMap.ker A := {
+    toFun x := ⟨x.val - φ₀, by
+      change A (x.val - φ₀) = 0
+      rw [map_sub, (hline x.val).mp x.property, sub_self]⟩
+    invFun k := ⟨k.val + φ₀, by
+      apply (hline _).mpr
+      rw [map_add, show A k.val = 0 from k.property, zero_add]⟩
+    left_inv x := by
+      apply Subtype.ext
+      simp
+    right_inv k := by
+      apply Subtype.ext
+      simp
+  }
+  exact Fintype.card_congr e
+
+def affineKernelFraction {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) : ℝ :=
+  (∑ φ : Fin d → ZMod 2,
+      if lineFrequency Y φ = 0 then (1 : ℝ) else 0) /
+    (Fintype.card (Fin d → ZMod 2) : ℝ)
+
+theorem affineKernelFraction_eq_invTwo_pow_rank_of_not_hybridLineSelected
+    {n d : ℕ} (Y : BinaryMatrix n (d + 1))
+    (hY : ¬ hybridLineSelected Y) :
+    affineKernelFraction Y = ((2 : ℝ)⁻¹) ^ Y.rank := by
+  obtain ⟨φ₀, hφ₀⟩ := exists_lineFrequency_zero_of_not_hybridLineSelected Y hY
+  let A := (dropLastFrequency Y).mulVecLin
+  have hrank : Y.rank = (dropLastFrequency Y).rank := by
+    rw [rank_eq_drop_add_hybrid_indicator]
+    simp [hybridLineSelected] at hY
+    simp [hY]
+  have hdim := A.finrank_range_add_finrank_ker
+  have hdomain : Module.finrank (ZMod 2) (Fin d → ZMod 2) = d := by simp
+  have hker : Module.finrank (ZMod 2) ↥(LinearMap.ker A) = d - Y.rank := by
+    have hdim' : (dropLastFrequency Y).rank +
+        Module.finrank (ZMod 2) ↥(LinearMap.ker A) = d := by
+      simpa [A, Matrix.rank, hdomain] using hdim
+    omega
+  have hle : Y.rank ≤ d := by
+    have hdim' : (dropLastFrequency Y).rank +
+        Module.finrank (ZMod 2) ↥(LinearMap.ker A) = d := by
+      simpa [A, Matrix.rank, hdomain] using hdim
+    omega
+  have hcard : Fintype.card {φ : Fin d → ZMod 2 // lineFrequency Y φ = 0} =
+      2 ^ (d - Y.rank) := by
+    rw [affineKernel_card_eq_ker Y φ₀ hφ₀,
+      Module.card_eq_pow_finrank (K := ZMod 2), hker]
+    simp
+  have hsum : (∑ φ : Fin d → ZMod 2,
+      if lineFrequency Y φ = 0 then (1 : ℝ) else 0) =
+      (Fintype.card {φ : Fin d → ZMod 2 // lineFrequency Y φ = 0} : ℝ) := by
+    simpa [Fintype.card_subtype] using
+      (Finset.sum_boole (p := fun φ : Fin d → ZMod 2 => lineFrequency Y φ = 0)
+        (s := Finset.univ) (R := ℝ))
+  have hden : Fintype.card (Fin d → ZMod 2) = 2 ^ d := by simp
+  unfold affineKernelFraction
+  rw [hsum, hcard, hden]
+  simp only [Nat.cast_pow, Nat.cast_ofNat]
+  have hp : (2 : ℝ) ^ d = (2 : ℝ) ^ (d - Y.rank) * (2 : ℝ) ^ Y.rank := by
+    rw [← pow_add, Nat.sub_add_cancel hle]
+  rw [hp, inv_pow]
+  have hne : (2 : ℝ) ^ (d - Y.rank) ≠ 0 := by positivity
+  field_simp
+
 def lineTranslationAverage {n d : ℕ}
     (f : BinaryMatrix n (d + 1) → ℝ)
     (M : BinaryMatrix n (d + 1)) : ℝ :=
@@ -114,12 +267,6 @@ def lineTranslationMultiplier {n d : ℕ}
       character Y (lineShift w φ)) /
     ((Fintype.card (Fin d → ZMod 2) : ℝ) *
       (Fintype.card (Fin n → ZMod 2) : ℝ))
-
-def affineKernelFraction {n d : ℕ}
-    (Y : BinaryMatrix n (d + 1)) : ℝ :=
-  (∑ φ : Fin d → ZMod 2,
-      if lineFrequency Y φ = 0 then (1 : ℝ) else 0) /
-    (Fintype.card (Fin d → ZMod 2) : ℝ)
 
 /-- Averaging the independent row shift leaves exactly the fraction of
 line functionals in the kernel of `Y`. This is the finite count required
@@ -157,6 +304,17 @@ theorem lineTranslationMultiplier_eq_zero_of_hybridLineSelected {n d : ℕ}
   rw [lineTranslationMultiplier_eq_affineKernelFraction]
   exact affineKernelFraction_eq_zero_of_hybridLineSelected Y hY
 
+/-- The exact order-one translation multiplier from manuscript (A13),
+including both selected and unselected frequencies. -/
+theorem lineTranslationMultiplier_eq_hybrid {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) :
+    lineTranslationMultiplier Y =
+      if hybridLineSelected Y then 0 else ((2 : ℝ)⁻¹) ^ Y.rank := by
+  by_cases hY : hybridLineSelected Y
+  · simp [hY, lineTranslationMultiplier_eq_zero_of_hybridLineSelected Y hY]
+  · rw [if_neg hY, lineTranslationMultiplier_eq_affineKernelFraction]
+    exact affineKernelFraction_eq_invTwo_pow_rank_of_not_hybridLineSelected Y hY
+
 /-- The manuscript polynomial `P_{j+1}=(I-2^{j+1}E)(I-2^j E)`.
 The successor index makes the stated `j ≥ 1` boundary explicit. -/
 def lineIminusE {n d : ℕ} (a : ℝ)
@@ -186,6 +344,13 @@ theorem lineTranslationAverage_character {n d : ℕ}
     simp_rw [Finset.mul_sum]
   rw [hsum]
   ring
+
+theorem lineTranslationAverage_character_explicit {n d : ℕ}
+    (Y M : BinaryMatrix n (d + 1)) :
+    lineTranslationAverage (character Y) M =
+      (if hybridLineSelected Y then 0 else ((2 : ℝ)⁻¹) ^ Y.rank) *
+        character Y M := by
+  rw [lineTranslationAverage_character, lineTranslationMultiplier_eq_hybrid]
 
 end
 end PvNP.RealizableHardness.BinaryMatrixLineTranslation
