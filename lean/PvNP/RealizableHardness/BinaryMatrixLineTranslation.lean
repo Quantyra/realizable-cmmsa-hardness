@@ -484,7 +484,7 @@ private theorem lineIminusE_finset_sum {n d : ℕ} (a : ℝ)
       simp only [Finset.sum_insert hx]
       rw [lineIminusE_add, ih]
 
-private theorem lineP_finset_sum {n d j : ℕ}
+theorem lineP_finset_sum {n d j : ℕ}
     {α : Type*} (s : Finset α)
     (g : α → BinaryMatrix n (d + 1) → ℝ)
     (M : BinaryMatrix n (d + 1)) :
@@ -498,7 +498,7 @@ private theorem lineP_finset_sum {n d j : ℕ}
   rw [hinner]
   exact lineIminusE_finset_sum _ s _ M
 
-private theorem lineP_mul {n d j : ℕ}
+theorem lineP_mul {n d j : ℕ}
     (b : ℝ) (f : BinaryMatrix n (d + 1) → ℝ)
     (M : BinaryMatrix n (d + 1)) :
     lineP j (fun N => b * f N) M = b * lineP j f M := by
@@ -543,7 +543,7 @@ theorem lineP_rankProjection {n d j k : ℕ}
   rw [lineP_mul, lineP_character]
   ring
 
-private theorem lineP_scalar_at_adjacent_rank {n d j : ℕ}
+theorem lineP_scalar_at_adjacent_rank {n d j : ℕ}
     (Y : BinaryMatrix n (d + 1))
     (hr : Y.rank = j ∨ Y.rank = j + 1) :
     (1 - (2 : ℝ) ^ (j + 1) * lineTranslationMultiplier Y) *

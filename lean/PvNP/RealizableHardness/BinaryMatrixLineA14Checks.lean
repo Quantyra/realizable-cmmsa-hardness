@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.BinaryMatrixLineA14
+
+open PvNP.RealizableHardness.BinaryMatrixLineA14
+
+#check input_rank_of_drop_rank
+#check rankProjection_restrict_lineP_character
+#check rankProjection_rawRestrict_lineP_eq_hybridDerivative
+
+#print axioms input_rank_of_drop_rank
+#print axioms rankProjection_restrict_lineP_character
+#print axioms rankProjection_rawRestrict_lineP_eq_hybridDerivative

@@ -44,8 +44,7 @@ including rank zero. The manuscript uses the identity at `j≥1`.
 polynomial `P_{j+1}` equals the hybrid filter on each input rank `j` and
 `j+1` before restriction.
 
-The first remaining comparison for (A14) is the output rank projection of
-the raw restriction of `P_{j+1}f`. It must aggregate Fourier collisions on
-the reduced matrix space and show that no other input ranks contribute to
-output rank `j`. No A14 or A22 claim is made here, and this result does not
-reduce the numeric NO-soundness gap.
+The final-line/full-domain (A14) output comparison is now proved in
+`BinaryMatrixLineA14.lean`. See the dedicated receipt below for its exact
+scope and remaining generalization. This source comparison does not reduce
+the numeric NO-soundness gap.
