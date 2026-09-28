@@ -1,5 +1,6 @@
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.Data.ZMod.Basic
+import Mathlib.Algebra.Field.ZMod
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
@@ -126,6 +127,81 @@ theorem rankProjection_add {n d i : ℕ}
     rankProjection i (fun N => f N + g N) M =
       rankProjection i f M + rankProjection i g M := by
   simp only [rankProjection, fourierCoeff_add, add_mul, Finset.sum_add_distrib]
+
+theorem rank_eq_zero_iff {n d : ℕ} (Y : BinaryMatrix n d) :
+    Y.rank = 0 ↔ Y = 0 := by
+  constructor
+  · intro h
+    have hr : LinearMap.range Y.mulVecLin = ⊥ := by
+      exact (Submodule.finrank_eq_zero).mp h
+    have hz : Y.mulVecLin = 0 := by
+      exact LinearMap.range_eq_bot.mp hr
+    ext i j
+    have hs := congrArg (fun L : (Fin d → ZMod 2) →ₗ[ZMod 2] (Fin n → ZMod 2) =>
+      L (Pi.single j 1) i) hz
+    simpa using hs
+  · rintro rfl
+    exact Matrix.rank_zero
+
+theorem rankProjection_zero {n d : ℕ}
+    (f : BinaryMatrix n d → ℝ) (M : BinaryMatrix n d) :
+    rankProjection 0 f M = uniformMean f := by
+  have hf : (Finset.univ : Finset (BinaryMatrix n d)).filter
+      (fun Y => Y.rank = 0) = {0} := by
+    ext Y
+    simp [rank_eq_zero_iff]
+  simp [rankProjection, hf, fourierCoeff_zero_frequency]
+
+theorem uniformMean_const {n d : ℕ} (c : ℝ) :
+    uniformMean (fun _ : BinaryMatrix n d => c) = c := by
+  simp [uniformMean]
+
+theorem lpMoment_rankProjection_zero {n d p : ℕ}
+    (f : BinaryMatrix n d → ℝ) :
+    lpMoment p (rankProjection 0 f) = |uniformMean f| ^ p := by
+  simp [lpMoment, rankProjection_zero, uniformMean_const]
+
+theorem uniformMean_indicator_nonneg {n d : ℕ}
+    (f : BinaryMatrix n d → Bool) :
+    0 ≤ uniformMean (indicator f) := by
+  unfold uniformMean
+  apply div_nonneg
+  · apply Finset.sum_nonneg
+    intro M _
+    simp only [indicator]
+    split <;> positivity
+  · positivity
+
+/-- The rank-zero case of the binary matrix bound, with its full raw-restriction
+quantifier and no positive-dimension assumption. -/
+theorem rankZero_lpNorm_le {n d r p : ℕ} {δ : ℝ}
+    (f : BinaryMatrix n d → Bool)
+    (hp : 4 ≤ p) (_hδ₀ : 0 ≤ δ) (_hδ₁ : δ ≤ 1)
+    (h : Pseudorandom r δ f) :
+    lpNorm p (rankProjection 0 (indicator f)) ≤ δ := by
+  have hpn : p ≠ 0 := by omega
+  rw [lpNorm, lpMoment_rankProjection_zero]
+  have hmean := uniformMean_indicator_nonneg f
+  rw [one_div, Real.pow_rpow_inv_natCast (abs_nonneg _) hpn,
+    abs_of_nonneg hmean]
+  exact boolean_mean_le_of_pseudorandom f h
+
+/-- Complete `i=0` slice of the stated exponent, for every aspect ratio,
+including zero rows or columns. The dyadic condition is kept explicit. -/
+theorem binary_hc_rankZero {n d r p : ℕ} {δ : ℝ}
+    (f : BinaryMatrix n d → Bool)
+    (hp : 4 ≤ p) (_hdyadic : ∃ s : ℕ, p = 2 ^ s)
+    (hδ₀ : 0 ≤ δ) (hδ₁ : δ ≤ 1)
+    (h : Pseudorandom r δ f) :
+    lpNorm p (rankProjection 0 (indicator f)) ≤
+      (2 : ℝ) ^ (500 * 0 ^ 2 * p) * δ ^ (1 - 2 / (p : ℝ)) := by
+  have hbase := rankZero_lpNorm_le f hp hδ₀ hδ₁ h
+  have hexp : (1 : ℝ) - 2 / (p : ℝ) ≤ 1 := by
+    have hp0 : (0 : ℝ) ≤ (p : ℝ) := Nat.cast_nonneg _
+    have hdiv : 0 ≤ (2 : ℝ) / (p : ℝ) := div_nonneg (by norm_num) hp0
+    linarith
+  have hpow := Real.self_le_rpow_of_le_one hδ₀ hδ₁ hexp
+  simpa using hbase.trans hpow
 
 end
 end PvNP.RealizableHardness.BinaryMatrixFourier
