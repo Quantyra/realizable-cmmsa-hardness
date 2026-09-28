@@ -6,7 +6,13 @@ open PvNP.RealizableHardness.ActualTaggedFixedUDensityForce
 #check conditionalCanonicalDensity_nonneg_le_one
 #check ordered_canonical_eq_uniformU_mean
 #check ordered_physical_forces_high_density_U
+#check ordered_physical_forces_MZ_threshold_U
+#check ordered_half_value_forces_MZ_threshold_U
+#check ordered_manuscript_half_value_forces_MZ_threshold_U
 
 #print axioms conditionalCanonicalDensity_nonneg_le_one
 #print axioms ordered_canonical_eq_uniformU_mean
 #print axioms ordered_physical_forces_high_density_U
+#print axioms ordered_physical_forces_MZ_threshold_U
+#print axioms ordered_half_value_forces_MZ_threshold_U
+#print axioms ordered_manuscript_half_value_forces_MZ_threshold_U

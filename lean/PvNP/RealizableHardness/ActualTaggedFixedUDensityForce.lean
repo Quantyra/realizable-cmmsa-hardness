@@ -220,5 +220,136 @@ theorem ordered_physical_forces_high_density_U {J t h k : Nat}
   · rw [← ordered_canonical_eq_uniformU_mean I copies hcenter hleaf C T']
     linarith
 
+/-- The numerical form needed to enter the MZ local decoder: after the
+explicit class-collision loss and the averaging half-loss, a physical score
+with sixteen decoder thresholds of slack leaves at least eight thresholds
+of eligible first questions at conditional density at least eight thresholds.
+The center and arbitrary raw vertex tables are fixed before sampling, and
+the selected canonical table is fixed before sampling as well. -/
+theorem ordered_physical_forces_MZ_threshold_U {J t h k : Nat}
+    [Nonempty (TaggedGoodU I copies J)]
+    (hcenter : ∀ U : TaggedGoodU I copies J,
+      Nonempty (TaggedCenterOver I copies t U))
+    (hleaf : ∀ (U : TaggedGoodU I copies J)
+      (K : TaggedCenterOver I copies t U),
+      Nonempty (TaggedLeafOver I copies h (questionOf I copies U K)))
+    (ht : t ≤ 2 * h) (hh : h ≤ J)
+    (hexp : 2 * J ≤ (2 * h - t) * (2 * J - 2 * h))
+    (hk : k ^ 2 ≤ 2 ^ J)
+    (C : TaggedCenterTable I copies)
+    (T : TaggedRawVertexTable I copies J h)
+    (S α : ℚ) (hS : 0 ≤ S)
+    (hslack : (1 / 2 : ℚ) ^ J + 16 * S ≤ α)
+    (hphysical : α ≤ taggedPhysicalMass I copies
+      (orderedStarLaw I copies J (t := t) (h := h) (k := k)
+        hcenter hleaf).mass
+      (sampledStar I copies (J := J) (t := t) (h := h) (k := k)) C T) :
+    ∃ T' : TaggedLeafTable I copies,
+      8 * S ≤
+        ∑ U : TaggedGoodU I copies J,
+          (uniformLaw (TaggedGoodU I copies J)).mass U *
+            (if 8 * S ≤
+              conditionalCanonicalDensity I copies (k := k) hcenter hleaf C T' U
+             then (1 : ℚ) else 0) := by
+  obtain ⟨T', hcomp⟩ := ordered_physical_le_canonical_plus_collision
+    I copies hcenter hleaf ht hh hexp hk C T
+  refine ⟨T', ?_⟩
+  have hmean : 16 * S ≤
+      ∑ U : TaggedGoodU I copies J,
+        (uniformLaw (TaggedGoodU I copies J)).mass U *
+          conditionalCanonicalDensity I copies (k := k) hcenter hleaf C T' U := by
+    rw [← ordered_canonical_eq_uniformU_mean I copies hcenter hleaf C T']
+    linarith
+  have h := high_density_mass (uniformLaw (TaggedGoodU I copies J))
+    (conditionalCanonicalDensity I copies (k := k) hcenter hleaf C T')
+    (fun U => conditionalCanonicalDensity_nonneg_le_one I copies
+      hcenter hleaf C T' U) (16 * S) (by positivity) hmean
+  convert h using 1 <;> ring
+
+/-- The manuscript's potential factor-two loss before the physical tagged
+test is charged explicitly. If the decoder exponent exceeds the composed
+value exponent by six and the repetition exponent exceeds the decoder
+exponent, half the composed threshold still supplies the `16*S` slack. -/
+theorem ordered_half_value_forces_MZ_threshold_U {J t h k p q : Nat}
+    [Nonempty (TaggedGoodU I copies J)]
+    (hcenter : ∀ U : TaggedGoodU I copies J,
+      Nonempty (TaggedCenterOver I copies t U))
+    (hleaf : ∀ (U : TaggedGoodU I copies J)
+      (K : TaggedCenterOver I copies t U),
+      Nonempty (TaggedLeafOver I copies h (questionOf I copies U K)))
+    (ht : t ≤ 2 * h) (hh : h ≤ J)
+    (hexp : 2 * J ≤ (2 * h - t) * (2 * J - 2 * h))
+    (hk : k ^ 2 ≤ 2 ^ J)
+    (hgap : q + 6 ≤ p) (hpJ : p ≤ J)
+    (C : TaggedCenterTable I copies)
+    (T : TaggedRawVertexTable I copies J h)
+    (hphysical : (1 / 2 : ℚ) ^ (q + 1) ≤ taggedPhysicalMass I copies
+      (orderedStarLaw I copies J (t := t) (h := h) (k := k)
+        hcenter hleaf).mass
+      (sampledStar I copies (J := J) (t := t) (h := h) (k := k)) C T) :
+    ∃ T' : TaggedLeafTable I copies,
+      8 * (1 / 2 : ℚ) ^ p ≤
+        ∑ U : TaggedGoodU I copies J,
+          (uniformLaw (TaggedGoodU I copies J)).mass U *
+            (if 8 * (1 / 2 : ℚ) ^ p ≤
+              conditionalCanonicalDensity I copies (k := k) hcenter hleaf C T' U
+             then (1 : ℚ) else 0) := by
+  have hJp : (1 / 2 : ℚ) ^ J ≤ (1 / 2 : ℚ) ^ p :=
+    pow_le_pow_of_le_one (by norm_num) (by norm_num) hpJ
+  have hpq : (1 / 2 : ℚ) ^ p ≤ (1 / 2 : ℚ) ^ (q + 6) :=
+    pow_le_pow_of_le_one (by norm_num) (by norm_num) hgap
+  have hbase : 0 ≤ (1 / 2 : ℚ) ^ q := by positivity
+  have hslack : (1 / 2 : ℚ) ^ J + 16 * (1 / 2 : ℚ) ^ p ≤
+      (1 / 2 : ℚ) ^ (q + 1) := by
+    rw [pow_add] at hpq
+    rw [pow_add]
+    norm_num at hpq ⊢
+    nlinarith
+  exact ordered_physical_forces_MZ_threshold_U I copies hcenter hleaf
+    ht hh hexp hk C T ((1 / 2 : ℚ) ^ p) ((1 / 2 : ℚ) ^ (q + 1))
+    (by positivity) hslack hphysical
+
+/-- Direct exponent bookkeeping for the manuscript's choice `ρ = ξ/4000`.
+The integral exponents `p,q` encode the MZ density `S` and the claimed
+composed-value threshold `Δ`, respectively. The hypothesis on physical
+score deliberately remains explicit: transferring a composed value `> Δ`
+to a tagged ordered physical score `≥ Δ/2` is a separate, unproved
+source-sampler and clique-selection step. -/
+theorem ordered_manuscript_half_value_forces_MZ_threshold_U
+    {J t h k p q : Nat} [Nonempty (TaggedGoodU I copies J)]
+    (hcenter : ∀ U : TaggedGoodU I copies J,
+      Nonempty (TaggedCenterOver I copies t U))
+    (hleaf : ∀ (U : TaggedGoodU I copies J)
+      (K : TaggedCenterOver I copies t U),
+      Nonempty (TaggedLeafOver I copies h (questionOf I copies U K)))
+    (ht : t ≤ 2 * h) (hh : h ≤ J)
+    (hexp : 2 * J ≤ (2 * h - t) * (2 * J - 2 * h))
+    (hk : k ^ 2 ≤ 2 ^ J)
+    (ξ ρ : ℚ) (hξ : ξ = 4000 * ρ)
+    (hp : (p : ℚ) = 2 * (1 - 1000 * ρ) * h * m)
+    (hq : (q : ℚ) = 2 * (1 - ξ) * h * m)
+    (hlarge : (6 : ℚ) ≤ 6000 * ρ * h * m)
+    (hpJ : p ≤ J)
+    (C : TaggedCenterTable I copies)
+    (T : TaggedRawVertexTable I copies J h)
+    (hphysical : (1 / 2 : ℚ) ^ (q + 1) ≤ taggedPhysicalMass I copies
+      (orderedStarLaw I copies J (t := t) (h := h) (k := k)
+        hcenter hleaf).mass
+      (sampledStar I copies (J := J) (t := t) (h := h) (k := k)) C T) :
+    ∃ T' : TaggedLeafTable I copies,
+      8 * (1 / 2 : ℚ) ^ p ≤
+        ∑ U : TaggedGoodU I copies J,
+          (uniformLaw (TaggedGoodU I copies J)).mass U *
+            (if 8 * (1 / 2 : ℚ) ^ p ≤
+              conditionalCanonicalDensity I copies (k := k) hcenter hleaf C T' U
+             then (1 : ℚ) else 0) := by
+  have hdiff : (p : ℚ) - q = 6000 * ρ * h * m := by
+    rw [hp, hq, hξ]
+    ring
+  have hgap : q + 6 ≤ p := by
+    exact_mod_cast (show (q : ℚ) + 6 ≤ p by linarith)
+  exact ordered_half_value_forces_MZ_threshold_U I copies hcenter hleaf
+    ht hh hexp hk hgap hpJ C T hphysical
+
 end
 end PvNP.RealizableHardness.ActualTaggedFixedUDensityForce
