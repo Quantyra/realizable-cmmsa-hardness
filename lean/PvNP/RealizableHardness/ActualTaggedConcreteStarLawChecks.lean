@@ -1,0 +1,24 @@
+import PvNP.RealizableHardness.ActualTaggedOrderedQuestionSourceBridge
+
+namespace PvNP.RealizableHardness.ActualTaggedConcreteStarLawChecks
+
+open PvNP.RealizableHardness.ActualTaggedConcreteStarLaw
+open PvNP.RealizableHardness.ActualTaggedOrderedQuestionSourceBridge
+
+#check taggedSampleLaw
+#check tagged_sample_exists_selected
+#check orderedGood_pushforward
+#check taggedGoodU_nonempty_of_padding
+#check taggedOrderedSampleLaw
+#check orderedStarLaw
+#check ordered_sample_exists_selected
+
+#print axioms taggedSampleLaw
+#print axioms tagged_sample_exists_selected
+#print axioms orderedGood_pushforward
+#print axioms taggedGoodU_nonempty_of_padding
+#print axioms taggedOrderedSampleLaw
+#print axioms orderedStarLaw
+#print axioms ordered_sample_exists_selected
+
+end PvNP.RealizableHardness.ActualTaggedConcreteStarLawChecks
