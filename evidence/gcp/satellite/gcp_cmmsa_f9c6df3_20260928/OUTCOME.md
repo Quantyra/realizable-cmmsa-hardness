@@ -1,0 +1,11 @@
+# GCP exact-source tagged fixed-center geometry receipt
+
+Run: 2026-09-28 UTC and Pacific. Builder: `quantyra-lean-builder-01`, project `quantyra-lean-cert-20260915`, zone `us-central1-a`. Source commit: `f9c6df3c7fc14d74659168212976db34d9ec6211`. Scope: `PvNP.RealizableHardness.ActualTaggedFixedCenterGeometry` only.
+
+The input was a `git archive` of that commit's `lean/`, `lakefile.toml`, `lake-manifest.json`, and `lean-toolchain`, SHA-256 `65b9ae80a841a7d0e4b29d682ee7593004f0d6349385826d97eced74a6546c9e`. The builder checked the archive before extraction. The committed and Windows-checkout source bytes matched, SHA-256 `8be6dc6e53948cf4dbf61ea0d487e97bdde99e5814df495b2ea9f7ea6b74437d`, checked before build and after replay. The fresh tree reused the builder's pinned `.lake/packages` and rebuilt `.lake/build` from scratch on replay.
+
+Lean 4.34.0-rc2 / Lake 5.0.0 built the target successfully twice, **3,195 jobs each**, with zero `error:` lines in either build log. The axiom audit of `taggedSource_support_card`, `transverseComplement_isCompl`, `projectedCenter`, and `tagged_fixedCenter_le_leafDomain` reports only `propext`, `Classical.choice`, and `Quot.sound`. The scoped forbidden-token scan was empty. `OUTCOME.txt` records `EXIT=0` at `2026-09-28T10:58:19Z`.
+
+The sealed evidence archive SHA-256 is `5328fabfaef54b43f415dd5f9a8a40dad3b21f3196462518c64e01b950e071d9`; its 10-file internal manifest was verified after download. The hidden collector stopped the builder, and the final GCP instance state was **TERMINATED**.
+
+**Review boundary:** the module proves semantic tagged support cardinality and conditional inclusion of the stored ambient `q.K` in a full leaf domain for a fixed `TaggedQuestionCenter` and a selected projected leaf containing the projected center. Projection is a selection device; it is not an identification of `q.K` with the projected center. No tagged source/leaf sampling law, fixed-global-table acceptance or force bound, MZ NO soundness, YES completeness, encoded reduction, Theorem 1, or Corollary 2 follows from this receipt. Reviewers directed the next formal increment to fixed-table acceptance and force rather than further geometry-only packaging.
