@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.BinaryMatrixActualAffine
+
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+
+#check ActualAffineRestriction
+#check ActualAffineRestriction.order
+#check ActualAffineRestriction.fibre
+#check actualOfRaw_order_le_budget
+#check actualOfRaw_fibre
+#check upToActual_implies_upToRaw
+#check actualGlobal_A15_fixedBase_rawOutput
+
+#print axioms upToActual_implies_upToRaw
+#print axioms actualGlobal_A15_fixedBase_rawOutput
