@@ -538,5 +538,24 @@ theorem binary_hc_rankZero_exact {n d r p : ℕ} {δ : ℝ}
     linarith
   simpa using hbase.trans (Real.self_le_rpow_of_le_one hδ₀ hδ₁ hexp)
 
+/-- The exact-budget Boolean input gives the rank-level `L²` estimate used
+before the positive-rank hypercontractive step of manuscript Appendix A.
+This holds for every rank, including ranks above the matrix dimensions. -/
+theorem binary_hc_rankLevel_L2_exact {n d r i : ℕ} {δ : ℝ}
+    (f : BinaryMatrix n d → Bool)
+    (h : PseudorandomExact r δ f) :
+    lpMoment 2 (rankProjection i (indicator f)) ≤ δ := by
+  have hsquare : (fun M : BinaryMatrix n d => (indicator f M) ^ 2) = indicator f := by
+    funext M
+    by_cases hf : f M = true <;> simp [indicator, hf]
+  calc
+    lpMoment 2 (rankProjection i (indicator f)) =
+        uniformMean (fun M => (rankProjection i (indicator f) M) ^ 2) := by
+          simp [lpMoment, sq_abs]
+    _ ≤ uniformMean (fun M => (indicator f M) ^ 2) :=
+      rankProjection_energy_le (indicator f)
+    _ = uniformMean (indicator f) := by rw [hsquare]
+    _ ≤ δ := boolean_mean_le_of_exact f h
+
 end
 end PvNP.RealizableHardness.BinaryMatrixFourier

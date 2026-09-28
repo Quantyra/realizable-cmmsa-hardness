@@ -29,6 +29,7 @@ open PvNP.RealizableHardness.BinaryMatrixFourier
 #check fourier_parseval
 #check fourierCoeff_rankProjection
 #check rankProjection_energy_le
+#check binary_hc_rankLevel_L2_exact
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.boolean_mean_le_of_pseudorandom
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.rank_eq_zero_iff
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.binary_hc_rankZero
@@ -37,3 +38,4 @@ open PvNP.RealizableHardness.BinaryMatrixFourier
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.fourier_inversion
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.fourier_parseval
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.rankProjection_energy_le
+#print axioms PvNP.RealizableHardness.BinaryMatrixFourier.binary_hc_rankLevel_L2_exact
