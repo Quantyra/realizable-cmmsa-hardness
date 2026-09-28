@@ -1,0 +1,24 @@
+import PvNP.RealizableHardness.ActualTaggedVertexPhysicalLaw
+
+namespace PvNP.RealizableHardness.ActualTaggedVertexPhysicalLawChecks
+
+open PvNP.RealizableHardness.ActualTaggedVertexPresentationFiber
+open PvNP.RealizableHardness.ActualTaggedVertexPhysicalAcceptance
+open PvNP.RealizableHardness.ActualTaggedVertexPhysicalLaw
+
+#check vertexPresentation_card
+#check class_eq_of_domain_eq
+#check uniform_classRepresentative_pushforward
+#check taggedTransportedRawLabel_source_coherent
+#check taggedRawValid_iff_same_vertex
+#check taggedPhysicalAccepts_vertex_invariant
+#check uniform_independentChoice_pushforward
+#check taggedPhysicalMean_eq_vertexMean
+
+#print axioms vertexPresentation_card
+#print axioms uniform_classRepresentative_pushforward
+#print axioms taggedPhysicalAccepts_vertex_invariant
+#print axioms uniform_independentChoice_pushforward
+#print axioms taggedPhysicalMean_eq_vertexMean
+
+end PvNP.RealizableHardness.ActualTaggedVertexPhysicalLawChecks
