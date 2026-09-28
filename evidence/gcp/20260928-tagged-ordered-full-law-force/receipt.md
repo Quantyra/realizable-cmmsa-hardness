@@ -4,6 +4,7 @@
 - GCP builder: `quantyra-lean-builder-01`, project `quantyra-lean-cert-20260915`, zone `us-central1-a`. Local `gcloud.cmd` child processes used Python `subprocess.CREATE_NO_WINDOW`.
 - Isolated exact-source checkout: `/tmp/cmmsa-ordered-force-r1`, populated from the parent HEAD archive plus the new source. Both final files were uploaded after source editing. Their SHA-256 values matched the committed local files byte for byte.
 - Detached final Checks build: PID `4438`, `/tmp/cmmsa-ordered-force-r3.exit=0`; `lake build PvNP.RealizableHardness.ActualTaggedOrderedFullLawForceChecks` completed successfully, 3254 jobs. Full remote output: `/tmp/cmmsa-ordered-force-r3.log`.
+- After the terminal build, the builder was stopped and a fresh instance query returned `TERMINATED`.
 - `#print axioms` for both `orderedStarLaw_eq_taggedSampleLaw` and `ordered_physical_le_canonical_plus_collision`: only `propext`, `Classical.choice`, `Quot.sound`.
 
 | Lean file | SHA-256 |
