@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty
+
+open PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty
+
+#check taggedCenterOver_nonempty
+#check taggedLeafOver_nonempty
+#check ordered_sample_exists_selected_of_padding
+#check taggedCoordinate_finrank
+#check taggedEquation_finrank
+#check taggedComplement_finrank
+
+#print axioms taggedCenterOver_nonempty
+#print axioms taggedLeafOver_nonempty
+#print axioms ordered_sample_exists_selected_of_padding
+#print axioms taggedCoordinate_finrank
+#print axioms taggedEquation_finrank
+#print axioms taggedComplement_finrank
