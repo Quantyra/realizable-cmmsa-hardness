@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.BinaryMatrixLineTranslation
+
+open PvNP.RealizableHardness.BinaryMatrixLineTranslation
+
+#check lineTranslationAverage_character
+#check lineShift_character_sum
+#check lineTranslationMultiplier_eq_affineKernelFraction
+#check lineFrequency_ne_zero_of_hybridLineSelected
+#check lineTranslationMultiplier_eq_zero_of_hybridLineSelected
+#check lineP
+
+#print axioms lineTranslationAverage_character
+#print axioms lineShift_character_sum
+#print axioms lineTranslationMultiplier_eq_affineKernelFraction
+#print axioms lineFrequency_ne_zero_of_hybridLineSelected
+#print axioms lineTranslationMultiplier_eq_zero_of_hybridLineSelected
