@@ -1,0 +1,11 @@
+# GCP exact-source ordered-question bridge receipt
+
+Run: 2026-09-28 UTC and Pacific. Builder: `quantyra-lean-builder-01`, project `quantyra-lean-cert-20260915`, zone `us-central1-a`. Source commit: `86ddeded5b40ad35cea4f72b932a90c6fd080e09`. Scope: `ActualQuestionCenterSourceLaw` and `ActualOrderedQuestionSourceBridge`.
+
+The input was a `git archive` of that commit's `lean/`, `lakefile.toml`, `lake-manifest.json`, and `lean-toolchain`, SHA-256 `4ddee89d4c6a6dbaca4326494fb486cba4abd2eb02df9855bcedb1d3f2e26210`. The builder checked the archive before extraction. The two committed source SHA-256 values were `2f99536122e836b294506ae1bc875222afe0bf9861f09a95d32cfd8546c95924` for `ActualQuestionCenterSourceLaw.lean` and `a5fe454f7f6ca2744543197ff47d5579209cd2aabaeafd6702c1048ba7762720` for `ActualOrderedQuestionSourceBridge.lean`; both were checked before build and after replay. Windows checkout bytes matched the committed blobs. The fresh tree reused the builder's pinned `.lake/packages` and rebuilt `.lake/build` from scratch on replay.
+
+Lean 4.34.0-rc2 / Lake 5.0.0 built both targets successfully twice, **3,224 jobs each**, with zero `error:` lines in either build log. The axiom audit of `sourceQuestionLaw_atom`, `fiberPermEquiv`, `orderedFiber_card`, `orderedGood_card`, `orderedGoodLaw`, and `orderedGood_pushforward` reports only `propext`, `Classical.choice`, and `Quot.sound`. The scoped forbidden-token scan of both touched files was empty. `OUTCOME.txt` records `EXIT=0` at `2026-09-28T09:40:59Z`.
+
+The sealed evidence archive SHA-256 is `0c2494467afa0cc907ece2787b2c52df96e6f45a3444f6793e3c0b156ef867a6`; its 10-file internal manifest was verified after download. The hidden collector stopped the builder, and the final GCP instance state was **TERMINATED**.
+
+**Review boundary:** for the explicitly defined uniform sampler of legitimate ordered row tuples, forgetting order gives uniform `GoodU`, conditional on `GoodU` being nonempty. The proof includes a same-size ordered-fibre count. It does not identify that law with the manuscript's initial-vertex/clique-resampling sampler. Center-fibre nonemptiness, the joint U/K/leaves/table law, manuscript soundness and completeness, the source-to-CMMSA reduction, Theorem 1, and Corollary 2 remain unproved.
