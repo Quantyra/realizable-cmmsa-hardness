@@ -1,0 +1,23 @@
+RESULT=PASS
+DATE=2026-09-28
+TARGET=PvNP.RealizableHardness.ActualTaggedSelectedDecoderBridgeChecks
+BUILDER=quantyra-lean-builder-01
+PROJECT=quantyra-lean-cert-20260915
+ZONE=us-central1-a
+REMOTE_ISOLATED_CHECKOUT=/home/dfredriksen_quantyra_org/cmmsa_tagged_decoder_bridge_run
+BUILD=exit 0; 3212 jobs; build.log
+REPLAY=exit 0; 3212 jobs; replay.log
+SOURCE_SHA256=source.sha256; remote sha256sum matched both local source files
+AXIOMS=propext, Classical.choice, Quot.sound only for all five audited declarations
+FORBIDDEN_SCAN=no sorry, admit, native_decide, or new axiom in the two new Lean sources
+
+SCOPE=For every fixed raw tagged presented-vertex table T, center table C,
+global class-representative choice s, and presented tagged star z, Lean proves
+taggedSelectedAccepts C T z s iff taggedAccepts C (taggedSelectedDomainTable T s)
+z.q (taggedConvertedLeaves z). The global domain table is chosen before z.
+Converted leaves have exactly the sampled full domains; the event uses stored
+z.q.K. Domain coherence handles different presentations of one full domain.
+
+LIMIT=This does not instantiate the manuscript weighted source law, bound
+class collisions, prove the MZ NO decoder inequality for this event, or certify
+Theorem 1 or Corollary 2. No source YES theorem or encoded FP reduction follows.

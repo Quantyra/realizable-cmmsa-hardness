@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualTaggedSelectedDecoderBridge
+
+/-! Exact declaration and axiom audit for the tagged selected event bridge. -/
+
+open PvNP.RealizableHardness.ActualTaggedSelectedDecoderBridge
+
+#check taggedTransportedRawLabel_domain_coherent
+#check taggedPresentedToFixedLeaf_domain
+#check taggedSelectedLeafLabel_domain_coherent
+#check taggedSelectedDomainTable_apply
+#check taggedSelectedAccepts_iff_taggedAccepts
+
+#print axioms taggedTransportedRawLabel_domain_coherent
+#print axioms taggedPresentedToFixedLeaf_domain
+#print axioms taggedSelectedLeafLabel_domain_coherent
+#print axioms taggedSelectedDomainTable_apply
+#print axioms taggedSelectedAccepts_iff_taggedAccepts
