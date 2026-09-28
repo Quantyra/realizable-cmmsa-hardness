@@ -640,7 +640,7 @@ def TaggedDistinctClasses {J h k : Nat}
 attribute [local instance 2000] Classical.decEq
 attribute [local instance] Classical.propDecidable
 
-private theorem tagged_uniformMean_equiv
+theorem tagged_uniformMean_equiv
     {α β : Type*} [Fintype α] [Fintype β]
     [Nonempty α] [Nonempty β]
     (e : α ≃ β) (f : β → ℚ) :
@@ -665,7 +665,7 @@ private theorem tagged_uniformMean_prod_fst
   simp only [Fintype.card]
   ring
 
-private theorem tagged_uniformMean_restrict_injective
+theorem tagged_uniformMean_restrict_injective
     {ι κ : Type*} [Fintype ι] [Fintype κ]
     (A : κ → Type*) [∀ c, Fintype (A c)]
     [∀ c, Nonempty (A c)]

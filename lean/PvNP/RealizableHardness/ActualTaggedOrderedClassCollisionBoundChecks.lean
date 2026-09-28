@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualTaggedOrderedClassCollisionBound
+
+open PvNP.RealizableHardness.ActualTaggedOrderedClassCollisionBound
+
+#check taggedConditionalPairClassCollision_eq
+#check taggedConditionalClassCollisionMass_le_choose_ratio
+#check taggedConditionalClassCollisionMass_le_twoNegJ
+#check taggedSampleClassCollisionMass_le_twoNegJ
+#check tagged_sample_exists_selected_le_twoNegJ
+
+#print axioms taggedConditionalPairClassCollision_eq
+#print axioms taggedConditionalClassCollisionMass_le_choose_ratio
+#print axioms taggedConditionalClassCollisionMass_le_twoNegJ
+#print axioms taggedSampleClassCollisionMass_le_twoNegJ
+#print axioms tagged_sample_exists_selected_le_twoNegJ
