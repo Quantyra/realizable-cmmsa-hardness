@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.BinaryMatrixLineA15
+
+open PvNP.RealizableHardness.BinaryMatrixLineA15
+
+#check liftRestriction_fibre
+#check normalizedSquare_liftRestriction
+#check upToRawSquareGlobal_translate
+#check upToRawSquareGlobal_lineTranslationAverage
+#check upToRawSquareGlobal_lineP
+#check upToRawSquareGlobal_A15_fixedBase
+
+#print axioms upToRawSquareGlobal_A15_fixedBase
