@@ -59,7 +59,9 @@ instance (J t : Nat) : Fintype (QuestionCenter I J t) :=
   Fintype.ofEquiv (Σ U : GoodU I J, CenterOver I t U)
     (sourceQuestionEquiv I J t)
 
-/-- U-first/K-conditional rational mass, as stated in the manuscript. -/
+/-- Point mass of the explicit U-first/K-conditional law. The ordered-tuple
+sampler is connected to its uniform `GoodU` marginal separately in
+`ActualOrderedQuestionSourceBridge`. -/
 def sourceQuestionWeight {J t : Nat} [Nonempty (GoodU I J)]
     (q : QuestionCenter I J t) : ℚ := by
   let U : GoodU I J := ((sourceQuestionEquiv I J t).symm q).1
