@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.ActualTaggedComposedPhysicalSampler
+
+/-! Axiom audit for the fixed-table composed-source transfer. -/
+
+open PvNP.RealizableHardness.ActualTaggedComposedPhysicalSampler
+open PvNP.RealizableHardness.ActualTaggedTargetPresentationInvariant
+
+#print axioms taggedPhysicalAccepts_replaceTargetLeaves
+#print axioms composedDomainLaw_mass
+#print axioms composedTaggedScore_eq_orderedPhysicalMass
+#print axioms taggedPhysicalAccepts_iff_independentAccepts_of_legal
+#print axioms composedLegalValue_gt_forces_MZ_threshold_U
