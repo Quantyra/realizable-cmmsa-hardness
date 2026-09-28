@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.BinaryMatrixFirstDerivative
+
+open PvNP.RealizableHardness.BinaryMatrixFirstDerivative
+
+#check pairing_rawLastColumn
+#check character_rawLastColumn
+#check selectedLastColumn_rank_shift
+#check lastColumnDerivative_character
+#check lastColumnDerivative_rankProjection
+#print axioms PvNP.RealizableHardness.BinaryMatrixFirstDerivative.pairing_rawLastColumn
+#print axioms PvNP.RealizableHardness.BinaryMatrixFirstDerivative.lastColumnDerivative_character
+#print axioms PvNP.RealizableHardness.BinaryMatrixFirstDerivative.lastColumnDerivative_rankProjection

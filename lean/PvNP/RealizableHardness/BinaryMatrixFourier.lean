@@ -27,7 +27,7 @@ def character {n d : ℕ} (Y M : BinaryMatrix n d) : ℝ :=
 
 private def bitSign (x : ZMod 2) : ℝ := if x = 0 then 1 else -1
 
-private theorem bitSign_add (x y : ZMod 2) :
+theorem bitSign_add (x y : ZMod 2) :
     bitSign (x + y) = bitSign x * bitSign y := by
   have h11 : (1 : ZMod 2) + 1 = 0 := by decide
   fin_cases x <;> fin_cases y
