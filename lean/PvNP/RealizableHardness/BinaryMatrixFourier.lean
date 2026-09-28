@@ -132,14 +132,185 @@ theorem character_orthogonality {n d : ℕ}
     rw [if_neg h]
     simp [uniformMean, character_sum_zero_of_ne _ hs]
 
+theorem pairing_comm {n d : ℕ} (Y M : BinaryMatrix n d) :
+    pairing Y M = pairing M Y := by
+  simp only [pairing]
+  congr 1
+  ext i
+  congr 1
+  ext j
+  exact mul_comm _ _
+
+theorem character_comm {n d : ℕ} (Y M : BinaryMatrix n d) :
+    character Y M = character M Y := by
+  simp [character, pairing_comm]
+
+theorem character_dual_orthogonality {n d : ℕ}
+    (M N : BinaryMatrix n d) :
+    uniformMean (fun Y => character Y M * character Y N) =
+      if M = N then 1 else 0 := by
+  simpa only [character_comm] using character_orthogonality M N
+
 def fourierCoeff {n d : ℕ} (f : BinaryMatrix n d → ℝ)
     (Y : BinaryMatrix n d) : ℝ :=
   uniformMean (fun M => f M * character Y M)
+
+theorem fourier_inversion {n d : ℕ}
+    (f : BinaryMatrix n d → ℝ) (M : BinaryMatrix n d) :
+    (∑ Y : BinaryMatrix n d, fourierCoeff f Y * character Y M) = f M := by
+  have hcard : (Fintype.card (BinaryMatrix n d) : ℝ) ≠ 0 := by
+    exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (BinaryMatrix n d)).ne'
+  have hd (N : BinaryMatrix n d) :
+      (∑ Y : BinaryMatrix n d, character Y N * character Y M) =
+        (Fintype.card (BinaryMatrix n d) : ℝ) *
+          (if N = M then 1 else 0) := by
+    have ho := character_dual_orthogonality N M
+    unfold uniformMean at ho
+    simpa [mul_comm] using (div_eq_iff hcard).mp ho
+  calc
+    (∑ Y : BinaryMatrix n d, fourierCoeff f Y * character Y M)
+        = (∑ Y : BinaryMatrix n d,
+            ∑ N : BinaryMatrix n d,
+              f N * character Y N * character Y M) /
+              (Fintype.card (BinaryMatrix n d) : ℝ) := by
+                simp only [fourierCoeff, uniformMean, div_eq_mul_inv]
+                calc
+                  (∑ Y : BinaryMatrix n d,
+                      (∑ N : BinaryMatrix n d, f N * character Y N) *
+                        (Fintype.card (BinaryMatrix n d) : ℝ)⁻¹ * character Y M)
+                      = ∑ Y : BinaryMatrix n d,
+                          ((∑ N : BinaryMatrix n d, f N * character Y N) *
+                            character Y M) *
+                              (Fintype.card (BinaryMatrix n d) : ℝ)⁻¹ := by
+                                apply Finset.sum_congr rfl
+                                intro Y _
+                                ring
+                  _ = (∑ Y : BinaryMatrix n d,
+                        (∑ N : BinaryMatrix n d, f N * character Y N) *
+                          character Y M) *
+                            (Fintype.card (BinaryMatrix n d) : ℝ)⁻¹ := by
+                              rw [Finset.sum_mul]
+                  _ = (∑ Y : BinaryMatrix n d,
+                        ∑ N : BinaryMatrix n d,
+                          f N * character Y N * character Y M) *
+                            (Fintype.card (BinaryMatrix n d) : ℝ)⁻¹ := by
+                              congr 1
+                              apply Finset.sum_congr rfl
+                              intro Y _
+                              rw [Finset.sum_mul]
+    _ = (∑ N : BinaryMatrix n d,
+          f N * ∑ Y : BinaryMatrix n d,
+            character Y N * character Y M) /
+              (Fintype.card (BinaryMatrix n d) : ℝ) := by
+                rw [Finset.sum_comm]
+                congr 1
+                apply Finset.sum_congr rfl
+                intro N _
+                rw [Finset.mul_sum]
+                congr 1
+                ext Y
+                ring
+    _ = f M := by
+      simp_rw [hd]
+      simp [hcard]
+
+theorem fourier_parseval {n d : ℕ}
+    (f : BinaryMatrix n d → ℝ) :
+    uniformMean (fun M => f M ^ 2) =
+      ∑ Y : BinaryMatrix n d, (fourierCoeff f Y) ^ 2 := by
+  have hpoint (M : BinaryMatrix n d) :
+      f M ^ 2 = (∑ Y : BinaryMatrix n d,
+        fourierCoeff f Y * character Y M) * f M := by
+    rw [fourier_inversion]
+    ring
+  simp_rw [hpoint]
+  unfold uniformMean
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  rw [div_eq_mul_inv, Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro Y _
+  have hs :
+      (∑ M : BinaryMatrix n d,
+        fourierCoeff f Y * character Y M * f M) =
+          fourierCoeff f Y *
+            (∑ M : BinaryMatrix n d, f M * character Y M) := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro M _
+    ring
+  rw [hs]
+  rw [mul_assoc]
+  change fourierCoeff f Y *
+      ((∑ M : BinaryMatrix n d, f M * character Y M) *
+        (Fintype.card (BinaryMatrix n d) : ℝ)⁻¹) =
+          (fourierCoeff f Y) ^ 2
+  rw [show ((∑ M : BinaryMatrix n d, f M * character Y M) *
+        (Fintype.card (BinaryMatrix n d) : ℝ)⁻¹) = fourierCoeff f Y from rfl]
+  ring
 
 def rankProjection {n d : ℕ} (i : ℕ)
     (f : BinaryMatrix n d → ℝ) (M : BinaryMatrix n d) : ℝ :=
   ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n d)).filter
       (fun Y => Y.rank = i), fourierCoeff f Y * character Y M
+
+theorem fourierCoeff_rankProjection {n d i : ℕ}
+    (f : BinaryMatrix n d → ℝ) (Z : BinaryMatrix n d) :
+    fourierCoeff (rankProjection i f) Z =
+      if Z.rank = i then fourierCoeff f Z else 0 := by
+  let s : Finset (BinaryMatrix n d) := Finset.univ.filter (fun Y => Y.rank = i)
+  have hs : (∑ Y ∈ s, fourierCoeff f Y *
+      (if Y = Z then (1 : ℝ) else 0)) =
+        if Z.rank = i then fourierCoeff f Z else 0 := by
+    by_cases hz : Z.rank = i
+    · simp [s, hz]
+    · simp [s, hz]
+  rw [← hs]
+  unfold fourierCoeff rankProjection uniformMean
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  rw [div_eq_mul_inv, Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  have ho := character_orthogonality Y Z
+  unfold uniformMean at ho
+  have hcard : (Fintype.card (BinaryMatrix n d) : ℝ) ≠ 0 := by
+    exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (BinaryMatrix n d)).ne'
+  have ho' := (div_eq_iff hcard).mp ho
+  calc
+    (∑ M : BinaryMatrix n d,
+      fourierCoeff f Y * character Y M * character Z M) *
+        (Fintype.card (BinaryMatrix n d) : ℝ)⁻¹
+      = fourierCoeff f Y *
+          ((∑ M : BinaryMatrix n d,
+            character Y M * character Z M) /
+              (Fintype.card (BinaryMatrix n d) : ℝ)) := by
+                have hsum :
+                    (∑ M : BinaryMatrix n d,
+                      fourierCoeff f Y * character Y M * character Z M) =
+                    fourierCoeff f Y *
+                      (∑ M : BinaryMatrix n d,
+                        character Y M * character Z M) := by
+                  rw [Finset.mul_sum]
+                  apply Finset.sum_congr rfl
+                  intro M _
+                  ring
+                rw [hsum]
+                simp only [div_eq_mul_inv]
+                ring
+    _ = fourierCoeff f Y * (if Y = Z then 1 else 0) := by rw [ho]
+
+/-- Rank-level Bessel energy comparison, the positive-rank Fourier input
+needed before the MZ/EKL hypercontractive estimates. -/
+theorem rankProjection_energy_le {n d i : ℕ}
+    (f : BinaryMatrix n d → ℝ) :
+    uniformMean (fun M => (rankProjection i f M) ^ 2) ≤
+      uniformMean (fun M => f M ^ 2) := by
+  rw [fourier_parseval (rankProjection i f), fourier_parseval f]
+  apply Finset.sum_le_sum
+  intro Y _
+  rw [fourierCoeff_rankProjection]
+  by_cases h : Y.rank = i <;> simp [h, sq_nonneg]
 
 /-- The normalized moment whose `p`th root is the normalized Lp norm. -/
 def lpMoment {n d : ℕ} (p : ℕ) (f : BinaryMatrix n d → ℝ) : ℝ :=

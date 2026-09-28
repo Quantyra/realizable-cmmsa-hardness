@@ -24,8 +24,16 @@ open PvNP.RealizableHardness.BinaryMatrixFourier
 #check pairing_matrixUnit
 #check character_sum_zero_of_ne
 #check character_orthogonality
+#check character_dual_orthogonality
+#check fourier_inversion
+#check fourier_parseval
+#check fourierCoeff_rankProjection
+#check rankProjection_energy_le
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.boolean_mean_le_of_pseudorandom
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.rank_eq_zero_iff
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.binary_hc_rankZero
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.binary_hc_rankZero_exact
 #print axioms PvNP.RealizableHardness.BinaryMatrixFourier.character_orthogonality
+#print axioms PvNP.RealizableHardness.BinaryMatrixFourier.fourier_inversion
+#print axioms PvNP.RealizableHardness.BinaryMatrixFourier.fourier_parseval
+#print axioms PvNP.RealizableHardness.BinaryMatrixFourier.rankProjection_energy_le
