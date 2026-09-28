@@ -15,6 +15,9 @@ noncomputable section
 
 abbrev BinaryMatrix (n d : ℕ) := Matrix (Fin n) (Fin d) (ZMod 2)
 
+def uniformMean {n d : ℕ} (f : BinaryMatrix n d → ℝ) : ℝ :=
+  (∑ M : BinaryMatrix n d, f M) / (Fintype.card (BinaryMatrix n d) : ℝ)
+
 /-- Trace pairing, written entrywise to expose its finite binary coordinates. -/
 def pairing {n d : ℕ} (Y M : BinaryMatrix n d) : ZMod 2 :=
   ∑ i : Fin n, ∑ j : Fin d, Y i j * M i j
@@ -22,8 +25,112 @@ def pairing {n d : ℕ} (Y M : BinaryMatrix n d) : ZMod 2 :=
 def character {n d : ℕ} (Y M : BinaryMatrix n d) : ℝ :=
   if pairing Y M = 0 then 1 else -1
 
-def uniformMean {n d : ℕ} (f : BinaryMatrix n d → ℝ) : ℝ :=
-  (∑ M : BinaryMatrix n d, f M) / (Fintype.card (BinaryMatrix n d) : ℝ)
+private def bitSign (x : ZMod 2) : ℝ := if x = 0 then 1 else -1
+
+private theorem bitSign_add (x y : ZMod 2) :
+    bitSign (x + y) = bitSign x * bitSign y := by
+  have h11 : (1 : ZMod 2) + 1 = 0 := by decide
+  fin_cases x <;> fin_cases y
+  · change bitSign ((0 : ZMod 2) + 0) = bitSign 0 * bitSign 0
+    simp [bitSign]
+  · change bitSign ((0 : ZMod 2) + 1) = bitSign 0 * bitSign 1
+    simp [bitSign]
+  · change bitSign ((1 : ZMod 2) + 0) = bitSign 1 * bitSign 0
+    simp [bitSign]
+  · change bitSign ((1 : ZMod 2) + 1) = bitSign 1 * bitSign 1
+    simp [bitSign, h11]
+
+theorem pairing_add_left {n d : ℕ} (Y Z M : BinaryMatrix n d) :
+    pairing (Y + Z) M = pairing Y M + pairing Z M := by
+  simp [pairing, add_mul, Finset.sum_add_distrib]
+
+theorem pairing_add_right {n d : ℕ} (Y M N : BinaryMatrix n d) :
+    pairing Y (M + N) = pairing Y M + pairing Y N := by
+  simp [pairing, mul_add, Finset.sum_add_distrib]
+
+theorem character_add_left {n d : ℕ} (Y Z M : BinaryMatrix n d) :
+    character (Y + Z) M = character Y M * character Z M := by
+  simpa [character, bitSign, pairing_add_left] using
+    bitSign_add (pairing Y M) (pairing Z M)
+
+theorem character_add_right {n d : ℕ} (Y M N : BinaryMatrix n d) :
+    character Y (M + N) = character Y M * character Y N := by
+  simpa [character, bitSign, pairing_add_right] using
+    bitSign_add (pairing Y M) (pairing Y N)
+
+def matrixUnit {n d : ℕ} (i : Fin n) (j : Fin d) : BinaryMatrix n d :=
+  Matrix.single i j 1
+
+theorem pairing_matrixUnit {n d : ℕ}
+    (Y : BinaryMatrix n d) (i : Fin n) (j : Fin d) :
+    pairing Y (matrixUnit i j) = Y i j := by
+  simp only [pairing, matrixUnit, Matrix.single_apply, mul_ite, mul_one, mul_zero]
+  have hin (x : Fin n) :
+      (∑ z : Fin d, if i = x ∧ j = z then Y x z else 0) =
+        if i = x then Y x j else 0 := by
+    by_cases hx : i = x
+    · subst x
+      simp
+    · simp [hx]
+  simp_rw [hin]
+  simp
+
+theorem character_matrixUnit_neg {n d : ℕ}
+    (Y : BinaryMatrix n d) (i : Fin n) (j : Fin d)
+    (h : Y i j ≠ 0) : character Y (matrixUnit i j) = -1 := by
+  simp [character, pairing_matrixUnit, h]
+
+theorem character_sum_zero_of_ne {n d : ℕ}
+    (Y : BinaryMatrix n d) (hY : Y ≠ 0) :
+    (∑ M : BinaryMatrix n d, character Y M) = 0 := by
+  obtain ⟨i, j, hij⟩ : ∃ i : Fin n, ∃ j : Fin d, Y i j ≠ 0 := by
+    by_contra hh
+    apply hY
+    ext i j
+    by_contra hij
+    exact hh ⟨i, j, hij⟩
+  let E := matrixUnit i j
+  have hE : character Y E = -1 := character_matrixUnit_neg Y i j hij
+  let shift : BinaryMatrix n d ≃ BinaryMatrix n d := {
+    toFun M := M + E
+    invFun M := M - E
+    left_inv M := by simp
+    right_inv M := by simp }
+  have hs : (∑ M : BinaryMatrix n d, character Y (M + E)) =
+      ∑ M : BinaryMatrix n d, character Y M := by
+    exact Equiv.sum_comp shift (character Y)
+  have hn : (∑ M : BinaryMatrix n d, character Y (M + E)) =
+      -(∑ M : BinaryMatrix n d, character Y M) := by
+    simp_rw [character_add_right, hE, mul_neg_one, Finset.sum_neg_distrib]
+  linarith
+
+theorem matrix_neg_self {n d : ℕ} (Y : BinaryMatrix n d) : -Y = Y := by
+  ext i j
+  exact ZMod.neg_eq_self_mod_two (Y i j)
+
+theorem matrix_add_self {n d : ℕ} (Y : BinaryMatrix n d) : Y + Y = 0 := by
+  conv_lhs => rhs; rw [← matrix_neg_self Y]
+  exact add_neg_cancel Y
+
+theorem character_orthogonality {n d : ℕ}
+    (Y Z : BinaryMatrix n d) :
+    uniformMean (fun M => character Y M * character Z M) =
+      if Y = Z then 1 else 0 := by
+  have hfun : (fun M => character Y M * character Z M) =
+      (fun M => character (Y + Z) M) := by
+    funext M
+    exact (character_add_left Y Z M).symm
+  rw [hfun]
+  by_cases h : Y = Z
+  · subst Z
+    rw [if_pos rfl, matrix_add_self]
+    simp [uniformMean, character, pairing]
+  · have hs : Y + Z ≠ 0 := by
+      intro hz
+      have hy : Y = -Z := eq_neg_of_add_eq_zero_left hz
+      exact h (hy.trans (matrix_neg_self Z))
+    rw [if_neg h]
+    simp [uniformMean, character_sum_zero_of_ne _ hs]
 
 def fourierCoeff {n d : ℕ} (f : BinaryMatrix n d → ℝ)
     (Y : BinaryMatrix n d) : ℝ :=
