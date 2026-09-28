@@ -11,7 +11,7 @@ This directory does not assemble Theorem 1 or Corollary 2.
 Included for every run: outcome files, `EVIDENCE.sha256` manifests, axiom,
 shortcut, source, replay, and build logs, and hash sidecars. Included for a
 PASS run only when the sealed archive was still on disk: that `.tar.gz`.
-Twenty-three sealed PASS archives are in this tree. Their bytes match the archive
+Twenty-four sealed PASS archives are in this tree. Their bytes match the archive
 hashes recorded in their receipts and the index.
 
 The new `gcp_cmmsa_cc23319_20260927` receipt is a bounded exact-source GCP
@@ -42,6 +42,10 @@ U′ stationarity, leaves/table acceptance, and the encoded reduction remain ope
 The `gcp_cmmsa_f9c6df3_20260928` receipt covers tagged support cardinality
 and conditional inclusion of a fixed ambient center in a leaf domain. The next
 formal step is fixed-table acceptance and force, not further geometry packaging.
+
+The `gcp_cmmsa_1b86d0a_20260928` receipt covers a semantic tagged fixed-table
+event and a deterministic conditional YES lemma. It does not supply a tagged
+sampling law, sampled representatives, or arbitrary-table NO soundness.
 
 Left on the local disk, and not published here: git-history bundles, `.olean`
 files, Lean sources already in this repository, shell launchers, input

@@ -1,0 +1,11 @@
+# GCP exact-source tagged fixed-table acceptance receipt
+
+Run: 2026-09-28 UTC and Pacific. Builder: `quantyra-lean-builder-01`, project `quantyra-lean-cert-20260915`, zone `us-central1-a`. Source commit: `1b86d0a77115fe79e9c9e371af57d1b2ca78e002`. Scope: `PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance` only.
+
+The input was a `git archive` of that commit's `lean/`, `lakefile.toml`, `lake-manifest.json`, and `lean-toolchain`, SHA-256 `4733755df49c17e5ee605ccbeebde456a090763076ab0c137783615272e69c83`. The builder checked the archive before extraction. The committed and Windows-checkout source bytes matched, SHA-256 `f313ea06743831505367504fa302cd058b9b940609f6a34b151aaf3f8a7c12fb`, checked before build and after replay. The fresh tree reused the builder's pinned `.lake/packages` and rebuilt `.lake/build` from scratch on replay.
+
+Lean 4.34.0-rc2 / Lake 5.0.0 built the target successfully twice, **3,196 jobs each**, with zero `error:` lines in either build log. The axiom audit of `TaggedLeaf.center_le_domain`, `TaggedLeaf.restrictedLabel`, `TaggedLeaf.equation_mem_domain`, `TaggedLeaf.respectsRows`, `taggedAccepts`, and `taggedAccepts_global` reports only `propext`, `Classical.choice`, and `Quot.sound`. The scoped forbidden-token scan was empty. `OUTCOME.txt` records `EXIT=0` at `2026-09-28T11:22:03Z`.
+
+The sealed evidence archive SHA-256 is `2d70da608b6e7e753f558ce65a0c0fc946295351c5eb0f0e745ee250abc274ca`; its 10-file internal manifest was verified after download. The hidden collector stopped the builder, and the final GCP instance state was **TERMINATED**.
+
+**Review boundary:** this defines a fixed-global-table predicate on the semantic tagged carrier. The event restricts each full-leaf label to the stored ambient center `q.K` and checks actual copied row right-hand sides. `taggedAccepts_global` is a deterministic arbitrary-leaf YES lemma conditional on one global linear assignment satisfying every tagged row. The source YES-to-global-`f` implication is not established here. The module does not construct a dimensioned leaf or sampled representative law, prove representative label transport, define a tagged acceptance probability law, bound arbitrary-table NO acceptance, or discharge manuscript YES completeness, the encoded reduction, Theorem 1, or Corollary 2.
