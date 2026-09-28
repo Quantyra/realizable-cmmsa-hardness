@@ -1,0 +1,11 @@
+# GCP exact-source question-center nonemptiness receipt
+
+Run: 2026-09-28 UTC and Pacific. Builder: `quantyra-lean-builder-01`, project `quantyra-lean-cert-20260915`, zone `us-central1-a`. Source commit: `c5e4b7da3897cd0a8386b3e54ec9d8718edb2cfc`. Scope: `PvNP.RealizableHardness.ActualQuestionCenterNonempty` only.
+
+The input was a `git archive` of that commit's `lean/`, `lakefile.toml`, `lake-manifest.json`, and `lean-toolchain`, SHA-256 `e5cc8d1d1c53baedf1ed0e2dfa61c678530914c9513f62a520e4c9c753852002`. The builder checked the archive before extraction. The committed and Windows-checkout source bytes matched, SHA-256 `3cc70d90b6eebb953e51f841f42f1b065f58411d8d058e8b812deecd19a18f31`, checked before build and after replay. The fresh tree reused the builder's pinned `.lake/packages` and rebuilt `.lake/build` from scratch on replay.
+
+Lean 4.34.0-rc2 / Lake 5.0.0 built the target successfully twice, **3,278 jobs each**, with zero `error:` lines in either build log. The axiom audit of `goodU_nonempty_of_rowCount`, `centerOver_nonempty`, `centerOver_nonempty_of_manuscript_bounds`, `actualSourceQuestionLaw`, `actualOrderedCenterLaw`, and `actualOrderedCenterLaw_atom` reports only `propext`, `Classical.choice`, and `Quot.sound`. The scoped forbidden-token scan was empty. `OUTCOME.txt` records `EXIT=0` at `2026-09-28T10:03:21Z`.
+
+The sealed evidence archive SHA-256 is `c98d0189889abcb90e89498570e933bfe419befaa4d4d91cf71f13a6a33c4abf`; its 10-file internal manifest was verified after download. The hidden collector stopped the builder, and the final GCP instance state was **TERMINATED**.
+
+**Review boundary:** the nonempty `GoodU` proof assumes the explicit row-count threshold `J * (J - 1) * 157 < Fintype.card I.RowId`. A nonempty transverse center fibre for every admitted U assumes `t ≤ 2 * J`; the alternative parameter form uses `t ≤ 2 * h` and `h ≤ J`. Under those hypotheses, the module defines normalized conditional ordered-question/center laws and proves an atom formula. Manuscript padding to meet the row-count threshold, equality with its initial-vertex/clique-resampling sampler, the full source/question/leaf/table acceptance law, soundness, completeness, the source-to-CMMSA reduction, Theorem 1, and Corollary 2 remain open.
