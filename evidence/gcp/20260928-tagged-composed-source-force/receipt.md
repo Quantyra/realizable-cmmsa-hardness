@@ -5,6 +5,7 @@
 - Isolated exact-source tree: `/tmp/cmmsa-target-r2`, with pinned package cache `/home/dfredriksen_quantyra_org/cmmsa-phasea-build-185df9d/.lake/packages` and absolute Lake `/home/dfredriksen_quantyra_org/.elan/bin/lake`.
 - Terminal Checks build: `lake build PvNP.RealizableHardness.ActualTaggedComposedPhysicalSamplerChecks`, exit `0`, 3259 jobs. Full output: `checks.log`, SHA-256 `d32c3dc2283135e46ca39557d93c756e469a3cd5412a27642e6725ba2e846fbf`.
 - Targeted `#print axioms` for presentation invariance, full-domain atom, exact score equality, legal event equivalence, and legal value transfer reported only `propext`, `Classical.choice`, and `Quot.sound`.
+- After the build, a hidden-console stop returned exit `0`; a fresh instance describe returned `TERMINATED`.
 
 | Lean module | SHA-256 |
 | --- | --- |
