@@ -11,12 +11,17 @@ This directory does not assemble Theorem 1 or Corollary 2.
 Included for every run: outcome files, `EVIDENCE.sha256` manifests, axiom,
 shortcut, source, replay, and build logs, and hash sidecars. Included for a
 PASS run only when the sealed archive was still on disk: that `.tar.gz`.
-Seventeen sealed PASS archives are in this tree. Their bytes match the archive
+Eighteen sealed PASS archives are in this tree. Their bytes match the archive
 hashes recorded in their receipts and the index.
 
 The new `gcp_cmmsa_cc23319_20260927` receipt is a bounded exact-source GCP
 build and clean replay for the query-star obstruction and representative
 acceptance bridge. It does not certify manuscript Theorem 1 or Corollary 2.
+
+The `gcp_cmmsa_816cb2_20260928` receipt covers the fixed-center conditional
+leaves module. Its first source build passed, but the first temporary axiom
+audit used incorrect declaration names. The corrected audit and clean replay
+passed; both outcomes and logs are retained to show that distinction.
 
 Left on the local disk, and not published here: git-history bundles, `.olean`
 files, Lean sources already in this repository, shell launchers, input

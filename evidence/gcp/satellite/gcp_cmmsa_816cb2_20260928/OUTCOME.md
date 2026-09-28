@@ -1,0 +1,11 @@
+# GCP exact-source fixed-center conditional-leaves receipt
+
+Run: 2026-09-28 UTC and Pacific. Builder: `quantyra-lean-builder-01`, project `quantyra-lean-cert-20260915`, zone `us-central1-a`. Source commit: `816cb2cb86508ba45aa3d0c18953ad3371efff19`. Scope: `PvNP.RealizableHardness.ActualFixedCenterConditionalLeaves` only.
+
+The input was a `git archive` of that commit's `lean/`, `lakefile.toml`, `lake-manifest.json`, and `lean-toolchain`, SHA-256 `cb257b304fbc68f85bb3ef18b330f20fcc2d37d0d35b8f9ed097ecc271448655`. The builder checked the archive before extraction and again before replay. The committed LF source SHA-256 was `cd7c1775dca84da8b46c0841dabb0ee22c62bc958be02b01fdff9548f614f640`, verified before the first build, before replay, and after replay. The Windows checkout used CRLF and had SHA-256 `61ce96555caa41c4407e5f0c053898ec21647f8527b55c4e1661fb9f9ad231f7`; normalizing its 93 CRLF pairs gives exactly the committed blob. The fresh source tree reused the builder's pinned `.lake/packages` and rebuilt `.lake/build` from scratch on replay.
+
+Lean 4.34.0-rc2 / Lake 5.0.0 built the target successfully twice, **3,273 jobs each**, with zero `error:` lines in either build log. The first remote script ended `EXIT=1` only because its temporary axiom audit used the wrong namespace, producing six `Unknown constant` errors in `axioms.log` after the successful first build. The corrected `axioms.corrected.log` names all six declarations under `PvNP.RealizableHardness.ActualStarAcceptedGoodMass`; each reports only `propext`, `Classical.choice`, and `Quot.sound`. After that audit, the fresh tree's `.lake/build` was removed and the same target rebuilt successfully. `OUTCOME_REPLAY.txt` records `EXIT=0` at `2026-09-28T08:36:25Z`. The scoped source forbidden-token scan was empty.
+
+The sealed evidence archive SHA-256 is `964ccb87e76bccf28a3c7f5d1fa064ff5de431bc301b8f1f8313bf8fe69255ee`. Its 14-file internal manifest was verified after download. The hidden collector stopped the builder, and the final GCP instance state was **TERMINATED**. Two intermediate, unsuccessful audit-harness archives remain only in the local temporary recovery directory; they are not certification receipts.
+
+This is a bounded module build and axiom audit. It does not prove manuscript NO soundness, YES completeness, the source-to-CMMSA reduction, Theorem 1, or Corollary 2.
