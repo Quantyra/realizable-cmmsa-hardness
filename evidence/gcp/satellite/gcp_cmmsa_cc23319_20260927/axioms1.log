@@ -1,0 +1,36 @@
+'PvNP.RealizableHardness.ActualPredrawRepresentativeAcceptance.selectedTable_drawnRepresentativeLabel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualPredrawRepresentativeAcceptance.selectedTable_representativeAccepts_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualPredrawRepresentativeAcceptance.selectedTable_classRepLaw_acceptanceMass_eq
+  {N nRows J t h : ℕ} {I : Instance N nRows} (T : ActualCliqueCollisionTransfer.LeafTable I J h)
+  (s : RepresentativeChoice I J h) (q : QuestionCenter I J t) (htd : t ≤ 2 * h)
+  (hdV : 2 * h ≤ Module.finrank (ZMod 2) ↥(transverseComplement q))
+  (g : (z : StarTuple t (2 * h) 2) → ↥(complementToAmbient q ↑z.fst) →ₗ[ZMod 2] ZMod 2) :
+  eventMass (classRepLaw h q htd hdV) {p | representativeAccepts (selectedTable T s) q p (g p.fst)} =
+    eventMass (starLaw htd hdV)
+      {z |
+        ∀ (i : Fin 2),
+          ActualPresentedLeafGluing.restrictToCenter (drawnCenterSub q z.fst ↑(z.snd i) ⋯)
+              (selectedTable T s (vertexOfGrass q ↑(z.snd i))) =
+            g z}
+'PvNP.RealizableHardness.ActualPredrawRepresentativeAcceptance.selectedTable_classRepLaw_acceptanceMass_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualPredrawRepresentativeAcceptance.selectedTable_centerOnly_classRepLaw_acceptanceMass_eq
+  {N nRows J t h : ℕ} {I : Instance N nRows} (T : ActualCliqueCollisionTransfer.LeafTable I J h)
+  (s : RepresentativeChoice I J h) (q : QuestionCenter I J t) (htd : t ≤ 2 * h)
+  (hdV : 2 * h ≤ Module.finrank (ZMod 2) ↥(transverseComplement q))
+  (C : (U : GrassmannCounting.Grass (↥(transverseComplement q)) t) → ↥(complementToAmbient q ↑U) →ₗ[ZMod 2] ZMod 2) :
+  eventMass (classRepLaw h q htd hdV) {p | representativeAccepts (selectedTable T s) q p (C p.fst.fst)} =
+    eventMass (starLaw htd hdV)
+      {z |
+        ∀ (i : Fin 2),
+          ActualPresentedLeafGluing.restrictToCenter (drawnCenterSub q z.fst ↑(z.snd i) ⋯)
+              (selectedTable T s (vertexOfGrass q ↑(z.snd i))) =
+            C z.fst}
+'PvNP.RealizableHardness.ActualPredrawRepresentativeAcceptance.selectedTable_centerOnly_classRepLaw_acceptanceMass_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
