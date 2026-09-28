@@ -11,7 +11,7 @@ This directory does not assemble Theorem 1 or Corollary 2.
 Included for every run: outcome files, `EVIDENCE.sha256` manifests, axiom,
 shortcut, source, replay, and build logs, and hash sidecars. Included for a
 PASS run only when the sealed archive was still on disk: that `.tar.gz`.
-Twenty-one sealed PASS archives are in this tree. Their bytes match the archive
+Twenty-two sealed PASS archives are in this tree. Their bytes match the archive
 hashes recorded in their receipts and the index.
 
 The new `gcp_cmmsa_cc23319_20260927` receipt is a bounded exact-source GCP
@@ -34,6 +34,10 @@ sampler correspondence, center existence, and the full joint law open.
 The `gcp_cmmsa_c5e4b7d_20260928` receipt covers nonempty legitimate questions
 and transverse centers under explicit row-count and dimension bounds. It does
 not discharge manuscript padding, source acceptance, or reduction obligations.
+
+The `gcp_cmmsa_330d122_20260928` receipt covers transport of the initial
+ordered-U/conditional-K law to the stored question-center law. Clique-resampled
+U′ stationarity, leaves/table acceptance, and the encoded reduction remain open.
 
 Left on the local disk, and not published here: git-history bundles, `.olean`
 files, Lean sources already in this repository, shell launchers, input
