@@ -71,10 +71,39 @@ example (L : Nat) (l : QueryVtx satEx (certifiedM L) → QSym (RBlock L (certifi
       ((RBlock L (certifiedM L) : ℝ) ^ certifiedM L)⁻¹ :=
   cnfQuery_score_le_rBlock L satEx_is3 (by decide) l
 
+example :
+    ¬ ∃ l : QueryVtx satEx 3 → QSym 2, ∀ e, (qStar satEx_is3 e).accepts l :=
+  cnfQuery_no_total_accept (by decide) (by decide) satEx_is3 (by decide)
+
+example :
+    ∃ L0, ∀ L, L0 ≤ L →
+      1 < RBlock L (certifiedM L) ∧
+        (∃ k : Fin 3,
+          (qStar (m := certifiedM L) (R := RBlock L (certifiedM L)) satEx_is3
+              ((⟨0, by decide⟩ : Fin satEx.length), k,
+                zeroShift (m := certifiedM L) (R := RBlock L (certifiedM L)))).accepts
+            (encLabel (m := certifiedM L) (R := RBlock L (certifiedM L)) satEx_is3 [true])) ∧
+        (∀ l : QueryVtx satEx (certifiedM L) → QSym (RBlock L (certifiedM L)),
+          score uniformEdge
+              (qEdges (m := certifiedM L) (R := RBlock L (certifiedM L)) satEx_is3) l ≤
+            ((RBlock L (certifiedM L) : ℝ) ^ certifiedM L)⁻¹) ∧
+        ¬ ∃ l : QueryVtx satEx (certifiedM L) → QSym (RBlock L (certifiedM L)),
+          ∀ e,
+            (qEdges (m := certifiedM L) (R := RBlock L (certifiedM L)) satEx_is3 e).accepts l := by
+  obtain ⟨L0, hL0⟩ := cnfQuery_sat_rBlock_partial_no_total
+  refine ⟨L0, ?_⟩
+  intro L hL
+  obtain ⟨hR, _, hφ⟩ := hL0 L hL
+  obtain ⟨hacc, hscore, hno⟩ :=
+    hφ satEx_is3 (by decide) [true] satEx_sat ⟨0, by decide⟩
+  exact ⟨hR, hacc, hscore, hno⟩
+
 #print axioms enc_accepts_of_sat
 #print axioms cnfQuery_score_le
 #print axioms cnfQuery_score_lt_one
 #print axioms cnfQuery_sat_accepts_and_score_lt_one
 #print axioms cnfQuery_score_le_rBlock
+#print axioms cnfQuery_no_total_accept
+#print axioms cnfQuery_sat_rBlock_partial_no_total
 
 end PvNP.RealizableHardness.ActualCnfQueryStarChecks

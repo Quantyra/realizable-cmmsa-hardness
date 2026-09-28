@@ -14,11 +14,14 @@ of each clause-witness pair. The uniform score is therefore at most `R^{-m}`.
 A satisfying assignment supplies, inside the proof, a labeling that accepts
 the zero shift of one witness on every clause. That labeling does not accept
 every shift, and when `m > 0` and `R > 1` every labeling has score strictly
-below 1, including on satisfiable formulas. Ports are not shared, so the same
-counting bound holds on unsatisfiable formulas. This file does not prove that
-a failing literal rejects every shift, does not prove `compile`, does not
-instantiate the q-fold product, and does not build a `SeededMap` or discharge
-`hSrcCmmsa`.
+below 1, including on satisfiable formulas. For every large leaf bound the
+same pair holds at `RBlock` and `certifiedM`: one zero-shift witness accepts,
+every labeling scores at most `RBlock^{-certifiedM}`, and no labeling accepts
+every edge. The accepting-product hypothesis therefore fails on satisfiable
+inputs. Ports are not shared, so the same counting bound holds on
+unsatisfiable formulas. This file does not prove that a failing literal
+rejects every shift, does not prove `compile`, does not instantiate the
+q-fold product, and does not build a `SeededMap` or discharge `hSrcCmmsa`.
 -/
 namespace PvNP.RealizableHardness.ActualCnfQueryStar
 
@@ -328,6 +331,76 @@ theorem cnfQuery_score_le_rBlock {φ : CNF} (L : Nat) (h3 : φ.Is3CNF)
         (qEdges (m := certifiedM L) (R := RBlock L (certifiedM L)) h3) l ≤
       ((RBlock L (certifiedM L) : ℝ) ^ certifiedM L)⁻¹ :=
   cnfQuery_score_le (m := certifiedM L) (R := RBlock L (certifiedM L)) h3 hφ l
+
+theorem cnfQuery_score_eq_one_of_accepts {φ : CNF} {m R : Nat} [NeZero R]
+    (h3 : φ.Is3CNF) (hφ : 0 < φ.length) (l : QueryVtx φ m → QSym R)
+    (hall : ∀ e, (qStar h3 e).accepts l) :
+    score uniformEdge (qEdges h3) l = 1 := by
+  let : Nonempty (QEdge φ m R) := ⟨(⟨0, hφ⟩, 0, fun _ => 0)⟩
+  rw [score_div h3 hφ l]
+  have hfilter :
+      (Finset.univ.filter fun e : QEdge φ m R => (qStar h3 e).accepts l) =
+        Finset.univ := by
+    ext e
+    simp [hall e]
+  rw [hfilter, Finset.card_univ]
+  exact div_self
+    (by exact_mod_cast (Fintype.card_ne_zero : Fintype.card (QEdge φ m R) ≠ 0))
+
+theorem cnfQuery_no_total_accept {φ : CNF} {m R : Nat} [NeZero R]
+    (hm : 0 < m) (hR : 1 < R) (h3 : φ.Is3CNF) (hφ : 0 < φ.length) :
+    ¬ ∃ l : QueryVtx φ m → QSym R, ∀ e, (qStar h3 e).accepts l := by
+  rintro ⟨l, hall⟩
+  exact (cnfQuery_score_lt_one hm hR h3 hφ l).ne
+    (cnfQuery_score_eq_one_of_accepts h3 hφ l hall)
+
+/-- For every large `L`, a satisfiable nonempty 3CNF has one accepting
+zero-shift witness at `RBlock` and `certifiedM`, every labeling scores at most
+`RBlock^{-certifiedM}`, and no labeling accepts every edge. -/
+theorem cnfQuery_sat_rBlock_partial_no_total :
+    ∃ L0, ∀ L, L0 ≤ L →
+      1 < RBlock L (certifiedM L) ∧ 3 ≤ certifiedM L ∧
+      ∀ {φ : CNF} (h3 : φ.Is3CNF) (_hφ : 0 < φ.length) (α : Assignment)
+        (_hα : CNF.eval α φ = true) (c : Fin φ.length),
+        (∃ k : Fin 3,
+            (qStar (m := certifiedM L) (R := RBlock L (certifiedM L)) h3
+                (c, k, zeroShift (m := certifiedM L)
+                  (R := RBlock L (certifiedM L)))).accepts
+              (encLabel (m := certifiedM L) (R := RBlock L (certifiedM L)) h3 α)) ∧
+          (∀ l : QueryVtx φ (certifiedM L) → QSym (RBlock L (certifiedM L)),
+            score uniformEdge
+                (qEdges (m := certifiedM L) (R := RBlock L (certifiedM L)) h3) l ≤
+              ((RBlock L (certifiedM L) : ℝ) ^ certifiedM L)⁻¹) ∧
+          ¬ ∃ l : QueryVtx φ (certifiedM L) → QSym (RBlock L (certifiedM L)),
+            ∀ e, (qEdges (m := certifiedM L) (R := RBlock L (certifiedM L)) h3 e).accepts
+              l := by
+  obtain ⟨L0, hL0⟩ := certified_parameters_eventually 256
+  refine ⟨L0, ?_⟩
+  intro L hL
+  obtain ⟨m, _, hM, hAd, hmcert, _⟩ := hL0 L hL
+  rcases hAd with ⟨_, _, _, _, _, _, _, hsrc, _⟩
+  have hm3 : 3 ≤ certifiedM L := by
+    rw [hmcert]
+    exact le_trans (by decide : 3 ≤ 256) hM
+  have hR : 1 < RBlock L (certifiedM L) := by
+    rw [hmcert]
+    have hsm : m + 2 ≤ hBlock L m := by simpa [manuscriptSourceFloor] using hsrc
+    have hblock : 258 ≤ hBlock L m := (Nat.add_le_add_right hM 2).trans hsm
+    have hexp : 2 ≤ 2 * hBlock L m := by
+      exact Nat.mul_le_mul_left 2 (le_trans (by decide : 1 ≤ 258) hblock)
+    have hpow : 4 ≤ RBlock L m := by
+      unfold RBlock
+      have htwo : 2 ^ 2 ≤ 2 ^ (2 * hBlock L m) :=
+        Nat.pow_le_pow_right (by decide : 1 ≤ 2) hexp
+      simpa using htwo
+    exact (by decide : 1 < 4).trans_le hpow
+  refine ⟨hR, hm3, ?_⟩
+  intro φ h3 hφ α hα c
+  refine ⟨enc_accepts_of_sat (m := certifiedM L) (R := RBlock L (certifiedM L))
+      hm3 h3 α hα c,
+    fun l => cnfQuery_score_le_rBlock L h3 hφ l,
+    cnfQuery_no_total_accept (m := certifiedM L) (R := RBlock L (certifiedM L))
+      (lt_of_lt_of_le (by decide : 0 < 3) hm3) hR h3 hφ⟩
 
 end
 
