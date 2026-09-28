@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualTaggedOrderedFullLawForce
+
+open PvNP.RealizableHardness.ActualTaggedOrderedFullLawForce
+
+#check orderedStarLaw_eq_taggedSampleLaw
+#check ordered_physical_le_canonical_plus_collision
+#print axioms orderedStarLaw_eq_taggedSampleLaw
+#print axioms ordered_physical_le_canonical_plus_collision
