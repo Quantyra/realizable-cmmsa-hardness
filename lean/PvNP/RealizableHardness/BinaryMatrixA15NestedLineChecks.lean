@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.BinaryMatrixA15NestedLine
+
+open PvNP.RealizableHardness.BinaryMatrixA15NestedLine
+
+#check lineCanonical_fibre_iff
+#check lineCanonical_fibre_image
+#check lineCanonical_order
+#check lineCanonical_energy
+#check typed_global_iff_lineCanonical
+#check canonical_line_oneStep_A15_global
+
+#print axioms typed_global_iff_lineCanonical
+#print axioms canonical_line_oneStep_A15_global
