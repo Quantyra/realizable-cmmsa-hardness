@@ -9,6 +9,11 @@ open PvNP.RealizableHardness.BinaryMatrixActualAffine
 #check actualOfRaw_fibre
 #check upToActual_implies_upToRaw
 #check actualGlobal_A15_fixedBase_rawOutput
+#check rawOfActual_budget
+#check rawOfActual_fibre
+#check upToRaw_implies_upToActual
+#check actualGlobal_A15_fixedBase
 
 #print axioms upToActual_implies_upToRaw
 #print axioms actualGlobal_A15_fixedBase_rawOutput
+#print axioms actualGlobal_A15_fixedBase

@@ -174,5 +174,127 @@ theorem actualGlobal_A15_fixedBase_rawOutput {n d k : ℕ}
   exact upToRawSquareGlobal_A15_fixedBase t f hε
     (upToActual_implies_upToRaw f hε hf)
 
+/-- Coordinate isomorphism onto the fixed domain subspace. -/
+def actualRightEquiv {n d : ℕ} (Q : ActualAffineRestriction n d) :
+    (Fin (Module.finrank (ZMod 2) Q.domainFixed) → ZMod 2) ≃ₗ[ZMod 2]
+      Q.domainFixed :=
+  (Finsupp.linearEquivFunOnFinite (ZMod 2) (ZMod 2)
+    (Fin (Module.finrank (ZMod 2) Q.domainFixed))).symm.trans
+      (Module.finBasis (ZMod 2) Q.domainFixed).repr.symm
+
+/-- Coordinate isomorphism of the codomain quotient. -/
+def actualLeftEquiv {n d : ℕ} (Q : ActualAffineRestriction n d) :
+    ((Fin n → ZMod 2) ⧸ Q.codomainVariation) ≃ₗ[ZMod 2]
+      (Fin (Module.finrank (ZMod 2)
+        ((Fin n → ZMod 2) ⧸ Q.codomainVariation)) → ZMod 2) :=
+  (Module.finBasis (ZMod 2)
+    ((Fin n → ZMod 2) ⧸ Q.codomainVariation)).repr.trans
+      (Finsupp.linearEquivFunOnFinite (ZMod 2) (ZMod 2)
+        (Fin (Module.finrank (ZMod 2)
+          ((Fin n → ZMod 2) ⧸ Q.codomainVariation))))
+
+/-- Basis coordinates of the manuscript domain-fixed subspace. -/
+def actualRightMap {n d : ℕ} (Q : ActualAffineRestriction n d) :
+    (Fin (Module.finrank (ZMod 2) Q.domainFixed) → ZMod 2) →ₗ[ZMod 2]
+      (Fin d → ZMod 2) :=
+  Q.domainFixed.subtype.comp (actualRightEquiv Q).toLinearMap
+
+/-- Quotient coordinates of the manuscript codomain variation space. -/
+def actualLeftMap {n d : ℕ} (Q : ActualAffineRestriction n d) :
+    (Fin n → ZMod 2) →ₗ[ZMod 2]
+      (Fin (Module.finrank (ZMod 2)
+        ((Fin n → ZMod 2) ⧸ Q.codomainVariation)) → ZMod 2) :=
+  (actualLeftEquiv Q).toLinearMap.comp (Submodule.mkQ Q.codomainVariation)
+
+/-- Raw coordinate equations for an intrinsic actual affine coset. The
+nominal budget is exactly the actual order. -/
+def rawOfActual {n d : ℕ} (Q : ActualAffineRestriction n d) :
+    AffineRestriction n d where
+  columns := Module.finrank (ZMod 2) Q.domainFixed
+  rows := Module.finrank (ZMod 2)
+    ((Fin n → ZMod 2) ⧸ Q.codomainVariation)
+  rightDirections := LinearMap.toMatrix' (actualRightMap Q)
+  rightValues := Q.base * LinearMap.toMatrix' (actualRightMap Q)
+  leftDirections := LinearMap.toMatrix' (actualLeftMap Q)
+  leftValues := LinearMap.toMatrix' (actualLeftMap Q) * Q.base
+
+@[simp] theorem rawOfActual_budget {n d : ℕ}
+    (Q : ActualAffineRestriction n d) :
+    (rawOfActual Q).budget = Q.order := rfl
+
+theorem rawOfActual_right_range {n d : ℕ}
+    (Q : ActualAffineRestriction n d) :
+    LinearMap.range (rawOfActual Q).rightDirections.mulVecLin =
+      Q.domainFixed := by
+  have hm : (rawOfActual Q).rightDirections.mulVecLin =
+      actualRightMap Q := by
+    exact Matrix.toLin'_toMatrix' (actualRightMap Q)
+  rw [hm]
+  ext a
+  constructor
+  · rintro ⟨c, rfl⟩
+    exact (actualRightEquiv Q c).property
+  · intro ha
+    refine ⟨(actualRightEquiv Q).symm ⟨a, ha⟩, ?_⟩
+    change ((actualRightEquiv Q)
+      ((actualRightEquiv Q).symm ⟨a, ha⟩) : Fin d → ZMod 2) = a
+    simp
+
+theorem rawOfActual_left_kernel {n d : ℕ}
+    (Q : ActualAffineRestriction n d) :
+    LinearMap.ker (rawOfActual Q).leftDirections.mulVecLin =
+      Q.codomainVariation := by
+  have hm : (rawOfActual Q).leftDirections.mulVecLin =
+      actualLeftMap Q := by
+    exact Matrix.toLin'_toMatrix' (actualLeftMap Q)
+  rw [hm]
+  ext v
+  change actualLeftMap Q v = 0 ↔ v ∈ Q.codomainVariation
+  simp [actualLeftMap]
+
+/-- Basis and quotient-coordinate equations recover precisely the
+intrinsic actual affine fibre, at the same uniform counting measure. -/
+theorem rawOfActual_fibre {n d : ℕ}
+    (Q : ActualAffineRestriction n d) :
+    (rawOfActual Q).fibre = Q.fibre := by
+  ext M
+  constructor
+  · intro hM
+    have ⟨hr, hl⟩ := (Finset.mem_filter.mp hM).2
+    have hA := (right_eq_iff_range (rawOfActual Q) Q.base M).mp hr
+    have hB := (left_eq_iff_kernel (rawOfActual Q) Q.base M).mp hl
+    rw [rawOfActual_right_range] at hA
+    rw [rawOfActual_left_kernel] at hB
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, ⟨hA, hB⟩⟩
+  · intro hM
+    have ⟨hA, hB⟩ := (Finset.mem_filter.mp hM).2
+    have hr := (right_eq_iff_range (rawOfActual Q) Q.base M).mpr
+      (by simpa only [rawOfActual_right_range] using hA)
+    have hl := (left_eq_iff_kernel (rawOfActual Q) Q.base M).mpr
+      (by simpa only [rawOfActual_left_kernel] using hB)
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, ⟨hr, hl⟩⟩
+
+theorem upToRaw_implies_upToActual {n d r : ℕ} {ε : ℝ}
+    (f : BinaryMatrix n d → ℝ)
+    (hf : UpToRawSquareGlobal r ε f) :
+    UpToActualSquareGlobal r ε f := by
+  intro Q hQ
+  rw [← rawOfActual_fibre Q]
+  exact hf (rawOfActual Q) (by simpa using hQ)
+
+/-- Full fixed-base A15 squared-globalness witness under the intrinsic
+actual affine-restriction quantifier, with no dimension or base exception. -/
+theorem actualGlobal_A15_fixedBase {n d k : ℕ}
+    {ε : ℝ} (t : Fin n → ZMod 2)
+    (f : BinaryMatrix n (d + 1) → ℝ)
+    (hε : 0 ≤ ε)
+    (hf : UpToActualSquareGlobal (k + 1) ε f) :
+    UpToActualSquareGlobal k
+      (4 * (2 : ℝ) ^ (4 * (k + 1)) * ε)
+      (BinaryMatrixHybridSelector.rawLastColumnRestrict t
+        (BinaryMatrixLineTranslation.lineP k f)) := by
+  exact upToRaw_implies_upToActual _
+    (actualGlobal_A15_fixedBase_rawOutput t f hε hf)
+
 end
 end PvNP.RealizableHardness.BinaryMatrixActualAffine
