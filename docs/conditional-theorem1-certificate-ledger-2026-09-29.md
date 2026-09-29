@@ -313,3 +313,47 @@ upper bound, `AllAmbientInverse`, robust decoder, NO soundness, or encoded
 core conclusion. Standalone contract typing does not count as progress on
 those force obligations. Full manuscript certification still requires
 discharging all classical contracts and reproducible consolidation.
+
+### Actual fixed-functional star law alignment (2026-09-29)
+
+The bounded increment in `ActualFixedFunctionalStarMoment.lean` proves
+`matchingStarMass_cast_eq_grassmannExperiment`: the real cast of the
+existing actual ordinary-star matching mass equals the existing
+`MatrixGrassmannIdentity.grassmannExperiment`, for the same fixed
+functional and predraw center and leaf tables. Its only dimension premise
+is `c + s <= finrank V`. The event retains the center condition and every
+ordered leaf condition, including the center at `k = 0`. The proof uses
+the actual star-law atom, exact rational-to-real casts and finite
+cardinality normalization; `Above R s` and `Extension R (c+s)` are the
+same carrier. No rank-conditioned or independently redrawn center is
+substituted.
+
+Frozen raw SHA-256 pins:
+
+- Main: `202014CFC75A05EC63FE4F55B9637B7B84705B78BA68EA886AA384072DA31893`.
+- Checks: `B92F0742670201CC2988B28EDE0F55E113889E475101D6291DB0E21361AD2E70`.
+
+Direct cached Lean 4.34.0-rc2, one thread and the captured project
+`LEAN_PATH`, returned exit 0 for main session `66545` (receipt chunk
+`c2371e`) and focused Checks session `77356` (chunk `f5561f`). Both normal
+project oleans were exported. Checks printed all three export signatures
+and only `[propext, Classical.choice, Quot.sound]`, and compiled the
+zero-leaf center-retention example. Earlier diagnostics and controlled
+resource stops are not counted as successful checks.
+
+| Top-level lens | Verdict | Evidence and limits |
+| --- | --- | --- |
+| Proof-adversarial (root) | GO-WITH-NOTES | Independently read and rehashed the frozen pair; checked actual atoms, casts, ordered-tuple normalization and focused export/axiom receipts. |
+| Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Same fixed tables and functional precede the shared-center experiment; no distribution or quantifier weakening. Orchestration and localized proof-hint overlap is disclosed; this is not an independent proof-author check. |
+| Non-claims boundary (separate reviewer) | GO-WITH-NOTES | Language states only the exact Grassmann experiment identity; no analytic, inverse, runtime, NO or core conclusion. Final verdict follows whole Checks exit 0. |
+
+All three verdicts apply only to this frozen pair and the bounded scope
+above. Review and proof debt for earlier increments is not discharged by
+this table.
+
+This is an exact finite-law identity. Coordinate-array/BinaryMatrix
+transport, the appended-column operator, the actual matrix moment bound,
+inverse theorem, robust `8S`, encoded NO soundness and the conditional
+core remain open. Unverified complement-consumer and manuscript-margin
+drafts are outside this accepted scope. Classical-contract discharge and
+full manuscript consolidation also remain outstanding.
