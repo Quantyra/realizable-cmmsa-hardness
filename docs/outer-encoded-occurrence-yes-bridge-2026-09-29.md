@@ -47,4 +47,14 @@ nonempty geometric fibres at the selected encoded instance and padding;
 fixed-parameter encoded runtime for occurrence allocation, copy padding,
 sampler, and final reduction; and the full NO-soundness path. The result
 reduces the YES assignment and late-padding gap, but does not complete core
-Theorem 1 or change the NO gap. Three-lens review is pending.
+Theorem 1 or change the NO gap.
+
+## Three-lens bounded review
+
+| Lens | Verdict | Boundary |
+| --- | --- | --- |
+| Proof adversarial | **GO-WITH-NOTES** | The encoded YES assignment maps to the actual occurrence and copied `PositiveErrorAssignment` with exact violation counts. Late `ε`, padded `T`, and conditional `τ/75` are separately composable; no single theorem yet carries the chosen `ε,E,T` and required geometric fibres through the entire chain. |
+| Complexity theory | **GO-WITH-NOTES** | The external MZ encoded reduction is still an uninhabited contract. The actual occurrence and copy operations have no proved encoded fixed-parameter runtime. The selected-padded instance's geometric fibre nonemptiness is a separate obligation. |
+| Non-claims boundary | **GO-WITH-NOTES** | The `τ/75` result is for the declared conditioned draw under explicit fibre hypotheses. The scalar probability product is not a common raw joint-event identity. Core Theorem 1 remains **INCOMPLETE**, and the NO-soundness gap is unchanged. |
+
+This review closes only the bounded source-to-copied YES bridge.
