@@ -1,0 +1,23 @@
+import PvNP.RealizableHardness.ActualResampledQuestionMarginal
+
+open PvNP.RealizableHardness.ActualTaggedYesReverseIncidence
+open PvNP.RealizableHardness.ActualResampledQuestionMarginal
+
+#check centersInLeaf_card
+#check taggedCenterOver_card
+#check fixedU_presentedLeaf_kernel_constant
+#check fixedUPresentedLeafLaw_uniform
+#check taggedSample_presented_coordinate_uniform
+#check originalDraw_presented_coordinate_uniform
+#check taggedIndependentChoice_eval_uniform
+#check originalDraw_representative_coordinate_uniform
+#check originalDraw_resampledU_coordinate_uniform
+#check resampledU_badRow_joint_le
+
+#print axioms centersInLeaf_card
+#print axioms taggedCenterOver_card
+#print axioms fixedUPresentedLeafLaw_uniform
+#print axioms originalDraw_presented_coordinate_uniform
+#print axioms originalDraw_representative_coordinate_uniform
+#print axioms originalDraw_resampledU_coordinate_uniform
+#print axioms resampledU_badRow_joint_le
