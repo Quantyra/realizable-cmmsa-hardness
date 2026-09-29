@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.BinaryMatrixA15CanonicalLineRank
+
+open PvNP.RealizableHardness.BinaryMatrixA15CanonicalLineRank
+
+#check lineCanonical_tracePair
+#check lineCanonical_character
+#check lineCanonical_frequency_rank
+#check lineCanonical_fourierCoeff
+#check lineCanonical_rankProjection
+
+#print axioms lineCanonical_tracePair
+#print axioms lineCanonical_fourierCoeff
+#print axioms lineCanonical_rankProjection
