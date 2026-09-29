@@ -33,3 +33,33 @@ maximal-pair/outer hardness machinery after this decoder output.
 This audit changes no numerical NO-soundness bound. The existing
 fixed-table class-collision charge and the `8S` density threshold are
 already upstream of this missing decoder theorem.
+
+## Earliest missing theorem inside the manuscript proof
+
+Following the proof of `inverse-explicit` in `paper/body.tex`, its first
+unavailable Lean input is the full `matrix-lift` lemma. For every binary
+ambient `E=F₂^n`, `D=F₂^d` with `n≥d` and `0≤r<d`, every `e≥0`, and every
+Boolean table `g` on `Grass(E,d)` whose density is at most `e` in **each
+nonempty** zoom `Q≤L≤W` with `dim Q+codim_E W=r`, define `G(M)` to be
+`g(im M)` when `M:D→E` has rank `d`, and zero otherwise. The required
+conclusion is basis invariance and
+`BinaryMatrixFourier.PseudorandomExact r (2e) G`: conditional density at
+most `2e` in every nonempty consistent nominal-budget-`r` fibre
+`MU=V₀, XM=Y₀`, including dependent and zero equations.
+
+Lean already defines the nominal `AffineRestriction` and
+`PseudorandomExact` predicates and proves some finite frame/fibre counts.
+It does not define this Grassmann zoom pseudorandom premise or prove its
+transfer to all nominal matrix fibres. The manuscript reconstructs the
+bridge from MZ Lemma 4.5 and MZ24 Lemmas A.17–A.18. Later, its
+`inverse-explicit` proof also needs the positive-rank dyadic-`p` Boolean
+matrix bound of `thm:binary-hc`, the finite spectral estimate, and the
+moment/refreshing/counting argument. Current `BinaryMatrixFourier`
+contains rank-zero and rank-level `L²` cases, not that positive-rank
+`Lᵖ` theorem.
+
+A Lean result parameterized by the matrix-lift or decoder claim would be
+conditional only. Importing the scoped MZ local-decoder contract as an
+explicit external premise could support a cited mathematical argument,
+but would not certify the manuscript's changed-ambient `8S` decoder or
+the NO contradiction in Lean. No axiom or conditional wrapper is added.
