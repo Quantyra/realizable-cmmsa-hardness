@@ -63,3 +63,23 @@ conditional only. Importing the scoped MZ local-decoder contract as an
 explicit external premise could support a cited mathematical argument,
 but would not certify the manuscript's changed-ambient `8S` decoder or
 the NO contradiction in Lean. No axiom or conditional wrapper is added.
+
+The existing representation already handles the nominal equation
+boundary: `BinaryMatrixActualAffine.actualOfRaw_fibre` identifies each
+nonempty raw fibre with an intrinsic affine coset, and
+`actualOfRaw_order_le_budget` gives actual order at most its nominal
+budget. The first substantive unproved comparison is therefore a
+rank-lift density bound on **every actual affine coset of order at most
+`r`** from the exact-budget Grassmann zoom hypothesis. The manuscript's
+factor two comes from reducing affine row targets to a full-rank target
+orbit and bounding its probability `π(c,k)>1/2`, with `c≤b<k`.
+After that reduction, the homogeneous count needs a constant-fibre
+theorem for fixed anchor `Q=span V` and sampled subspace `H₀=ker X₀`
+without assuming `Q≤H₀`: for each eligible `d`-space `L` between
+`Q` and `Q+H₀`, exactly `|GL(k,2)|·2^(zk)` full-rank ordered free-column
+tuples yield `L`, where `k=d-dim Q` and `z=dim(Q∩H₀)`.
+`MatrixGrassmannFibre.uniform_extension_law` handles anchors inside
+the sampled ambient; it does not supply this intersecting-anchor case.
+Finally, smaller actual budgets must be refined to exact zoom budget
+`r` by constant-incidence averaging. These are missing proof steps,
+not additional assumptions licensed by the current Lean theorems.
