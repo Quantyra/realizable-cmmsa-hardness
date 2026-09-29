@@ -84,5 +84,14 @@ theorem's axiom print lists only `propext`, `Classical.choice`, and
 `Quot.sound`. This says nothing about the existence of an
 `ExternalMZOuterSource` inhabitant. The fixed encoding/parser implementation,
 fixed-`L` encoded runtime, full reduction, and NO-soundness proof remain
-open. Core Theorem 1 is **INCOMPLETE**; the NO gap is unchanged. Three-lens
-review of this combined increment is pending.
+open. Core Theorem 1 is **INCOMPLETE**; the NO gap is unchanged.
+
+### Three-lens review of the combined increment
+
+| Lens | Verdict | Boundary |
+| --- | --- | --- |
+| Proof adversarial | **GO-WITH-NOTES** | The single theorem preserves fixed external NO constants, the later arbitrary positive `τ`, and the selected `ε,E,T,f`; it discharges selected-padding geometric fibres and bounds rejection under the declared conditioned draw law. `ExternalMZOuterSource` remains uninhabited. |
+| Complexity theory | **GO-WITH-NOTES** | The existential witnesses use noncomputable choices. They do not constitute an encoded algorithm, an FP runtime proof, or a complete fixed-`L` randomized reduction. The fixed parser and implementation remain external or unproved. |
+| Non-claims boundary | **GO-WITH-NOTES** | The scalar conditioned-draw probability times raw legitimacy mass is not identified with one common raw joint event. Core Theorem 1 is **INCOMPLETE**, and the NO-soundness gap is unchanged. |
+
+This closes only the source-conditional declared-law YES composition.
