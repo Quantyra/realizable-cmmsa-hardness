@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedHyperplaneSelector
+
+open PvNP.RealizableHardness.BinaryMatrixTypedHyperplaneSelector
+
+#check ker_le_hyperplane_iff_defining_in_dual_range
+#check typedHyperplaneSelected_iff_ker_le
+#check typedHyperplaneSelected_iff_defining_in_dual_range
+#print axioms ker_le_hyperplane_iff_defining_in_dual_range
+#print axioms typedHyperplaneSelected_iff_ker_le
+#print axioms typedHyperplaneSelected_iff_defining_in_dual_range
