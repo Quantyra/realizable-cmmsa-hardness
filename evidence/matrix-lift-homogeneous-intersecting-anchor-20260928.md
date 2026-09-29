@@ -49,3 +49,12 @@ span bridges, exact fibre count, GL-factor identity, sum disintegration, and
 homogeneous density theorem contained only `[propext, Classical.choice,
 Quot.sound]`. The Checks file instantiates `k=0` and `z=0`. The increment has
 no `sorry`, `admit`, or custom axiom.
+
+## Three-lens review
+
+| Lens | Verdict | Evidence and limit |
+|------|---------|--------------------|
+| Build/audit | GO | Independent `lake build PvNP.RealizableHardness.MatrixGrassmannIntersectingAnchorChecks`: 2,468 jobs, standard axioms only. |
+| Proof-adversarial | GO-WITH-NOTES | Concrete fibre equivalence, dimension identity, exact count, and unconditioned density bound cover arbitrary anchor intersection, empty zoom, and deficient tuples. |
+| Complexity | GO-WITH-NOTES | Matches the manuscript homogeneous step; assumes the actual zoom density bound and does not prove the affine target or exact-budget refinement. |
+| Non-claims | GO | Evidence confines the claim to homogeneous matrix-lift; robust decoder and final numerical NO remain open. |
