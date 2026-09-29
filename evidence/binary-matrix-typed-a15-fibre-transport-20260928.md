@@ -24,3 +24,10 @@ A15 remain open. The numeric NO-soundness gap is unchanged.
 `lake build PvNP.RealizableHardness.BinaryMatrixTypedA15TransportChecks`
 passed (2293 jobs). Fibre energy, order, and coordinate-surjectivity axiom
 audits report only `[propext, Classical.choice, Quot.sound]`.
+
+Follow-on theorem `typed_global_iff_coordinate` packages the full
+quantifier equivalence, using the inverse coordinate restriction and the
+same fixed base and normalized energy. It does not yet transfer a one-step
+operator: an arbitrary typed line or hyperplane requires a basis adapted
+to that subspace, while the coordinate A14/A15 theorem fixes the final
+coordinate line or row.

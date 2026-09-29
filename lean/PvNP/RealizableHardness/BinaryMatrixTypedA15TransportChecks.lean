@@ -8,6 +8,8 @@ open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
 #check coordinate_fibre_energy
 #check coordinate_order
 #check coordinate_typedOfCoordinate
+#check typed_global_iff_coordinate
 #print axioms coordinate_fibre_energy
 #print axioms coordinate_order
 #print axioms coordinate_typedOfCoordinate
+#print axioms typed_global_iff_coordinate

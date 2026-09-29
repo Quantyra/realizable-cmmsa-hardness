@@ -254,5 +254,35 @@ theorem coordinate_typedOfCoordinate {n d : ℕ}
           ⟨u, hu, rfl⟩, (codomainBasis B).equivFun.apply_symm_apply u⟩
     · simp
 
+def UpToTypedNormSqGlobal {n d : ℕ}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (r : ℕ) (ε : ℝ) (f : ((V d ⧸ A) →ₗ[F] B) → ℂ) : Prop :=
+  ∀ Q : CarrierRestriction A B, Q.order ≤ r →
+    (∑ M ∈ Q.fibre, Complex.normSq (f M)) / Q.fibre.card ≤ ε
+
+/-- Full quantified globalness equivalence for the typed A1 carrier and
+its coordinate matrix model. This is the A15 premise/conclusion bridge. -/
+theorem typed_global_iff_coordinate {n d r : ℕ} {ε : ℝ}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : ((V d ⧸ A) →ₗ[F] B) → ℂ) :
+    UpToTypedNormSqGlobal A B r ε f ↔
+      UpToActualNormSqGlobal r ε
+        (fun X => f ((carrierMatrixEquiv A B).symm X)) := by
+  constructor
+  · intro hf R hR
+    let Q := typedOfCoordinate A B R
+    have hQR : Q.order ≤ r := by
+      rw [← coordinate_order Q, coordinate_typedOfCoordinate]
+      exact hR
+    have h := hf Q hQR
+    rw [← coordinate_fibre_energy Q f,
+      coordinate_typedOfCoordinate] at h
+    exact h
+  · intro hf Q hQ
+    have h := hf (coordinateRestriction Q)
+      (by rw [coordinate_order]; exact hQ)
+    rw [coordinate_fibre_energy] at h
+    exact h
+
 end
 end PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
