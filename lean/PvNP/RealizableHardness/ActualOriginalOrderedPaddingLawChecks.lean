@@ -1,0 +1,21 @@
+import PvNP.RealizableHardness.ActualOriginalOrderedPaddingLaw
+
+open PvNP.RealizableHardness.ActualOriginalOrderedPaddingLaw
+
+#check legitimate_eq_actual_good
+#check raw_legitimate_mass_eq_actual_good
+#check raw_legitimate_mass_eq_one_sub_bad
+#check conditioned_ordered_point
+#check conditioned_taggedU_mass
+#check originalLaw_U_marginal
+#check originalLawFromTagged_U_marginal
+#check conditional_raw_eq_originalDraw_U
+
+#print axioms legitimate_eq_actual_good
+#print axioms raw_legitimate_mass_eq_actual_good
+#print axioms raw_legitimate_mass_eq_one_sub_bad
+#print axioms conditioned_ordered_point
+#print axioms conditioned_taggedU_mass
+#print axioms originalLaw_U_marginal
+#print axioms originalLawFromTagged_U_marginal
+#print axioms conditional_raw_eq_originalDraw_U

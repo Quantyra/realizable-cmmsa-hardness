@@ -202,10 +202,37 @@ were GO-WITH-NOTES for this bounded padding statement and NO-GO for Equation
 `docs/late-tau-tagged-padding-boundary-2026-09-29.md`.
 
 The MZ positive-error outer YES / encoded bounded-occurrence 3-Lin hardness
-result remains a visibly external source contract. The full post-padding
-verifier's original-question marginal and all `m+1` clique-resampled block
+result remains a visibly external source contract. The original-question
+marginal is now proved for the declared post-padding draw law, as recorded
+below. All `m+1` clique-resampled block
 joint failure bounds remain unproved; so does the implication from all-good
 blocks to actual honest acceptance. `taggedCopy_value` proves source optimum
 preservation separately, but typed degree preservation and an encoded
 polynomial-time copy constructor remain open. This result does not reduce the
 numeric NO-soundness gap.
+
+### Original ordered padding to declared post-padding U marginal
+
+`ActualOriginalOrderedPaddingLaw` proves, for every fixed actual occurrence
+instance `I`, copies, and `J` with a nonempty raw ordered-row type, that the
+raw uniform legitimate event has mass exactly `actualTaggedGoodMass I copies J`.
+With `0 < copies` and `0 < m`, this is `1 - actualTaggedBadMass I copies J`.
+For a nonempty `TaggedGoodU` type, conditioning the raw eligible ordered tuple
+and forgetting its order gives uniform `TaggedGoodU` mass. For each fixed
+`I`, copies, `J,t,h,k`, assuming every sampled tagged center and leaf fibre
+is nonempty, the declared `originalLawFromTagged` draw has uniform `OriginalU`
+marginal, and `conditional_raw_eq_originalDraw_U` equates that marginal
+pointwise with the conditioned raw ordered law. These marginal theorems hold
+at each fixed copy count; the earlier `exists_late_tau_padding` chooses an
+admissible count after the later positive tau choice, with bad mass at most
+tau/100 and 1/4.
+
+The Checks target built green (3437 jobs); its eight principal declarations
+show only standard Lean axioms under `#print axioms`. The proof adversarial,
+complexity, and non-claims lenses each gave GO-WITH-NOTES for this bounded
+U-marginal identity and NO-GO for Equation (21) or the core Theorem 1
+certificate. See `docs/original-ordered-padding-u-marginal-2026-09-29.md`.
+This result identifies the U marginal of the declared post-padding draw law.
+It does not prove the resampled block U laws or their joint equation-failure
+bounds, the actual all-good-block acceptance implication, or any new NO
+decoder estimate. The numeric NO-soundness gap is unchanged.
