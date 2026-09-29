@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.MatrixLiftFullRowRankBridge
+
+open PvNP.RealizableHardness.MatrixLiftFullRowRankBridge
+
+#check residual_row_surjective
+#check binary_target_half
+#check binary_target_half_natCard
+#check binary_affine_target_score_sum_le_twice
+#check binary_affine_target_mean_le_twice
+#check binary_affine_target_zoom_density_le_two_e
+
+#print axioms binary_target_half_natCard
+#print axioms binary_affine_target_score_sum_le_twice
+#print axioms binary_affine_target_mean_le_twice
+#print axioms binary_affine_target_zoom_density_le_two_e

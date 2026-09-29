@@ -462,6 +462,20 @@ theorem affine_target_score_sum_le_twice {d k : ℕ} (f : Frame V d)
   have hmul := mul_le_mul_of_nonneg_right (le_of_lt hcard) hmass
   nlinarith [hmul]
 
+/-- Stable cardinal interface for the concrete binary target count. `Nat.card`
+avoids exposing the chosen `Fintype` enumerations of full-rank targets to
+downstream modules. -/
+theorem affine_target_score_sum_le_twice_natCard {d k : ℕ} (f : Frame V d)
+    (g : Grass V (d+k) → ℝ) (hg : ∀ W, 0 ≤ g W)
+    (H : Submodule (ZMod 2) V) (X₁ : H →ₗ[ZMod 2] C)
+    (B : Fin k → C) (hB : Function.Surjective (columnLinear B))
+    (hhalf : Nat.card (Fin k → C) <
+      2 * Nat.card {B' : Fin k → C // Function.Surjective (columnLinear B')}) :
+    targetScoreSum f g H X₁ B * (Fintype.card (Fin k → C) : ℝ) ≤
+      2 * ∑ N : FreeColumns H k, liftScore f g H N := by
+  apply affine_target_score_sum_le_twice f g hg H X₁ B hB
+  simpa only [Nat.card_eq_fintype_card] using hhalf
+
 /-- The normalized affine-target comparison for the actual matrix-fibre
 experiment. This is the manuscript's sole factor two, with the finite
 full-row-rank target count supplied as an explicit hypothesis. -/
@@ -502,6 +516,20 @@ theorem affine_target_mean_le_twice {d k : ℕ} (f : Frame V d)
             nlinarith [hmul]
     _ = _ := by ring
 
+theorem affine_target_mean_le_twice_natCard {d k : ℕ} (f : Frame V d)
+    (g : Grass V (d+k) → ℝ) (hg : ∀ W, 0 ≤ g W)
+    (H : Submodule (ZMod 2) V) (X₁ : H →ₗ[ZMod 2] C)
+    (hX₁ : Function.Surjective X₁)
+    (B : Fin k → C) (hB : Function.Surjective (columnLinear B))
+    (hhalf : Nat.card (Fin k → C) <
+      2 * Nat.card {B' : Fin k → C // Function.Surjective (columnLinear B')}) :
+    targetScoreSum f g H X₁ B /
+        (Fintype.card {N : FreeColumns H k // rowTarget H X₁ N = B} : ℝ) ≤
+      2 * ((∑ N : FreeColumns H k, liftScore f g H N) /
+        (Fintype.card (FreeColumns H k) : ℝ)) := by
+  apply affine_target_mean_le_twice f g hg H X₁ hX₁ B hB
+  simpa only [Nat.card_eq_fintype_card] using hhalf
+
 /-- Direct matrix-lift density comparison for the actual affine target fibre.
 The only remaining finite input is the full-row-rank target probability. -/
 theorem affine_target_zoom_density_le_two_e {a z k : ℕ}
@@ -537,6 +565,24 @@ theorem affine_target_zoom_density_le_two_e {a z k : ℕ}
     _ ≤ 2 * ((∑ N : FreeColumns H k, liftScore f g H N) /
         (Fintype.card (FreeColumns H k) : ℝ)) := hnorm
     _ ≤ 2 * e := mul_le_mul_of_nonneg_left hhomMean (by norm_num)
+
+theorem affine_target_zoom_density_le_two_e_natCard {a z k : ℕ}
+    (Q H : Submodule (ZMod 2) V) (f : Frame V a) (s : Frame V z)
+    (hfQ : Submodule.span (ZMod 2) (Set.range f.val) = Q)
+    (hsQH : Submodule.span (ZMod 2) (Set.range s.val) = Q ⊓ H)
+    (g : Grass V (a+k) → ℝ) (hg : ∀ W, 0 ≤ g W)
+    (e : ℝ) (he : 0 ≤ e)
+    (hzoom : (∑ L : HomEligible f H k, g L.val) ≤
+      e * (Fintype.card (HomEligible f H k) : ℝ))
+    (X₁ : H →ₗ[ZMod 2] C) (hX₁ : Function.Surjective X₁)
+    (B : Fin k → C) (hB : Function.Surjective (columnLinear B))
+    (hhalf : Nat.card (Fin k → C) <
+      2 * Nat.card {B' : Fin k → C // Function.Surjective (columnLinear B')}) :
+    targetScoreSum f g H X₁ B /
+        (Fintype.card {N : FreeColumns H k // rowTarget H X₁ N = B} : ℝ) ≤
+      2 * e := by
+  apply affine_target_zoom_density_le_two_e Q H f s hfQ hsQH g hg e he hzoom X₁ hX₁ B hB
+  simpa only [Nat.card_eq_fintype_card] using hhalf
 
 end
 end PvNP.RealizableHardness.MatrixLiftAffineTarget

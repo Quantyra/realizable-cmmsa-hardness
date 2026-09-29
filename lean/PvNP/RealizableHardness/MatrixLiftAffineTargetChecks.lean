@@ -11,11 +11,15 @@ open PvNP.RealizableHardness.MatrixLiftAffineTarget
 #check liftScore_eq_homLiftTest
 #check card_freeColumns_eq_card_targets_mul_fibre
 #check affine_target_score_sum_le_twice
+#check affine_target_score_sum_le_twice_natCard
 #check affine_target_mean_le_twice
+#check affine_target_mean_le_twice_natCard
 #check affine_target_zoom_density_le_two_e
+#check affine_target_zoom_density_le_two_e_natCard
 
 #print axioms targetFibre_card_eq
 #print axioms surjective_target_orbit
 #print axioms fullRank_target_score_eq
 #print axioms affine_target_mean_le_twice
 #print axioms affine_target_zoom_density_le_two_e
+#print axioms affine_target_zoom_density_le_two_e_natCard
