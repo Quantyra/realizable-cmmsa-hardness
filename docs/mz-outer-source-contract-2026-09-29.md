@@ -55,3 +55,5 @@ manuscript's YES verifier law, or the final NO contradiction.
 
 The new declarations improve the precision of the conditional certificate
 but do **not** reduce the remaining NO-soundness gap by themselves.
+Three-lens review of this separate outer-contract increment is still owed;
+no review verdict is asserted here.

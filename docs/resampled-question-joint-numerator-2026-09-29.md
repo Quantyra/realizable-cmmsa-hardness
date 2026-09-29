@@ -39,5 +39,15 @@ Verification: `lake --old build
 PvNP.RealizableHardness.ActualResampledQuestionMarginalChecks` passed (3446
 jobs). The Checks file imports the reverse-incidence dependency, checks the
 named theorems, and prints only `propext`, `Classical.choice`, and `Quot.sound`
-as axioms. The requested three-lens review remains to be recorded before any
-route-final status.
+as axioms. The bounded three-lens review is recorded below.
+
+## Three-lens bounded review
+
+| Lens | Verdict | Boundary |
+| --- | --- | --- |
+| Proof adversarial | **GO-WITH-NOTES** | The proved claim is per-coordinate uniformity of the actual projected `U'_i` and the stated bad-row probability bound times raw legitimacy mass, under the listed nonempty fibres and positive-error assignment premise. |
+| Complexity theory | **GO-WITH-NOTES** | The result supplies one resampled-block YES numerator. The encoded outer assignment and the common `(m+1)`-block experiment remain conditional. |
+| Non-claims boundary | **GO-WITH-NOTES** | The product of the declared draw's bad-row probability and raw legitimacy mass is not identified here with a common raw joint event. No Equation (21), core Theorem 1, or NO-soundness closure follows. |
+
+The bounded increment may close as reviewed. Equation (21) and the core
+certificate remain **INCOMPLETE**; the NO gap is unchanged.
