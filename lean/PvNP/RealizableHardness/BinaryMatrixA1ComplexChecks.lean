@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+
+#check complexFourierCoeff_re
+#check complexFourierCoeff_im
+#check complexCarrierFourierCoeff_re
+#check complexCarrierFourierCoeff_im
+#check complexAmbientHybridFilter_re
+#check complexAmbientHybridFilter_im
+#check complexCarrierHybridFilter_re
+#check complexCarrierHybridFilter_im
+#check manuscript_A1_complex
+#print axioms complexFourierCoeff_re
+#print axioms complexCarrierFourierCoeff_re
+#print axioms manuscript_A1_complex
