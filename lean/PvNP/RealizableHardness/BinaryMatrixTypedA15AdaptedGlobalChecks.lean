@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA15AdaptedGlobal
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA15AdaptedGlobal
+
+#check mem_line_coordinate_fibre_iff
+#check line_coordinate_fibre_energy
+#check line_coordinate_order
+#check typed_global_iff_line_coordinate
+#check typed_line_coordinate_witness_global
+#check typed_line_coordinate_witness_fixed_base
+#print axioms typed_global_iff_line_coordinate
+#print axioms typed_line_coordinate_witness_global
+#print axioms typed_line_coordinate_witness_fixed_base
