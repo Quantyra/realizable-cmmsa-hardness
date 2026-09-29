@@ -33,3 +33,12 @@ comparison after normal form. The reduction of arbitrary nominal
 smaller-budget eligible zoom to exact budget `r`, and the fixed-`U`
 robust decoder are still missing. The final numerical NO-soundness
 exponent is unchanged.
+
+## Three-lens review
+
+| Lens | Verdict | Evidence and limit |
+|------|---------|--------------------|
+| Build/audit | GO | Independent `lake build PvNP.RealizableHardness.MatrixLiftFullRowRankBridgeChecks`: 2,471 jobs, standard axioms only. |
+| Proof-adversarial | GO-WITH-NOTES | Exact rank count includes `c=0`; concrete score/mean/zoom declarations consume it, so `hhalf` is absent. Normal-form assumptions remain explicit. |
+| Complexity | GO-WITH-NOTES | Matches the normalized binary affine-target step, not arbitrary nominal restrictions or exact-budget zooms. |
+| Non-claims | GO | Evidence leaves full matrix-lift, robust decoder, outer NO, and final exponent open. |
