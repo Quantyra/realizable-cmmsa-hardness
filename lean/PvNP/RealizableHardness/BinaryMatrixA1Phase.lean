@@ -50,6 +50,33 @@ theorem tracePair_carrier {n d : ℕ}
   unfold tracePair
   exact LinearMap.trace_comp_comm' A.mkQ ((Y.comp B.subtype).comp N)
 
+/-- The same cyclic trace identity on an intermediate quotient/subtype
+carrier, as required by the second stage of manuscript A1. -/
+theorem tracePair_carrier_general {U Z : Type*}
+    [AddCommGroup U] [Module (ZMod 2) U]
+    [Module.Free (ZMod 2) U] [Module.Finite (ZMod 2) U]
+    [AddCommGroup Z] [Module (ZMod 2) Z]
+    (A : Submodule (ZMod 2) U) (B : Submodule (ZMod 2) Z)
+    (Y : Z →ₗ[ZMod 2] U) (N : (U ⧸ A) →ₗ[ZMod 2] B) :
+    tracePair Y (B.subtype.comp (N.comp A.mkQ)) =
+      tracePair (A.mkQ.comp (Y.comp B.subtype)) N := by
+  unfold tracePair
+  exact LinearMap.trace_comp_comm' A.mkQ ((Y.comp B.subtype).comp N)
+
+theorem traceCharacter_carrier_base_general {U Z : Type*}
+    [AddCommGroup U] [Module (ZMod 2) U]
+    [Module.Free (ZMod 2) U] [Module.Finite (ZMod 2) U]
+    [AddCommGroup Z] [Module (ZMod 2) Z]
+    (A : Submodule (ZMod 2) U) (B : Submodule (ZMod 2) Z)
+    (Y : Z →ₗ[ZMod 2] U) (T : U →ₗ[ZMod 2] Z)
+    (N : (U ⧸ A) →ₗ[ZMod 2] B) :
+    traceCharacter Y (T + B.subtype.comp (N.comp A.mkQ)) =
+      traceCharacter Y T *
+        traceCharacter (A.mkQ.comp (Y.comp B.subtype)) N := by
+  rw [traceCharacter_add]
+  unfold traceCharacter
+  rw [tracePair_carrier_general]
+
 /-- Manuscript A1 phase law on an arbitrary affine base, with canonical
 quotient/inclusion maps and no coordinate-basis choice. -/
 theorem traceCharacter_carrier_base {n d : ℕ}

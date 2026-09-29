@@ -4,5 +4,8 @@ open PvNP.RealizableHardness.BinaryMatrixA1Phase
 
 #check tracePair_carrier
 #check traceCharacter_carrier_base
+#check tracePair_carrier_general
+#check traceCharacter_carrier_base_general
 #print axioms tracePair_carrier
 #print axioms traceCharacter_carrier_base
+#print axioms traceCharacter_carrier_base_general

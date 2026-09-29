@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.BinaryMatrixA1CoefficientTransfer
+
+open PvNP.RealizableHardness.BinaryMatrixA1CoefficientTransfer
+
+#check initialDerivative
+#check nextDerivative
+#check carrierFourierCoeff_sum_characters
+#check initialDerivative_character_sum
+#check initialDerivative_fourierCoeff
+#print axioms carrierFourierCoeff_sum_characters
+#print axioms initialDerivative_fourierCoeff
