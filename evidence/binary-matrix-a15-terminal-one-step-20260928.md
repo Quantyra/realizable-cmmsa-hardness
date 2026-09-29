@@ -13,9 +13,10 @@ column/row and complex input. These theorems consume both A14 rank-level
 identities and actual A15 globalness bounds, so the endpoint is used in
 the force comparison.
 
-The full manuscript (A15) still needs typed derivative composition across
-successive quotient/subtype carriers with canonical base propagation and
-rank-level intertwining. No `k>1` accumulated factor is claimed here.
+The full manuscript (A15) still needs the already-proved complex A1
+composition instantiated across successive quotient/subtype carriers,
+with canonical base propagation and rank-level intertwining. No `k>1`
+accumulated factor is claimed here.
 The tagged fixed-table comparison already exists elsewhere; the original
 post-padding verifier-law/acceptance handoff and decoder remain. The
 numeric MZ NO-soundness gap is unchanged.
