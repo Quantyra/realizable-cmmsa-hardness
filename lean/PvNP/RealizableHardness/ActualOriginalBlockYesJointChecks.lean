@@ -1,0 +1,22 @@
+import PvNP.RealizableHardness.ActualOriginalBlockYesJoint
+
+open PvNP.RealizableHardness.ActualOriginalBlockYesJoint
+
+#check PositiveErrorAssignment
+#check badOriginalU_iff_ordered
+#check orderedToOriginalU_pushforward
+#check eligible_bad_image
+#check conditioned_badU_joint_eq_raw
+#check originalRejects_implies_badU
+#check originalRejectMass_le_badU
+#check raw_original_joint_le
+#check original_block_joint_rejection_le
+
+#print axioms badOriginalU_iff_ordered
+#print axioms orderedToOriginalU_pushforward
+#print axioms eligible_bad_image
+#print axioms conditioned_badU_joint_eq_raw
+#print axioms originalRejects_implies_badU
+#print axioms originalRejectMass_le_badU
+#print axioms raw_original_joint_le
+#print axioms original_block_joint_rejection_le
