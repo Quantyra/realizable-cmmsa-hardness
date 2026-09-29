@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge
+
+open PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge
+
+#check actual_implies_ordinary_star_accepts
+#print axioms actual_implies_ordinary_star_accepts

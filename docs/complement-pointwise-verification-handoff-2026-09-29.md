@@ -1,7 +1,7 @@
 # Complement pointwise verification handoff
 
-Status: pointwise proof built; integrated density comparison and required
-three-lens review remain incomplete. Planning ownership: S3126/S3132, with
+Status: pointwise proof built and three-lens reviewed with notes; integrated
+density comparison remains incomplete. Planning ownership: S3126/S3132, with
 existing S3126 review debt. This is a progress handoff, not route-final closeout.
 
 Luna implemented `actual_implies_ordinary_star_accepts` in
@@ -20,8 +20,8 @@ only `propext`, `Classical.choice`, and `Quot.sound` for the exported implicatio
 Frozen SHA256: bridge
 `ADA143BA67BA5F4FCA40B080D79D57751B9961F56A7A6D3967A5642ED36FB398`;
 Checks `2FE566CF7CFF8A9EEE4D3C4E6B14E7E8A11F78AA709457203C076745A8F8F7E8`.
-These source files remain untracked pending orchestrator review; no proof-source
-commit, push, release, or claims expansion was performed.
+The exact source pair is accepted for focused local tracking after top-level
+review. No push, release, or claims expansion is authorized by this acceptance.
 
 The new `ActualTaggedComplementStarDensityBound.lean` remains unverified.
 Session 74934 reached the pointwise leaf-sum comparison but failed dependent
@@ -34,12 +34,18 @@ remained active at handoff; latest independent memory read was 5205048 KiB free.
 | Lens | Verdict | Scope |
 | --- | --- | --- |
 | Build/audit | GO for pointwise implication | Focused target and direct Checks; standard axioms |
-| Proof adversarial | INCOMPLETE | Top-level review not yet run |
-| Complexity theory | INCOMPLETE | Top-level review not yet run |
-| Non-claims boundary | INCOMPLETE | New implication review not yet run; prior ca31d9d review is separate |
+| Proof adversarial | GO-WITH-NOTES | Exact domain and pointwise evaluation transport; no blocking issue |
+| Complexity theory | GO-WITH-NOTES | Same predraw tables and correct implication direction; role overlap disclosed |
+| Non-claims boundary | GO-WITH-NOTES | Pointwise wording bounded; integrated density and core excluded |
 
-Next: review the frozen pointwise theorem at top level; separately compile the
-scalar density comparison, prove its exact weighted link to the existing
+The top-level complexity reviewer also orchestrated the implementation and
+provided proof hints. This is a disclosed role review, not independently
+authored verification. Empty typed carriers and `k=0` may make a pointwise
+event vacuous; no positive-mass inference is made. Integrated density, analytic
+inverse, robust 8S, numerical NO soundness, and core Theorem 1 are explicitly
+outside this acceptance. Existing S3126 review debt persists for the wider core.
+
+Next: separately compile the scalar density comparison, prove its exact weighted link to the existing
 `ordinaryComplementStarDensity`, and audit its axioms. Then feed the actual
 ordinary density into the already present weighted selection theorem (7293d45),
 prove its required ratio/exponent bounds, and continue positive-rank analytic
@@ -48,5 +54,5 @@ Theorem 1 remain open. The numerical NO-soundness gap is unchanged.
 
 OpenCode's prescribed launch failed with invalidated OAuth; proof execution
 used the user-authorized collaboration Luna fallback. The parent orchestration
-agent reported model capacity failure at handoff, so top-level reviews were not
-silently substituted with nested reviews.
+agent initially reported model capacity failure; it subsequently recovered and
+launched the three top-level reviews. No nested review substituted for them.
