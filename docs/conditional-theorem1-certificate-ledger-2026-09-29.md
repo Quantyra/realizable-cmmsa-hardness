@@ -31,16 +31,26 @@ source floor and therefore does not by itself certify this quantifier.
 | --- | --- | --- |
 | Outer hardness and smooth repeated game | MZ Theorem 3.1, Section 3.2, Claim 3.2; fixed absolute 3-Lin NO gap, arbitrarily small fixed positive YES error, bounded occurrence, and game value `≤2^{-Ω(η² 2^{-r} βJ)}`. Manuscript Section 3, `paper/body.tex:55`. | **External**. No encoded SAT-to-outer `SeededMap` with all quantifiers and the game bound is proved here. |
 | Star construction and label transport | MZ Section 3.3, Lemmas 3.3–3.4; legitimate `U`, transverse `K,L_i`, side-condition-preserving unique transport, weighted `(m+1)`-star, finite enumeration. Manuscript `paper/body.tex:57`. | **External** for construction/transport. Tagged physical-law and representative-selection Lean modules prove selected new comparisons, but do not construct the full encoded reduction. |
-| Scoped local decoder | MZ Theorem 4.2; fixed `U`, density at least `S=2^{-2(1-1000ρ)hm}`, `a+c≤10m/ρ`, lucky `Q` mass at least `2^{-6h²}`, and agreement `C=2^{-2(1-1000ρ²)h}/5`. Manuscript `paper/body.tex:59`. | **External at source scope only**. The changed-ambient robust `8S` application is a manuscript-new obligation, not an imported all-`J` decoder theorem. Existing `ActualTaggedFixedUDensityForce` reaches the `8S` input but does not yield the decoder conclusion. |
+| Scoped local decoder | MZ Theorem 4.2; fixed `U`, density at least `S=2^{-2(1-1000ρ)hm}`, `a+c≤10m/ρ`, lucky `Q` mass at least `2^{-6h²}`, and agreement `C=2^{-2(1-1000ρ²)h}/5`. Manuscript `paper/body.tex:59`. | **Typed, visibly external source-law interface** in `ActualMZFixedUSourceDecoderContract.ExternalMZFixedUSourceDecoder`; no inhabitant is proved. Its cutoff precedes `h,J,U` and both tables; the actual fixed-`U` transverse law and exact real thresholds are typed. The changed-ambient robust `8S` application remains manuscript-new. `ActualTaggedFixedUDensityForce` reaches its input but supplies no decoder conclusion. |
 | Maximal-pair counting | MZ Definition 5.4 and MZ24 revision 1 Theorem 5.26, with `δ=ρ/m`, fixed subsidiary constants, `dim V≥2^h`, dimensions/codimensions `≤10m/ρ`, threshold `B≥2^{-2(1-(ρ/m)^3)h}`, and count `≤B^{-2}2^{O_{m,ρ}(h)}`. Manuscript `paper/body.tex:61`. | **External**. The descending threshold ladder and use in changed ambient are manuscript-new. |
 | Covering | KMS Definition 4.5, Lemmas 4.6–4.7, Section 8; independent triple-deletion sampler and its joint-law conditioned advice bound, including exceptional `Q` mass. Manuscript `paper/body.tex:63`. | **External**. The posterior, vector-law and zoom-out comparisons for this parameter order remain manuscript-new. |
 | Weighted star compilation | HN Definition 4.4 and Lemma 4.6; one global center/leaf partition, `m≥1`, deletion of zero-occurrence vertices, normalized occurrence weights, repeated leaf-variable consistency, leaf bound `(m+1)R`, budget `1/Λ`, exact-weight YES, monotonicity, and real-threshold base NO satisfaction at most `3/4`. Manuscript `paper/body.tex:65` and Section 8. | **Typed external finite-semantic contract** in `ActualCoreSourceContractScopes.ExternalHNWeightedStarCompiler`, uniformly over valid finite stars; no inhabitant is proved. Its `HNSourceStar` preconditions enforce the source applicability scope, and `HNCompilationConclusion` uses the actual finite `compile`/weight semantics. The polynomial-time encoded formula-distribution constructor is absent. This contract does not supply AND sampling, finite-list repair, rounding, or an encoded source-to-CMMSA map. Strict `<γ_L` is obtained only downstream. |
 
 These entries describe mathematical source contracts, not Lean axioms.
-The MZ24 count and finite-semantic HN compiler have explicit external Lean
-interfaces; faithful typing of the remaining source contracts and encoded
+The fixed-`U` decoder, MZ24 count, and finite-semantic HN compiler have
+explicit external Lean interfaces; faithful typing of the remaining source contracts and encoded
 interfaces remains work. A broad `hSrcCmmsa` parameter would absorb
 manuscript-new work.
+
+The fixed-`U` contract is an external *source test-law* boundary, not a
+manuscript decoder theorem. A proof must still align the selected tagged
+physical law, arbitrary fixed tables, class-collision charge, and the
+conditioned transverse zoom law with its hypotheses and output. Supplying an
+inhabitant does not prove the changed-ambient all-ambient inverse or robust
+`8S` result. The source text writes the output probability over `Q⊆L⊆W`
+without repeating transversality; the Lean `SourceZoom` conditions on
+transverse leaves, matching the defined source leaf alphabet and manuscript
+description. This convention remains a source-alignment review note.
 
 ## Lean facts already available for the manuscript-new comparison
 
@@ -117,3 +127,14 @@ The review table is a status record, not a route-final three-lens closeout.
 Planning review-debt story **S3126** blocks any route-final or core-certified
 claim until the missing force chain, encoded YES/NO construction, and faithful
 contract interfaces are proved and reviewed.
+
+### Fixed-U contract bounded review
+
+`lake build PvNP.RealizableHardness.ActualMZFixedUSourceDecoderContract`
+passed (3260 jobs); the separate checks target records `#check` and
+`#print axioms` for its `decode` projection. Three post-fix lenses judged the
+**bounded external contract GO-WITH-NOTES**: proof adversarial, complexity
+theory, and non-claims. All three retain **NO-GO for the changed-ambient
+`8S`/core Theorem 1 claim**. The remaining source-tagged alignment obligation
+above and planning review debt S3126 remain open. This increment reduces no
+numeric NO-soundness gap.
