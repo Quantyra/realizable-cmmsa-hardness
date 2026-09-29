@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.BinaryMatrixA15BaseCase
+
+open PvNP.RealizableHardness.BinaryMatrixA15BaseCase
+
+#check complexRankProjection_energy_le
+#check actualGlobal_zero_energy_le
+#check A15_coordinate_order_zero
+#check A15_coordinate_line_oneStep_influence
+#check A15_coordinate_hyperplane_oneStep_influence
+
+#print axioms A15_coordinate_order_zero
+#print axioms A15_coordinate_line_oneStep_influence
+#print axioms A15_coordinate_hyperplane_oneStep_influence
