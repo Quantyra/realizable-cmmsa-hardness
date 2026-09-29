@@ -6,6 +6,9 @@ open PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
 #check lineMatrix_rawLastColumn
 #check adaptedFunctional_inverse
 #check lineMatrix_rankOne_shift
+#check lineFunctionalIndex
+#check typedLineAverage_coordinate
 #print axioms lineMatrix_rawLastColumn
 #print axioms adaptedFunctional_inverse
 #print axioms lineMatrix_rankOne_shift
+#print axioms typedLineAverage_coordinate

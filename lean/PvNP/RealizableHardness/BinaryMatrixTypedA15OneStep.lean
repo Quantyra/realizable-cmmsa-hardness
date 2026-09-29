@@ -7,11 +7,25 @@ open BinaryMatrixTypedA15Transport
 open BinaryMatrixFourier BinaryMatrixFirstDerivative
 open BinaryMatrixLineA15
 open BinaryMatrixLineTranslation
+open BinaryMatrixComplexA15
 set_option autoImplicit false
 noncomputable section
 
 private abbrev F := ZMod 2
 private abbrev V (d : ℕ) := Fin d → F
+
+private noncomputable instance {d : ℕ} {A : Submodule F (V d)} :
+    Fintype (V d ⧸ A) := Fintype.ofFinite _
+
+private noncomputable instance {d : ℕ} {A : Submodule F (V d)} :
+    Fintype ((V d ⧸ A) →ₗ[F] F) := by
+  haveI : Finite ((V d ⧸ A) →ₗ[F] F) :=
+    Finite.of_injective (fun φ : (V d ⧸ A) →ₗ[F] F => (φ : (V d ⧸ A) → F))
+      DFunLike.coe_injective
+  exact Fintype.ofFinite _
+
+private noncomputable instance {n : ℕ} (B : Submodule F (Fin n → F)) :
+    Fintype B := Fintype.ofFinite _
 
 /-- Put the one-dimensional constraint in the final coordinate. The
 coordinate map is used below to compare the actual typed line average
@@ -195,6 +209,50 @@ theorem adaptedFunctional_inverse {d : ℕ} {A : Submodule F (V d)}
   simp [adaptedFunctional, inverseAdaptedFunctional, Pi.single_apply,
     Finset.sum_ite_eq']
 
+theorem adaptedFunctional_injective {d : ℕ} {A : Submodule F (V d)}
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (φ ψ : (V d ⧸ A) →ₗ[F] F)
+    (hφ : φ ((lineScalarEquiv L hL).symm 1 : L) = 1)
+    (hψ : ψ ((lineScalarEquiv L hL).symm 1 : L) = 1)
+    (h : adaptedFunctional L hL φ = adaptedFunctional L hL ψ) : φ = ψ := by
+  let e := lineAdaptedEquiv L hL
+  have hcomp : φ.comp e.symm.toLinearMap = ψ.comp e.symm.toLinearMap := by
+    apply (Pi.basisFun F (Fin (Module.finrank F ((V d ⧸ A) ⧸ L) + 1))).ext
+    intro j
+    induction j using Fin.lastCases with
+    | last =>
+        simpa [e, lineAdapted_symm_last L hL] using hφ.trans hψ.symm
+    | cast j =>
+        simpa [Pi.basisFun, e, adaptedFunctional] using congrFun h j
+  apply LinearMap.ext
+  intro u
+  have hu := LinearMap.congr_fun hcomp (e u)
+  simpa [e] using hu
+
+def lineFunctionalIndex {d : ℕ} {A : Submodule F (V d)}
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1) :
+    {φ : (V d ⧸ A) →ₗ[F] F //
+      φ ((lineScalarEquiv L hL).symm 1 : L) = 1} ≃
+        (Fin (Module.finrank F ((V d ⧸ A) ⧸ L)) → F) where
+  toFun φ := adaptedFunctional L hL φ.1
+  invFun c := ⟨inverseAdaptedFunctional L hL c,
+    inverseAdaptedFunctional_last L hL c⟩
+  left_inv φ := by
+    apply Subtype.ext
+    apply adaptedFunctional_injective L hL _ _
+      (inverseAdaptedFunctional_last L hL (adaptedFunctional L hL φ.1)) φ.2
+    exact adaptedFunctional_inverse L hL _
+  right_inv c := adaptedFunctional_inverse L hL c
+
+def lineShiftIndex {n d : ℕ} {A : Submodule F (V d)}
+    (B : Submodule F (Fin n → F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1) :
+    ({φ : (V d ⧸ A) →ₗ[F] F //
+      φ ((lineScalarEquiv L hL).symm 1 : L) = 1} × B) ≃
+      ((Fin (Module.finrank F ((V d ⧸ A) ⧸ L)) → F) ×
+        (Fin (Module.finrank F B) → F)) :=
+  (lineFunctionalIndex L hL).prodCongr (codomainBasis B).equivFun.toEquiv
+
 theorem lineMatrix_rankOne_shift {n d : ℕ}
     {A : Submodule F (V d)} (B : Submodule F (Fin n → F))
     (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
@@ -218,6 +276,46 @@ theorem lineMatrix_rankOne_shift {n d : ℕ}
         LinearMap.toMatrix'_apply, LinearEquiv.arrowCongr_apply,
         LinearMap.add_apply, LinearMap.smulRight_apply]
       simp [lineShift, lineFunctional, adaptedFunctional, mul_comm]
+
+def typedLineAverage {n d : ℕ} {A : Submodule F (V d)}
+    (B : Submodule F (Fin n → F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (f : ((V d ⧸ A) →ₗ[F] B) → ℂ)
+    (M : (V d ⧸ A) →ₗ[F] B) : ℂ :=
+  (∑ p : {φ : (V d ⧸ A) →ₗ[F] F //
+      φ ((lineScalarEquiv L hL).symm 1 : L) = 1} × B,
+    f (M + p.1.1.smulRight p.2)) /
+    Fintype.card ({φ : (V d ⧸ A) →ₗ[F] F //
+      φ ((lineScalarEquiv L hL).symm 1 : L) = 1} × B)
+
+theorem typedLineAverage_coordinate {n d : ℕ}
+    {A : Submodule F (V d)} (B : Submodule F (Fin n → F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (f : ((V d ⧸ A) →ₗ[F] B) → ℂ)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    typedLineAverage B L hL f M =
+      complexLineAverage
+        (fun X => f ((lineMatrixEquiv B L hL).symm X))
+        (lineMatrixEquiv B L hL M) := by
+  unfold typedLineAverage complexLineAverage
+  let e := lineShiftIndex B L hL
+  have hs :
+      (∑ p : {φ : (V d ⧸ A) →ₗ[F] F //
+          φ ((lineScalarEquiv L hL).symm 1 : L) = 1} × B,
+        f (M + p.1.1.smulRight p.2)) =
+      ∑ p : (Fin (Module.finrank F ((V d ⧸ A) ⧸ L)) → F) ×
+          (Fin (Module.finrank F B) → F),
+        f ((lineMatrixEquiv B L hL).symm
+          (lineMatrixEquiv B L hL M + lineShift p.2 p.1)) := by
+    apply Fintype.sum_equiv e
+    intro p
+    have hh := lineMatrix_rankOne_shift B L hL M p.2 p.1.1 p.1.2
+    apply congrArg f
+    apply (lineMatrixEquiv B L hL).injective
+    simpa [e, lineShiftIndex, lineFunctionalIndex] using hh
+  rw [hs]
+  congr 1
+  exact_mod_cast Fintype.card_congr e
 
 end
 end PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
