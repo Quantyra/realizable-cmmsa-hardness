@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.MatrixLiftNominalDirectComparison
+
+open PvNP.RealizableHardness.MatrixLiftNominalDirectComparison
+
+#check fixed_residual_mean_le_two
+#check raw_card_eq_fibre_card
+#check raw_mean_eq_residual_mean
+#check fixed_row_target_mean_le_two_e
+#check nominal_score_mean_eq_raw
+#check density_zero_of_fixed_dependent
+#check exact_zoom_implies_nominal_pseudorandom
+
+#print axioms exact_zoom_implies_nominal_pseudorandom
