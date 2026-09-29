@@ -1,0 +1,21 @@
+import PvNP.RealizableHardness.ActualOuterEncodedOccurrenceYesBridge
+
+open PvNP.RealizableHardness.ActualOuterEncodedOccurrenceYesBridge
+
+#check occurrenceOfEncoded
+#check occurrence_sourceViolations_eq
+#check occurrence_extension_violations_eq
+#check assignmentFunctional_equation
+#check assignmentFunctional_badRows_card
+#check nearSatisfiable_positiveErrorAssignment
+#check exists_encoded_late_padding
+#check exists_late_outer_error
+#check external_yes_to_copied_assignment
+#check external_yes_exists_padded_assignment
+#check parsed_outer_yes_common_draw
+
+#print axioms occurrence_extension_violations_eq
+#print axioms nearSatisfiable_positiveErrorAssignment
+#print axioms exists_late_outer_error
+#print axioms external_yes_exists_padded_assignment
+#print axioms parsed_outer_yes_common_draw
