@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualConditionalTheorem1Core
+
+open PvNP.RealizableHardness.ActualConditionalTheorem1Core
+
+#check outerYesError
+#check outerYesError_pos
+#check conditioned_honest_failure_lt
+#check exists_outer_repetition_scale
+#check conditioned_outer_lt_decoded
+#check no_strategy_from_outer_and_changed_ambient
+
+#print axioms outerYesError_pos
+#print axioms conditioned_honest_failure_lt
+#print axioms exists_outer_repetition_scale
+#print axioms conditioned_outer_lt_decoded
+#print axioms no_strategy_from_outer_and_changed_ambient
