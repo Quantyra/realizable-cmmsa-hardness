@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReduced
+open PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal
+
+#check dropLastRow_hyperplaneMatrix_fixed_base
+#check reduced_coordinate_fibre_image
+#check reduced_coordinate_fibre_energy
+#check reduced_coordinate_order
+#check reduced_global_iff_coordinate
+#check hyperplane_witness_coordinate_shift
+#check typed_hyperplane_oneStep_A15_global
+
+#print axioms reduced_global_iff_coordinate
+#print axioms hyperplane_witness_coordinate_shift
+#print axioms typed_hyperplane_oneStep_A15_global
