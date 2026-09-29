@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+
+#check mem_reduced_coordinate_fibre_iff
+#check reduced_coordinate_fibre_energy
+#check reduced_coordinate_order
+#check reduced_global_iff_coordinate
+#check typed_line_oneStep_A15_global
+#print axioms reduced_global_iff_coordinate
+#print axioms typed_line_oneStep_A15_global
