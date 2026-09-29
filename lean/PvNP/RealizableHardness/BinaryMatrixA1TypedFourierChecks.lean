@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+
+#check exists_tracePair_one_of_ne
+#check exists_tracePair_one_of_map_ne
+#check traceCharacter_sum_zero_of_ne
+#check traceCharacter_sum_zero_of_map_ne
+#check carrierCharacter_orthogonality
+#check dualCharacter_orthogonality
+#check carrierFourierCoeff
+#check carrierFourier_inversion
+#print axioms carrierCharacter_orthogonality
+#print axioms dualCharacter_orthogonality
+#print axioms carrierFourier_inversion
