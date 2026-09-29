@@ -275,3 +275,41 @@ contract. The fixed encoding/parser computational implementation and
 fixed-`L` encoded runtime for the full reduction remain open. The source
 product-game observation bridge, decoder, and full NO soundness also remain
 open. Core Theorem 1 is **INCOMPLETE** and its NO gap is unchanged.
+
+### Classical analytic subcontracts and core-first phase boundary
+
+The six entries above remain the historical top-level source inventory.
+The conditional core route also needs explicit classical analytic
+subcontracts from [MZ v1, Section 4.2, Theorem 4.6 and Lemma 4.7](https://arxiv.org/pdf/2510.23991v1).
+Their exact Lean interfaces have not yet been added or verified. This
+classification is a planning decision, not an imported theorem or a new
+proof of an analytic estimate.
+
+The hypercontractive subcontract must use the existing
+`BinaryMatrixFourier.PseudorandomExact`, Boolean indicator, rank projection
+and normalized `lpNorm`: for every matrix shape, nominal restriction budget
+`r`, positive rank `i <= r`, and dyadic `p >= 4`, with `0 <= delta <= 1`,
+its conclusion is
+`lpNorm p (rankProjection i (indicator f)) <= 2^(500*i^2*p) * delta^(1-2/p)`.
+Dependent or zero restriction equations and zero dimensions remain within
+the typed domain. No basis-invariance or full-rank-conditioning premise
+belongs to this hypercontractive field. The nominal-to-source restriction
+alignment remains an explicit obligation.
+
+The spectral subcontract must separately preserve Lemma 4.7's exact
+operators, normalized averages, source applicability and basis-invariance
+premise. It must not be identified with the manuscript's stronger
+finite-character lemma without a proof of that comparison. In particular,
+typing an operator bound does not establish its use for the actual
+common-center experiment.
+
+Source-checked classical fields may be explicit parameters of the
+conditional core. Their inhabitants, including the A18/A21/A22 engine and
+the cited spectral proof, are deferred to the outward certification phase
+after that core closes. The manuscript-new actual matrix-lift, moment,
+inverse, robust `8S`, parameter and source-law comparisons must still be
+proved from those exact fields. No field may assume the final actual moment
+upper bound, `AllAmbientInverse`, robust decoder, NO soundness, or encoded
+core conclusion. Standalone contract typing does not count as progress on
+those force obligations. Full manuscript certification still requires
+discharging all classical contracts and reproducible consolidation.
