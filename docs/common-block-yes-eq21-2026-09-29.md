@@ -44,4 +44,14 @@ The existence of an encoded outer YES assignment in this exact ambient
 linear-map representation remains conditional. This result does not prove the
 full encoded SAT-to-CMMSA reduction, core Theorem 1, or any NO-soundness
 bound. It reduces the remaining **YES composition** gap; the NO gap is
-unchanged. Three-lens review is pending.
+unchanged.
+
+## Three-lens bounded review
+
+| Lens | Verdict | Boundary |
+| --- | --- | --- |
+| Proof adversarial | **GO-WITH-NOTES** | The common `OriginalDraw` carries `U` and every actual `U'_i`. All-good acceptance for the fixed legal table invokes the original `U` implication; the `m+1`-block union is conservative. The copied-row error assignment and all listed nonempty fibres remain premises. |
+| Complexity theory | **GO-WITH-NOTES** | The later `ε₁≤τ/[100(m+1)J]` and raw bad mass `a≤1/4` yield the declared-draw Eq21 rejection bound. Existence of the ambient outer assignment `f`, encoded padding, and the full SAT-to-CMMSA reduction remain external or unproved. |
+| Non-claims boundary | **GO-WITH-NOTES** | Multiplying the declared conditioned-draw event probability by raw legitimacy mass is not identified with a common raw joint event. The core certificate is **INCOMPLETE**, and the NO-soundness gap is unchanged. |
+
+This three-lens outcome closes only the bounded declared-draw YES comparison.
