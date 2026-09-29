@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.ActualOriginalPostPaddingVerifier
+
+open PvNP.RealizableHardness.ActualOriginalPostPaddingVerifier
+
+#check originalDrawEquiv
+#check originalLaw
+#check originalLaw_mass_encode
+#check originalAccepts_iff_taggedPhysical
+#check originalScore_eq_taggedSourceVerifierScore
+#check originalScore_le_selected_add_collision
+#print axioms originalLaw_mass_encode
+#print axioms originalAccepts_iff_taggedPhysical
+#print axioms originalScore_eq_taggedSourceVerifierScore
+#print axioms originalScore_le_selected_add_collision
