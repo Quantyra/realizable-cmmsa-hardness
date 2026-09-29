@@ -1,26 +1,9 @@
-# Initial-vertex and clique-resampling joint-law gap
+# Initial-vertex and clique-resampling scope correction
 
-## Exact first missing comparison
+`paper/body.tex:57-63` directly defines the imported star verifier for NO soundness: uniform eligible copied `U`, transverse `K`, independent ordered leaves, then independent uniform clique representatives. `ActualOriginalPostPaddingVerifier.originalLawFromTagged` models that stated post-conditioning law, and `originalScore_le_selected_add_collision` bounds every fixed legal predraw assignment by one tagged selector score plus `(1/2)^J`. **No raw initial-vertex joint-law pushforward is required to identify the manuscript's stated NO verifier with this conditioned law.** The next force-bearing NO theorem is the fixed-`U` robust local decoder at the `8S` side-test threshold, followed by the outer repeated-game contradiction.
 
-`paper/body.tex:57` specifies the imported post-conditioning star test: uniform eligible copied `U`, transverse center `K`, independent ordered leaves, and uniform clique representatives. `ActualOriginalPostPaddingVerifier.originalLawFromTagged` formalizes that law independently of the tagged acceptance predicate. Its fixed legal-table score satisfies `originalScore_le_selected_add_collision`, with collision charge `(1/2)^J`.
+`paper/body.tex:793` invokes an initial uniform vertex and clique-resampled `U'_i` marginals for the honest YES union bound in equation (21). That marginal and the parameterized `1/(1-a)` legitimacy-conditioning charge still need formal connection to the full YES argument and relevant outer transfer. Existing `ActualTaggedQuestionRetainedMass` proves the ordered-row bad mass `a`, `goodMass=1-a`, and a bounded inverse under padding hypotheses; it does not itself finish the manuscript's YES or outer-game composition.
 
-The manuscript's earlier raw sampler is described at `paper/body.tex:793` only through an initial uniform vertex, uniform resampling within its equivalence class, the marginal assertion that each `U'_i` is uniform eligible, and an illegitimacy probability `a`. It does not give a joint kernel for the initial vertex, all resampled vertices, `K`, ordered leaves, and representatives, nor a map from that raw tuple to `OriginalDraw`. The projection argument at `body.tex:124-145` explicitly preserves the observed `D_i` and acceptance event while disclaiming identity of unobserved raw tuples.
+For an **alternate raw-sampler implementation** that purports to represent the same verifier, a full joint law and event map would be needed. A candidate proof would specify `rawLaw`, legitimacy `GoodRaw`, and `decode : GoodRaw -> OriginalDraw`, then show the conditioned pushforward equals `originalLawFromTagged` and that every fixed legal-table acceptance event is preserved. Uniformity of each `U'_i` alone does not imply that joint statement: independent and perfectly correlated fair pairs have the same marginals but different conjunction probabilities (`1/4` versus `1/2`). This conditional observation is not a manuscript NO prerequisite and does not justify adding an assumption to its direct star contract.
 
-The first force theorem would require a specified finite `rawLaw : FiniteLaw RawDraw`, legitimacy predicate `GoodRaw`, and `decode : {w : RawDraw // GoodRaw w} -> OriginalDraw`. For every allowed source instance, copy count, dimensions, and fixed legal predraw assignment `A`, it must prove both
-
-```
-pushforward decode (rawLaw conditioned on GoodRaw)
-  = originalLawFromTagged I copies hcenter hleaf
-
-rawAccepts A w <-> originalAccepts I copies A (decode w)
-```
-
-for every legitimate `w`. This implies equality of conditioned scores for every fixed `A`. If `a = rawLaw(not GoodRaw) < 1`, a raw failure event then has conditioned failure at most `rawFailure / (1-a)`. The available bound `a <= min(tau/100, 1/4)` gives `1/(1-a) <= 4/3`, and the manuscript conservatively charges a factor two in NO soundness. The raw-law definition, pushforward, and acceptance equivalence are absent; no numerical reduction of that remaining NO gap follows from this audit.
-
-## Why the stated marginal is insufficient
-
-The marginal statement at line 793 supports the honest-label union bound in equation (21), which only sums failure probabilities for the original and resampled blocks. It cannot transfer an arbitrary fixed-table acceptance conjunction. In a two-point toy class, let initial `V` be uniform on `{0,1}`. One kernel chooses `Y1,Y2` independently uniform in that class. Another chooses one uniform `Y` and sets `Y1=Y2=Y`. Both have uniform initial vertex and uniform individual resampled marginals. A fixed acceptance event `Y1=1 and Y2=1` has probability `1/4` under the first and `1/2` under the second. This is a counterexample to inference from the line-793 marginal alone, not a claim that the second kernel satisfies the independently sampled leaves of the post-conditioning contract at line 57. Even if independent clique representatives are read into that contract, the missing raw-to-conditioned coupling must still specify how the initial vertex, center, and leaves relate to those representatives.
-
-Existing lemmas are downstream: `ActualTaggedOrderedQuestionSourceBridge.orderedGood_pushforward` starts from legitimate ordered rows, `ActualTaggedVertexPhysicalLaw.uniform_independentChoice_pushforward` starts from sampled independent presentations, and `ActualTaggedQuestionRetainedMass` handles illegitimate ordered-row mass. None establishes the raw initial-vertex joint pushforward or raw fixed-table event transport. A constant-cardinality vertex-to-`U` fiber would prove only a marginal and is not a substitute for the missing theorem.
-
-No Lean assumption or standalone counting increment was introduced. The proved post-conditioning inequality remains `originalScore <= taggedSelectedMass + 2^-J`; extending it to the manuscript's raw initial-vertex sampler requires the joint-law theorem above.
+This note corrects the earlier classification of raw joint-law transport as the first NO blocker. It introduces no Lean theorem and changes no numerical NO bound.
