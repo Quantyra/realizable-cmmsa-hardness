@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Reduced
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Reduced
+
+#check reducedFrequency_tracePair
+#check reducedFrequency_rank
+#check reducedFourierCoeff_coordinate
+#check reducedRankProjection_coordinate
+#print axioms reducedRankProjection_coordinate

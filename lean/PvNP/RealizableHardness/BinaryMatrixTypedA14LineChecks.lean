@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+
+#check lineFrequency_tracePair
+#check lineFrequency_rank
+#check lineFourierCoeff_coordinate
+#check typedRankProjection_lineCoordinate
+#check typedLineSelected_coordinate
+#check typedLineFilter_coordinate
+#print axioms typedRankProjection_lineCoordinate
+#print axioms typedLineFilter_coordinate
