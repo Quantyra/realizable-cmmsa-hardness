@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedHyperplaneIntrinsicP
+
+open PvNP.RealizableHardness.BinaryMatrixTypedHyperplaneIntrinsicP
+
+#check hyperplaneDefiningFunctional_ker
+#check hyperplaneShiftVectorIndex
+#check hyperplaneMatrix_rankOne_shift
+#check intrinsicHyperplaneAverage_coordinate
+#check intrinsicHyperplaneP_eq_typed
+#print axioms hyperplaneDefiningFunctional_ker
+#print axioms intrinsicHyperplaneAverage_coordinate
+#print axioms intrinsicHyperplaneP_eq_typed
