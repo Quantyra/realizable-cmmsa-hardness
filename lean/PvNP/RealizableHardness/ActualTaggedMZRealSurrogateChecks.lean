@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualTaggedMZRealSurrogate
+
+open PvNP.RealizableHardness.ActualTaggedMZRealSurrogate
+
+#check surrogate_exponent_gap
+#check surrogate_exponents_exist
+#check surrogate_real_density_le_rational
+#check surrogate_rational_value_le_real
+#check composedScore_realThreshold_forces_rational_MZ_U
+#print axioms composedScore_realThreshold_forces_rational_MZ_U
