@@ -17,5 +17,7 @@ and fixed-base translation into the complex coordinate theorem. The line
 and hyperplane A15 one-step bounds are now both available on their typed
 reduced carriers. The hyperplane A14 selector/rank identity and A1 peeling
 into the iterated manuscript A15 influence bound remain open. This does
-not yet establish the tagged arbitrary-fixed-table representative-selection
-inequality or improve the numeric MZ NO-soundness gap.
+not improve the numeric MZ NO-soundness gap. The tagged arbitrary-fixed-table
+representative-selection inequality with `2^-J` class-collision charge was
+proved earlier. The original post-padding verifier-to-tagged source-law
+handoff and MZ decoder remain open.
