@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.BinaryMatrixA15CanonicalRank
+
+open PvNP.RealizableHardness.BinaryMatrixA15CanonicalRank
+
+#check hyperplaneCanonical_tracePair
+#check hyperplaneCanonical_character
+#check hyperplaneCanonical_frequency_rank
+#check hyperplaneCanonical_fourierCoeff
+#check hyperplaneCanonical_rankProjection
+
+#print axioms hyperplaneCanonical_tracePair
+#print axioms hyperplaneCanonical_fourierCoeff
+#print axioms hyperplaneCanonical_rankProjection
