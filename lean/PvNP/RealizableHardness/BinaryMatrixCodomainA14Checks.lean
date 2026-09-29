@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.BinaryMatrixCodomainA14
+
+open PvNP.RealizableHardness.BinaryMatrixCodomainA14
+
+#check pairing_transpose
+#check fourierCoeff_transpose
+#check rankProjection_transpose
+#check rankProjection_rawRestrict_hyperplaneP_eq_hyperplaneDerivative
+#print axioms rankProjection_rawRestrict_hyperplaneP_eq_hyperplaneDerivative
