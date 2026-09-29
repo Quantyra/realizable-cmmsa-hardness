@@ -357,3 +357,52 @@ inverse theorem, robust `8S`, encoded NO soundness and the conditional
 core remain open. Unverified complement-consumer and manuscript-margin
 drafts are outside this accepted scope. Classical-contract discharge and
 full manuscript consolidation also remain outstanding.
+
+### Actual binary-matrix moment transport (2026-09-29)
+
+`ActualFixedFunctionalBinaryMatrixMoment.lean` proves a coordinate-column
+transpose equivalence, the exact unconditional binary-matrix mean for
+`rawTF`, and `matrixMoment_eq_actualBinaryMatrixMoment`. The actual moment
+has one uniform shared base matrix, with the unconditional extension mean
+raised to the ordered-leaf count. The accepted `rawF` and `rawG` retain
+their zero values on deficient arrays. No sampling distribution is
+conditioned on rank.
+
+`matchingStarMass_cast_le_twice_actualBinaryMatrixMoment` consumes the
+accepted actual star-law identity and `grassmann_le_twice_moment`, for the
+same fixed functional and predraw tables. Its dimension premise `hdV`,
+positive total width `hD`, and explicit numeric rank-loss premise `hsmall`
+are retained. The selected-parameter proof of `hsmall` is not supplied by
+this increment.
+
+Frozen raw SHA-256 pins:
+
+- Main: `87CC5C417FD419E4E475DB66C209E5A8A6DA1EDE258BFA0D3532950398DA9B45`.
+- Checks: `5419EE6CA664BA8E2DE55C0CC3BC4AA02E6554B868F86BA6A7257417FC7790AB`.
+
+Direct cached Lean 4.34.0-rc2 with one thread returned exit 0 for main
+session `5243` (chunk `e02a95`, empty diagnostics) and focused Checks
+session `10350` (chunk `538247`). Both normal project oleans were exported.
+The reconstructed `LEAN_PATH` used this satellite's root build library
+and extant local package build libraries: aesop, batteries, complexitylib,
+importGraph, LeanSearchClient, mathlib, plausible, proofwidgets and Qq.
+It is not asserted to be identical to the previous captured path.
+Checks confirmed all four exported objects. The coordinate equivalence has
+exact axiom profile `[propext, Quot.sound]`; the other three exports have
+`[propext, Classical.choice, Quot.sound]`.
+
+Emitted olean SHA-256 pins, independently reverified by the root reviewer:
+
+- Main: `BD889BE1237ED64D14B22E6F8C6350B81EB6B168053B2085E2DBFB5229F59AC2`.
+- Checks: `0BF79924A15753E4F03DE71FE75835AD79D3BED89E2B108A5185E7B291563A91`.
+
+| Top-level lens | Verdict | Bounded review scope |
+| --- | --- | --- |
+| Proof-adversarial (root) | GO-WITH-NOTES | Independently read frozen source and Checks, rehashed source/objects, and verified exact coordinate sums and consumption of the accepted law and finite rank-loss comparison. |
+| Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Unconditional append draws, shared base matrix, fixed functional/tables and exact normalizers are retained. Orchestration and localized proof-hint overlap is disclosed; this is not an independent proof-author check. |
+| Non-claims boundary (separate reviewer) | GO-WITH-NOTES | The explicit `hdV`, `hD` and `hsmall` premises and missing operator/analytic applications remain visible. Final verdict follows whole Checks exit 0. |
+
+The actual single appended matrix indexed by `Fin (c+s)`, its existing
+`rankImageBoolean` lift, basis invariance and the cited analytic operator
+application remain open. This transport does not prove the analytic moment
+bound, inverse theorem, robust `8S`, NO soundness or conditional core.
