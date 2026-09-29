@@ -330,6 +330,30 @@ theorem hyperplane_witness_coordinate_shift {n d k : ℕ}
   rw [add_comm (dropLastRow (hyperplaneMatrixEquiv B H hH T)) X] at hw
   exact hw
 
+theorem hyperplane_witness_coordinate_shift_complex {n d k : ℕ}
+    {A : Submodule F (V d)} (B : Submodule F (Fin n → F))
+    (H : Submodule F B) (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → ℂ)
+    (X : BinaryMatrix (Module.finrank F H) (Module.finrank F (V d ⧸ A))) :
+    typedHyperplaneReducedWitness (k := k) B H hH T f
+      ((hyperplaneReducedMatrixEquiv H).symm X) =
+    complexHyperplaneP k
+      (fun Z => f ((hyperplaneMatrixEquiv B H hH).symm Z))
+      (rawLastRow
+        (X + dropLastRow (hyperplaneMatrixEquiv B H hH T))
+        (hyperplaneBaseRow B H hH T)) := by
+  calc
+    _ = typedHyperplaneP B H hH k f
+      ((hyperplaneMatrixEquiv B H hH).symm
+        (rawLastRow
+          (X + dropLastRow (hyperplaneMatrixEquiv B H hH T))
+          (hyperplaneBaseRow B H hH T))) :=
+        hyperplane_witness_coordinate_shift B H hH T f X
+    _ = _ := by
+      simp only [typedHyperplaneP,
+        LinearEquiv.apply_symm_apply]
+
 set_option maxHeartbeats 800000 in
 theorem typed_hyperplane_oneStep_A15_global {n d k : ℕ} {ε : ℝ}
     (A : Submodule F (V d)) (B : Submodule F (Fin n → F))

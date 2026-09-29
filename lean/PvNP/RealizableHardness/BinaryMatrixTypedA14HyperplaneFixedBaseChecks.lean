@@ -1,0 +1,21 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA14HyperplaneFixedBase
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Hyperplane
+open PvNP.RealizableHardness.BinaryMatrixTypedA14HyperplaneReduced
+open PvNP.RealizableHardness.BinaryMatrixTypedA14HyperplaneFixedBase
+
+#check hyperplaneFrequency_tracePair
+#check hyperplaneFrequency_rank
+#check hyperplaneFourierCoeff_coordinate
+#check typedRankProjection_hyperplaneCoordinate
+#check typedHyperplaneFilter_coordinate
+#check hyperplaneReducedFrequency_tracePair
+#check hyperplaneReducedFrequency_rank
+#check hyperplaneReducedFourierCoeff_coordinate
+#check hyperplaneReducedRankProjection_coordinate
+#check typed_A14_fixedHyperplane
+
+#print axioms typedRankProjection_hyperplaneCoordinate
+#print axioms typedHyperplaneFilter_coordinate
+#print axioms hyperplaneReducedRankProjection_coordinate
+#print axioms typed_A14_fixedHyperplane
