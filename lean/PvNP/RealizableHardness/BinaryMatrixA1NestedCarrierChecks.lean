@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+
+open PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+
+#check nestedDomainEquiv
+#check nestedCodomainEquiv
+#check nestedCarrierEquiv
+#check nestedCarrier_apply_mk
+#check nestedCarrier_affine_base
+#print axioms nestedCarrier_apply_mk
+#print axioms nestedCarrier_affine_base
