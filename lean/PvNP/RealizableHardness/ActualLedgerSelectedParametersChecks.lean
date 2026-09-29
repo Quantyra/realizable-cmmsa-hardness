@@ -1,0 +1,20 @@
+import PvNP.RealizableHardness.ActualLedgerSelectedParameters
+
+open PvNP.RealizableHardness.ActualLedgerSelectedParameters
+
+#check selected_parameters_eventually
+#check selected_amplification_eventually
+#check selected_sigma_budget_eventually
+#check selected_gamma_small_eventually
+#check selected_sigma_ge_four_eventually
+#check selectedSigma_log_gap
+#check selectedSigma_log_ratio
+#check exists_outer_scale_and_ledger_selected_parameters
+
+#print axioms selected_parameters_eventually
+#print axioms selected_amplification_eventually
+#print axioms selected_sigma_budget_eventually
+#print axioms selected_gamma_small_eventually
+#print axioms selected_sigma_ge_four_eventually
+#print axioms selectedSigma_log_ratio
+#print axioms exists_outer_scale_and_ledger_selected_parameters

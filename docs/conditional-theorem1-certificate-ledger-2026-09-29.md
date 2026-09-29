@@ -75,8 +75,15 @@ description. This convention remains a source-alignment review note.
   passed (3222 jobs), and the separate `ActualConditionalTheorem1CoreChecks`
   passed with only `propext`, `Classical.choice`, and `Quot.sound` axioms.
 - `ActualCertifiedManuscriptParameters` proves the `/16`, `/4`, `/2` gap
-  chain and asymptotic family for its current selector. Its placeholder
-  `manuscriptSourceFloor n = n+2` must be reconciled with the actual cutoff.
+  chain and asymptotic family for its current selector, whose
+  `manuscriptSourceFloor n = n+2` is a placeholder. The separate
+  `ActualLedgerSelectedParameters` proves eventual selection, sigma budget,
+  gamma decay, four-label room, and `log σ_L/log L → 1` for every *fixed*
+  `SourceHeightBounds` ledger. It also chooses `A` after each positive real
+  `κ`, then selects a ledger and eventual input lengths. The seven ledger
+  cutoffs are explicit external numerical data; their sufficiency for the
+  inverse, robust-history, covering, posterior, maximal-count, outer-decoder,
+  and compilation source claims has not been proved.
 - `ActualTheorem1.theorem1_realizable_cmmsa` composes assumed SAT-to-source
   and source-to-CMMSA `Preserves (1/6)` maps with Cook–Levin. It is a
   conditional assembly theorem; its broad source-to-CMMSA premise is **not**
@@ -106,9 +113,10 @@ description. This convention remains a source-alignment review note.
    YES/NO control, exception repair to exact YES satisfaction, rational
    weight rounding with a polynomial common denominator, and encoded FP
    implementation. Preserve the strict NO threshold and fixed-`L` runtime.
-5. Replace `n+2` in the parameter selector by the actual fixed-parameter
-   cutoff and re-establish eventual admissibility/asymptotics for the selected
-   `m(L)`. Then connect the concrete SAT-to-outer and outer-to-CMMSA
+5. Prove that the seven externally supplied cutoff functions in the
+   ledger-selected family are sufficient for their exact source and
+   manuscript inequalities, and use that family throughout the actual
+   reduction in place of the `n+2` production placeholder. Then connect the concrete SAT-to-outer and outer-to-CMMSA
    `SeededMap` stages to `cmmsaPromise` and apply `ActualTheorem1`.
 
 Theorem 1 remains conditional until these obligations are Lean theorems with
