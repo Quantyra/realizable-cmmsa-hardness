@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualTaggedMZThresholdArithmetic
+
+open PvNP.RealizableHardness.ActualTaggedMZThresholdArithmetic
+
+#check halfValue_collision_beta_ge_eightS
+#check realExponent_halfValue_collision_beta_ge_eightS
+#check manuscript_realExponent_halfValue_collision_beta_ge_eightS
+#print axioms manuscript_realExponent_halfValue_collision_beta_ge_eightS
