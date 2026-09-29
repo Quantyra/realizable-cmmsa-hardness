@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
+
+open PvNP.RealizableHardness.ActualOrdinaryStarMatchingFiber
+open PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
+
+#check matchingStar_fibre_card
+#check matchingStarMass_sum_ge_good
+#check matchingCenterMass_sum_eq
+#check exists_weighted_matching_functional
+#check ordinary_star_selects_weighted_functional
+#print axioms matchingStar_fibre_card
+#print axioms matchingStarMass_sum_ge_good
+#print axioms matchingCenterMass_sum_eq
+#print axioms exists_weighted_matching_functional
+#print axioms ordinary_star_selects_weighted_functional

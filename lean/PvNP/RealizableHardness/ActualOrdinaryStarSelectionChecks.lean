@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualOrdinaryStarSelection
+
+open PvNP.RealizableHardness.ActualOrdinaryStarSelection
+
+#check starDensity_eq_acceptanceMass
+#check ordinary_good_mass_gt_half
+#print axioms starDensity_eq_acceptanceMass
+#print axioms ordinary_good_mass_gt_half
