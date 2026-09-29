@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+
+#check carrierMatrix_mulVec
+#check mem_coordinate_fibre_iff
+#check coordinate_fibre_image
+#check coordinate_fibre_energy
+#check coordinate_order
+#check coordinate_typedOfCoordinate
+#print axioms coordinate_fibre_energy
+#print axioms coordinate_order
+#print axioms coordinate_typedOfCoordinate
