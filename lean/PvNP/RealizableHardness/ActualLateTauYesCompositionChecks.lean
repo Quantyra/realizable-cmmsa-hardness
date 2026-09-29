@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualLateTauYesComposition
+
+open PvNP.RealizableHardness.ActualLateTauYesComposition
+
+#check badBlocks_mass_le
+#check conditioned_yes_failure_le
+#check conditioned_goodBlocks_probability_gt
+#print axioms badBlocks_mass_le
+#print axioms conditioned_yes_failure_le
+#print axioms conditioned_goodBlocks_probability_gt

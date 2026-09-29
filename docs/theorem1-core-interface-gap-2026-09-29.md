@@ -30,7 +30,10 @@ transverse side law. It returns **one fixed pair** `a,c` with `a+c <= r` and
 uniform `Q` mass at least `2^(-6h^2)` of the precise source decoder event
 `SourceDecodedAt` at agreement threshold
 `2^(-2(1-1000rho^2)h)/5`. The source question domain and legal-table
-alignment remain explicit proof obligations; the contract is not a theorem
+alignment remain explicit proof obligations. In particular, `SourceZoom`
+conditions on transverse leaves, while the printed MZ conclusion writes
+`Q⊆L⊆W` without restating transversality. Equality of those output laws
+is an unresolved source-alignment proof obligation. The contract is not a theorem
 about the tagged physical law or the enlarged-ambient manuscript test.
 
 **First missing force theorem:** a changed-ambient inverse and robust
@@ -41,7 +44,10 @@ is proved, but nonempty fibre equivalence, fixed-`U` legalization of the
 selected table, source question representation, and complement-to-ambient
 amplification remain open. The source ambient is 3J with a J-dimensional
 `H_U`; the manuscript's `n=2J` inverse works in a complement of `H_U` and
-is not a separate MZ 2J decoder. The actual row comparison
+is not a separate MZ 2J decoder. The robust result needs this separate
+changed-ambient inverse and amplification proof; the source contract is a
+cited input that cannot be directly instantiated at manuscript `J`.
+The actual row comparison
 currently under investigation is
 `MatrixLiftRawFactorTwoBridge.raw_fixed_row_mean_le_twice`; it is a necessary
 local step, not this full theorem. The manuscript's Lemma

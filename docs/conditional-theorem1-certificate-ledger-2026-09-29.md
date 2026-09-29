@@ -54,7 +54,9 @@ inverse and robust `8S` result at the manuscript `J`. Supplying a source
 contract inhabitant does not discharge those new obligations. The source text writes the output probability over `Q⊆L⊆W`
 without repeating transversality; the Lean `SourceZoom` conditions on
 transverse leaves, matching the defined source leaf alphabet and manuscript
-description. This convention remains a source-alignment review note.
+description. The equality of that conditioned output with the source's
+printed `Q⊆L⊆W` probability is an unresolved source-alignment proof
+obligation, not an established convention.
 
 ## Lean facts already available for the manuscript-new comparison
 
@@ -95,8 +97,10 @@ description. This convention remains a source-alignment review note.
 
 ## Remaining manuscript-new obligations before core closeout
 
-1. Prove the changed-ambient robust `8S` local decoder application from the
-   scoped MZ fixed-`U` contract, including all matrix-lift, inverse-explicit,
+1. Prove the changed-ambient robust `8S` local decoder application using a
+   separate changed-ambient inverse and amplification argument. The scoped
+   MZ fixed-`U` contract is a cited source input and cannot be directly
+   instantiated at manuscript `J`. Include all matrix-lift, inverse-explicit,
    positive-rank, posterior, and zoom comparisons needed for its exact query
    law and quantified `a,c,Q,W,g` conclusion. The current `8S` mass bound is
    only its input. Preserve arbitrary fixed legal tables and the explicit
@@ -139,6 +143,21 @@ The review table is a status record, not a route-final three-lens closeout.
 Planning review-debt story **S3126** blocks any route-final or core-certified
 claim until the missing force chain, encoded YES/NO construction, and faithful
 contract interfaces are proved and reviewed.
+
+### Late-τ YES bounded composition
+
+`ActualLateTauYesComposition` proves the `m+1` block union and legitimate-event
+conditioning bound `≤τ/75` on a finite law. Its exact per-block premise is
+`μ(legitimate ∩ badᵢ) ≤ J ε₁`; the conclusion concerns the probability that
+all blocks are good, not the actual PCP accepts event. The Checks target built
+green (3234 jobs), reporting only standard Lean axioms. The bounded three-lens
+review is recorded in `docs/late-tau-yes-composition-review-2026-09-29.md`:
+GO-WITH-NOTES for this composition and INCOMPLETE for core Theorem 1.
+Remaining YES interfaces are the external positive-error SAT-to-outer map
+after the fixed NO parameters, disjoint-copy padding with
+`a≤min(τ/100,1/4)`, joint numerator bounds for the original and all
+clique-resampled blocks, and containment of the all-good-block event in
+actual honest PCP acceptance. This changes no numeric NO-soundness bound.
 
 ### Fixed-U contract bounded review
 
