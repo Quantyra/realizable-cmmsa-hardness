@@ -1,0 +1,9 @@
+# Manuscript affine carrier and A1 boundary
+
+Date: 2026-09-28 Pacific. S3132, Appendix (A1), (A15).
+
+`BinaryMatrixActualAffineCarrier.mem_fibre_iff_exists_carrierMap` proves, for arbitrary finite binary dimensions, actual subspaces `A ≤ V`, `B ≤ W`, arbitrary base `T`, and every matrix `M`, that the intrinsic fibre predicate used by `actualGlobal_A15_fixedBase` is equivalent to existence of a linear `N : V/A → B` with `M = T + j_B N q_A`. The carrier is the manuscript's actual affine restriction, without basis choices or nonzero-dimension assumptions. The theorem is a direct consumer of the existing fixed-base A15 comparison because it closes the representation caveat in that theorem's globalness quantifier. It introduces no stronger globalness premise.
+
+This is not Appendix (A1). The first missing force theorem for iterating the fixed-base witness is **arbitrary nested hybrid-selector composition**: for `A₂ ≤ A₁`, `B₁ ≤ B₂`, and each Fourier frequency `Y`, selection by `(A₁,B₁)` iff selection by `(A₂,B₂)` and selection of the induced quotient/restricted frequency by `(A₁/A₂,B₁)`. Its proof must include the arbitrary actual quotient carriers, rank drop, and fixed-base phase `T + j_{B₂} S q_{A₂}`; the current Lean selector only covers the final coordinate line. After that, derive full derivative composition (A1), including the order-zero translation case, then peel arbitrary domain lines and codomain hyperplanes. Until then the full influence estimate (A15), A22, MZ decoder, and Theorem 1 remain open. This carrier theorem does not reduce the numeric NO-soundness gap.
+
+Verification: targeted local `lake build PvNP.RealizableHardness.BinaryMatrixActualAffineCarrierChecks` passed (2219 jobs). `#print axioms mem_fibre_iff_exists_carrierMap` reports only `propext`, `Classical.choice`, and `Quot.sound`. No `sorry`, `admit`, `native_decide`, or custom axiom occurs in the new source. No GCP connection or visible console launched.

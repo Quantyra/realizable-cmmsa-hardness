@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.BinaryMatrixActualAffineCarrier
+
+open PvNP.RealizableHardness.BinaryMatrixActualAffineCarrier
+
+#check carrierMap
+#check carrierMap_add
+#check carrierMap_mem_fibre
+#check mem_fibre_iff_exists_carrierMap
+#print axioms mem_fibre_iff_exists_carrierMap
