@@ -1,5 +1,10 @@
 # Complement pointwise verification handoff
 
+Later same-day update: the formerly pending integrated density comparison was
+kernel-checked and reviewed in `complement-density-domination-review-2026-09-29.md`.
+The unverified-bound and resource observations below describe the earlier handoff;
+the analytic inverse, robust 8S and full core remain incomplete.
+
 Status: pointwise proof built and three-lens reviewed with notes; integrated
 density comparison remains incomplete. Planning ownership: S3126/S3132, with
 existing S3126 review debt. This is a progress handoff, not route-final closeout.
