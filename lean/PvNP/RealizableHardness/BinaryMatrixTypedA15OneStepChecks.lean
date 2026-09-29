@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
+
+#check lineAdapted_apply_line
+#check lineMatrix_rawLastColumn
+#check adaptedFunctional_inverse
+#check lineMatrix_rankOne_shift
+#print axioms lineMatrix_rawLastColumn
+#print axioms adaptedFunctional_inverse
+#print axioms lineMatrix_rankOne_shift
