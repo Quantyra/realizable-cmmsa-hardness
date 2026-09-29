@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.BinaryMatrixCodomainA15
+
+open PvNP.RealizableHardness.BinaryMatrixCodomainA15
+
+#check transposeRaw_fibre
+#check upToRawSquareGlobal_transpose
+#check actualGlobal_A15_fixedCodomainHyperplane
+#print axioms actualGlobal_A15_fixedCodomainHyperplane
