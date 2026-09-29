@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualLateTauPadding
+
+namespace PvNP.RealizableHardness.ActualLateTauPaddingChecks
+
+open PvNP.RealizableHardness.ActualLateTauPadding
+
+#check exists_late_tau_padding
+#print axioms exists_late_tau_padding
+
+end PvNP.RealizableHardness.ActualLateTauPaddingChecks

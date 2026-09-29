@@ -169,3 +169,26 @@ theory, and non-claims. All three retain **NO-GO for the changed-ambient
 `8S`/core Theorem 1 claim**. The remaining source-tagged alignment obligation
 above and planning review debt S3126 remain open. This increment reduces no
 numeric NO-soundness gap.
+
+### Late-τ actual copied-row conditioning budget
+
+`ActualLateTauPadding.exists_late_tau_padding` is Lean checked for every
+fixed actual occurrence-allocation instance with `m>0`, every fixed `J`, and
+every later rational `τ>0`. It selects a fixed `T≥4` and
+`copies=actualPaddingCopies J T`, and proves for the uniform ordered copied-row
+draw that its actual illegitimate `GoodOrderedQuestion` complement mass
+`a≤τ/100`, `a≤1/4`, and legitimate mass is exactly `1−a`. This discharges the
+copied-question **conditioning budget** used in manuscript §7. The Checks
+target built green (3388 jobs) with only standard Lean axioms. Three lenses
+were GO-WITH-NOTES for this bounded padding statement and NO-GO for Equation
+(21) / core Theorem 1; see
+`docs/late-tau-tagged-padding-boundary-2026-09-29.md`.
+
+The MZ positive-error outer YES / encoded bounded-occurrence 3-Lin hardness
+result remains a visibly external source contract. The full post-padding
+verifier's original-question marginal and all `m+1` clique-resampled block
+joint failure bounds remain unproved; so does the implication from all-good
+blocks to actual honest acceptance. `taggedCopy_value` proves source optimum
+preservation separately, but typed degree preservation and an encoded
+polynomial-time copy constructor remain open. This result does not reduce the
+numeric NO-soundness gap.
