@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+
+#check actualGlobal_A15_complex_fixedLine
+#check actualGlobal_A15_complex_fixedHyperplane
+#print axioms actualGlobal_A15_complex_fixedLine
+#print axioms actualGlobal_A15_complex_fixedHyperplane
