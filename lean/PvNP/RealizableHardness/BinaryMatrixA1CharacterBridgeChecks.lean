@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+
+open PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+
+#check tracePair_matrix
+#check traceCharacter_eq_matrix_character
+#print axioms tracePair_matrix
+#print axioms traceCharacter_eq_matrix_character
