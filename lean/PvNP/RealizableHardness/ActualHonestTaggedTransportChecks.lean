@@ -1,0 +1,23 @@
+import PvNP.RealizableHardness.ActualHonestTaggedTransport
+
+open PvNP.RealizableHardness.ActualHonestTaggedTransport
+
+#check GoodOn
+#check goodOn_iff_restriction_respects
+#check tagged_threeGoodQuestions_rhs_unique
+#check tagged_domain_inf_twoEquationSpans_le
+#check tagged_exists_threeWayGluedRhs
+#check tagged_transport_coherence
+#check classSeed
+#check classRawTable
+#check classRawTable_legal
+#check transported_honest_of_goodOn
+#check classRawTable_transport_good
+#check honestOriginalAssignment
+#check honestOriginalAccepts_of_goodU
+
+#print axioms tagged_transport_coherence
+#print axioms classRawTable_legal
+#print axioms classRawTable_transport_good
+#print axioms honestOriginalAccepts_of_goodU
+#print axioms transported_honest_of_goodOn

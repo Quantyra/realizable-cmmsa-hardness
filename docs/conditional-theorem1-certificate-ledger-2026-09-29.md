@@ -159,6 +159,23 @@ after the fixed NO parameters, disjoint-copy padding with
 clique-resampled blocks, and containment of the all-good-block event in
 actual honest PCP acceptance. This changes no numeric NO-soundness bound.
 
+`ActualHonestTaggedTransport.honestOriginalAccepts_of_goodU` now proves the
+pointwise acceptance implication for the actual post-padding copied verifier:
+for every fixed occurrence instance, copy count, `J,t,h,k`, arbitrary ambient
+linear assignment `f`, and every `OriginalDraw x`, if `f` satisfies every
+copied equation in `x.U.rows`, the single globally legal predraw
+`honestOriginalAssignment I copies f` accepts `x`. The proof uses a good
+presentation per quotient class when available, valid fallback elsewhere,
+and tagged three-way transport coherence. It imposes **no goodness premise on
+sampled class representatives**. Checks passed (3262 jobs), with only standard
+Lean axioms. All three lenses are GO-WITH-NOTES for this bounded pointwise
+result and NO-GO for the PCP/core certificate; see
+`docs/honest-class-table-good-u-bridge-2026-09-29.md`. The same fixed table
+can be tested on each original or clique-resampled block, but a Lean joint
+`m+1` experiment, its actual per-block conditioned marginal bounds, and the
+transport of the outer honest assignment to this tagged functional remain
+missing. The numeric NO-soundness gap is unchanged.
+
 ### Fixed-U contract bounded review
 
 `lake build PvNP.RealizableHardness.ActualMZFixedUSourceDecoderContract`
