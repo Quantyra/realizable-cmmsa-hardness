@@ -33,3 +33,12 @@ PvNP.RealizableHardness.MatrixLiftAffineTargetChecks` passed 2,469 jobs.
 normalized factor-two, and zoom-density comparison reports only
 `[propext, Classical.choice, Quot.sound]`. The direct rank-half count is
 still pending in its separate module.
+
+## Three-lens review
+
+| Lens | Verdict | Evidence and limit |
+|------|---------|--------------------|
+| Build/audit | GO | Independent `lake build PvNP.RealizableHardness.MatrixLiftAffineTargetChecks`: 2,469 jobs, standard axioms only. |
+| Proof-adversarial | GO-WITH-NOTES | Actual ordered-column fibres, score invariance under right GL action, equal denominators, and zero deficient score are proved. `hhalf` and surjective residual map are explicit. |
+| Complexity | GO-WITH-NOTES | Matches the normalized affine-target step. Direct rank-half count, nominal-constraint normal form, and exact-budget zoom refinement remain. |
+| Non-claims | GO | Evidence confines the result to the conditional factor-two step; full matrix-lift, decoder, and numeric NO remain open. |
