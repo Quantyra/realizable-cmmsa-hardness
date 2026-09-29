@@ -34,11 +34,13 @@ source floor and therefore does not by itself certify this quantifier.
 | Scoped local decoder | MZ Theorem 4.2; fixed `U`, density at least `S=2^{-2(1-1000ρ)hm}`, `a+c≤10m/ρ`, lucky `Q` mass at least `2^{-6h²}`, and agreement `C=2^{-2(1-1000ρ²)h}/5`. Manuscript `paper/body.tex:59`. | **External at source scope only**. The changed-ambient robust `8S` application is a manuscript-new obligation, not an imported all-`J` decoder theorem. Existing `ActualTaggedFixedUDensityForce` reaches the `8S` input but does not yield the decoder conclusion. |
 | Maximal-pair counting | MZ Definition 5.4 and MZ24 revision 1 Theorem 5.26, with `δ=ρ/m`, fixed subsidiary constants, `dim V≥2^h`, dimensions/codimensions `≤10m/ρ`, threshold `B≥2^{-2(1-(ρ/m)^3)h}`, and count `≤B^{-2}2^{O_{m,ρ}(h)}`. Manuscript `paper/body.tex:61`. | **External**. The descending threshold ladder and use in changed ambient are manuscript-new. |
 | Covering | KMS Definition 4.5, Lemmas 4.6–4.7, Section 8; independent triple-deletion sampler and its joint-law conditioned advice bound, including exceptional `Q` mass. Manuscript `paper/body.tex:63`. | **External**. The posterior, vector-law and zoom-out comparisons for this parameter order remain manuscript-new. |
-| Weighted star compilation | HN Lemma 4.6; occurrence weights, repeated leaf-variable consistency, leaf bound `(m+1)R`, budget `1/Λ`, and base NO satisfaction at most `3/4` at the conservative integer gap. Manuscript `paper/body.tex:65` and Section 8. | **External only for star-to-base-formula compilation**. It does not supply AND sampling, finite-list repair, rounding, or an encoded source-to-CMMSA map. Strict `<γ_L` is obtained only downstream. |
+| Weighted star compilation | HN Definition 4.4 and Lemma 4.6; one global center/leaf partition, `m≥1`, deletion of zero-occurrence vertices, normalized occurrence weights, repeated leaf-variable consistency, leaf bound `(m+1)R`, budget `1/Λ`, exact-weight YES, monotonicity, and real-threshold base NO satisfaction at most `3/4`. Manuscript `paper/body.tex:65` and Section 8. | **Typed external finite-semantic contract** in `ActualCoreSourceContractScopes.ExternalHNWeightedStarCompiler`, uniformly over valid finite stars; no inhabitant is proved. Its `HNSourceStar` preconditions enforce the source applicability scope, and `HNCompilationConclusion` uses the actual finite `compile`/weight semantics. The polynomial-time encoded formula-distribution constructor is absent. This contract does not supply AND sampling, finite-list repair, rounding, or an encoded source-to-CMMSA map. Strict `<γ_L` is obtained only downstream. |
 
 These entries describe mathematical source contracts, not Lean axioms.
-Representing them in Lean as explicit theorem parameters with faithful types
-remains work; a broad `hSrcCmmsa` parameter would absorb manuscript-new work.
+The MZ24 count and finite-semantic HN compiler have explicit external Lean
+interfaces; faithful typing of the remaining source contracts and encoded
+interfaces remains work. A broad `hSrcCmmsa` parameter would absorb
+manuscript-new work.
 
 ## Lean facts already available for the manuscript-new comparison
 
