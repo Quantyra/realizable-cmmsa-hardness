@@ -16,6 +16,8 @@ quantifier. Applying the complex coordinate A15 hyperplane theorem gives
 
 This is the coordinate-carrier witness. Transport to the reduced typed
 carrier `Hom(V/A,H)` and the intrinsic A14 rank/selector identity remain open.
-It does not yet discharge the manuscript's iterated A15 influence bound or
-the tagged arbitrary-fixed-table representative-selection inequality.
+It does not yet discharge the manuscript's iterated A15 influence bound.
+The tagged arbitrary-fixed-table representative-selection inequality and
+its `2^-J` class-collision charge are already proved; the original
+post-padding verifier-to-tagged source-law handoff remains open.
 The numeric MZ NO-soundness gap is unchanged.
