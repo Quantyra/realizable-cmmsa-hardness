@@ -61,3 +61,16 @@ linked from an existing checkout at the matching `d9be641` commit. The
 dirty canonical builder checkout was not edited. The local full Checks
 artifact build had stopped at its final write while C: was full; the GCP
 build supplied the completed target verification.
+
+After local free space returned, an independent local
+`lake build PvNP.RealizableHardness.MatrixLiftExactBudgetZoomChecks`
+also completed successfully (2,469 jobs), with standard axioms only.
+
+## Three-lens review
+
+| Lens | Verdict | Evidence and limit |
+|------|---------|--------------------|
+| Build/audit | GO | Isolated exact-source GCP and independent local Checks both passed 2,469 jobs; scoped axioms are standard only. |
+| Proof-adversarial | GO-WITH-NOTES | Universal nonempty exact-budget zoom premise transfers by constant flag incidence, including empty smaller intervals; the result directly supplies homogeneous density. |
+| Complexity | GO-WITH-NOTES | Matches the manuscript refinement. The application must separately establish `n≥d`; arbitrary nominal affine normalization remains open. |
+| Non-claims | GO | Full matrix-lift, robust decoder, outer NO, and final exponent remain unproved. |
