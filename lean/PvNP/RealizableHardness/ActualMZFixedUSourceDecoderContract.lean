@@ -117,9 +117,12 @@ def SourceLeafTableLegal (d : Nat) (T : TaggedLeafTable I copies) : Prop :=
 
 /-- Uniform, visibly external fixed-`U` MZ Theorem 4.2 interface. The cutoff
 is selected from fixed `k,ρ` before `h`, the eligible source question `U`,
-and both tables. This concerns the source fixed-`U` transverse test law;
-it supplies no theorem comparing the manuscript's physical/selected test to
-that law and no changed-ambient inverse or robust `8S` application. Exact
+  and both tables. This interface is conservatively restricted to the
+  source PCP schedule `J = 2^(100*h^2)` in MZ v1, Section 5.1, equation (8);
+  Theorem 4.2 itself does not state this equality. Thus this interface cannot be applied
+  at the manuscript's changed `J = 2^(2^(A*h^2))`. This concerns the source
+  fixed-`U` transverse test law; it supplies no changed-ambient inverse or
+  robust `8S` application. Exact
 real powers avoid an unwarranted `ρ²h` integrality premise. -/
 structure ExternalMZFixedUSourceDecoder
     (k r : Nat) (rho : ℚ) where
@@ -131,6 +134,7 @@ structure ExternalMZFixedUSourceDecoder
   decode : ∀ {N degree : Nat}
       (I : ActualOccurrenceAllocation.Instance N degree) (copies h t J : Nat),
     heightCutoff ≤ h →
+    J = 2 ^ (100 * h ^ 2) →
     (t : ℚ) = 2 * (1 - rho) * h →
     ∀ (U : TaggedGoodU I copies J),
     Nonempty (SideCenter I copies U t) →

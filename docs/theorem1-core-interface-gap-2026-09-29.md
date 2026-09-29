@@ -14,11 +14,17 @@ then yield an existential selected table `T'` and a uniform mass of fixed
 tagged questions `U` whose `conditionalCanonicalDensity` is at least `8S`.
 The latter theorem assumes a separate physical-score lower bound; the
 composed-value-to-physical-score comparison is not supplied by it.
+`ActualTaggedMZSideDraw.conditionalCanonicalDensity_eq_side` already proves
+equality with the typed `sideConditionalDensity` for that same fixed `U,C,T'`.
 
 `ActualMZFixedUSourceDecoderContract.ExternalMZFixedUSourceDecoder.decode`
 is a **visibly external, uninhabited** MZ Theorem 4.2 source-law contract.
 For fixed `k,r,rho`, its `heightCutoff` is chosen before `h`, the eligible
-fixed `U`, and the two arbitrary legal tables `C,T`. At each such fixed `U`
+fixed `U`, and the two arbitrary legal tables `C,T`. Its `decode` field now
+is conservatively restricted to the source PCP application's schedule
+`J=2^(100h^2)` (MZ v1 Section 5.1, equation (8)); Theorem 4.2 itself
+does not state that equality. This interface cannot be instantiated at the manuscript's
+`J=2^(2^(Ah^2))`. At each source-schedule `U`
 it requires `sideConditionalDensity >= S` for the source conditioned
 transverse side law. It returns **one fixed pair** `a,c` with `a+c <= r` and
 uniform `Q` mass at least `2^(-6h^2)` of the precise source decoder event
@@ -27,12 +33,15 @@ uniform `Q` mass at least `2^(-6h^2)` of the precise source decoder event
 alignment remain explicit proof obligations; the contract is not a theorem
 about the tagged physical law or the enlarged-ambient manuscript test.
 
-**First missing force theorem:** a source-alignment and changed-ambient
-comparison for each arbitrary fixed legal table and each eligible `U` on
-which the selected tagged conditional density is at least `8S`, mapping
-that tagged law to the fixed-U source
-side law, then producing the manuscript's robust enlarged-ambient conclusion
-with one fixed `a,c` and full uniform `Q` marginal. The actual row comparison
+**First missing force theorem:** a changed-ambient inverse and robust
+application at manuscript `J`, for each arbitrary fixed legal table and
+eligible `U` whose selected tagged side density is at least `8S`, producing
+one fixed `a,c` and the full uniform `Q` marginal. The side-density equality
+is proved, but nonempty fibre equivalence, fixed-`U` legalization of the
+selected table, source question representation, and complement-to-ambient
+amplification remain open. The source ambient is 3J with a J-dimensional
+`H_U`; the manuscript's `n=2J` inverse works in a complement of `H_U` and
+is not a separate MZ 2J decoder. The actual row comparison
 currently under investigation is
 `MatrixLiftRawFactorTwoBridge.raw_fixed_row_mean_le_twice`; it is a necessary
 local step, not this full theorem. The manuscript's Lemma
