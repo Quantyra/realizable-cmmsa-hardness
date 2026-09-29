@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane
+
+open PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane
+
+#check hyperplaneCanonical_affine_base
+#check hyperplaneCanonical_fibre_iff
+#check hyperplaneCanonical_fibre_image
+#check hyperplaneCanonical_order
+#check hyperplaneCanonical_energy
+#check typed_global_iff_hyperplaneCanonical
+#check canonical_hyperplane_oneStep_A15_global
+
+#print axioms hyperplaneCanonical_affine_base
+#print axioms typed_global_iff_hyperplaneCanonical
+#print axioms canonical_hyperplane_oneStep_A15_global
