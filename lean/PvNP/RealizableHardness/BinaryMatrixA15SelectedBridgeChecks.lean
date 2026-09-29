@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.BinaryMatrixA15SelectedBridge
+
+open PvNP.RealizableHardness.BinaryMatrixA15SelectedBridge
+
+#check typedLineSelected_iff_Selected
+#check typedHyperplaneSelected_iff_Selected
+#check typedLineFilter_eq_carrierHybrid
+#check typedHyperplaneFilter_eq_carrierHybrid
+#check canonical_line_A14_selected
+#check canonical_hyperplane_A14_selected
+
+#print axioms typedLineSelected_iff_Selected
+#print axioms typedHyperplaneSelected_iff_Selected
+#print axioms canonical_line_A14_selected
+#print axioms canonical_hyperplane_A14_selected
