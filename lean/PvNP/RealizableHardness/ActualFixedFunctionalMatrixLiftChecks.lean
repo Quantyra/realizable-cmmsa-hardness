@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualFixedFunctionalMatrixLift
+
+open PvNP.RealizableHardness.ActualFixedFunctionalMatrixLift
+
+#check failed_zoom_gives_exact_bound
+#check failed_zoom_gives_nominal_pseudorandom
+#print axioms failed_zoom_gives_exact_bound
+#print axioms failed_zoom_gives_nominal_pseudorandom
