@@ -317,5 +317,48 @@ theorem typedLineAverage_coordinate {n d : ℕ}
   congr 1
   exact_mod_cast Fintype.card_congr e
 
+def typedLineIminusE {n d : ℕ} {A : Submodule F (V d)}
+    (B : Submodule F (Fin n → F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (a : ℝ) (f : ((V d ⧸ A) →ₗ[F] B) → ℂ)
+    (M : (V d ⧸ A) →ₗ[F] B) : ℂ :=
+  f M - (a : ℂ) * typedLineAverage B L hL f M
+
+theorem typedLineIminusE_coordinate {n d : ℕ}
+    {A : Submodule F (V d)} (B : Submodule F (Fin n → F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (a : ℝ) (f : ((V d ⧸ A) →ₗ[F] B) → ℂ)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    typedLineIminusE B L hL a f M =
+      complexLineIminusE a
+        (fun X => f ((lineMatrixEquiv B L hL).symm X))
+        (lineMatrixEquiv B L hL M) := by
+  simp [typedLineIminusE, complexLineIminusE,
+    typedLineAverage_coordinate]
+
+def typedLineP {n d : ℕ} {A : Submodule F (V d)}
+    (B : Submodule F (Fin n → F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (j : ℕ) (f : ((V d ⧸ A) →ₗ[F] B) → ℂ) :
+    ((V d ⧸ A) →ₗ[F] B) → ℂ :=
+  typedLineIminusE B L hL (2 ^ (j + 1))
+    (typedLineIminusE B L hL (2 ^ j) f)
+
+theorem typedLineP_coordinate {n d : ℕ}
+    {A : Submodule F (V d)} (B : Submodule F (Fin n → F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (j : ℕ) (f : ((V d ⧸ A) →ₗ[F] B) → ℂ)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    typedLineP B L hL j f M =
+      complexLineP j
+        (fun X => f ((lineMatrixEquiv B L hL).symm X))
+        (lineMatrixEquiv B L hL M) := by
+  unfold typedLineP complexLineP
+  rw [typedLineIminusE_coordinate]
+  congr 1
+  funext X
+  rw [typedLineIminusE_coordinate]
+  simp
+
 end
 end PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
