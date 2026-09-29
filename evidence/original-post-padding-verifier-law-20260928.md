@@ -11,3 +11,12 @@ Scope of the source identity: the draw begins with **uniform eligible copied `U`
 Under nonempty eligible `U`, every required center and leaf fiber nonempty, `t ≤ 2h`, `h ≤ J`, `2J ≤ (2h-t)(2J-2h)`, and `k² ≤ 2^J`, `originalScore_le_selected_add_collision` states: for every fixed legal assignment `A`, there exists one class representative selector `s`, chosen after `A` but before the verifier draw, with original score at most selected tagged mass plus `(1/2)^J`. The class-collision charge is explicit and unchanged.
 
 Targeted build: `lake build PvNP.RealizableHardness.ActualOriginalPostPaddingVerifier` green (3260 jobs). Checks records declarations and axiom output. The source-law transfer reduces the comparison gap to the tagged selected score with an additive `2^-J`; the outer MZ NO decoder and full Theorem 1 NO-soundness exponent are not proved here, so no new final numerical NO threshold is claimed.
+
+## Three-lens review
+
+| Lens | Verdict | Evidence and limit |
+|------|---------|--------------------|
+| Build/audit | GO | Independent `lake build PvNP.RealizableHardness.ActualOriginalPostPaddingVerifierChecks`: 3261 jobs; checked declarations depend only on `propext`, `Classical.choice`, and `Quot.sound`. |
+| Proof-adversarial | GO-WITH-NOTES | The normalized sequential law, legal-table event transport, `∀ A ∃ s` order, and collision loss hold. The draw begins after eligibility conditioning. |
+| Complexity | GO-WITH-NOTES | The conditioned copied-source comparison is closed; initial-vertex/clique-resampled marginal, `1/(1-a)` transfer, MZ decoder, and outer NO exponent remain open. |
+| Non-claims | GO-WITH-NOTES | Safe claim is the conditioned eligible-`U` copied verifier model to tagged selected score; no full unconditioned verifier or numerical NO theorem is claimed. |
