@@ -17,6 +17,7 @@ frequency bridge still expresses its selector in adapted coordinates. A typed
 A1 peeling iteration, MZ decoder, outer contradiction, and final NO exponent
 also remain open. This increment does not reduce the numeric NO soundness gap.
 
-Verification: targeted local Lake builds of the module and Checks target;
-`#print axioms` must show only the standard Lean axioms. No GCP build or
-visible console launch is used for this increment.
+Verification: an independent local build of the Checks target passed 2,303
+jobs. `#print axioms` for the kernel, average, and polynomial identity reported
+only `propext`, `Classical.choice`, and `Quot.sound`. No GCP build or visible
+console launch was used for this increment.
