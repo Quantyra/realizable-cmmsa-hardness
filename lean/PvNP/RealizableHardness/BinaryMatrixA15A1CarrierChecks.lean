@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.BinaryMatrixA15A1Carrier
+
+open PvNP.RealizableHardness.BinaryMatrixA15A1Carrier
+
+#check line_comap_eq_top
+#check hyperplane_comap_map_eq
+#check lineA1Input_nestedCarrier
+#check hyperplaneA1Input_nestedCarrier
+#check lineA1Input_subtype
+#check hyperplaneA1Input_subtype_comp
+#check line_A1_selected_composition
+#check hyperplane_A1_selected_composition
+
+#print axioms line_A1_selected_composition
+#print axioms hyperplane_A1_selected_composition
