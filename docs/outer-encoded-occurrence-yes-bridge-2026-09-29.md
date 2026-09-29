@@ -41,15 +41,14 @@ The module target built green (3490 jobs), and its Checks target built green
 `Classical.choice`, and `Quot.sound`; this does not prove the external MZ
 fields.
 
-**Remaining conditional dependencies:** no Lean inhabitant of
-`ExternalMZOuterSource`; fixed encoding/parser computational implementation;
-nonempty geometric fibres at the selected encoded instance and padding;
-fixed-parameter encoded runtime for occurrence allocation, copy padding,
-sampler, and final reduction; and the full NO-soundness path. The result
-reduces the YES assignment and late-padding gap, but does not complete core
-Theorem 1 or change the NO gap.
+**Remaining conditional dependencies after the initial bounded bridge:** no
+Lean inhabitant of `ExternalMZOuterSource`; fixed encoding/parser
+computational implementation; fixed-parameter encoded runtime for occurrence
+allocation, copy padding, sampler, and final reduction; and the full
+NO-soundness path. The result does not complete core Theorem 1 or change the
+NO gap.
 
-## Three-lens bounded review
+## Three-lens bounded review of the initial bridge
 
 | Lens | Verdict | Boundary |
 | --- | --- | --- |
@@ -58,3 +57,32 @@ Theorem 1 or change the NO gap.
 | Non-claims boundary | **GO-WITH-NOTES** | The `τ/75` result is for the declared conditioned draw under explicit fibre hypotheses. The scalar probability product is not a common raw joint-event identity. Core Theorem 1 remains **INCOMPLETE**, and the NO-soundness gap is unchanged. |
 
 This review closes only the bounded source-to-copied YES bridge.
+
+## Combined selected-padding YES theorem
+
+The later `padded_draw_fibres` theorem uses the existing
+`ActualTaggedOrderedSampleNonempty` constructions to prove the required raw,
+eligible-question, presented-leaf, center, and leaf nonemptiness at the
+**actual selected** `T≥4`. It also proves positive copy and copied-row
+counts. Its only dimension guards are `t≤2h` and `h≤J`; the encoded source
+has positive row count by construction. Thus geometric fibre nonemptiness is
+no longer an external premise for this YES chain.
+
+`external_yes_combined_eq21` now takes a fixed, visibly external
+`ExternalMZOuterSource`, fixed `blocks,J,t,h` with `J>0`, `t≤2h`, `h≤J`, a
+3SAT YES input, and **every later** `τ>0`. It selects `ε>0` below both the
+absolute MZ gap `1-s` and `τ/[100(blocks+1)J]`, a parsed encoded 3Lin output
+`E`, an actual padding `T≥4`, and one ambient functional `f`. It proves the
+actual collision bounds `a≤τ/100` and `a≤1/4`, the exact copied
+`PositiveErrorAssignment`, and declared-draw honest-table rejection at most
+`τ/75`. The table is fixed before the draw. The theorem is a single Lean
+composition of the previously separate results. It still makes no common
+raw joint-event identity.
+
+The revised module and Checks builds passed (3490 and 3491 jobs). The combined
+theorem's axiom print lists only `propext`, `Classical.choice`, and
+`Quot.sound`. This says nothing about the existence of an
+`ExternalMZOuterSource` inhabitant. The fixed encoding/parser implementation,
+fixed-`L` encoded runtime, full reduction, and NO-soundness proof remain
+open. Core Theorem 1 is **INCOMPLETE**; the NO gap is unchanged. Three-lens
+review of this combined increment is pending.

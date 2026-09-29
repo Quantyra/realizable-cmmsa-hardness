@@ -2,6 +2,7 @@ import PvNP.RealizableHardness.ActualMZOuterSourceContract
 import PvNP.RealizableHardness.ActualOccurrenceCompleteness
 import PvNP.RealizableHardness.ActualLateTauPadding
 import PvNP.RealizableHardness.ActualCommonBlockYesComposition
+import PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty
 
 /-!
 The source output of the external MZ contract is mapped to the actual ordered
@@ -26,6 +27,8 @@ open ActualTaggedConcreteStarLaw
 open ActualTaggedPresentedSelection
 open ActualOriginalPostPaddingVerifier
 open ActualFiniteLaw
+open ActualTaggedOrderedSampleNonempty
+open ActualTaggedOrderedQuestionSourceBridge
 open scoped BigOperators
 set_option autoImplicit false
 noncomputable section
@@ -200,6 +203,47 @@ theorem exists_encoded_late_padding (E : Encoded3Lin) (J : Nat)
         1 - actualTaggedBadMass (occurrenceOfEncoded E) copies J :=
   exists_late_tau_padding (occurrenceOfEncoded E) E.rows_pos τ hτ
 
+/-- At the actual late padding, the existing dimension constructions supply
+every finite draw fibre used by the common-draw YES theorem. -/
+theorem padded_draw_fibres (E : Encoded3Lin) (J T t h : Nat)
+    (hT : 4 ≤ T) (ht : t ≤ 2 * h) (hh : h ≤ J) :
+    let I := occurrenceOfEncoded E
+    let copies := actualPaddingCopies J T
+    Nonempty (ActualOriginalOrderedPaddingLaw.RawOrdered I copies J) ∧
+    Nonempty (TaggedGoodU I copies J) ∧
+    Nonempty (TaggedPresentedLeaf I copies J h) ∧
+    (∀ U : TaggedGoodU I copies J,
+      Nonempty (TaggedCenterOver I copies t U)) ∧
+    (∀ (U : TaggedGoodU I copies J)
+      (K : TaggedCenterOver I copies t U),
+      Nonempty (TaggedLeafOver I copies h (questionOf I copies U K))) ∧
+    0 < copies ∧ 0 < Fintype.card (TaggedRow I copies) := by
+  let I := occurrenceOfEncoded E
+  let copies := actualPaddingCopies J T
+  have hcopies : 0 < copies := actualPaddingCopies_pos J T
+  have hgood : Nonempty (TaggedGoodU I copies J) :=
+    taggedGoodU_nonempty_of_padding I J T hT E.rows_pos
+  have hcenter : ∀ U : TaggedGoodU I copies J,
+      Nonempty (TaggedCenterOver I copies t U) := by
+    intro U
+    exact taggedCenterOver_nonempty I copies U (by omega)
+  have hleaf : ∀ (U : TaggedGoodU I copies J)
+      (K : TaggedCenterOver I copies t U),
+      Nonempty (TaggedLeafOver I copies h (questionOf I copies U K)) := by
+    intro U K
+    exact taggedLeafOver_nonempty I copies U K ht hh
+  let U := Classical.choice hgood
+  let K := Classical.choice (hcenter U)
+  have hpresented : Nonempty (TaggedPresentedLeaf I copies J h) :=
+    ⟨(Classical.choice (hleaf U K)).1⟩
+  let e : I.RowId := Sum.inl ⟨0, E.rows_pos⟩
+  let c : Fin copies := ⟨0, hcopies⟩
+  have hraw : Nonempty (ActualOriginalOrderedPaddingLaw.RawOrdered I copies J) :=
+    ⟨fun _ => (c, e)⟩
+  have hrow : 0 < Fintype.card (TaggedRow I copies) := by
+    exact Fintype.card_pos_iff.mpr ⟨(c, e)⟩
+  exact ⟨hraw, hgood, hpresented, hcenter, hleaf, hcopies, hrow⟩
+
 /-- The later outer YES error exists after the fixed NO gap, block count,
 repetition count, and positive target completeness error are known. -/
 theorem exists_late_outer_error (M : ExternalMZOuterSource)
@@ -299,6 +343,62 @@ theorem parsed_outer_yes_common_draw
   exact common_draw_yes_failure_le (occurrenceOfEncoded E) copies J
     hcenter hleaf ht hh hcopies E.rows_pos hJ f τ ε hτ hε.le
     hεtarget hrow hf ha
+
+/-- The actual declared law at the selected padding, with all finite fibres
+constructed from the existing tagged geometry theorems. -/
+def paddedOriginalLaw (E : Encoded3Lin) (J T t h blocks : Nat)
+    (hT : 4 ≤ T) (ht : t ≤ 2 * h) (hh : h ≤ J) :
+    FiniteLaw (OriginalDraw (occurrenceOfEncoded E)
+      (actualPaddingCopies J T) J t h blocks) := by
+  let I := occurrenceOfEncoded E
+  let copies := actualPaddingCopies J T
+  letI : Nonempty (TaggedGoodU I copies J) :=
+    taggedGoodU_nonempty_of_padding I J T hT E.rows_pos
+  exact originalLawFromTagged I copies
+    (fun U => taggedCenterOver_nonempty I copies U (by omega))
+    (fun U K => taggedLeafOver_nonempty I copies U K ht hh)
+
+/-- Fully selected conditional YES chain for a fixed external MZ contract.
+The fixed NO gap and κ belong to `M`; for every later positive τ, ε, encoded
+output E, actual padding T, and one legal predraw f are selected in order.
+The conclusion is the declared conditioned-draw Eq21 rejection bound. -/
+theorem external_yes_combined_eq21
+    (M : ExternalMZOuterSource) (blocks J t h : Nat)
+    (hJ : 0 < J) (ht : t ≤ 2 * h) (hh : h ≤ J)
+    (input : Bits) (hyes : input ∈ Complexity.SAT.ThreeSAT.language)
+    (τ : Rat) (hτ : 0 < τ) :
+    ∃ (ε : Rat) (hε : 0 < ε) (hgap : ε < 1 - M.s)
+      (E : Encoded3Lin) (T : Nat) (hT : 4 ≤ T),
+      ε ≤ outerYesError blocks J τ ∧
+      M.encoding.decode ((M.reduction ε hε hgap).map.apply input []) = some E ∧
+      let copies := actualPaddingCopies J T
+      actualTaggedBadMass (occurrenceOfEncoded E) copies J ≤ τ / 100 ∧
+      actualTaggedBadMass (occurrenceOfEncoded E) copies J ≤ (1 : Rat) / 4 ∧
+      ∃ f : TaggedAmbient (occurrenceOfEncoded E) copies →ₗ[ZMod 2] ZMod 2,
+        PositiveErrorAssignment (occurrenceOfEncoded E) copies f ε ∧
+        eventMass (paddedOriginalLaw E J T t h blocks hT ht hh)
+          (Finset.univ.filter (fun x : OriginalDraw
+            (occurrenceOfEncoded E) copies J t h blocks =>
+            ¬ originalAccepts (occurrenceOfEncoded E) copies
+              (ActualHonestTaggedTransport.honestOriginalAssignment
+                (occurrenceOfEncoded E) copies f) x)) ≤ τ / 75 := by
+  obtain ⟨ε, hε, hgap, hεtarget⟩ :=
+    exists_late_outer_error M blocks J hJ τ hτ
+  obtain ⟨E, T, hparse, hT, haτ, haquarter, _, _, _⟩ :=
+    external_yes_exists_padded_assignment M ε hε hgap input hyes J τ hτ
+  let I := occurrenceOfEncoded E
+  let copies := actualPaddingCopies J T
+  obtain ⟨hraw, hgood, hpresented, hcenter, hleaf, hcopies, hrow⟩ :=
+    padded_draw_fibres E J T t h hT ht hh
+  letI : Nonempty (ActualOriginalOrderedPaddingLaw.RawOrdered I copies J) := hraw
+  letI : Nonempty (TaggedGoodU I copies J) := hgood
+  letI : Nonempty (TaggedPresentedLeaf I copies J h) := hpresented
+  obtain ⟨f, hf, hfail⟩ := parsed_outer_yes_common_draw
+    M ε hε hgap input hyes E hparse copies J t h blocks
+    hcenter hleaf ht hh hcopies hJ τ hτ hεtarget hrow haquarter
+  refine ⟨ε, hε, hgap, E, T, hT, hεtarget, hparse,
+    haτ, haquarter, f, hf, ?_⟩
+  simpa only [paddedOriginalLaw, I, copies] using hfail
 
 end
 end ActualOuterEncodedOccurrenceYesBridge

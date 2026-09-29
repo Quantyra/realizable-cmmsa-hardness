@@ -9,13 +9,18 @@ open PvNP.RealizableHardness.ActualOuterEncodedOccurrenceYesBridge
 #check assignmentFunctional_badRows_card
 #check nearSatisfiable_positiveErrorAssignment
 #check exists_encoded_late_padding
+#check padded_draw_fibres
 #check exists_late_outer_error
 #check external_yes_to_copied_assignment
 #check external_yes_exists_padded_assignment
 #check parsed_outer_yes_common_draw
+#check paddedOriginalLaw
+#check external_yes_combined_eq21
 
 #print axioms occurrence_extension_violations_eq
 #print axioms nearSatisfiable_positiveErrorAssignment
 #print axioms exists_late_outer_error
 #print axioms external_yes_exists_padded_assignment
 #print axioms parsed_outer_yes_common_draw
+#print axioms padded_draw_fibres
+#print axioms external_yes_combined_eq21

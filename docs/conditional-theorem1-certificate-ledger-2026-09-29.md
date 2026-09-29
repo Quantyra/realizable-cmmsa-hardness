@@ -249,3 +249,29 @@ This result identifies the U marginal of the declared post-padding draw law.
 It does not prove the resampled block U laws or their joint equation-failure
 bounds, the actual all-good-block acceptance implication, or any new NO
 decoder estimate. The numeric NO-soundness gap is unchanged.
+
+### Later combined source-conditional YES certificate
+
+The entries above record their earlier bounded states. The later
+`ActualCommonBlockYesComposition` proves the actual common declared draw's
+`m+1` equation-block union bound and the fixed legal honest table's rejection
+bound `≤τ/75`, conditional on a copied positive-error assignment. The later
+`ActualOuterEncodedOccurrenceYesBridge.external_yes_combined_eq21` discharges
+that assignment and all selected-padding geometric fibre hypotheses **from
+one fixed external `ExternalMZOuterSource` inhabitant**. For fixed `blocks,J,t,h`
+with `J>0`, `t≤2h`, `h≤J`, each 3SAT YES input and each later `τ>0`, it
+selects `ε>0`, encoded output `E`, actual `T≥4`, and one fixed predraw `f`.
+It proves `ε<1-s`, `ε≤τ/[100(blocks+1)J]`, collision mass at most `τ/100`
+and `1/4`, the concrete `PositiveErrorAssignment`, and declared-draw honest
+rejection at most `τ/75`. `padded_draw_fibres` proves raw, eligible,
+presented, center and leaf nonemptiness using the existing dimension
+constructions. Checks built green (3491 jobs), with only standard Lean axioms.
+See `docs/outer-encoded-occurrence-yes-bridge-2026-09-29.md` for exact
+quantifiers and the separate initial bounded three-lens review. Review of
+this **combined** increment is pending.
+
+This is a conditional YES result, not a new inhabitant of the MZ external
+contract. The fixed encoding/parser computational implementation and
+fixed-`L` encoded runtime for the full reduction remain open. The source
+product-game observation bridge, decoder, and full NO soundness also remain
+open. Core Theorem 1 is **INCOMPLETE** and its NO gap is unchanged.
