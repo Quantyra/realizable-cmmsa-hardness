@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+
+#check complexFourierCoeff_translate
+#check complexRankProjection_translate
+#check typed_A14_fixedLine
+#print axioms complexRankProjection_translate
+#print axioms typed_A14_fixedLine
