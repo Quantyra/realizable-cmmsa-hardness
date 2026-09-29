@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Composition
+
+open PvNP.RealizableHardness.BinaryMatrixA1Composition
+
+#check ambientHybridFilter
+#check ambientAffineRestrict
+#check carrierHybridFilter
+#check carrierAffineRestrict
+#check initialDerivative_eq_restrict_hybridFilter
+#check nextDerivative_eq_restrict_hybridFilter
+#check next_initial_collapse
+#check derivative_composition_A1
+#check manuscript_A1_restrict_filter
+#print axioms initialDerivative_eq_restrict_hybridFilter
+#print axioms next_initial_collapse
+#print axioms derivative_composition_A1
+#print axioms manuscript_A1_restrict_filter
