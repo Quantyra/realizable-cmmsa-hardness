@@ -17,6 +17,12 @@ independent uniform ordinary `2h`-leaf in `A` containing `K` for each of the
 `H_U + L'_i`. The equality concerns the observed domain star and fixed-table
 acceptance, not equality of raw transverse and ordinary leaf presentations.
 
+`ordinaryComplementStarDensity` retains the copied-row right-hand-side
+checks in `fullAccepts`. In contrast, `ActualChangedAmbient8SBoundary.StarDensity`
+tests only agreement of center and leaf restrictions. The pending same-table
+bridge therefore requires actual complement density to be **at most** ordinary
+`StarDensity`; equality would require a separate row-validity justification.
+
 The proof uses a fixed-center tagged-leaf to full-domain tuple pushforward,
 the ordinary complement leaf to full-domain equivalence, exact center to
 complement incidence balance, and the pointwise observed-atom weight
