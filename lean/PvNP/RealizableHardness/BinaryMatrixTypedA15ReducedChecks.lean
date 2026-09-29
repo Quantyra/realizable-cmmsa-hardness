@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Reduced
+
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Reduced
+
+#check reducedMatrixEquiv
+#check lineSplit_mkQ_first
+#check lineAdapted_symm_cast_mkQ
+#check dropLast_lineMatrix_comp_mkQ
+#check dropLast_lineMatrix_fixed_base
+#check reducedAffineEquiv
+#print axioms dropLast_lineMatrix_fixed_base
+#print axioms reducedAffineEquiv
