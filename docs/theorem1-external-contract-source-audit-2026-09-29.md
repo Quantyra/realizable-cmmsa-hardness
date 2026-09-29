@@ -28,8 +28,10 @@ value at most `2^{−Ω(η² 2^{−r} βJ)}` when its value is at most `s₀`.
 **Lean contract boundary:** an external contract must range over an encoded
 bounded-occurrence 3-Lin source reduction and the *actual* smooth game
 strategy/value law, with one `s₀,κ` chosen before all later positive `ε₁`.
-The current repository has no complete encoded smooth-game semantic object
-and no corresponding SAT-to-outer `SeededMap`. A broad source-to-CMMSA
+`ActualMZOuterSourceContract` now types an indexed product-game law, its
+strategy value bound, and an encoded SAT-to-outer `SeededMap` as **external
+fields**. No inhabitant, fixed encoding implementation, or bridge from the
+manuscript decoder's actual observation is proved. A broad source-to-CMMSA
 `Preserves` premise would absorb the manuscript's new comparison and is not
 a cited result. The main MZ PCP theorem chooses alphabet after its positive
 errors, so it cannot supply the manuscript's inverse-alphabet late `ε₁`
