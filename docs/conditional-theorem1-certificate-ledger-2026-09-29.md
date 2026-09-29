@@ -64,7 +64,10 @@ obligation, not an established convention.
   selects one predraw representative table for an arbitrary fixed legal table
   with explicit class-collision loss. The conditioned original-score bridge
   and `ActualTaggedFixedUDensityForce.ordered_manuscript_half_value_forces_MZ_threshold_U`
-  feed the fixed-`U` robust input. They do not prove a decoder conclusion.
+  feed the fixed-`U` robust input. `ActualMZFixedUSourceDecoderContract.selectedDomainTable_sourceLegal`
+  proves that the same predraw representative table satisfies the source
+  leaf side conditions on every transverse leaf at each eligible fixed `U`.
+  These facts do not prove a decoder conclusion.
 - `ActualModifiedPcpParameterOrder` proves `βJ=Ah²` and the basic reciprocal
   exponent comparison. The new
   `ActualConditionalTheorem1Core.outerYesError_pos`,
@@ -102,9 +105,19 @@ obligation, not an established convention.
    MZ fixed-`U` contract is a cited source input and cannot be directly
    instantiated at manuscript `J`. Include all matrix-lift, inverse-explicit,
    positive-rank, posterior, and zoom comparisons needed for its exact query
-   law and quantified `a,c,Q,W,g` conclusion. The current `8S` mass bound is
-   only its input. Preserve arbitrary fixed legal tables and the explicit
-   representative-class collision charge.
+   law and quantified `a,c,Q,W,g` conclusion. Precisely: for each fixed
+   `m≥2`, `ρ>0`, positive `A`, and all sufficiently large admissible `h`
+   chosen after them, set `J=2^(2^(A h²))`. For every eligible fixed `U`,
+   fixed center table `C`, and predraw selected legal leaf table `T'`,
+   side-test density at least `8S`, with `S=2^{-2(1-1000ρ)hm}`, must give
+   **one fixed pair** `a,c` with `a+c≤r=10m/ρ` and at least `2^{-6h²}`
+   of uniform `a`-spaces `Q`, each admitting `W⊇Q+H_U` of codimension `c`
+   and a side-respecting linear `g` with transverse conditioned agreement
+   at least `2^{-2(1-1000ρ²)h}/5`. The current `8S` mass bound is only its
+   input. `ActualChangedAmbient8SBoundary.first_inverse_witness_of_eightS`
+   assumes an all-ambient inverse and returns only one zoom, so it does not
+   establish this robust theorem. Preserve arbitrary fixed legal tables and
+   the explicit representative-class collision charge.
 2. Compose that decoder, threshold ladder, maximal counting, covering,
    vector-law correction and random extensions into a decoded outer strategy
    with success `≥2^{-10h²}`, then use the fixed-gap outer contract and the

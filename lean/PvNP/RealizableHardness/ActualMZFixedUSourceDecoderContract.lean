@@ -19,6 +19,7 @@ open PvNP.RealizableHardness.ActualTaggedOrderedQuestionSourceBridge
 open PvNP.RealizableHardness.ActualTaggedMZSideDraw
 open PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance
 open PvNP.RealizableHardness.ActualTaggedPresentedSelection
+open PvNP.RealizableHardness.ActualTaggedSelectedDecoderBridge
 open PvNP.RealizableHardness.ActualMaximalPairLadder
 open PvNP.RealizableHardness.GrassmannCounting
 open scoped BigOperators
@@ -114,6 +115,34 @@ def SourceLeafTableLegal (d : Nat) (T : TaggedLeafTable I copies) : Prop :=
               (equationVector_mem_equationSpan
                 (taggedSource I copies).support U.1 e he))⟩ =
         (taggedSource I copies).rhs e
+
+/-- A representative table selected once for all classes obeys the source
+side conditions at every transverse full leaf domain of this fixed `U`. -/
+theorem selectedDomainTable_sourceLegal {h : Nat}
+    (T : TaggedRawVertexTable I copies J h)
+    (s : TaggedRepresentativeChoice I copies J h) :
+    SourceLeafTableLegal I copies U (2 * h)
+      (taggedSelectedDomainTable I copies T s) := by
+  intro L htrans e he
+  let E := coordinateSpace (taggedSource I copies).support U.1
+  let P : TaggedPresentedLeaf I copies J h := {
+    U := U.1
+    goodU := U.2.1
+    card_U := U.2.2
+    L := L.val.map E.subtype
+    L_le := E.map_subtype_le L.val
+    finrank_L := by rw [Submodule.finrank_map_subtype_eq, L.property]
+    transverse := htrans }
+  have hdomain : sourceLeafDomain I copies U L = P.domain I copies := rfl
+  have hvalid := taggedSelectedLeafLabel_respectsRows I copies T s P e he
+  have heval := taggedSelectedDomainTable_eval I copies T s P
+    (sourceLeafDomain I copies U L) hdomain
+    ⟨equationVector (taggedSource I copies).support e,
+      (le_sup_right : equationSpan (taggedSource I copies).support U.1 ≤
+        sourceLeafDomain I copies U L)
+        (equationVector_mem_equationSpan
+          (taggedSource I copies).support U.1 e he)⟩
+  exact heval.trans hvalid
 
 /-- Uniform, visibly external fixed-`U` MZ Theorem 4.2 interface. The cutoff
 is selected from fixed `k,ρ` before `h`, the eligible source question `U`,
