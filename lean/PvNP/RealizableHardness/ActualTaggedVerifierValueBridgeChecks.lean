@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.ActualTaggedVerifierValueBridge
+
+open PvNP.RealizableHardness.ActualTaggedVerifierValueBridge
+
+#check taggedSourceVerifierScore_eq_composedScore
+#check taggedSourceVerifierScore_le_selected_add_collision
+#check taggedSourceVerifierLegalValue_eq_composedLegalValue
+#print axioms taggedSourceVerifierScore_le_selected_add_collision
+#print axioms taggedSourceVerifierLegalValue_eq_composedLegalValue
