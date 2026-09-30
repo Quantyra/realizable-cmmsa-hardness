@@ -107,8 +107,11 @@ theorem source_tail_scalar_guards {m h J : Nat}
   have hJgap : (h : Real) ^ 2 + 1 <= (J : Real) := by exact_mod_cast hJgapNat
   have hlarge : 2 * (h : Real) ^ 2 + 2 <= 2 * (J : Real) := by
     nlinarith [hJgap]
-  have hsq : 12 * (m : Real) * (h : Real) <= (h : Real) ^ 2 :=
-    mul_le_mul_of_nonneg_right hh12_R (by positivity)
+  have hsq : 12 * (m : Real) * (h : Real) <= (h : Real) ^ 2 := by
+    calc
+      12 * (m : Real) * (h : Real) <= (h : Real) * (h : Real) :=
+        mul_le_mul_of_nonneg_right hh12_R (by positivity)
+      _ = (h : Real) ^ 2 := by ring
   have hmSqLower : (m : Real) <= (m : Real) ^ 2 := by
     nlinarith [sq_nonneg ((m : Real) - 1)]
   have hgap : 20 * (m : Real) + 2 <= (h : Real) := by
@@ -119,7 +122,7 @@ theorem source_tail_scalar_guards {m h J : Nat}
     have hhone : (1 : Real) <= (h : Real) := by
       have hpos : 1 <= h := by omega
       exact_mod_cast hpos
-    exact mul_le_mul hmone hhone (by norm_num) (by positivity)
+    simpa only [one_mul] using mul_le_mul hmone hhone (by norm_num) (by positivity)
   have hcompare :
       20 * (m : Real) * (h : Real) + 2 * (h : Real) + 3 <=
         2 * (h : Real) ^ 2 + 2 := by
