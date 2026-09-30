@@ -18,6 +18,8 @@ open PvNP.RealizableHardness.SamplerParameters
 open PvNP.RealizableHardness.ActualComplementCoordinateMassBridge
 open PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge
 open PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
+open PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
+open PvNP.RealizableHardness.GrassmannCounting
 
 noncomputable section
 
@@ -45,7 +47,7 @@ def manuscriptInverseDecayCoefficient (m T : Nat) : Real :=
 theorem fixed_rho_explicit {m : Nat} (hm : 0 < m) :
     (fixedRho m : Real) = 1 / (4000 * (m : Real) ^ 2) := by
   have h := fixedRho_eq_inverse_bOf hm
-  rw [bOf] at h
+  rw [ActualCmmsaParameterReconciliation.bOf] at h
   push_cast at h
   exact h
 
@@ -55,9 +57,11 @@ theorem selected_radius_rho_product {m : Nat} (hm : 0 < m) :
   have hr : (fixedRho m : Real) ≠ 0 := by
     have hp := fixedRho_pos hm
     exact_mod_cast (ne_of_gt hp)
-  have hcast : ((Rof m : Rat) : Real) = (Rof m : Real) := by norm_num
-  rw [← hcast] at h
-  exact (div_eq_iff hr).mp h
+  have hreal : (Rof m : Real) =
+      10 * (m : Real) / (fixedRho m : Real) := by
+    exact_mod_cast h
+  rw [hreal]
+  field_simp [hr]
 
 theorem manuscript_threshold_exponent_eq {m h : Nat} (hm : 0 < m) :
     ((2 : Real) / 3) * (Rof m : Real) *
@@ -101,8 +105,8 @@ theorem accepted_window_decay_is_negative {m k : Nat}
       field_simp
       ring
     rw [hbase]
-    nlinarith [mul_nonneg (by positivity : 0 ≤ 1 / (2 * (m : Real)))
-      (by linarith : 0 ≤ 1 - 1 / (4000 * (m : Real) ^ 2))]
+    have hfactorLe : 1 - 1 / (4000 * (m : Real) ^ 2) <= 1 := by linarith
+    exact mul_le_mul_of_nonneg_left hfactorLe (by positivity)
   have hrecip : 1 / (2 * (m : Real)) ≤ 1 / 512 := by
     rw [div_le_iff₀ (by positivity : (0 : Real) < 2 * m)]
     nlinarith
@@ -110,9 +114,15 @@ theorem accepted_window_decay_is_negative {m k : Nat}
       (m + 3 : Nat) * (m : Real) / (k : Real) >
         ((m + 3 : Nat) : Real) / 8 := by
     have hm3 : 0 < ((m + 3 : Nat) : Real) := by exact_mod_cast (by omega : 0 < m + 3)
-    exact mul_lt_mul_of_pos_left hfrac hm3
+    have hfrac' := mul_lt_mul_of_pos_left hfrac hm3
+    simpa [div_eq_mul_inv, mul_assoc] using hfrac'
   unfold acceptedInverseDecayCoefficient
-  nlinarith
+  have hthreshold : 0 <= 2 * (m : Real) * (fixedRho m : Real) := by positivity
+  have hsecond' :
+      2 * ((m + 3 : Nat) : Real) * ((m : Real) / (k : Real)) >
+        ((m + 3 : Nat) : Real) / 4 := by
+    nlinarith [hsecond]
+  nlinarith [hterm, hrecip, hsecond', hthreshold]
 
 theorem manuscript_large_dyadic_choices {m : Nat} (hm : 256 ≤ m) :
     ∃ T qT P qP : Nat,
@@ -121,16 +131,23 @@ theorem manuscript_large_dyadic_choices {m : Nat} (hm : 256 ≤ m) :
   let T := 2 ^ sourceHolderLowerBound m
   have hT : sourceHolderLowerBound m ≤ T := by
     dsimp [T]
-    exact (sourceHolderLowerBound m).lt_two_pow_self.le
+    exact (Nat.lt_two_pow_self (n := sourceHolderLowerBound m)).le
   let P := 2 ^ (m * T)
   have hP : m * T ≤ P := by
     dsimp [P]
-    exact (m * T).lt_two_pow_self.le
+    exact (Nat.lt_two_pow_self (n := m * T)).le
   have hTlarge : 8 < T := by
     dsimp [T, sourceHolderLowerBound]
     have hmpos : 0 < m := by omega
-    have hsmall : 8 < 16000 * m * (m + 3) := by omega
-    exact hsmall.trans_le (Nat.lt_two_pow_self _).le
+    have hsmall : 8 < sourceHolderLowerBound m := by
+      dsimp [sourceHolderLowerBound]
+      have hmNat : 1 <= m := by omega
+      have hm3 : 1 <= m + 3 := by omega
+      have hA : 16000 <= 16000 * m := Nat.mul_le_mul_left 16000 hmNat
+      have hB : 16000 * m <= 16000 * m * (m + 3) :=
+        Nat.mul_le_mul_left (16000 * m) hm3
+      exact (by decide : 8 < 16000).trans_le (hA.trans hB)
+    exact hsmall.trans_le (Nat.lt_two_pow_self (n := sourceHolderLowerBound m)).le
   have hPlarge : 8 * m < P := by
     calc
       8 * m < m * T := by nlinarith [hTlarge]
@@ -146,18 +163,23 @@ theorem manuscript_large_holder_decay_positive {m T : Nat}
     have hTpos : 0 < T := by
       have : 0 < sourceHolderLowerBound m := by
         dsimp [sourceHolderLowerBound]
-        omega
+        exact Nat.mul_pos (by decide) (Nat.mul_pos hmpos (by omega))
       omega
     exact_mod_cast hTpos
   have hrho := fixed_rho_explicit hmpos
   have hratio : ((m + 3 : Nat) : Real) / T ≤ (m : Real) * (fixedRho m : Real) / 4 := by
-    rw [hrho]
-    rw [div_le_iff₀ hTR]
     have hTc : (sourceHolderLowerBound m : Real) ≤ T := by exact_mod_cast hT
     dsimp [sourceHolderLowerBound] at hTc
-    rw [div_le_iff₀ (by positivity : (0 : Real) < 4 * 4000 * m)]
-    nlinarith [mul_nonneg (by positivity : 0 ≤ (m : Real))
-      (by positivity : 0 ≤ m + 3)]
+    have hRhs : (m : Real) * (fixedRho m : Real) / 4 =
+        1 / (16000 * (m : Real)) := by
+      rw [hrho]
+      field_simp
+      ring
+    rw [hRhs, div_le_iff₀ hTR, div_le_iff₀ (by positivity : (0 : Real) < 16000 * m)]
+    have hTc' : (16000 : Real) * (m : Real) * ((m + 3 : Nat) : Real) ≤ T := by
+      norm_num [sourceHolderLowerBound] at hTc
+      nlinarith
+    nlinarith
   have hrhole : (fixedRho m : Real) ≤ 1 / 4000 := by
     rw [hrho]
     have hmRlarge : (1 : Real) ≤ (m : Real) ^ 2 := by nlinarith
@@ -165,7 +187,11 @@ theorem manuscript_large_holder_decay_positive {m T : Nat}
     nlinarith
   have hTtail :
       2 * ((m + 3 : Nat) : Real) / T ≤ (m : Real) * (fixedRho m : Real) / 2 := by
-    linarith [hratio]
+    have hscaled := mul_le_mul_of_nonneg_left hratio (by norm_num : 0 <= (2 : Real))
+    calc
+      2 * ((m + 3 : Nat) : Real) / T = 2 * (((m + 3 : Nat) : Real) / T) := by ring
+      _ ≤ 2 * ((m : Real) * (fixedRho m : Real) / 4) := hscaled
+      _ = (m : Real) * (fixedRho m : Real) / 2 := by ring
   unfold manuscriptInverseDecayCoefficient
   have hbracket :
       2000 * (1 - (fixedRho m : Real)) - (5 / 2 : Real) > 0 := by
@@ -173,7 +199,7 @@ theorem manuscript_large_holder_decay_positive {m T : Nat}
   have hfactor :
       (m : Real) * (fixedRho m : Real) *
         (2000 * (1 - (fixedRho m : Real)) - (5 / 2 : Real)) > 0 :=
-    mul_pos (mul_pos hmR (by positivity : 0 < (fixedRho m : Real))) hbracket
+    mul_pos (mul_pos hmR (by rw [hrho]; positivity)) hbracket
   nlinarith [hTtail, hfactor]
 
 /-- Translating the manuscript's two dyadic scales: if the actual moment
@@ -202,13 +228,18 @@ theorem selected_holder_decay_dominates_source {m K P : Nat}
   have hKpos : 0 < K := by
     have : 0 < sourceHolderLowerBound m := by
       dsimp [sourceHolderLowerBound]
-      omega
+      exact Nat.mul_pos (by decide) (Nat.mul_pos hmpos (by omega))
     omega
   have hratio := selected_holder_ratio_le_inverse hmpos hKpos hPK
   have hmult := mul_le_mul_of_nonneg_left hratio
     (by positivity : 0 <= 2 * ((m + 3 : Nat) : Real))
   unfold manuscriptInverseDecayCoefficient acceptedInverseDecayCoefficient
-  nlinarith
+  have hratio' : (m : Real) / (P : Real) <= 1 / (K : Real) := hratio
+  have hmult' : 2 * ((m + 3 : Nat) : Real) * ((m : Real) / (P : Real)) <=
+      2 * ((m + 3 : Nat) : Real) / (K : Real) := by
+    have := hmult
+    simpa [div_eq_mul_inv, mul_assoc] using this
+  nlinarith [hmult']
 
 /-- The accepted same-center consumer with only the lower dyadic condition.
 The former `k < 8*m` premise was not used by the proof and is removed here:
@@ -231,7 +262,7 @@ theorem selected_actual_HC_spectral_moment_bound_large_dyadic
     (hs : (s : Real) = 2 * rho * h)
     (hHeight : sourceHeightCutoff rho <= h)
     (hPR : PseudorandomExact r eta (selectedF T f))
-    (hkDyadic : Exists q : Nat, k = 2 ^ q)
+    (hkDyadic : ∃ q : Nat, k = 2 ^ q)
     (hHC : HC46ExactContract)
     (hSpectral : Spectral47ExactContract sourceHeightCutoff)
     (hdim : c + s <= n) :
