@@ -67,13 +67,21 @@ theorem manuscript_threshold_exponent_eq {m h : Nat} (hm : 0 < m) :
     ((2 : Real) / 3) * (Rof m : Real) *
       (fixedRho m : Real) * (h : Real) =
         ((20 : Real) / 3) * (m : Real) * (h : Real) := by
-  rw [selected_radius_rho_product hm]
-  ring
+  calc
+    ((2 : Real) / 3) * (Rof m : Real) *
+        (fixedRho m : Real) * (h : Real) =
+      ((2 : Real) / 3) *
+        ((Rof m : Real) * (fixedRho m : Real)) * (h : Real) := by ring
+    _ = ((20 : Real) / 3) * (m : Real) * (h : Real) := by
+      rw [selected_radius_rho_product hm]
+      ring
 
 theorem manuscript_threshold_simplifies {m h : Nat} (hm : 0 < m) :
     manuscriptMomentThreshold m h =
       (2 : Real) ^ (-((20 : Real) / 3) * (m : Real) * (h : Real)) := by
-  rw [manuscriptMomentThreshold, manuscript_threshold_exponent_eq hm]
+  simpa [manuscriptMomentThreshold] using
+    congrArg (fun x : Real => (2 : Real) ^ (-x))
+      (manuscript_threshold_exponent_eq hm)
 
 theorem accepted_window_decay_is_negative {m k : Nat}
     (hm : 256 ≤ m) (hkm : 4 * m ≤ k) (hklt : k < 8 * m) :
