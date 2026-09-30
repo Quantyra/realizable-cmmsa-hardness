@@ -107,7 +107,8 @@ private theorem leafK_eq_fixedRho_height {m h : Nat}
   rw [hK, hrho]
   push_cast
   field_simp [ne_of_gt (show (0 : Real) < (m : Real) by exact_mod_cast hm)]
-  rw [← hqR, hbR]`r`n  ring
+  rw [← hqR, hbR]
+  ring
 
 private theorem manuscript_threshold_eq_dyadic {m h : Nat} (hm : 0 < m) :
     manuscriptMomentThreshold m h =
