@@ -1,6 +1,7 @@
 import Mathlib.Analysis.MeanInequalities
 import Mathlib.Analysis.MeanInequalitiesPow
 import PvNP.RealizableHardness.ActualSelectedComplementAppendMoment
+import PvNP.RealizableHardness.ActualSelectedSpectralParameters
 import PvNP.RealizableHardness.ActualLeafLabelRankImageAlignment
 import PvNP.RealizableHardness.ActualRankImageRightBasisInvariance
 import PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality
@@ -21,6 +22,9 @@ open PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality
 open PvNP.RealizableHardness.MatrixLiftNominalDirectComparison
 open PvNP.RealizableHardness.MatrixGrassmannIdentity
 open PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment
+open PvNP.RealizableHardness.ActualComplementCoordinateMassBridge
+open PvNP.RealizableHardness.ActualSelectedSpectralParameters
+open PvNP.RealizableHardness.SamplerParameters
 
 set_option autoImplicit false
 noncomputable section
@@ -1064,6 +1068,180 @@ theorem selected_actual_HC_spectral_moment_bound
     selectedActualMoment (m := m) (selectedG C f) (selectedF T f) ≤ _ := hbase
     _ ≤ _ := by
       exact add_le_add (add_le_add hscaleLow le_rfl) hscaleHigh
+
+/-! Exact marginal of the actual shared-center star law for one fixed
+functional. The leaf table below is the functional's own restriction, so
+every leaf test is true; summing the conditional leaf law leaves the uniform
+Grassmann center probability. -/
+theorem matching_center_mass_eq_grassmann_beta
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {c s m : Nat} (hdV : c + s <= Module.finrank (ZMod 2) V)
+    (C : ActualSourceStarLaw.CenterTable (V := V) c)
+    (f : Module.Dual (ZMod 2) V) :
+    (ActualOrdinaryStarWeightedSelection.matchingCenterMass
+      (V := V) (m := m) (Nat.le_add_right c s) hdV C f : Real) =
+      (∑ R : Grass V c, if centerMatchBit C f R then (1 : Real) else 0) /
+        (Fintype.card (Grass V c) : Real) := by
+  classical
+  let T0 : ActualSourceStarLaw.LeafTable (V := V) (c + s) :=
+    fun W => f.comp W.val.subtype
+  have hstar :
+      ActualOrdinaryStarWeightedSelection.matchingCenterMass
+        (V := V) (m := m) (Nat.le_add_right c s) hdV C f =
+      ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := V) (m := m) (Nat.le_add_right c s) hdV C T0 f := by
+    unfold ActualOrdinaryStarWeightedSelection.matchingCenterMass
+      ActualOrdinaryStarWeightedSelection.matchingStarMass
+    congr 1
+    ext z
+    simp [ActualOrdinaryStarMatchingFiber.MatchesStar, T0,
+      centerMatchBit, leafMatchBit]
+  have htransport :=
+    ActualFixedFunctionalStarMoment.matchingStarMass_cast_eq_grassmannExperiment
+      (c := c) (s := s) (k := m) hdV C T0 f
+  have hall (W : Grass V (c + s)) : leafMatchBit T0 f W = true := by
+    simp [T0, leafMatchBit]
+  have hmean (R : Grass V c) :
+      MatrixGrassmannIdentity.aboveMean R
+        (fun W : Grass V (c + s) => if leafMatchBit T0 f W then (1 : Real) else 0) = 1 := by
+    have hcard : (Fintype.card (MatrixGrassmannIdentity.Above R s) : Real) != 0 := by
+      exact_mod_cast Nat.ne_of_gt (MatrixGrassmannIdentity.above_card_pos R (by omega))
+    simp [MatrixGrassmannIdentity.aboveMean, hall, hcard]
+  have hexp :
+      MatrixGrassmannIdentity.grassmannExperiment
+        (fun R : Grass V c => centerMatchBit C f R)
+        (fun W : Grass V (c + s) => leafMatchBit T0 f W) m =
+      (∑ R : Grass V c, if centerMatchBit C f R then (1 : Real) else 0) /
+        (Fintype.card (Grass V c) : Real) := by
+    rw [MatrixGrassmannIdentity.grassmannExperiment_eq]
+    simp [hmean]
+  have hstarR :
+      (ActualOrdinaryStarWeightedSelection.matchingCenterMass
+        (V := V) (m := m) (Nat.le_add_right c s) hdV C f : Real) =
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := V) (m := m) (Nat.le_add_right c s) hdV C T0 f : Real) := by
+    exact_mod_cast hstar
+  calc
+    (ActualOrdinaryStarWeightedSelection.matchingCenterMass
+      (V := V) (m := m) (Nat.le_add_right c s) hdV C f : Real) =
+        (ActualOrdinaryStarWeightedSelection.matchingStarMass
+          (V := V) (m := m) (Nat.le_add_right c s) hdV C T0 f : Real) := hstarR
+    _ = MatrixGrassmannIdentity.grassmannExperiment
+        (fun R : Grass V c => centerMatchBit C f R)
+        (fun W : Grass V (c + s) => leafMatchBit T0 f W) m := htransport
+    _ = _ := hexp
+
+/-- Material selected caller: the original I/U/A/C/T/f lane is reduced to its
+actual coordinate tables and functional, then the same coordinate leaf is
+used for the exact failed-zoom PR premise and the actual shared-center moment.
+The result packages the source-selected mass comparison and exact center
+identity beside the derived HC/spectral moment bound. -/
+theorem selected_actual_material_moment_bound
+    {N m L samplerA : Nat} (I : ActualOccurrenceAllocation.Instance N m)
+    (copies : Nat)
+    (U : ActualTaggedComplementIncidence.TaggedGoodU I copies
+      (ActualCmmsaAdmissibilitySelector.blocks samplerA
+        (ActualCmmsaAdmissibilitySelector.hBlock L m)))
+    (A : ActualTaggedComplementIncidence.SideComplement I copies U)
+    (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+    (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+    (f : Module.Dual (ZMod 2) A.1)
+    (base : Nat → Nat) (sourceHeightCutoff : Real → Nat)
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max (analyticSourceHeightFloor base sourceHeightCutoff j) (j + 2)) L =
+        (m : WithBot Nat))
+    (hA : 1 ≤ samplerA) (r : Nat) (hrd : r <
+      ActualCmmsaAdmissibilitySelector.leafT m
+        (ActualCmmsaAdmissibilitySelector.hBlock L m) +
+      ActualCmmsaAdmissibilitySelector.leafK m
+        (ActualCmmsaAdmissibilitySelector.hBlock L m))
+    (e : Rat) (he : 0 ≤ e)
+    (hfail : ∀ (q : Nat)
+      (Q : Grass (CoordAmbient (ActualCmmsaAdmissibilitySelector.blocks samplerA
+        (ActualCmmsaAdmissibilitySelector.hBlock L m))) q)
+      (P : ActualMaximalPairLadder.DecodedPair Q
+        (ActualCmmsaAdmissibilitySelector.leafT m
+          (ActualCmmsaAdmissibilitySelector.hBlock L m) +
+         ActualCmmsaAdmissibilitySelector.leafK m
+          (ActualCmmsaAdmissibilitySelector.hBlock L m))),
+      q + ActualMaximalPairLadder.codim P.W = r →
+        Fintype.card (ActualMaximalPairLadder.Zoom Q P) ≠ 0 →
+          ActualMaximalPairLadder.agreement
+            (fun X => selectedCoordinateLeafTable I copies U A T X) Q P ≤ e)
+    (hHC : HC46ExactContract)
+    (hSpectral : Spectral47ExactContract sourceHeightCutoff)
+    (a : Real) (ha : 0 < a) :
+    let h := ActualCmmsaAdmissibilitySelector.hBlock L m
+    let J := ActualCmmsaAdmissibilitySelector.blocks samplerA h
+    let c := ActualCmmsaAdmissibilitySelector.leafT m h
+    let s := ActualCmmsaAdmissibilitySelector.leafK m h
+    let n := 2 * J
+    let Cc := selectedCoordinateCenterTable I copies U A C
+    let Tc := selectedCoordinateLeafTable I copies U A T
+    let fc := coordinateFunctional I copies U A f
+    ∃ k q : Nat, k = 2 ^ q ∧ 4 * m ≤ k ∧ k < 8 * m ∧
+      selectedActualMoment (m := m) (selectedG Cc fc) (selectedF Tc fc) ≤
+        (2 : Real) ^ m *
+          ((((∑ R : Grass (CoordAmbient J) c,
+              if centerMatchBit Cc fc R then (1 : Real) else 0) /
+                (Fintype.card (Grass (CoordAmbient J) c) : Real)) ^
+              (1 - ((k : Real) / (m : Real))⁻¹) *
+            (selectedLowHC46NormBound (d := c + s) (r := r) (p := k)
+              (2 * (e : Real))) ^ m) +
+        (2 : Real) ^ m * a ^ m *
+          ((∑ R : Grass (CoordAmbient J) c,
+              if centerMatchBit Cc fc R then (1 : Real) else 0) /
+                (Fintype.card (Grass (CoordAmbient J) c) : Real)) +
+        (1 / a ^ 2) *
+          (∑ i ∈ selectedHighFinIndexSet (c + s) r,
+            ((2 : Real) ^ (-(i.val : Real) * ((s : Real) - 1)) +
+              3 * (2 : Real) ^ ((i.val : Real) - (n : Real))) *
+              uniformMean (fun W =>
+                (rankProjection i.val (indicator (selectedF Tc fc)) W) ^ 2)) ∧
+      ActualSelectedComplementAppendMoment.selected_actual_append_moment
+        I copies U A C T f (analyticSourceHeightFloor base sourceHeightCutoff)
+        hsel hA ∧
+      ActualSelectedComplementAppendMoment.selected_actual_center_identity
+        I copies U A C f (analyticSourceHeightFloor base sourceHeightCutoff) hsel hA ∧
+      matching_center_mass_eq_grassmann_beta
+        (V := CoordAmbient J) (c := c) (s := s) (m := m)
+        (by simpa [CoordAmbient] using hdim) Cc fc := by
+  intro h J c s n Cc Tc fc
+  have hparams := selected_spectral_parameters base sourceHeightCutoff hsel
+  rcases hparams with
+    ⟨hm256, hh, hdiv, hhpos, hspos, hsplit, hrhoPos, hrho, hcReal, hsReal,
+      hbaseFloor, hcutFloor⟩
+  have hm : 0 < m := by omega
+  have hlarge : h ^ 2 < J := by
+    dsimp [h, J]
+    simpa only [one_mul] using
+      ((Nat.mul_le_mul_right ((ActualCmmsaAdmissibilitySelector.hBlock L m) ^ 2) hA).trans_lt
+        (SamplerParameters.numerator_lt_blocks samplerA
+          (ActualCmmsaAdmissibilitySelector.hBlock L m)))
+  have hle : h ≤ h ^ 2 := by
+    simpa [pow_two] using Nat.le_mul_of_pos_left h hhpos
+  have hdim : c + s ≤ n := by
+    dsimp [n, c, s, h]
+    omega
+  have hPR :=
+    ActualLeafLabelRankImageAlignment.actual_leaf_failed_zoom_gives_nominal_pseudorandom
+      (r := r) (d := c + s) hrd Tc fc e he hfail
+  rcases exists_dyadic_moment_exponent_window hm with ⟨k, q, hkpow, hkm, hklt⟩
+  have hMoment := selected_actual_HC_spectral_moment_bound
+    sourceHeightCutoff (C := Cc) (T := Tc) (f := fc) (a := a) ha hm hkm hklt
+    hsplit hrhoPos hcReal hsReal hcutFloor hPR hkpow hHC hSpectral hdim
+  have hMass :=
+    ActualSelectedComplementAppendMoment.selected_actual_append_moment
+      I copies U A C T f (analyticSourceHeightFloor base sourceHeightCutoff) hsel hA
+  have hCenter :=
+    ActualSelectedComplementAppendMoment.selected_actual_center_identity
+      I copies U A C f (analyticSourceHeightFloor base sourceHeightCutoff) hsel hA
+  have hBeta := matching_center_mass_eq_grassmann_beta
+    (V := CoordAmbient J) (c := c) (s := s) (m := m)
+    (by simpa [CoordAmbient] using hdim) Cc fc
+  refine ⟨k, q, hkpow, hkm, hklt, ?_, hMass, hCenter, hBeta⟩
+  simpa [selectedG, selectedF, CoordAmbient, ActualFixedFunctionalAppendOperator.CoordinateAmbient]
+    using hMoment
 
 end
 end PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
