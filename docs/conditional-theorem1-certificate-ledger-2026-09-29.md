@@ -860,3 +860,19 @@ The subsequent D157 transport source and BD7A Checks compiled in actual run 0903
 | Non-claims boundary | Not yet executed for this increment |
 
 This is a native-green candidate, not an accepted transport increment. It preserves arbitrary decoded functionals, exact Rat agreement, codimension, the complete source failed-zoom quantifiers, exact total budget, and the nonempty Zoom guard. The numerical and Margin overlays in this run were source-only snapshots and were not compiled by this gate. Original-failure integration into the selected analytic caller, numerical inverse margins, inverse/robust8S/runtime core, and classical component inhabitants remain open. Root/Sol routing-hint overlap and the existing delegation governance debt remain disclosed.
+
+### 2026-09-30: accepted bounded original decoded zoom coordinate transport
+
+This closeout supersedes the preceding pending-review status only for the frozen D157 transport and BD7A Checks. The actual 090338 native prebuild and Checks both exited 0, with the final VM state verified TERMINATED. The scoped manifest/audit verifies two source pins, two compiled object receipt pins, and five standard-only material axiom profiles; original raw evidence and historical failed runs remain preserved.
+
+| Fresh independent top-level lens | Final verdict | Artifact |
+| --- | --- | --- |
+| Proof adversarial | GO-WITH-NOTES | docs/reviews/proof-adversarial-original-zoom-2026-09-30.md |
+| Complexity theory | GO-WITH-NOTES | docs/reviews/complexity-original-zoom-2026-09-30.md |
+| Non-claims boundary | GO-WITH-NOTES | docs/reviews/nonclaims-original-zoom-2026-09-30.md |
+
+These are separately executed top-level content reviews, not Sol's contributor self-review. Root/Sol proof-routing/API hints, shared model-family limitations, and the unavailable Task/OpenCode collaboration fallback governance debt remain disclosed. The manifest records the exact review-file hashes.
+
+Accepted scope is exact transport of arbitrary decoded subspaces/functionals, containment, Zoom and AgreeingZoom carriers, codimension, and Rat agreement under the actual chosen-complement coordinate equivalence. The full source universal failure hypothesis transfers with the same table, threshold, exact budget, and nonempty guard. It does not establish that hypothesis, a new failure bound, positivity, an efficient construction, a quantitative analytic margin, or an inverse/decoder theorem.
+
+OPEN: composition with the actual selected analytic caller, source-faithful large-dyadic and beta-relative numerical simplification, the same-functional inverse witness, robust8S, numerical NO/runtime/full core, and later classical component-contract inhabitants. Numerical/Margin source-only overlays in 090338 are not accepted or compiled by this transport gate. No full manuscript certification or outward theorem expansion follows from this closeout.
