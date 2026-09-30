@@ -103,6 +103,153 @@ def sourceLowHCHeightFloor (m : Nat) : Nat :=
   1000000 * m ^ 2 *
     (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100)
 
+/-- Exact base-two exponent of the low analytic term after division by the
+same selected weighted-star signal, using beta's unconditional signal floor.
+The count-rate term is the strengthened h/(1000*m^2) estimate. -/
+def sourceLowRelativeExponent (m h P : Nat) : Real :=
+  let mm : Real := m
+  let hh : Real := h
+  let pp : Real := P
+  let rho : Real := fixedRho m
+  let alpha : Real := 1 - 2 / pp
+  let rate : Real :=
+    1 / (1000 * mm) - 2 * mm * alpha * (1 - 1000 * rho ^ 2) +
+      (mm / pp) *
+        (2 * mm * (1 - 1000 * rho) + 2 * (1 - rho) + 2 * mm * rho) +
+      2 * mm * (1 - 1000 * rho) + 2 * mm * rho
+  let const : Real :=
+    mm + mm * (500 * (sourceRankExponent m : Real) ^ 2 * pp + 2 * alpha) +
+      (mm / pp) * 2 + 2
+  const + rate * hh
+
+/-- Attempt to discharge the low contribution against the first weighted
+signal term. The exponent includes the same-f beta lower floor, the actual
+failed-zoom agreement exponent, the factor-four rational tolerance, and the
+finite rank-count loss. -/
+theorem source_low_relative_exponent_nonpos {m h : Nat}
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h) :
+    sourceLowRelativeExponent m h (sourceMomentP m) <= 0 := by
+  have hmpos : 0 < m := by omega
+  have hmR : (256 : Real) <= (m : Real) := by exact_mod_cast hm
+  have hrho := fixed_rho_explicit hmpos
+  have hT : sourceHolderLowerBound m <= sourceMomentT m := by
+    unfold sourceMomentT
+    exact (Nat.lt_two_pow_self (n := sourceHolderLowerBound m)).le
+  have hPpow : m * sourceMomentT m <= sourceMomentP m := by
+    unfold sourceMomentP
+    exact (Nat.lt_two_pow_self (n := m * sourceMomentT m)).le
+  have hPbase : 16000 * m ^ 2 * (m + 3) <= sourceMomentP m := by
+    calc
+      16000 * m ^ 2 * (m + 3) = m * sourceHolderLowerBound m := by
+        simp [sourceHolderLowerBound]
+        ring
+      _ <= m * sourceMomentT m := Nat.mul_le_mul_left m hT
+      _ <= sourceMomentP m := hPpow
+  have hPbaseR : 16000 * (m : Real) ^ 2 * ((m + 3 : Nat) : Real) <=
+      (sourceMomentP m : Real) := by exact_mod_cast hPbase
+  have hfloorR : 1000000 * (m : Real) ^ 2 *
+      (500 * (sourceRankExponent m : Real) ^ 2 *
+        (sourceMomentP m : Real) + 100) <= (h : Real) := by
+    exact_mod_cast hfloor
+  have hmRpos : 0 < (m : Real) := by positivity
+  have hPpos : 0 < (sourceMomentP m : Real) := by positivity
+  have hPsmall : (m : Real) / (sourceMomentP m : Real) <=
+      1 / (16000 * (m : Real) ^ 2) := by
+    apply (div_le_iff₀ hPpos).2
+    apply (le_div_iff₀ (by positivity : (0 : Real) < 16000 * (m : Real) ^ 2)).2
+    nlinarith [hPbaseR, hmR]
+  have h4mP : 4 * (m : Real) / (sourceMomentP m : Real) <=
+      1 / (4000 * (m : Real)) := by
+    apply (div_le_iff₀ hPpos).2
+    apply (le_div_iff₀ (by positivity : (0 : Real) < 4000 * (m : Real))).2
+    have hm1 : 1 <= (m : Real) := by exact_mod_cast (show 1 <= m by omega)
+    nlinarith [hPbaseR, hm1]
+  have hbetaRate : (m : Real) / (sourceMomentP m : Real) *
+      (2 * (m : Real) + 2) <= 1 / (4000 * (m : Real)) := by
+    have hbracket : 2 * (m : Real) + 2 <= 4 * (m : Real) := by
+      have hm1 : 1 <= (m : Real) := by exact_mod_cast (show 1 <= m by omega)
+      linarith
+    have hscaled := mul_le_mul_of_nonneg_left hbracket
+      (show 0 <= (m : Real) / (sourceMomentP m : Real) by positivity)
+    have hsmall' := mul_le_mul_of_nonneg_right hPsmall
+      (show 0 <= 4 * (m : Real) by positivity)
+    have hm1 : 1 <= (m : Real) := by exact_mod_cast (show 1 <= m by omega)
+    nlinarith [hscaled, hsmall', hm1]
+  have hrhoEq : (fixedRho m : Real) = 1 / (4000 * (m : Real) ^ 2) := hrho
+  have hsmallRho : 0 <= 1 - 1000 * (fixedRho m : Real) ^ 2 := by
+    rw [hrhoEq]
+    have hm2 : 1 <= (m : Real) ^ 2 := by nlinarith [hmR]
+    nlinarith
+  have hmain :
+      -2 * (m : Real) * (1 - 2 / (sourceMomentP m : Real)) *
+          (1 - 1000 * (fixedRho m : Real) ^ 2) +
+        2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+        2 * (m : Real) * (fixedRho m : Real) <=
+      -1998 * (m : Real) * (fixedRho m : Real) +
+        2000 * (m : Real) * (fixedRho m : Real) ^ 2 +
+        4 * (m : Real) / (sourceMomentP m : Real) := by
+    have hEq :
+        -2 * (m : Real) * (1 - 2 / (sourceMomentP m : Real)) *
+            (1 - 1000 * (fixedRho m : Real) ^ 2) +
+          2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+          2 * (m : Real) * (fixedRho m : Real) =
+        -1998 * (m : Real) * (fixedRho m : Real) +
+          2000 * (m : Real) * (fixedRho m : Real) ^ 2 +
+          4 * (m : Real) / (sourceMomentP m : Real) -
+          4000 * (m : Real) * (fixedRho m : Real) ^ 2 /
+            (sourceMomentP m : Real) := by
+      field_simp
+      ring
+    rw [hEq]
+    have hloss : 0 <= 4000 * (m : Real) * (fixedRho m : Real) ^ 2 /
+        (sourceMomentP m : Real) := by positivity
+    linarith [hloss]
+  have hrhoSq : 2000 * (m : Real) * (fixedRho m : Real) ^ 2 <=
+      1 / (8000 * (m : Real)) := by
+    rw [hrhoEq]
+    have hm2 : 1 <= (m : Real) ^ 2 := by nlinarith [hmR]
+    field_simp
+    nlinarith [hm2]
+  have hrate :
+      1 / (1000 * (m : Real)) -
+        2 * (m : Real) * (1 - 2 / (sourceMomentP m : Real)) *
+          (1 - 1000 * (fixedRho m : Real) ^ 2) +
+        (m : Real) / (sourceMomentP m : Real) *
+          (2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+            2 * (1 - (fixedRho m : Real)) +
+            2 * (m : Real) * (fixedRho m : Real)) +
+        2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+        2 * (m : Real) * (fixedRho m : Real) <= -(1 / (3 * (m : Real))) := by
+    have hbracket : 2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+        2 * (1 - (fixedRho m : Real)) +
+        2 * (m : Real) * (fixedRho m : Real) <= 2 * (m : Real) + 2 := by
+      have hrho0 : 0 <= (fixedRho m : Real) := by rw [hrhoEq]; positivity
+      nlinarith
+    have hbetaterm := mul_le_mul_of_nonneg_left hbracket
+      (show 0 <= (m : Real) / (sourceMomentP m : Real) by positivity)
+    rw [hrhoEq]
+    nlinarith [hmain, hrhoSq, h4mP, hbetaRate, hbetaterm, hmR]
+  have hconst :
+      (m : Real) +
+        (m : Real) * (500 * (sourceRankExponent m : Real) ^ 2 *
+          (sourceMomentP m : Real) +
+          2 * (1 - 2 / (sourceMomentP m : Real))) +
+        (m : Real) / (sourceMomentP m : Real) * 2 + 2 <=
+      (h : Real) / (3 * (m : Real)) := by
+    have hratio : (m : Real) / (sourceMomentP m : Real) <= (m : Real) := by
+      rw [div_le_iff₀ hPpos]
+      nlinarith [hPbaseR, hmR]
+    have hfloor' : 3 * (m : Real) *
+        ((m : Real) + (m : Real) *
+          (500 * (sourceRankExponent m : Real) ^ 2 *
+            (sourceMomentP m : Real) + 4) + 2) <= (h : Real) := by
+      nlinarith [hfloorR, hmR]
+    rw [div_le_iff₀ (by positivity : (0 : Real) < 3 * (m : Real))]
+    nlinarith [hratio, hfloor']
+  unfold sourceLowRelativeExponent
+  rw [hrho]
+  dsimp
+  nlinarith [hrate, hconst, show 0 <= (h : Real) from by positivity]
 /-- Exponent envelope for the low-HC contribution after using eta=2 times the
 manuscript threshold, alpha=(P-2)/P >= 2/3, and d=2h available ranks. -/
 def sourceTailHeightFloor (m : Nat) : Nat := max (4000 * m ^ 2) (12 * m)
