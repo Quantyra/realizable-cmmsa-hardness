@@ -56,7 +56,54 @@ theorem low_HC_height_floor_covers_rounding {m : Nat} (hm : 0 < m) :
   have hprod := Nat.mul_le_mul_left (m ^ 2) hfactor
   have hscaled : 2 * m <= 1000000 * m ^ 2 := by nlinarith
   unfold sourceLowHCHeightFloor
-  exact hscaled.trans (Nat.mul_le_mul_left 1000000 hprod)
+  calc
+    2 * m <= 1000000 * m ^ 2 := hscaled
+    _ <= 1000000 * (m ^ 2 *
+        (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100)) :=
+          Nat.mul_le_mul_left 1000000 hprod
+    _ = 1000000 * m ^ 2 *
+        (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100) := by
+          ring
+
+theorem low_HC_height_floor_dominates_square (m : Nat) :
+    (4000 * m) ^ 2 <= sourceLowHCHeightFloor m := by
+  have hfactor : 100 <= 500 * sourceRankExponent m ^ 2 *
+      sourceMomentP m + 100 := by omega
+  have hprod := Nat.mul_le_mul_left (1000000 * m ^ 2) hfactor
+  calc
+    (4000 * m) ^ 2 = 16000000 * m ^ 2 := by ring
+    _ <= 1000000 * m ^ 2 * 100 := by nlinarith
+    _ <= 1000000 * m ^ 2 *
+        (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100) := hprod
+    _ = sourceLowHCHeightFloor m := by
+      simp [sourceLowHCHeightFloor, Nat.mul_assoc]
+
+/-- The finite rank count costs only a square-root exponent. This is the
+useful count estimate for comparing the actual HC sum to the weighted signal. -/
+theorem low_level_count_le_sqrt_dyadic (h : Nat) :
+    2 * h + 1 <= 2 ^ (2 * (Nat.sqrt h + 1)) := by
+  let k := Nat.sqrt h
+  have hrough : h <= k ^ 2 + k + k := Nat.sqrt_le_add h
+  have hcount : 2 * h + 1 <= 2 * (k + 1) ^ 2 + 1 := by
+    dsimp [k] at hrough ⊢
+    nlinarith [hrough]
+  have hpow := Nat.two_mul_sq_add_one_le_two_pow_two_mul (k + 1)
+  simpa [Nat.mul_add, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
+    hcount.trans hpow
+
+theorem low_level_count_exponent_le_height_rate {m h : Nat}
+    (hm : 0 < m) (hfloor : sourceLowHCHeightFloor m <= h) :
+    (2 * (Nat.sqrt h + 1) : Real) <=
+      (h : Real) / (1000 * (m : Real)) := by
+  have hlarge : (4000 * m) ^ 2 <= h :=
+    (low_HC_height_floor_dominates_square m).trans hfloor
+  have hroot : 4000 * m <= Nat.sqrt h := (Nat.le_sqrt').2 hlarge
+  have hrootSq : Nat.sqrt h * Nat.sqrt h <= h := Nat.sqrt_le h
+  have hmul := Nat.mul_le_mul_right (Nat.sqrt h + 1) hroot
+  have hnat : 2000 * m * (Nat.sqrt h + 1) <= h := by
+    nlinarith [hmul, hrootSq]
+  rw [div_le_iff₀ (by positivity : (0 : Real) < 1000 * (m : Real))]
+  exact_mod_cast hnat
 
 /-- The actual double-exponential sampler has enough blocks to dominate the
 selected squared height whenever its fixed integer multiplier is at least one.
@@ -103,10 +150,9 @@ theorem source_signal_exponent_gap_exact {m h : Nat} :
     sourceHighErrorExponentGap sourceRankExponent
   ring
 
-/-- The explicit enlarged cutoff makes the actual large-P low-HC exponent
-smaller than the source's unconditional weighted-signal exponent. The finite
-sum estimate is separately provided by `selected_low_HC46_constant_sum_bound`;
-this lemma pays its worst-rank coefficient and level-count factors. -/
+/-- The actual agreement-scale finite coefficient estimate follows from
+`selected_low_HC46_constant_sum_bound`; the later margin comparison retains
+the beta weight and is not asserted by this component. -/
 theorem selected_actual_low_HC_sum_bound {h m : Nat} :
     selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
       (p := sourceMomentP m) (2 * manuscriptAgreementFloor m h) <=
