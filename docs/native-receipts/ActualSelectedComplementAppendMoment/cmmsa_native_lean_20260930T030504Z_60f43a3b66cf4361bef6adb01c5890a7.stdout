@@ -1,0 +1,64 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:202:39: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  y ≥ 0
+  x ≥ 0
+  w ≥ 0
+  v ≥ 0
+  u ≥ 0
+  t ≥ 0
+  t - v ≥ 1
+  t ≥ 0
+  r ≥ 0
+  p ≥ 8
+  o ≥ 0
+  l ≥ 1
+  l - o ≥ 0
+  l ≥ 1
+  l - v ≤ 0
+  l - y ≥ 1
+  2*l - r ≥ 0
+  2*l - w ≤ 0
+  4*l - r - 2*t + x ≤ 0
+  4*l - r - 2*t + u ≤ 0
+  j ≥ 0
+  i ≥ 0
+  g ≥ 0
+  g - i ≥ 1
+  g - j ≥ 1
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  b ≥ 256
+  b - d ≤ 0
+  b - l ≤ -2
+  a ≥ 1
+where
+ a := ↑samplerA
+ b := ↑m
+ d := ↑(log2nat L).sqrt
+ e := ↑(bOf m)
+ g := ↑L
+ i := ↑(q m) * ↑(m + 1)
+ j := ↑(q m * (m + 1)) * ↑(RBlock L m)
+ l := ↑(hBlock L m)
+ o := ↑((fun n => max (sourceHMin n) (n + 2)) m)
+ p := ↑(sigmaBase L m)
+ r := ↑(leafK m h)
+ t := ↑(blocks samplerA h)
+ u := ↑m * ↑(leafK m h)
+ v := ↑(h ^ 2)
+ w := ↑(Module.finrank (ZMod 2) ↥↑A)
+ x := ↑m * ↑s
+ y := ↑(blocks samplerA (hBlock L m))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:248:13: warning: Variable name `hsum` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hsum
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:249:13: warning: Variable name `hbudget` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hbudget
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`

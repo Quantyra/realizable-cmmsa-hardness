@@ -1,0 +1,61 @@
+PvNP.RealizableHardness.ActualSelectedComplementAppendMoment.selected_actual_append_moment {N m L samplerA : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m) (copies : ℕ)
+  (U :
+    PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedGoodU I copies
+      (PvNP.RealizableHardness.SamplerParameters.blocks samplerA
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)))
+  (A : PvNP.RealizableHardness.ActualTaggedComplementIncidence.SideComplement I copies U)
+  (C : PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+  (T : PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies) (f : Module.Dual (ZMod 2) ↥↑A)
+  (sourceHMin : ℕ → ℕ)
+  (hsel :
+    PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector.selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m)
+  (hA : 1 ≤ samplerA) :
+  let h := PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m;
+  let J := PvNP.RealizableHardness.SamplerParameters.blocks samplerA h;
+  let c := PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT m h;
+  let s := PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafK m h;
+  have k := m;
+  let n := 2 * J;
+  ↑(PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection.matchingStarMass ⋯ ⋯
+        (PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C)
+        (PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge.transportedLeafTable I copies U A T) f) ≤
+    2 *
+      PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.actualAppendRankImageMoment
+        (fun R =>
+          PvNP.RealizableHardness.ActualFixedFunctionalStarMoment.centerMatchBit
+            (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+            (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A f) R)
+        (fun W =>
+          PvNP.RealizableHardness.ActualFixedFunctionalStarMoment.leafMatchBit
+            (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable I copies U A T)
+            (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A f) W)
+        k
+PvNP.RealizableHardness.ActualSelectedComplementAppendMoment.selected_actual_center_identity {N m L samplerA : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N m) (copies : ℕ)
+  (U :
+    PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedGoodU I copies
+      (PvNP.RealizableHardness.SamplerParameters.blocks samplerA
+        (PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m)))
+  (A : PvNP.RealizableHardness.ActualTaggedComplementIncidence.SideComplement I copies U)
+  (C : PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+  (f : Module.Dual (ZMod 2) ↥↑A) (sourceHMin : ℕ → ℕ)
+  (hsel :
+    PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector.selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m)
+  (hA : 1 ≤ samplerA) :
+  let h := PvNP.RealizableHardness.ActualCmmsaParameterReconciliation.hBlock L m;
+  let J := PvNP.RealizableHardness.SamplerParameters.blocks samplerA h;
+  let c := PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafT m h;
+  let s := PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard.leafK m h;
+  have k := m;
+  PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection.matchingCenterMass ⋯ ⋯
+      (PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C) f =
+    PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection.matchingCenterMass ⋯ ⋯
+      (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+      (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A f)
+'PvNP.RealizableHardness.ActualSelectedComplementAppendMoment.selected_actual_append_moment' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualSelectedComplementAppendMoment.selected_actual_center_identity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

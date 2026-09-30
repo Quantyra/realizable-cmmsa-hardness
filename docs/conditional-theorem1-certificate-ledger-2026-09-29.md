@@ -719,3 +719,75 @@ Git-normalized LF final receipt SHA256 values are main
 and Checks `2B72873DDE2561D128606625B8C8BA997737538EFB61B5F139C17959056FA72E`.
 Raw working copies remain byte-exact to the original machine streams and receipt
 hashes above. Source working/blob pins are identical.
+
+## Selected actual complement mass-to-moment comparison: accepted bounded increment
+
+The frozen new module `ActualSelectedComplementAppendMoment.lean` has native
+Main and focused Checks green. All three final top-level lenses permit this
+bounded mass-to-moment comparison, not an analytic moment upper bound.
+It instantiates h=hBlock L m, J=blocks samplerA h, c=leafT m h,
+s=leafK m h, k=m and n=2J, with I:Instance N m. The supplied selector
+equality uses the max cutoff and samplerA>=1 remains explicit. The chosen actual
+complement, original tagged C/T and fixed f are preserved.
+
+The selected caller derives c+s=2h and c+m*s+2h<=2J from m+2<=h and
+h^2<blocks. With N0=c+m*s, N0<=2^N0 and power monotonicity derive the genuine
+rank-loss quotient <=1/2. No selected hsmall or final moment-bound premise is
+added. The substantive export casts the actual matching-star Rat mass to Real
+and bounds it by twice the SAME coordinate shared-center unconditional append
+rank-image moment. The second export preserves the exact Rat center mass beta
+under the same selected t/d/m ordered star law.
+
+Frozen Main source SHA256:
+`1D84E04486A9045AA6A883D8225B28C253558AD5CC0C47B3289FD817540B0D0B`.
+Checks source:
+`7BF348B0A60F143241F59F7E335F017F15D178784614EB06E122F62F30641B07`.
+Normal objects are Main
+`A4F3AD4606ED701ADC6318B95D6AB1767FB6EDC29CB0B7255CC421A8E9EF5A83`
+and Checks
+`01C103E4A98FF784B023451249C3C407DB4DD3EB32490AB4E08A026058E6AB1E`.
+
+Authenticated Main session80907/PID19104 and Checks session81574/PID9920
+both have integer native exit0, success=true, guard_terminated=false,
+unchanged source and fresh normal objects. Main output has four unused-name
+warnings only; both stderr streams are empty. Focused Checks prints two exact
+signatures and both transitive profiles are [propext, Classical.choice,
+Quot.sound], with no sorryAx. No optional tests were added.
+
+Seven automatic JSON/stdout/stderr triplets are preserved byte-for-byte under
+`docs/native-receipts/ActualSelectedComplementAppendMoment/`. The first five
+are native1 diagnostic history, not green. The last two are final Main and
+Checks. Final raw JSON hashes are Main
+`4D97B20D9B4BE6203B1ED25707A9524AD8B192D43B2A7939D41C008C168A1390`
+and Checks
+`A6EFE0CCE6A1C0ACCD4B618221C24F7C2CEFC244B648684BD9C18D6075619EDD`.
+Their Git-normalized LF hashes are respectively
+`96B097A1888EF8DCE4D7DAF517B5F9D593A6A75666B6A13E706215F8E766B9D1`
+and `DA22C03B620BEFEE952C4C00D0F74CBCB80E615EE6265EF21DD3E06B5486A151`.
+Raw stdout hashes are Main
+`4A31C0460EDE57C277229599B541C8B20E8722F9F74347B15638578A1E7F3825`
+and Checks
+`25795B83942ECB0081E98BDDF5FED24CE71B62A06254A929BC5A92CEB5076386`.
+The inspected Python helper1548 and serial native resource guard were used;
+the launch reserve and continuous stop are agent operating policy, not a user
+mathematical premise. The source-read gate ensured the final calc reused hdim
+and actualCoordinateDimensionBound instead of repeating failing arithmetic.
+
+| Top-level lens | Verdict | Bounded scope |
+| --- | --- | --- |
+| Proof-adversarial (independent reviewer) | GO-WITH-NOTES | Final frozen source and authenticated source/object/receipt/output pins independently verified; exact selected caller and derived rank-loss guards. |
+| Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Genuine selected rank-loss derivation, same C/T/f and joint law; substantial orchestration/arithmetic/name/dimension/calc proof-hint overlap disclosed, no direct proof-source edit or compiler by Sol. |
+| Non-claims boundary (independent reviewer) | GO-WITH-NOTES | Independently authenticated all pins and full proof; exact mass-to-moment comparison and Rat beta, supplied selector/sampler/U/A premises, no analytic moment upper-bound or core claim. |
+
+The supplied sourceHMin, U, chosen complement, selector equality and samplerA>=1 are not
+existence conclusions. Matching positivity, actual failed-zoom witness,
+classical HC/spectral quantitative moment estimate, inverse, robust8S,
+numerical NO, runtime, conditional/full core and final consolidation remain
+OPEN. Noncomputable coordinate transport is not an efficient strategy claim.
+Classical source-contract inhabitants remain outward obligations after core
+closure; S3126 and Task/OpenCode fallback review governance debt persists.
+The temporary reviewer thread-limit rejection was resolved by sequential
+independent reviews, not by substituting an author for the missing lens.
+Next analytic work must combine exact source-checked HC/spectral component
+fields with a genuine same-leaf level/moment consumer; no existing active Lean
+HC/spectral contract was found, and typing a field alone is not force progress.

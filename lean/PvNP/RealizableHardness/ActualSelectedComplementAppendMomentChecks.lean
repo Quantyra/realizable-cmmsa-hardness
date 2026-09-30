@@ -1,0 +1,7 @@
+import PvNP.RealizableHardness.ActualSelectedComplementAppendMoment
+
+#check PvNP.RealizableHardness.ActualSelectedComplementAppendMoment.selected_actual_append_moment
+#check PvNP.RealizableHardness.ActualSelectedComplementAppendMoment.selected_actual_center_identity
+
+#print axioms PvNP.RealizableHardness.ActualSelectedComplementAppendMoment.selected_actual_append_moment
+#print axioms PvNP.RealizableHardness.ActualSelectedComplementAppendMoment.selected_actual_center_identity

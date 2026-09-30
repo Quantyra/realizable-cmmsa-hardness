@@ -1,0 +1,272 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:42:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≤ -1
+  e ≥ 0
+  e ≥ 0
+  e + f ≥ 0
+  d ≥ 0
+  d - 2*e - 2*f ≤ 0
+  c ≥ 0
+  c - 2*e - 2*f ≤ 0
+  b ≥ 1
+  a ≥ 256
+  a - e - f ≤ -2
+where
+ a := ↑m
+ b := ↑A
+ c := ↑(leafT m h)
+ d := ↑(leafK m h)
+ e := ↑(h - h / bOf m)
+ f := ↑h / ↑(bOf m)
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:92:47: error: unsolved goals
+h J c s m : ℕ
+hh : 0 < h
+hsum : c + s = 2 * h
+hbudget : c + m * s + 2 * h ≤ 2 * J
+N0 : ℕ := c + m * s
+hNpos : 0 < 2 * h
+hnumerator : ↑N0 ≤ 2 ^ N0
+hexp : N0 + (2 * h - 1) ≤ 2 * J - 1
+hp : 2 ^ (N0 + (2 * h - 1)) ≤ 2 ^ (2 * J - 1)
+hprod : ↑N0 * 2 ^ (2 * h - 1) ≤ 2 ^ (2 * J - 1)
+he : 2 * J - 1 + 1 = 2 * J
+⊢ 2 ^ (1 + (J * 2 - 1) - 1) = 2 ^ (J * 2 - 1)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:103:9: error(lean.unknownIdentifier): Unknown identifier `TaggedGoodU`
+
+Note: It is not possible to treat `TaggedGoodU` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:105:9: error(lean.unknownIdentifier): Unknown identifier `TaggedCenterTable`
+
+Note: It is not possible to treat `TaggedCenterTable` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:105:42: error(lean.unknownIdentifier): Unknown identifier `TaggedLeafTable`
+
+Note: It is not possible to treat `TaggedLeafTable` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:116:5: error(lean.unknownIdentifier): Unknown identifier `matchingStarMass`
+
+Note: It is not possible to treat `matchingStarMass` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:134:20: error(lean.unknownIdentifier): Unknown identifier `centerMatchBit`
+
+Note: It is not possible to treat `centerMatchBit` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:136:20: error(lean.unknownIdentifier): Unknown identifier `leafMatchBit`
+
+Note: It is not possible to treat `leafMatchBit` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:145:4: error: Type mismatch
+  LE.le.trans_lt (Nat.mul_le_mul_right (hBlock L m ^ 2) hA) (numerator_lt_blocks samplerA (hBlock L m))
+has type
+  1 * hBlock L m ^ 2 < blocks samplerA (hBlock L m)
+but is expected to have type
+  hBlock L m ^ 2 < blocks samplerA (hBlock L m)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:153:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  x ≥ 0
+  w ≥ 0
+  v ≥ 0
+  v - w + x ≥ 1
+  v ≥ 0
+  v + x ≥ 1
+  u ≥ 0
+  u - v - x ≥ 0
+  t ≥ 0
+  r ≥ 0
+  r - u ≥ 1
+  p ≥ 0
+  p - 2*v - 2*x ≤ 0
+  p + 2*r - t - 4*v - 4*x ≥ 0
+  o ≥ 8
+  l ≥ 0
+  l - v - x ≤ 0
+  j ≥ 0
+  i ≥ 0
+  g ≥ 0
+  g - i ≥ 1
+  g - j ≥ 1
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  b ≥ 256
+  b - d ≤ 0
+  b - v - x ≤ -2
+  a ≥ 1
+where
+ a := ↑samplerA
+ b := ↑m
+ d := ↑(log2nat L).sqrt
+ e := ↑(bOf m)
+ g := ↑L
+ i := ↑(q m) * ↑(m + 1)
+ j := ↑(q m * (m + 1)) * ↑(RBlock L m)
+ l := ↑((fun n => max (sourceHMin n) (n + 2)) m)
+ o := ↑(sigmaBase L m)
+ p := ↑(leafK m h)
+ r := ↑(blocks samplerA h)
+ t := ↑m * ↑(leafK m h)
+ u := ↑(h ^ 2)
+ v := ↑(h - h / bOf m)
+ w := ↑(?m.74 I copies U)
+ x := ↑h / ↑(bOf m)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:166:16: error: Application type mismatch: The argument
+  hsmall
+has type
+  ↑(leafT m h + m * leafK m h) * 2 ^ (leafT m h + leafK m h - 1) / 2 ^ (2 * J) ≤ 1 / 2
+but is expected to have type
+  ↑(c + k * s) * 2 ^ (c + s - 1) / 2 ^ Module.finrank (ZMod 2) (CoordinateAmbient n) ≤ 1 / 2
+in the application
+  matchingStarMass_cast_le_twice_actualAppendRankImageMoment ?m.346 hD hsmall
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:137:58: error: unsolved goals
+N m L samplerA : ℕ
+I : Instance N m
+copies : ℕ
+U : sorry
+A : SideComplement I copies sorry
+C : sorry
+T : sorry
+f : Module.Dual (ZMod 2) ↥↑A
+sourceHMin : ℕ → ℕ
+hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m
+hA : 1 ≤ samplerA
+h : ℕ := hBlock L m
+J : ℕ := blocks samplerA h
+c : ℕ := leafT m h
+s : ℕ := leafK m h
+k : ℕ := m
+n : ℕ := 2 * J
+hs :
+  Admissible (fun n => max (sourceHMin n) (n + 2)) L m ∧
+    ∀ (n : ℕ), Admissible (fun n => max (sourceHMin n) (n + 2)) L n → n ≤ m
+hm : 256 ≤ m
+left✝⁵ : m ≤ (log2nat L).sqrt
+left✝⁴ : bOf m ≤ (log2nat L).sqrt
+left✝³ : q m * (m + 1) < L
+left✝² : q m * (m + 1) * RBlock L m + 1 ≤ L
+left✝¹ : bOf m ∣ hBlock L m
+left✝ : m ∣ hBlock L m
+hcut : (fun n => max (sourceHMin n) (n + 2)) m ≤ hBlock L m
+right✝ : 8 ≤ sigmaBase L m
+hh : m + 2 ≤ h
+hbudgetData : leafT m h + leafK m h = 2 * h ∧ leafT m h + m * leafK m h + 2 * h ≤ 2 * blocks samplerA h
+hp : h ^ 2 < J
+hpos : 0 < h
+hle : h ≤ h ^ 2
+hdim : c + s ≤ Module.finrank (ZMod 2) ↥↑A
+hD : 0 < c + s
+hbudget : c + m * s + 2 * h ≤ 2 * J
+hsmall : ↑(leafT m h + m * leafK m h) * 2 ^ (leafT m h + leafK m h - 1) / 2 ^ (2 * J) ≤ 1 / 2
+hbound :
+  ↑(ActualOrdinaryStarWeightedSelection.matchingStarMass ⋯ ⋯ (selectedCoordinateCenterTable I copies sorry A sorry)
+        (selectedCoordinateLeafTable I copies sorry A sorry) (coordinateFunctional I copies sorry A f)) ≤
+    2 *
+      actualAppendRankImageMoment
+        (fun R =>
+          ActualFixedFunctionalStarMoment.centerMatchBit (selectedCoordinateCenterTable I copies sorry A sorry)
+            (coordinateFunctional I copies sorry A f) R)
+        (fun W =>
+          ActualFixedFunctionalStarMoment.leafMatchBit (selectedCoordinateLeafTable I copies sorry A sorry)
+            (coordinateFunctional I copies sorry A f) W)
+        k
+⊢ sorry ≤ 2 * actualAppendRankImageMoment (fun R => sorry) (fun W => sorry) k
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:163:12: warning: This simp argument is unused:
+  CoordAmbient
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:187:9: error(lean.unknownIdentifier): Unknown identifier `TaggedGoodU`
+
+Note: It is not possible to treat `TaggedGoodU` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:189:9: error(lean.unknownIdentifier): Unknown identifier `TaggedCenterTable`
+
+Note: It is not possible to treat `TaggedCenterTable` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:199:5: error(lean.unknownIdentifier): Unknown identifier `matchingCenterMass`
+
+Note: It is not possible to treat `matchingCenterMass` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:215:8: error(lean.unknownIdentifier): Unknown identifier `matchingCenterMass`
+
+Note: It is not possible to treat `matchingCenterMass` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:232:4: error: Type mismatch
+  LE.le.trans_lt (Nat.mul_le_mul_right (hBlock L m ^ 2) hA) (numerator_lt_blocks samplerA (hBlock L m))
+has type
+  1 * hBlock L m ^ 2 < blocks samplerA (hBlock L m)
+but is expected to have type
+  hBlock L m ^ 2 < blocks samplerA (hBlock L m)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:240:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  u ≥ 0
+  t ≥ 0
+  r ≥ 0
+  r - t + u ≥ 1
+  r ≥ 0
+  r + u ≥ 1
+  p ≥ 0
+  p - r - u ≥ 0
+  o ≥ 0
+  o - p ≥ 1
+  n ≥ 8
+  l ≥ 0
+  l - r - u ≤ 0
+  j ≥ 0
+  i ≥ 0
+  g ≥ 0
+  g - i ≥ 1
+  g - j ≥ 1
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  b ≥ 256
+  b - d ≤ 0
+  b - r - u ≤ -2
+  a ≥ 1
+where
+ a := ↑samplerA
+ b := ↑m
+ d := ↑(log2nat L).sqrt
+ e := ↑(bOf m)
+ g := ↑L
+ i := ↑(q m) * ↑(m + 1)
+ j := ↑(q m * (m + 1)) * ↑(RBlock L m)
+ l := ↑((fun n => max (sourceHMin n) (n + 2)) m)
+ n := ↑(sigmaBase L m)
+ o := ↑(blocks samplerA h)
+ p := ↑(h ^ 2)
+ r := ↑(h - h / bOf m)
+ t := ↑(?m.39 I copies U)
+ u := ↑h / ↑(bOf m)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAppendMoment.lean:225:51: error: unsolved goals
+N m L samplerA : ℕ
+I : Instance N m
+copies : ℕ
+U : sorry
+A : SideComplement I copies sorry
+C : sorry
+f : Module.Dual (ZMod 2) ↥↑A
+sourceHMin : ℕ → ℕ
+hsel : selector (fun n => max (sourceHMin n) (n + 2)) L = ↑m
+hA : 1 ≤ samplerA
+h : ℕ := hBlock L m
+J : ℕ := blocks samplerA h
+c : ℕ := leafT m h
+s : ℕ := leafK m h
+k : ℕ := m
+hs :
+  Admissible (fun n => max (sourceHMin n) (n + 2)) L m ∧
+    ∀ (n : ℕ), Admissible (fun n => max (sourceHMin n) (n + 2)) L n → n ≤ m
+hm : 256 ≤ m
+left✝⁵ : m ≤ (log2nat L).sqrt
+left✝⁴ : bOf m ≤ (log2nat L).sqrt
+left✝³ : q m * (m + 1) < L
+left✝² : q m * (m + 1) * RBlock L m + 1 ≤ L
+left✝¹ : bOf m ∣ hBlock L m
+left✝ : m ∣ hBlock L m
+hcut : (fun n => max (sourceHMin n) (n + 2)) m ≤ hBlock L m
+right✝ : 8 ≤ sigmaBase L m
+hh : m + 2 ≤ h
+hp : h ^ 2 < J
+hpos : 0 < h
+hle : h ≤ h ^ 2
+hdim : c + s ≤ Module.finrank (ZMod 2) ↥↑A
+⊢ sorry = sorry
