@@ -1,0 +1,54 @@
+PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound {N rows : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N rows) (copies : ℕ) {J : ℕ}
+  (U : PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedGoodU I copies J) {d : ℕ}
+  (A : PvNP.RealizableHardness.ActualTaggedComplementIncidence.SideComplement I copies U)
+  (hdA : d ≤ Module.finrank (ZMod 2) ↥↑A) :
+  d ≤ Module.finrank (ZMod 2) (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.CoordAmbient J)
+PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.starLaw_pushforward_actual {N rows : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N rows) (copies : ℕ) {J : ℕ}
+  (U : PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedGoodU I copies J) {t d k : ℕ}
+  (A : PvNP.RealizableHardness.ActualTaggedComplementIncidence.SideComplement I copies U) (htd : t ≤ d)
+  (hdA : d ≤ Module.finrank (ZMod 2) ↥↑A) :
+  PvNP.RealizableHardness.ActualFiniteLaw.pushforward
+      (⇑(PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.starCoordinateEquiv I copies U A))
+      (PvNP.RealizableHardness.ActualSourceStarLaw.starLaw htd hdA) =
+    PvNP.RealizableHardness.ActualSourceStarLaw.starLaw htd ⋯
+PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.matchingStarMass_actual_coordinate {N rows : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N rows) (copies : ℕ) {J : ℕ}
+  (U : PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedGoodU I copies J) {t d m : ℕ}
+  (A : PvNP.RealizableHardness.ActualTaggedComplementIncidence.SideComplement I copies U) (htd : t ≤ d)
+  (hdA : d ≤ Module.finrank (ZMod 2) ↥↑A)
+  (C : PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+  (T : PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+  (f : Module.Dual (ZMod 2) ↥↑A) :
+  PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection.matchingStarMass htd hdA
+      (PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C)
+      (PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge.transportedLeafTable I copies U A T) f =
+    PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection.matchingStarMass htd ⋯
+      (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+      (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable I copies U A T)
+      (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A f)
+PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.matchingCenterMass_actual_coordinate {N rows : ℕ}
+  (I : PvNP.RealizableHardness.ActualOccurrenceAllocation.Instance N rows) (copies : ℕ) {J : ℕ}
+  (U : PvNP.RealizableHardness.ActualTaggedConcreteStarLaw.TaggedGoodU I copies J) {t d m : ℕ}
+  (A : PvNP.RealizableHardness.ActualTaggedComplementIncidence.SideComplement I copies U) (htd : t ≤ d)
+  (hdA : d ≤ Module.finrank (ZMod 2) ↥↑A)
+  (C : PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+  (f : Module.Dual (ZMod 2) ↥↑A) :
+  PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection.matchingCenterMass htd hdA
+      (PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C) f =
+    PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection.matchingCenterMass htd ⋯
+      (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+      (PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A f)
+'PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.starLaw_pushforward_actual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.matchingStarMass_actual_coordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualComplementCoordinateMassBridge.matchingCenterMass_actual_coordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

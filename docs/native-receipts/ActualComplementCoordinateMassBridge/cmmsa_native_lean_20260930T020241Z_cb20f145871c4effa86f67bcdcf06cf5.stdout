@@ -1,0 +1,284 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:73:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (grassCoordinateEquiv I copies U A).invFun ((grassCoordinateEquiv I copies U A).toFun ?x)
+in the target expression
+  ↑((grassCoordinateEquiv I copies U A).symm ((grassCoordinateEquiv I copies U A) K)) ≤
+    ↑((grassCoordinateEquiv I copies U A).symm ↑L)
+
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d : ℕ
+A : SideComplement I copies U
+K : Grass (↥↑A) t
+L : Extension ((grassCoordinateEquiv I copies U A) K) d
+hmap :
+  ↑((grassCoordinateEquiv I copies U A).symm ((grassCoordinateEquiv I copies U A) K)) ≤
+    ↑((grassCoordinateEquiv I copies U A).symm ↑L)
+⊢ ↑K ≤ ↑((grassCoordinateEquiv I copies U A).symm ↑L)
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (grassCoordinateEquiv I copies U A).symm ((grassCoordinateEquiv I copies U A) K)
+  has type
+    Grass (↥↑A) t
+  but is expected to have type
+    { Q // Module.finrank (ZMod 2) ↥Q = t }
+  in the application
+    ↑((grassCoordinateEquiv I copies U A).symm ((grassCoordinateEquiv I copies U A) K))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:144:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (StarTuple t d m)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:146:78: error: unsolved goals
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+T : TaggedLeafTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+e : StarTuple t d m ≃ StarTuple t d m := starCoordinateEquiv I copies U A
+C_A : CenterTable t := transportedCenterTable I copies U A C
+T_A : LeafTable d := transportedLeafTable I copies U A T
+C_E : CenterTable t := coordinateCenterTable I copies U A C_A
+T_E : LeafTable d := coordinateLeafTable I copies U A T_A
+⊢ sorry () = uniformLaw (StarTuple t d m)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:150:8: error(lean.unknownIdentifier): Unknown identifier `MatchesStar`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:149:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (StarTuple t d m)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:151:63: error(lean.unknownIdentifier): Unknown identifier `MatchesStar`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:151:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (StarTuple t d m)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:154:13: error(lean.unknownIdentifier): Unknown identifier `MatchesStar`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:151:90: error: unsolved goals
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+T : TaggedLeafTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+e : StarTuple t d m ≃ StarTuple t d m := starCoordinateEquiv I copies U A
+C_A : CenterTable t := transportedCenterTable I copies U A C
+T_A : LeafTable d := transportedLeafTable I copies U A T
+C_E : CenterTable t := coordinateCenterTable I copies U A C_A
+T_E : LeafTable d := coordinateLeafTable I copies U A T_A
+hlaw : sorry = starLaw htd hdCoord
+z : StarTuple t d m
+⊢ z ∈ sorry () ↔ sorry ()
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:156:9: error: Tactic `unfold` failed to unfold `matchingStarMass` in
+  Fintype (StarTuple t d m)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:147:10: warning: This simp argument is unused:
+  e
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [starLaw, pushforward_uniformLaw_equiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:147:22: warning: This simp argument is unused:
+  pushforward_uniformLaw_equiv
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, starLaw]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:153:15: warning: This simp argument is unused:
+  preimageEvent
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:154:10: warning: This simp argument is unused:
+  e
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [MatchesStar, C_E, T_E, coordinateCenterTable, coordinateLeafTable, coordinateFunctional,
+    coordinateSubspaceEquivFromCoord, LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:154:26: warning: This simp argument is unused:
+  C_E
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, MatchesStar, T_E, coordinateCenterTable, coordinateLeafTable, coordinateFunctional,
+    coordinateSubspaceEquivFromCoord, LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:154:31: warning: This simp argument is unused:
+  T_E
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, MatchesStar, C_E, coordinateCenterTable, coordinateLeafTable, coordinateFunctional,
+    coordinateSubspaceEquivFromCoord, LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:154:36: warning: This simp argument is unused:
+  coordinateCenterTable
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, MatchesStar, C_E, T_E, coordinateLeafTable, coordinateFunctional, coordinateSubspaceEquivFromCoord,
+    LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:154:59: warning: This simp argument is unused:
+  coordinateLeafTable
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, MatchesStar, C_E, T_E, coordinateCenterTable, coordinateFunctional, coordinateSubspaceEquivFromCoord,
+    LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:155:6: warning: This simp argument is unused:
+  coordinateFunctional
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, MatchesStar, C_E, T_E, coordinateCenterTable, coordinateLeafTable, coordinateSubspaceEquivFromCoord,
+    LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:155:28: warning: This simp argument is unused:
+  coordinateSubspaceEquivFromCoord
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, MatchesStar, C_E, T_E, coordinateCenterTable, coordinateLeafTable, coordinateFunctional,
+    LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:155:62: warning: This simp argument is unused:
+  LinearEquiv.ofSubmodules
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, MatchesStar, C_E, T_E, coordinateCenterTable, coordinateLeafTable, coordinateFunctional,
+    coordinateSubspaceEquivFromCoord]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:175:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (StarTuple t d m)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:177:78: error: unsolved goals
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+e : StarTuple t d m ≃ StarTuple t d m := starCoordinateEquiv I copies U A
+C_A : CenterTable t := transportedCenterTable I copies U A C
+C_E : CenterTable t := coordinateCenterTable I copies U A C_A
+⊢ sorry () = uniformLaw (StarTuple t d m)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:180:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (StarTuple t d m)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:182:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (StarTuple t d m)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:183:44: error: unsolved goals
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+e : StarTuple t d m ≃ StarTuple t d m := starCoordinateEquiv I copies U A
+C_A : CenterTable t := transportedCenterTable I copies U A C
+C_E : CenterTable t := coordinateCenterTable I copies U A C_A
+hlaw : sorry = starLaw htd hdCoord
+z : StarTuple t d m
+⊢ z ∈ sorry () ↔ f ∘ₗ (↑z.fst).subtype = C_A z.fst
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:188:9: error: Tactic `unfold` failed to unfold `matchingCenterMass` in
+  Fintype (StarTuple t d m)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:178:10: warning: This simp argument is unused:
+  e
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [starLaw, pushforward_uniformLaw_equiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:178:22: warning: This simp argument is unused:
+  pushforward_uniformLaw_equiv
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, starLaw]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:185:15: warning: This simp argument is unused:
+  preimageEvent
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:186:10: warning: This simp argument is unused:
+  e
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [C_E, coordinateCenterTable, coordinateFunctional, coordinateSubspaceEquivFromCoord,
+    LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:186:13: warning: This simp argument is unused:
+  C_E
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, coordinateCenterTable, coordinateFunctional, coordinateSubspaceEquivFromCoord,
+    LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:186:18: warning: This simp argument is unused:
+  coordinateCenterTable
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, C_E, coordinateFunctional, coordinateSubspaceEquivFromCoord, LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:186:41: warning: This simp argument is unused:
+  coordinateFunctional
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, C_E, coordinateCenterTable, coordinateSubspaceEquivFromCoord, LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:187:6: warning: This simp argument is unused:
+  coordinateSubspaceEquivFromCoord
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, C_E, coordinateCenterTable, coordinateFunctional, LinearEquiv.ofSubmodules]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:187:40: warning: This simp argument is unused:
+  LinearEquiv.ofSubmodules
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e, C_E, coordinateCenterTable, coordinateFunctional, coordinateSubspaceEquivFromCoord]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

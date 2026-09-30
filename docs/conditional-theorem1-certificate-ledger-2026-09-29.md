@@ -656,3 +656,66 @@ The stable source has the same working and Git blob SHA256. Git-normalized
 latest diagnostic JSON SHA256 is
 `C299E53BD7B7F5B0EF90EF80FAC2218B2DAB62A7CCE74040F41E5F95F65C2740`;
 the raw byte hash above remains the machine receipt's original pin.
+
+### Actual complement-coordinate star and center mass bridge: accepted bounded increment
+
+The WIP checkpoint above is historical. The frozen final module now proves
+`matchingStarMass_actual_coordinate` AND `matchingCenterMass_actual_coordinate`
+for the same chosen actual side complement A and original tagged C/T and f.
+The source tables are the tracked transportedCenterTable/transportedLeafTable;
+coordinate labels compose with the induced restricted inverse, and the same
+functional composes with the actual coordinate inverse. The ambient has 2J
+coordinates by sideComplement_finrank. Grass/extension equivalences preserve
+containment, and sigma/pi equivalences retain one shared center with all ordered
+leaves. Uniform-law pushforward and exact matching-event preimages give BOTH
+Rat mass identities under the SAME t/d/m joint law, including m=0 center beta.
+The coordinate dimension proof is derived by actualCoordinateDimensionBound
+from hdA; no independent coordinate guard, matching-mass premise or proxy labels
+are added. The basis choice is noncomputable proof transport, not a runtime
+algorithm claim.
+
+Frozen source SHA256: main
+`0BDD2A95493E631DAF013FB4915B985A67B45FC137CD2A6DA22B1C24BFDE5857`;
+Checks `A7803212758A4EC49F64E34D09165B7D5CB6CF57CB88B53FEB5E12AF0E252D5B`.
+Normal object SHA256: main
+`E29A8D66125F0B3F33B0497B7CBC26B65033A762A530A2849ED1D4B95AA91FA8`;
+Checks `BFC5525D84ECA1CC9E8AE217E7B2FE72512E3DC9A8584F9FFCB3F7FB4B2CF134`.
+
+Main session31098 and Checks58218 have genuine native exit0, success=true,
+unchanged source pins, fresh normal objects, guard_terminated=false and empty
+stderr. Main stdout contains six letI-style warnings only. Checks supplies four
+exact signatures and four standard-only profiles
+`[propext, Classical.choice, Quot.sound]`, excluding sorryAx transitively.
+Raw machine triplets are byte-preserved in the coordinate evidence directory:
+
+- Main `cmmsa_native_lean_20260930T023115Z_8b90c4a4a2204666b1cbc029e0f5a02a.json`, SHA256 `99833B5C37855AECCA79C9FAC97F33990FB0A169F3009DAB2BC5E47B4C3F3D4C`.
+- Checks `cmmsa_native_lean_20260930T023253Z_1ac92978f4e340a4a6ce65d134ca607d.json`, SHA256 `5A741C815164984301BB885DA12DC59A47683C90C24F1B65207532A865E54466`.
+- Checks raw stdout SHA256 `2F337C63CB8713261543E4D33A9309BC48D80BCEDB97A3A502633EBEEAD15294`.
+
+The preceding authentic failures are diagnostic history, not acceptance receipts.
+Finite-instance/namespace and dependent event proofs were repaired without
+premise changes. The center theorem uses scoped maxHeartbeats400000 after
+actual whnf timeout; the runtime memory guard is unchanged. Predicate congrArg
+transport replaced repeated dependent simplification. A mistyped expected SHA
+was refused before native launch and remains separate nonnative history.
+
+| Top-level lens | Verdict | Bounded scope |
+| --- | --- | --- |
+| Proof-adversarial (independent reviewer) | GO-WITH-NOTES | Independently hashed source, receipts, outputs and objects; no vacuity or hypothesis drift. Actual A/U/htd/hdA remain supplied. |
+| Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Same fixed C/T/f, exact joint law and both Rat masses, no conditioning or runtime claim. Orchestration and extensive proof-hint overlap disclosed; no direct proof edit by Sol. |
+| Non-claims boundary (independent reviewer) | GO-WITH-NOTES | Exact law and both Rat identities with same C/T/f; no existence, positivity, selected-parameter, analytic or core claim. |
+
+Selected parameter and hsmall application, actual classical HC/spectral moment
+application, inverse, robust8S, numerical NO, runtime, conditional/full core and
+final consolidation remain OPEN. Source-contract inhabitants remain outward
+obligations after conditional-core closure; review fallback governance debt and
+S3126 review debt persist. These exact mass identities do not supply an analytic
+upper bound or close the core. All three final lenses permit this bounded increment.
+The exports do not prove existence of A or U, positive matching mass, or actual
+selected leaf-parameter guards. The preceding route/audit documents are historical
+planning evidence, not acceptance of those remaining caller obligations.
+Git-normalized LF final receipt SHA256 values are main
+`AC0AA7380C82C1C12092E80CCD216C744FECD475E72A0CFC1121BC33C0D51796`
+and Checks `2B72873DDE2561D128606625B8C8BA997737538EFB61B5F139C17959056FA72E`.
+Raw working copies remain byte-exact to the original machine streams and receipt
+hashes above. Source working/blob pins are identical.

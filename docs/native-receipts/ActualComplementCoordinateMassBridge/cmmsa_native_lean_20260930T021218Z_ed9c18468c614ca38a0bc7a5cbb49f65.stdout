@@ -1,0 +1,168 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:154:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:155:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:156:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:158:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:160:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:163:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:197:90: error: unsolved goals
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+T : TaggedLeafTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+e : StarTuple t d m ≃ StarTuple t d m := starCoordinateEquiv I copies U A
+C_A : CenterTable t := transportedCenterTable I copies U A C
+T_A : LeafTable d := transportedLeafTable I copies U A T
+C_E : CenterTable t := coordinateCenterTable I copies U A C_A
+T_E : LeafTable d := coordinateLeafTable I copies U A T_A
+hlaw : pushforward (⇑e) (starLaw htd hdA) = starLaw htd hdCoord
+z : StarTuple t d m
+⊢ ((f ∘ₗ ↑(actualCoordinateEquiv I copies U A).symm) ∘ₗ (↑((starCoordinateEquiv I copies U A) z).fst).subtype =
+        C_A ((grassCoordinateEquiv I copies U A).symm ((starCoordinateEquiv I copies U A) z).fst) ∘ₗ
+          ↑((LinearEquiv.ofEq (↑((starCoordinateEquiv I copies U A) z).fst)
+                  (Submodule.map ↑(actualCoordinateEquiv I copies U A)
+                    ↑((grassCoordinateEquiv I copies U A).symm ((starCoordinateEquiv I copies U A) z).fst))
+                  ⋯).trans
+              ((actualCoordinateEquiv I copies U A).submoduleMap
+                  ↑((grassCoordinateEquiv I copies U A).symm ((starCoordinateEquiv I copies U A) z).fst)).symm) ∧
+      ∀ (i : Fin m),
+        (f ∘ₗ ↑(actualCoordinateEquiv I copies U A).symm) ∘ₗ
+            (↑↑(((starCoordinateEquiv I copies U A) z).snd i)).subtype =
+          T_A ((grassCoordinateEquiv I copies U A).symm ↑(((starCoordinateEquiv I copies U A) z).snd i)) ∘ₗ
+            ↑((LinearEquiv.ofEq (↑↑(((starCoordinateEquiv I copies U A) z).snd i))
+                    (Submodule.map ↑(actualCoordinateEquiv I copies U A)
+                      ↑((grassCoordinateEquiv I copies U A).symm ↑(((starCoordinateEquiv I copies U A) z).snd i)))
+                    ⋯).trans
+                ((actualCoordinateEquiv I copies U A).submoduleMap
+                    ↑((grassCoordinateEquiv I copies U A).symm
+                        ↑(((starCoordinateEquiv I copies U A) z).snd i))).symm)) ↔
+    f ∘ₗ (↑z.fst).subtype = C_A z.fst ∧ ∀ (i : Fin m), f ∘ₗ (↑↑(z.snd i)).subtype = T_A ↑(z.snd i)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:203:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  preimageEvent ⇑e {z | MatchesStar C_E T_E z (coordinateFunctional I copies U A f)}
+in the target expression
+  eventMass (starLaw htd hdA)
+      {z | MatchesStar (transportedCenterTable I copies U A C) (transportedLeafTable I copies U A T) z f} =
+    eventMass (starLaw htd hdA)
+      (preimageEvent ⇑e
+        {z |
+          MatchesStar (selectedCoordinateCenterTable I copies U A C) (selectedCoordinateLeafTable I copies U A T) z
+            (coordinateFunctional I copies U A f)})
+
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+T : TaggedLeafTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+e : StarTuple t d m ≃ StarTuple t d m := starCoordinateEquiv I copies U A
+C_A : CenterTable t := transportedCenterTable I copies U A C
+T_A : LeafTable d := transportedLeafTable I copies U A T
+C_E : CenterTable t := coordinateCenterTable I copies U A C_A
+T_E : LeafTable d := coordinateLeafTable I copies U A T_A
+hlaw : pushforward (⇑e) (starLaw htd hdA) = starLaw htd hdCoord
+hevent :
+  preimageEvent ⇑e {z | MatchesStar C_E T_E z (coordinateFunctional I copies U A f)} = {z | MatchesStar C_A T_A z f}
+⊢ eventMass (starLaw htd hdA)
+      {z | MatchesStar (transportedCenterTable I copies U A C) (transportedLeafTable I copies U A T) z f} =
+    eventMass (starLaw htd hdA)
+      (preimageEvent ⇑e
+        {z |
+          MatchesStar (selectedCoordinateCenterTable I copies U A C) (selectedCoordinateLeafTable I copies U A T) z
+            (coordinateFunctional I copies U A f)})
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    i
+  has type
+    Grass (↥↑A) t
+  but is expected to have type
+    { Q // Module.finrank (ZMod 2) ↥Q = t }
+  in the application
+    ↑i
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:229:44: error: unsolved goals
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+e : StarTuple t d m ≃ StarTuple t d m := starCoordinateEquiv I copies U A
+C_A : CenterTable t := transportedCenterTable I copies U A C
+C_E : CenterTable t := coordinateCenterTable I copies U A C_A
+hlaw : pushforward (⇑e) (starLaw htd hdA) = starLaw htd hdCoord
+z : StarTuple t d m
+⊢ (f ∘ₗ ↑(actualCoordinateEquiv I copies U A).symm) ∘ₗ (↑((starCoordinateEquiv I copies U A) z).fst).subtype =
+      C_A ((grassCoordinateEquiv I copies U A).symm ((starCoordinateEquiv I copies U A) z).fst) ∘ₗ
+        ↑((LinearEquiv.ofEq (↑((starCoordinateEquiv I copies U A) z).fst)
+                (Submodule.map ↑(actualCoordinateEquiv I copies U A)
+                  ↑((grassCoordinateEquiv I copies U A).symm ((starCoordinateEquiv I copies U A) z).fst))
+                ⋯).trans
+            ((actualCoordinateEquiv I copies U A).submoduleMap
+                ↑((grassCoordinateEquiv I copies U A).symm ((starCoordinateEquiv I copies U A) z).fst)).symm) ↔
+    f ∘ₗ (↑z.fst).subtype = C_A z.fst
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:205:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
