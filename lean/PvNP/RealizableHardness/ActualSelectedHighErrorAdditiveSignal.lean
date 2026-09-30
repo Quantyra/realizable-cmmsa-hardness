@@ -2,6 +2,7 @@ import Mathlib.Tactic
 import PvNP.RealizableHardness.ActualSelectedHighErrorSignalComparison
 import PvNP.RealizableHardness.ActualSelectedComplementAnalyticNumerics
 import PvNP.RealizableHardness.ActualSelectedSpectralParameters
+import PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector
 import PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
 import PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard
 
@@ -12,6 +13,7 @@ namespace PvNP.RealizableHardness.ActualSelectedHighErrorAdditiveSignal
 open PvNP.RealizableHardness.ActualSelectedHighErrorSignalComparison
 open PvNP.RealizableHardness.ActualSelectedComplementAnalyticNumerics
 open PvNP.RealizableHardness.ActualSelectedSpectralParameters
+open PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector
 open PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
 open PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard
 
