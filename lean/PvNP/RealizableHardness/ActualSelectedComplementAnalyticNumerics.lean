@@ -21,6 +21,7 @@ open PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
 open PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
 open PvNP.RealizableHardness.GrassmannCounting
 open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator
 
 noncomputable section
 
@@ -48,9 +49,10 @@ def manuscriptInverseDecayCoefficient (m T : Nat) : Real :=
 theorem fixed_rho_explicit {m : Nat} (hm : 0 < m) :
     (fixedRho m : Real) = 1 / (4000 * (m : Real) ^ 2) := by
   have h := fixedRho_eq_inverse_bOf hm
-  rw [ActualCmmsaParameterReconciliation.bOf] at h
-  push_cast at h
-  exact_mod_cast h
+  have hcast := congrArg (fun x : Rat => (x : Real)) h
+  rw [ActualCmmsaParameterReconciliation.bOf] at hcast
+  norm_num [ActualCmmsaParameterReconciliation.bOf, pow_two] at hcast ⊢
+  nlinarith [hcast]
 
 theorem selected_radius_rho_product {m : Nat} (hm : 0 < m) :
     (Rof m : Real) * (fixedRho m : Real) = 10 * (m : Real) := by
@@ -115,8 +117,9 @@ theorem accepted_window_decay_is_negative {m k : Nat}
       ring
     rw [hbase]
     have hfactorLe : 1 - 1 / (4000 * (m : Real) ^ 2) <= 1 := by linarith
-    exact mul_le_mul_of_nonneg_left hfactorLe
-      (show 0 <= 1 / (2 * (m : Real)) by positivity)
+    simpa only [mul_one] using
+      (mul_le_mul_of_nonneg_left hfactorLe
+        (show 0 <= 1 / (2 * (m : Real)) by positivity))
   have hrecip : 1 / (2 * (m : Real)) ≤ 1 / 512 := by
     rw [div_le_iff₀ (by positivity : (0 : Real) < 2 * m)]
     nlinarith
@@ -144,7 +147,7 @@ theorem accepted_window_decay_is_negative {m k : Nat}
     rw [lt_div_iff₀ (by norm_num : (0 : Real) < 4)]
     norm_num
     exact_mod_cast (show 256 < m + 3 by omega)
-  nlinarith [hterm, hrecip, hsecond', hthreshold, hquart]
+  linarith [hterm, hrecip, hsecond', hthreshold, hquart]
 
 theorem manuscript_large_dyadic_choices {m : Nat} (hm : 256 ≤ m) :
     ∃ T qT P qP : Nat,
@@ -186,7 +189,8 @@ theorem manuscript_large_holder_decay_positive {m T : Nat}
       have : 0 < sourceHolderLowerBound m := by
         dsimp [sourceHolderLowerBound]
         have hm3 : 0 < m + 3 := by omega
-        exact Nat.mul_pos (by decide) (Nat.mul_pos hmpos hm3)
+        have hm16000 : 0 < 16000 * m := Nat.mul_pos (by omega) hmpos
+        exact Nat.mul_pos hm16000 hm3
       omega
     exact_mod_cast hTpos
   have hrho := fixed_rho_explicit hmpos
@@ -257,7 +261,8 @@ theorem selected_holder_decay_dominates_source {m K P : Nat}
     have : 0 < sourceHolderLowerBound m := by
       dsimp [sourceHolderLowerBound]
       have hm3 : 0 < m + 3 := by omega
-      exact Nat.mul_pos (by decide) (Nat.mul_pos hmpos hm3)
+      have hm16000 : 0 < 16000 * m := Nat.mul_pos (by omega) hmpos
+      exact Nat.mul_pos hm16000 hm3
     omega
   have hratio := selected_holder_ratio_le_inverse hmpos hKpos hPK
   have hmult := mul_le_mul_of_nonneg_left hratio
@@ -526,14 +531,15 @@ theorem selected_actual_material_moment_bound_large_dyadic
       Nat.mul_le_mul_left m hm4
     have hlow : 4 * m <= sourceHolderLowerBound m := by
       dsimp [sourceHolderLowerBound]
-      simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hmul
+      simpa [sourceHolderLowerBound, Nat.mul_assoc, Nat.mul_left_comm,
+        Nat.mul_comm] using hmul
     exact hlow.trans hKlarge
   have hPm : m * K <= P := hPlarge
   have hPmoment : 4 * m <= P := by omega
   have hMoment := selected_actual_HC_spectral_moment_bound_large_dyadic
     (n := n) (c := c) (s := s) (m := m) (k := P)
     sourceHeightCutoff (C := Cc) (T := Tc) (f := fc) (a := a) ha hm hPmoment
-    hsplit hrhoPos hcReal hsReal hcutFloor hPR hPpow hHC hSpectral hdim
+    hsplit hrhoPos hcReal hsReal hcutFloor hPR ⟨qP, hPpow⟩ hHC hSpectral hdim
   have hMass :=
     ActualSelectedComplementAppendMoment.selected_actual_append_moment
       I copies U A C T f (analyticSourceHeightFloor base sourceHeightCutoff) hsel hA
