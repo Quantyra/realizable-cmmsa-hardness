@@ -409,6 +409,115 @@ theorem source_low_relative_factor_with_outer_two_le_one {m h : Nat}
     (by norm_num : (1 : Real) <= 2) hsum
   simpa using hpow
 
+/-- Compose the low analytic term with the same selected beta-weighted signal.
+The two premises are the actual HC-envelope estimate and the actual
+same-functional beta floor; the conclusion includes the outer factor two from
+the selected star-mass comparison. -/
+theorem selected_low_analytic_term_le_same_functional_signal
+    {m h P : Nat} {beta low : Real}
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h)
+    (hP : 0 < P) (hPeq : P = sourceMomentP m)
+    (hbeta : (2 : Real) ^ sourceLowBetaFloorExponent m h <= beta)
+    (hlow0 : 0 <= low)
+    (hlow : low <= (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) :
+    (2 : Real) ^ (m + 1) * beta ^ (1 - (m : Real) / (P : Real)) * low ^ m <=
+      (2 : Real) ^ sourceLowTargetSignalExponent m h * beta := by
+  have hmpos : 0 < m := by omega
+  have hq : 0 <= (m : Real) / (P : Real) := by positivity
+  have hbeta0 : 0 < (2 : Real) ^ sourceLowBetaFloorExponent m h :=
+    Real.rpow_pos_of_pos (by norm_num) _
+  have hbetaPos : 0 < beta := lt_of_lt_of_le hbeta0 hbeta
+  have hbetaNeg := selected_beta_negative_holder_power_le_signal
+    hbeta0 hbeta hq
+  have hcoeff0 : 0 <=
+      (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P := by positivity
+  have hlowPow : low ^ m <=
+      ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m := by
+    have hr := Real.rpow_le_rpow hlow0 hlow (show 0 <= (m : Real) by positivity)
+    simpa only [Real.rpow_natCast] using hr
+  have hbetaSplit : beta ^ (1 - (m : Real) / (P : Real)) =
+      beta * beta ^ (-((m : Real) / (P : Real))) := by
+    rw [show 1 - (m : Real) / (P : Real) =
+      1 + (-((m : Real) / (P : Real))) by ring,
+      Real.rpow_add (le_of_lt hbetaPos)]
+    simp
+  have hcore :
+      (2 : Real) ^ m * beta ^ (-((m : Real) / (P : Real))) * low ^ m <=
+        (2 : Real) ^ m *
+          ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+            (-((m : Real) / (P : Real))) *
+          ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m := by
+    have hbetaNeg0 : 0 <=
+        ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+          (-((m : Real) / (P : Real))) := by positivity
+    have hlowPow0 : 0 <= low ^ m := pow_nonneg hlow0 m
+    have hprod := mul_le_mul hbetaNeg hlowPow hlowPow0 hbetaNeg0
+    exact mul_le_mul_of_nonneg_left hprod (by positivity)
+  have hsignalPos : 0 <
+      (2 : Real) ^ sourceLowTargetSignalExponent m h :=
+    Real.rpow_pos_of_pos (by norm_num) _
+  have hratio := source_low_dyadic_ratio_eq_exponent hmpos hP
+  have hratioMul := congrArg
+    (fun x : Real => x * (2 : Real) ^ sourceLowTargetSignalExponent m h) hratio
+  have hratioMul' :
+      (2 : Real) ^ m *
+          ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+            (-((m : Real) / (P : Real))) *
+          ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m =
+        (2 : Real) ^ sourceLowRelativeExponent m h P *
+          (2 : Real) ^ sourceLowTargetSignalExponent m h := by
+    have hcancel := hratioMul
+    rw [div_mul_cancel₀ _ (ne_of_gt hsignalPos)] at hcancel
+    exact hcancel
+  have houter0 := source_low_relative_factor_with_outer_two_le_one hm hfloor
+  have houter : (2 : Real) ^ (1 + sourceLowRelativeExponent m h P) <= 1 := by
+    simpa [hPeq] using houter0
+  have houterSignal := mul_le_mul_of_nonneg_right houter
+    (le_of_lt hsignalPos)
+  have hratioOuter :
+      2 * ((2 : Real) ^ m *
+          ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+            (-((m : Real) / (P : Real))) *
+          ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m) <=
+        (2 : Real) ^ sourceLowTargetSignalExponent m h := by
+    have hpow : (2 : Real) ^ (1 + sourceLowRelativeExponent m h P) =
+        2 * (2 : Real) ^ sourceLowRelativeExponent m h := by
+      rw [Real.rpow_add (by norm_num : (0 : Real) < 2)]
+      norm_num
+    calc
+      _ = 2 * ((2 : Real) ^ sourceLowRelativeExponent m h P *
+          (2 : Real) ^ sourceLowTargetSignalExponent m h) := by
+            rw [hratioMul']
+      _ = (2 : Real) ^ (1 + sourceLowRelativeExponent m h P) *
+          (2 : Real) ^ sourceLowTargetSignalExponent m h := by rw [hpow]; ring
+      _ <= (2 : Real) ^ sourceLowTargetSignalExponent m h := houterSignal
+  have hscaledCore := mul_le_mul_of_nonneg_left hcore
+    (show 0 <= 2 * beta by positivity)
+  have hbetaOuter := mul_le_mul_of_nonneg_left hratioOuter
+    (by exact le_of_lt hbetaPos)
+  calc
+    (2 : Real) ^ (m + 1) * beta ^ (1 - (m : Real) / (P : Real)) * low ^ m =
+        beta * (2 * ((2 : Real) ^ m *
+          beta ^ (-((m : Real) / (P : Real))) * low ^ m)) := by
+            rw [hbetaSplit]
+            rw [pow_succ]
+            ring
+    _ <= beta * (2 * ((2 : Real) ^ m *
+        ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+          (-((m : Real) / (P : Real))) *
+        ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m)) := by
+          calc
+            _ = (2 * beta) * ((2 : Real) ^ m *
+                beta ^ (-((m : Real) / (P : Real))) * low ^ m) := by ring
+            _ <= (2 * beta) * ((2 : Real) ^ m *
+                ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+                  (-((m : Real) / (P : Real))) *
+                ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m) :=
+                  hscaledCore
+            _ = _ := by ring
+    _ <= beta * (2 : Real) ^ sourceLowTargetSignalExponent m h := hbetaOuter
+    _ = (2 : Real) ^ sourceLowTargetSignalExponent m h * beta := by ring
+
 /-- Independent cutoff used by the high spectral-tail component. The low-HC
 rounding and coefficient budget is handled by `sourceLowHCHeightFloor`. -/
 def sourceTailHeightFloor (m : Nat) : Nat := max (4000 * m ^ 2) (12 * m)
@@ -686,7 +795,63 @@ theorem selected_rational_low_HC_sum_bound {h m : Nat} (hm : 0 < m)
         (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
           (4 * manuscriptAgreementFloor m h) ^
             (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) :=
-              mul_le_mul_of_nonneg_left hpower hcoef0
+      mul_le_mul_of_nonneg_left hpower hcoef0
+
+/-- The actual rational failed-zoom HC sum is bounded by the dyadic
+coefficient envelope used in the same-f exponent identity. -/
+theorem selected_actual_low_HC_dyadic_envelope {m h : Nat}
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h)
+    {e : Rat} (he : (e : Real) < 2 * manuscriptAgreementFloor m h) :
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+      (p := sourceMomentP m) (2 * (e : Real)) <=
+        (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+          (sourceMomentP m) := by
+  have hmpos : 0 < m := by omega
+  have hcountNat := low_level_count_le_sqrt_dyadic h
+  have hcountCast : ((2 * h + 1 : Nat) : Real) <=
+      (2 : Real) ^ ((2 * (Nat.sqrt h + 1) : Nat) : Real) := by
+    exact_mod_cast hcountNat
+  have hcountRate := low_level_count_exponent_le_height_rate hmpos hfloor
+  have hcount : ((2 * h + 1 : Nat) : Real) <=
+      (2 : Real) ^ ((h : Real) / (1000 * (m : Real) ^ 2)) := by
+    exact hcountCast.trans (Real.rpow_le_rpow_of_exponent_le
+      (by norm_num : (1 : Real) <= 2) hcountRate)
+  have hfour : 4 * manuscriptAgreementFloor m h =
+      (2 : Real) ^ (2 - 2 * (1 - 1000 * (fixedRho m : Real) ^ 2) * (h : Real)) := by
+    unfold manuscriptAgreementFloor
+    rw [show (4 : Real) = (2 : Real) ^ (2 : Real) by norm_num]
+    rw [← Real.rpow_add (by norm_num : (0 : Real) < 2)]
+    congr 1
+    ring
+  have hcoeffEq :
+      (2 : Real) ^ ((h : Real) / (1000 * (m : Real) ^ 2)) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+        (4 * manuscriptAgreementFloor m h) ^
+          (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) =
+      (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+        (sourceMomentP m) := by
+    rw [hfour, ← Real.rpow_mul (by norm_num : (0 : Real) <= 2),
+      ← Real.rpow_add (by norm_num : (0 : Real) < 2),
+      ← Real.rpow_add (by norm_num : (0 : Real) < 2)]
+    congr 1
+    unfold sourceLowCoefficientEnvelopeExponent
+    ring
+  have hhc := selected_rational_low_HC_sum_bound hmpos he
+  calc
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+        (p := sourceMomentP m) (2 * (e : Real)) <=
+      ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+        (4 * manuscriptAgreementFloor m h) ^
+          (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := hhc
+    _ <= (2 : Real) ^ ((h : Real) / (1000 * (m : Real) ^ 2)) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+        (4 * manuscriptAgreementFloor m h) ^
+          (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+            exact mul_le_mul_of_nonneg_right
+              (mul_le_mul_of_nonneg_right hcount (by positivity)) (by positivity)
+    _ = (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+        (sourceMomentP m) := hcoeffEq
 
 theorem source_high_error_exponent_gap_positive {m h : Nat}
     (hm : 256 <= m) (hh : 20001 * m ^ 2 <= h) :
