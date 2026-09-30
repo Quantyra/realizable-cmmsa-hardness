@@ -19,13 +19,16 @@ open PvNP.RealizableHardness.ActualTaggedComplementIncidence
 open PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector
 open PvNP.RealizableHardness.ActualLeafLabelRankImageAlignment
 open PvNP.RealizableHardness.ActualSourceStarLaw
+open PvNP.RealizableHardness.ActualTaggedConcreteStarLaw
 
 set_option autoImplicit false
 noncomputable section
 attribute [local instance] Classical.propDecidable
 
-variable {N rows copies J : Nat}
+variable {N rows : Nat}
 variable (I : ActualOccurrenceAllocation.Instance N rows)
+variable (copies : Nat)
+variable {J : Nat}
 variable (U : TaggedGoodU I copies J)
 variable (A : SideComplement I copies U)
 
@@ -66,7 +69,8 @@ theorem map_le_map_coordinate_iff {K L : Submodule (ZMod 2) A.1} :
     rcases Submodule.mem_map.mp hx' with ⟨y, hy, hxy⟩
     have hyx : y = x := (actualCoordinateEquiv I copies U A).injective hxy
     simpa [hyx] using hy
-  · exact Submodule.map_mono
+  · intro h
+    exact Submodule.map_mono h
 
 /-- The decoded pair pulled back along the actual coordinate equivalence.
 Its functional is composed with the restriction of that equivalence; no
@@ -140,10 +144,10 @@ theorem coordinate_agrees_iff {q d : Nat}
     (P : DecodedPair Q d) (L : Grass A.1 d)
     (hLW : L.val ≤ (pullbackDecodedPair I copies U A Q P).W)
     (hcoord : (grassEquiv I copies U A L).val ≤ P.W) :
-    AgreesOn (coordinateLeafTable I copies U A T) Q P
+    AgreesOn (coordinateLeafTable I copies U A T) (Q := Q) (P := P)
         (grassEquiv I copies U A L) hcoord ↔
-      AgreesOn T ((grassEquiv I copies U A).symm Q)
-        (pullbackDecodedPair I copies U A Q P) L hLW := by
+      AgreesOn T (Q := (grassEquiv I copies U A).symm Q)
+        (P := pullbackDecodedPair I copies U A Q P) L hLW := by
   classical
   let s := coordinateSubspaceEquiv I copies U A L
   let eW := pulledSubspaceEquiv I copies U A P.W
