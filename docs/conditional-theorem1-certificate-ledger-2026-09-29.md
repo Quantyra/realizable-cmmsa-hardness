@@ -531,7 +531,7 @@ Fresh free-memory minima were 2,076,240 and 1,925,348 KiB; no controlled stop.
 | Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Same T/f, matrix lift, complete failed-zoom quantifiers and exact delta=2e. Orchestration and proof-hint overlap is disclosed; this is not an independent proof-author check. |
 | Non-claims boundary (separate reviewer) | GO-WITH-NOTES | Independently verified the actual Checks receipt and five signatures/three standard profiles; distinguishes native Lean success from wrapper summary failure. |
 
-Intended failed-zoom invocation, derivation of 2e<=1 for the classical HC input,
+Intended failed-zoom invocation, derivation of 2e<=1 if downstream arithmetic needs it,
 exact HC/spectral application, selected hsmall, analytic moment bound, actual
 inverse, robust 8S, numeric NO and conditional/full core remain OPEN. Inherited
 S3126 review debt and outward classical contract inhabitants remain open.
