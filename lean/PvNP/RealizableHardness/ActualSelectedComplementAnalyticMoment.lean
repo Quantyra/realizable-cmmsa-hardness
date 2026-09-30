@@ -1069,6 +1069,25 @@ theorem selected_actual_HC_spectral_moment_bound
     _ ≤ _ := by
       exact add_le_add (add_le_add hscaleLow le_rfl) hscaleHigh
 
+/-! Scalar right-hand side of the actual finite-level HC/spectral estimate. -/
+def selected_actual_analytic_rhs {n c s m : Nat}
+    (C : ActualSourceStarLaw.CenterTable (V := Fin n → ZMod 2) c)
+    (T : ActualSourceStarLaw.LeafTable (V := Fin n → ZMod 2) (c + s))
+    (f : Module.Dual (ZMod 2) (Fin n → ZMod 2))
+    (r k : Nat) (eta a : Real) : Real :=
+  let beta := (∑ R : Grass (ActualFixedFunctionalAppendOperator.CoordinateAmbient n) c,
+    if centerMatchBit C f R then (1 : Real) else 0) /
+      (Fintype.card (Grass (ActualFixedFunctionalAppendOperator.CoordinateAmbient n) c) : Real)
+  (2 : Real) ^ m *
+      (beta ^ (1 - ((k : Real) / (m : Real))⁻¹) *
+        (selectedLowHC46NormBound (d := c + s) (r := r) (p := k) eta) ^ m) +
+    (2 : Real) ^ m * a ^ m * beta +
+    (1 / a ^ 2) *
+      (∑ i ∈ selectedHighFinIndexSet (c + s) r,
+        ((2 : Real) ^ (-(i.val : Real) * ((s : Real) - 1)) +
+          3 * (2 : Real) ^ ((i.val : Real) - (n : Real))) *
+          uniformMean (fun W => (rankProjection i.val (indicator (selectedF T f)) W) ^ 2))
+
 /-! Exact marginal of the actual shared-center star law for one fixed
 functional. The leaf table below is the functional's own restriction, so
 every leaf test is true; summing the conditional leaf law leaves the uniform
@@ -1131,6 +1150,44 @@ theorem matching_center_mass_eq_grassmann_beta
         (fun W : Grass V (c + s) => leafMatchBit T0 f W) m := htransport
     _ = _ := hexp
 
+theorem selected_actual_source_dimension_bound
+    {N m L samplerA : Nat} (I : ActualOccurrenceAllocation.Instance N m)
+    (copies : Nat)
+    (U : ActualTaggedConcreteStarLaw.TaggedGoodU I copies
+      (SamplerParameters.blocks samplerA
+        (ActualCmmsaParameterReconciliation.hBlock L m)))
+    (A : ActualTaggedComplementIncidence.SideComplement I copies U)
+    (base : Nat → Nat) (sourceHeightCutoff : Real → Nat)
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+        base sourceHeightCutoff j) (j + 2)) L = (m : WithBot Nat))
+    (hA : 1 ≤ samplerA) :
+    ActualStarFixedRhoDimensionGuard.leafT m
+        (ActualCmmsaParameterReconciliation.hBlock L m) +
+      ActualStarFixedRhoDimensionGuard.leafK m
+        (ActualCmmsaParameterReconciliation.hBlock L m) ≤
+      Module.finrank (ZMod 2) A.1 := by
+  have hs := ActualCmmsaAdmissibilitySelector.selector_spec hsel
+  rcases hs.1 with ⟨hm, _, _, _, _, _, _, hcut, _⟩
+  let h := ActualCmmsaParameterReconciliation.hBlock L m
+  let J := SamplerParameters.blocks samplerA h
+  have hh : m + 2 ≤ h := (Nat.le_max_right _ _).trans hcut
+  have hp : h ^ 2 < J := by
+    dsimp [J, h]
+    simpa only [one_mul] using
+      ((Nat.mul_le_mul_right ((ActualCmmsaParameterReconciliation.hBlock L m) ^ 2) hA).trans_lt
+        (SamplerParameters.numerator_lt_blocks samplerA
+          (ActualCmmsaParameterReconciliation.hBlock L m)))
+  have hpos : 0 < h := by omega
+  have hle : h ≤ h ^ 2 := by simpa [pow_two] using Nat.le_mul_of_pos_left h hpos
+  have hsplit := ActualSelectedSpectralParameters.leaf_split_total
+    (m := m) (h := h)
+  have hsmall : h ≤ J := by omega
+  rw [ActualTaggedComplementIncidence.sideComplement_finrank I copies U A]
+  change ActualStarFixedRhoDimensionGuard.leafT m h +
+      ActualStarFixedRhoDimensionGuard.leafK m h ≤ 2 * J
+  omega
+
 /-- Material selected caller: the original I/U/A/C/T/f lane is reduced to its
 actual coordinate tables and functional, then the same coordinate leaf is
 used for the exact failed-zoom PR premise and the actual shared-center moment.
@@ -1139,9 +1196,9 @@ identity beside the derived HC/spectral moment bound. -/
 theorem selected_actual_material_moment_bound
     {N m L samplerA : Nat} (I : ActualOccurrenceAllocation.Instance N m)
     (copies : Nat)
-    (U : ActualTaggedComplementIncidence.TaggedGoodU I copies
-      (ActualCmmsaAdmissibilitySelector.blocks samplerA
-        (ActualCmmsaAdmissibilitySelector.hBlock L m)))
+    (U : ActualTaggedConcreteStarLaw.TaggedGoodU I copies
+      (SamplerParameters.blocks samplerA
+        (ActualCmmsaParameterReconciliation.hBlock L m)))
     (A : ActualTaggedComplementIncidence.SideComplement I copies U)
     (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
     (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
@@ -1151,19 +1208,19 @@ theorem selected_actual_material_moment_bound
       (fun j => max (analyticSourceHeightFloor base sourceHeightCutoff j) (j + 2)) L =
         (m : WithBot Nat))
     (hA : 1 ≤ samplerA) (r : Nat) (hrd : r <
-      ActualCmmsaAdmissibilitySelector.leafT m
-        (ActualCmmsaAdmissibilitySelector.hBlock L m) +
-      ActualCmmsaAdmissibilitySelector.leafK m
-        (ActualCmmsaAdmissibilitySelector.hBlock L m))
+      ActualStarFixedRhoDimensionGuard.leafT m
+        (ActualCmmsaParameterReconciliation.hBlock L m) +
+      ActualStarFixedRhoDimensionGuard.leafK m
+        (ActualCmmsaParameterReconciliation.hBlock L m))
     (e : Rat) (he : 0 ≤ e)
     (hfail : ∀ (q : Nat)
-      (Q : Grass (CoordAmbient (ActualCmmsaAdmissibilitySelector.blocks samplerA
-        (ActualCmmsaAdmissibilitySelector.hBlock L m))) q)
+      (Q : Grass (CoordAmbient (SamplerParameters.blocks samplerA
+        (ActualCmmsaParameterReconciliation.hBlock L m))) q)
       (P : ActualMaximalPairLadder.DecodedPair Q
-        (ActualCmmsaAdmissibilitySelector.leafT m
-          (ActualCmmsaAdmissibilitySelector.hBlock L m) +
-         ActualCmmsaAdmissibilitySelector.leafK m
-          (ActualCmmsaAdmissibilitySelector.hBlock L m))),
+        (ActualStarFixedRhoDimensionGuard.leafT m
+          (ActualCmmsaParameterReconciliation.hBlock L m) +
+         ActualStarFixedRhoDimensionGuard.leafK m
+          (ActualCmmsaParameterReconciliation.hBlock L m))),
       q + ActualMaximalPairLadder.codim P.W = r →
         Fintype.card (ActualMaximalPairLadder.Zoom Q P) ≠ 0 →
           ActualMaximalPairLadder.agreement
@@ -1171,41 +1228,28 @@ theorem selected_actual_material_moment_bound
     (hHC : HC46ExactContract)
     (hSpectral : Spectral47ExactContract sourceHeightCutoff)
     (a : Real) (ha : 0 < a) :
-    let h := ActualCmmsaAdmissibilitySelector.hBlock L m
-    let J := ActualCmmsaAdmissibilitySelector.blocks samplerA h
-    let c := ActualCmmsaAdmissibilitySelector.leafT m h
-    let s := ActualCmmsaAdmissibilitySelector.leafK m h
+    let h := ActualCmmsaParameterReconciliation.hBlock L m
+    let J := SamplerParameters.blocks samplerA h
+    let c := ActualStarFixedRhoDimensionGuard.leafT m h
+    let s := ActualStarFixedRhoDimensionGuard.leafK m h
     let n := 2 * J
     let Cc := selectedCoordinateCenterTable I copies U A C
     let Tc := selectedCoordinateLeafTable I copies U A T
     let fc := coordinateFunctional I copies U A f
     ∃ k q : Nat, k = 2 ^ q ∧ 4 * m ≤ k ∧ k < 8 * m ∧
-      selectedActualMoment (m := m) (selectedG Cc fc) (selectedF Tc fc) ≤
-        (2 : Real) ^ m *
-          ((((∑ R : Grass (CoordAmbient J) c,
-              if centerMatchBit Cc fc R then (1 : Real) else 0) /
-                (Fintype.card (Grass (CoordAmbient J) c) : Real)) ^
-              (1 - ((k : Real) / (m : Real))⁻¹) *
-            (selectedLowHC46NormBound (d := c + s) (r := r) (p := k)
-              (2 * (e : Real))) ^ m) +
-        (2 : Real) ^ m * a ^ m *
-          ((∑ R : Grass (CoordAmbient J) c,
-              if centerMatchBit Cc fc R then (1 : Real) else 0) /
-                (Fintype.card (Grass (CoordAmbient J) c) : Real)) +
-        (1 / a ^ 2) *
-          (∑ i ∈ selectedHighFinIndexSet (c + s) r,
-            ((2 : Real) ^ (-(i.val : Real) * ((s : Real) - 1)) +
-              3 * (2 : Real) ^ ((i.val : Real) - (n : Real))) *
-              uniformMean (fun W =>
-                (rankProjection i.val (indicator (selectedF Tc fc)) W) ^ 2)) ∧
-      ActualSelectedComplementAppendMoment.selected_actual_append_moment
-        I copies U A C T f (analyticSourceHeightFloor base sourceHeightCutoff)
-        hsel hA ∧
-      ActualSelectedComplementAppendMoment.selected_actual_center_identity
-        I copies U A C f (analyticSourceHeightFloor base sourceHeightCutoff) hsel hA ∧
-      matching_center_mass_eq_grassmann_beta
-        (V := CoordAmbient J) (c := c) (s := s) (m := m)
-        (by simpa [CoordAmbient] using hdim) Cc fc := by
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := A.1) (m := m) (Nat.le_add_right c s)
+        (selected_actual_source_dimension_bound I copies U A base sourceHeightCutoff hsel hA)
+        (ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C)
+        (ActualTaggedComplementStarDensityBridge.transportedLeafTable I copies U A T) f : Real) ≤
+        2 * selected_actual_analytic_rhs Cc Tc fc r k (2 * (e : Real)) a ∧
+      (ActualOrdinaryStarWeightedSelection.matchingCenterMass
+        (V := A.1) (m := m) (Nat.le_add_right c s)
+        (selected_actual_source_dimension_bound I copies U A base sourceHeightCutoff hsel hA)
+        (ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C) f : Real) =
+        (∑ R : Grass (CoordAmbient J) c,
+          if centerMatchBit Cc fc R then (1 : Real) else 0) /
+            (Fintype.card (Grass (CoordAmbient J) c) : Real) := by
   intro h J c s n Cc Tc fc
   have hparams := selected_spectral_parameters base sourceHeightCutoff hsel
   rcases hparams with
@@ -1215,9 +1259,9 @@ theorem selected_actual_material_moment_bound
   have hlarge : h ^ 2 < J := by
     dsimp [h, J]
     simpa only [one_mul] using
-      ((Nat.mul_le_mul_right ((ActualCmmsaAdmissibilitySelector.hBlock L m) ^ 2) hA).trans_lt
+      ((Nat.mul_le_mul_right ((ActualCmmsaParameterReconciliation.hBlock L m) ^ 2) hA).trans_lt
         (SamplerParameters.numerator_lt_blocks samplerA
-          (ActualCmmsaAdmissibilitySelector.hBlock L m)))
+          (ActualCmmsaParameterReconciliation.hBlock L m)))
   have hle : h ≤ h ^ 2 := by
     simpa [pow_two] using Nat.le_mul_of_pos_left h hhpos
   have hdim : c + s ≤ n := by
@@ -1233,15 +1277,41 @@ theorem selected_actual_material_moment_bound
   have hMass :=
     ActualSelectedComplementAppendMoment.selected_actual_append_moment
       I copies U A C T f (analyticSourceHeightFloor base sourceHeightCutoff) hsel hA
+  have hMassMoment :
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := A.1) (m := m) (Nat.le_add_right c s)
+        (selected_actual_source_dimension_bound I copies U A base sourceHeightCutoff hsel hA)
+        (ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C)
+        (ActualTaggedComplementStarDensityBridge.transportedLeafTable I copies U A T) f : Real) ≤
+        2 * selectedActualMoment (m := m) (selectedG Cc fc) (selectedF Tc fc) := by
+    simpa [ActualFixedFunctionalAppendOperator.actualAppendRankImageMoment,
+      selectedActualMoment, selectedG, selectedF,
+      ActualFixedFunctionalAppendOperator.CoordinateAmbient, CoordAmbient] using hMass
+  have hMomentRhs :
+      selectedActualMoment (m := m) (selectedG Cc fc) (selectedF Tc fc) ≤
+        selected_actual_analytic_rhs Cc Tc fc r k (2 * (e : Real)) a := by
+    simpa [selected_actual_analytic_rhs] using hMoment
+  have hfinal := hMassMoment.trans
+    (mul_le_mul_of_nonneg_left hMomentRhs (by norm_num : (0 : Real) ≤ 2))
   have hCenter :=
     ActualSelectedComplementAppendMoment.selected_actual_center_identity
       I copies U A C f (analyticSourceHeightFloor base sourceHeightCutoff) hsel hA
   have hBeta := matching_center_mass_eq_grassmann_beta
     (V := CoordAmbient J) (c := c) (s := s) (m := m)
     (by simpa [CoordAmbient] using hdim) Cc fc
-  refine ⟨k, q, hkpow, hkm, hklt, ?_, hMass, hCenter, hBeta⟩
-  simpa [selectedG, selectedF, CoordAmbient, ActualFixedFunctionalAppendOperator.CoordinateAmbient]
-    using hMoment
+  have hCenterR :
+      (ActualOrdinaryStarWeightedSelection.matchingCenterMass
+        (V := A.1) (m := m) (Nat.le_add_right c s)
+        (selected_actual_source_dimension_bound I copies U A base sourceHeightCutoff hsel hA)
+        (ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C) f : Real) =
+        (ActualOrdinaryStarWeightedSelection.matchingCenterMass
+        (V := CoordAmbient J) (m := m) (Nat.le_add_right c s)
+        (ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound
+          I copies U A
+          (selected_actual_source_dimension_bound I copies U A base sourceHeightCutoff hsel hA))
+        Cc fc : Real) := by
+    exact_mod_cast hCenter
+  exact ⟨k, q, hkpow, hkm, hklt, hfinal, hCenterR.trans hBeta⟩
 
 end
 end PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
