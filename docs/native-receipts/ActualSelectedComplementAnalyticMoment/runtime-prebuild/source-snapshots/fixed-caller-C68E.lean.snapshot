@@ -88,7 +88,7 @@ theorem selected_actual_fixed_moment_bound_from_source_failure
           ActualStarFixedRhoDimensionGuard.leafK m
             (ActualCmmsaParameterReconciliation.hBlock L m))),
       q + codim P.W = r ->
-        Fintype.card (Zoom Q P) ≠ 0 ->
+        Fintype.card (Zoom Q P) != 0 ->
           agreement
             (ActualTaggedComplementStarDensityBridge.transportedLeafTable
               I copies U A T) Q P <= e)
@@ -140,7 +140,7 @@ theorem selected_actual_fixed_moment_bound_from_source_failure
           ((ActualCmmsaParameterReconciliation.hBlock L m) ^ 2) hA).trans_lt
           (SamplerParameters.numerator_lt_blocks samplerA
             (ActualCmmsaParameterReconciliation.hBlock L m)))
-    have hleJ : h <= J := (hle.trans_lt hJ).le
+    have hleJ : h <= J := hle.trans_lt hJ
     calc
       c + s = 2 * h := hsplit
       _ <= 2 * J := Nat.mul_le_mul_left 2 hleJ
@@ -151,7 +151,7 @@ theorem selected_actual_fixed_moment_bound_from_source_failure
       (Q : Grass (Fin n -> ZMod 2) q)
       (Qpair : ActualMaximalPairLadder.DecodedPair Q (c + s)),
       q + ActualMaximalPairLadder.codim Qpair.W = r ->
-        Fintype.card (ActualMaximalPairLadder.Zoom Q Qpair) ≠ 0 ->
+        Fintype.card (ActualMaximalPairLadder.Zoom Q Qpair) != 0 ->
           ActualMaximalPairLadder.agreement (fun X => Tc X) Q Qpair <= e := by
     simpa [ActualComplementCoordinateMassBridge.CoordAmbient,
       ActualLeafLabelRankImageAlignment.Ambient, n, J, c, s, Tc] using hfailCoord
