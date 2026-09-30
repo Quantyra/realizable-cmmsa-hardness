@@ -800,3 +800,8 @@ This checkpoint preserves three owned proof attempts and their raw diagnostic hi
 Latest main run 66503 / 061304 used ED9EDCC9AA65B0506F4F5ECB0A39C65F9F4668855C75A84F6BE4C36602DE7F62 plus BF9C. Native integer exit 1, archive SHA 610E2B83C34BE05CC685E81A89D58BEAF1C269A8C4A4A140E1AC8AB984926945; wrapper confirmed VM TERMINATED. Evidence preserves exact raw output, executed runner and inputs. This is a genuine failed proof diagnostic, not authentication failure.
 
 The exact normalized HC aggregate and conditional HC/spectral moment composition are proof attempts. Actual selected caller, source floor/rho applicability verification, inverse, robust 8S, numeric NO and full core remain open. No final moment assumption is accepted. Original thirteen drafts remain excluded. Sol orchestration and read-only proof hints overlap is disclosed; no final independent reviews are claimed for this WIP checkpoint.
+
+
+### UNVERIFIED diagnostic checkpoint: durable 064137
+
+Owned run56317 ended with VM TERMINATED. Archive081DE7C41E40C8A75ED5EBC964E8050196B0739B80ACB1737B7E84557B067E69 authenticates parameter prebuild integer0 and main integer1. Frozen source pins51E37/BF9C/78FB are in source-before.sha256. Main has exactly one remaining reported error: Fin.sum_univ_eq_sum_range needs its explicit dimension after the function argument. Actual finite HC/spectral composition otherwise produced no reported errors, but the module is not green. This checkpoint is NOT analytic/core acceptance; no profiles or final lenses are claimed. All stable prepared inputs, actual raw outputs and automatic structured terminal result are durable and byte-backed up. The actual selected caller and inverse/core remain open.

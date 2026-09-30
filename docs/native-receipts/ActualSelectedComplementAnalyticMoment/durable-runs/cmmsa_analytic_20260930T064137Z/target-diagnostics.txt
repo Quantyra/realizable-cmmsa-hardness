@@ -1,0 +1,48 @@
+error: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:130:2: Type mismatch: After simplification, term
+  Fin.sum_univ_eq_sum_range fun i => if r < i then selectedLevel b i W else 0
+ has type
+  ∀ (n_1 : ℕ),
+    (∑ i, if r < ↑i then selectedLevel b (↑i) W else 0) =
+      ∑ i ∈ Finset.range n_1, if r < i then selectedLevel b i W else 0
+but is expected to have type
+  (∑ i, if r < ↑i then selectedLevel b (↑i) W else 0) =
+    ∑ i ∈ Finset.range (d + 1), if r < i then selectedLevel b i W else 0
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:162:16: This simp argument is unused:
+  hrank
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:237:46: Variable name `hC` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hC
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:508:46: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:508:46: Unused tactic linter: `ring` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:578:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:595:6: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [ActualFixedFunctionalBinaryMatrixMoment.CoordinateAmbient]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:902:46: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
