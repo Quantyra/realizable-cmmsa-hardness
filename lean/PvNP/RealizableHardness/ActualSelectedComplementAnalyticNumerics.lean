@@ -20,6 +20,7 @@ open PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge
 open PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
 open PvNP.RealizableHardness.ActualCmmsaParameterReconciliation
 open PvNP.RealizableHardness.GrassmannCounting
+open PvNP.RealizableHardness.BinaryMatrixFourier
 
 noncomputable section
 
@@ -49,7 +50,7 @@ theorem fixed_rho_explicit {m : Nat} (hm : 0 < m) :
   have h := fixedRho_eq_inverse_bOf hm
   rw [ActualCmmsaParameterReconciliation.bOf] at h
   push_cast at h
-  exact h
+  exact_mod_cast h
 
 theorem selected_radius_rho_product {m : Nat} (hm : 0 < m) :
     (Rof m : Real) * (fixedRho m : Real) = 10 * (m : Real) := by
@@ -114,23 +115,36 @@ theorem accepted_window_decay_is_negative {m k : Nat}
       ring
     rw [hbase]
     have hfactorLe : 1 - 1 / (4000 * (m : Real) ^ 2) <= 1 := by linarith
-    exact mul_le_mul_of_nonneg_left hfactorLe (by positivity)
+    exact mul_le_mul_of_nonneg_left hfactorLe
+      (show 0 <= 1 / (2 * (m : Real)) by positivity)
   have hrecip : 1 / (2 * (m : Real)) ≤ 1 / 512 := by
     rw [div_le_iff₀ (by positivity : (0 : Real) < 2 * m)]
     nlinarith
   have hsecond :
-      (m + 3 : Nat) * (m : Real) / (k : Real) >
+      ((m + 3 : Nat) : Real) * (m : Real) / (k : Real) >
         ((m + 3 : Nat) : Real) / 8 := by
     have hm3 : 0 < ((m + 3 : Nat) : Real) := by exact_mod_cast (by omega : 0 < m + 3)
     have hfrac' := mul_lt_mul_of_pos_left hfrac hm3
     simpa [div_eq_mul_inv, mul_assoc] using hfrac'
   unfold acceptedInverseDecayCoefficient
+  have hrhoPos : 0 < (fixedRho m : Real) := by
+    exact_mod_cast fixedRho_pos hmpos
   have hthreshold : 0 <= 2 * (m : Real) * (fixedRho m : Real) := by positivity
   have hsecond' :
       2 * ((m + 3 : Nat) : Real) * ((m : Real) / (k : Real)) >
         ((m + 3 : Nat) : Real) / 4 := by
-    nlinarith [hsecond]
-  nlinarith [hterm, hrecip, hsecond', hthreshold]
+    have hmul := mul_lt_mul_of_pos_left hsecond (by norm_num : (0 : Real) < 2)
+    calc
+      2 * ((m + 3 : Nat) : Real) * ((m : Real) / (k : Real)) =
+          2 * (((m + 3 : Nat) : Real) * (m : Real) / (k : Real)) := by ring
+      _ > 2 * (((m + 3 : Nat) : Real) / 8) := hmul
+      _ = ((m + 3 : Nat) : Real) / 4 := by ring
+  have hm3 : 259 <= m + 3 := by omega
+  have hquart : (64 : Real) < ((m + 3 : Nat) : Real) / 4 := by
+    rw [lt_div_iff₀ (by norm_num : (0 : Real) < 4)]
+    norm_num
+    exact_mod_cast (show 256 < m + 3 by omega)
+  nlinarith [hterm, hrecip, hsecond', hthreshold, hquart]
 
 theorem manuscript_large_dyadic_choices {m : Nat} (hm : 256 ≤ m) :
     ∃ T qT P qP : Nat,
@@ -152,8 +166,8 @@ theorem manuscript_large_dyadic_choices {m : Nat} (hm : 256 ≤ m) :
       have hmNat : 1 <= m := by omega
       have hm3 : 1 <= m + 3 := by omega
       have hA : 16000 <= 16000 * m := Nat.mul_le_mul_left 16000 hmNat
-      have hB : 16000 * m <= 16000 * m * (m + 3) :=
-        Nat.mul_le_mul_left (16000 * m) hm3
+      have hB : 16000 * m <= 16000 * m * (m + 3) := by
+        simpa using Nat.mul_le_mul_left (16000 * m) hm3
       exact (by decide : 8 < 16000).trans_le (hA.trans hB)
     exact hsmall.trans_le (Nat.lt_two_pow_self (n := sourceHolderLowerBound m)).le
   have hPlarge : 8 * m < P := by
@@ -171,7 +185,8 @@ theorem manuscript_large_holder_decay_positive {m T : Nat}
     have hTpos : 0 < T := by
       have : 0 < sourceHolderLowerBound m := by
         dsimp [sourceHolderLowerBound]
-        exact Nat.mul_pos (by decide) (Nat.mul_pos hmpos (by omega))
+        have hm3 : 0 < m + 3 := by omega
+        exact Nat.mul_pos (by decide) (Nat.mul_pos hmpos hm3)
       omega
     exact_mod_cast hTpos
   have hrho := fixed_rho_explicit hmpos
@@ -183,15 +198,20 @@ theorem manuscript_large_holder_decay_positive {m T : Nat}
       rw [hrho]
       field_simp
       ring
-    rw [hRhs, div_le_iff₀ hTR, div_le_iff₀ (by positivity : (0 : Real) < 16000 * m)]
+    have hTcNat : 16000 * m * (m + 3) <= T := by
+      simpa [sourceHolderLowerBound] using hT
     have hTc' : (16000 : Real) * (m : Real) * ((m + 3 : Nat) : Real) ≤ T := by
-      norm_num [sourceHolderLowerBound] at hTc
-      nlinarith
+      exact_mod_cast hTcNat
+    rw [hRhs, div_le_div_iff₀ hTR
+      (by positivity : (0 : Real) < 16000 * (m : Real))]
     nlinarith
   have hrhole : (fixedRho m : Real) ≤ 1 / 4000 := by
     rw [hrho]
-    have hmRlarge : (1 : Real) ≤ (m : Real) ^ 2 := by nlinarith
-    rw [div_le_iff₀ (by norm_num : (0 : Real) < 4000)]
+    have hmSqNat : 1 <= m ^ 2 := by
+      exact Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt (Nat.pow_pos hmpos))
+    have hmRlarge : (1 : Real) ≤ (m : Real) ^ 2 := by exact_mod_cast hmSqNat
+    rw [div_le_div_iff₀ (by positivity : (0 : Real) < 4000 * (m : Real) ^ 2)
+      (by norm_num : (0 : Real) < 4000)]
     nlinarith
   have hTtail :
       2 * ((m + 3 : Nat) : Real) / T ≤ (m : Real) * (fixedRho m : Real) / 2 := by
@@ -236,7 +256,8 @@ theorem selected_holder_decay_dominates_source {m K P : Nat}
   have hKpos : 0 < K := by
     have : 0 < sourceHolderLowerBound m := by
       dsimp [sourceHolderLowerBound]
-      exact Nat.mul_pos (by decide) (Nat.mul_pos hmpos (by omega))
+      have hm3 : 0 < m + 3 := by omega
+      exact Nat.mul_pos (by decide) (Nat.mul_pos hmpos hm3)
     omega
   have hratio := selected_holder_ratio_le_inverse hmpos hKpos hPK
   have hmult := mul_le_mul_of_nonneg_left hratio
@@ -269,7 +290,7 @@ theorem selected_actual_HC_spectral_moment_bound_large_dyadic
     (hc : (c : Real) = 2 * (1 - rho) * h)
     (hs : (s : Real) = 2 * rho * h)
     (hHeight : sourceHeightCutoff rho <= h)
-    (hPR : PseudorandomExact r eta (selectedF T f))
+    (hPR : BinaryMatrixFourier.PseudorandomExact r eta (selectedF T f))
     (hkDyadic : ∃ q : Nat, k = 2 ^ q)
     (hHC : HC46ExactContract)
     (hSpectral : Spectral47ExactContract sourceHeightCutoff)
@@ -282,7 +303,8 @@ theorem selected_actual_HC_spectral_moment_bound_large_dyadic
   let beta : Real :=
     (Finset.sum (Finset.univ : Finset (Grass
       (ActualFixedFunctionalAppendOperator.CoordinateAmbient n) c))
-      (fun R => if centerMatchBit C f R then (1 : Real) else 0)) /
+      (fun R => if ActualFixedFunctionalStarMoment.centerMatchBit C f R
+        then (1 : Real) else 0)) /
       (Fintype.card (Grass
         (ActualFixedFunctionalAppendOperator.CoordinateAmbient n) c) : Real)
   let lowBound : Real :=
@@ -293,12 +315,15 @@ theorem selected_actual_HC_spectral_moment_bound_large_dyadic
     exact_mod_cast (show 0 < k by omega)
   have hp : 1 <= p / (m : Real) := by
     dsimp [p]
-    exact (le_div_iff₀ hmR).2 (by exact_mod_cast (show m <= k by omega))
+    exact (le_div_iff₀ hmR).2 (by
+      have hmk : (m : Real) <= (k : Real) := by exact_mod_cast (show m <= k by omega)
+      simpa [p] using hmk)
   have hbetaDom := selected_center_matrix_mean_le_exact_grassmann_beta C f
     (by simpa [ActualFixedFunctionalAppendOperator.CoordinateAmbient] using
       (show c <= n by omega))
-  have hcenter0 : 0 <= uniformMean (indicator (selectedG C f)) :=
-    uniformMean_indicator_nonneg (selectedG C f)
+  have hcenter0 : 0 <= BinaryMatrixFourier.uniformMean
+      (BinaryMatrixFourier.indicator (selectedG C f)) :=
+    BinaryMatrixFourier.uniformMean_indicator_nonneg (selectedG C f)
   have hbeta0 : 0 <= beta := by
     dsimp [beta]
     exact le_trans hcenter0 hbetaDom
@@ -433,7 +458,7 @@ theorem selected_actual_material_moment_bound_large_dyadic
          ActualStarFixedRhoDimensionGuard.leafK m
           (ActualCmmsaParameterReconciliation.hBlock L m))),
       q + ActualMaximalPairLadder.codim P.W = r ->
-        Fintype.card (ActualMaximalPairLadder.Zoom Q P) != 0 ->
+        Fintype.card (ActualMaximalPairLadder.Zoom Q P) ≠ 0 ->
           ActualMaximalPairLadder.agreement
             (fun X => selectedCoordinateLeafTable I copies U A T X) Q P <= e)
     (hHC : HC46ExactContract)
@@ -465,21 +490,46 @@ theorem selected_actual_material_moment_bound_large_dyadic
     ⟨hm256, hh, hdiv, hhpos, hspos, hsplit, hrhoPos, hrho, hcReal, hsReal,
       hbaseFloor, hcutFloor⟩
   have hm : 0 < m := by omega
+  have hlarge : h ^ 2 < J := by
+    dsimp [h, J]
+    simpa only [one_mul] using
+      ((Nat.mul_le_mul_right
+        ((ActualCmmsaParameterReconciliation.hBlock L m) ^ 2) hA).trans_lt
+        (SamplerParameters.numerator_lt_blocks samplerA
+          (ActualCmmsaParameterReconciliation.hBlock L m)))
+  have hle : h <= h ^ 2 := by
+    simpa [pow_two] using Nat.le_mul_of_pos_left h hhpos
   have hdim : c + s <= n := by
     dsimp [n, c, s, h]
     omega
+  have hfail' : forall (q : Nat)
+      (Q : Grass (Fin n -> ZMod 2) q)
+      (P : ActualMaximalPairLadder.DecodedPair Q (c + s)),
+      q + ActualMaximalPairLadder.codim P.W = r ->
+        Fintype.card (ActualMaximalPairLadder.Zoom Q P) ≠ 0 ->
+          ActualMaximalPairLadder.agreement
+            (fun X => Tc X) Q P <= e := by
+    simpa [CoordAmbient, ActualLeafLabelRankImageAlignment.Ambient,
+      n, J, c, s, Tc] using hfail
   have hPR :=
     ActualLeafLabelRankImageAlignment.actual_leaf_failed_zoom_gives_nominal_pseudorandom
-      (r := r) (d := c + s) hrd Tc fc e he hfail
+      (r := r) (d := c + s) hrd Tc fc e he hfail'
   rcases manuscript_large_dyadic_choices hm256 with
     ⟨K, qK, P, qP, hKpow, hKlarge, hPpow, hPlarge, hPstrict⟩
   have hKm : 4 * m <= K := by
-    dsimp [sourceHolderLowerBound] at hKlarge
-    omega
+    have hm3 : 1 <= m + 3 := by omega
+    have hm4 : 4 <= 16000 * (m + 3) := by
+      calc
+        4 <= 16000 := by decide
+        _ <= 16000 * (m + 3) := Nat.mul_le_mul_left 16000 hm3
+    have hmul : 4 * m <= m * (16000 * (m + 3)) :=
+      Nat.mul_le_mul_left m hm4
+    have hlow : 4 * m <= sourceHolderLowerBound m := by
+      dsimp [sourceHolderLowerBound]
+      simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hmul
+    exact hlow.trans hKlarge
   have hPm : m * K <= P := hPlarge
-  have hPmoment : 4 * m <= P := by
-    dsimp [sourceHolderLowerBound] at hKlarge
-    omega
+  have hPmoment : 4 * m <= P := by omega
   have hMoment := selected_actual_HC_spectral_moment_bound_large_dyadic
     (n := n) (c := c) (s := s) (m := m) (k := P)
     sourceHeightCutoff (C := Cc) (T := Tc) (f := fc) (a := a) ha hm hPmoment
