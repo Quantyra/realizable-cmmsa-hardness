@@ -209,7 +209,7 @@ def coordinateAgreeingZoomEquiv {q d : Nat}
   refine Equiv.subtypeEquiv (coordinateZoomEquiv I copies U A Q P) ?_
   intro z
   have hcoord := (coordinate_zoom_containment_iff I copies U A Q z.1.1 P).2 z.1.2
-  exact (coordinate_agrees_iff I copies U A T Q P z.1.1 z.1.2.2 hcoord).symm
+  exact (coordinate_agrees_iff I copies U A T Q P z.1.1 z.1.2.2 hcoord.2).symm
 
 /-- The dimension difference of the decoded subspaces is unchanged. -/
 theorem coordinate_codim_eq {q d : Nat} (Q : Grass (CoordAmbient J) q)
