@@ -198,7 +198,7 @@ theorem source_low_relative_exponent_nonpos {m h : Nat}
           4 * (m : Real) / (sourceMomentP m : Real) -
           4000 * (m : Real) * (fixedRho m : Real) ^ 2 /
             (sourceMomentP m : Real) := by
-      field_simp
+      field_simp [ne_of_gt hPpos]
       ring
     rw [hEq]
     have hloss : 0 <= 4000 * (m : Real) * (fixedRho m : Real) ^ 2 /
@@ -228,7 +228,11 @@ theorem source_low_relative_exponent_nonpos {m h : Nat}
     have hbetaterm := mul_le_mul_of_nonneg_left hbracket
       (show 0 <= (m : Real) / (sourceMomentP m : Real) by positivity)
     rw [hrhoEq]
-    nlinarith [hmain, hrhoSq, h4mP, hbetaRate, hbetaterm, hmR]
+    have hmain' := hmain
+    have hrhoSq' := hrhoSq
+    have hbetaterm' := hbetaterm
+    rw [hrhoEq] at hmain' hrhoSq' hbetaterm'
+    nlinarith [hmain', hrhoSq', h4mP, hbetaRate, hbetaterm', hmR]
   have hconst :
       (m : Real) +
         (m : Real) * (500 * (sourceRankExponent m : Real) ^ 2 *
@@ -236,6 +240,10 @@ theorem source_low_relative_exponent_nonpos {m h : Nat}
           2 * (1 - 2 / (sourceMomentP m : Real))) +
         (m : Real) / (sourceMomentP m : Real) * 2 + 2 <=
       (h : Real) / (3 * (m : Real)) := by
+    have halphaUpper :
+        1 - 2 / (sourceMomentP m : Real) <= 1 := by
+      have hrecip : 0 <= 2 / (sourceMomentP m : Real) := by positivity
+      linarith
     have hratio : (m : Real) / (sourceMomentP m : Real) <= (m : Real) := by
       rw [div_le_iff₀ hPpos]
       nlinarith [hPbaseR, hmR]
@@ -245,11 +253,22 @@ theorem source_low_relative_exponent_nonpos {m h : Nat}
             (sourceMomentP m : Real) + 4) + 2) <= (h : Real) := by
       nlinarith [hfloorR, hmR]
     rw [div_le_iff₀ (by positivity : (0 : Real) < 3 * (m : Real))]
-    nlinarith [hratio, hfloor']
+    nlinarith [hratio, halphaUpper, hfloor']
   unfold sourceLowRelativeExponent
   rw [hrho]
   dsimp
   nlinarith [hrate, hconst, show 0 <= (h : Real) from by positivity]
+
+/-- The explicit coefficient and height estimates make the low-term ratio
+at most one after exponentiation. This follows from the derived cutoff. -/
+theorem source_low_relative_factor_le_one {m h : Nat}
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h) :
+    (2 : Real) ^ sourceLowRelativeExponent m h (sourceMomentP m) <= 1 := by
+  have hexp := source_low_relative_exponent_nonpos hm hfloor
+  have hpow := Real.rpow_le_rpow_of_exponent_le
+    (by norm_num : (1 : Real) <= 2) hexp
+  simpa using hpow
+
 /-- Exponent envelope for the low-HC contribution after using eta=2 times the
 manuscript threshold, alpha=(P-2)/P >= 2/3, and d=2h available ranks. -/
 def sourceTailHeightFloor (m : Nat) : Nat := max (4000 * m ^ 2) (12 * m)
