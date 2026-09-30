@@ -61,7 +61,6 @@ theorem source_high_error_exponent_gap_positive {m h : Nat}
   have hmRlarge : (256 : Real) <= (m : Real) := by exact_mod_cast hm
   have hhR : 20001 * (m : Real) ^ 2 <= (h : Real) := by exact_mod_cast hh
   have hrho := fixed_rho_pos hmpos
-  have hr := source_rank_eq_radius hmpos
   have hcoeff :
       2 * (m : Real) <=
         (8 / 3 : Real) * (m : Real) - 2 +
