@@ -48,6 +48,8 @@ def main():
     ap.add_argument('--dependency-snapshot', action='append', default=[],
                     help='Uncompiled overlay as repository-source=durable-snapshot-path')
     ap.add_argument('--prebuild-source', action='append', default=[])
+    ap.add_argument('--prebuild-snapshot', action='append', default=[],
+                    help='Explicit compiled prebuild overlay as repository-source=durable-snapshot-path')
     a = ap.parse_args()
     if a.reuse_tag:
         assert re.fullmatch(r'cmmsa_analytic_\d{8}T\d{6}Z', a.reuse_tag)
@@ -64,6 +66,11 @@ def main():
     snapshots = dict(item.split('=', 1) for item in a.dependency_snapshot)
     assert set(snapshots) <= set(a.dependency_source)
     assert not set(snapshots).intersection(a.prebuild_source)
+    compiled_snapshots = dict(item.split('=', 1) for item in a.prebuild_snapshot)
+    assert set(compiled_snapshots) <= set(a.prebuild_source)
+    assert set(compiled_snapshots) <= set(a.dependency_source)
+    assert not set(compiled_snapshots).intersection(snapshots)
+    snapshots.update(compiled_snapshots)
     for dep, pin in zip(a.dependency_source, a.dependency_sha):
         assert dep.startswith('lean/') and dep.endswith('.lean') and '..' not in dep
         payload_path = (REPO / snapshots.get(dep, dep)).resolve()
@@ -161,6 +168,7 @@ sha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256
     preparation = {'prepared': True, 'archive': str(archive), 'script': str(script),
         'source_sha': a.expected_sha, 'archive_sha': archive_sha, 'execute': a.execute,
         'overlay_pins': overlay_pins, 'dependency_snapshots': snapshots,
+        'compiled_prebuild_snapshots': compiled_snapshots,
         'runner_sha256': hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()}
     (base / 'preparation.json').write_text(json.dumps(preparation, indent=2), encoding='utf-8')
     print(json.dumps(preparation, indent=2))
