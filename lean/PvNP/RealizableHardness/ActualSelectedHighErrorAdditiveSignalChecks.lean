@@ -1,0 +1,7 @@
+import PvNP.RealizableHardness.ActualSelectedHighErrorAdditiveSignal
+
+open PvNP.RealizableHardness.ActualSelectedHighErrorAdditiveSignal
+
+#check sourceAdditiveSignalExponent
+#check doubled_high_error_budget_le_additive_half
+#print axioms doubled_high_error_budget_le_additive_half
