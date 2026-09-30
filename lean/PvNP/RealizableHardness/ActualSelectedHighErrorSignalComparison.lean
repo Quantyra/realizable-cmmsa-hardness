@@ -76,7 +76,7 @@ theorem source_high_error_gap_ge_three {m h : Nat}
     calc
       8 = 4 * 2 := by norm_num
       _ <= m ^ 2 * m := Nat.mul_le_mul hmsqNat hmge2
-      _ = m ^ 3 := by rw [pow_succ, pow_two]
+      _ = m ^ 3 := by norm_num [pow_succ, pow_two]
   have hmcube : (8 : Real) <= (m : Real) ^ 3 := by exact_mod_cast hmcubeNat
   have hmain : 40000 * (m : Real) ^ 3 + 10 <= 40002 * (m : Real) ^ 3 := by
     nlinarith [hmcube]
@@ -94,7 +94,7 @@ private theorem leafK_eq_fixedRho_height {m h : Nat}
     (hm : 0 < m) (hdiv : bOf m ∣ h) :
     (leafK m h : Real) = 2 * (fixedRho m : Real) * (h : Real) := by
   have hK : leafK m h = 2 * (h / bOf m) :=
-    ActualSelectedSpectralTailGeometry.leafK_eq_two_mul_quotient hdiv
+    ActualSelectedSpectralParameters.leafK_eq_two_mul_quotient hdiv
   have hqNat : bOf m * (h / bOf m) = h := by
     have hmod : h % bOf m = 0 := Nat.mod_eq_zero_of_dvd hdiv
     have hdecomp := Nat.mod_add_div h (bOf m)
@@ -104,7 +104,6 @@ private theorem leafK_eq_fixedRho_height {m h : Nat}
     exact_mod_cast hqNat
   have hrho := ActualSelectedComplementAnalyticNumerics.fixed_rho_explicit hm
   have hbR : (bOf m : Real) = 4000 * (m : Real) ^ 2 := by simp [bOf]
-  rw [hbR] at hqR
   rw [hK, hrho, hbR]
   push_cast
   field_simp [ne_of_gt (show (0 : Real) < (m : Real) by exact_mod_cast hm)]
@@ -118,9 +117,12 @@ private theorem manuscript_threshold_eq_dyadic {m h : Nat} (hm : 0 < m) :
 
 private theorem dyadic_power_square {x : Real} :
     ((2 : Real) ^ x) ^ 2 = (2 : Real) ^ (2 * x) := by
-  rw [← Real.rpow_natCast ((2 : Real) ^ x) 2, Real.rpow_mul (by norm_num)]
-  congr 1
-  ring
+  calc
+    ((2 : Real) ^ x) ^ 2 = ((2 : Real) ^ x) ^ (2 : Real) := by
+      rw [Real.rpow_natCast]
+    _ = (2 : Real) ^ (x * 2) := by
+      rw [Real.rpow_mul (by norm_num : (0 : Real) <= 2)]
+    _ = (2 : Real) ^ (2 * x) := by rw [show x * 2 = 2 * x by ring]
 
 /-- The actual spectral high term is bounded by the conservative error
 exponent; the i-dependent second tail term is handled upstream by the genuine
@@ -145,9 +147,13 @@ theorem spectral_high_error_le_dyadic {m h : Nat}
   have hscaledRank : (sourceRankExponent m : Real) *
       (2 * (fixedRho m : Real) * (h : Real)) =
         20 * (m : Real) * (h : Real) := by
-    rw [hrhoRank]
-    ring
-  have ha := manuscript_threshold_eq_dyadic hmpos
+    calc
+      (sourceRankExponent m : Real) *
+          (2 * (fixedRho m : Real) * (h : Real)) =
+        2 * ((sourceRankExponent m : Real) * (fixedRho m : Real)) * (h : Real) := by ring
+      _ = 2 * (10 * (m : Real)) * (h : Real) := by rw [hrhoRank]
+      _ = 20 * (m : Real) * (h : Real) := by ring
+  have ha := manuscript_threshold_eq_dyadic (m := m) (h := h) hmpos
   have ha2 : (manuscriptMomentThreshold m h) ^ 2 =
       (2 : Real) ^ (2 * (-((20 : Real) / 3) * (m : Real) * (h : Real))) := by
     rw [ha, dyadic_power_square]
@@ -219,7 +225,7 @@ theorem threshold_high_error_le_dyadic {m h : Nat} (hm : 256 <= m)
           (20 / 3 : Real) * (m : Real) ^ 2 * (h : Real) := by
       nlinarith [hcoefMul, hhlarge]
     linarith [hdom, hweightedLower]
-  have ha := manuscript_threshold_eq_dyadic hmpos
+  have ha := manuscript_threshold_eq_dyadic (m := m) (h := h) hmpos
   have haPow : (manuscriptMomentThreshold m h) ^ m =
       (2 : Real) ^ ((-((20 : Real) / 3) * (m : Real) * (h : Real)) *
         (m : Real)) := by
