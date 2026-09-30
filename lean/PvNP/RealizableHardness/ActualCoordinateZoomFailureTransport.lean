@@ -177,14 +177,14 @@ theorem coordinate_agrees_iff {q d : Nat}
         (P := pullbackDecodedPair I copies U A Q P)
         ((grassEquiv I copies U A).symm L) hLW := by
   classical
-  let Ls := (grassEquiv I copies U A).symm L
   let s := coordinateSubspaceEquivFromCoord I copies U A L
   let eW := pulledSubspaceEquiv I copies U A P.W
-  have htable (y : Ls.val) :
-      coordinateLeafTable I copies U A T L (s y) = T Ls y := by
-    simp [coordinateLeafTable, s, Ls,
-      LinearEquiv.ofSubmodules_symm_apply]
-  have hfunctional (y : Ls.val) :
+  have htable (y : ((grassEquiv I copies U A).symm L).val) :
+      coordinateLeafTable I copies U A T L (s y) =
+        T ((grassEquiv I copies U A).symm L) y := by
+    simp [coordinateLeafTable, s, grassEquiv,
+      LinearEquiv.symm_apply_apply]
+  have hfunctional (y : ((grassEquiv I copies U A).symm L).val) :
       (pullbackDecodedPair I copies U A Q P).g ⟨y, hLW y.property⟩ =
         P.g ⟨s y, hcoord (s y).property⟩ := by
     change P.g (eW ⟨y, hLW y.property⟩) = _
@@ -194,11 +194,20 @@ theorem coordinate_agrees_iff {q d : Nat}
   constructor
   · intro h y
     have hy := h (s y)
-    simpa [AgreesOn, htable y, hfunctional y] using hy
+    rw [htable y] at hy
+    calc
+      T ((grassEquiv I copies U A).symm L) y =
+          P.g ⟨s y, hcoord (s y).property⟩ := hy
+      _ = (pullbackDecodedPair I copies U A Q P).g ⟨y, hLW y.property⟩ :=
+        (hfunctional y).symm
   · intro h x
     obtain ⟨y, rfl⟩ := s.surjective x
     have hy := h y
-    simpa [AgreesOn, htable y, hfunctional y] using hy
+    calc
+      coordinateLeafTable I copies U A T L (s y) =
+          T ((grassEquiv I copies U A).symm L) y := htable y
+      _ = (pullbackDecodedPair I copies U A Q P).g ⟨y, hLW y.property⟩ := hy
+      _ = P.g ⟨s y, hcoord (s y).property⟩ := hfunctional y
 
 /-- The induced bijection on the subfibres satisfying decoded agreement. -/
 def coordinateAgreeingZoomEquiv {q d : Nat}
@@ -213,8 +222,8 @@ def coordinateAgreeingZoomEquiv {q d : Nat}
   have hleafInv : (grassEquiv I copies U A).symm
       (grassEquiv I copies U A z.1) = z.1 :=
     (grassEquiv I copies U A).left_inv z.1
-  have hsource : (grassEquiv I copies U A).symm
-      (grassEquiv I copies U A z.1) |>.val ≤
+  have hsource :
+      ((grassEquiv I copies U A).symm (grassEquiv I copies U A z.1)).val ≤
         (pullbackDecodedPair I copies U A Q P).W := by
     simpa [hleafInv] using z.2.2
   have hagree := coordinate_agrees_iff I copies U A T Q P
