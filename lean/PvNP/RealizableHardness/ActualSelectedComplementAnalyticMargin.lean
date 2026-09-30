@@ -38,12 +38,6 @@ def sourceLowHCHeightFloor (m : Nat) : Nat :=
 
 /-- Exponent envelope for the low-HC contribution after using eta=2 times the
 manuscript threshold, alpha=(P-2)/P >= 2/3, and d=2h available ranks. -/
-def sourceLowHCEnvelopeExponent (m h : Nat) : Real :=
-  (m : Real) *
-      (500 * (sourceRankExponent m : Real) ^ 2 * (sourceMomentP m : Real) +
-        2 * (h : Real) + 2 - (40 / 9 : Real) * (m : Real) * (h : Real)) +
-    (m : Real)
-
 def sourceTailHeightFloor (m : Nat) : Nat := max (4000 * m ^ 2) (12 * m)
 
 def sourceMarginHeightFloor (m : Nat) : Nat :=
@@ -99,21 +93,17 @@ theorem source_signal_exponent_gap_exact {m h : Nat} :
 smaller than the source's unconditional weighted-signal exponent. The finite
 sum estimate is separately provided by `selected_low_HC46_constant_sum_bound`;
 this lemma pays its worst-rank coefficient and level-count factors. -/
-theorem source_low_HC_envelope_below_weighted_signal {m h : Nat}
-    (hm : 256 <= m) (hh : sourceLowHCHeightFloor m <= h) :
-    sourceLowHCEnvelopeExponent m h <= sourceWeightedSignalExponent m h := by
-  have hmpos : 0 < m := by omega
-  have hmR : (256 : Real) <= (m : Real) := by exact_mod_cast hm
-  have hhR :
-      100 * (500 * (sourceRankExponent m : Real) ^ 2 *
-        (sourceMomentP m : Real) + 100) <= (h : Real) := by
-    exact_mod_cast (show sourceLowHCHeightFloor m <= h by simpa [sourceLowHCHeightFloor] using hh)
-  have hrho := fixed_rho_explicit hmpos
-  have hr : (sourceRankExponent m : Real) = 40000 * (m : Real) ^ 3 := by
-    norm_num [sourceRankExponent, pow_succ]
-  unfold sourceLowHCEnvelopeExponent sourceWeightedSignalExponent
-  rw [hrho, hr]
-  nlinarith [hhR, sq_nonneg ((m : Real) - 1), sq_nonneg ((m : Real) - 256)]
+theorem selected_actual_low_HC_sum_bound {h m : Nat}
+    (heta : 0 <= 2 * manuscriptAgreementFloor m h) :
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+      (p := sourceMomentP m) (2 * manuscriptAgreementFloor m h) <=
+      ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+          (2 * manuscriptAgreementFloor m h) ^
+            (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+  simpa using selected_low_HC46_constant_sum_bound
+    (d := 2 * h) (r := sourceRankExponent m) (p := sourceMomentP m)
+    (eta := 2 * manuscriptAgreementFloor m h) heta
 
 theorem source_high_error_exponent_gap_positive {m h : Nat}
     (hm : 256 <= m) (hh : 20001 * m ^ 2 <= h) :
