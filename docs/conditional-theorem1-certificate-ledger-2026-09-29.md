@@ -805,3 +805,10 @@ The exact normalized HC aggregate and conditional HC/spectral moment composition
 ### UNVERIFIED diagnostic checkpoint: durable 064137
 
 Owned run56317 ended with VM TERMINATED. Archive081DE7C41E40C8A75ED5EBC964E8050196B0739B80ACB1737B7E84557B067E69 authenticates parameter prebuild integer0 and main integer1. Frozen source pins51E37/BF9C/78FB are in source-before.sha256. Main has exactly one remaining reported error: Fin.sum_univ_eq_sum_range needs its explicit dimension after the function argument. Actual finite HC/spectral composition otherwise produced no reported errors, but the module is not green. This checkpoint is NOT analytic/core acceptance; no profiles or final lenses are claimed. All stable prepared inputs, actual raw outputs and automatic structured terminal result are durable and byte-backed up. The actual selected caller and inverse/core remain open.
+
+
+### Build-green intermediate checkpoint: 064926 (not route-final acceptance)
+
+Authenticated run57888 / archive694D8526E6F6B6FE17F1F4B1DA1F75877D7F76B3B253CA490118119A77451482 reports parameter prebuild integer0 and main integer0, no error headers, and authoritative wrapper0/VM TERMINATED. Frozen sources AA22D91A1E6563900B93B826BBAA70638D0D08C9A0A0D5C8B477B51AABCAC09E, BF9C27E32D08A6D4FCE7853D6D45F5BF2BA229635BE0C2AC7229A02979B5532B, and78FB8DF0B635E950ED087C3598530B328AD25EC5AC4B2DBF556CBE433A46E582 have matching before/after hashes. Linux normal objects6AF69AA1E85DC8B9091D0118661B899C10DEA411B3795D74067ECF3E1A456AB4,6C72341582DB34C60E3C0D0F6600EB048A3B1C1996163B4A0D98059005FDAEF5,3AAFAF101F646EAA61891A08670C98D2653142B4D290CF33CF85D03025E35AF1 are pinned. Exact raw evidence and byte backup remain durable.
+
+This builds the conditional finite HC/spectral composition with the exact normalized low-level sum, shared center, Boolean deficient-zero lift, beta domination, and internally proved dyadic window. It does NOT accept source-contract inhabitants, actual selected caller, inverse, decoder, runtime or full core. Material selected caller and focused export axiom profiles plus three independent final lenses remain pending; author/orchestrator hint overlap is retained.
