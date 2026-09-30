@@ -80,8 +80,8 @@ theorem selected_weighted_levels_le_max_weight {n d : Nat}
     (F : BinaryMatrix n d -> Real) (S : Finset (Fin (d + 1)))
     (weight : Fin (d + 1) -> Real) (B : Real)
     (hB : 0 <= B)
-    (hweight0 : forall i, i in S -> 0 <= weight i)
-    (hweight : forall i, i in S -> weight i <= B)
+    (hweight0 : forall i, i ∈ S -> 0 <= weight i)
+    (hweight : forall i, i ∈ S -> weight i <= B)
     (hFenergy : uniformMean (fun M => F M ^ 2) <= 1) :
     Finset.sum S (fun i => weight i *
       uniformMean (fun M : BinaryMatrix n d =>
@@ -195,11 +195,11 @@ theorem selected_actual_high_spectral_sum_le_tail {n d r s : Nat}
       3 * (2 : Real) ^ ((i.val : Real) - (n : Real))
   let B : Real := (2 : Real) ^ (-(r : Real) * ((s : Real) - 1))
   have hB : 0 <= B := by positivity
-  have hwt0 : forall i, i in S -> 0 <= wt i := by
+  have hwt0 : forall i, i ∈ S -> 0 <= wt i := by
     intro i hi
     dsimp [wt]
     positivity
-  have hwt : forall i, i in S -> wt i <= B := by
+  have hwt : forall i, i ∈ S -> wt i <= B := by
     intro i hi
     have hir : r < i.val := (Finset.mem_filter.mp hi).2
     have hiD : i.val <= d := Nat.le_of_lt_succ i.isLt
