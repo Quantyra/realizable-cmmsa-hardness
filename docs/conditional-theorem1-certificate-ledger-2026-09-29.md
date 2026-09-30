@@ -612,3 +612,47 @@ and Checks `3B9C0C8B5E20D309FE41AF6E1010598A47E5034263079A11A7F24B372B7CC65B`.
 The disqualified JSON originals are preserved with explicit `DISQUALIFIED-`
 filenames in the same evidence directory; their diagnostics remain historical,
 not acceptance receipts.
+
+### WIP: actual complement-coordinate mass transport (2026-09-29)
+
+This is an UNVERIFIED source checkpoint, not an accepted theorem increment.
+`ActualComplementCoordinateMassBridge` now contains the full attempted
+`matchingStarMass_actual_coordinate` and `matchingCenterMass_actual_coordinate`
+proofs. Both retain the SAME actual A, original tagged C/T, chosen f, and t/d/k
+ordered uniform star law. Selected coordinate tables explicitly consume tracked
+`transportedCenterTable`/`transportedLeafTable`; f is composed with the inverse
+actual basis coordinate equivalence. Exact pushforward/event preimage proofs are
+attempted, without a final-mass hypothesis. The redundant hdCoord proof remains
+explicit and must be derived from the actual hdA guard at the final caller.
+
+Stable WIP source SHA256:
+`290767FB56C04CBA4FB1BC8BE6F1900AB6F2AC0E7070F1BC3E62F84245D593DD`.
+This latest repair has NOT been checked. The last checked source was
+`CC6CA78901CA068998978CB62E74BA9278460B9F4C7D133FCE014EC207ABD897`:
+native exit 1, guard_terminated=false, no fresh accepted object. Its diagnostics
+were inverse extension containment and stale named m after renaming leaf count
+k. The current source rewrites the mapped-back center with Grass left_inv and
+uses the actual k parameter. Earlier diagnostics included mapped finrank,
+namespace/arity and dependent Sigma inverse proofs; the latter were replaced
+by accepted Equiv.sigmaCongr/piCongrRight APIs. Lean's failed-elaboration sorry
+warnings are NOT a standard axiom receipt or accepted proof.
+
+Coordinate history is separated from accepted POST evidence in
+`docs/native-receipts/ActualComplementCoordinateMassBridge/`. It preserves two
+prelaunch refusal triplets and seven authentic native-failure triplets, with
+original paths/arguments/pins in machine JSON and raw stdout/stderr retained.
+Latest native JSON `cmmsa_native_lean_20260930T015939Z_364ca420c0e94f389a6059d8a4a6784c.json`
+has raw SHA256 `555945E445C32ACD703FB3503AD0612DECD361C6710110689ED984CA199174E5`;
+its stdout SHA256 is `FEB9C09D50279D53DAA23470D195B1FE7EFBD22BE64C01B2ED4680975D23674F`.
+All coordinate launches used the inspected Python capture after the two explicit
+prelaunch path errors. No failure was attributed to a crossed memory guard.
+
+Both exact mass proofs, final source/Checks green, no-sorryAx profiles and the
+three final review lenses are STILL REQUIRED. No coordinate bridge acceptance,
+analytic moment estimate, inverse, robust 8S, numerical NO or conditional/full
+core closure is recorded. This WIP checkpoint preserves progress for continued
+Luna proof work and does not replace the full bridge target with carriers.
+The stable source has the same working and Git blob SHA256. Git-normalized
+latest diagnostic JSON SHA256 is
+`C299E53BD7B7F5B0EF90EF80FAC2218B2DAB62A7CCE74040F41E5F95F65C2740`;
+the raw byte hash above remains the machine receipt's original pin.

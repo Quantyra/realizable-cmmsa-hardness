@@ -1,0 +1,72 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:80:6: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  ((fun z =>
+          ⟨(grassCoordinateEquiv I copies U A).symm z.fst, fun i =>
+            ⟨(grassCoordinateEquiv I copies U A).symm ↑(z.snd i), ⋯⟩⟩)
+        ((fun z =>
+            ⟨(grassCoordinateEquiv I copies U A) z.fst, fun i => ⟨(grassCoordinateEquiv I copies U A) ↑(z.snd i), ⋯⟩⟩)
+          z)).snd ≍
+    z.snd
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.102} {β : α → Sort ?u.101} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case snd
+N m✝ : ℕ
+I : ActualOccurrenceAllocation.Instance N m✝
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+z : StarTuple t d m
+⊢ ((fun z =>
+          ⟨(grassCoordinateEquiv I copies U A).symm z.fst, fun i =>
+            ⟨(grassCoordinateEquiv I copies U A).symm ↑(z.snd i), ⋯⟩⟩)
+        ((fun z =>
+            ⟨(grassCoordinateEquiv I copies U A) z.fst, fun i => ⟨(grassCoordinateEquiv I copies U A) ↑(z.snd i), ⋯⟩⟩)
+          z)).snd ≍
+    z.snd
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:88:6: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  ((fun z => ⟨(grassCoordinateEquiv I copies U A) z.fst, fun i => ⟨(grassCoordinateEquiv I copies U A) ↑(z.snd i), ⋯⟩⟩)
+        ((fun z =>
+            ⟨(grassCoordinateEquiv I copies U A).symm z.fst, fun i =>
+              ⟨(grassCoordinateEquiv I copies U A).symm ↑(z.snd i), ⋯⟩⟩)
+          z)).snd ≍
+    z.snd
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.110} {β : α → Sort ?u.109} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case snd
+N m✝ : ℕ
+I : ActualOccurrenceAllocation.Instance N m✝
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+z : StarTuple t d m
+⊢ ((fun z => ⟨(grassCoordinateEquiv I copies U A) z.fst, fun i => ⟨(grassCoordinateEquiv I copies U A) ↑(z.snd i), ⋯⟩⟩)
+        ((fun z =>
+            ⟨(grassCoordinateEquiv I copies U A).symm z.fst, fun i =>
+              ⟨(grassCoordinateEquiv I copies U A).symm ↑(z.snd i), ⋯⟩⟩)
+          z)).snd ≍
+    z.snd
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:144:77: error: Application type mismatch: The argument
+  A
+has type
+  SideComplement I copies U
+but is expected to have type
+  SideComplement ?m.71 copies ?m.72
+in the application
+  starCoordinateEquiv ?m.71 copies ?m.72 A
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:177:77: error: Application type mismatch: The argument
+  A
+has type
+  SideComplement I copies U
+but is expected to have type
+  SideComplement ?m.61 copies ?m.62
+in the application
+  starCoordinateEquiv ?m.61 copies ?m.62 A

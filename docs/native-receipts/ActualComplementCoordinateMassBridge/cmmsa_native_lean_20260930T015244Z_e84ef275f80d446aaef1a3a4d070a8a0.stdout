@@ -1,0 +1,62 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:67:12: error: Application type mismatch: The argument
+  (z.snd i).property
+has type
+  ↑z.fst ≤ ↑↑(z.snd i)
+but is expected to have type
+  ?m.104 ∈ Submodule.map ?m.83 ?m.84
+in the application
+  Submodule.map_mono ?m.103 (z.snd i).property
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:73:12: error: Application type mismatch: The argument
+  (z.snd i).property
+has type
+  ↑z.fst ≤ ↑↑(z.snd i)
+but is expected to have type
+  ?m.163 ∈ Submodule.map ?m.128 ?m.129
+in the application
+  Submodule.map_mono ?m.162 (z.snd i).property
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:142:31: error: Application type mismatch: The argument
+  A
+has type
+  SideComplement I copies U
+but is expected to have type
+  ActualOccurrenceAllocation.Instance ?m.70 m
+in the application
+  starCoordinateEquiv A
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:140:49: error: unsolved goals
+N m✝ : ℕ
+I : ActualOccurrenceAllocation.Instance N m✝
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+T : TaggedLeafTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+⊢ matchingStarMass htd hdA (transportedCenterTable I copies U A C) (transportedLeafTable I copies U A T) f =
+    matchingStarMass htd hdCoord (selectedCoordinateCenterTable I copies U A C)
+      (selectedCoordinateLeafTable I copies U A T) (coordinateFunctional I copies U A f)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:174:31: error: Application type mismatch: The argument
+  A
+has type
+  SideComplement I copies U
+but is expected to have type
+  ActualOccurrenceAllocation.Instance ?m.60 m
+in the application
+  starCoordinateEquiv A
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:172:49: error: unsolved goals
+N m✝ : ℕ
+I : ActualOccurrenceAllocation.Instance N m✝
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+⊢ matchingCenterMass htd hdA (transportedCenterTable I copies U A C) f =
+    matchingCenterMass htd hdCoord (selectedCoordinateCenterTable I copies U A C) (coordinateFunctional I copies U A f)

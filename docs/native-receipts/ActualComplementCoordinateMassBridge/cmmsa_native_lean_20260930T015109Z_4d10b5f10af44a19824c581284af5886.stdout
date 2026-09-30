@@ -1,0 +1,50 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:64:9: error: Type mismatch: After simplification, term
+  (z.snd i).property
+ has type
+  ↑z.fst ≤ ↑↑(z.snd i)
+but is expected to have type
+  ↑({ toFun := coordinateSubspace I copies U A,
+          invFun := fun K => ⟨Submodule.map ↑(actualCoordinateEquiv I copies U A).symm ↑K, ⋯⟩, left_inv := ⋯,
+          right_inv := ⋯ }
+        z.fst) ≤
+    ↑({ toFun := coordinateSubspace I copies U A,
+          invFun := fun K => ⟨Submodule.map ↑(actualCoordinateEquiv I copies U A).symm ↑K, ⋯⟩, left_inv := ⋯,
+          right_inv := ⋯ }
+        ↑(z.snd i))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:67:9: error: Type mismatch: After simplification, term
+  (z.snd i).property
+ has type
+  ↑z.fst ≤ ↑↑(z.snd i)
+but is expected to have type
+  ↑({ toFun := coordinateSubspace I copies U A,
+            invFun := fun K => ⟨Submodule.map ↑(actualCoordinateEquiv I copies U A).symm ↑K, ⋯⟩, left_inv := ⋯,
+            right_inv := ⋯ }.symm
+        z.fst) ≤
+    ↑({ toFun := coordinateSubspace I copies U A,
+            invFun := fun K => ⟨Submodule.map ↑(actualCoordinateEquiv I copies U A).symm ↑K, ⋯⟩, left_inv := ⋯,
+            right_inv := ⋯ }.symm
+        ↑(z.snd i))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:96:31: error: Application type mismatch: The argument
+  (grassCoordinateEquiv I copies U A).right_inv
+has type
+  Function.RightInverse (grassCoordinateEquiv I copies U A).invFun (grassCoordinateEquiv I copies U A).toFun
+but is expected to have type
+  ?m.83 = ?m.84
+in the application
+  congrArg Subtype.val (grassCoordinateEquiv I copies U A).right_inv
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:136:42: error: Application type mismatch: The argument
+  A
+has type
+  SideComplement I copies U
+but is expected to have type
+  SideComplement ?m.71 copies ?m.73
+in the application
+  starCoordinateEquiv ?m.71 copies ?m.73 A
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:168:42: error: Application type mismatch: The argument
+  A
+has type
+  SideComplement I copies U
+but is expected to have type
+  SideComplement ?m.61 copies ?m.63
+in the application
+  starCoordinateEquiv ?m.61 copies ?m.63 A

@@ -1,0 +1,55 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:67:4: error: Application type mismatch: The argument
+  Submodule.map_mono L.property
+has type
+  Submodule.map ↑(actualCoordinateEquiv I copies U A).symm ↑((grassCoordinateEquiv I copies U A) K) ≤
+    Submodule.map ↑(actualCoordinateEquiv I copies U A).symm ↑↑L
+but is expected to have type
+  ↑K ≤ ↑((grassCoordinateEquiv I copies U A).symm ↑L)
+in the application
+  ⟨(grassCoordinateEquiv I copies U A).symm ↑L, ⋯⟩
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:133:22: error: Invalid argument name `m` for function `DFunLike.coe`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `N`: m̵N̲
+  • `rows`: m̵r̲o̲w̲s̲
+  • `k`: m̵k̲
+  • `A`: m̵A̲
+  • `a`: m̵a̲
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:130:49: error: unsolved goals
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+T : TaggedLeafTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+⊢ matchingStarMass htd hdA (transportedCenterTable I copies U A C) (transportedLeafTable I copies U A T) f =
+    matchingStarMass htd hdCoord (selectedCoordinateCenterTable I copies U A C)
+      (selectedCoordinateLeafTable I copies U A T) (coordinateFunctional I copies U A f)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:166:22: error: Invalid argument name `m` for function `DFunLike.coe`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `N`: m̵N̲
+  • `rows`: m̵r̲o̲w̲s̲
+  • `k`: m̵k̲
+  • `A`: m̵A̲
+  • `a`: m̵a̲
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualComplementCoordinateMassBridge.lean:163:49: error: unsolved goals
+N rows : ℕ
+I : ActualOccurrenceAllocation.Instance N rows
+copies J : ℕ
+U : TaggedGoodU I copies J
+t d m : ℕ
+A : SideComplement I copies U
+htd : t ≤ d
+hdA : d ≤ Module.finrank (ZMod 2) ↥↑A
+hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J)
+C : TaggedCenterTable I copies
+f : Module.Dual (ZMod 2) ↥↑A
+⊢ matchingCenterMass htd hdA (transportedCenterTable I copies U A C) f =
+    matchingCenterMass htd hdCoord (selectedCoordinateCenterTable I copies U A C) (coordinateFunctional I copies U A f)
