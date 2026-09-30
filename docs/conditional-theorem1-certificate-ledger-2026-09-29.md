@@ -848,3 +848,15 @@ All three are freshly executed independent top-level reviews. Sol's contextual c
 Supplied premises remain chosen I/U/A, actual C/T/f, selector with max analytic source floor and m+2, samplerA >= 1, r < leafT+leafK, nonnegative Rat e, the full coordinate failed-zoom family, positive threshold a, and source-scoped HC46/Spectral47 component contracts. The source guards do not add eta <= 1 or HC basis invariance. No final moment, beta equality, decoder, or inverse result is assumed.
 
 OPEN: the original-complement universal zoom-failure transfer (its current native attempt is not accepted), numerical low/high error simplification, inverse witness, robust 8S decoding, numeric NO/runtime/full core, and later classical component-contract inhabitants. No publication or outward theorem expansion follows from this bounded acceptance.
+
+### 2026-09-30: decoded zoom coordinate transport native green; reviews pending
+
+The subsequent D157 transport source and BD7A Checks compiled in actual run 090338 with prebuild/native exit 0 and verified final VM state TERMINATED. The exact archive is 77115c3a86b1a349432ce1c060ac6f4aa18ba8581f9840e3b5c3f77aedef3929. Five material axiom profiles contain only propext, Classical.choice, and Quot.sound. The separate zoom-claims manifest and actual scoped audit verify two source pins, two object receipt pins, and those five profiles; they do not replace independent reviews.
+
+| Fresh independent top-level lens | Current status |
+| --- | --- |
+| Proof adversarial | Review running; final verdict pending |
+| Complexity theory | Not yet executed for this increment |
+| Non-claims boundary | Not yet executed for this increment |
+
+This is a native-green candidate, not an accepted transport increment. It preserves arbitrary decoded functionals, exact Rat agreement, codimension, the complete source failed-zoom quantifiers, exact total budget, and the nonempty Zoom guard. The numerical and Margin overlays in this run were source-only snapshots and were not compiled by this gate. Original-failure integration into the selected analytic caller, numerical inverse margins, inverse/robust8S/runtime core, and classical component inhabitants remain open. Root/Sol routing-hint overlap and the existing delegation governance debt remain disclosed.
