@@ -1,0 +1,19 @@
+import PvNP.RealizableHardness.ActualSelectedHighErrorSignalComparison
+
+open PvNP.RealizableHardness.ActualSelectedHighErrorSignalComparison
+
+#check sourceRankExponent
+#check sourceHighErrorExponentGap
+#check sourceHighErrorExponent
+#check sourceWeightedSignalExponent
+#check source_signal_exponent_gap_exact
+#check source_high_error_gap_ge_three
+#check spectral_high_error_le_dyadic
+#check threshold_high_error_le_dyadic
+#check doubled_high_error_budget_le_half
+
+#print axioms source_signal_exponent_gap_exact
+#print axioms source_high_error_gap_ge_three
+#print axioms spectral_high_error_le_dyadic
+#print axioms threshold_high_error_le_dyadic
+#print axioms doubled_high_error_budget_le_half
