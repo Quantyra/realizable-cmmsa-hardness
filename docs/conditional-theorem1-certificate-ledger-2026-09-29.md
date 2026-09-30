@@ -551,3 +551,64 @@ linear-equivalence transport of the SAME C/T/f and the uniform Grassmannian laws
 the finrank equality alone does not supply that bridge. Source-scoped classical
 clauses must retain their checked standing assumptions. This audit is not a
 classical contract inhabitant or an actual analytic moment bound.
+
+### Actual post-append Fourier cross-level orthogonality (2026-09-29)
+
+`ActualAppendFourierCrossLevelOrthogonality` proves the exact unconditional
+append operator has zero averaged product between two distinct Fourier ranks
+of the SAME fixed real function F. All base and append matrices are included;
+there is no full-rank conditioning or basis-invariance premise. Append averaging
+kills nonzero tail frequencies. For surviving tails, distinct full ranks imply
+distinct base frequencies, so character orthogonality and finite coefficient
+expansion prove the final post-operator identity. The helper
+`appendAverage_character_mul_eq_zero` specifically assumes distinct RANKS,
+although its descriptive comment refers to distinct frequencies. Zero dimensions
+are included. This is an internally proved finite identity, not a claim that the
+paper states arbitrary-function spectral estimates.
+
+Frozen SHA256 pins:
+
+- Main source: `AE8D620F887E45B9B4445375640E5EB3AE54C5B56A81186DF77B6FC55D741652`.
+- Checks source: `26652622F88D67216BA355F14D240211D95EE828DCBBF18244457D08755894A4`.
+- Normal main object: `46A207E2AD408BF376617BD8D3702955AFC32EEC392D70C69333DA4AC86C8BF9`.
+- Normal Checks object: `2FCD60504BE5CA64DA2DC7C031A63A9D7219323CB2DAC39F94C1912B10D7AF08`.
+
+Authoritative machine evidence is preserved byte-for-byte under
+`docs/native-receipts/ActualAppendFourierCrossLevelOrthogonality/`, including
+the Python capture helper, native 0/7 self-tests, JSON receipts and raw streams.
+The helper SHA256 is `1548CA444C2EF3A12F5736A1B2CC3C81849EE299DA79DBA614A92D0E4B3F2629`.
+Original paths are retained in each receipt. Main session 34972 and Checks
+session 89834 both have actual Python Popen native exit 0, success=true,
+unchanged source pins, fresh normal objects, and guard_terminated=false.
+Main stdout/stderr are empty. Checks has eight exact signatures and three
+material profiles `[propext, Classical.choice, Quot.sound]`; the final theorem's
+profile covers all its transitive helper dependencies and excludes sorryAx.
+
+- Main JSON `cmmsa_native_lean_20260930T012553Z_e70997610da24ce8ba871774606c88d4.json`: raw SHA256 `EE6347DA5954F7EB7BABDE4CEA5E246729BB1625EF4D0A5D2C121511C6933C0C`.
+- Checks JSON `cmmsa_native_lean_20260930T012717Z_10181d86d5984b578478c85a93264745.json`: raw SHA256 `5F579571F9270087F6FC20594AD1D2C456950C503CD644403ECCB029E69BFAAE`.
+- Checks stdout: `1C7C6CF2F30FADC8686409B32FA134961EAF9C9D90ABD5764A78400742EA6576`.
+
+Earlier sessions 30001 and 93047 are NOT acceptance evidence: their capture
+reported null or inconsistent zero exit while Lean errors remained, and omitted
+normal -o output. The new Python capture and successful reruns supersede those
+disqualified receipts; they do not retroactively validate them.
+
+| Top-level lens | Verdict | Bounded scope |
+| --- | --- | --- |
+| Proof-adversarial (independent reviewer) | GO | Full frozen source, actual native receipts, normal objects and focused Checks inspected. |
+| Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Same F, unconditional append draws, common base and exact finite weights; no spectral magnitude or runtime assertion. Orchestration and proof-hint overlap is disclosed; no direct proof edit was performed. |
+| Non-claims boundary (separate reviewer) | GO-WITH-NOTES | Independently verified frozen source, durable successful receipts and raw standard profiles; the arbitrary-function result is local, not claimed verbatim from MZ. |
+
+Exact complement-to-coordinate SAME C/T/f star mass AND center mass transport,
+selected parameter guards, source-scoped HC/spectral application, analytic moment
+bound, actual inverse, robust 8S, numeric NO, conditional/full core and final
+consolidation remain OPEN. S3126 review debt and outward classical contract
+inhabitants remain open. This increment supplies post-append orthogonality only.
+Task/OpenCode fallback governance debt is unchanged. Byte-exact working evidence
+hashes above are retained even if Git text normalization changes committed hashes.
+Git-normalized LF receipt SHA256 values are main
+`DB84473E94AEB438F50354151204E42EE93FFA41596E41A33F979CDBC5598350`
+and Checks `3B9C0C8B5E20D309FE41AF6E1010598A47E5034263079A11A7F24B372B7CC65B`.
+The disqualified JSON originals are preserved with explicit `DISQUALIFIED-`
+filenames in the same evidence directory; their diagnostics remain historical,
+not acceptance receipts.

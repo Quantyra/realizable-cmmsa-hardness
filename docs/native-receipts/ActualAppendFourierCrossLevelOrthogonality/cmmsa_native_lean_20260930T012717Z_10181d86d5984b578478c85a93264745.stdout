@@ -1,0 +1,70 @@
+PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.pairing_appendBinaryMatrix {n c s : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n c)
+  (Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n s)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n c)
+  (B : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n s) :
+  PvNP.RealizableHardness.BinaryMatrixFourier.pairing
+      (PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrix Y Z)
+      (PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrix M B) =
+    PvNP.RealizableHardness.BinaryMatrixFourier.pairing Y M + PvNP.RealizableHardness.BinaryMatrixFourier.pairing Z B
+PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.character_appendBinaryMatrix {n c s : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n c)
+  (Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n s)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n c)
+  (B : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n s) :
+  PvNP.RealizableHardness.BinaryMatrixFourier.character
+      (PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrix Y Z)
+      (PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrix M B) =
+    PvNP.RealizableHardness.BinaryMatrixFourier.character Y M *
+      PvNP.RealizableHardness.BinaryMatrixFourier.character Z B
+PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.appendAverage_character {n c s : ℕ}
+  (Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (c + s))
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n c) :
+  PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendAverage
+      (PvNP.RealizableHardness.BinaryMatrixFourier.character Z) M =
+    if ((PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrixEquiv n c s).symm Z).2 = 0 then
+      PvNP.RealizableHardness.BinaryMatrixFourier.character
+        ((PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrixEquiv n c s).symm Z).1 M
+    else 0
+PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.appendAverage_character_mul_eq_zero {n c s : ℕ}
+  (Z Z' : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (c + s)) (hrank : Matrix.rank Z ≠ Matrix.rank Z') :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M =>
+      PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendAverage
+          (PvNP.RealizableHardness.BinaryMatrixFourier.character Z) M *
+        PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendAverage
+          (PvNP.RealizableHardness.BinaryMatrixFourier.character Z') M) =
+    0
+PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.uniformMean_sum.{u_1} {n d : ℕ} {α : Type u_1}
+  [Fintype α] (s : Finset α) (f : α → PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℝ) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => ∑ a ∈ s, f a M) =
+    ∑ a ∈ s, PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean (f a)
+PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.uniformMean_const_mul {n d : ℕ} (a : ℝ)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℝ) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => a * f M) =
+    a * PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean f
+PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.appendAverage_rankProjection_sum {n c s i : ℕ}
+  (F : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (c + s) → ℝ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n c) :
+  PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendAverage
+      (PvNP.RealizableHardness.BinaryMatrixFourier.rankProjection i F) M =
+    ∑ Z with Matrix.rank Z = i,
+      PvNP.RealizableHardness.BinaryMatrixFourier.fourierCoeff F Z *
+        PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendAverage
+          (PvNP.RealizableHardness.BinaryMatrixFourier.character Z) M
+PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.uniformMean_appendAverage_rankProjection_mul_rankProjection_eq_zero
+  {n c s i j : ℕ} (hij : i ≠ j) (F : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (c + s) → ℝ) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M =>
+      PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendAverage
+          (PvNP.RealizableHardness.BinaryMatrixFourier.rankProjection i F) M *
+        PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendAverage
+          (PvNP.RealizableHardness.BinaryMatrixFourier.rankProjection j F) M) =
+    0
+'PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.appendAverage_character_mul_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.appendAverage_rankProjection_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality.uniformMean_appendAverage_rankProjection_mul_rankProjection_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
