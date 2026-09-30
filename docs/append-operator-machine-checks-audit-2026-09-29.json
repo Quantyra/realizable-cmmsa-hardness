@@ -1,0 +1,89 @@
+{
+    "MainSourceSHA256":  "EB71A55A38E8922333058F0D05D8E48472003AAA9BEE2B9F01A9DE00668A7B77",
+    "ChecksSourceSHA256":  "6995A25BBEC41EA6C1ECE710CA11EA2DFC9585B5106E97C416A4DD4909BF5E9A",
+    "MainOleanSHA256":  "5E37F434B0B0F20E3AE5F3895D6129D2432EEDEAC033B88D776DBB1043981828",
+    "ChecksOleanSHA256":  "8E662C6F9EF73DFA46E77DF80CE91774E4AC381C46525D60C9C91A8A2A745312",
+    "Executable":  "C:\\Users\\Dan\\.elan\\toolchains\\leanprover--lean4---v4.34.0-rc2\\bin\\lean.exe",
+    "Arguments":  "-j 1 -o \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\build\\lib\\lean\\PvNP\\RealizableHardness\\ActualFixedFunctionalAppendOperatorChecks.olean\" \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\lean\\PvNP\\RealizableHardness\\ActualFixedFunctionalAppendOperatorChecks.lean\"",
+    "LEAN_PATH":  "C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\aesop\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\batteries\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\complexitylib\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\importGraph\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\LeanSearchClient\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\mathlib\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\plausible\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\proofwidgets\\.lake\\build\\lib\\lean;C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\.lake\\packages\\Qq\\.lake\\build\\lib\\lean",
+    "PID":  25088,
+    "PreflightFreeKiB":  3557972,
+    "LaunchThresholdKiB":  3515864,
+    "ContinuousStopKiB":  1572864,
+    "ControlledResourceStop":  false,
+    "ExitCode":  0,
+    "Stdout":  "PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendCoordinateArrayEquiv (n c s : ℕ) :\n  (Fin c → CoordinateAmbient n) × (Fin s → CoordinateAmbient n) ≃ (Fin (c + s) → CoordinateAmbient n)\nPvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrix_columns {n c s : ℕ}\n  (M : Fin c → CoordinateAmbient n) (B : Fin s → CoordinateAmbient n) :\n  (fun z =\u003e\n      (PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n (c + s)).symm\n        (appendBinaryMatrix\n          ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n c) M)\n          ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n s) B))\n        (finSumFinEquiv z)) =\n    PvNP.RealizableHardness.MatrixGrassmannMoment.concatenate M B\nPvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrix_range_eq_span {n c s : ℕ}\n  (M : Fin c → CoordinateAmbient n) (B : Fin s → CoordinateAmbient n) :\n  (Matrix.toLin\u0027\n        (appendBinaryMatrix\n          ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n c) M)\n          ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n s)\n            B))).range =\n    Submodule.span (ZMod 2) (Set.range (PvNP.RealizableHardness.MatrixGrassmannMoment.concatenate M B))\nPvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.appendBinaryMatrix_injective_iff {n c s : ℕ}\n  (M : Fin c → CoordinateAmbient n) (B : Fin s → CoordinateAmbient n) :\n  Function.Injective\n      ⇑(Matrix.toLin\u0027\n          (appendBinaryMatrix\n            ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n c) M)\n            ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n s)\n              B))) ↔\n    LinearIndependent (ZMod 2) (PvNP.RealizableHardness.MatrixGrassmannMoment.concatenate M B)\nPvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.rawG_eq_rankImageBoolean_indicator {n d : ℕ}\n  (Rset : PvNP.RealizableHardness.GrassmannCounting.Grass (CoordinateAmbient n) d → Bool)\n  (M : Fin d → CoordinateAmbient n) :\n  PvNP.RealizableHardness.MatrixGrassmannIdentity.rawG Rset M =\n    PvNP.RealizableHardness.BinaryMatrixFourier.indicator\n      (PvNP.RealizableHardness.MatrixLiftNominalDirectComparison.rankImageBoolean Rset)\n      ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n d) M)\nPvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.rawF_eq_rankImageBoolean_append {n c s : ℕ}\n  (Lset : PvNP.RealizableHardness.GrassmannCounting.Grass (CoordinateAmbient n) (c + s) → Bool)\n  (M : Fin c → CoordinateAmbient n) (B : Fin s → CoordinateAmbient n) :\n  PvNP.RealizableHardness.MatrixGrassmannIdentity.rawF Lset M B =\n    PvNP.RealizableHardness.BinaryMatrixFourier.indicator\n      (PvNP.RealizableHardness.MatrixLiftNominalDirectComparison.rankImageBoolean Lset)\n      (appendBinaryMatrix\n        ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n c) M)\n        ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n s) B))\nPvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.rawTF_eq_appendRankImageMean {n c s : ℕ}\n  (Lset : PvNP.RealizableHardness.GrassmannCounting.Grass (CoordinateAmbient n) (c + s) → Bool)\n  (M : Fin c → CoordinateAmbient n) :\n  PvNP.RealizableHardness.MatrixGrassmannIdentity.rawTF Lset M =\n    PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun B =\u003e\n      PvNP.RealizableHardness.BinaryMatrixFourier.indicator\n        (PvNP.RealizableHardness.MatrixLiftNominalDirectComparison.rankImageBoolean Lset)\n        (appendBinaryMatrix\n          ((PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n c) M) B)\nPvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.actualBinaryMatrixMoment_eq_actualAppendRankImageMoment\n  {n c s : ℕ} (Rset : PvNP.RealizableHardness.GrassmannCounting.Grass (CoordinateAmbient n) c → Bool)\n  (Lset : PvNP.RealizableHardness.GrassmannCounting.Grass (CoordinateAmbient n) (c + s) → Bool) (k : ℕ) :\n  PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment.actualBinaryMatrixMoment Rset Lset k =\n    actualAppendRankImageMoment Rset Lset k\nPvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.matchingStarMass_cast_le_twice_actualAppendRankImageMoment\n  {n c s k : ℕ} (hdV : c + s ≤ Module.finrank (ZMod 2) (CoordinateAmbient n)) (hD : 0 \u003c c + s)\n  (hsmall : ↑(c + k * s) * 2 ^ (c + s - 1) / 2 ^ Module.finrank (ZMod 2) (CoordinateAmbient n) ≤ 1 / 2)\n  (C : PvNP.RealizableHardness.ActualSourceStarLaw.CenterTable c)\n  (T : PvNP.RealizableHardness.ActualSourceStarLaw.LeafTable (c + s)) (f : Module.Dual (ZMod 2) (CoordinateAmbient n)) :\n  ↑(PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection.matchingStarMass ⋯ hdV C T f) ≤\n    2 *\n      actualAppendRankImageMoment\n        (fun R =\u003e PvNP.RealizableHardness.ActualFixedFunctionalStarMoment.centerMatchBit C f R)\n        (fun W =\u003e PvNP.RealizableHardness.ActualFixedFunctionalStarMoment.leafMatchBit T f W) k\n\u0027PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.rawG_eq_rankImageBoolean_indicator\u0027 depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n\u0027PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.rawF_eq_rankImageBoolean_append\u0027 depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n\u0027PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.rawTF_eq_appendRankImageMean\u0027 depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n\u0027PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.actualBinaryMatrixMoment_eq_actualAppendRankImageMoment\u0027 depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n\u0027PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator.matchingStarMass_cast_le_twice_actualAppendRankImageMoment\u0027 depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n",
+    "Stderr":  "",
+    "Samples":  [
+                    {
+                        "Utc":  "2026-09-30T00:00:03.1190421Z",
+                        "FreeKiB":  3531808,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:05.2585937Z",
+                        "FreeKiB":  3471636,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:07.3700074Z",
+                        "FreeKiB":  3315684,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:09.4902257Z",
+                        "FreeKiB":  3389660,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:11.5989463Z",
+                        "FreeKiB":  3343740,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:13.7084633Z",
+                        "FreeKiB":  3296240,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:15.8205313Z",
+                        "FreeKiB":  2029360,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:17.9308449Z",
+                        "FreeKiB":  2022716,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:20.0415690Z",
+                        "FreeKiB":  2010724,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:22.1580218Z",
+                        "FreeKiB":  1964216,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:24.2603105Z",
+                        "FreeKiB":  1953896,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:26.3539598Z",
+                        "FreeKiB":  1946340,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:28.4615451Z",
+                        "FreeKiB":  1936468,
+                        "WorkingSetBytes":  39104512
+                    },
+                    {
+                        "Utc":  "2026-09-30T00:00:30.5644170Z",
+                        "FreeKiB":  2127364,
+                        "WorkingSetBytes":  39104512
+                    }
+                ]
+}

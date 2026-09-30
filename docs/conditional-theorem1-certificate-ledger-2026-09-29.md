@@ -406,3 +406,50 @@ The actual single appended matrix indexed by `Fin (c+s)`, its existing
 `rankImageBoolean` lift, basis invariance and the cited analytic operator
 application remain open. This transport does not prove the analytic moment
 bound, inverse theorem, robust `8S`, NO soundness or conditional core.
+
+### Accepted actual append-column rank-image operator alignment (2026-09-29)
+
+`ActualFixedFunctionalAppendOperator` proves the all-array coordinate span and
+injectivity bridges, the existing rank-image Boolean lifts of `rawG` and
+`rawF` (deficient arrays contribute zero), and the unconditional append-column
+mean. Its shared-center kth-moment identity consumes the accepted binary
+matrix transport. The actual matching-star mass bound retains the same fixed
+functional and predrawn tables and the explicit `hdV`, `hD`, `hsmall` premises.
+The center factor remains present at k=0.
+
+Frozen source SHA256:
+- Main: `EB71A55A38E8922333058F0D05D8E48472003AAA9BEE2B9F01A9DE00668A7B77`.
+- Checks: `6995A25BBEC41EA6C1ECE710CA11EA2DFC9585B5106E97C416A4DD4909BF5E9A`.
+Normal cached object SHA256:
+- Main: `5E37F434B0B0F20E3AE5F3895D6129D2432EEDEAC033B88D776DBB1043981828`.
+- Checks: `8E662C6F9EF73DFA46E77DF80CE91774E4AC381C46525D60C9C91A8A2A745312`.
+
+Main author build session 63464 reported exit 0. Author session 61615's
+manually transcribed output was disqualified after a namespace mismatch;
+it is not authoritative raw evidence. Acceptance uses the necessary Sol
+machine audit session 5855, native Lean PID 25088, structured terminal chunk
+3b1aab: exit 0, empty stderr, nine actual `PvNP.RealizableHardness` signatures
+and five material export profiles containing only
+`[propext, Classical.choice, Quot.sound]`. The audit imported the frozen normal
+main object and automatically persisted stdout, stderr, native exit and pins
+in [the machine receipt](append-operator-machine-checks-audit-2026-09-29.json),
+SHA256 `5D3DD371D6EE18E5ABE6236884206C7E5A03E48A54363A1D06944DDCE20A9EEC`.
+Root independently read and hashed that receipt and the frozen artifacts.
+Fresh free-memory samples reached a minimum of 1,936,468 KiB, above the
+1,572,864 KiB owned-process stop guard; no controlled stop occurred. The
+receipt's cached WorkingSetBytes values are not evidence of peak memory.
+These resource limits are agent operating policy, not manuscript premises.
+
+| Top-level lens | Final verdict | Scope and evidence |
+| --- | --- | --- |
+| Proof-adversarial (root) | GO-WITH-NOTES | Independently read the all-rank source and Checks, verified frozen objects, and restored the verdict after reading the authentic machine receipt. |
+| Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Fixed functional/tables, unconditional appended draws, shared center, deficient-zero lift and exact normalizers are retained. Orchestration and proof-hint overlap is disclosed; this is not an independent proof-author check. |
+| Non-claims boundary (separate reviewer) | GO-WITH-NOTES | Independently read and hashed the source, Checks and authentic receipt; bounded operator/moment alignment wording is accurate. |
+
+All three final verdicts were restored after the receipt issue was resolved.
+This bounded increment does not discharge inherited S3126/full-manuscript
+review debt. Selected-parameter `hsmall`, all-matrix basis invariance, the
+classical HC/spectral application, actual analytic moment estimate, inverse,
+robust `8S`, numeric NO and conditional/full core certification remain OPEN.
+Consumer/margin drafts remain unverified. Classical contract inhabitants are
+still deferred outward until the conditional core closes.
