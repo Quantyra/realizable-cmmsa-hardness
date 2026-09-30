@@ -144,9 +144,7 @@ sha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256
             'printf "%s\\n" "$rc" >/tmp/TAG-evidence/prebuild-' + str(index) + '.native-exit\n'
             'if [ "$rc" -ne 0 ]; then exit "$rc"; fi')
     remote = remote.replace('PREBUILDSTEPS', '\n'.join(prebuild_steps))
-    # Source-only overlays need not be compiled; pin objects only for explicit build stages.
-    built_sources = list(dict.fromkeys([*a.prebuild_source, a.source]))
-    overlay_objects = ' '.join('.lake/build/lib/lean/' + name.removeprefix('lean/').removesuffix('.lean') + '.olean' for name in built_sources)
+    overlay_objects = ' '.join('.lake/build/lib/lean/' + name.removeprefix('lean/').removesuffix('.lean') + '.olean' for name in overlays)
     overlay_verify = '\n'.join("echo '" + pin + '  ' + name + "' | sha256sum -c -" for name, pin in overlay_pins.items())
     for key, value in [('OVERLAYOBJECTS', overlay_objects), ('OVERLAYNAMES', ','.join(overlays)), ('OVERLAYPATHS', ' '.join(overlays)), ('OVERLAYVERIFY', overlay_verify), ('WORKTAG', a.reuse_tag or tag), ('REUSEMODE', 'yes' if a.reuse_tag else 'no'), ('CACHESHA', a.cslib_sha or 'UNUSED_REUSE_CACHE'), ('CACHENAME', cache.name if cache else 'UNUSED_REUSE_CACHE'), ('ARCHIVESHA', archive_sha), ('SOURCESHA', a.expected_sha), ('MODULEPATH', module.replace('.', '/')), ('MODULE', module), ('SOURCE', a.source), ('TAG', tag)]:
         remote = remote.replace(key, value)
