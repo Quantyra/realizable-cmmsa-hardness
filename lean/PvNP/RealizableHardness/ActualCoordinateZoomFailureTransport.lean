@@ -43,9 +43,10 @@ def pullbackSubspace (K : Submodule (ZMod 2) (CoordAmbient J)) :
     Submodule (ZMod 2) A.1 :=
   K.map (actualCoordinateEquiv I copies U A).symm.toLinearMap
 
-/-- The restricted coordinate equivalence on a pulled-back subspace. -/
-def pulledSubspaceEquiv (K : Submodule (ZMod 2) (CoordAmbient J)) :
-    pullbackSubspace I copies U A K ≃ₗ[ZMod 2] K := by
+/-- Pulling a subspace back and mapping it forward returns the same subspace. -/
+theorem pullbackSubspace_map_eq (K : Submodule (ZMod 2) (CoordAmbient J)) :
+    (pullbackSubspace I copies U A K).map
+      (actualCoordinateEquiv I copies U A).toLinearMap = K := by
   have hm : (pullbackSubspace I copies U A K).map
       (actualCoordinateEquiv I copies U A).toLinearMap = K := by
     change (K.map (actualCoordinateEquiv I copies U A).symm.toLinearMap).map
@@ -53,6 +54,12 @@ def pulledSubspaceEquiv (K : Submodule (ZMod 2) (CoordAmbient J)) :
     rw [Submodule.map_equiv_eq_comap_symm]
     exact Submodule.comap_map_eq_of_injective
       (actualCoordinateEquiv I copies U A).symm.injective K
+  exact hm
+
+/-- The restricted coordinate equivalence on a pulled-back subspace. -/
+def pulledSubspaceEquiv (K : Submodule (ZMod 2) (CoordAmbient J)) :
+    pullbackSubspace I copies U A K ≃ₗ[ZMod 2] K := by
+  have hm := pullbackSubspace_map_eq I copies U A K
   exact LinearEquiv.ofSubmodules (actualCoordinateEquiv I copies U A)
     (pullbackSubspace I copies U A K) K hm
 
@@ -109,24 +116,40 @@ theorem coordinate_zoom_containment_iff {q d : Nat}
   · rintro ⟨hQ, hW⟩
     constructor
     · apply map_le_map_coordinate_iff I copies U A |>.1
-      rw [(grassEquiv I copies U A).right_inv Q]
-      simpa [grassEquiv] using hQ
+      have hQmap : ((grassEquiv I copies U A).symm Q).val.map
+          (actualCoordinateEquiv I copies U A).toLinearMap = Q.val := by
+        exact congrArg Subtype.val ((grassEquiv I copies U A).right_inv Q)
+      have hLmap : (grassEquiv I copies U A L).val =
+          L.val.map (actualCoordinateEquiv I copies U A).toLinearMap := rfl
+      rw [hQmap, hLmap]
+      exact hQ
     · apply map_le_map_coordinate_iff I copies U A |>.1
       change L.val.map (actualCoordinateEquiv I copies U A).toLinearMap ≤
         (pullbackDecodedPair I copies U A Q P).W.map
           (actualCoordinateEquiv I copies U A).toLinearMap
-      rw [(pulledSubspaceEquiv I copies U A P.W).map_eq]
-      simpa [grassEquiv] using hW
+      rw [pullbackSubspace_map_eq I copies U A P.W]
+      have hLmap : (grassEquiv I copies U A L).val =
+          L.val.map (actualCoordinateEquiv I copies U A).toLinearMap := rfl
+      rw [hLmap]
+      exact hW
   · rintro ⟨hQ, hW⟩
     constructor
     · have hm := Submodule.map_mono
         (f := (actualCoordinateEquiv I copies U A).toLinearMap) hQ
-      rw [(grassEquiv I copies U A).right_inv Q] at hm
-      simpa [grassEquiv] using hm
+      have hQmap : ((grassEquiv I copies U A).symm Q).val.map
+          (actualCoordinateEquiv I copies U A).toLinearMap = Q.val := by
+        exact congrArg Subtype.val ((grassEquiv I copies U A).right_inv Q)
+      have hLmap : (grassEquiv I copies U A L).val =
+          L.val.map (actualCoordinateEquiv I copies U A).toLinearMap := rfl
+      rw [hQmap, hLmap] at hm
+      exact hm
     · have hm := Submodule.map_mono
         (f := (actualCoordinateEquiv I copies U A).toLinearMap) hW
-      rw [(pulledSubspaceEquiv I copies U A P.W).map_eq] at hm
-      simpa [grassEquiv] using hm
+      rw [pullbackSubspace_map_eq I copies U A P.W] at hm
+      have hLmap : (grassEquiv I copies U A L).val =
+          L.val.map (actualCoordinateEquiv I copies U A).toLinearMap := rfl
+      rw [hLmap] at hm
+      exact hm
 
 /-- The coordinate map gives an equivalence of the entire zoom fibres. -/
 def coordinateZoomEquiv {q d : Nat} (Q : Grass (CoordAmbient J) q)
@@ -151,14 +174,19 @@ theorem coordinate_agrees_iff {q d : Nat}
   classical
   let s := coordinateSubspaceEquiv I copies U A L
   let eW := pulledSubspaceEquiv I copies U A P.W
+  have hs : coordinateSubspaceEquivFromCoord I copies U A
+      (grassEquiv I copies U A L) = s := by
+    ext y
+    rfl
   have htable (y : L.val) :
       coordinateLeafTable I copies U A T (grassEquiv I copies U A L) (s y) =
         T L y := by
-    simp [coordinateLeafTable, s, grassEquiv,
-      coordinateSubspaceEquiv, LinearEquiv.ofSubmodules_symm_apply]
+    simp [coordinateLeafTable, grassEquiv, hs, s,
+      LinearEquiv.ofSubmodules_symm_apply]
   have hfunctional (y : L.val) :
-      (P.g.comp eW.toLinearMap) ⟨y, hLW y.property⟩ =
+      (pullbackDecodedPair I copies U A Q P).g ⟨y, hLW y.property⟩ =
         P.g ⟨s y, hcoord (s y).property⟩ := by
+    change P.g (eW ⟨y, hLW y.property⟩) = _
     apply congrArg P.g
     apply Subtype.ext
     rfl
@@ -180,7 +208,7 @@ def coordinateAgreeingZoomEquiv {q d : Nat}
       AgreeingZoom (coordinateLeafTable I copies U A T) Q P := by
   refine Equiv.subtypeEquiv (coordinateZoomEquiv I copies U A Q P) ?_
   intro z
-  have hcoord := (coordinate_zoom_containment_iff I copies U A Q P z.1.1).2 z.1.2
+  have hcoord := (coordinate_zoom_containment_iff I copies U A Q z.1.1 P).2 z.1.2
   exact (coordinate_agrees_iff I copies U A T Q P z.1.1 z.1.2.2 hcoord).symm
 
 /-- The dimension difference of the decoded subspaces is unchanged. -/
@@ -188,7 +216,10 @@ theorem coordinate_codim_eq {q d : Nat} (Q : Grass (CoordAmbient J) q)
     (P : DecodedPair Q d) :
     codim ((pullbackDecodedPair I copies U A Q P).W) = codim P.W := by
   let eW := pulledSubspaceEquiv I copies U A P.W
-  simp [codim, eW.finrank_eq, (actualCoordinateEquiv I copies U A).finrank_eq]
+  change Module.finrank (ZMod 2) A.1 -
+      Module.finrank (ZMod 2) (pullbackSubspace I copies U A P.W) =
+    Module.finrank (ZMod 2) (CoordAmbient J) - Module.finrank (ZMod 2) P.W
+  rw [eW.finrank_eq, (actualCoordinateEquiv I copies U A).finrank_eq]
 
 /-- Exact Rat agreement is invariant under the coordinate transport, including
 the empty-zoom zero convention. -/
