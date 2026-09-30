@@ -71,7 +71,7 @@ theorem doubled_high_error_budget_le_additive_half {m h : Nat}
     unfold sourceWeightedSignalExponent sourceAdditiveSignalExponent
     rw [hsReal]
     have hleft : 0 <= 2 * (1 - (fixedRho m : Real)) * (h : Real) :=
-      mul_nonneg (mul_nonneg hrhoComplement (by norm_num)) hhR
+      mul_nonneg (mul_nonneg (by norm_num) hrhoComplement) hhR
     have hright : 0 <= 2 * (m : Real) * (fixedRho m : Real) * (h : Real) :=
       mul_nonneg (mul_nonneg (by positivity) (le_of_lt hrhoPos)) hhR
     nlinarith [hleft, hright]
