@@ -1123,8 +1123,9 @@ theorem matching_center_mass_eq_grassmann_beta
   have hmean (R : Grass V c) :
       MatrixGrassmannIdentity.aboveMean R
         (fun W : Grass V (c + s) => if leafMatchBit T0 f W then (1 : Real) else 0) = 1 := by
-    have hcard : (Fintype.card (MatrixGrassmannIdentity.Above R s) : Real) != 0 := by
-      exact_mod_cast Nat.ne_of_gt (MatrixGrassmannIdentity.above_card_pos R (by omega))
+    have hcard : (Fintype.card (MatrixGrassmannIdentity.Above R s) : Real) ≠ 0 := by
+      exact_mod_cast Nat.ne_of_gt
+        (MatrixGrassmannIdentity.above_card_pos (d := c) (w := s) R hdV)
     simp [MatrixGrassmannIdentity.aboveMean, hall, hcard]
   have hexp :
       MatrixGrassmannIdentity.grassmannExperiment
@@ -1234,7 +1235,9 @@ theorem selected_actual_material_moment_bound
     let s := ActualStarFixedRhoDimensionGuard.leafK m h
     let n := 2 * J
     let Cc := selectedCoordinateCenterTable I copies U A C
-    let Tc := selectedCoordinateLeafTable I copies U A T
+    let Tc : ActualSourceStarLaw.LeafTable
+        (V := Fin n → ZMod 2) (c + s) :=
+      selectedCoordinateLeafTable I copies U A T
     let fc := coordinateFunctional I copies U A f
     ∃ k q : Nat, k = 2 ^ q ∧ 4 * m ≤ k ∧ k < 8 * m ∧
       (ActualOrdinaryStarWeightedSelection.matchingStarMass
@@ -1242,7 +1245,8 @@ theorem selected_actual_material_moment_bound
         (selected_actual_source_dimension_bound I copies U A base sourceHeightCutoff hsel hA)
         (ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C)
         (ActualTaggedComplementStarDensityBridge.transportedLeafTable I copies U A T) f : Real) ≤
-        2 * selected_actual_analytic_rhs Cc Tc fc r k (2 * (e : Real)) a ∧
+        2 * selected_actual_analytic_rhs (n := n) (c := c) (s := s) (m := m)
+          Cc Tc fc r k (2 * (e : Real)) a ∧
       (ActualOrdinaryStarWeightedSelection.matchingCenterMass
         (V := A.1) (m := m) (Nat.le_add_right c s)
         (selected_actual_source_dimension_bound I copies U A base sourceHeightCutoff hsel hA)
@@ -1272,8 +1276,9 @@ theorem selected_actual_material_moment_bound
       (r := r) (d := c + s) hrd Tc fc e he hfail
   rcases exists_dyadic_moment_exponent_window hm with ⟨k, q, hkpow, hkm, hklt⟩
   have hMoment := selected_actual_HC_spectral_moment_bound
+    (n := n) (c := c) (s := s) (m := m)
     sourceHeightCutoff (C := Cc) (T := Tc) (f := fc) (a := a) ha hm hkm hklt
-    hsplit hrhoPos hcReal hsReal hcutFloor hPR hkpow hHC hSpectral hdim
+    hsplit hrhoPos hcReal hsReal hcutFloor hPR ⟨q, hkpow⟩ hHC hSpectral hdim
   have hMass :=
     ActualSelectedComplementAppendMoment.selected_actual_append_moment
       I copies U A C T f (analyticSourceHeightFloor base sourceHeightCutoff) hsel hA
@@ -1289,7 +1294,8 @@ theorem selected_actual_material_moment_bound
       ActualFixedFunctionalAppendOperator.CoordinateAmbient, CoordAmbient] using hMass
   have hMomentRhs :
       selectedActualMoment (m := m) (selectedG Cc fc) (selectedF Tc fc) ≤
-        selected_actual_analytic_rhs Cc Tc fc r k (2 * (e : Real)) a := by
+        selected_actual_analytic_rhs (n := n) (c := c) (s := s) (m := m)
+          Cc Tc fc r k (2 * (e : Real)) a := by
     simpa [selected_actual_analytic_rhs] using hMoment
   have hfinal := hMassMoment.trans
     (mul_le_mul_of_nonneg_left hMomentRhs (by norm_num : (0 : Real) ≤ 2))

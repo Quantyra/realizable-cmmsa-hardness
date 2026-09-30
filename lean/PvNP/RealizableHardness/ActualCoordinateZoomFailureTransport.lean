@@ -18,6 +18,7 @@ open PvNP.RealizableHardness.ActualComplementCoordinateMassBridge
 open PvNP.RealizableHardness.ActualTaggedComplementIncidence
 open PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector
 open PvNP.RealizableHardness.ActualLeafLabelRankImageAlignment
+open PvNP.RealizableHardness.ActualSourceStarLaw
 
 set_option autoImplicit false
 noncomputable section
