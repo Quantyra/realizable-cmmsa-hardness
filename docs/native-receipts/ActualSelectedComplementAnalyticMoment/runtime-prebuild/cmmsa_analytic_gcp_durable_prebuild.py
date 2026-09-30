@@ -45,6 +45,8 @@ def main():
     ap.add_argument('--reuse-tag')
     ap.add_argument('--dependency-source', action='append', default=[])
     ap.add_argument('--dependency-sha', action='append', default=[])
+    ap.add_argument('--dependency-snapshot', action='append', default=[],
+                    help='Uncompiled overlay as repository-source=durable-snapshot-path')
     ap.add_argument('--prebuild-source', action='append', default=[])
     a = ap.parse_args()
     if a.reuse_tag:
@@ -59,9 +61,14 @@ def main():
     assert len(a.dependency_source) == len(a.dependency_sha)
     overlays = {a.source: data}
     overlay_pins = {a.source: a.expected_sha}
+    snapshots = dict(item.split('=', 1) for item in a.dependency_snapshot)
+    assert set(snapshots) <= set(a.dependency_source)
+    assert not set(snapshots).intersection(a.prebuild_source)
     for dep, pin in zip(a.dependency_source, a.dependency_sha):
         assert dep.startswith('lean/') and dep.endswith('.lean') and '..' not in dep
-        payload = (REPO / dep).read_bytes()
+        payload_path = (REPO / snapshots.get(dep, dep)).resolve()
+        assert payload_path.is_relative_to(REPO.resolve())
+        payload = payload_path.read_bytes()
         assert hashlib.sha256(payload).hexdigest().lower() == pin.lower()
         assert dep not in overlays
         overlays[dep] = payload
@@ -153,7 +160,7 @@ sha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256
     script.write_text(remote, encoding='utf-8', newline='\n')
     preparation = {'prepared': True, 'archive': str(archive), 'script': str(script),
         'source_sha': a.expected_sha, 'archive_sha': archive_sha, 'execute': a.execute,
-        'overlay_pins': overlay_pins,
+        'overlay_pins': overlay_pins, 'dependency_snapshots': snapshots,
         'runner_sha256': hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()}
     (base / 'preparation.json').write_text(json.dumps(preparation, indent=2), encoding='utf-8')
     print(json.dumps(preparation, indent=2))
