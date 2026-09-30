@@ -89,11 +89,7 @@ def pullbackDecodedPair {q d : Nat} (Q : Grass (CoordAmbient J) q)
   let eW := pulledSubspaceEquiv I copies U A P.W
   refine ⟨W0, ?_, P.g.comp eW.toLinearMap⟩
   have hmap : W0.map (actualCoordinateEquiv I copies U A).toLinearMap = P.W := by
-    change (P.W.map (actualCoordinateEquiv I copies U A).symm.toLinearMap).map
-      (actualCoordinateEquiv I copies U A).toLinearMap = P.W
-    rw [Submodule.map_equiv_eq_comap_symm]
-    exact Submodule.comap_map_eq_of_injective
-      (actualCoordinateEquiv I copies U A).symm.injective P.W
+    exact pullbackSubspace_map_eq I copies U A P.W
   have hQ : ((grassEquiv I copies U A).symm Q).val.map
       (actualCoordinateEquiv I copies U A).toLinearMap = Q.val := by
     exact congrArg Subtype.val ((grassEquiv I copies U A).right_inv Q)
@@ -102,6 +98,11 @@ def pullbackDecodedPair {q d : Nat} (Q : Grass (CoordAmbient J) q)
     rw [hQ, hmap]
     exact P.hQW
   exact hle
+
+@[simp] theorem pullbackDecodedPair_W {q d : Nat} (Q : Grass (CoordAmbient J) q)
+    (P : DecodedPair Q d) :
+    (pullbackDecodedPair I copies U A Q P).W =
+      pullbackSubspace I copies U A P.W := rfl
 
 /-- The two containment conditions defining a zoom are invariant under the
 coordinate map. -/
@@ -121,16 +122,17 @@ theorem coordinate_zoom_containment_iff {q d : Nat}
         exact congrArg Subtype.val ((grassEquiv I copies U A).right_inv Q)
       have hLmap : (grassEquiv I copies U A L).val =
           L.val.map (actualCoordinateEquiv I copies U A).toLinearMap := rfl
-      rw [hQmap, hLmap]
+      rw [hQmap, ← hLmap]
       exact hQ
     · apply map_le_map_coordinate_iff I copies U A |>.1
       change L.val.map (actualCoordinateEquiv I copies U A).toLinearMap ≤
         (pullbackDecodedPair I copies U A Q P).W.map
           (actualCoordinateEquiv I copies U A).toLinearMap
-      rw [pullbackSubspace_map_eq I copies U A P.W]
+      rw [pullbackDecodedPair_W I copies U A Q P,
+        pullbackSubspace_map_eq I copies U A P.W]
       have hLmap : (grassEquiv I copies U A L).val =
           L.val.map (actualCoordinateEquiv I copies U A).toLinearMap := rfl
-      rw [hLmap]
+      rw [← hLmap]
       exact hW
   · rintro ⟨hQ, hW⟩
     constructor
@@ -141,14 +143,15 @@ theorem coordinate_zoom_containment_iff {q d : Nat}
         exact congrArg Subtype.val ((grassEquiv I copies U A).right_inv Q)
       have hLmap : (grassEquiv I copies U A L).val =
           L.val.map (actualCoordinateEquiv I copies U A).toLinearMap := rfl
-      rw [hQmap, hLmap] at hm
+      rw [hQmap, ← hLmap] at hm
       exact hm
     · have hm := Submodule.map_mono
         (f := (actualCoordinateEquiv I copies U A).toLinearMap) hW
-      rw [pullbackSubspace_map_eq I copies U A P.W] at hm
+      rw [pullbackDecodedPair_W I copies U A Q P,
+        pullbackSubspace_map_eq I copies U A P.W] at hm
       have hLmap : (grassEquiv I copies U A L).val =
           L.val.map (actualCoordinateEquiv I copies U A).toLinearMap := rfl
-      rw [hLmap] at hm
+      rw [← hLmap] at hm
       exact hm
 
 /-- The coordinate map gives an equivalence of the entire zoom fibres. -/
@@ -164,26 +167,24 @@ def coordinateZoomEquiv {q d : Nat} (Q : Grass (CoordAmbient J) q)
 is equivalent leaf by leaf. -/
 theorem coordinate_agrees_iff {q d : Nat}
     (T : LeafTable (V := A.1) d) (Q : Grass (CoordAmbient J) q)
-    (P : DecodedPair Q d) (L : Grass A.1 d)
-    (hLW : L.val ≤ (pullbackDecodedPair I copies U A Q P).W)
-    (hcoord : (grassEquiv I copies U A L).val ≤ P.W) :
+    (P : DecodedPair Q d) (L : Grass (CoordAmbient J) d)
+    (hLW : ((grassEquiv I copies U A).symm L).val ≤
+      (pullbackDecodedPair I copies U A Q P).W)
+    (hcoord : L.val ≤ P.W) :
     AgreesOn (coordinateLeafTable I copies U A T) (Q := Q) (P := P)
-        (grassEquiv I copies U A L) hcoord ↔
+        L hcoord ↔
       AgreesOn T (Q := (grassEquiv I copies U A).symm Q)
-        (P := pullbackDecodedPair I copies U A Q P) L hLW := by
+        (P := pullbackDecodedPair I copies U A Q P)
+        ((grassEquiv I copies U A).symm L) hLW := by
   classical
-  let s := coordinateSubspaceEquiv I copies U A L
+  let Ls := (grassEquiv I copies U A).symm L
+  let s := coordinateSubspaceEquivFromCoord I copies U A L
   let eW := pulledSubspaceEquiv I copies U A P.W
-  have hs : coordinateSubspaceEquivFromCoord I copies U A
-      (grassEquiv I copies U A L) = s := by
-    ext y
-    rfl
-  have htable (y : L.val) :
-      coordinateLeafTable I copies U A T (grassEquiv I copies U A L) (s y) =
-        T L y := by
-    simp [coordinateLeafTable, grassEquiv, hs, s,
+  have htable (y : Ls.val) :
+      coordinateLeafTable I copies U A T L (s y) = T Ls y := by
+    simp [coordinateLeafTable, s, Ls,
       LinearEquiv.ofSubmodules_symm_apply]
-  have hfunctional (y : L.val) :
+  have hfunctional (y : Ls.val) :
       (pullbackDecodedPair I copies U A Q P).g ⟨y, hLW y.property⟩ =
         P.g ⟨s y, hcoord (s y).property⟩ := by
     change P.g (eW ⟨y, hLW y.property⟩) = _
@@ -208,8 +209,17 @@ def coordinateAgreeingZoomEquiv {q d : Nat}
       AgreeingZoom (coordinateLeafTable I copies U A T) Q P := by
   refine Equiv.subtypeEquiv (coordinateZoomEquiv I copies U A Q P) ?_
   intro z
-  have hcoord := (coordinate_zoom_containment_iff I copies U A Q z.1.1 P).2 z.1.2
-  exact (coordinate_agrees_iff I copies U A T Q P z.1.1 z.1.2.2 hcoord.2).symm
+  have hcoordPair := (coordinate_zoom_containment_iff I copies U A Q z.1 P).2 z.2
+  have hleafInv : (grassEquiv I copies U A).symm
+      (grassEquiv I copies U A z.1) = z.1 :=
+    (grassEquiv I copies U A).left_inv z.1
+  have hsource : (grassEquiv I copies U A).symm
+      (grassEquiv I copies U A z.1) |>.val ≤
+        (pullbackDecodedPair I copies U A Q P).W := by
+    simpa [hleafInv] using z.2.2
+  have hagree := coordinate_agrees_iff I copies U A T Q P
+    (grassEquiv I copies U A z.1) hsource hcoordPair.2
+  simpa [hleafInv] using hagree.symm
 
 /-- The dimension difference of the decoded subspaces is unchanged. -/
 theorem coordinate_codim_eq {q d : Nat} (Q : Grass (CoordAmbient J) q)
