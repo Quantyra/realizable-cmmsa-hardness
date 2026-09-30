@@ -104,25 +104,39 @@ private theorem leafK_eq_fixedRho_height {m h : Nat}
     exact_mod_cast hqNat
   have hrho := ActualSelectedComplementAnalyticNumerics.fixed_rho_explicit hm
   have hbR : (bOf m : Real) = 4000 * (m : Real) ^ 2 := by simp [bOf]
-  rw [hK, hrho, hbR]
+  rw [hK, hrho]
   push_cast
   field_simp [ne_of_gt (show (0 : Real) < (m : Real) by exact_mod_cast hm)]
-  rw [← hqR]
-  ring
+  rw [← hqR, hbR]`r`n  ring
 
 private theorem manuscript_threshold_eq_dyadic {m h : Nat} (hm : 0 < m) :
     manuscriptMomentThreshold m h =
       (2 : Real) ^ (-((20 : Real) / 3) * (m : Real) * (h : Real)) :=
   manuscript_threshold_simplifies hm
 
+private theorem dyadic_mul_exp {x y : Real} :
+    (2 : Real) ^ x * (2 : Real) ^ y = (2 : Real) ^ (x + y) := by
+  rw [← Real.rpow_add (by norm_num : (0 : Real) < 2)]
+
+private theorem dyadic_two_mul_exp {x : Real} :
+    2 * (2 : Real) ^ x = (2 : Real) ^ (1 + x) := by
+  calc
+    2 * (2 : Real) ^ x = (2 : Real) ^ (1 : Real) * (2 : Real) ^ x := by
+      rw [Real.rpow_one]
+    _ = (2 : Real) ^ (1 + x) := dyadic_mul_exp
+
 private theorem dyadic_power_square {x : Real} :
     ((2 : Real) ^ x) ^ 2 = (2 : Real) ^ (2 * x) := by
-  calc
-    ((2 : Real) ^ x) ^ 2 = ((2 : Real) ^ x) ^ (2 : Real) := by
-      rw [Real.rpow_natCast]
-    _ = (2 : Real) ^ (x * 2) := by
-      rw [Real.rpow_mul (by norm_num : (0 : Real) <= 2)]
-    _ = (2 : Real) ^ (2 * x) := by rw [show x * 2 = 2 * x by ring]
+  rw [← Real.rpow_natCast ((2 : Real) ^ x) 2]
+  rw [Real.rpow_mul (by norm_num : (0 : Real) <= 2)]
+  rw [show x * (2 : Real) = 2 * x by ring]
+
+private theorem dyadic_div_eighth {x : Real} :
+    (2 : Real) ^ x / 8 = (2 : Real) ^ (x - 3) := by
+  rw [show (8 : Real) = (2 : Real) ^ (3 : Real) by norm_num,
+    div_eq_mul_inv, ← Real.rpow_neg (by norm_num : (0 : Real) <= 2),
+    dyadic_mul_exp]
+  rw [show x + -3 = x - 3 by ring]
 
 /-- The actual spectral high term is bounded by the conservative error
 exponent; the i-dependent second tail term is handled upstream by the genuine
@@ -162,15 +176,27 @@ theorem spectral_high_error_le_dyadic {m h : Nat}
           ((leafK m h : Real) - 1)) /
           (manuscriptMomentThreshold m h) ^ 2 =
         (2 : Real) ^ (sourceHighErrorExponent m h - 1) := by
-    rw [ha2, div_eq_mul_inv]
-    rw [← Real.rpow_neg (by norm_num : (0 : Real) <= 2)]
-    rw [show (2 : Real) = (2 : Real) ^ (1 : Real) by norm_num]
-    rw [← Real.rpow_add (by norm_num : (0 : Real) < 2)]
-    rw [← Real.rpow_add (by norm_num : (0 : Real) < 2)]
-    congr 1
-    unfold sourceHighErrorExponent
-    rw [hK, hscaledRank]
-    ring
+    have hdenInv :
+        ((2 : Real) ^ (2 * (-((20 : Real) / 3) * (m : Real) * (h : Real))))⁻¹ =
+          (2 : Real) ^ (-(2 * (-((20 : Real) / 3) * (m : Real) * (h : Real)))) := by
+      rw [← Real.rpow_neg (by norm_num : (0 : Real) <= 2)]
+    calc
+      2 * (2 : Real) ^ (-(sourceRankExponent m : Real) *
+          ((leafK m h : Real) - 1)) /
+          (manuscriptMomentThreshold m h) ^ 2 =
+          2 * (2 : Real) ^ (-(sourceRankExponent m : Real) *
+            ((leafK m h : Real) - 1)) *
+            (2 : Real) ^ (-(2 * (-((20 : Real) / 3) * (m : Real) * (h : Real)))) := by
+              rw [ha2, div_eq_mul_inv, hdenInv]
+      _ = (2 : Real) ^ (1 + (-(sourceRankExponent m : Real) *
+            ((leafK m h : Real) - 1)) +
+            (-(2 * (-((20 : Real) / 3) * (m : Real) * (h : Real))))) := by
+              rw [dyadic_two_mul_exp, dyadic_mul_exp]
+      _ = (2 : Real) ^ (sourceHighErrorExponent m h - 1) := by
+        apply congrArg (fun e : Real => (2 : Real) ^ e)
+        unfold sourceHighErrorExponent
+        rw [hK, hscaledRank]
+        ring
   have hgap := source_high_error_gap_ge_three hm hh
   have hgapExact := source_signal_exponent_gap_exact (m := m) (h := h)
   have hsignalExponent : sourceHighErrorExponent m h - 1 <=
@@ -226,20 +252,37 @@ theorem threshold_high_error_le_dyadic {m h : Nat} (hm : 256 <= m)
       nlinarith [hcoefMul, hhlarge]
     linarith [hdom, hweightedLower]
   have ha := manuscript_threshold_eq_dyadic (m := m) (h := h) hmpos
+  have haPos : 0 < manuscriptMomentThreshold m h := by
+    rw [ha]
+    exact Real.rpow_pos_of_pos (by norm_num) _
   have haPow : (manuscriptMomentThreshold m h) ^ m =
       (2 : Real) ^ ((-((20 : Real) / 3) * (m : Real) * (h : Real)) *
         (m : Real)) := by
     rw [ha]
     rw [← Real.rpow_natCast ((2 : Real) ^
-      (-((20 : Real) / 3) * (m : Real) * (h : Real))) m]
+      (-((20 : Real) / 3) * (m : Real) * (h : Real))) h]
+    rw [Real.rpow_mul (by positivity)]
+    rw [← Real.rpow_natCast (2 : Real) m]
     rw [Real.rpow_mul (by norm_num : (0 : Real) <= 2)]
+    congr 1
+    ring
   have hprod :
       (2 : Real) ^ (m : Real) * (manuscriptMomentThreshold m h) ^ m =
         (2 : Real) ^ ((m : Real) - (20 / 3 : Real) *
           (m : Real) ^ 2 * (h : Real)) := by
-    rw [haPow, ← Real.rpow_add (by norm_num : (0 : Real) < 2)]
-    congr 1
-    ring
+    calc
+      (2 : Real) ^ (m : Real) * (manuscriptMomentThreshold m h) ^ m =
+          (2 : Real) ^ (m : Real) *
+            (2 : Real) ^ ((-((20 : Real) / 3) * (m : Real) * (h : Real)) * (m : Real)) := by
+        rw [haPow]
+      _ = (2 : Real) ^ ((m : Real) +
+          ((-((20 : Real) / 3) * (m : Real) * (h : Real)) * (m : Real))) :=
+        dyadic_mul_exp
+      _ = (2 : Real) ^ ((m : Real) - (20 / 3 : Real) *
+          (m : Real) ^ 2 * (h : Real)) := by
+        rw [show (m : Real) +
+          ((-((20 : Real) / 3) * (m : Real) * (h : Real)) * (m : Real)) =
+            (m : Real) - (20 / 3 : Real) * (m : Real) ^ 2 * (h : Real) by ring]
   have hpow := Real.rpow_le_rpow_of_exponent_le
     (by norm_num : (1 : Real) <= 2) hexp
   have hscaled :
@@ -247,22 +290,18 @@ theorem threshold_high_error_le_dyadic {m h : Nat} (hm : 256 <= m)
         (2 : Real) ^ (sourceWeightedSignalExponent m h - 3) := by
     rw [hprod]
     exact hpow
-  have hbeta := mul_le_mul_of_nonneg_left hbeta1
-    (by positivity : 0 <= (2 : Real) ^ (m : Real) *
-      (manuscriptMomentThreshold m h) ^ m)
+  have hfactorNonneg : 0 <= (2 : Real) ^ (m : Real) *
+      (manuscriptMomentThreshold m h) ^ m := by positivity
+  have hbeta := mul_le_mul_of_nonneg_left hbeta1 hfactorNonneg
   calc
     (2 : Real) ^ (m : Real) * (manuscriptMomentThreshold m h) ^ m * beta <=
         (2 : Real) ^ (m : Real) * (manuscriptMomentThreshold m h) ^ m := by
-          nlinarith [hbeta]
+          exact hbeta
     _ <= (2 : Real) ^ (sourceWeightedSignalExponent m h - 3) := by
       rw [hprod]
       exact hpow
-    _ = (2 : Real) ^ (sourceWeightedSignalExponent m h) / 8 := by
-      rw [show (8 : Real) = (2 : Real) ^ (3 : Real) by norm_num,
-        div_eq_mul_inv, ← Real.rpow_neg (by norm_num : (0 : Real) <= 2),
-        ← Real.rpow_add (by norm_num : (0 : Real) < 2)]
-      congr 1
-      ring
+    _ = (2 : Real) ^ (sourceWeightedSignalExponent m h) / 8 :=
+      (dyadic_div_eighth (x := sourceWeightedSignalExponent m h)).symm
 
 /-- The two independent actual high-error sources consume at most half of
 the same weighted signal exponent after the outer factor two in the source
