@@ -527,8 +527,8 @@ theorem selected_actual_material_moment_bound_large_dyadic
       calc
         4 <= 16000 := by decide
         _ <= 16000 * (m + 3) := Nat.mul_le_mul_left 16000 hm3
-    have hmul : 4 * m <= m * (16000 * (m + 3)) :=
-      Nat.mul_le_mul_left m hm4
+    have hmul : 4 * m <= m * (16000 * (m + 3)) := by
+      simpa [Nat.mul_comm] using (Nat.mul_le_mul_left m hm4)
     have hlow : 4 * m <= sourceHolderLowerBound m := by
       dsimp [sourceHolderLowerBound]
       simpa [sourceHolderLowerBound, Nat.mul_assoc, Nat.mul_left_comm,
