@@ -1,6 +1,7 @@
 import Mathlib.Tactic
 import PvNP.RealizableHardness.ActualSelectedComplementAnalyticNumerics
 import PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
+import PvNP.RealizableHardness.ActualManuscriptComplementMargin
 
 /-! Component arithmetic for comparing the selected large-dyadic analytic
 bound with the actual selected-star signal.  The source's chosen-functional
@@ -17,6 +18,7 @@ open PvNP.RealizableHardness.ActualChangedAmbient8SBoundary
 open PvNP.RealizableHardness.ActualSourceStarLaw
 open PvNP.RealizableHardness.ActualOrdinaryStarMatchingFiber
 open PvNP.RealizableHardness.SamplerParameters
+open PvNP.RealizableHardness.ActualManuscriptComplementMargin
 
 noncomputable section
 
@@ -28,10 +30,25 @@ def sourceMomentT (m : Nat) : Nat := 2 ^ sourceMomentTLowerBound m
 
 def sourceMomentP (m : Nat) : Nat := 2 ^ (m * sourceMomentT m)
 
+/-- Explicit enlarged height used to pay for the finite HC constants at the
+actual source Holder exponent P. It is allowed to be very large: the selected
+height floor is a source cutoff, and no asymptotic shorthand replaces it. -/
+def sourceLowHCHeightFloor (m : Nat) : Nat :=
+  100 * (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100)
+
+/-- Exponent envelope for the low-HC contribution after using eta=2 times the
+manuscript threshold, alpha=(P-2)/P >= 2/3, and d=2h available ranks. -/
+def sourceLowHCEnvelopeExponent (m h : Nat) : Real :=
+  (m : Real) *
+      (500 * (sourceRankExponent m : Real) ^ 2 * (sourceMomentP m : Real) +
+        2 * (h : Real) + 2 - (40 / 9 : Real) * (m : Real) * (h : Real)) +
+    (m : Real)
+
 def sourceTailHeightFloor (m : Nat) : Nat := max (4000 * m ^ 2) (12 * m)
 
 def sourceMarginHeightFloor (m : Nat) : Nat :=
-  max (sourceTailHeightFloor m) (20001 * m ^ 2)
+  max (max (sourceTailHeightFloor m) (20001 * m ^ 2))
+    (sourceLowHCHeightFloor m)
 
 /-- The actual double-exponential sampler has enough blocks to dominate the
 selected squared height whenever its fixed integer multiplier is at least one.
@@ -78,6 +95,26 @@ theorem source_signal_exponent_gap_exact {m h : Nat} :
     sourceHighErrorExponentGap sourceRankExponent
   ring
 
+/-- The explicit enlarged cutoff makes the actual large-P low-HC exponent
+smaller than the source's unconditional weighted-signal exponent. The finite
+sum estimate is separately provided by `selected_low_HC46_constant_sum_bound`;
+this lemma pays its worst-rank coefficient and level-count factors. -/
+theorem source_low_HC_envelope_below_weighted_signal {m h : Nat}
+    (hm : 256 <= m) (hh : sourceLowHCHeightFloor m <= h) :
+    sourceLowHCEnvelopeExponent m h <= sourceWeightedSignalExponent m h := by
+  have hmpos : 0 < m := by omega
+  have hmR : (256 : Real) <= (m : Real) := by exact_mod_cast hm
+  have hhR :
+      100 * (500 * (sourceRankExponent m : Real) ^ 2 *
+        (sourceMomentP m : Real) + 100) <= (h : Real) := by
+    exact_mod_cast (show sourceLowHCHeightFloor m <= h by simpa [sourceLowHCHeightFloor] using hh)
+  have hrho := fixed_rho_explicit hmpos
+  have hr : (sourceRankExponent m : Real) = 40000 * (m : Real) ^ 3 := by
+    norm_num [sourceRankExponent, pow_succ]
+  unfold sourceLowHCEnvelopeExponent sourceWeightedSignalExponent
+  rw [hrho, hr]
+  nlinarith [hhR, sq_nonneg ((m : Real) - 1), sq_nonneg ((m : Real) - 256)]
+
 theorem source_high_error_exponent_gap_positive {m h : Nat}
     (hm : 256 <= m) (hh : 20001 * m ^ 2 <= h) :
     0 < sourceHighErrorExponentGap m h := by
@@ -109,9 +146,72 @@ theorem source_high_error_exponent_gap_positive {m h : Nat}
   nlinarith [mul_le_mul_of_nonneg_left hhR (by positivity : (0 : Real) <= 2 * m),
     hmul, hmulcoeff, hmain]
 
+/-- The finite low-level HC coefficient is bounded by its worst rank term
+times the number of available ranks. This keeps the actual rank-indexed sum
+visible for the later source-height comparison. -/
+theorem selected_low_HC46_constant_sum_bound {d r p : Nat} {eta : Real}
+    (heta : 0 <= eta) :
+    selectedLowHC46NormBound (d := d) (r := r) (p := p) eta <=
+      ((d + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * r ^ 2 * p) *
+          eta ^ (((p : Real) - 2) / (p : Real)) := by
+  classical
+  let S := selectedLowIndexSet d r
+  let alpha : Real := ((p : Real) - 2) / (p : Real)
+  let C : Real := (2 : Real) ^ (500 * r ^ 2 * p) * eta ^ alpha
+  have hterm (i : Nat) (hi : i in S) :
+      (2 : Real) ^ (500 * i ^ 2 * p) * eta ^ alpha <= C := by
+    have hir : i <= r := (Finset.mem_filter.mp hi).2
+    have hi2 : i ^ 2 <= r ^ 2 := Nat.pow_le_pow_left hir 2
+    have hexp : 500 * i ^ 2 * p <= 500 * r ^ 2 * p :=
+      Nat.mul_le_mul_right p (Nat.mul_le_mul_left 500 hi2)
+    have hpow : (2 : Real) ^ (500 * i ^ 2 * p) <=
+        (2 : Real) ^ (500 * r ^ 2 * p) :=
+      pow_le_pow_right₀ (by norm_num) hexp
+    have hetaPow : 0 <= eta ^ alpha := Real.rpow_nonneg heta _
+    dsimp [C, alpha]
+    exact mul_le_mul_of_nonneg_right hpow hetaPow
+  have hsum :
+      Finset.sum S (fun i => (2 : Real) ^ (500 * i ^ 2 * p) * eta ^ alpha) <=
+        (S.card : Real) * C := by
+    have hs := Finset.sum_le_card_nsmul S
+      (fun i => (2 : Real) ^ (500 * i ^ 2 * p) * eta ^ alpha) C hterm
+    simpa [nsmul_eq_mul] using hs
+  have hcard : S.card <= d + 1 := by
+    apply Finset.card_le_card
+    intro i hi
+    exact (Finset.mem_filter.mp hi).1
+  have hcardR : (S.card : Real) <= ((d + 1 : Nat) : Real) := by
+    exact_mod_cast hcard
+  unfold selectedLowHC46NormBound
+  dsimp [S, alpha, C]
+  calc
+    Finset.sum (selectedLowIndexSet d r)
+        (fun i => (2 : Real) ^ (500 * i ^ 2 * p) * eta ^ (((p : Real) - 2) / (p : Real)))
+        <= (S.card : Real) * C := by simpa [S, alpha, C] using hsum
+    _ <= ((d + 1 : Nat) : Real) * C :=
+      mul_le_mul_of_nonneg_right hcardR (by positivity)
+
 def sourceSuccessScale (m h : Nat) : Real :=
-  (2 : Real) ^ (-2 * (1 - 1000 * (fixedRho m : Real)) *
-    (m : Real) * (h : Real))
+  manuscriptSuccessScale (manuscriptRho m) m h
+
+/-- The analytic margin scale is the manuscript's displayed scale with the
+same fixed-rho parameter. This is an exponent identity, not a threshold
+assumption. -/
+theorem source_success_scale_eq_manuscript {m h : Nat} :
+    sourceSuccessScale m h =
+      manuscriptSuccessScale (manuscriptRho m) m h := by
+  rfl
+
+/-- Divisibility in the selected height identifies the source scale with the
+existing rational success margin at precisely `badExponent m h`. -/
+theorem source_success_scale_eq_successMargin {m h : Nat}
+    (hm : 0 < m) (hdiv : ActualCmmsaParameterReconciliation.bOf m | h) :
+    sourceSuccessScale m h =
+      (ActualStarAcceptedGoodMass.successMargin
+        (ActualStarAcceptedGoodMass.badExponent m h) : Real) := by
+  rw [source_success_scale_eq_manuscript]
+  exact manuscriptSuccessScale_eq_successMargin hm hdiv
 
 def sourceAgreementScale (m h : Nat) : Real := manuscriptAgreementFloor m h
 
@@ -410,8 +510,10 @@ theorem source_tail_guards_of_margin_floor {m h J s : Nat}
     1 <= (s : Real) - 1 /\
     (2 * (h : Real) : Real) - (2 * (J : Real)) <=
       -(sourceRankExponent m : Real) * ((s : Real) - 1) - 3 := by
-  have htail : sourceTailHeightFloor m <= h :=
+  have hmid : max (sourceTailHeightFloor m) (20001 * m ^ 2) <= h :=
     (Nat.le_max_left _ _).trans hfloor
+  have htail : sourceTailHeightFloor m <= h :=
+    (Nat.le_max_left _ _).trans hmid
   have hhS : 4000 * m ^ 2 <= h :=
     (Nat.le_max_left _ _).trans htail
   have hh12 : 12 * m <= h :=
