@@ -495,3 +495,43 @@ HC/spectral application, selected hsmall, leaf-label/failed-zoom alignment,
 analytic moment bound, actual inverse, robust 8S, numeric NO and conditional/full
 core remain OPEN. This increment does not discharge inherited S3126 independent
 review debt or the outward classical source-contract inhabitants.
+
+### Actual leaf-label and failed-zoom rank-image alignment (2026-09-29)
+
+`ActualLeafLabelRankImageAlignment` proves that the actual linear-map matching
+bit and the existing pointwise `matchingLeafSet` use precisely the same T and f.
+Their full Grassmannian predicates, existing rank-image Booleans (including
+deficient matrices), and indicators agree. The consumer transfers the existing
+failed-zoom finite nominal-restriction comparison onto this actual leaf lift:
+`PseudorandomExact r (2 * (e : Real))`. It retains r<d, e>=0, ALL q/Q/DecodedPair
+quantifiers, exact q+codim=r, nonempty Zoom and agreement<=e. No row-validity
+premise is introduced. This supplies pseudorandomness, not a hypercontractive
+estimate or an inverse conclusion.
+
+Frozen source SHA256:
+- Main: `5991FC3DDC2AFE577C6E4F77CF68707B05BC1F233107C1E48DC840B7FB9080C2`.
+- Checks: `ED3EE6B63AC02B1133A5FCD2696C325A3198BD98044051515AA7EACC072745FA`.
+Normal object SHA256:
+- Main: `4CB525619006C19B30B54D494E5D196D8C3155AEF229BB90B724170467AEB952`.
+- Checks: `D11EF6B152C6FA17A813F762F6248D468FFFCD25AFBE52C33A3AF72B78AF5FC4`.
+
+Main session 92104 has native exit 0 and empty stdout/stderr. Checks session
+7577 has native exit 0, five exact signatures and three material axiom profiles,
+each `[propext, Classical.choice, Quot.sound]`. Its PowerShell wrapper exited 1
+AFTER persisting the authentic receipt, during summary formatting; that is not
+a Lean failure. The original main receipt was found at its exact Temp subfolder
+and copied byte-for-byte, without reconstruction. Authoritative raw receipts:
+- [Main](ActualLeafLabelRankImageAlignment-main-receipt-20260930T003000347Z.json), SHA256 `9863C216AAD2A93983766BA720A2DCFE4F58064D7C4797076ACBE9BD40870B45`.
+- [Checks](ActualLeafLabelRankImageAlignmentChecks-receipt-20260930T003254303Z.json), SHA256 `DA0B3AB6B9510095665EB10671D37A1FD7FE3BB497BB39C9A614A88072D64B35`.
+Fresh free-memory minima were 2,076,240 and 1,925,348 KiB; no controlled stop.
+
+| Top-level lens | Verdict | Bounded scope |
+| --- | --- | --- |
+| Proof-adversarial (root) | GO-WITH-NOTES | Independently verified frozen source/objects and authenticated receipts; all failed-zoom quantifiers and nominal budget are retained. |
+| Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Same T/f, matrix lift, complete failed-zoom quantifiers and exact delta=2e. Orchestration and proof-hint overlap is disclosed; this is not an independent proof-author check. |
+| Non-claims boundary (separate reviewer) | GO-WITH-NOTES | Independently verified the actual Checks receipt and five signatures/three standard profiles; distinguishes native Lean success from wrapper summary failure. |
+
+Intended failed-zoom invocation, derivation of 2e<=1 for the classical HC input,
+exact HC/spectral application, selected hsmall, analytic moment bound, actual
+inverse, robust 8S, numeric NO and conditional/full core remain OPEN. Inherited
+S3126 review debt and outward classical contract inhabitants remain open.
