@@ -182,8 +182,9 @@ theorem coordinate_agrees_iff {q d : Nat}
   have htable (y : ((grassEquiv I copies U A).symm L).val) :
       coordinateLeafTable I copies U A T L (s y) =
         T ((grassEquiv I copies U A).symm L) y := by
-    simp [coordinateLeafTable, s, grassEquiv,
-      LinearEquiv.symm_apply_apply]
+    change T ((grassEquiv I copies U A).symm L) (s.symm (s y)) = _
+    exact congrArg (T ((grassEquiv I copies U A).symm L))
+      (s.symm_apply_apply y)
   have hfunctional (y : ((grassEquiv I copies U A).symm L).val) :
       (pullbackDecodedPair I copies U A Q P).g ⟨y, hLW y.property⟩ =
         P.g ⟨s y, hcoord (s y).property⟩ := by
@@ -228,7 +229,9 @@ def coordinateAgreeingZoomEquiv {q d : Nat}
     simpa [hleafInv] using z.2.2
   have hagree := coordinate_agrees_iff I copies U A T Q P
     (grassEquiv I copies U A z.1) hsource hcoordPair.2
-  simpa [hleafInv] using hagree.symm
+  have hzoomVal : (coordinateZoomEquiv I copies U A Q P z).val =
+      grassEquiv I copies U A z.1 := rfl
+  simpa [hleafInv, hzoomVal] using hagree.symm
 
 /-- The dimension difference of the decoded subspaces is unchanged. -/
 theorem coordinate_codim_eq {q d : Nat} (Q : Grass (CoordAmbient J) q)
