@@ -39,7 +39,7 @@ report = {"success": True, "audit_scope": "actual native receipt/source/profile 
           "archive_sha256": manifest["evidence_archive_sha256"],
           "source_pins": manifest["sources"], "object_pins": objects,
           "native_exit_codes": [0, 0, 0], "axiom_profiles": profiles,
-          "final_three_lens_acceptance": False,
+          "final_three_lens_acceptance": "not evaluated by this receipt audit; see independent reviews and ledger",
           "open_debts": manifest["open_debts"]}
 (HERE / "material-claims-audit-result.json").write_text(
     json.dumps(report, indent=2) + "\n", encoding="utf-8")

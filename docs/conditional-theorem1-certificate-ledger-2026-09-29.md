@@ -819,3 +819,32 @@ This builds the conditional finite HC/spectral composition with the exact normal
 Draft source0E10B9829D02879DE98351331010A634DD6C8A10083CE64B841CCDDD7D34177C is preserved for data continuity, not acceptance. It adds a genuine center-marginal proof attempt: auxiliary T0(W)=f restricted toW makes all leaves match, then the accepted exact Grassmann law identity and nonempty extension normalization yield the direct center ratio. T0 is solely a proof device for the center marginal; actual T remains the analytic leaf. This addition has not been natively checked.
 
 The material caller attempt now states the full coordinate failed-zoom family and explicit r<leafT+leafK guard, but its current output still incorrectly conjoins theorem proof terms, references a proof-local dimension fact in the declaration, and does not yet consume the accepted actual star comparison into the analytic RHS. These are explicit source defects to repair before another native run, not additional assumptions or accepted claims. Main owner holds this exact draft only for preservation and resumes immediately after commit. Original failure-family coordinate transfer is a distinct active internal proof task. All selected/inverse/core/profile/three-lens debts remain open.
+
+## 2026-09-30: accepted bounded selected analytic mass comparison
+
+This entry supersedes the unverified status of the historical analytic WIP checkpoints only for the four frozen sources below. Historical failed runs and malformed drafts remain preserved as history; their receipts are not green evidence. The full CMMSA core goal remains open.
+
+The material theorem directly bounds the original chosen I/U/A/C/T/f star Rat-mass cast by twice the internally derived analytic RHS and proves its exact original center Rat-mass cast equals coordinate Grassmann beta. Finite Fourier reconstruction, unconditional append Jensen, exact normalized finite Minkowski, weighted Holder, low-level HC aggregation, and high-level orthogonality/spectral aggregation are internal proofs. The selected split, rho, source-height selector floor, and dyadic window 4*m <= k < 8*m are derived. This is a conditional analytic comparison, not a numerical manuscript conclusion.
+
+| Frozen file | SHA256 |
+| --- | --- |
+| ActualSelectedComplementAnalyticMoment.lean | BFAE5D2ECAA63D258742FC776B3A21720744F0238A6624D4800304072FFE92F9 |
+| ActualSelectedComplementAnalyticMomentChecks.lean | 8D2F2596FEA7917F306F1F26907563DD78181D5973305F644F597BC704383979 |
+| ActualFiniteMomentLpBounds.lean | BF9C27E32D08A6D4FCE7853D6D45F5BF2BA229635BE0C2AC7229A02979B5532B |
+| ActualSelectedSpectralParameters.lean | 78FB8DF0B635E950ED087C3598530B328AD25EC5AC4B2DBF556CBE433A46E582 |
+
+Build/audit: actual durable run 072903 records parameter prebuild 0, material main prebuild 0, Checks native 0, and successful 3359-job completion. Its original archive SHA256 is A0A764BF164D620DCAA83D0856ACA7BADED8EBEC465E59DD6B6E6A9457E46153. Eight focused axiom profiles contain only propext, Classical.choice, and Quot.sound. Normal object receipt pins are main D06587079E8395C924E2E21781FB7326DC5EAC92A117516745D1B42BF5359F54, Checks E22478EACEA73503D2B802DEA2071DFB3A4029B724CEDB59504F5FE9734EA1CA, and parameter 3AAFAF101F646EAA61891A08670C98D2653142B4D290CF33CF85D03025E35AF1. These object hashes are recorded build receipts, not a fresh independent object compilation. Actual wrapper terminal and final describe records verify same-run VM termination.
+
+The new scoped command `python docs/native-receipts/ActualSelectedComplementAnalyticMoment/audit_material_claims.py` actually passed, validating four current source pins, the exact archive and integer exits, three object receipt pins, and the eight expected profiles. It is a receipt-consistency gate, not a conventional pre-existing repository audit or a proof of classical contract inhabitants. See material-claims-manifest.json and material-claims-audit-result.json. Byte-exact ZIP C1CCDEAE0D9D9D2EB212C107E7DF47744DCDF932BC1D7955DB52B8E04DE6571F and manifest preserve raw records despite Git CRLF normalization.
+
+| Fresh independent top-level lens | Final verdict | Artifact |
+| --- | --- | --- |
+| Proof adversarial | GO-WITH-NOTES | docs/reviews/proof-adversarial-selected-analytic-2026-09-30.md |
+| Complexity theory | GO-WITH-NOTES | docs/reviews/complexity-selected-analytic-2026-09-30.md |
+| Non-claims boundary | GO-WITH-NOTES | docs/reviews/nonclaims-selected-analytic-2026-09-30.md |
+
+All three are freshly executed independent top-level reviews. Sol's contextual complexity assessment does not replace the independent complexity lens. Root/Sol proof-routing and API-hint overlap is disclosed; unavailable Task/OpenCode fallback governance debt remains open.
+
+Supplied premises remain chosen I/U/A, actual C/T/f, selector with max analytic source floor and m+2, samplerA >= 1, r < leafT+leafK, nonnegative Rat e, the full coordinate failed-zoom family, positive threshold a, and source-scoped HC46/Spectral47 component contracts. The source guards do not add eta <= 1 or HC basis invariance. No final moment, beta equality, decoder, or inverse result is assumed.
+
+OPEN: the original-complement universal zoom-failure transfer (its current native attempt is not accepted), numerical low/high error simplification, inverse witness, robust 8S decoding, numeric NO/runtime/full core, and later classical component-contract inhabitants. No publication or outward theorem expansion follows from this bounded acceptance.
