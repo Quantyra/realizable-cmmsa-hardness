@@ -791,3 +791,12 @@ independent reviews, not by substituting an author for the missing lens.
 Next analytic work must combine exact source-checked HC/spectral component
 fields with a genuine same-leaf level/moment consumer; no existing active Lean
 HC/spectral contract was found, and typing a field alone is not force progress.
+
+
+## UNVERIFIED analytic WIP data checkpoint — 2026-09-30
+
+This checkpoint preserves three owned proof attempts and their raw diagnostic histories; it is not material analytic acceptance or core certification. Main source E84C5224C32E32C0D648827372CBBF4C2DF7E9097EFA4CEE53B11624236334F6 repairs the three remaining native 061304 sites and is not yet checked. Norm helper BF9C27E32D08A6D4FCE7853D6D45F5BF2BA229635BE0C2AC7229A02979B5532B built as a Linux dependency; full export axiom profiles and three-lens acceptance remain pending. Parameter source 78FB8DF0B635E950ED087C3598530B328AD25EC5AC4B2DBF556CBE433A46E582 repairs the sole 060030 width error and is not yet checked.
+
+Latest main run 66503 / 061304 used ED9EDCC9AA65B0506F4F5ECB0A39C65F9F4668855C75A84F6BE4C36602DE7F62 plus BF9C. Native integer exit 1, archive SHA 610E2B83C34BE05CC685E81A89D58BEAF1C269A8C4A4A140E1AC8AB984926945; wrapper confirmed VM TERMINATED. Evidence preserves exact raw output, executed runner and inputs. This is a genuine failed proof diagnostic, not authentication failure.
+
+The exact normalized HC aggregate and conditional HC/spectral moment composition are proof attempts. Actual selected caller, source floor/rho applicability verification, inverse, robust 8S, numeric NO and full core remain open. No final moment assumption is accepted. Original thirteen drafts remain excluded. Sol orchestration and read-only proof hints overlap is disclosed; no final independent reviews are claimed for this WIP checkpoint.

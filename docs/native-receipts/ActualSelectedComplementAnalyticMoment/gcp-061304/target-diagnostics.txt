@@ -1,0 +1,195 @@
+error: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:131:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, ?f ↑i
+in the target expression
+  (∑ i, if r < ↑i then selectedLevel b (↑i) W else 0) =
+    ∑ i ∈ Finset.range (d + 1), if r < i then selectedLevel b i W else 0
+
+n d r : ℕ
+b : BinaryMatrix n d → Bool
+W : BinaryMatrix n d
+⊢ (∑ i, if r < ↑i then selectedLevel b (↑i) W else 0) =
+    ∑ i ∈ Finset.range (d + 1), if r < i then selectedLevel b i W else 0
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:162:16: This simp argument is unused:
+  hrank
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:237:46: Variable name `hC` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hC
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:508:46: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:508:46: Unused tactic linter: `ring` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:578:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:595:6: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [ActualFixedFunctionalBinaryMatrixMoment.CoordinateAmbient]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:876:13: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (x ^ ?y) ^ ?z
+in the target expression
+  x.rpow ↑m ^ (↑k / ↑m) = x ^ k
+
+m k : ℕ
+hm : 0 < m
+x : ℝ
+hx : 0 ≤ x
+hcast : x ^ m = x.rpow ↑m
+⊢ x.rpow ↑m ^ (↑k / ↑m) = x ^ k
+warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:900:46: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+error: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:1005:21: don't know how to synthesize implicit argument `k`
+  @real_pow_moment_div_m_eq_pow m ?m.757 hm |?m.764| (abs_nonneg ?m.764)
+context:
+sourceHeightCutoff : ℝ → ℕ
+n c s h r m k : ℕ
+rho eta : ℝ
+C : ActualSourceStarLaw.CenterTable c
+T : ActualSourceStarLaw.LeafTable (c + s)
+f : Module.Dual (ZMod 2) (ActualFixedFunctionalAppendOperator.CoordinateAmbient n)
+a : ℝ
+ha : 0 < a
+hm : 0 < m
+hkm : 4 * m ≤ k
+hklt : k < 8 * m
+hEven : c + s = 2 * h
+hRho : 0 < rho
+hc : ↑c = 2 * (1 - rho) * ↑h
+hs : ↑s = 2 * rho * ↑h
+hHeight : sourceHeightCutoff rho ≤ h
+hPR : PseudorandomExact r eta (selectedF T f)
+hkDyadic : ∃ q, k = 2 ^ q
+hHC : HC46ExactContract
+hSpectral : Spectral47ExactContract sourceHeightCutoff
+hdim : c + s ≤ n
+p : ℝ := ⋯
+beta : ℝ := ⋯
+hmR : 0 < ↑m
+hkm' : m ≤ k
+hp : 1 ≤ p / ↑m
+hbetaDom :
+  uniformMean (indicator (selectedG C f)) ≤
+    (∑ R, if centerMatchBit C f R = true then 1 else 0) /
+      ↑(Fintype.card (Grass (ActualFixedFunctionalAppendOperator.CoordinateAmbient n) c))
+hcenter0 : 0 ≤ uniformMean (indicator (selectedG C f))
+hbeta0 : 0 ≤ beta
+hlowHC : (lpNorm k fun M => appendAverage (selectedLow (selectedF T f)) M) ≤ selectedLowHC46NormBound eta
+hlowNorm0 : 0 ≤ lpNorm k fun M => appendAverage (selectedLow (selectedF T f)) M
+hCsum0 : 0 ≤ selectedLowHC46NormBound eta
+hlowMoment : (lpMoment k fun M => appendAverage (selectedLow (selectedF T f)) M) ≤ selectedLowHC46NormBound eta ^ k
+hlowMoment' :
+  (uniformMean fun M => |appendAverage (selectedLow (selectedF T f)) M| ^ k) ≤ selectedLowHC46NormBound eta ^ k
+hlowMoment0 : 0 ≤ uniformMean fun M => |appendAverage (selectedLow (selectedF T f)) M| ^ k
+M : BinaryMatrix n c
+hG : selectedG C f M = true
+⊢ ℕ
+error: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:1005:67: don't know how to synthesize placeholder for argument `a`
+context:
+sourceHeightCutoff : ℝ → ℕ
+n c s h r m k : ℕ
+rho eta : ℝ
+C : ActualSourceStarLaw.CenterTable c
+T : ActualSourceStarLaw.LeafTable (c + s)
+f : Module.Dual (ZMod 2) (ActualFixedFunctionalAppendOperator.CoordinateAmbient n)
+a : ℝ
+ha : 0 < a
+hm : 0 < m
+hkm : 4 * m ≤ k
+hklt : k < 8 * m
+hEven : c + s = 2 * h
+hRho : 0 < rho
+hc : ↑c = 2 * (1 - rho) * ↑h
+hs : ↑s = 2 * rho * ↑h
+hHeight : sourceHeightCutoff rho ≤ h
+hPR : PseudorandomExact r eta (selectedF T f)
+hkDyadic : ∃ q, k = 2 ^ q
+hHC : HC46ExactContract
+hSpectral : Spectral47ExactContract sourceHeightCutoff
+hdim : c + s ≤ n
+p : ℝ := ⋯
+beta : ℝ := ⋯
+hmR : 0 < ↑m
+hkm' : m ≤ k
+hp : 1 ≤ p / ↑m
+hbetaDom :
+  uniformMean (indicator (selectedG C f)) ≤
+    (∑ R, if centerMatchBit C f R = true then 1 else 0) /
+      ↑(Fintype.card (Grass (ActualFixedFunctionalAppendOperator.CoordinateAmbient n) c))
+hcenter0 : 0 ≤ uniformMean (indicator (selectedG C f))
+hbeta0 : 0 ≤ beta
+hlowHC : (lpNorm k fun M => appendAverage (selectedLow (selectedF T f)) M) ≤ selectedLowHC46NormBound eta
+hlowNorm0 : 0 ≤ lpNorm k fun M => appendAverage (selectedLow (selectedF T f)) M
+hCsum0 : 0 ≤ selectedLowHC46NormBound eta
+hlowMoment : (lpMoment k fun M => appendAverage (selectedLow (selectedF T f)) M) ≤ selectedLowHC46NormBound eta ^ k
+hlowMoment' :
+  (uniformMean fun M => |appendAverage (selectedLow (selectedF T f)) M| ^ k) ≤ selectedLowHC46NormBound eta ^ k
+hlowMoment0 : 0 ≤ uniformMean fun M => |appendAverage (selectedLow (selectedF T f)) M| ^ k
+M : BinaryMatrix n c
+hG : selectedG C f M = true
+⊢ ℝ
+error: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:1005:53: don't know how to synthesize placeholder for argument `x`
+context:
+sourceHeightCutoff : ℝ → ℕ
+n c s h r m k : ℕ
+rho eta : ℝ
+C : ActualSourceStarLaw.CenterTable c
+T : ActualSourceStarLaw.LeafTable (c + s)
+f : Module.Dual (ZMod 2) (ActualFixedFunctionalAppendOperator.CoordinateAmbient n)
+a : ℝ
+ha : 0 < a
+hm : 0 < m
+hkm : 4 * m ≤ k
+hklt : k < 8 * m
+hEven : c + s = 2 * h
+hRho : 0 < rho
+hc : ↑c = 2 * (1 - rho) * ↑h
+hs : ↑s = 2 * rho * ↑h
+hHeight : sourceHeightCutoff rho ≤ h
+hPR : PseudorandomExact r eta (selectedF T f)
+hkDyadic : ∃ q, k = 2 ^ q
+hHC : HC46ExactContract
+hSpectral : Spectral47ExactContract sourceHeightCutoff
+hdim : c + s ≤ n
+p : ℝ := ⋯
+beta : ℝ := ⋯
+hmR : 0 < ↑m
+hkm' : m ≤ k
+hp : 1 ≤ p / ↑m
+hbetaDom :
+  uniformMean (indicator (selectedG C f)) ≤
+    (∑ R, if centerMatchBit C f R = true then 1 else 0) /
+      ↑(Fintype.card (Grass (ActualFixedFunctionalAppendOperator.CoordinateAmbient n) c))
+hcenter0 : 0 ≤ uniformMean (indicator (selectedG C f))
+hbeta0 : 0 ≤ beta
+hlowHC : (lpNorm k fun M => appendAverage (selectedLow (selectedF T f)) M) ≤ selectedLowHC46NormBound eta
+hlowNorm0 : 0 ≤ lpNorm k fun M => appendAverage (selectedLow (selectedF T f)) M
+hCsum0 : 0 ≤ selectedLowHC46NormBound eta
+hlowMoment : (lpMoment k fun M => appendAverage (selectedLow (selectedF T f)) M) ≤ selectedLowHC46NormBound eta ^ k
+hlowMoment' :
+  (uniformMean fun M => |appendAverage (selectedLow (selectedF T f)) M| ^ k) ≤ selectedLowHC46NormBound eta ^ k
+hlowMoment0 : 0 ≤ uniformMean fun M => |appendAverage (selectedLow (selectedF T f)) M| ^ k
+M : BinaryMatrix n c
+hG : selectedG C f M = true
+⊢ ℝ
+error: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:1005:13: failed to infer `have` declaration type
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment

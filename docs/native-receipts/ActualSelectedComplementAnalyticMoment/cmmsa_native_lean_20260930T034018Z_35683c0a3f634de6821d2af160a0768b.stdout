@@ -1,0 +1,94 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:36:5: warning: Variable name `basisInv` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _basisInv
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:38:5: warning: Variable name `hEven` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hEven
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:38:29: warning: Variable name `hi` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hi
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:39:5: warning: Variable name `hRho` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hRho
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:40:5: warning: Variable name `hc` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hc
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:41:5: warning: Variable name `hs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:42:5: warning: Variable name `hHeight` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hHeight
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:66:35: error: Type mismatch
+  M * U
+has type
+  Matrix (Fin n) (Fin d) (ZMod 2)
+but is expected to have type
+  BinaryMatrix n (?m.29 + ?m.30)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:66:70: error: Application type mismatch: The argument
+  M
+has type
+  BinaryMatrix n d
+but is expected to have type
+  BinaryMatrix n (?m.42 + ?m.43)
+in the application
+  indicator (selectedF ?m.45 f) M
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:66:65: error: Application type mismatch: The argument
+  T
+has type
+  ActualSourceStarLaw.LeafTable d
+but is expected to have type
+  ActualSourceStarLaw.LeafTable (?m.54 M U V + ?m.55 M U V)
+in the application
+  selectedF T
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:122:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  uniformMean fun M => ∑ a ∈ ?s, ?f a M
+in the target expression
+  (∑ a ∈ S,
+      uniformMean fun M => ∑ j ∈ S, appendAverage (rankProjection (↑a) F) M * appendAverage (rankProjection (↑j) F) M) =
+    ∑ i ∈ S, uniformMean fun M => appendAverage (rankProjection (↑i) F) M ^ 2
+
+n c s : ℕ
+S : Finset (Fin (c + s + 1))
+F : BinaryMatrix n (c + s) → ℝ
+hexpand :
+  (fun M => (∑ i ∈ S, appendAverage (rankProjection (↑i) F) M) ^ 2) = fun M =>
+    ∑ i ∈ S, ∑ j ∈ S, appendAverage (rankProjection (↑i) F) M * appendAverage (rankProjection (↑j) F) M
+⊢ (∑ a ∈ S,
+      uniformMean fun M => ∑ j ∈ S, appendAverage (rankProjection (↑a) F) M * appendAverage (rankProjection (↑j) F) M) =
+    ∑ i ∈ S, uniformMean fun M => appendAverage (rankProjection (↑i) F) M ^ 2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\lean\PvNP\RealizableHardness\ActualSelectedComplementAnalyticMoment.lean:160:48: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  b ≥ 0
+  b - d ≥ 0
+  2*b - e ≤ -1
+  a ≥ 0
+  a - 2*b ≤ 0
+where
+ a := ↑s
+ b := ↑h
+ d := ↑(sourceHeightCutoff rho)
+ e := ↑?m.234
