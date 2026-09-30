@@ -1,0 +1,111 @@
+[
+  {
+    "args": [
+      "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-01",
+      "--format=value(status)",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "967ec10041df32d00a03b303e28efc37a40412ae5b0c53fe9bd151c3b9064fc2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "args": [
+      "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "instances",
+      "start",
+      "quantyra-lean-builder-01",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "f76153e520821b35062cd532335f35349d585999da17343a37e09f98be94170c"
+  },
+  {
+    "args": [
+      "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "scp",
+      "C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\native-receipts\\ActualSelectedComplementAnalyticMoment\\durable-runs\\cmmsa_analytic_20260930T120231Z\\cmmsa_analytic_20260930T120231Z.tar.gz",
+      "C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\native-receipts\\ActualSelectedComplementAnalyticMoment\\durable-runs\\cmmsa_analytic_20260930T120231Z\\cmmsa_analytic_20260930T120231Z.sh",
+      "quantyra-lean-builder-01:/tmp/",
+      "--quiet",
+      "--tunnel-through-iap",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "7d0974c105c6eaa958f0c1b1f537ce6b80a72dbcce5e034cc29766ee25ca3a67",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "args": [
+      "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-01",
+      "--quiet",
+      "--tunnel-through-iap",
+      "--command=bash /tmp/cmmsa_analytic_20260930T120231Z.sh",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "native_exit_code": 1,
+    "stdout_sha256": "e156c7140584a1137f8a2f5cac2cf41d8dfe539d4bf77b0ccc57905370fd8037",
+    "stderr_sha256": "83d94bb350e277a1c5af8ef014e791ed1a5928239b2c89e31fc01798926c902a"
+  },
+  {
+    "args": [
+      "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "scp",
+      "quantyra-lean-builder-01:/tmp/cmmsa_analytic_20260930T120231Z-evidence.tar.gz",
+      "C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\native-receipts\\ActualSelectedComplementAnalyticMoment\\durable-runs\\cmmsa_analytic_20260930T120231Z\\cmmsa_analytic_20260930T120231Z-evidence.tar.gz",
+      "--quiet",
+      "--tunnel-through-iap",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "be71d906f45708546696448c0f82a288ba0d9f514a8bc38b936a134cb387053a",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "args": [
+      "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "instances",
+      "stop",
+      "quantyra-lean-builder-01",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e70fa73e8c27faf91432c8061c5ff0f6e5837a82765d68020f5f87944e15b20c"
+  },
+  {
+    "args": [
+      "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-01",
+      "--format=value(status)",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "967ec10041df32d00a03b303e28efc37a40412ae5b0c53fe9bd151c3b9064fc2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

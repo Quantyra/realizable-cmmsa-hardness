@@ -1,0 +1,13 @@
+Running timer as unit: cmmsa_analytic_20260930T120231Z-hard-stop.timer
+Will run service as unit: cmmsa_analytic_20260930T120231Z-hard-stop.service
+
+Recommendation: To check for possible causes of SSH connectivity issues and get
+recommendations, rerun the ssh command with the --troubleshoot option.
+
+gcloud compute ssh quantyra-lean-builder-01 --project=quantyra-lean-cert-20260915 --zone=us-central1-a --troubleshoot
+
+Or, to investigate an IAP tunneling issue:
+
+gcloud compute ssh quantyra-lean-builder-01 --project=quantyra-lean-cert-20260915 --zone=us-central1-a --troubleshoot --tunnel-through-iap
+
+ERROR: (gcloud.compute.ssh) [C:\Users\Dan\AppData\Local\Google\CloudSDKPortable\google-cloud-sdk\bin\sdk\plink.exe] exited with return code [1].
