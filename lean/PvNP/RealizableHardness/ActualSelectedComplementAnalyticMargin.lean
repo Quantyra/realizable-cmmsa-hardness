@@ -34,7 +34,8 @@ def sourceMomentP (m : Nat) : Nat := 2 ^ (m * sourceMomentT m)
 actual source Holder exponent P. It is allowed to be very large: the selected
 height floor is a source cutoff, and no asymptotic shorthand replaces it. -/
 def sourceLowHCHeightFloor (m : Nat) : Nat :=
-  100 * (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100)
+  1000000 * m ^ 2 *
+    (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100)
 
 /-- Exponent envelope for the low-HC contribution after using eta=2 times the
 manuscript threshold, alpha=(P-2)/P >= 2/3, and d=2h available ranks. -/
@@ -43,6 +44,19 @@ def sourceTailHeightFloor (m : Nat) : Nat := max (4000 * m ^ 2) (12 * m)
 def sourceMarginHeightFloor (m : Nat) : Nat :=
   max (max (sourceTailHeightFloor m) (20001 * m ^ 2))
     (sourceLowHCHeightFloor m)
+
+/-- The enlarged low-HC cutoff includes room for the factor-two rational
+rounding loss after the moment power is taken. -/
+theorem low_HC_height_floor_covers_rounding {m : Nat} (hm : 0 < m) :
+    2 * m <= sourceLowHCHeightFloor m := by
+  have hm1 : 1 <= m := Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hm)
+  have hmSq : m <= m ^ 2 := by nlinarith
+  have hfactor : 1 <= 500 * sourceRankExponent m ^ 2 *
+      sourceMomentP m + 100 := by omega
+  have hprod := Nat.mul_le_mul_left (m ^ 2) hfactor
+  have hscaled : 2 * m <= 1000000 * m ^ 2 := by nlinarith
+  unfold sourceLowHCHeightFloor
+  exact hscaled.trans (Nat.mul_le_mul_left 1000000 hprod)
 
 /-- The actual double-exponential sampler has enough blocks to dominate the
 selected squared height whenever its fixed integer multiplier is at least one.
@@ -93,17 +107,92 @@ theorem source_signal_exponent_gap_exact {m h : Nat} :
 smaller than the source's unconditional weighted-signal exponent. The finite
 sum estimate is separately provided by `selected_low_HC46_constant_sum_bound`;
 this lemma pays its worst-rank coefficient and level-count factors. -/
-theorem selected_actual_low_HC_sum_bound {h m : Nat}
-    (heta : 0 <= 2 * manuscriptAgreementFloor m h) :
+theorem selected_actual_low_HC_sum_bound {h m : Nat} :
     selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
       (p := sourceMomentP m) (2 * manuscriptAgreementFloor m h) <=
       ((2 * h + 1 : Nat) : Real) *
         (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
           (2 * manuscriptAgreementFloor m h) ^
             (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+  have heta : 0 <= 2 * manuscriptAgreementFloor m h := by
+    unfold manuscriptAgreementFloor
+    positivity
   simpa using selected_low_HC46_constant_sum_bound
     (d := 2 * h) (r := sourceRankExponent m) (p := sourceMomentP m)
     (eta := 2 * manuscriptAgreementFloor m h) heta
+
+/-- A rational threshold can be chosen strictly between the true real
+agreement scale and twice that scale. Thus the actual failed-zoom PR error
+`2*e` is at most four times the real scale. -/
+theorem selected_rational_failure_threshold_exists {m h : Nat} :
+    exists e : Rat,
+      manuscriptAgreementFloor m h < (e : Real) /\
+      (e : Real) < 2 * manuscriptAgreementFloor m h := by
+  have hpos : 0 < manuscriptAgreementFloor m h := by
+    unfold manuscriptAgreementFloor
+    exact Real.rpow_pos_of_pos (by norm_num) _
+  obtain ⟨e, helo, hehi⟩ :=
+    exists_rat_btwn (show manuscriptAgreementFloor m h <
+      2 * manuscriptAgreementFloor m h by nlinarith)
+  exact ⟨e, helo, hehi⟩
+
+theorem selected_rational_failure_eta_le_four_floor {m h : Nat}
+    {e : Rat} (he : (e : Real) < 2 * manuscriptAgreementFloor m h) :
+    2 * (e : Real) < 4 * manuscriptAgreementFloor m h := by
+  linarith
+
+/-- The finite HC coefficient bound instantiated with the real agreement
+floor tolerates the rational rounding loss exactly as a factor four in eta. -/
+theorem selected_rational_low_HC_sum_bound {h m : Nat} (hm : 0 < m)
+    {e : Rat} (he : (e : Real) < 2 * manuscriptAgreementFloor m h) :
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+      (p := sourceMomentP m) (2 * (e : Real)) <=
+      ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+          (4 * manuscriptAgreementFloor m h) ^
+            (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+  have heta0 : 0 <= 2 * (e : Real) := by
+    have hpos : 0 < manuscriptAgreementFloor m h := by
+      unfold manuscriptAgreementFloor
+      exact Real.rpow_pos_of_pos (by norm_num) _
+    linarith
+  have hTpos : 0 < sourceMomentT m := by
+    unfold sourceMomentT
+    exact Nat.pow_pos (by omega)
+  have hExp : 1 <= m * sourceMomentT m := by
+    exact Nat.one_le_iff_ne_zero.mpr
+      (Nat.mul_ne_zero (Nat.ne_of_gt hm) (Nat.ne_of_gt hTpos))
+  have hP2 : 2 <= sourceMomentP m := by
+    unfold sourceMomentP
+    exact Nat.pow_le_pow_right (by norm_num) hExp
+  have halpha : 0 <= ((sourceMomentP m : Real) - 2) /
+      (sourceMomentP m : Real) := by
+    apply div_nonneg
+    · exact sub_nonneg.mpr (by exact_mod_cast hP2)
+    · positivity
+  have heta : 2 * (e : Real) <= 4 * manuscriptAgreementFloor m h := by
+    have hround := selected_rational_failure_eta_le_four_floor he
+    linarith
+  have hpower := Real.rpow_le_rpow heta0 heta halpha
+  have hsum := selected_low_HC46_constant_sum_bound
+    (d := 2 * h) (r := sourceRankExponent m) (p := sourceMomentP m)
+    (eta := 2 * (e : Real)) heta0
+  have hcoef0 : 0 <= ((2 * h + 1 : Nat) : Real) *
+      (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) := by
+    positivity
+  calc
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+        (p := sourceMomentP m) (2 * (e : Real)) <=
+      ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+          (2 * (e : Real)) ^
+            (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+              simpa using hsum
+    _ <= ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+          (4 * manuscriptAgreementFloor m h) ^
+            (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) :=
+              mul_le_mul_of_nonneg_left hpower hcoef0
 
 theorem source_high_error_exponent_gap_positive {m h : Nat}
     (hm : 256 <= m) (hh : 20001 * m ^ 2 <= h) :
@@ -203,6 +292,20 @@ theorem source_success_scale_eq_successMargin {m h : Nat}
   rw [source_success_scale_eq_manuscript]
   exact manuscriptSuccessScale_eq_successMargin hm hdiv
 
+/-- A lower bound on the same selected beta controls the negative Holder
+power. This retains the beta-relative comparison required by the weighted
+star signal; it does not replace that signal by an absolute success margin. -/
+theorem selected_beta_negative_holder_power_le_signal
+    {beta signal q : Real} (hsignal : 0 < signal)
+    (hbeta : signal <= beta) (hq : 0 <= q) :
+    beta ^ (-q) <= signal ^ (-q) := by
+  have hbetaPos : 0 < beta := lt_of_lt_of_le hsignal hbeta
+  have hpow := Real.rpow_le_rpow (le_of_lt hsignal) hbeta hq
+  have hsignalPow : 0 < signal ^ q := Real.rpow_pos_of_pos hsignal q
+  have hbetaPow : 0 < beta ^ q := Real.rpow_pos_of_pos hbetaPos q
+  rw [Real.rpow_neg (le_of_lt hbetaPos), Real.rpow_neg (le_of_lt hsignal)]
+  exact (inv_le_inv₀ hbetaPow hsignalPow).mpr hpow
+
 def sourceAgreementScale (m h : Nat) : Real := manuscriptAgreementFloor m h
 
 def sourceThresholdScale (m h : Nat) : Real := manuscriptMomentThreshold m h
@@ -240,6 +343,46 @@ theorem ordinary_selected_functional_beta_lower
           2 ^ (Module.finrank (ZMod 2) V)) *
         matchingCenterMass (m := m) htd hdV C f := by positivity
   nlinarith
+
+/-- The same ordinary weighted-star witness carries the exact beta floor
+needed for the negative Holder power in the selected analytic estimate. -/
+theorem ordinary_selected_beta_controls_holder_loss
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {t d m E P : Nat}
+    (htd : t <= d) (hdV : d <= Module.finrank (ZMod 2) V)
+    (hk : 1 <= d - t)
+    (hguard : m * (d - t) + E + 2 <= Module.finrank (ZMod 2) V - t)
+    (hcenter : Nonempty (Grass V t))
+    (hleaf : forall K : Grass V t, Nonempty (LeafOver K d))
+    (C : CenterTable (V := V) t) (T : LeafTable (V := V) d)
+    (hscore : successMargin E <= StarDensity (k := m) hcenter hleaf C T)
+    (hP : 0 < P) :
+    exists f : Module.Dual (ZMod 2) V,
+      let beta : Real :=
+        (matchingCenterMass (m := m) htd hdV C f : Real)
+      let signal : Real :=
+        (((successMargin E / 4) *
+          (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+            2 ^ Module.finrank (ZMod 2) V) : Rat) : Real)
+      beta ^ (-(m : Real) / (P : Real)) <=
+        signal ^ (-(m : Real) / (P : Real)) := by
+  obtain ⟨f, hbeta⟩ := ordinary_selected_functional_beta_lower
+    htd hdV hk hguard hcenter hleaf C T hscore
+  refine ⟨f, ?_⟩
+  dsimp at hbeta
+  have hsignal : 0 <
+      (((successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+          2 ^ Module.finrank (ZMod 2) V) : Rat) : Real) := by
+    positivity
+  have hbetaReal :
+      (((successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+          2 ^ Module.finrank (ZMod 2) V) : Rat) : Real) <=
+        (matchingCenterMass (m := m) htd hdV C f : Real) := by
+    exact_mod_cast hbeta
+  apply selected_beta_negative_holder_power_le_signal hsignal hbetaReal
+  positivity
 
 /-- Parseval aggregated over every integral rank level.  This is the finite
 identity needed to control the total selected high-level energy without an
