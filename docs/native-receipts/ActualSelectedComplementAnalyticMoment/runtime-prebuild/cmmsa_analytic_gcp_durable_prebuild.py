@@ -100,7 +100,8 @@ def main():
                 item = tarfile.TarInfo(name)
                 item.size = len(payload)
                 new.addfile(item, io.BytesIO(payload))
-    archive_sha = hashlib.sha256(archive.read_bytes()).hexdigest()
+    with archive.open('rb') as archive_input:
+        archive_sha = hashlib.file_digest(archive_input, 'sha256').hexdigest()
     module = a.source.removeprefix('lean/').removesuffix('.lean').replace('/', '.')
     remote = '''#!/usr/bin/env bash
 set -Eeuo pipefail
