@@ -110,7 +110,7 @@ theorem selected_actual_material_moment_bound_large_dyadic_from_source_failure
           (n := n) (c := c) (s := s) (m := m) Cc Tc fc r P (2 * (e : Real)) a := by
   exact ActualSelectedComplementAnalyticNumerics.selected_actual_material_moment_bound_large_dyadic
     I copies U A C T f base sourceHeightCutoff hsel hA r hrd e he
-    (source_failed_zoom_to_selected_coordinate I copies U A T e he hfailSource)
+    (source_failed_zoom_to_selected_coordinate I U A T e he hfailSource)
     hHC hSpectral a ha
 
 end
