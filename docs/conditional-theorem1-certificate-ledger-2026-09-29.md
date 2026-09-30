@@ -453,3 +453,45 @@ classical HC/spectral application, actual analytic moment estimate, inverse,
 robust `8S`, numeric NO and conditional/full core certification remain OPEN.
 Consumer/margin drafts remain unverified. Classical contract inhabitants are
 still deferred outward until the conditional core closes.
+
+### Actual rank-image right-basis invariance (2026-09-29)
+
+`ActualRankImageRightBasisInvariance` proves range and injectivity preservation
+under right multiplication by U with an explicitly supplied two-sided inverse V,
+for every matrix M. The existing `rankImageBoolean` and its indicator are
+therefore invariant, including deficient matrices. Actual fixed C, T and f
+specializations consume this result in the accepted leaf append average and
+shared-center kth moment. These are equalities after precomposing the leaf
+FUNCTION by X -> X*U; they do not assert invariance of the conditional sampler
+under a transformation of the base matrix or arbitrary block mixing. All draws
+and normalizers are unchanged, and k=0 retains the center factor.
+
+Frozen source SHA256:
+- Main: `F2286607C739FF54B221DD209A4148BF0FC4915DEB4A956ACE72D8EE49986957`.
+- Checks: `33D4375176C750FB73BA422DAAF3E1FE84A36DFA92E93185DDE6CD057EA0FD0E`.
+Normal object SHA256:
+- Main: `883E9836F567EF4CDA088F2DB466B7A0905101A7F85F7BA22DC1977A59CC5320`.
+- Checks: `48FF70D7143C2BA17427CDD009697FF8D01577132A4D28F36FBE6E601E270EE5`.
+
+Author direct-j1 main session 34284 and Checks session 57326 both have
+authenticated automatic native exit 0 receipts. Main stdout contains only four
+deprecated dif_pos/dif_neg warnings. Checks prints seven exact signatures and
+four material axiom profiles, each `[propext, Classical.choice, Quot.sound]`.
+Root and Sol independently read and hashed the machine evidence and frozen
+artifacts; no manually reconstructed stdout is used.
+- [Main receipt](ActualRankImageRightBasisInvariance-main-receipt-20260930T001939092Z.json), original raw SHA256 `02246AF81DA1D2D9B77657C29F2CCC90E9E308F8521CCDAD888E53E39EFBC8F3`.
+- [Checks receipt](ActualRankImageRightBasisInvariance-checks-receipt-20260930T002117029Z.json), original raw SHA256 `E525161E4F4D558A39F02B3ACC0462A8F2C71A9F62716EF621F5569947E61DF8`.
+Minimum fresh free-memory samples were 1,975,728 and 2,231,108 KiB respectively,
+above the agent operating stop guard 1,572,864 KiB. Neither run was stopped.
+
+| Top-level lens | Verdict | Scope |
+| --- | --- | --- |
+| Proof-adversarial (root) | GO-WITH-NOTES | All-matrix inverse transport, full and deficient lift branches, actual means and k=0; authenticated main/Checks and normal objects verified. |
+| Complexity-theory (Sol orchestrator) | GO-WITH-NOTES | Same fixed f/C/T, unconditional append draws and shared center; input precomposition is not sampler invariance. Orchestration and proof-hint overlap is disclosed; this is not an independent proof-author check. |
+| Non-claims boundary (separate reviewer) | GO-WITH-NOTES | Independently read and hashed the authenticated Checks receipt, seven signatures and four standard profiles; no unproved analytic or sampler-invariance claim. |
+
+Basis invariance of these concrete lifts is now kernel checked. Exact classical
+HC/spectral application, selected hsmall, leaf-label/failed-zoom alignment,
+analytic moment bound, actual inverse, robust 8S, numeric NO and conditional/full
+core remain OPEN. This increment does not discharge inherited S3126 independent
+review debt or the outward classical source-contract inhabitants.
