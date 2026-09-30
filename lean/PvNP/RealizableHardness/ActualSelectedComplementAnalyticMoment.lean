@@ -129,7 +129,7 @@ theorem selectedHighFin_eq_selectedHigh {n d r : Nat}
   funext W
   simpa [selectedHighFin, selectedHigh] using
     (Fin.sum_univ_eq_sum_range
-      (fun i : Nat => if r < i then selectedLevel b i W else 0))
+      (fun i : Nat => if r < i then selectedLevel b i W else 0) (d + 1))
 
 def selectedHighFinIndexSet (d r : Nat) : Finset (Fin (d + 1)) :=
   Finset.univ.filter (fun i => r < i.val)
