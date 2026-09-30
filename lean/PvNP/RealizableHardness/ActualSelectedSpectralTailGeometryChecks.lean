@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualSelectedSpectralTailGeometry
+
+open PvNP.RealizableHardness.ActualSelectedSpectralTailGeometry
+
+#check sourceTailRankExponent
+#check sourceTailGeometryHeightFloor
+#check sourceRankExponent
+#check source_tail_scalar_guards
+#check selected_actual_tail_geometry_guards
+#check selected_actual_high_tail_guards
+#check PvNP.RealizableHardness.ActualSelectedHighEnergyTail.selected_actual_high_spectral_sum_le_tail
+#check PvNP.RealizableHardness.ActualSelectedSpectralParameters.selected_spectral_parameters
+
+#print axioms source_tail_scalar_guards
+#print axioms selected_actual_tail_geometry_guards
+#print axioms selected_actual_high_tail_guards
