@@ -541,3 +541,13 @@ Intended failed-zoom invocation, derivation of 2e<=1 if downstream arithmetic ne
 exact HC/spectral application, selected hsmall, analytic moment bound, actual
 inverse, robust 8S, numeric NO and conditional/full core remain OPEN. Inherited
 S3126 review debt and outward classical contract inhabitants remain open.
+
+The standing-assumption/application audit
+`docs/mz-standing-assumptions-application-audit-2026-09-29.md` identifies the
+actual complement dimensions n=2J, c=t and s=2h-t, hence even leaf width 2h.
+Selected-parameter specialization remains open. Before the coordinate moment
+theorems can serve the actual complement caller, prove A -> CoordinateAmbient(2J)
+linear-equivalence transport of the SAME C/T/f and the uniform Grassmannian laws;
+the finrank equality alone does not supply that bridge. Source-scoped classical
+clauses must retain their checked standing assumptions. This audit is not a
+classical contract inhabitant or an actual analytic moment bound.
