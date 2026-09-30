@@ -16,6 +16,7 @@ open PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
 open PvNP.RealizableHardness.ActualChangedAmbient8SBoundary
 open PvNP.RealizableHardness.ActualSourceStarLaw
 open PvNP.RealizableHardness.ActualOrdinaryStarMatchingFiber
+open PvNP.RealizableHardness.SamplerParameters
 
 noncomputable section
 
@@ -31,6 +32,30 @@ def sourceTailHeightFloor (m : Nat) : Nat := max (4000 * m ^ 2) (12 * m)
 
 def sourceMarginHeightFloor (m : Nat) : Nat :=
   max (sourceTailHeightFloor m) (20001 * m ^ 2)
+
+/-- The actual double-exponential sampler has enough blocks to dominate the
+selected squared height whenever its fixed integer multiplier is at least one.
+This proves the ambient growth guard from the sampler definition. -/
+theorem selected_height_square_lt_blocks {A h : Nat} (hA : 1 <= A) :
+    h ^ 2 < SamplerParameters.blocks A h := by
+  have hsq : h ^ 2 <= A * h ^ 2 := Nat.mul_le_mul_right (h ^ 2) hA
+  exact hsq.trans_lt (SamplerParameters.numerator_lt_blocks A h)
+
+/-- The selector's actual block height satisfies the sampler growth guard.
+The selector certificate is retained here so the inequality is attached to
+the same selected h used by the leaf dimensions and spectral contracts. -/
+theorem selected_actual_height_square_lt_blocks
+    (base : Nat -> Nat) (cutoff : Real -> Nat) {L m A : Nat}
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+        base cutoff j) (j + 2)) L =
+        (m : WithBot Nat)) (hA : 1 <= A) :
+    (ActualCmmsaParameterReconciliation.hBlock L m) ^ 2 <
+      SamplerParameters.blocks A
+        (ActualCmmsaParameterReconciliation.hBlock L m) := by
+  have hselected := ActualSelectedSpectralParameters.selected_spectral_parameters
+    base cutoff hsel
+  exact selected_height_square_lt_blocks hA
 
 def sourceHighErrorExponentGap (m h : Nat) : Real :=
   (((8 : Real) / 3) * (m : Real) - 2 +
@@ -392,5 +417,54 @@ theorem source_tail_guards_of_margin_floor {m h J s : Nat}
   have hh12 : 12 * m <= h :=
     (Nat.le_max_right _ _).trans htail
   exact source_tail_guards_of_growth hm hhS hh12 hJ hs
+
+/-- The margin-height source cutoff and selected sampler dimensions give the
+exact spectral guards at the actual chosen height. The bound h^2 < J is
+proved from blocks samplerA h and samplerA >= 1, not supplied as a tail
+assumption. -/
+theorem selected_actual_tail_guards
+    (base : Nat -> Nat) (cutoff : Real -> Nat) {L m samplerA : Nat}
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+        base cutoff j) (j + 2)) L =
+        (m : WithBot Nat))
+    (hsampler : 1 <= samplerA)
+    (hmargin : sourceMarginHeightFloor m <= cutoff
+      (1 / (ActualCmmsaParameterReconciliation.bOf m : Real))) :
+    let h := ActualCmmsaParameterReconciliation.hBlock L m
+    let J := SamplerParameters.blocks samplerA h
+    let s := ActualStarFixedRhoDimensionGuard.leafK m h
+    1 <= (s : Real) - 1 /\
+      (2 * (h : Real) : Real) - (2 * (J : Real)) <=
+        -(sourceRankExponent m : Real) * ((s : Real) - 1) - 3 := by
+  dsimp
+  let h := ActualCmmsaParameterReconciliation.hBlock L m
+  let J := SamplerParameters.blocks samplerA h
+  let s := ActualStarFixedRhoDimensionGuard.leafK m h
+  have hparams := ActualSelectedSpectralParameters.selected_spectral_parameters
+    base cutoff hsel
+  rcases hparams with
+    ⟨hm256, hh, hdiv, hhpos, hspos, hsplit, hrhoPos, hrho, hcReal,
+      hsReal, hbaseFloor, hcutFloor⟩
+  have hm : 0 < m := by omega
+  have hrhoEq : ActualSelectedSpectralParameters.actualSelectedRho m h =
+      ActualMZ24FixedRhoPointwiseSelector.fixedRho m := by
+    calc
+      ActualSelectedSpectralParameters.actualSelectedRho m h =
+          1 / (ActualCmmsaParameterReconciliation.bOf m : Real) := hrho
+      _ = ActualMZ24FixedRhoPointwiseSelector.fixedRho m := by
+        rw [fixed_rho_explicit hm]
+        norm_num [ActualCmmsaParameterReconciliation.bOf]
+  have hsFixed : (s : Real) =
+      2 * (ActualMZ24FixedRhoPointwiseSelector.fixedRho m : Real) * (h : Real) := by
+    dsimp [s]
+    rw [hrhoEq] at hsReal
+    exact hsReal
+  have hheight : sourceMarginHeightFloor m <= h :=
+    hmargin.trans hcutFloor
+  have hJ : h ^ 2 < J := by
+    dsimp [J, h]
+    exact selected_height_square_lt_blocks hsampler
+  exact source_tail_guards_of_margin_floor hm256 hheight hJ hsFixed
 
 end PvNP.RealizableHardness.ActualSelectedComplementAnalyticMargin
