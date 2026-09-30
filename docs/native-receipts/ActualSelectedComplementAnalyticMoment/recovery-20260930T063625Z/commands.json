@@ -1,0 +1,63 @@
+[
+  {
+    "args": [
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-01",
+      "--format=value(status)"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "967ec10041df32d00a03b303e28efc37a40412ae5b0c53fe9bd151c3b9064fc2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "args": [
+      "compute",
+      "instances",
+      "start",
+      "quantyra-lean-builder-01",
+      "--quiet"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "ada52c1986ef761b39b549d28db0c9a6153e06723d3e4c31fdc9fc0c27e859de"
+  },
+  {
+    "args": [
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-01",
+      "--quiet",
+      "--tunnel-through-iap",
+      "--command=systemctl is-active --quiet quantyra-idle-shutdown.timer && sudo systemd-run --unit=cmmsa-data-recovery-1790750207 --on-active=12min /sbin/shutdown -h now && tar -czf /tmp/cmmsa-062303-recovery.tar.gz -C /tmp cmmsa_analytic_20260930T062303Z.sh cmmsa_analytic_20260930T062303Z.tar.gz cmmsa_analytic_20260930T062303Z-evidence.tar.gz cmmsa_cslib_d9be641_cache.tar.gz && sha256sum /tmp/cmmsa-062303-recovery.tar.gz"
+    ],
+    "native_exit_code": 2,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "54ca5bd89d8604c516bbea36b0b103094a9e4aec66d39ecd39ef8d0958c047d7"
+  },
+  {
+    "args": [
+      "compute",
+      "instances",
+      "stop",
+      "quantyra-lean-builder-01",
+      "--quiet"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "2ab7c5c2f3e6d0031d509a88226ad3dd7a489e9cbe8c38b35dd7bac6b6269d75"
+  },
+  {
+    "args": [
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-01",
+      "--format=value(status)"
+    ],
+    "native_exit_code": 0,
+    "stdout_sha256": "967ec10041df32d00a03b303e28efc37a40412ae5b0c53fe9bd151c3b9064fc2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

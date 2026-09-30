@@ -17,3 +17,15 @@ The bounded read-only recovery script records actual subprocess outputs and
 integer statuses directly in a durable satellite directory. It does not compile
 Lean or make an analytic claim. Source 51E37, helper BF9C and parameter 78FB remain
 unverified as a complete increment; profiles and three-lens acceptance are open.
+
+Recovery 18068 ended with the VM TERMINATED. Its actual remote stderr records
+the requested `/tmp` files absent after reboot. Its durable numbered raw command
+files and native integers are under recovery-20260930T063625Z; a byte backup ZIP
+preserves the originals across Git text normalization. No lost native logs are
+reconstructed, and no recovery success is claimed.
+
+The replacement durable runner ADDDAC68B00B81AAEF79473A036A9359B05FA12C9B2C205369E8EBB24392F2FB
+prepares all artifacts directly under satellite durable-runs, captures numbered
+raw CLI process files, and does not upload a local cache in existing-worktree
+reuse mode. Private cache revision and strict dependency checks remain active.
+Run 56317 / 064137 is pending; stable prepared inputs are saved before execution.
