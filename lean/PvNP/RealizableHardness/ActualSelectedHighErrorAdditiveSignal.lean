@@ -64,13 +64,14 @@ theorem doubled_high_error_budget_le_additive_half {m h : Nat}
     have hden : 0 < 4000 * (m : Real) ^ 2 := by positivity
     rw [div_le_iff₀ hden]
     nlinarith [hmRlarge]
+  have hrhoComplement : 0 <= 1 - (fixedRho m : Real) := sub_nonneg.mpr hrhoLe
   have hsReal := leafK_eq_fixedRho_height hmpos hdiv
   have hcompare : sourceWeightedSignalExponent m h <=
       sourceAdditiveSignalExponent m h - 3 := by
     unfold sourceWeightedSignalExponent sourceAdditiveSignalExponent
     rw [hsReal]
     have hleft : 0 <= 2 * (1 - (fixedRho m : Real)) * (h : Real) :=
-      mul_nonneg (mul_nonneg (by linarith [hrhoLe]) (by norm_num)) hhR
+      mul_nonneg (mul_nonneg hrhoComplement (by norm_num)) hhR
     have hright : 0 <= 2 * (m : Real) * (fixedRho m : Real) * (h : Real) :=
       mul_nonneg (mul_nonneg (by positivity) (le_of_lt hrhoPos)) hhR
     nlinarith [hleft, hright]
