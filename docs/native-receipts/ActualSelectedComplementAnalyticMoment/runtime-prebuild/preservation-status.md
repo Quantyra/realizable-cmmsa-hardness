@@ -29,3 +29,25 @@ prepares all artifacts directly under satellite durable-runs, captures numbered
 raw CLI process files, and does not upload a local cache in existing-worktree
 reuse mode. Private cache revision and strict dependency checks remain active.
 Run 56317 / 064137 is pending; stable prepared inputs are saved before execution.
+
+## Historical status cross-reference (2026-09-30)
+
+The pending/WIP descriptions above are historical snapshots and remain intact.
+Run 56317 subsequently terminated with parameter native 0 and main native 1;
+its actual diagnostic records are preserved under
+durable-runs/cmmsa_analytic_20260930T064137Z. No lost
+Temp files were recovered or reconstructed by that later verification.
+
+The accepted bounded increment is now recorded in
+docs/conditional-theorem1-certificate-ledger-2026-09-29.md, section
+"accepted bounded selected analytic mass comparison", and in
+material-claims-manifest.json. That closeout supersedes only the unverified
+candidate status of the exact four frozen sources BFAE5D2E (material main),
+8D2F2596 (Checks), BF9C27E3 (finite norm helper), and 78FB8DF0 (parameters).
+Actual run 072903 has native/prebuild integer 0 results, eight standard axiom
+profiles, and three fresh independent GO-WITH-NOTES reviews.
+
+This does not accept the coordinate zoom-failure attempt, certify classical
+contract inhabitants, recover missing historical artifacts, or close the
+numeric/inverse/robust8S/runtime/full-core obligations. Original raw logs and
+byte-exact backup records remain the authority for each historical run.
