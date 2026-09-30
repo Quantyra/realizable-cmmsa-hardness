@@ -1,4 +1,4 @@
-import argparse, hashlib, io, json, pathlib, re, subprocess, tarfile, time, traceback
+import argparse, hashlib, io, json, pathlib, re, subprocess, tarfile, tempfile, time, traceback
 
 G = r'C:\Users\Dan\AppData\Local\Google\CloudSDKPortable\google-cloud-sdk\bin\gcloud.cmd'
 REPO = pathlib.Path(r'C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness')
@@ -89,15 +89,17 @@ def main():
     RUN_LOG_DIRECTORY = base / (tag + '-local-runtime')
     archive = base / (tag + '.tar.gz')
     script = base / (tag + '.sh')
-    raw = run(['git', 'archive', '--format=tar', 'HEAD', 'lean', 'lakefile.toml', 'lake-manifest.json', 'lean-toolchain'], timeout=180)
-    with tarfile.open(fileobj=io.BytesIO(raw)) as old, tarfile.open(archive, 'w:gz') as new:
-        for member in old:
-            if member.name not in overlays:
-                new.addfile(member, old.extractfile(member) if member.isfile() else None)
-        for name, payload in overlays.items():
-            item = tarfile.TarInfo(name)
-            item.size = len(payload)
-            new.addfile(item, io.BytesIO(payload))
+    with tempfile.TemporaryFile() as raw:
+        subprocess.run(['git', 'archive', '--format=tar', 'HEAD', 'lean', 'lakefile.toml', 'lake-manifest.json', 'lean-toolchain'], cwd=REPO, stdout=raw, stderr=subprocess.PIPE, timeout=180, check=True, creationflags=subprocess.CREATE_NO_WINDOW)
+        raw.seek(0)
+        with tarfile.open(fileobj=raw) as old, tarfile.open(archive, 'w:gz') as new:
+            for member in old:
+                if member.name not in overlays:
+                    new.addfile(member, old.extractfile(member) if member.isfile() else None)
+            for name, payload in overlays.items():
+                item = tarfile.TarInfo(name)
+                item.size = len(payload)
+                new.addfile(item, io.BytesIO(payload))
     archive_sha = hashlib.sha256(archive.read_bytes()).hexdigest()
     module = a.source.removeprefix('lean/').removesuffix('.lean').replace('/', '.')
     remote = '''#!/usr/bin/env bash
