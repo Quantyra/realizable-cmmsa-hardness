@@ -1,0 +1,3107 @@
+import Mathlib.Tactic
+import PvNP.RealizableHardness.ActualSelectedComplementAnalyticNumerics
+import PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
+import PvNP.RealizableHardness.ActualStarAcceptedGoodMass
+import PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector
+import PvNP.RealizableHardness.ActualComplementCoordinateMassBridge
+import PvNP.RealizableHardness.ActualSelectedHighEnergyTail
+import PvNP.RealizableHardness.ActualSelectedHighErrorAdditiveSignal
+import PvNP.RealizableHardness.ActualTaggedComplementStarDensityBound
+import PvNP.RealizableHardness.ActualOriginalFailureFixedMomentCaller
+
+/-! Component arithmetic for comparing the selected large-dyadic analytic
+bound with the actual selected-star signal.  The source's chosen-functional
+signal is consumed separately from this scalar work; no final margin, beta
+lower bound, or inverse conclusion is assumed here. -/
+
+namespace PvNP.RealizableHardness.ActualSelectedComplementAnalyticMargin
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+open PvNP.RealizableHardness.ActualSelectedComplementAnalyticNumerics
+open PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection
+open PvNP.RealizableHardness.ActualChangedAmbient8SBoundary
+open PvNP.RealizableHardness.ActualSourceStarLaw
+open PvNP.RealizableHardness.ActualOrdinaryStarMatchingFiber
+open PvNP.RealizableHardness.SamplerParameters
+open PvNP.RealizableHardness.ActualMZ24FixedRhoPointwiseSelector
+open PvNP.RealizableHardness.ActualStarAcceptedGoodMass
+open PvNP.RealizableHardness.GrassmannCounting
+open PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator
+open PvNP.RealizableHardness.ActualComplementCoordinateMassBridge
+open PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge
+open PvNP.RealizableHardness.ActualSelectedHighEnergyTail
+open PvNP.RealizableHardness.ActualSelectedHighErrorAdditiveSignal
+open PvNP.RealizableHardness.ActualTaggedComplementStarDensityBound
+open PvNP.RealizableHardness.ActualTaggedComplementIncidence
+open PvNP.RealizableHardness.ActualTaggedConcreteStarLaw
+open PvNP.RealizableHardness.ActualBinaryGrassmannIncidence
+open PvNP.RealizableHardness.ActualTaggedFixedCenterGeometry
+open PvNP.RealizableHardness.ActualStarSpanIntersection
+open PvNP.RealizableHardness.ActualFiniteLaw
+
+noncomputable section
+
+local instance marginActualRowIdDecidableEq {N rows : Nat}
+    (I : ActualOccurrenceAllocation.Instance N rows) : DecidableEq I.RowId :=
+  Classical.decEq _
+
+local instance marginActualGlobalVarDecidableEq {N rows : Nat}
+    (I : ActualOccurrenceAllocation.Instance N rows) : DecidableEq I.GlobalVar :=
+  inferInstance
+
+/-! ### Direct star-density transport
+
+The chosen-functional matching-mass comparison is not used to transport the
+all-functional `StarDensity`: that comparison only yields a one-sided good
+ mass estimate.  Instead, transport the actual acceptance event under the
+accepted star-coordinate equivalence and then push forward the exact star law.
+-/
+
+set_option maxHeartbeats 800000 in
+theorem ordinary_star_density_eq_coordinate_of_tables
+    {N rows : Nat} (I : ActualOccurrenceAllocation.Instance N rows)
+    (copies : Nat) {J : Nat} (U : TaggedGoodU I copies J)
+    (A : SideComplement I copies U) {t d k : Nat}
+    (C : ActualChangedAmbient8SBoundary.Labels (V := A.1) t)
+    (T : ActualChangedAmbient8SBoundary.Labels (V := A.1) d)
+    (htd : t ≤ d) (hdA : d ≤ Module.finrank (ZMod 2) A.1)
+    (hcenterA : Nonempty (Grass A.1 t))
+    (hleafA : ∀ K : Grass A.1 t, Nonempty (LeafOver K d))
+    (hcenterCoord : Nonempty (Grass (CoordAmbient J) t))
+    (hleafCoord : ∀ K : Grass (CoordAmbient J) t,
+      Nonempty (LeafOver K d)) :
+    StarDensity (V := A.1) (k := k) hcenterA hleafA C T =
+      StarDensity (V := CoordAmbient J) (k := k) hcenterCoord hleafCoord
+        (coordinateCenterTable I copies U A C)
+        (coordinateLeafTable I copies U A T) := by
+  classical
+  let e := starCoordinateEquiv (I := I) (copies := copies) (J := J)
+    (U := U) A (t := t) (d := d) (k := k)
+  let hdCoord : d ≤ Module.finrank (ZMod 2) (CoordAmbient J) :=
+    actualCoordinateDimensionBound I copies U A hdA
+  have hlaw : pushforward e
+      (starLaw (V := A.1) (t := t) (d := d) (m := k) htd hdA) =
+      starLaw (V := CoordAmbient J) (t := t) (d := d) (m := k) htd hdCoord := by
+    simpa [e] using starLaw_pushforward_actual I copies U A htd hdA
+  have hevent :
+      preimageEvent e
+        (Finset.univ.filter fun z : StarTuple (V := CoordAmbient J) t d k =>
+          ActualSourceStarLaw.accepts (coordinateCenterTable I copies U A C)
+            (coordinateLeafTable I copies U A T) z) =
+      Finset.univ.filter fun z : StarTuple (V := A.1) t d k =>
+        ActualSourceStarLaw.accepts C T z := by
+    ext z
+    simp only [preimageEvent, Finset.mem_filter, Finset.mem_univ, true_and]
+    change ActualSourceStarLaw.accepts
+        (coordinateCenterTable I copies U A C)
+        (coordinateLeafTable I copies U A T) (e z) ↔
+      ActualSourceStarLaw.accepts C T z
+    constructor
+    · intro hz i
+      let Kq := (e z).1
+      let Lq := ((e z).2 i).val
+      have K0 : Grass A.1 t := (grassCoordinateEquiv I copies U A).symm Kq
+      have L0 : Grass A.1 d := (grassCoordinateEquiv I copies U A).symm Lq
+      have hK : K0 = z.1 :=
+        (grassCoordinateEquiv I copies U A).left_inv z.1
+      have hL : L0 = (z.2 i).val :=
+        (grassCoordinateEquiv I copies U A).left_inv (z.2 i).val
+      let sK := coordinateSubspaceEquivFromCoord I copies U A Kq
+      let sL := coordinateSubspaceEquivFromCoord I copies U A Lq
+      have hsubset : K0.1 ≤ L0.1 := by
+        rw [hK, hL]
+        exact (z.2 i).property
+      have hcomm :
+          sL.symm.toLinearMap.comp (Submodule.inclusion ((e z).2 i).property) =
+            (Submodule.inclusion hsubset).comp sK.symm.toLinearMap := by
+        ext x
+        rfl
+      have hcommT :
+          ((T L0).comp sL.symm.toLinearMap).comp
+              (Submodule.inclusion ((e z).2 i).property) =
+            ((T L0).comp (Submodule.inclusion hsubset)).comp
+              sK.symm.toLinearMap := by
+        simpa only [LinearMap.comp_assoc] using
+          congrArg (fun g => (T L0).comp g) hcomm
+      have hrestricted :
+          ((T L0).comp (Submodule.inclusion hsubset)).comp
+              sK.symm.toLinearMap =
+            (C K0).comp sK.symm.toLinearMap := by
+        have h : (T L0).comp (Submodule.inclusion hsubset) = C K0 := by
+          simpa [hK, hL] using hz i
+        exact congrArg (fun g => g.comp sK.symm.toLinearMap) h
+      have hsurj : Function.Surjective sK.symm := sK.symm.surjective
+      have htable := LinearMap.cancel_right hsurj |>.mp hrestricted
+      simpa [hK, hL] using htable
+    · intro hz i
+      let Kq := (e z).1
+      let Lq := ((e z).2 i).val
+      have K0 : Grass A.1 t := (grassCoordinateEquiv I copies U A).symm Kq
+      have L0 : Grass A.1 d := (grassCoordinateEquiv I copies U A).symm Lq
+      have hK : K0 = z.1 :=
+        (grassCoordinateEquiv I copies U A).left_inv z.1
+      have hL : L0 = (z.2 i).val :=
+        (grassCoordinateEquiv I copies U A).left_inv (z.2 i).val
+      let sK := coordinateSubspaceEquivFromCoord I copies U A Kq
+      let sL := coordinateSubspaceEquivFromCoord I copies U A Lq
+      have hsubset : K0.1 ≤ L0.1 := by
+        rw [hK, hL]
+        exact (z.2 i).property
+      have hcomm :
+          sL.symm.toLinearMap.comp (Submodule.inclusion ((e z).2 i).property) =
+            (Submodule.inclusion hsubset).comp sK.symm.toLinearMap := by
+        ext x
+        rfl
+      have hcommT :
+          ((T L0).comp sL.symm.toLinearMap).comp
+              (Submodule.inclusion ((e z).2 i).property) =
+            ((T L0).comp (Submodule.inclusion hsubset)).comp
+              sK.symm.toLinearMap := by
+        simpa only [LinearMap.comp_assoc] using
+          congrArg (fun g => (T L0).comp g) hcomm
+      have hrestricted :
+          ((T L0).comp (Submodule.inclusion hsubset)).comp
+              sK.symm.toLinearMap =
+            (C K0).comp sK.symm.toLinearMap := by
+        have hsource : (T L0).comp (Submodule.inclusion hsubset) = C K0 := by
+          simpa [hK, hL] using hz i
+        exact congrArg (fun g => g.comp sK.symm.toLinearMap) hsource
+      have hsurj : Function.Surjective sK.symm := sK.symm.surjective
+      have htable := LinearMap.cancel_right hsurj |>.mp hrestricted
+      calc
+        ((T L0).comp sL.symm.toLinearMap).comp
+            (Submodule.inclusion ((e z).2 i).property) =
+            ((T L0).comp (Submodule.inclusion hsubset)).comp
+              sK.symm.toLinearMap := hcommT
+        _ = (C K0).comp sK.symm.toLinearMap :=
+          congrArg (fun g => g.comp sK.symm.toLinearMap) htable
+  rw [ActualOrdinaryStarSelection.starDensity_eq_acceptanceMass
+      htd hdA hcenterA hleafA C T,
+    ActualOrdinaryStarSelection.starDensity_eq_acceptanceMass
+      htd hdCoord hcenterCoord hleafCoord
+      (coordinateCenterTable I copies U A C)
+      (coordinateLeafTable I copies U A T)]
+  unfold ActualSourceStarLaw.acceptanceMass
+  rw [← hlaw, eventMass_pushforward, hevent]
+
+/-- Specialization of direct acceptance-event transport to the actual fixed
+tagged tables on one selected complement.  This exposes an equality usable to
+derive the coordinate selector premise from the original complement score;
+it is not inferred from the one-sided matching-good-mass bound. -/
+theorem transported_complement_star_density_eq_coordinate
+    {N rows : Nat} (I : ActualOccurrenceAllocation.Instance N rows)
+    (copies : Nat) {J : Nat} (U : TaggedGoodU I copies J)
+    (A : SideComplement I copies U) {t d k : Nat}
+    (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+    (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+    (htd : t ≤ d)
+    (hdA : d ≤ Module.finrank (ZMod 2) A.1) :
+    StarDensity (V := A.1) (k := k)
+        (grass_nonempty_of_le (by
+          calc
+            t ≤ d := htd
+            _ ≤ Module.finrank (ZMod 2) A.1 := hdA))
+        (fun K => extension_nonempty K htd hdA)
+        (transportedCenterTable I copies U A C)
+        (transportedLeafTable I copies U A T) =
+      StarDensity (V := CoordAmbient J) (k := k)
+        (grass_nonempty_of_le (by
+          calc
+            t ≤ d := htd
+            _ ≤ Module.finrank (ZMod 2) (CoordAmbient J) :=
+              actualCoordinateDimensionBound I copies U A hdA))
+        (fun K => extension_nonempty K htd
+          (actualCoordinateDimensionBound I copies U A hdA))
+        (selectedCoordinateCenterTable I copies U A C)
+        (selectedCoordinateLeafTable I copies U A T) := by
+  exact ordinary_star_density_eq_coordinate_of_tables I copies U A
+    (transportedCenterTable I copies U A C)
+    (transportedLeafTable I copies U A T) htd hdA
+    (grass_nonempty_of_le (by
+      calc
+        t ≤ d := htd
+        _ ≤ Module.finrank (ZMod 2) A.1 := hdA))
+    (fun K => extension_nonempty K htd hdA)
+    (grass_nonempty_of_le (by
+      calc
+        t ≤ d := htd
+        _ ≤ Module.finrank (ZMod 2) (CoordAmbient J) :=
+          actualCoordinateDimensionBound I copies U A hdA))
+    (fun K => extension_nonempty K htd
+      (actualCoordinateDimensionBound I copies U A hdA))
+
+/-- The original complement's actual star-density lower bound transports to
+the selected coordinate star-density lower bound by the direct event-law
+equality above.  In particular the coordinate score is derived, never an
+additional input to the material caller. -/
+theorem selected_coordinate_score_of_actual_complement_score
+    {N rows : Nat} (I : ActualOccurrenceAllocation.Instance N rows)
+    (copies : Nat) {J : Nat} (U : TaggedGoodU I copies J)
+    (A : SideComplement I copies U) {t d k E : Nat}
+    (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+    (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+    (htd : t ≤ d)
+    (hdA : d ≤ Module.finrank (ZMod 2) A.1)
+    (hscore : successMargin E ≤
+      StarDensity (V := A.1) (k := k)
+        (grass_nonempty_of_le (by
+          calc
+            t ≤ d := htd
+            _ ≤ Module.finrank (ZMod 2) A.1 := hdA))
+        (fun K => extension_nonempty K htd hdA)
+        (transportedCenterTable I copies U A C)
+        (transportedLeafTable I copies U A T)) :
+    successMargin E ≤
+      StarDensity (V := CoordAmbient J) (k := k)
+        (grass_nonempty_of_le (by
+          calc
+            t ≤ d := htd
+            _ ≤ Module.finrank (ZMod 2) (CoordAmbient J) :=
+              actualCoordinateDimensionBound I copies U A hdA))
+        (fun K => extension_nonempty K htd
+          (actualCoordinateDimensionBound I copies U A hdA))
+        (selectedCoordinateCenterTable I copies U A C)
+        (selectedCoordinateLeafTable I copies U A T) := by
+  rw [← transported_complement_star_density_eq_coordinate I copies U A C T htd hdA]
+  exact hscore
+
+/-- The full source side-conditioned score selects an actual complement whose
+ordinary transported-table star density clears the same threshold. This uses
+the tracked source-law coupling inequality in its valid direction, followed
+by the finite uniform-complement averaging argument. The selected complement
+then carries a derived coordinate score via direct acceptance-event equality.
+-/
+theorem actual_side_score_selects_coordinate_complement
+    {N rows : Nat} (I : ActualOccurrenceAllocation.Instance N rows)
+    (copies : Nat) {J : Nat} (U : TaggedGoodU I copies J)
+    {t h k E : Nat} (ht : t ≤ 2 * h) (hh : h ≤ J)
+    (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+    (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+    (hscore : ActualTaggedMZSideDraw.sideConditionalDensity
+        I copies U t h k C T ≥ successMargin E) :
+    ∃ A : SideComplement I copies U,
+      successMargin E ≤
+        StarDensity (V := CoordAmbient J) (k := k)
+          (grass_nonempty_of_le (by
+            calc
+              t ≤ 2 * h := ht
+              _ ≤ 2 * J := by omega
+              _ = Module.finrank (ZMod 2) (CoordAmbient J) := by
+                simp [CoordAmbient]))
+          (fun K => extension_nonempty K ht (by
+            calc
+              2 * h ≤ 2 * J := by omega
+              _ = Module.finrank (ZMod 2) (CoordAmbient J) := by
+                simp [CoordAmbient]))
+          (selectedCoordinateCenterTable I copies U A C)
+          (selectedCoordinateLeafTable I copies U A T) := by
+  classical
+  have hnonempty : Nonempty (SideComplement I copies U) := by
+    classical
+    obtain ⟨A, hA⟩ := Submodule.exists_isCompl
+      ((equationSpan (taggedSource I copies).support U.1).comap
+        (coordinateSpace (taggedSource I copies).support U.1).subtype)
+    exact ⟨⟨A, hA⟩⟩
+  letI : Nonempty (SideComplement I copies U) := hnonempty
+  let D : SideComplement I copies U → Rat := fun A =>
+    StarDensity (V := A.1) (k := k)
+      (grass_nonempty_of_le (by
+        calc
+          t ≤ 2 * h := ht
+          _ ≤ 2 * J := by omega
+          _ = Module.finrank (ZMod 2) A.1 :=
+            (sideComplement_finrank I copies U A).symm))
+      (fun K => extension_nonempty K ht (by
+        calc
+          2 * h ≤ 2 * J := by omega
+          _ = Module.finrank (ZMod 2) A.1 :=
+            (sideComplement_finrank I copies U A).symm))
+      (transportedCenterTable I copies U A C)
+      (transportedLeafTable I copies U A T)
+  have haverage :
+      ActualTaggedMZSideDraw.sideConditionalDensity I copies U t h k C T ≤
+        ∑ A : SideComplement I copies U,
+          ((1 : Rat) / Fintype.card (SideComplement I copies U)) * D A := by
+    have hAvgBound := sideConditionalDensity_le_uniformComplement_average_StarDensity
+      (k := k) I copies U ht hh C T
+    change ActualTaggedMZSideDraw.sideConditionalDensity I copies U t h k C T ≤
+      ∑ A : SideComplement I copies U,
+        (1 / Fintype.card (SideComplement I copies U) : Rat) *
+          StarDensity (V := A.1) (k := k)
+            (grass_nonempty_of_le (by
+              calc
+                t ≤ 2 * h := ht
+                _ ≤ 2 * J := by omega
+                _ = Module.finrank (ZMod 2) A.1 :=
+                  (sideComplement_finrank I copies U A).symm))
+            (fun K => extension_nonempty K ht (by
+              calc
+                2 * h ≤ 2 * J := by omega
+                _ = Module.finrank (ZMod 2) A.1 :=
+                  (sideComplement_finrank I copies U A).symm))
+            (transportedCenterTable I copies U A C)
+            (transportedLeafTable I copies U A T) at hAvgBound
+    exact hAvgBound
+  have hqavg : successMargin E ≤
+      ∑ A : SideComplement I copies U,
+        ((1 : Rat) / Fintype.card (SideComplement I copies U)) * D A :=
+    hscore.trans haverage
+  let cardA : Nat := Fintype.card (SideComplement I copies U)
+  have hcardPos : 0 < cardA := by
+    dsimp [cardA]
+    exact Fintype.card_pos_iff.mpr inferInstance
+  have hcardNe : (cardA : Rat) ≠ 0 := by
+    exact Nat.cast_ne_zero.mpr hcardPos.ne'
+  have hscaled := mul_le_mul_of_nonneg_left hqavg (Nat.cast_nonneg cardA)
+  have hnormalize : (cardA : Rat) *
+      (∑ A : SideComplement I copies U,
+        ((1 : Rat) / (cardA : Rat)) * D A) =
+      ∑ A : SideComplement I copies U, D A := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro A _
+    field_simp [hcardNe]
+  rw [hnormalize] at hscaled
+  have hsumq :
+      (∑ _A : SideComplement I copies U, successMargin E) =
+        (cardA : Rat) * successMargin E := by
+    simp [cardA, Finset.sum_const, nsmul_eq_mul]
+  have hsumle :
+      (∑ _A : SideComplement I copies U, successMargin E) ≤
+        ∑ A : SideComplement I copies U, D A := by
+    rw [hsumq]
+    exact hscaled
+  obtain ⟨A, hAmem, hA⟩ := Finset.exists_le_of_sum_le
+    (s := (Finset.univ : Finset (SideComplement I copies U)))
+    (f := fun _ : SideComplement I copies U => successMargin E)
+    (g := D) Finset.univ_nonempty hsumle
+  refine ⟨A, ?_⟩
+  have hscoreA : successMargin E ≤ D A := hA
+  have hdA : 2 * h ≤ Module.finrank (ZMod 2) A.1 := by
+    rw [sideComplement_finrank I copies U A]
+    omega
+  have hscoreA' : successMargin E ≤
+      StarDensity (V := A.1) (k := k)
+        (grass_nonempty_of_le (by
+          calc
+            t ≤ 2 * h := ht
+            _ ≤ 2 * J := by omega
+            _ = Module.finrank (ZMod 2) A.1 :=
+              (sideComplement_finrank I copies U A).symm))
+        (fun K => extension_nonempty K ht (by
+          calc
+            2 * h ≤ 2 * J := by omega
+            _ = Module.finrank (ZMod 2) A.1 :=
+              (sideComplement_finrank I copies U A).symm))
+        (transportedCenterTable I copies U A C)
+        (transportedLeafTable I copies U A T) := by
+    simpa [D] using hscoreA
+  have hcoord := selected_coordinate_score_of_actual_complement_score
+    I copies U A C T (by omega) hdA hscoreA'
+  exact hcoord
+
+/-- Local tracked copy of the manuscript's displayed rational-rho scale. -/
+def localManuscriptSuccessScale (rho : Rat) (m h : Nat) : Real :=
+  (1 / 2 : Real) ^ (2 * (1 - 1000 * (rho : Real)) *
+    (h : Real) * (m : Real))
+
+def localManuscriptRho (m : Nat) : Rat :=
+  ActualMZ24FixedRhoPointwiseSelector.fixedRho m
+
+/-- Divisibility by the actual reciprocal block parameter identifies this
+displayed scale with the existing natural-exponent rational success margin. -/
+theorem local_manuscript_scale_eq_successMargin {m h : Nat}
+    (hm : 0 < m)
+    (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h) :
+    localManuscriptSuccessScale (localManuscriptRho m) m h =
+      (ActualStarAcceptedGoodMass.successMargin
+        (ActualStarFixedRhoDimensionGuard.badExponent m h) : Real) := by
+  let q : Nat := h / ActualCmmsaParameterReconciliation.bOf m
+  have hbpos : 0 < ActualCmmsaParameterReconciliation.bOf m := by
+    dsimp [ActualCmmsaParameterReconciliation.bOf]
+    positivity
+  have hbne : (ActualCmmsaParameterReconciliation.bOf m : Real) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt hbpos)
+  have hmul : ActualCmmsaParameterReconciliation.bOf m * q = h := by
+    dsimp [q]
+    exact Nat.mul_div_cancel' hdiv
+  have hb1000 : 1000 <= ActualCmmsaParameterReconciliation.bOf m := by
+    dsimp [ActualCmmsaParameterReconciliation.bOf]
+    have hm1 : 1 <= m := by omega
+    have hsquare : 1 <= m ^ 2 := Nat.one_le_pow 2 m hm1
+    nlinarith
+  have hsub : 1000 * q <= h := by
+    calc
+      1000 * q <= ActualCmmsaParameterReconciliation.bOf m * q :=
+        Nat.mul_le_mul_right q hb1000
+      _ = h := hmul
+  have hcastmul : (h : Real) =
+      (ActualCmmsaParameterReconciliation.bOf m : Real) * (q : Real) := by
+    exact_mod_cast hmul.symm
+  have hrho : (localManuscriptRho m : Real) =
+      1 / (ActualCmmsaParameterReconciliation.bOf m : Real) := by
+    change (ActualMZ24FixedRhoPointwiseSelector.fixedRho m : Real) = _
+    have hrat := ActualMZ24FixedRhoPointwiseSelector.fixedRho_eq_inverse_bOf hm
+    rw [hrat, Rat.cast_div]
+    norm_num
+  have hexp :
+      2 * (1 - 1000 * (localManuscriptRho m : Real)) *
+        (h : Real) * (m : Real) =
+      (ActualStarFixedRhoDimensionGuard.badExponent m h : Real) := by
+    rw [hrho, hcastmul]
+    have hcastsub : ((h - 1000 * q : Nat) : Real) =
+        (h : Real) - 1000 * (q : Real) := by
+      rw [Nat.cast_sub hsub, Nat.cast_mul]
+      norm_num
+    have hbadexp :
+        (ActualStarFixedRhoDimensionGuard.badExponent m h : Real) =
+          2 * (m : Real) * ((h - 1000 * q : Nat) : Real) := by
+      unfold ActualStarFixedRhoDimensionGuard.badExponent
+      rw [show h / ActualCmmsaParameterReconciliation.bOf m = q from rfl]
+      push_cast
+      simp only [Nat.cast_sub hsub, Nat.cast_mul]
+    rw [hbadexp, hcastsub, hcastmul]
+    field_simp [hbne] <;> ring
+  rw [localManuscriptSuccessScale, hexp, Real.rpow_natCast]
+  simp [ActualStarAcceptedGoodMass.successMargin, Rat.cast_pow]
+
+def sourceRankExponent (m : Nat) : Nat := 40000 * m ^ 3
+
+def sourceMomentTLowerBound (m : Nat) : Nat := sourceHolderLowerBound m
+
+def sourceMomentT (m : Nat) : Nat := 2 ^ sourceMomentTLowerBound m
+
+def sourceMomentP (m : Nat) : Nat := 2 ^ (m * sourceMomentT m)
+
+/-- Explicit enlarged height used to pay for the finite HC constants at the
+actual source Holder exponent P. It is allowed to be very large: the selected
+height floor is a source cutoff, and no asymptotic shorthand replaces it. -/
+def sourceLowHCHeightFloor (m : Nat) : Nat :=
+  1000000 * m ^ 2 *
+    (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100)
+
+/-- Exact base-two exponent of the low analytic term after division by the
+same selected weighted-star signal, using beta's unconditional signal floor.
+The count-rate term is the strengthened h/(1000*m^2) estimate. -/
+def sourceLowRelativeExponent (m h P : Nat) : Real :=
+  let mm : Real := m
+  let hh : Real := h
+  let pp : Real := P
+  let rho : Real := fixedRho m
+  let alpha : Real := 1 - 2 / pp
+  let rate : Real :=
+    1 / (1000 * mm) - 2 * mm * alpha * (1 - 1000 * rho ^ 2) +
+      (mm / pp) *
+        (2 * mm * (1 - 1000 * rho) + 2 * (1 - rho) + 2 * mm * rho) +
+      2 * mm * (1 - 1000 * rho) + 2 * mm * rho
+  let const : Real :=
+    mm + mm * (500 * (sourceRankExponent m : Real) ^ 2 * pp + 2 * alpha) +
+      (mm / pp) * 2 + 2
+  const + rate * hh
+
+/-- Exponent of the same selected beta floor `successScale/4 · M/F`, after
+using the actual selected dimensions `c=2(1-rho)h` and `s=2rho h`. -/
+def sourceLowBetaFloorExponent (m h : Nat) : Real :=
+  -2 * (1 - 1000 * (fixedRho m : Real)) * (m : Real) * (h : Real) - 2 -
+    2 * (1 - (fixedRho m : Real)) * (h : Real) -
+    2 * (m : Real) * (fixedRho m : Real) * (h : Real)
+
+/-- Exponent of the selected first weighted-star signal, with its exact
+`successScale/4 · M/B` factor retained. -/
+def sourceLowTargetSignalExponent (m h : Nat) : Real :=
+  -2 * (1 - 1000 * (fixedRho m : Real)) * (m : Real) * (h : Real) - 2 -
+    2 * (m : Real) * (fixedRho m : Real) * (h : Real)
+
+/-- The beta-floor exponent is exactly the rational success scale, the `1/4`
+selector factor, and the selected coordinate ratio `M/F`, with the actual
+fixed-rho leaf dimensions substituted. This isolates the scalar identity
+needed to feed the one-functional selector output into the low comparison. -/
+theorem source_low_beta_floor_exponent_selected_dimensions {m h c s : Nat}
+    {rho : Real}
+    (hrho : (fixedRho m : Real) = rho)
+    (hc : (c : Real) = 2 * (1 - rho) * (h : Real))
+    (hs : (s : Real) = 2 * rho * (h : Real)) :
+    sourceLowBetaFloorExponent m h =
+      -2 * (1 - 1000 * rho) * (m : Real) * (h : Real) - 2 -
+        (c : Real) - (m : Real) * (s : Real) := by
+  unfold sourceLowBetaFloorExponent
+  rw [hrho, hc, hs]
+  ring
+
+/-- The source integer bad exponent is the same real exponent as the displayed
+fixed-rho success scale once the selected height is divisible by `bOf`. -/
+theorem bad_exponent_cast_eq_fixed_rho_scale {m h : Nat}
+    (hm : 0 < m)
+    (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h) :
+    (ActualStarFixedRhoDimensionGuard.badExponent m h : Real) =
+      2 * (1 - 1000 * (fixedRho m : Real)) * (m : Real) * (h : Real) := by
+  let b := ActualCmmsaParameterReconciliation.bOf m
+  let q := h / b
+  have hbpos : 0 < b := by dsimp [b, ActualCmmsaParameterReconciliation.bOf]; positivity
+  have hbne : (b : Real) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hbpos)
+  have hmul : b * q = h := by
+    dsimp [q]
+    exact Nat.mul_div_cancel' hdiv
+  have hsub : 1000 * q ≤ h := by
+    have hb1000 : 1000 ≤ b := by
+      dsimp [b, ActualCmmsaParameterReconciliation.bOf]
+      have hm1 : 1 ≤ m := by omega
+      nlinarith [Nat.one_le_pow 2 m hm1]
+    calc
+      1000 * q ≤ b * q := Nat.mul_le_mul_right q hb1000
+      _ = h := hmul
+  have hcastmul : (h : Real) = (b : Real) * (q : Real) := by exact_mod_cast hmul.symm
+  have hcastsub : ((h - 1000 * q : Nat) : Real) =
+      (h : Real) - 1000 * (q : Real) := by
+    rw [Nat.cast_sub hsub, Nat.cast_mul]
+    norm_num
+  have hrho : (fixedRho m : Real) = 1 / (b : Real) := by
+    dsimp [b]
+    have hrat := ActualMZ24FixedRhoPointwiseSelector.fixedRho_eq_inverse_bOf hm
+    rw [hrat, Rat.cast_div]
+    norm_num
+  unfold ActualStarFixedRhoDimensionGuard.badExponent
+  rw [show h / ActualCmmsaParameterReconciliation.bOf m = q from rfl]
+  push_cast
+  rw [hcastsub, hcastmul, hrho]
+  field_simp [hbne] <;> ring
+
+/-- Exact conversion of the selected rational `M/F` factor to its real
+negative-exponent form. The natural subtraction is justified by the caller's
+actual dimension guard. -/
+theorem selected_M_over_F_eq_negative_power {n c s m : Nat}
+    (hdim : c + m * s ≤ n) :
+    ((((2 : Rat) ^ (n - (c + m * s))) / (2 : Rat) ^ n : Rat) : Real) =
+      (2 : Real) ^ (-((c : Real) + (m : Real) * (s : Real))) := by
+  have hpow : (2 : Rat) ^ n =
+      (2 : Rat) ^ (n - (c + m * s)) * (2 : Rat) ^ (c + m * s) := by
+    rw [← pow_add, Nat.sub_add_cancel hdim]
+  have hrat : (2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ n =
+      1 / (2 : Rat) ^ (c + m * s) := by
+    rw [hpow]
+    field_simp
+  have hcast :
+      ((((2 : Rat) ^ (n - (c + m * s))) / (2 : Rat) ^ n : Rat) : Real) =
+        1 / (2 : Real) ^ (c + m * s) := by
+    have hcast' := congrArg (fun x : Rat => (x : Real)) hrat
+    norm_num [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat] at hcast'
+    norm_num [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat, one_div] at hcast' ⊢
+    exact hcast'
+  rw [hcast, one_div, ← Real.rpow_natCast (2 : Real) (c + m * s),
+    ← Real.rpow_neg (by norm_num : (0 : Real) ≤ 2)]
+  congr 1
+  push_cast
+  ring
+
+/-- The exact selector beta signal has the exponent used by the analytic
+low-term comparison when the source dimensions and fixed-rho scale are the
+selected ones. -/
+theorem selected_beta_signal_eq_source_floor {m h n c s E : Nat}
+    (hm : 0 < m)
+    (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h)
+    (hE : E = ActualStarFixedRhoDimensionGuard.badExponent m h)
+    (hdim : c + m * s ≤ n)
+    {rho : Real}
+    (hrho : (fixedRho m : Real) = rho)
+    (hc : (c : Real) = 2 * (1 - rho) * (h : Real))
+    (hs : (s : Real) = 2 * rho * (h : Real)) :
+    ((((successMargin E / 4) *
+      ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ n) : Rat) : Real)) =
+      (2 : Real) ^ sourceLowBetaFloorExponent m h := by
+  have hsuccess : (successMargin E : Real) =
+      (2 : Real) ^ (-((ActualStarFixedRhoDimensionGuard.badExponent m h : Nat) : Real)) := by
+    rw [hE]
+    unfold successMargin
+    rw [Rat.cast_div, Rat.cast_pow]
+    norm_num [Rat.cast_one, Rat.cast_ofNat]
+    rw [← Real.rpow_natCast (2 : Real)
+      (ActualStarFixedRhoDimensionGuard.badExponent m h)]
+    rw [← Real.rpow_neg (by norm_num : (0 : Real) ≤ 2)]
+    norm_num
+  have hM := selected_M_over_F_eq_negative_power (n := n) (c := c)
+    (s := s) (m := m) hdim
+  rw [Rat.cast_div] at hM
+  have hbad := bad_exponent_cast_eq_fixed_rho_scale hm hdiv
+  rw [hrho] at hbad
+  simp only [Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat]
+  rw [hsuccess, hM]
+  rw [div_eq_mul_inv,
+    show (4 : Real)⁻¹ = (2 : Real) ^ (-2 : Real) by norm_num [Real.rpow_neg]]
+  rw [← Real.rpow_add (by norm_num : (0 : Real) < 2),
+    ← Real.rpow_add (by norm_num : (0 : Real) < 2)]
+  congr 1
+  rw [hbad]
+  rw [source_low_beta_floor_exponent_selected_dimensions hrho hc hs]
+  ring
+
+/-! The high-error comparison uses a conservative dyadic signal with the
+success scale squared. This lemma compares that quantity to the actual
+selected additive signal `successMargin E / 4 * M/F`; it does not identify
+the two signals. -/
+theorem selected_actual_additive_signal_dominates_dyadic
+    {m h n c s E : Nat} (hm : 256 <= m)
+    (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h)
+    (hE : E = ActualStarFixedRhoDimensionGuard.badExponent m h)
+    (hdim : c + m * s <= n) {rho : Real}
+    (hrho : (fixedRho m : Real) = rho)
+    (hc : (c : Real) = 2 * (1 - rho) * (h : Real))
+    (hs : (s : Real) = 2 * rho * (h : Real)) :
+    (2 : Real) ^ (-4 * (1 - 1000 * rho) * (m : Real) * (h : Real) - 2 -
+        (m : Real) * (s : Real)) <=
+      ((((successMargin E / 4) *
+        ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ n : Rat) : Rat) : Real)) := by
+  have hmpos : 0 < m := by omega
+  have hmR : (1 : Real) <= (m : Real) := by
+    exact_mod_cast (show 1 <= m by omega)
+  have hrhoSmallRat := fixedRho_le_one_div_4000 hmpos
+  have hrhoSmall : (fixedRho m : Real) <= 1 / 4000 := by
+    have hcast := (Rat.cast_le (K := Real)).mpr hrhoSmallRat
+    norm_num at hcast ⊢
+    exact hcast
+  have hsignal := selected_beta_signal_eq_source_floor hmpos hdiv hE hdim
+    hrho hc hs
+  have hgap :
+      -4 * (1 - 1000 * rho) * (m : Real) * (h : Real) - 2 -
+          (m : Real) * (s : Real) <= sourceLowBetaFloorExponent m h := by
+    unfold sourceLowBetaFloorExponent
+    rw [hs, hrho]
+    have hcoef : 0 <= 1000 * (m : Real) - 1 := by nlinarith
+    have hfactor : 0 <= (m : Real) - 1 -
+        (fixedRho m : Real) * (1000 * (m : Real) - 1) := by
+      have hbound := mul_le_mul_of_nonneg_right hrhoSmall hcoef
+      have hbound' : (1 / 4000 : Real) * (1000 * (m : Real) - 1) <=
+          (m : Real) - 1 := by nlinarith [hmR]
+      exact le_trans hbound hbound'
+    have hscale : 0 <= 2 * (h : Real) := by positivity
+    nlinarith [mul_nonneg hfactor hscale]
+  have hpow := Real.rpow_le_rpow_of_exponent_le
+    (by norm_num : (1 : Real) <= 2) hgap
+  rw [hsignal]
+  simpa using hpow
+
+/-- The selector's first weighted term is exactly the dyadic low target after
+the selected `M/B` ratio is expanded. This is the low-signal identity needed
+to combine the Holder estimate with the *same* selector witness. -/
+theorem selected_actual_first_signal_eq_dyadic
+    {m h n c s E : Nat} (hm : 0 < m)
+    (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h)
+    (hE : E = ActualStarFixedRhoDimensionGuard.badExponent m h)
+    (hdim : c + m * s <= n) {rho : Real}
+    (hrho : (fixedRho m : Real) = rho)
+    (hs : (s : Real) = 2 * rho * (h : Real)) :
+    ((((successMargin E / 4) *
+      ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ (n - c)) : Rat) : Real)) =
+      (2 : Real) ^ sourceLowTargetSignalExponent m h := by
+  have hsuccess : (successMargin E : Real) =
+      (2 : Real) ^ (-((ActualStarFixedRhoDimensionGuard.badExponent m h : Nat) : Real)) := by
+    rw [hE]
+    unfold successMargin
+    rw [Rat.cast_div, Rat.cast_pow]
+    rw [← Real.rpow_natCast (2 : Real)
+      (ActualStarFixedRhoDimensionGuard.badExponent m h),
+      ← Real.rpow_neg (by norm_num : (0 : Real) <= 2)]
+    norm_num
+  have hnat : n - (c + m * s) + m * s = n - c := by omega
+  have hratioRat :
+      (2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ (n - c) =
+        1 / (2 : Rat) ^ (m * s) := by
+    rw [← hnat, pow_add]
+    field_simp
+  have hratio :
+      ((((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ (n - c) : Rat) : Real)) =
+        (2 : Real) ^ (-((m : Real) * (s : Real))) := by
+    have hcast := congrArg (fun x : Rat => (x : Real)) hratioRat
+    rw [Rat.cast_div, Rat.cast_pow] at hcast
+    norm_num [Rat.cast_div, Rat.cast_pow, Rat.cast_ofNat, one_div] at hcast ⊢
+    rw [hcast, ← Real.rpow_natCast (2 : Real) (m * s),
+      ← Real.rpow_neg (by norm_num : (0 : Real) <= 2)]
+    have hcastMul : ((m * s : Nat) : Real) = (m : Real) * (s : Real) := by
+      exact_mod_cast Nat.cast_mul m s
+    rw [hcastMul]
+  have hbad := bad_exponent_cast_eq_fixed_rho_scale hm hdiv
+  rw [hrho] at hbad
+  have hexp :
+      -((ActualStarFixedRhoDimensionGuard.badExponent m h : Nat) : Real) - 2 -
+        (m : Real) * (s : Real) = sourceLowTargetSignalExponent m h := by
+    rw [hbad, hs]
+    unfold sourceLowTargetSignalExponent
+    rw [hrho]
+    ring
+  rw [Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat, hsuccess, hratio,
+    div_eq_mul_inv]
+  rw [show (4 : Real)⁻¹ = (2 : Real) ^ (-2 : Real) by norm_num [Real.rpow_neg]]
+  rw [← Real.rpow_add (by norm_num : (0 : Real) < 2),
+    ← Real.rpow_add (by norm_num : (0 : Real) < 2)]
+  have hexpAdd :
+      -((ActualStarFixedRhoDimensionGuard.badExponent m h : Nat) : Real) +
+          (-2) + (-((m : Real) * (s : Real))) =
+        sourceLowTargetSignalExponent m h := by
+    nlinarith [hexp]
+  rw [hexpAdd]
+
+/-- The selected center atom is a probability under the actual shared-center
+star law. This supplies the genuine `beta <= 1` guard required by the
+high-error moment estimate. -/
+theorem selected_matching_center_mass_le_one
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {c s m : Nat} (hdV : c + s <= Module.finrank (ZMod 2) V)
+    (C : ActualSourceStarLaw.CenterTable (V := V) c)
+    (f : Module.Dual (ZMod 2) V) :
+    matchingCenterMass (m := m) (Nat.le_add_right c s) hdV C f <= 1 := by
+  classical
+  unfold matchingCenterMass
+  let mu := ActualSourceStarLaw.starLaw
+    (V := V) (t := c) (d := c + s) (m := m)
+      (Nat.le_add_right c s) hdV
+  calc
+    eventMass mu (Finset.univ.filter fun z : ActualSourceStarLaw.StarTuple
+        (V := V) c (c + s) m =>
+          f.comp z.1.val.subtype = C z.1) <= eventMass mu Finset.univ := by
+      apply ActualStarAcceptedGoodMass.eventMass_mono
+      exact Finset.filter_subset _ _
+    _ = 1 := ActualFiniteLaw.eventMass_univ mu
+
+/-- The proved high-error budget is below half of the *actual* selected
+additive signal. The intermediate dyadic scale is only a conservative lower
+bound on `successMargin E / 4 · M/F`; the equality is supplied by the exact
+selected-dimension beta identity, not by an assumed signal field. -/
+theorem selected_actual_high_error_budget_le_actual_additive_half
+    {m h n c E : Nat} (hm : 256 <= m)
+    (hh : 20001 * m ^ 2 <= h)
+    (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h)
+    (hE : E = ActualStarFixedRhoDimensionGuard.badExponent m h)
+    (hdim : c + m * ActualStarFixedRhoDimensionGuard.leafK m h <= n)
+    {rho : Real}
+    (hrho : (fixedRho m : Real) = rho)
+    (hc : (c : Real) = 2 * (1 - rho) * (h : Real))
+    (hs : (ActualStarFixedRhoDimensionGuard.leafK m h : Real) =
+      2 * rho * (h : Real))
+    {beta : Real} (hbeta0 : 0 <= beta) (hbeta1 : beta <= 1) :
+    2 * ((2 : Real) * (2 : Real) ^
+        (-(sourceRankExponent m : Real) *
+          ((ActualStarFixedRhoDimensionGuard.leafK m h : Real) - 1)) /
+          (ActualSelectedComplementAnalyticNumerics.manuscriptMomentThreshold m h) ^ 2 +
+      (2 : Real) ^ (m : Real) *
+        (ActualSelectedComplementAnalyticNumerics.manuscriptMomentThreshold m h) ^ m * beta) <=
+      ((((successMargin E / 4) *
+        ((2 : Rat) ^ (n - (c + m * ActualStarFixedRhoDimensionGuard.leafK m h)) /
+          (2 : Rat) ^ n : Rat) : Rat) : Real)) / 2 := by
+  have hbudget :=
+    ActualSelectedHighErrorAdditiveSignal.doubled_high_error_budget_le_additive_half
+      hm hh hdiv hbeta0 hbeta1
+  have hsignal := selected_actual_additive_signal_dominates_dyadic
+    hm hdiv hE hdim hrho hc hs
+  have hsignal' :
+      (2 : Real) ^
+          (ActualSelectedHighErrorAdditiveSignal.sourceAdditiveSignalExponent m h) <=
+        ((((successMargin E / 4) *
+          ((2 : Rat) ^ (n - (c + m * ActualStarFixedRhoDimensionGuard.leafK m h)) /
+             (2 : Rat) ^ n : Rat) : Rat) : Real)) := by
+    simpa [ActualSelectedHighErrorAdditiveSignal.sourceAdditiveSignalExponent, hrho]
+      using hsignal
+  exact hbudget.trans
+    (div_le_div_of_nonneg_right hsignal' (by norm_num : (0 : Real) <= 2))
+
+/-- The exact last scalar step in the same-functional inverse.  The low
+term has already paid for the outer factor two; the high term consumes at
+most half of the selector's additive signal.  Since that additive signal is
+strictly positive, the two retained selector terms give a strict upper bound
+on the same matching-star mass. -/
+theorem selected_total_analytic_budget_contradicts_signal
+    {X first additive low high : Real}
+    (hselector : first + additive <= X)
+    (hadditive : 0 < additive)
+    (hlow : 2 * low <= first)
+    (hhigh : 2 * high <= additive / 2)
+    (hmass : X <= 2 * (low + high)) : False := by
+  have htotal : 2 * (low + high) <= first + additive / 2 := by
+    calc
+      2 * (low + high) = 2 * low + 2 * high := by ring
+      _ <= first + additive / 2 := add_le_add hlow hhigh
+  have hstrict : first + additive / 2 < X := by linarith [hselector, hadditive]
+  linarith [hmass, htotal]
+
+/-- Exponent of the dyadic upper envelope for the low HC coefficient. The
+factor four is the honest rational-threshold rounding bound. -/
+def sourceLowCoefficientEnvelopeExponent (m h P : Nat) : Real :=
+  (h : Real) / (1000 * (m : Real) ^ 2) +
+    500 * (sourceRankExponent m : Real) ^ 2 * (P : Real) +
+    (1 - 2 / (P : Real)) *
+      (2 - 2 * (1 - 1000 * (fixedRho m : Real) ^ 2) * (h : Real))
+
+/-- The explicit logarithmic exponent in `sourceLowRelativeExponent` is the
+exact exponent of the low coefficient after beta-floor loss, divided by the
+same selected weighted-star signal. This identity keeps the same P, rho and
+selected dimensions in the arithmetic. -/
+theorem source_low_relative_exponent_is_signal_ratio_exponent
+    {m h P : Nat} (hm : 0 < m) (hP : 0 < P) :
+    sourceLowRelativeExponent m h P =
+      (m : Real) + (m : Real) * sourceLowCoefficientEnvelopeExponent m h P -
+        ((m : Real) / (P : Real)) * sourceLowBetaFloorExponent m h -
+        sourceLowTargetSignalExponent m h := by
+  have hmR : (m : Real) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  have hPR : (P : Real) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hP)
+  unfold sourceLowRelativeExponent sourceLowCoefficientEnvelopeExponent
+    sourceLowBetaFloorExponent sourceLowTargetSignalExponent
+  dsimp
+  field_simp [hmR, hPR]
+  ring
+
+/-- Exponentiating the identity above gives the exact dyadic ratio that is
+controlled by the low-HC cutoff. The outer factor two in the eventual star
+mass comparison is retained by the separate `1 + exponent` bound below. -/
+theorem source_low_dyadic_ratio_eq_exponent
+    {m h P : Nat} (hm : 0 < m) (hP : 0 < P) :
+    (2 : Real) ^ sourceLowRelativeExponent m h P =
+      (2 : Real) ^ (m : Real) *
+        ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+          (-((m : Real) / (P : Real))) *
+      ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^
+          (m : Real) /
+        ((2 : Real) ^ sourceLowTargetSignalExponent m h) := by
+  rw [source_low_relative_exponent_is_signal_ratio_exponent hm hP]
+  rw [← Real.rpow_mul (by norm_num : (0 : Real) <= 2),
+    ← Real.rpow_mul (by norm_num : (0 : Real) <= 2),
+    ← Real.rpow_add (by norm_num : (0 : Real) < 2),
+    ← Real.rpow_add (by norm_num : (0 : Real) < 2),
+    ← Real.rpow_sub (by norm_num : (0 : Real) < 2)]
+  congr 1
+  ring
+
+/- Attempt to discharge the low contribution against the first weighted
+signal term. The exponent includes the same-f beta lower floor, the actual
+failed-zoom agreement exponent, the factor-four rational tolerance, and the
+finite rank-count loss. -/
+set_option maxHeartbeats 800000 in
+theorem source_low_relative_exponent_le_neg_one {m h : Nat}
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h) :
+    sourceLowRelativeExponent m h (sourceMomentP m) <= -1 := by
+  have hmpos : 0 < m := by omega
+  have hmR : (256 : Real) <= (m : Real) := by exact_mod_cast hm
+  have hrho := fixed_rho_explicit hmpos
+  have hT : sourceHolderLowerBound m <= sourceMomentT m := by
+    unfold sourceMomentT
+    exact (Nat.lt_two_pow_self (n := sourceHolderLowerBound m)).le
+  have hPpow : m * sourceMomentT m <= sourceMomentP m := by
+    unfold sourceMomentP
+    exact (Nat.lt_two_pow_self (n := m * sourceMomentT m)).le
+  have hPbase : 16000 * m ^ 2 * (m + 3) <= sourceMomentP m := by
+    calc
+      16000 * m ^ 2 * (m + 3) = m * sourceHolderLowerBound m := by
+        simp [sourceHolderLowerBound]
+        ring
+      _ <= m * sourceMomentT m := Nat.mul_le_mul_left m hT
+      _ <= sourceMomentP m := hPpow
+  have hPbaseR : 16000 * (m : Real) ^ 2 * ((m + 3 : Nat) : Real) <=
+      (sourceMomentP m : Real) := by exact_mod_cast hPbase
+  have hmPlus3 : ((m + 3 : Nat) : Real) = (m : Real) + 3 := by
+    norm_num
+  rw [hmPlus3] at hPbaseR
+  have hfloorR : 1000000 * (m : Real) ^ 2 *
+      (500 * (sourceRankExponent m : Real) ^ 2 *
+        (sourceMomentP m : Real) + 100) <= (h : Real) := by
+    exact_mod_cast hfloor
+  have hmRpos : 0 < (m : Real) := by positivity
+  have hM3 : 1 <= (m : Real) + 3 := by linarith
+  have hmleM3 : (m : Real) <= (m : Real) + 3 := by linarith
+  have hPbound : 16000 * (m : Real) ^ 2 <= (sourceMomentP m : Real) := by
+    have hmul := mul_le_mul_of_nonneg_left hM3
+      (show 0 <= 16000 * (m : Real) ^ 2 by positivity)
+    have hmul' : 16000 * (m : Real) ^ 2 <=
+        16000 * (m : Real) ^ 2 * ((m : Real) + 3) := by
+      simpa [mul_one] using hmul
+    exact hmul'.trans hPbaseR
+  have hPboundStrong : 16000 * (m : Real) ^ 3 <=
+      (sourceMomentP m : Real) := by
+    have hmul := mul_le_mul_of_nonneg_left hmleM3
+      (show 0 <= 16000 * (m : Real) ^ 2 by positivity)
+    have hmul' : 16000 * (m : Real) ^ 3 <=
+        16000 * (m : Real) ^ 2 * ((m : Real) + 3) := by
+      have hmPow : (m : Real) ^ 3 = (m : Real) ^ 2 * (m : Real) := by ring
+      rw [hmPow]
+      simpa [mul_assoc] using hmul
+    exact hmul'.trans hPbaseR
+  have hPpos : 0 < (sourceMomentP m : Real) := by
+    have hpn : 0 < sourceMomentP m := by
+      unfold sourceMomentP
+      exact Nat.pow_pos (by omega)
+    exact_mod_cast hpn
+  have hPsmall : (m : Real) / (sourceMomentP m : Real) <=
+      1 / (16000 * (m : Real) ^ 2) := by
+    rw [div_le_iff₀ hPpos]
+    field_simp [ne_of_gt hmRpos]
+    nlinarith [hPboundStrong]
+  have h4mP : 4 * (m : Real) / (sourceMomentP m : Real) <=
+      1 / (4000 * (m : Real)) := by
+    rw [div_le_iff₀ hPpos]
+    field_simp [ne_of_gt hmRpos]
+    have hm1 : 1 <= (m : Real) := by exact_mod_cast (show 1 <= m by omega)
+    nlinarith [hPbound, hm1]
+  have hbetaRate : (m : Real) / (sourceMomentP m : Real) *
+      (2 * (m : Real) + 2) <= 1 / (4000 * (m : Real)) := by
+    have hbracket : 2 * (m : Real) + 2 <= 4 * (m : Real) := by
+      have hm1 : 1 <= (m : Real) := by exact_mod_cast (show 1 <= m by omega)
+      linarith
+    have hscaled := mul_le_mul_of_nonneg_left hbracket
+      (show 0 <= (m : Real) / (sourceMomentP m : Real) by positivity)
+    have hsmall' := mul_le_mul_of_nonneg_right hPsmall
+      (show 0 <= 4 * (m : Real) by positivity)
+    have hsmallEq :
+        1 / (16000 * (m : Real) ^ 2) * (4 * (m : Real)) =
+          1 / (4000 * (m : Real)) := by
+      field_simp [ne_of_gt hmRpos]
+      ring
+    have hm1 : 1 <= (m : Real) := by exact_mod_cast (show 1 <= m by omega)
+    calc
+      (m : Real) / (sourceMomentP m : Real) * (2 * (m : Real) + 2) <=
+          (m : Real) / (sourceMomentP m : Real) * (4 * (m : Real)) := hscaled
+      _ <= 1 / (16000 * (m : Real) ^ 2) * (4 * (m : Real)) := hsmall'
+      _ = 1 / (4000 * (m : Real)) := hsmallEq
+  have hrhoEq : (fixedRho m : Real) = 1 / (4000 * (m : Real) ^ 2) := hrho
+  have hsmallRho : 0 <= 1 - 1000 * (fixedRho m : Real) ^ 2 := by
+    rw [hrhoEq]
+    field_simp [ne_of_gt hmRpos]
+    have hm1 : 1 <= m := by omega
+    have hm4Nat : 1 ^ 4 <= m ^ 4 := Nat.pow_le_pow_left hm1 4
+    have hm4 : (1 : Real) <= (m : Real) ^ 4 := by exact_mod_cast hm4Nat
+    nlinarith [hm4]
+  have hmain :
+      -2 * (m : Real) * (1 - 2 / (sourceMomentP m : Real)) *
+          (1 - 1000 * (fixedRho m : Real) ^ 2) +
+        2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+        2 * (m : Real) * (fixedRho m : Real) <=
+      -1998 * (m : Real) * (fixedRho m : Real) +
+        2000 * (m : Real) * (fixedRho m : Real) ^ 2 +
+        4 * (m : Real) / (sourceMomentP m : Real) := by
+    have hEq :
+        -2 * (m : Real) * (1 - 2 / (sourceMomentP m : Real)) *
+            (1 - 1000 * (fixedRho m : Real) ^ 2) +
+          2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+          2 * (m : Real) * (fixedRho m : Real) =
+        -1998 * (m : Real) * (fixedRho m : Real) +
+          2000 * (m : Real) * (fixedRho m : Real) ^ 2 +
+          4 * (m : Real) / (sourceMomentP m : Real) -
+          4000 * (m : Real) * (fixedRho m : Real) ^ 2 /
+            (sourceMomentP m : Real) := by
+      field_simp [ne_of_gt hPpos]
+      ring
+    rw [hEq]
+    have hloss : 0 <= 4000 * (m : Real) * (fixedRho m : Real) ^ 2 /
+        (sourceMomentP m : Real) := by positivity
+    linarith [hloss]
+  have hrhoSq : 2000 * (m : Real) * (fixedRho m : Real) ^ 2 <=
+      1 / (8000 * (m : Real)) := by
+    rw [hrhoEq]
+    have hm2 : 1 <= (m : Real) ^ 2 := by nlinarith [hmR]
+    field_simp [ne_of_gt hmRpos]
+    nlinarith [hm2]
+  have hrate :
+      1 / (1000 * (m : Real)) -
+        2 * (m : Real) * (1 - 2 / (sourceMomentP m : Real)) *
+          (1 - 1000 * (fixedRho m : Real) ^ 2) +
+        (m : Real) / (sourceMomentP m : Real) *
+          (2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+            2 * (1 - (fixedRho m : Real)) +
+            2 * (m : Real) * (fixedRho m : Real)) +
+        2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+        2 * (m : Real) * (fixedRho m : Real) <= -(1 / (3 * (m : Real))) := by
+    have hnegRho : -1998 * (m : Real) * (fixedRho m : Real) =
+        -1998 / (4000 * (m : Real)) := by
+      rw [hrhoEq]
+      field_simp [ne_of_gt hmRpos]
+    have hmainBound :
+        -2 * (m : Real) * (1 - 2 / (sourceMomentP m : Real)) *
+            (1 - 1000 * (fixedRho m : Real) ^ 2) +
+          2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+          2 * (m : Real) * (fixedRho m : Real) <=
+        -1998 / (4000 * (m : Real)) +
+          1 / (8000 * (m : Real)) + 1 / (4000 * (m : Real)) := by
+      calc
+        _ <= -1998 * (m : Real) * (fixedRho m : Real) +
+            2000 * (m : Real) * (fixedRho m : Real) ^ 2 +
+            4 * (m : Real) / (sourceMomentP m : Real) := hmain
+        _ = -1998 / (4000 * (m : Real)) +
+            2000 * (m : Real) * (fixedRho m : Real) ^ 2 +
+            4 * (m : Real) / (sourceMomentP m : Real) := by rw [hnegRho]
+        _ <= -1998 / (4000 * (m : Real)) +
+            1 / (8000 * (m : Real)) + 1 / (4000 * (m : Real)) := by
+              nlinarith [hrhoSq, h4mP]
+    have hbracket : 2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+        2 * (1 - (fixedRho m : Real)) +
+        2 * (m : Real) * (fixedRho m : Real) <= 2 * (m : Real) + 2 := by
+      have hrho0 : 0 <= (fixedRho m : Real) := by rw [hrhoEq]; positivity
+      nlinarith
+    have hbetaterm := mul_le_mul_of_nonneg_left hbracket
+      (show 0 <= (m : Real) / (sourceMomentP m : Real) by positivity)
+    have hbetaBound :
+        (m : Real) / (sourceMomentP m : Real) *
+          (2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+            2 * (1 - (fixedRho m : Real)) +
+            2 * (m : Real) * (fixedRho m : Real)) <=
+          1 / (4000 * (m : Real)) := hbetaterm.trans hbetaRate
+    have hsumBound :
+        1 / (1000 * (m : Real)) +
+          (-1998 / (4000 * (m : Real)) +
+            1 / (8000 * (m : Real)) + 1 / (4000 * (m : Real))) +
+          1 / (4000 * (m : Real)) <= -(1 / (3 * (m : Real))) := by
+      have hcoeff : (1 / 1000 : Real) - 1998 / 4000 +
+          1 / 8000 + 1 / 4000 + 1 / 4000 <= -(1 / 3 : Real) := by
+        norm_num
+      calc
+        _ = (1 / (m : Real)) *
+            (1 / 1000 - 1998 / 4000 + 1 / 8000 + 1 / 4000 +
+              1 / 4000) := by
+                field_simp [ne_of_gt hmRpos] <;> ring
+        _ <= (1 / (m : Real)) * (-(1 / 3 : Real)) :=
+          mul_le_mul_of_nonneg_left hcoeff (by positivity)
+        _ = -(1 / (3 * (m : Real))) := by
+          field_simp [ne_of_gt hmRpos]
+    calc
+      _ = 1 / (1000 * (m : Real)) +
+          ((-2 * (m : Real) * (1 - 2 / (sourceMomentP m : Real)) *
+              (1 - 1000 * (fixedRho m : Real) ^ 2) +
+            2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+            2 * (m : Real) * (fixedRho m : Real)) +
+            (m : Real) / (sourceMomentP m : Real) *
+              (2 * (m : Real) * (1 - 1000 * (fixedRho m : Real)) +
+                2 * (1 - (fixedRho m : Real)) +
+                2 * (m : Real) * (fixedRho m : Real))) := by ring
+      _ <= 1 / (1000 * (m : Real)) +
+          (-1998 / (4000 * (m : Real)) +
+            1 / (8000 * (m : Real)) + 1 / (4000 * (m : Real))) +
+          1 / (4000 * (m : Real)) := by
+            nlinarith [hmainBound, hbetaBound]
+      _ <= -(1 / (3 * (m : Real))) := hsumBound
+  have hconst :
+      (m : Real) +
+        (m : Real) * (500 * (sourceRankExponent m : Real) ^ 2 *
+          (sourceMomentP m : Real) +
+          2 * (1 - 2 / (sourceMomentP m : Real))) +
+        (m : Real) / (sourceMomentP m : Real) * 2 + 2 <=
+      (h : Real) / (3 * (m : Real)) - 1 := by
+    have halphaUpper :
+        1 - 2 / (sourceMomentP m : Real) <= 1 := by
+      have hrecip : 0 <= 2 / (sourceMomentP m : Real) := by positivity
+      linarith
+    have hratio : (m : Real) / (sourceMomentP m : Real) <= (m : Real) := by
+      rw [div_le_iff₀ hPpos]
+      nlinarith [hPbaseR, hmR]
+    have hfloor' : 3 * (m : Real) *
+        ((m : Real) + (m : Real) *
+          (500 * (sourceRankExponent m : Real) ^ 2 *
+          (sourceMomentP m : Real) + 4) + 3) <= (h : Real) := by
+      nlinarith [hfloorR, hmR]
+    have hconstPlusOne :
+        (m : Real) +
+          (m : Real) * (500 * (sourceRankExponent m : Real) ^ 2 *
+            (sourceMomentP m : Real) +
+            2 * (1 - 2 / (sourceMomentP m : Real))) +
+          (m : Real) / (sourceMomentP m : Real) * 2 + 3 <=
+        (h : Real) / (3 * (m : Real)) := by
+      rw [le_div_iff₀ (by positivity : (0 : Real) < 3 * (m : Real))]
+      nlinarith [hratio, halphaUpper, hfloor']
+  linarith
+  have hrateMul := mul_le_mul_of_nonneg_right hrate
+    (show 0 <= (h : Real) by positivity)
+  unfold sourceLowRelativeExponent
+  rw [hrho]
+  dsimp
+  nlinarith [hrateMul, hconst]
+
+/-- The explicit coefficient and height estimates make the low-term ratio
+at most one after exponentiation. This follows from the derived cutoff. -/
+theorem source_low_relative_factor_with_outer_two_le_one {m h : Nat}
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h) :
+    (2 : Real) ^ (1 + sourceLowRelativeExponent m h (sourceMomentP m)) <= 1 := by
+  have hexp := source_low_relative_exponent_le_neg_one hm hfloor
+  have hsum : 1 + sourceLowRelativeExponent m h (sourceMomentP m) <= 0 := by linarith
+  have hpow := Real.rpow_le_rpow_of_exponent_le
+    (by norm_num : (1 : Real) <= 2) hsum
+  simpa using hpow
+
+/-- Monotonicity of a negative Holder power, stated here before its first
+use so the low-term comparison has no forward declaration dependency. -/
+theorem selected_beta_negative_holder_power_le_signal_early
+    {beta signal q : Real} (hsignal : 0 < signal)
+    (hbeta : signal <= beta) (hq : 0 <= q) :
+    beta ^ (-q) <= signal ^ (-q) := by
+  have hbetaPos : 0 < beta := lt_of_lt_of_le hsignal hbeta
+  have hpow := Real.rpow_le_rpow (le_of_lt hsignal) hbeta hq
+  have hsignalPow : 0 < signal ^ q := Real.rpow_pos_of_pos hsignal q
+  have hbetaPow : 0 < beta ^ q := Real.rpow_pos_of_pos hbetaPos q
+  rw [Real.rpow_neg (le_of_lt hbetaPos), Real.rpow_neg (le_of_lt hsignal)]
+  exact (inv_le_inv₀ hbetaPow hsignalPow).mpr hpow
+
+/-- Compose the low analytic term with the same selected beta-weighted signal.
+The two premises are the actual HC-envelope estimate and the actual
+same-functional beta floor; the conclusion includes the outer factor two from
+the selected star-mass comparison. -/
+theorem selected_low_analytic_term_le_same_functional_signal
+    {m h P : Nat} {beta low : Real}
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h)
+    (hP : 0 < P) (hPeq : P = sourceMomentP m)
+    (hbeta : (2 : Real) ^ sourceLowBetaFloorExponent m h <= beta)
+    (hlow0 : 0 <= low)
+    (hlow : low <= (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) :
+    (2 : Real) ^ (m + 1) * beta ^ (1 - (m : Real) / (P : Real)) * low ^ m <=
+      (2 : Real) ^ sourceLowTargetSignalExponent m h * beta := by
+  have hmpos : 0 < m := by omega
+  have hq : 0 <= (m : Real) / (P : Real) := by positivity
+  have hbeta0 : 0 < (2 : Real) ^ sourceLowBetaFloorExponent m h :=
+    Real.rpow_pos_of_pos (by norm_num) _
+  have hbetaPos : 0 < beta := lt_of_lt_of_le hbeta0 hbeta
+  have hbetaNeg := selected_beta_negative_holder_power_le_signal_early
+    hbeta0 hbeta hq
+  have hcoeff0 : 0 <=
+      (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P := by positivity
+  have hlowPow : low ^ m <=
+      ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m := by
+    have hr := Real.rpow_le_rpow hlow0 hlow (show 0 <= (m : Real) by positivity)
+    simpa only [Real.rpow_natCast] using hr
+  have hbetaSplit : beta ^ (1 - (m : Real) / (P : Real)) =
+      beta * beta ^ (-((m : Real) / (P : Real))) := by
+    rw [show 1 - (m : Real) / (P : Real) =
+      1 + (-((m : Real) / (P : Real))) by ring,
+      Real.rpow_add hbetaPos]
+    simp
+  have hcore :
+      (2 : Real) ^ m * beta ^ (-((m : Real) / (P : Real))) * low ^ m <=
+        (2 : Real) ^ m *
+          ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+            (-((m : Real) / (P : Real))) *
+          ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m := by
+    have hbetaNeg0 : 0 <=
+        ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+          (-((m : Real) / (P : Real))) := by positivity
+    have hlowPow0 : 0 <= low ^ m := pow_nonneg hlow0 m
+    have hprod := mul_le_mul hbetaNeg hlowPow hlowPow0 hbetaNeg0
+    calc
+      (2 : Real) ^ m * beta ^ (-((m : Real) / (P : Real))) * low ^ m =
+          (2 : Real) ^ m *
+            (beta ^ (-((m : Real) / (P : Real))) * low ^ m) := by ring
+      _ <= (2 : Real) ^ m *
+          (((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+            (-((m : Real) / (P : Real))) *
+            ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m) :=
+        mul_le_mul_of_nonneg_left hprod (by positivity)
+      _ = (2 : Real) ^ m *
+          ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+            (-((m : Real) / (P : Real))) *
+            ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m := by ring
+  have hsignalPos : 0 <
+      (2 : Real) ^ sourceLowTargetSignalExponent m h :=
+    Real.rpow_pos_of_pos (by norm_num) _
+  have hratio := source_low_dyadic_ratio_eq_exponent
+    (m := m) (h := h) (P := P) hmpos hP
+  have hratioMul := congrArg
+    (fun x : Real => x * (2 : Real) ^ sourceLowTargetSignalExponent m h) hratio
+  have hratioMul' :
+      (2 : Real) ^ m *
+          ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+            (-((m : Real) / (P : Real))) *
+          ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m =
+        (2 : Real) ^ sourceLowRelativeExponent m h P *
+          (2 : Real) ^ sourceLowTargetSignalExponent m h := by
+    have hcancel := hratioMul
+    rw [div_mul_cancel₀ _ (ne_of_gt hsignalPos)] at hcancel
+    exact hcancel.symm
+  have houter0 := source_low_relative_factor_with_outer_two_le_one hm hfloor
+  have houter : (2 : Real) ^ (1 + sourceLowRelativeExponent m h P) <= 1 := by
+    simpa [hPeq] using houter0
+  have houterSignal := mul_le_mul_of_nonneg_right houter
+    (le_of_lt hsignalPos)
+  have hratioOuter :
+      2 * ((2 : Real) ^ m *
+          ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+            (-((m : Real) / (P : Real))) *
+          ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m) <=
+        (2 : Real) ^ sourceLowTargetSignalExponent m h := by
+    have hpow : (2 : Real) ^ (1 + sourceLowRelativeExponent m h P) =
+        2 * (2 : Real) ^ sourceLowRelativeExponent m h := by
+      rw [Real.rpow_add (by norm_num : (0 : Real) < 2)]
+      norm_num
+    calc
+      _ = 2 * ((2 : Real) ^ sourceLowRelativeExponent m h P *
+          (2 : Real) ^ sourceLowTargetSignalExponent m h) := by
+            rw [hratioMul']
+      _ = (2 : Real) ^ (1 + sourceLowRelativeExponent m h P) *
+          (2 : Real) ^ sourceLowTargetSignalExponent m h := by rw [hpow]; ring
+      _ <= (2 : Real) ^ sourceLowTargetSignalExponent m h := by
+        simpa only [one_mul] using houterSignal
+  have hscaledCore := mul_le_mul_of_nonneg_left hcore
+    (show 0 <= 2 * beta by positivity)
+  have hbetaOuter := mul_le_mul_of_nonneg_left hratioOuter
+    (by exact le_of_lt hbetaPos)
+  calc
+    (2 : Real) ^ (m + 1) * beta ^ (1 - (m : Real) / (P : Real)) * low ^ m =
+        beta * (2 * ((2 : Real) ^ m *
+          beta ^ (-((m : Real) / (P : Real))) * low ^ m)) := by
+            rw [hbetaSplit]
+            rw [pow_succ]
+            ring
+    _ <= beta * (2 * ((2 : Real) ^ m *
+        ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+          (-((m : Real) / (P : Real))) *
+        ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m)) := by
+          calc
+            _ = (2 * beta) * ((2 : Real) ^ m *
+                beta ^ (-((m : Real) / (P : Real))) * low ^ m) := by ring
+            _ <= (2 * beta) * ((2 : Real) ^ m *
+                ((2 : Real) ^ sourceLowBetaFloorExponent m h) ^
+                  (-((m : Real) / (P : Real))) *
+                ((2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h P) ^ m) :=
+                  hscaledCore
+            _ = _ := by ring
+    _ <= beta * (2 : Real) ^ sourceLowTargetSignalExponent m h := hbetaOuter
+    _ = (2 : Real) ^ sourceLowTargetSignalExponent m h * beta := by ring
+
+/-- Independent cutoff used by the high spectral-tail component. The low-HC
+rounding and coefficient budget is handled by `sourceLowHCHeightFloor`. -/
+def sourceTailHeightFloor (m : Nat) : Nat := max (4000 * m ^ 2) (12 * m)
+
+def sourceMarginHeightFloor (m : Nat) : Nat :=
+  max (max (sourceTailHeightFloor m) (20001 * m ^ 2))
+    (sourceLowHCHeightFloor m)
+
+/-- The enlarged low-HC cutoff includes room for the factor-two rational
+rounding loss after the moment power is taken. -/
+theorem low_HC_height_floor_covers_rounding {m : Nat} (hm : 0 < m) :
+    2 * m <= sourceLowHCHeightFloor m := by
+  have hm1 : 1 <= m := Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hm)
+  have hmSq : m <= m ^ 2 := by nlinarith
+  have hfactor : 1 <= 500 * sourceRankExponent m ^ 2 *
+      sourceMomentP m + 100 := by positivity
+  have hprod0 := Nat.mul_le_mul_left (m ^ 2) hfactor
+  have hprod : m ^ 2 <= m ^ 2 *
+      (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100) := by
+    simpa [Nat.mul_one] using hprod0
+  have hscaled : 2 * m <= 1000000 * m ^ 2 := by nlinarith
+  unfold sourceLowHCHeightFloor
+  calc
+    2 * m <= 1000000 * m ^ 2 := hscaled
+    _ <= 1000000 * (m ^ 2 *
+        (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100)) :=
+          Nat.mul_le_mul_left 1000000 hprod
+    _ = 1000000 * m ^ 2 *
+        (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100) := by
+          ring
+
+theorem low_HC_height_floor_dominates_m_squared {m : Nat} (hm : 0 < m) :
+    (4000 * m ^ 2) ^ 2 <= sourceLowHCHeightFloor m := by
+  have hm1 : 1 <= m := Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hm)
+  have hm2 : m ^ 2 <= m ^ 2 * m := by
+    simpa using Nat.mul_le_mul_left (m ^ 2) hm1
+  have hcoef : m ^ 2 * m <= 40000 * (m ^ 2 * m) :=
+    by simpa using Nat.mul_le_mul_right (m ^ 2 * m) (by decide : 1 <= 40000)
+  have hr : m ^ 2 <= sourceRankExponent m := by
+    dsimp [sourceRankExponent]
+    simpa [pow_succ, Nat.mul_assoc] using hm2.trans hcoef
+  have hr4 : m ^ 4 <= sourceRankExponent m ^ 2 := by
+    calc
+      m ^ 4 = m ^ 2 * m ^ 2 := by ring
+      _ <= sourceRankExponent m * sourceRankExponent m :=
+        Nat.mul_le_mul hr hr
+      _ = sourceRankExponent m ^ 2 := by ring
+  have hm4 : m ^ 2 <= m ^ 4 := by
+    have hsq : 1 <= m ^ 2 := Nat.one_le_pow 2 m hm1
+    calc
+      m ^ 2 = m ^ 2 * 1 := by simp
+      _ <= m ^ 2 * m ^ 2 := Nat.mul_le_mul_left (m ^ 2) hsq
+      _ = m ^ 4 := by ring
+  have hbase : 16 * m ^ 2 <= 500 * sourceRankExponent m ^ 2 := by
+    calc
+      16 * m ^ 2 <= 500 * m ^ 4 := by nlinarith [hm4]
+      _ <= 500 * sourceRankExponent m ^ 2 :=
+        Nat.mul_le_mul_left 500 hr4
+  have hP : 1 <= sourceMomentP m := Nat.one_le_iff_ne_zero.mpr
+    (Nat.ne_of_gt (Nat.pow_pos (by omega)))
+  have hfactor : 16 * m ^ 2 <=
+      500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100 := by
+    have hscaled := Nat.mul_le_mul_left (500 * sourceRankExponent m ^ 2) hP
+    calc
+      16 * m ^ 2 <= 500 * sourceRankExponent m ^ 2 := hbase
+      _ <= 500 * sourceRankExponent m ^ 2 * sourceMomentP m := by
+        simpa [Nat.mul_assoc] using hscaled
+      _ <= 500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100 :=
+        Nat.le_add_right _ _
+  have hprod := Nat.mul_le_mul_left (1000000 * m ^ 2) hfactor
+  calc
+    (4000 * m ^ 2) ^ 2 = 16000000 * m ^ 4 := by ring
+    _ = 1000000 * m ^ 2 * (16 * m ^ 2) := by ring
+    _ <= 1000000 * m ^ 2 *
+        (500 * sourceRankExponent m ^ 2 * sourceMomentP m + 100) := hprod
+    _ = sourceLowHCHeightFloor m := by
+      simp [sourceLowHCHeightFloor, Nat.mul_assoc]
+
+/-- The finite rank count costs only a square-root exponent. This is the
+useful count estimate for comparing the actual HC sum to the weighted signal. -/
+theorem low_level_count_le_sqrt_dyadic (h : Nat) :
+    2 * h + 1 <= 2 ^ (2 * (Nat.sqrt h + 1)) := by
+  let k := Nat.sqrt h
+  have hrough : h <= k ^ 2 + k + k := by
+    simpa [k, pow_two, Nat.mul_comm, Nat.add_assoc] using Nat.sqrt_le_add h
+  have hcount : 2 * h + 1 <= 2 * (k + 1) ^ 2 + 1 := by
+    dsimp [k] at hrough ⊢
+    nlinarith [hrough]
+  have hpow := Nat.two_mul_sq_add_one_le_two_pow_two_mul (k + 1)
+  simpa [Nat.mul_add, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
+    hcount.trans hpow
+
+theorem low_level_count_exponent_le_height_rate {m h : Nat}
+    (hm : 0 < m) (hfloor : sourceLowHCHeightFloor m <= h) :
+    (2 * (Nat.sqrt h + 1) : Real) <=
+      (h : Real) / (1000 * (m : Real) ^ 2) := by
+  have hlarge : (4000 * m ^ 2) ^ 2 <= h :=
+    (low_HC_height_floor_dominates_m_squared hm).trans hfloor
+  have hroot : 4000 * m ^ 2 <= Nat.sqrt h := (Nat.le_sqrt').2 hlarge
+  have hrootSq : Nat.sqrt h * Nat.sqrt h <= h := Nat.sqrt_le h
+  have hsqrt1 : 1 <= Nat.sqrt h := by
+    have hcoef : 1 <= 4000 * m ^ 2 := by positivity
+    omega
+  have hsum : Nat.sqrt h + 1 <= 2 * Nat.sqrt h := by omega
+  have hstep1 : 2000 * m ^ 2 * (Nat.sqrt h + 1) <=
+      4000 * m ^ 2 * Nat.sqrt h := by
+    calc
+      2000 * m ^ 2 * (Nat.sqrt h + 1) <=
+          2000 * m ^ 2 * (2 * Nat.sqrt h) :=
+        Nat.mul_le_mul_left _ hsum
+      _ = 4000 * m ^ 2 * Nat.sqrt h := by ring
+  have hstep2 : 4000 * m ^ 2 * Nat.sqrt h <=
+      Nat.sqrt h * Nat.sqrt h := Nat.mul_le_mul_right _ hroot
+  have hnat : 2000 * m ^ 2 * (Nat.sqrt h + 1) <= h :=
+    hstep1.trans (hstep2.trans hrootSq)
+  rw [le_div_iff₀ (by positivity : (0 : Real) < 1000 * (m : Real) ^ 2)]
+  have hnatR : 2000 * (m : Real) ^ 2 * ((Nat.sqrt h + 1 : Nat) : Real) <=
+      (h : Real) := by exact_mod_cast hnat
+  nlinarith [hnatR]
+
+/-- The actual double-exponential sampler has enough blocks to dominate the
+selected squared height whenever its fixed integer multiplier is at least one.
+This proves the ambient growth guard from the sampler definition. -/
+theorem selected_height_square_lt_blocks {A h : Nat} (hA : 1 <= A) :
+    h ^ 2 < SamplerParameters.blocks A h := by
+  have hsq : h ^ 2 <= A * h ^ 2 := by
+    simpa using Nat.mul_le_mul_right (h ^ 2) hA
+  exact hsq.trans_lt (SamplerParameters.numerator_lt_blocks A h)
+
+/-- The selector's actual block height satisfies the sampler growth guard.
+The selector certificate is retained here so the inequality is attached to
+the same selected h used by the leaf dimensions and spectral contracts. -/
+theorem selected_actual_height_square_lt_blocks
+    (base : Nat -> Nat) (cutoff : Real -> Nat) {L m A : Nat}
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+        base cutoff j) (j + 2)) L =
+        (m : WithBot Nat)) (hA : 1 <= A) :
+    (ActualCmmsaParameterReconciliation.hBlock L m) ^ 2 <
+      SamplerParameters.blocks A
+        (ActualCmmsaParameterReconciliation.hBlock L m) := by
+  have hselected := ActualSelectedSpectralParameters.selected_spectral_parameters
+    base cutoff hsel
+  exact selected_height_square_lt_blocks hA
+
+def sourceHighErrorExponentGap (m h : Nat) : Real :=
+  (((8 : Real) / 3) * (m : Real) - 2 +
+      (3996 * (m : Real) + 2) * (fixedRho m : Real)) * (h : Real) -
+    ((sourceRankExponent m : Real) + 7)
+
+def sourceHighErrorExponent (m h : Nat) : Real :=
+  (sourceRankExponent m : Real) + 2 -
+    ((20 : Real) / 3) * (m : Real) * (h : Real)
+
+def sourceWeightedSignalExponent (m h : Nat) : Real :=
+  -4 * (1 - 1000 * (fixedRho m : Real)) * (m : Real) * (h : Real) - 5 -
+    2 * (1 - (fixedRho m : Real)) * (h : Real) -
+    4 * (m : Real) * (fixedRho m : Real) * (h : Real)
+
+theorem source_signal_exponent_gap_exact {m h : Nat} :
+    sourceWeightedSignalExponent m h - sourceHighErrorExponent m h =
+      sourceHighErrorExponentGap m h := by
+  unfold sourceWeightedSignalExponent sourceHighErrorExponent
+    sourceHighErrorExponentGap sourceRankExponent
+  ring
+
+/-- The finite low-level HC coefficient is bounded by its worst rank term
+times the number of available ranks. This keeps the actual rank-indexed sum
+visible for the later source-height comparison. -/
+theorem selected_low_HC46_constant_sum_bound {d r p : Nat} {eta : Real}
+    (heta : 0 <= eta) :
+    selectedLowHC46NormBound (d := d) (r := r) (p := p) eta <=
+      ((d + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * r ^ 2 * p) *
+          eta ^ (((p : Real) - 2) / (p : Real)) := by
+  classical
+  let S := selectedLowIndexSet d r
+  let alpha : Real := ((p : Real) - 2) / (p : Real)
+  let C : Real := (2 : Real) ^ (500 * r ^ 2 * p) * eta ^ alpha
+  have hterm (i : Nat) (hi : i ∈ S) :
+      (2 : Real) ^ (500 * i ^ 2 * p) * eta ^ alpha <= C := by
+    have hir : i <= r := (Finset.mem_filter.mp hi).2
+    have hi2 : i ^ 2 <= r ^ 2 := by
+      calc
+        i ^ 2 = i * i := by ring
+        _ <= r * r := Nat.mul_le_mul hir hir
+        _ = r ^ 2 := by ring
+    have hexp : 500 * i ^ 2 * p <= 500 * r ^ 2 * p :=
+      Nat.mul_le_mul_right p (Nat.mul_le_mul_left 500 hi2)
+    have hpow : (2 : Real) ^ (500 * i ^ 2 * p) <=
+        (2 : Real) ^ (500 * r ^ 2 * p) :=
+      pow_le_pow_right₀ (by norm_num) hexp
+    have hetaPow : 0 <= eta ^ alpha := Real.rpow_nonneg heta _
+    dsimp [C, alpha]
+    exact mul_le_mul_of_nonneg_right hpow hetaPow
+  have hsum :
+      Finset.sum S (fun i => (2 : Real) ^ (500 * i ^ 2 * p) * eta ^ alpha) <=
+        (S.card : Real) * C := by
+    have hs := Finset.sum_le_card_nsmul S
+      (fun i => (2 : Real) ^ (500 * i ^ 2 * p) * eta ^ alpha) C hterm
+    simpa [nsmul_eq_mul] using hs
+  have hcard : S.card <= d + 1 := by
+    calc
+      S.card <= (Finset.range (d + 1)).card :=
+        Finset.card_le_card (Finset.filter_subset _ _)
+      _ = d + 1 := Finset.card_range (d + 1)
+  have hcardR : (S.card : Real) <= ((d + 1 : Nat) : Real) := by
+    exact_mod_cast hcard
+  unfold selectedLowHC46NormBound
+  calc
+    Finset.sum (selectedLowIndexSet d r)
+        (fun i => (2 : Real) ^ (500 * i ^ 2 * p) * eta ^ (((p : Real) - 2) / (p : Real)))
+        <= (S.card : Real) * C := by simpa [S, alpha, C] using hsum
+    _ <= ((d + 1 : Nat) : Real) * C :=
+      mul_le_mul_of_nonneg_right hcardR (by positivity)
+    _ = ((d + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * r ^ 2 * p) *
+          eta ^ (((p : Real) - 2) / (p : Real)) := by
+      ring
+
+
+/-- The actual agreement-scale finite coefficient estimate follows from
+`selected_low_HC46_constant_sum_bound`; the later margin comparison retains
+the beta weight and is not asserted by this component. -/
+theorem selected_actual_low_HC_sum_bound {h m : Nat} :
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+      (p := sourceMomentP m) (2 * manuscriptAgreementFloor m h) <=
+      ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+          (2 * manuscriptAgreementFloor m h) ^
+            (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+  have heta : 0 <= 2 * manuscriptAgreementFloor m h := by
+    unfold manuscriptAgreementFloor
+    positivity
+  simpa using selected_low_HC46_constant_sum_bound
+    (d := 2 * h) (r := sourceRankExponent m) (p := sourceMomentP m)
+    (eta := 2 * manuscriptAgreementFloor m h) heta
+
+/-- A rational threshold can be chosen strictly between the true real
+agreement scale and twice that scale. Thus the actual failed-zoom PR error
+`2*e` is at most four times the real scale. -/
+theorem selected_rational_failure_threshold_exists {m h : Nat} :
+    exists e : Rat,
+      manuscriptAgreementFloor m h < (e : Real) /\
+      (e : Real) < 2 * manuscriptAgreementFloor m h := by
+  have hpos : 0 < manuscriptAgreementFloor m h := by
+    unfold manuscriptAgreementFloor
+    exact Real.rpow_pos_of_pos (by norm_num) _
+  obtain ⟨e, helo, hehi⟩ :=
+    exists_rat_btwn (show manuscriptAgreementFloor m h <
+      2 * manuscriptAgreementFloor m h by nlinarith)
+  exact ⟨e, helo, hehi⟩
+
+theorem selected_rational_failure_eta_le_four_floor {m h : Nat}
+    {e : Rat} (he : (e : Real) < 2 * manuscriptAgreementFloor m h) :
+    2 * (e : Real) < 4 * manuscriptAgreementFloor m h := by
+  linarith
+
+/-- The finite HC coefficient bound instantiated with the real agreement
+floor tolerates the rational rounding loss exactly as a factor four in eta. -/
+theorem selected_rational_low_HC_sum_bound {h m : Nat} (hm : 0 < m)
+    {e : Rat} (he0 : 0 <= e)
+    (he : (e : Real) < 2 * manuscriptAgreementFloor m h) :
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+      (p := sourceMomentP m) (2 * (e : Real)) <=
+      ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+          (4 * manuscriptAgreementFloor m h) ^
+            (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+  have heta0 : 0 <= 2 * (e : Real) := by
+    have he0Real : (0 : Real) <= (e : Real) := by exact_mod_cast he0
+    exact mul_nonneg (by norm_num) he0Real
+  have hTpos : 0 < sourceMomentT m := by
+    unfold sourceMomentT
+    exact Nat.pow_pos (by omega)
+  have hExp : 1 <= m * sourceMomentT m := by
+    exact Nat.one_le_iff_ne_zero.mpr
+      (Nat.mul_ne_zero (Nat.ne_of_gt hm) (Nat.ne_of_gt hTpos))
+  have hP2 : 2 <= sourceMomentP m := by
+    unfold sourceMomentP
+    exact Nat.pow_le_pow_right (by norm_num) hExp
+  have halpha : 0 <= ((sourceMomentP m : Real) - 2) /
+      (sourceMomentP m : Real) := by
+    apply div_nonneg
+    · exact sub_nonneg.mpr (by exact_mod_cast hP2)
+    · positivity
+  have heta : 2 * (e : Real) <= 4 * manuscriptAgreementFloor m h := by
+    have hround := selected_rational_failure_eta_le_four_floor he
+    linarith
+  have hpower := Real.rpow_le_rpow heta0 heta halpha
+  have hsum := selected_low_HC46_constant_sum_bound
+    (d := 2 * h) (r := sourceRankExponent m) (p := sourceMomentP m)
+    (eta := 2 * (e : Real)) heta0
+  have hcoef0 : 0 <= ((2 * h + 1 : Nat) : Real) *
+      (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) := by
+    positivity
+  calc
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+        (p := sourceMomentP m) (2 * (e : Real)) <=
+      ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+          (2 * (e : Real)) ^
+            (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+              simpa using hsum
+    _ <= ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+          (4 * manuscriptAgreementFloor m h) ^
+            (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) :=
+      mul_le_mul_of_nonneg_left hpower hcoef0
+
+/-- The actual rational failed-zoom HC sum is bounded by the dyadic
+coefficient envelope used in the same-f exponent identity. -/
+theorem selected_actual_low_HC_dyadic_envelope {m h : Nat}
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h)
+    {e : Rat} (he0 : 0 <= e)
+    (he : (e : Real) < 2 * manuscriptAgreementFloor m h) :
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+      (p := sourceMomentP m) (2 * (e : Real)) <=
+        (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+          (sourceMomentP m) := by
+  have hmpos : 0 < m := by omega
+  have hcountNat := low_level_count_le_sqrt_dyadic h
+  have hcountCast : ((2 * h + 1 : Nat) : Real) <=
+      (2 : Real) ^ ((2 * (Nat.sqrt h + 1) : Nat) : Real) := by
+    exact_mod_cast hcountNat
+  have hcountRate := low_level_count_exponent_le_height_rate hmpos hfloor
+  have hcountRateCast : ((2 * (Nat.sqrt h + 1) : Nat) : Real) <=
+      (h : Real) / (1000 * (m : Real) ^ 2) := by
+    push_cast
+    exact hcountRate
+  have hcount : ((2 * h + 1 : Nat) : Real) <=
+      (2 : Real) ^ ((h : Real) / (1000 * (m : Real) ^ 2)) := by
+    exact hcountCast.trans (Real.rpow_le_rpow_of_exponent_le
+      (by norm_num : (1 : Real) <= 2) hcountRateCast)
+  have hfour : 4 * manuscriptAgreementFloor m h =
+      (2 : Real) ^ (2 - 2 * (1 - 1000 * (fixedRho m : Real) ^ 2) * (h : Real)) := by
+    unfold manuscriptAgreementFloor
+    rw [show (4 : Real) = (2 : Real) ^ (2 : Real) by norm_num]
+    rw [← Real.rpow_add (by norm_num : (0 : Real) < 2)]
+    congr 1
+    ring
+  have hcoeffEq :
+      (2 : Real) ^ ((h : Real) / (1000 * (m : Real) ^ 2)) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+        (4 * manuscriptAgreementFloor m h) ^
+          (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) =
+      (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+        (sourceMomentP m) := by
+    let a : Real := (h : Real) / (1000 * (m : Real) ^ 2)
+    let b : Real := 500 * sourceRankExponent m ^ 2 * sourceMomentP m
+    let d : Real := 2 - 2 * (1 - 1000 * (fixedRho m : Real) ^ 2) * (h : Real)
+    let alpha : Real :=
+      ((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)
+    have hbase : (4 * manuscriptAgreementFloor m h) ^ alpha =
+        (2 : Real) ^ (d * alpha) := by
+      dsimp [alpha, d]
+      rw [hfour, Real.rpow_mul (by norm_num : (0 : Real) <= 2)]
+    calc
+      _ = ((2 : Real) ^ a * (2 : Real) ^ b) * (2 : Real) ^ (d * alpha) := by
+        dsimp [a, b, alpha]
+        rw [hbase]
+        ring
+      _ = (2 : Real) ^ (a + b) * (2 : Real) ^ (d * alpha) := by
+        rw [← Real.rpow_add (by norm_num : (0 : Real) < 2)]
+      _ = (2 : Real) ^ (a + b + d * alpha) := by
+        rw [← Real.rpow_add (by norm_num : (0 : Real) < 2)]
+        congr 1
+        ring
+      _ = (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+          (sourceMomentP m) := by
+        congr 1
+        dsimp [a, b, d, alpha]
+        unfold sourceLowCoefficientEnvelopeExponent
+        ring
+  have hhc := selected_rational_low_HC_sum_bound hmpos he0 he
+  calc
+    selectedLowHC46NormBound (d := 2 * h) (r := sourceRankExponent m)
+        (p := sourceMomentP m) (2 * (e : Real)) <=
+      ((2 * h + 1 : Nat) : Real) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+        (4 * manuscriptAgreementFloor m h) ^
+          (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := hhc
+    _ <= (2 : Real) ^ ((h : Real) / (1000 * (m : Real) ^ 2)) *
+        (2 : Real) ^ (500 * sourceRankExponent m ^ 2 * sourceMomentP m) *
+        (4 * manuscriptAgreementFloor m h) ^
+          (((sourceMomentP m : Real) - 2) / (sourceMomentP m : Real)) := by
+            exact mul_le_mul_of_nonneg_right
+              (mul_le_mul_of_nonneg_right hcount (by positivity)) (by positivity)
+    _ = (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+        (sourceMomentP m) := hcoeffEq
+
+theorem source_high_error_exponent_gap_positive {m h : Nat}
+    (hm : 256 <= m) (hh : 20001 * m ^ 2 <= h) :
+    0 < sourceHighErrorExponentGap m h := by
+  have hmpos : 0 < m := by omega
+  have hmR : (0 : Real) < (m : Real) := by exact_mod_cast hmpos
+  have hmRlarge : (256 : Real) <= (m : Real) := by exact_mod_cast hm
+  have hhR : 20001 * (m : Real) ^ 2 <= (h : Real) := by exact_mod_cast hh
+  have hrho := fixed_rho_explicit hmpos
+  have hrhoPos : 0 < (fixedRho m : Real) := by rw [hrho]; positivity
+  have hcoeff :
+      2 * (m : Real) <=
+        (8 / 3 : Real) * (m : Real) - 2 +
+          (3996 * (m : Real) + 2) * (fixedRho m : Real) := by
+    have hbase : 2 * (m : Real) <= (8 / 3 : Real) * (m : Real) - 2 := by
+      nlinarith
+    exact hbase.trans (by nlinarith [mul_nonneg
+      (show 0 <= 3996 * (m : Real) + 2 by positivity)
+      (show 0 <= (fixedRho m : Real) by exact hrhoPos.le)])
+  have hrNat : (sourceRankExponent m : Real) = 40000 * (m : Real) ^ 3 := by
+    norm_num [sourceRankExponent, pow_succ]
+  unfold sourceHighErrorExponentGap
+  rw [hrNat]
+  have hmul : 2 * (m : Real) * (20001 * (m : Real) ^ 2) =
+      40002 * (m : Real) ^ 3 := by ring
+  have hmain :
+      40002 * (m : Real) ^ 3 > 40000 * (m : Real) ^ 3 + 7 := by
+    nlinarith
+  have hmulcoeff := mul_le_mul_of_nonneg_right hcoeff
+    (by positivity : (0 : Real) <= (h : Real))
+  nlinarith [mul_le_mul_of_nonneg_left hhR (by positivity : (0 : Real) <= 2 * m),
+    hmul, hmulcoeff, hmain]
+
+def sourceSuccessScale (m h : Nat) : Real :=
+  localManuscriptSuccessScale (localManuscriptRho m) m h
+
+/-- The analytic margin scale is the manuscript's displayed scale with the
+same fixed-rho parameter. This is an exponent identity, not a threshold
+assumption. -/
+theorem source_success_scale_eq_manuscript {m h : Nat} :
+    sourceSuccessScale m h =
+      localManuscriptSuccessScale (localManuscriptRho m) m h := by
+  rfl
+
+/-- Divisibility in the selected height identifies the source scale with the
+existing rational success margin at precisely `badExponent m h`. -/
+theorem source_success_scale_eq_successMargin {m h : Nat}
+    (hm : 0 < m) (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h) :
+    sourceSuccessScale m h =
+      (ActualStarAcceptedGoodMass.successMargin
+        (ActualStarFixedRhoDimensionGuard.badExponent m h) : Real) := by
+  rw [source_success_scale_eq_manuscript]
+  exact local_manuscript_scale_eq_successMargin hm hdiv
+
+/-- A lower bound on the same selected beta controls the negative Holder
+power. This retains the beta-relative comparison required by the weighted
+star signal; it does not replace that signal by an absolute success margin. -/
+theorem selected_beta_negative_holder_power_le_signal
+    {beta signal q : Real} (hsignal : 0 < signal)
+    (hbeta : signal <= beta) (hq : 0 <= q) :
+    beta ^ (-q) <= signal ^ (-q) := by
+  have hbetaPos : 0 < beta := lt_of_lt_of_le hsignal hbeta
+  have hpow := Real.rpow_le_rpow (le_of_lt hsignal) hbeta hq
+  have hsignalPow : 0 < signal ^ q := Real.rpow_pos_of_pos hsignal q
+  have hbetaPow : 0 < beta ^ q := Real.rpow_pos_of_pos hbetaPos q
+  rw [Real.rpow_neg (le_of_lt hbetaPos), Real.rpow_neg (le_of_lt hsignal)]
+  exact (inv_le_inv₀ hbetaPow hsignalPow).mpr hpow
+
+def sourceAgreementScale (m h : Nat) : Real := manuscriptAgreementFloor m h
+
+def sourceThresholdScale (m h : Nat) : Real := manuscriptMomentThreshold m h
+
+/-- The accepted global-functional selection gives a genuine additive
+selected-f signal. Combined with `X_f <= beta_f`, its positive unconditional
+term proves the selected beta lower bound; beta is not supplied as a margin
+hypothesis. -/
+theorem ordinary_selected_functional_beta_lower
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {t d m E : Nat}
+    (htd : t <= d) (hdV : d <= Module.finrank (ZMod 2) V)
+    (hk : 1 <= d - t)
+    (hguard : m * (d - t) + E + 2 <= Module.finrank (ZMod 2) V - t)
+    (hcenter : Nonempty (Grass V t))
+    (hleaf : forall K : Grass V t, Nonempty (LeafOver K d))
+    (C : CenterTable (V := V) t) (T : LeafTable (V := V) d)
+    (hscore : successMargin E <= StarDensity (k := m) hcenter hleaf C T) :
+    exists f : Module.Dual (ZMod 2) V,
+      let beta := matchingCenterMass (m := m) htd hdV C f
+      let M : Rat := 2 ^ (Module.finrank (ZMod 2) V -
+        (t + m * (d - t)))
+      let F : Rat := 2 ^ Module.finrank (ZMod 2) V
+      (successMargin E / 4) * (M / F) <= beta := by
+  obtain ⟨f, hselected⟩ :=
+    ActualOrdinaryStarWeightedSelection.ordinary_star_selects_weighted_functional
+      htd hdV hk hguard hcenter hleaf C T hscore
+  refine ⟨f, ?_⟩
+  dsimp at hselected ⊢
+  rcases hselected with ⟨hsignal, hdom⟩
+  have hfirst : 0 <=
+      (successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+          2 ^ (Module.finrank (ZMod 2) V - t)) *
+        matchingCenterMass (m := m) htd hdV C f := by positivity
+  have hcombine := hsignal.trans hdom
+  nlinarith
+
+/-- The same ordinary weighted-star witness carries the exact beta floor
+needed for the negative Holder power in the selected analytic estimate. -/
+theorem ordinary_selected_beta_controls_holder_loss
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {t d m E P : Nat}
+    (htd : t <= d) (hdV : d <= Module.finrank (ZMod 2) V)
+    (hk : 1 <= d - t)
+    (hguard : m * (d - t) + E + 2 <= Module.finrank (ZMod 2) V - t)
+    (hcenter : Nonempty (Grass V t))
+    (hleaf : forall K : Grass V t, Nonempty (LeafOver K d))
+    (C : CenterTable (V := V) t) (T : LeafTable (V := V) d)
+    (hscore : successMargin E <= StarDensity (k := m) hcenter hleaf C T)
+    (hP : 0 < P) :
+    exists f : Module.Dual (ZMod 2) V,
+      let beta : Real :=
+        (matchingCenterMass (m := m) htd hdV C f : Real)
+      let signal : Real :=
+        (((successMargin E / 4) *
+          (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+            2 ^ Module.finrank (ZMod 2) V) : Rat) : Real)
+      beta ^ (-(m : Real) / (P : Real)) <=
+        signal ^ (-(m : Real) / (P : Real)) := by
+  obtain ⟨f, hbeta⟩ := ordinary_selected_functional_beta_lower
+    htd hdV hk hguard hcenter hleaf C T hscore
+  refine ⟨f, ?_⟩
+  dsimp
+  dsimp at hbeta
+  have hsignal : 0 <
+      (((successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+          2 ^ Module.finrank (ZMod 2) V) : Rat) : Real) := by
+    positivity [successMargin]
+  have hbetaReal :
+      (((successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+          2 ^ Module.finrank (ZMod 2) V) : Rat) : Real) <=
+        (matchingCenterMass (m := m) htd hdV C f : Real) := by
+    exact_mod_cast hbeta
+  have hholder := selected_beta_negative_holder_power_le_signal hsignal hbetaReal
+    (show 0 <= (m : Real) / (P : Real) by positivity)
+  simpa [neg_div] using hholder
+
+/-- Full same-functional output of weighted selection together with the beta
+Holder-loss estimate. The selected star mass bound, domination by beta, and
+unconditional beta floor all belong to one witness `f`. -/
+theorem ordinary_selected_same_witness_signal_and_holder_loss
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {t d m E P : Nat}
+    (htd : t <= d) (hdV : d <= Module.finrank (ZMod 2) V)
+    (hk : 1 <= d - t)
+    (hguard : m * (d - t) + E + 2 <= Module.finrank (ZMod 2) V - t)
+    (hcenter : Nonempty (Grass V t))
+    (hleaf : forall K : Grass V t, Nonempty (LeafOver K d))
+    (C : CenterTable (V := V) t) (T : LeafTable (V := V) d)
+    (hscore : successMargin E <= StarDensity (k := m) hcenter hleaf C T)
+    (hP : 0 < P) :
+    exists f : Module.Dual (ZMod 2) V,
+      let betaRat := matchingCenterMass (m := m) htd hdV C f
+      let X := matchingStarMass (m := m) htd hdV C T f
+      let M : Rat := 2 ^ (Module.finrank (ZMod 2) V -
+        (t + m * (d - t)))
+      let B : Rat := 2 ^ (Module.finrank (ZMod 2) V - t)
+      let F : Rat := 2 ^ Module.finrank (ZMod 2) V
+      let beta : Real := (betaRat : Real)
+      let signal : Real := (((successMargin E / 4) * (M / F) : Rat) : Real)
+      (successMargin E / 4) * (M / B) * betaRat +
+          (successMargin E / 4) * (M / F) <= X /\
+        X <= betaRat /\
+        (successMargin E / 4) * (M / F) <= betaRat /\
+        beta ^ (-(m : Real) / (P : Real)) <=
+          signal ^ (-(m : Real) / (P : Real)) := by
+  obtain ⟨f, hselected⟩ :=
+    ActualOrdinaryStarWeightedSelection.ordinary_star_selects_weighted_functional
+      htd hdV hk hguard hcenter hleaf C T hscore
+  dsimp at hselected
+  rcases hselected with ⟨hsignal, hdom⟩
+  have hbetaFloor :
+      (successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+          2 ^ Module.finrank (ZMod 2) V) <=
+        matchingCenterMass (m := m) htd hdV C f := by
+    have hterm0 : 0 <=
+        (successMargin E / 4) *
+          (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+            2 ^ (Module.finrank (ZMod 2) V - t)) *
+          matchingCenterMass (m := m) htd hdV C f := by positivity
+    have hcombine := hsignal.trans hdom
+    nlinarith
+  have hsignalPos : 0 <
+      (((successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+          2 ^ Module.finrank (ZMod 2) V) : Rat) : Real) := by
+    positivity [successMargin]
+  have hbetaReal :
+      (((successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) V - (t + m * (d - t))) /
+          2 ^ Module.finrank (ZMod 2) V) : Rat) : Real) <=
+        (matchingCenterMass (m := m) htd hdV C f : Real) := by
+    exact_mod_cast hbetaFloor
+  refine ⟨f, ?_⟩
+  dsimp
+  refine ⟨hsignal, hdom, hbetaFloor, ?_⟩
+  have hholder := selected_beta_negative_holder_power_le_signal hsignalPos hbetaReal
+    (show 0 <= (m : Real) / (P : Real) by positivity)
+  simpa [neg_div] using hholder
+
+/-- The actual side-law score, after complement selection and exact coordinate
+transport, chooses one coordinate functional carrying the full weighted-star
+signal and its beta-floor/Holder consequence.  This is the single witness
+that can be passed unchanged to the finite moment and inverse consumers. -/
+theorem actual_side_score_selects_same_coordinate_functional
+    {N rows : Nat} (I : ActualOccurrenceAllocation.Instance N rows)
+    (copies : Nat) {J : Nat} (U : TaggedGoodU I copies J)
+    {t h k E P : Nat} (ht : t ≤ 2 * h) (hh : h ≤ J)
+    (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+    (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+    (hk : 1 ≤ 2 * h - t)
+    (hguard : k * (2 * h - t) + E + 2 ≤ 2 * J - t)
+    (hscore : ActualTaggedMZSideDraw.sideConditionalDensity
+        I copies U t h k C T ≥ successMargin E)
+    (hP : 0 < P) :
+    ∃ A : SideComplement I copies U,
+    ∃ f : Module.Dual (ZMod 2) (CoordAmbient J),
+      let Cc := selectedCoordinateCenterTable I copies U A C
+      let Tc : ActualSourceStarLaw.LeafTable (V := CoordAmbient J) (2 * h) := by
+        have hsplitCoord : t + (2 * h - t) = 2 * h := by omega
+        simpa only [hsplitCoord] using
+          (selectedCoordinateLeafTable I copies U A T)
+      let betaRat := matchingCenterMass (V := CoordAmbient J) (m := k)
+        (Nat.le_add_right t (2 * h - t))
+        (by simpa [CoordAmbient] using (show 2 * h ≤ 2 * J by omega)) Cc f
+      let X := matchingStarMass (V := CoordAmbient J) (m := k)
+        (Nat.le_add_right t (2 * h - t))
+        (by simpa [CoordAmbient] using (show 2 * h ≤ 2 * J by omega)) Cc Tc f
+      let M : Rat := 2 ^ (2 * J - (t + k * (2 * h - t)))
+      let B : Rat := 2 ^ (2 * J - t)
+      let F : Rat := 2 ^ (2 * J)
+      let beta : Real := (betaRat : Real)
+      let signal : Real := (((successMargin E / 4) * (M / F) : Rat) : Real)
+      (successMargin E / 4) * (M / B) * betaRat +
+          (successMargin E / 4) * (M / F) ≤ X ∧
+        X ≤ betaRat ∧
+        (successMargin E / 4) * (M / F) ≤ betaRat ∧
+        beta ^ (-(k : Real) / (P : Real)) ≤
+          signal ^ (-(k : Real) / (P : Real)) ∧
+        successMargin E ≤ StarDensity (V := CoordAmbient J) (k := k)
+          (grass_nonempty_of_le (by
+            calc
+              t ≤ 2 * h := ht
+              _ ≤ 2 * J := by omega
+              _ = Module.finrank (ZMod 2) (CoordAmbient J) := by
+                simp [CoordAmbient]))
+          (fun K => extension_nonempty K ht (by
+            calc
+              2 * h ≤ 2 * J := by omega
+              _ = Module.finrank (ZMod 2) (CoordAmbient J) := by
+                simp [CoordAmbient])) Cc Tc := by
+  have hscoreA := actual_side_score_selects_coordinate_complement
+    I copies U ht hh C T hscore
+  obtain ⟨A, hscoreCoord⟩ := hscoreA
+  have hdCoord : 2 * h ≤ Module.finrank (ZMod 2) (CoordAmbient J) := by
+    simpa [CoordAmbient] using (show 2 * h ≤ 2 * J by omega)
+  have hcenter : Nonempty (Grass (CoordAmbient J) t) :=
+    grass_nonempty_of_le (ht.trans (by omega))
+  have hleaf : ∀ K : Grass (CoordAmbient J) t,
+      Nonempty (LeafOver K (2 * h)) :=
+    fun K => extension_nonempty K ht hdCoord
+  have hsplitCoord : t + (2 * h - t) = 2 * h := by omega
+  let Cc := selectedCoordinateCenterTable I copies U A C
+  let Tc := selectedCoordinateLeafTable I copies U A T
+  have hTc : ActualSourceStarLaw.LeafTable
+      (V := CoordAmbient J) (2 * h) := by
+    simpa only [hsplitCoord] using Tc
+  have hscoreCoord' : successMargin E <=
+      StarDensity (V := CoordAmbient J) (k := k) hcenter hleaf Cc hTc := by
+    simpa only [hsplitCoord] using hscoreCoord
+  have hsel := ordinary_selected_same_witness_signal_and_holder_loss
+    (V := CoordAmbient J) (t := t) (d := 2 * h) (m := k) (E := E) (P := P)
+    ht hdCoord hk hguard hcenter hleaf Cc hTc hscoreCoord' hP
+  rcases hsel with ⟨f, hf⟩
+  refine ⟨A, f, ?_, ?_⟩
+  · simpa [Cc, Tc, CoordAmbient] using hf
+  · simpa [Cc, Tc, CoordAmbient] using hscoreCoord
+
+/-- The actual coordinate selected leaf, exact rational failed-zoom error,
+and the weighted selector's single functional produce the low-HC part of the
+analytic comparison against that same functional's first weighted-star
+signal. The selected beta floor is derived from the selector's additive
+signal; it is not a caller-supplied beta hypothesis. -/
+theorem selected_actual_same_witness_low_HC_signal_bound
+    {n c s h m E : Nat} {rho : Real} {e : Rat}
+    (C : ActualSourceStarLaw.CenterTable
+      (V := Fin n → ZMod 2) c)
+    (T : ActualSourceStarLaw.LeafTable
+      (V := Fin n → ZMod 2) (c + s))
+    (hm : 256 ≤ m) (hmpos : 0 < m)
+    (hfloor : sourceLowHCHeightFloor m ≤ h)
+    (hEven : c + s = 2 * h)
+    (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h)
+    (hE : E = ActualStarFixedRhoDimensionGuard.badExponent m h)
+    (hrd : sourceRankExponent m < c + s)
+    (he0 : 0 ≤ e)
+    (he : (e : Real) < 2 * manuscriptAgreementFloor m h)
+    (hfail : ∀ (q : Nat) (Q : Grass (Fin n → ZMod 2) q)
+      (P : ActualMaximalPairLadder.DecodedPair Q (c + s)),
+      q + ActualMaximalPairLadder.codim P.W = sourceRankExponent m →
+        Fintype.card (ActualMaximalPairLadder.Zoom Q P) ≠ 0 →
+          ActualMaximalPairLadder.agreement (fun L => T L) Q P ≤ e)
+    (hc : (c : Real) = 2 * (1 - rho) * (h : Real))
+    (hs : (s : Real) = 2 * rho * (h : Real))
+    (hrho : (fixedRho m : Real) = rho)
+    (hcenter : Nonempty (Grass (Fin n → ZMod 2) c))
+    (hleaf : ∀ K : Grass (Fin n → ZMod 2) c,
+      Nonempty (LeafOver K (c + s)))
+    (hk : 1 ≤ s)
+    (hguard : m * s + E + 2 ≤
+      Module.finrank (ZMod 2) (Fin n → ZMod 2) - c)
+    (hscore : successMargin E ≤
+      StarDensity (k := m) hcenter hleaf C T)
+    (hHC : HC46ExactContract) :
+    ∃ f : Module.Dual (ZMod 2) (Fin n → ZMod 2),
+      let beta : Real := (matchingCenterMass (m := m) (Nat.le_add_right c s)
+        (by simpa using (show c + s ≤ Module.finrank (ZMod 2) (Fin n → ZMod 2) by
+          omega)) C f : Real)
+      let X := matchingStarMass (m := m) (Nat.le_add_right c s)
+        (by simpa using (show c + s ≤ Module.finrank (ZMod 2) (Fin n → ZMod 2) by
+          omega)) C T f
+      (successMargin E / 4) *
+          (2 ^ (Module.finrank (ZMod 2) (Fin n → ZMod 2) - (c + m * s)) /
+            2 ^ (Module.finrank (ZMod 2) (Fin n → ZMod 2) - c)) *
+          matchingCenterMass (m := m) (Nat.le_add_right c s)
+            (by simpa using (show c + s ≤ Module.finrank (ZMod 2) (Fin n → ZMod 2) by
+              omega)) C f +
+      (successMargin E / 4) *
+          (2 ^ (Module.finrank (ZMod 2) (Fin n → ZMod 2) - (c + m * s)) /
+            2 ^ Module.finrank (ZMod 2) (Fin n → ZMod 2)) ≤ X ∧
+      lpNorm (sourceMomentP m) (fun M : BinaryMatrix n c =>
+        appendAverage (selectedLow (selectedF T f)
+          (r := sourceRankExponent m)) M) ≤
+        selectedLowHC46NormBound (d := c + s)
+          (r := sourceRankExponent m) (p := sourceMomentP m) (2 * (e : Real)) ∧
+      2 ^ (m + 1) * beta ^
+          (1 - (m : Real) / (sourceMomentP m : Real)) *
+          (selectedLowHC46NormBound (d := c + s)
+            (r := sourceRankExponent m) (p := sourceMomentP m)
+            (2 * (e : Real))) ^ m ≤
+        (2 : Real) ^ sourceLowTargetSignalExponent m h * beta := by
+  have hdim : c + s ≤ Module.finrank (ZMod 2) (Fin n → ZMod 2) := by
+    have hn : Module.finrank (ZMod 2) (Fin n → ZMod 2) = n := by simp
+    omega
+  have hsub : (c + s) - c = s := Nat.add_sub_cancel_left c s
+  have hk' : 1 ≤ (c + s) - c := by omega
+  have hguard' : m * ((c + s) - c) + E + 2 ≤
+      Module.finrank (ZMod 2) (Fin n → ZMod 2) - c := by omega
+  have hsel := ordinary_star_selects_weighted_functional
+    (m := m) (E := E) (Nat.le_add_right c s) hdim hk' hguard'
+    hcenter hleaf C T hscore
+  obtain ⟨f, hselected⟩ := hsel
+  dsimp at hselected
+  rcases hselected with ⟨hweighted, hdom⟩
+  simp only [hsub] at hweighted hdom
+  have hcoef0 : 0 ≤
+      (successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) (Fin n → ZMod 2) - c) /
+          2 ^ Module.finrank (ZMod 2) (Fin n → ZMod 2)) *
+        matchingCenterMass (m := m) (Nat.le_add_right c s) hdim C f := by
+    positivity
+  have hbetaRat :
+      (successMargin E / 4) *
+        (2 ^ (Module.finrank (ZMod 2) (Fin n → ZMod 2) -
+          (c + m * s)) /
+          2 ^ Module.finrank (ZMod 2) (Fin n → ZMod 2)) ≤
+        matchingCenterMass (m := m) (Nat.le_add_right c s) hdim C f := by
+    have hcombine := hweighted.trans hdom
+    nlinarith
+  have hbetaReal :
+      ((((successMargin E / 4) *
+        ((2 : Rat) ^ (Module.finrank (ZMod 2) (Fin n → ZMod 2) -
+          (c + m * s)) /
+          (2 : Rat) ^ Module.finrank (ZMod 2) (Fin n → ZMod 2))) : Rat) : Real) ≤
+        (matchingCenterMass (m := m) (Nat.le_add_right c s) hdim C f : Real) := by
+    exact_mod_cast hbetaRat
+  have hdimMoment : c + m * s ≤ Module.finrank (ZMod 2) (Fin n → ZMod 2) := by
+    omega
+  have hbetaFloor := selected_beta_signal_eq_source_floor
+    hmpos hdiv hE hdimMoment hrho hc hs
+  have hbetaFloorReal :
+      (2 : Real) ^ sourceLowBetaFloorExponent m h ≤
+        (matchingCenterMass (m := m) (Nat.le_add_right c s) hdim C f : Real) := by
+    rw [← hbetaFloor]
+    exact hbetaReal
+  have hPR := ActualLeafLabelRankImageAlignment.actual_leaf_failed_zoom_gives_nominal_pseudorandom
+    hrd T f e he0 hfail
+  have hP4 : 4 ≤ sourceMomentP m := by
+    have hT : 0 < sourceMomentT m := by
+      unfold sourceMomentT
+      exact Nat.pow_pos (by omega)
+    have hExp : 2 ≤ m * sourceMomentT m := by omega
+    unfold sourceMomentP
+    calc
+      4 = 2 ^ 2 := by norm_num
+      _ ≤ 2 ^ (m * sourceMomentT m) := Nat.pow_le_pow_right (by decide) hExp
+  have hPpos : 0 < (sourceMomentP m : Real) := by positivity
+  have hPdyadic : ∃ q : Nat, sourceMomentP m = 2 ^ q := by
+    exact ⟨m * sourceMomentT m, rfl⟩
+  have hlowNorm := selected_low_append_HC46_lpNorm_bound
+    (b := selectedF T f) (p := sourceMomentP m) hEven hPR hP4 hPdyadic hHC
+  have hlowEnvelope := selected_actual_low_HC_dyadic_envelope
+    hm hfloor he0 he
+  have hlowEnvelope' : selectedLowHC46NormBound (d := c + s)
+      (r := sourceRankExponent m) (p := sourceMomentP m) (2 * (e : Real)) <=
+        (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+          (sourceMomentP m) := by
+    simpa [hEven] using hlowEnvelope
+  have hlow0 : 0 ≤ selectedLowHC46NormBound (d := c + s)
+      (r := sourceRankExponent m) (p := sourceMomentP m) (2 * (e : Real)) := by
+    unfold selectedLowHC46NormBound
+    exact Finset.sum_nonneg (fun i hi => by positivity)
+  have hlowSignal := selected_low_analytic_term_le_same_functional_signal
+    hm hfloor (by unfold sourceMomentP; positivity) rfl
+    hbetaFloorReal hlow0 hlowEnvelope'
+  dsimp
+  exact ⟨hweighted, hlowNorm, hlowSignal⟩
+
+/-- The low-level Holder and HC46 contribution for a fixed, already selected
+functional.  Its PR input is derived directly from that functional's complete
+failed-zoom family, so this lemma cannot select a replacement witness. -/
+theorem selected_fixed_functional_low_HC_signal_bound
+    {n c s h m : Nat} {e : Rat} {beta : Real}
+    (T : ActualSourceStarLaw.LeafTable (V := Fin n → ZMod 2) (c + s))
+    (f : Module.Dual (ZMod 2) (Fin n → ZMod 2))
+    (hm : 256 ≤ m) (hfloor : sourceLowHCHeightFloor m ≤ h)
+    (hEven : c + s = 2 * h)
+    (hrd : sourceRankExponent m < c + s)
+    (he0 : 0 ≤ e) (he : (e : Real) < 2 * manuscriptAgreementFloor m h)
+    (hfail : ∀ (q : Nat) (Q : Grass (Fin n → ZMod 2) q)
+      (P : ActualMaximalPairLadder.DecodedPair Q (c + s)),
+      q + ActualMaximalPairLadder.codim P.W = sourceRankExponent m →
+        Fintype.card (ActualMaximalPairLadder.Zoom Q P) ≠ 0 →
+          ActualMaximalPairLadder.agreement (fun L => T L) Q P ≤ e)
+    (hbetaFloor : (2 : Real) ^ sourceLowBetaFloorExponent m h ≤ beta)
+    (hHC : ActualSelectedComplementAnalyticMoment.HC46ExactContract) :
+    lpNorm (sourceMomentP m)
+        (fun M : BinaryMatrix n c =>
+          appendAverage (selectedLow (selectedF T f)
+            (r := sourceRankExponent m)) M) <=
+      selectedLowHC46NormBound (d := c + s) (r := sourceRankExponent m)
+        (p := sourceMomentP m) (2 * (e : Real)) ∧
+    (2 : Real) ^ (m + 1) * beta ^
+        (1 - (m : Real) / (sourceMomentP m : Real)) *
+        (selectedLowHC46NormBound (d := c + s) (r := sourceRankExponent m)
+          (p := sourceMomentP m) (2 * (e : Real))) ^ m <=
+      (2 : Real) ^ sourceLowTargetSignalExponent m h * beta := by
+  have hPR :=
+    ActualLeafLabelRankImageAlignment.actual_leaf_failed_zoom_gives_nominal_pseudorandom
+      hrd T f e he0 hfail
+  have hP4 : 4 ≤ sourceMomentP m := by
+    have hT : 0 < sourceMomentT m := by
+      unfold sourceMomentT
+      exact Nat.pow_pos (by omega)
+    have hExp : 2 ≤ m * sourceMomentT m := by omega
+    unfold sourceMomentP
+    calc
+      4 = 2 ^ 2 := by norm_num
+      _ ≤ 2 ^ (m * sourceMomentT m) := Nat.pow_le_pow_right (by decide) hExp
+  have hPdyadic : ∃ q : Nat, sourceMomentP m = 2 ^ q :=
+    ⟨m * sourceMomentT m, rfl⟩
+  have hlowNorm := selected_low_append_HC46_lpNorm_bound
+    (b := selectedF T f) (p := sourceMomentP m) hEven hPR hP4 hPdyadic hHC
+  have hlowEnvelope := selected_actual_low_HC_dyadic_envelope
+    hm hfloor he0 he
+  have hlowEnvelope' : selectedLowHC46NormBound (d := c + s)
+      (r := sourceRankExponent m) (p := sourceMomentP m) (2 * (e : Real)) <=
+        (2 : Real) ^ sourceLowCoefficientEnvelopeExponent m h
+          (sourceMomentP m) := by
+    simpa [hEven] using hlowEnvelope
+  have hlow0 : 0 ≤ selectedLowHC46NormBound (d := c + s)
+      (r := sourceRankExponent m) (p := sourceMomentP m) (2 * (e : Real)) := by
+    unfold selectedLowHC46NormBound
+    exact Finset.sum_nonneg (fun i hi => by positivity)
+  have hlowSignal := selected_low_analytic_term_le_same_functional_signal
+    hm hfloor (by unfold sourceMomentP; positivity) rfl
+    hbetaFloor hlow0 hlowEnvelope'
+  exact ⟨hlowNorm, hlowSignal⟩
+
+/-- Parseval aggregated over every integral rank level.  This is the finite
+identity needed to control the total selected high-level energy without an
+extra factor for the number of levels. -/
+theorem rankProjection_all_levels_energy_eq {n d : Nat}
+    (F : BinaryMatrix n d -> Real) :
+    (Finset.sum (Finset.range (d + 1)) (fun i =>
+      uniformMean (fun M : BinaryMatrix n d =>
+        (rankProjection i F M) ^ 2))) = uniformMean (fun M => F M ^ 2) :=
+  ActualSelectedHighEnergyTail.rankProjection_all_levels_energy_eq F
+
+/-- Boolean indicators have squared matrix mean at most one. -/
+theorem indicator_squared_mean_le_one {n d : Nat} (b : BinaryMatrix n d -> Bool) :
+    uniformMean (fun M => (indicator b M) ^ 2) <= 1 :=
+  ActualSelectedHighEnergyTail.indicator_squared_mean_le_one b
+
+/-- Each spectral rank layer of the actual Boolean indicator carries at most
+unit squared energy, by the proved Fourier Parseval/Bessel identity. -/
+theorem selected_rank_layer_energy_le_one {n d i : Nat}
+    (b : BinaryMatrix n d -> Bool) :
+    uniformMean (fun M : BinaryMatrix n d =>
+      (rankProjection i (indicator b) M) ^ 2) <= 1 :=
+  ActualSelectedHighEnergyTail.selected_rank_layer_energy_le_one b
+
+/-- A Parseval-controlled weighted level sum is at most its largest weight.
+The high index set may be any subset of the available ranks; the proof uses
+the full rank-energy identity above, not a per-level bound multiplied by d. -/
+theorem selected_weighted_levels_le_max_weight {n d : Nat}
+    (F : BinaryMatrix n d -> Real) (S : Finset (Fin (d + 1)))
+    (weight : Fin (d + 1) -> Real) (B : Real)
+    (hB : 0 <= B)
+    (hweight0 : forall i, i ∈ S -> 0 <= weight i)
+    (hweight : forall i, i ∈ S -> weight i <= B)
+    (hFenergy : uniformMean (fun M => F M ^ 2) <= 1) :
+    Finset.sum S (fun i => weight i *
+      uniformMean (fun M : BinaryMatrix n d =>
+        (rankProjection i.val F M) ^ 2)) <= B :=
+  ActualSelectedHighEnergyTail.selected_weighted_levels_le_max_weight
+    F S weight B hB hweight0 hweight hFenergy
+
+/-- Pointwise spectral coefficient estimate under the explicit ambient
+condition in Lemma 4.8. For i>r, the first spectral term contributes at most
+half of 2^{-r(s-1)} and the ambient term contributes at most three eighths. -/
+theorem selected_spectral_coefficient_le_tail {d i r s n : Nat}
+    (hi : r < i) (hiD : i <= d)
+    (hb : 1 <= (s : Real) - 1)
+    (hn : (d : Real) - (n : Real) <=
+      -(r : Real) * ((s : Real) - 1) - 3) :
+    (2 : Real) ^ (-(i : Real) * ((s : Real) - 1)) +
+        3 * (2 : Real) ^ ((i : Real) - (n : Real)) <=
+      (2 : Real) ^ (-(r : Real) * ((s : Real) - 1)) :=
+  ActualSelectedHighEnergyTail.selected_spectral_coefficient_le_tail
+    hi hiD hb hn
+
+/-- The actual selected Boolean leaf's high spectral expression is bounded by
+the source tail after Parseval aggregates all high rank energies. Conditions
+are stated in the source's integral dimensions; no assumed high-energy field
+is introduced. -/
+theorem selected_actual_high_spectral_sum_le_tail {n d r s : Nat}
+    (b : BinaryMatrix n d -> Bool)
+    (hb : 1 <= (s : Real) - 1)
+    (hn : (d : Real) - (n : Real) <=
+      -(r : Real) * ((s : Real) - 1) - 3) :
+    Finset.sum (selectedHighFinIndexSet d r) (fun i =>
+      ((2 : Real) ^ (-(i.val : Real) * ((s : Real) - 1)) +
+        3 * (2 : Real) ^ ((i.val : Real) - (n : Real))) *
+        uniformMean (fun W : BinaryMatrix n d =>
+          (rankProjection i.val (indicator b) W) ^ 2)) <=
+      (2 : Real) ^ (-(r : Real) * ((s : Real) - 1)) :=
+  ActualSelectedHighEnergyTail.selected_actual_high_spectral_sum_le_tail
+    b hb hn
+
+/-- The explicit enlarged-height and block-growth guards imply the two
+ambient hypotheses used in the high spectral tail estimate. The only
+dimension growth used is the selected sampler's existing `h^2 < J`. -/
+theorem source_tail_guards_of_growth {m h J s : Nat}
+    (hm : 256 <= m) (hhS : 4000 * m ^ 2 <= h)
+    (hh12 : 12 * m <= h) (hJ : h ^ 2 < J)
+    (hs : (s : Real) = 2 * (fixedRho m : Real) * (h : Real)) :
+    1 <= (s : Real) - 1 /\
+    (2 * (h : Real) : Real) - (2 * (J : Real)) <=
+      -(sourceRankExponent m : Real) * ((s : Real) - 1) - 3 := by
+  have hmpos : 0 < m := by omega
+  have hmR : (0 : Real) < (m : Real) := by exact_mod_cast hmpos
+  have hhS_R : 4000 * (m : Real) ^ 2 <= (h : Real) := by exact_mod_cast hhS
+  have hh12_R : 12 * (m : Real) <= (h : Real) := by exact_mod_cast hh12
+  have hJ_R : (h : Real) ^ 2 < (J : Real) := by exact_mod_cast hJ
+  have hrho := fixed_rho_explicit hmpos
+  have hsExact : (s : Real) = (h : Real) / (2000 * (m : Real) ^ 2) := by
+    rw [hrho] at hs
+    rw [hs]
+    field_simp [ne_of_gt hmR]
+    ring
+  have hs2 : 2 <= (s : Real) := by
+    rw [hsExact]
+    rw [le_div_iff₀ (by positivity : (0 : Real) < 2000 * (m : Real) ^ 2)]
+    nlinarith
+  have hb : 1 <= (s : Real) - 1 := by linarith
+  have hr : (sourceRankExponent m : Real) = 40000 * (m : Real) ^ 3 := by
+    norm_num [sourceRankExponent, pow_succ]
+  have hproduct :
+      (sourceRankExponent m : Real) * (s : Real) <=
+        20 * (m : Real) * (h : Real) := by
+    rw [hr, hsExact]
+    field_simp [ne_of_gt hmR]
+    nlinarith
+  have hprodsub :
+      (sourceRankExponent m : Real) * ((s : Real) - 1) <=
+        20 * (m : Real) * (h : Real) := by
+    have hrnonneg : 0 <= (sourceRankExponent m : Real) := by positivity
+    nlinarith
+  constructor
+  · exact hb
+  · have hlarge :
+        2 * (h : Real) ^ 2 + 2 <= 2 * (J : Real) := by nlinarith
+    have hsq :
+        12 * (m : Real) * (h : Real) <= (h : Real) ^ 2 :=
+      mul_le_mul_of_nonneg_right hh12_R (by positivity)
+    have hgap : 20 * (m : Real) + 2 <= (h : Real) := by
+      nlinarith [hhS_R, hmR]
+    have hgapMul := mul_le_mul_of_nonneg_right hgap
+      (show 0 <= (h : Real) by positivity)
+    have hcompare :
+        20 * (m : Real) * (h : Real) + 2 * (h : Real) + 3 <=
+          2 * (h : Real) ^ 2 + 2 := by nlinarith [hsq, hgapMul]
+    nlinarith
+
+theorem source_tail_guards_of_margin_floor {m h J s : Nat}
+    (hm : 256 <= m) (hfloor : sourceMarginHeightFloor m <= h)
+    (hJ : h ^ 2 < J)
+    (hs : (s : Real) = 2 * (fixedRho m : Real) * (h : Real)) :
+    1 <= (s : Real) - 1 /\
+    (2 * (h : Real) : Real) - (2 * (J : Real)) <=
+      -(sourceRankExponent m : Real) * ((s : Real) - 1) - 3 := by
+  have hmid : max (sourceTailHeightFloor m) (20001 * m ^ 2) <= h :=
+    (Nat.le_max_left _ _).trans hfloor
+  have htail : sourceTailHeightFloor m <= h :=
+    (Nat.le_max_left _ _).trans hmid
+  have hhS : 4000 * m ^ 2 <= h :=
+    (Nat.le_max_left _ _).trans htail
+  have hh12 : 12 * m <= h :=
+    (Nat.le_max_right _ _).trans htail
+  exact source_tail_guards_of_growth hm hhS hh12 hJ hs
+
+/-- The margin-height source cutoff and selected sampler dimensions give the
+exact spectral guards at the actual chosen height. The bound h^2 < J is
+proved from blocks samplerA h and samplerA >= 1, not supplied as a tail
+assumption. -/
+theorem selected_actual_tail_guards
+    (base : Nat -> Nat) (cutoff : Real -> Nat) {L m samplerA : Nat}
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+        base cutoff j) (j + 2)) L =
+        (m : WithBot Nat))
+    (hsampler : 1 <= samplerA)
+    (hmargin : sourceMarginHeightFloor m <= cutoff
+      (1 / (ActualCmmsaParameterReconciliation.bOf m : Real))) :
+    let h := ActualCmmsaParameterReconciliation.hBlock L m
+    let J := SamplerParameters.blocks samplerA h
+    let s := ActualStarFixedRhoDimensionGuard.leafK m h
+    1 <= (s : Real) - 1 /\
+      (2 * (h : Real) : Real) - (2 * (J : Real)) <=
+        -(sourceRankExponent m : Real) * ((s : Real) - 1) - 3 := by
+  dsimp
+  let h := ActualCmmsaParameterReconciliation.hBlock L m
+  let J := SamplerParameters.blocks samplerA h
+  let s := ActualStarFixedRhoDimensionGuard.leafK m h
+  have hparams := ActualSelectedSpectralParameters.selected_spectral_parameters
+    base cutoff hsel
+  rcases hparams with
+    ⟨hm256, hh, hdiv, hhpos, hspos, hsplit, hrhoPos, hrho, hcReal,
+      hsReal, hbaseFloor, hcutFloor⟩
+  have hm : 0 < m := by omega
+  have hrhoEq : ActualSelectedSpectralParameters.actualSelectedRho m h =
+      ActualMZ24FixedRhoPointwiseSelector.fixedRho m := by
+    calc
+      ActualSelectedSpectralParameters.actualSelectedRho m h =
+          1 / (ActualCmmsaParameterReconciliation.bOf m : Real) := hrho
+      _ = ActualMZ24FixedRhoPointwiseSelector.fixedRho m := by
+        rw [fixed_rho_explicit hm]
+        norm_num [ActualCmmsaParameterReconciliation.bOf]
+  have hsFixed : (s : Real) =
+      2 * (ActualMZ24FixedRhoPointwiseSelector.fixedRho m : Real) * (h : Real) := by
+    dsimp [s]
+    rw [hrhoEq] at hsReal
+    exact hsReal
+  have hcutFloorB : cutoff
+      (1 / (ActualCmmsaParameterReconciliation.bOf m : Real)) <= h := by
+    simpa [hrho] using hcutFloor
+  have hheight : sourceMarginHeightFloor m <= h :=
+    hmargin.trans hcutFloorB
+  have hJ : h ^ 2 < J := by
+    dsimp [J, h]
+    exact selected_height_square_lt_blocks hsampler
+  exact source_tail_guards_of_margin_floor hm256 hheight hJ hsFixed
+
+/-- The selected height cutoff supplies the enlarged low-HC floor used in
+the actual rational-threshold envelope. The floor is derived from the
+selector's real-rho cutoff and the existing source margin cutoff. -/
+theorem selected_actual_low_HC_floor
+    (base : Nat → Nat) (cutoff : Real → Nat) {L m : Nat}
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+        base cutoff j) (j + 2)) L = (m : WithBot Nat))
+    (hmargin : sourceMarginHeightFloor m <=
+      cutoff (1 / (ActualCmmsaParameterReconciliation.bOf m : Real))) :
+    sourceLowHCHeightFloor m <=
+      ActualCmmsaParameterReconciliation.hBlock L m := by
+  have hparams := ActualSelectedSpectralParameters.selected_spectral_parameters
+    base cutoff hsel
+  rcases hparams with
+    ⟨_, _, _, _, _, _, _, hrho, _, _, _, hcutFloor⟩
+  have hcut : cutoff (1 / (ActualCmmsaParameterReconciliation.bOf m : Real)) <=
+      ActualCmmsaParameterReconciliation.hBlock L m := by
+    simpa [hrho] using hcutFloor
+  have hheight : sourceMarginHeightFloor m <=
+      ActualCmmsaParameterReconciliation.hBlock L m := hmargin.trans hcut
+  exact (Nat.le_max_right _ _).trans hheight
+
+/-- Concrete same-functional fields supplied by the ordinary weighted-star
+selector: its weighted lower signal, atom-to-center domination, additive beta
+floor, and negative Holder comparison. -/
+def selected_actual_weighted_signal_bundle
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {c s m E P : Nat}
+    (hdim : c + s <= Module.finrank (ZMod 2) V)
+    (C : ActualSourceStarLaw.CenterTable (V := V) c)
+    (T : ActualSourceStarLaw.LeafTable (V := V) (c + s))
+    (f : Module.Dual (ZMod 2) V) : Prop :=
+  let betaRat := matchingCenterMass (m := m) (Nat.le_add_right c s) hdim C f
+  let X := matchingStarMass (m := m) (Nat.le_add_right c s) hdim C T f
+  let M : Rat := 2 ^ (Module.finrank (ZMod 2) V - (c + m * s))
+  let B : Rat := 2 ^ (Module.finrank (ZMod 2) V - c)
+  let F : Rat := 2 ^ Module.finrank (ZMod 2) V
+  let beta : Real := (betaRat : Real)
+  let signal : Real := (((successMargin E / 4) * (M / F) : Rat) : Real)
+  (successMargin E / 4 * (M / B) * betaRat +
+      successMargin E / 4 * (M / F) <= X) /\
+    X <= betaRat /\
+    successMargin E / 4 * (M / F) <= betaRat /\
+    beta ^ (-(m : Real) / (P : Real)) <=
+      signal ^ (-(m : Real) / (P : Real))
+
+def selected_actual_coordinate_score_bundle
+    {V : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Fintype V]
+    {c s m E : Nat}
+    (hdim : c + s <= Module.finrank (ZMod 2) V)
+    (C : ActualSourceStarLaw.CenterTable (V := V) c)
+    (T : ActualSourceStarLaw.LeafTable (V := V) (c + s)) : Prop :=
+  successMargin E <= StarDensity (V := V) (k := m)
+    (grass_nonempty_of_le (by
+      calc
+        c <= c + s := Nat.le_add_right c s
+        _ <= Module.finrank (ZMod 2) V := hdim))
+    (fun K => extension_nonempty K (Nat.le_add_right c s) hdim) C T
+
+set_option maxHeartbeats 800000 in
+/-- The actual low-HC and high-spectral terms for one fixed coordinate
+functional are strictly smaller than the two signals returned for that same
+functional by the weighted-star selector.  The low theorem pays for the
+outer factor two; the high tail and threshold together consume at most half
+of the additive signal.  No final RHS comparison is an input. -/
+theorem selected_actual_fixed_functional_rhs_lt_matching_mass
+    {n c s h m J E : Nat} {rho : Real} {e : Rat}
+    (C : ActualSourceStarLaw.CenterTable (V := Fin n -> ZMod 2) c)
+    (T : ActualSourceStarLaw.LeafTable (V := Fin n -> ZMod 2) (c + s))
+    (f : Module.Dual (ZMod 2) (Fin n -> ZMod 2))
+    (hm : 256 <= m) (hfloor : sourceLowHCHeightFloor m <= h)
+    (hcNat : c = ActualStarFixedRhoDimensionGuard.leafT m h)
+    (hsNat : s = ActualStarFixedRhoDimensionGuard.leafK m h)
+    (hEven : c + s = 2 * h)
+    (hdiv : ActualCmmsaParameterReconciliation.bOf m ∣ h)
+    (hE : E = ActualStarFixedRhoDimensionGuard.badExponent m h)
+    (hrd : sourceRankExponent m < c + s)
+    (he0 : 0 <= e) (he : (e : Real) < 2 * manuscriptAgreementFloor m h)
+    (hfail : forall (q : Nat) (Q : Grass (Fin n -> ZMod 2) q)
+      (P : ActualMaximalPairLadder.DecodedPair Q (c + s)),
+      q + ActualMaximalPairLadder.codim P.W = sourceRankExponent m ->
+        Ne (Fintype.card (ActualMaximalPairLadder.Zoom Q P)) 0 ->
+          ActualMaximalPairLadder.agreement (fun L => T L) Q P <= e)
+    (hc : (c : Real) = 2 * (1 - rho) * (h : Real))
+    (hs : (s : Real) = 2 * rho * (h : Real))
+    (hrho : (fixedRho m : Real) = rho)
+    (hdim : c + m * s <= n)
+    (hmassdim : c + s <= Module.finrank (ZMod 2) (Fin n -> ZMod 2))
+    (hselector :
+      successMargin E / 4 *
+          ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ (n - c)) *
+          matchingCenterMass (m := m) (Nat.le_add_right c s) hmassdim C f +
+        successMargin E / 4 *
+          ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ n) <=
+        matchingStarMass (m := m) (Nat.le_add_right c s) hmassdim C T f)
+    (haddBeta : successMargin E / 4 *
+        ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ n) <=
+      matchingCenterMass (m := m) (Nat.le_add_right c s) hmassdim C f)
+    (hHC : HC46ExactContract)
+    (hJ : h ^ 2 < J) (hN : n = 2 * J) :
+    2 * selected_actual_analytic_rhs (n := n) (c := c) (s := s) (m := m)
+        C T f (sourceRankExponent m) (sourceMomentP m) (2 * (e : Real))
+        (manuscriptMomentThreshold m h) <
+      (matchingStarMass (m := m) (Nat.le_add_right c s) hmassdim C T f : Real) := by
+  let betaRat := matchingCenterMass (m := m) (Nat.le_add_right c s) hmassdim C f
+  let beta : Real := (betaRat : Real)
+  let X : Rat := matchingStarMass (m := m) (Nat.le_add_right c s) hmassdim C T f
+  let firstRat := successMargin E / 4 *
+    ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ (n - c)) * betaRat
+  let additiveRat := successMargin E / 4 *
+    ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ n)
+  have hbetaEq := matching_center_mass_eq_grassmann_beta
+    (V := Fin n -> ZMod 2) (c := c) (s := s) (m := m) hmassdim C f
+  have hbeta0 : 0 <= beta := by
+    dsimp [beta, betaRat]
+    rw [hbetaEq]
+    apply div_nonneg
+    · exact Finset.sum_nonneg fun R _ => by split <;> positivity
+    · positivity
+  have hbeta1 : beta <= 1 := by
+    dsimp [beta, betaRat]
+    exact selected_matching_center_mass_le_one
+      (V := Fin n -> ZMod 2) (c := c) (s := s) (m := m)
+      hmassdim C f
+  have hbetaFloor : (2 : Real) ^ sourceLowBetaFloorExponent m h <= beta := by
+    have hsignal := selected_beta_signal_eq_source_floor
+      (m := m) (h := h) (n := n) (c := c) (s := s) (E := E)
+      (by omega) hdiv hE hdim hrho hc hs
+    have haddReal : (additiveRat : Real) <= beta := by
+      dsimp [additiveRat, beta, betaRat]
+      exact_mod_cast haddBeta
+    rw [← hsignal]
+    exact haddReal
+  have hlow := selected_fixed_functional_low_HC_signal_bound
+    (T := T) (f := f) hm hfloor hEven hrd he0 he hfail hbetaFloor hHC
+  have hLowTerm :
+      2 * ((2 : Real) ^ (m : Real) *
+        beta ^ (1 - (m : Real) / (sourceMomentP m : Real)) *
+        (selectedLowHC46NormBound (d := c + s)
+          (r := sourceRankExponent m) (p := sourceMomentP m) (2 * (e : Real))) ^ m) <=
+        (firstRat : Real) := by
+    have hfirst := selected_actual_first_signal_eq_dyadic
+      (m := m) (h := h) (n := n) (c := c) (s := s) (E := E)
+      (by omega) hdiv hE hdim hrho hs
+    have hfirstRat : (firstRat : Real) =
+        (2 : Real) ^ sourceLowTargetSignalExponent m h * beta := by
+      dsimp [firstRat, beta, betaRat]
+      rw [Rat.cast_mul, hfirst]
+      ring
+    have hlowSignal := hlow.2
+    rw [← hfirstRat] at hlowSignal
+    simpa [pow_succ, mul_assoc, mul_left_comm, mul_comm] using hlowSignal
+  have hmpos : 0 < m := by omega
+  have hlarge := (low_HC_height_floor_dominates_m_squared hmpos).trans hfloor
+  have hm1 : 1 <= m := by omega
+  have hmSq : m ^ 2 <= m ^ 4 := by
+    have hsq : 1 <= m ^ 2 := Nat.one_le_pow 2 m hm1
+    calc
+      m ^ 2 = m ^ 2 * 1 := by simp
+      _ <= m ^ 2 * m ^ 2 := Nat.mul_le_mul_left _ hsq
+      _ = m ^ 4 := by ring
+  have hmLarge : 20001 * m ^ 2 <= (4000 * m ^ 2) ^ 2 := by
+    dsimp [pow_two]
+    nlinarith [hmSq]
+  have h20001 : 20001 * m ^ 2 <= h := hmLarge.trans hlarge
+  have h4000 : 4000 * m ^ 2 <= h := by
+    have hp : 1 <= 4000 * m ^ 2 := by positivity
+    have hle : 4000 * m ^ 2 <= (4000 * m ^ 2) ^ 2 := by nlinarith
+    exact hle.trans hlarge
+  have h12Large : 12 * m <= (4000 * m ^ 2) ^ 2 := by
+    nlinarith [hmSq]
+  have h12 : 12 * m <= h := h12Large.trans hlarge
+  have hsFixed : (s : Real) = 2 * (fixedRho m : Real) * (h : Real) := by
+    rw [hrho]
+    exact hs
+  have htailGuards := source_tail_guards_of_growth hm h4000 h12 hJ hsFixed
+  have hTailB : 1 <= (s : Real) - 1 := htailGuards.1
+  have hTailN : (2 * (h : Real) : Real) - (n : Real) <=
+      -(sourceRankExponent m : Real) * ((s : Real) - 1) - 3 := by
+    simpa [hN, Nat.cast_mul] using htailGuards.2
+  have hTail := selected_actual_high_spectral_sum_le_tail
+    (n := n) (d := c + s) (r := sourceRankExponent m) (s := s)
+    (selectedF T f) hTailB hTailN
+  have hhigh := selected_actual_high_error_budget_le_actual_additive_half
+    (m := m) (h := h) (n := n)
+    (c := ActualStarFixedRhoDimensionGuard.leafT m h) (E := E) hm
+    h20001
+    hdiv hE (by simpa [hsNat] using hdim) hrho
+    (by simpa [hcNat] using hc) (by simpa [hsNat] using hs) hbeta0 hbeta1
+  have hadditiveSame :
+      ((((successMargin E / 4) *
+        ((2 : Rat) ^ (n - (c + m * s)) / (2 : Rat) ^ n) : Rat) : Rat) : Real) =
+        (additiveRat : Real) := by
+    rfl
+  have hXcast : (X : Real) =
+      (matchingStarMass (m := m) (Nat.le_add_right c s) hmassdim C T f : Real) := rfl
+  have hselectorReal : (firstRat : Real) + (additiveRat : Real) <= (X : Real) := by
+    dsimp [firstRat, additiveRat, betaRat, X]
+    exact_mod_cast hselector
+  have haddPos : 0 < (additiveRat : Real) := by
+    have hsignal := selected_beta_signal_eq_source_floor
+      (m := m) (h := h) (n := n) (c := c) (s := s) (E := E)
+      (by omega) hdiv hE hdim hrho hc hs
+    rw [← hsignal]
+    exact Real.rpow_pos_of_pos (by norm_num) _
+  let lowTerm := (2 : Real) ^ (m : Real) * beta ^
+    (1 - (m : Real) / (sourceMomentP m : Real)) *
+    (selectedLowHC46NormBound (d := c + s) (r := sourceRankExponent m)
+      (p := sourceMomentP m) (2 * (e : Real))) ^ m
+  let thresholdTerm := (2 : Real) ^ (m : Real) *
+    (manuscriptMomentThreshold m h) ^ m * beta
+  let highTerm := (1 / (manuscriptMomentThreshold m h) ^ 2) *
+    Finset.sum (selectedHighFinIndexSet (c + s) (sourceRankExponent m))
+      (fun i => ((2 : Real) ^ (-(i.val : Real) * ((s : Real) - 1)) +
+        3 * (2 : Real) ^ ((i.val : Real) - (n : Real))) *
+        uniformMean (fun W : BinaryMatrix n (c + s) =>
+          (rankProjection i.val (indicator (selectedF T f)) W) ^ 2))
+  have hRhsEq : selected_actual_analytic_rhs (n := n) (c := c) (s := s) (m := m)
+      C T f (sourceRankExponent m) (sourceMomentP m) (2 * (e : Real))
+      (manuscriptMomentThreshold m h) = lowTerm + thresholdTerm + highTerm := by
+    unfold selected_actual_analytic_rhs
+    rw [← hbetaEq]
+    rfl
+  have htailTerm : highTerm <=
+      (2 : Real) ^ (-(sourceRankExponent m : Real) * ((s : Real) - 1)) /
+        (manuscriptMomentThreshold m h) ^ 2 := by
+    dsimp [highTerm]
+    have hcoef : 0 <= (1 / (manuscriptMomentThreshold m h) ^ 2 : Real) := by
+      positivity
+    exact mul_le_mul_of_nonneg_left hTail hcoef
+  have hhighActual : 2 * (thresholdTerm + highTerm) <= (additiveRat : Real) / 2 := by
+    have haPos : 0 < manuscriptMomentThreshold m h := by
+      unfold manuscriptMomentThreshold
+      exact Real.rpow_pos_of_pos (by norm_num) _
+    have htail := htailTerm
+    have htailNonneg : 0 <=
+        (2 : Real) ^ (-(sourceRankExponent m : Real) * ((s : Real) - 1)) := by
+      positivity
+    have htailOver0 : 0 <=
+        (2 : Real) ^ (-(sourceRankExponent m : Real) * ((s : Real) - 1)) /
+          (manuscriptMomentThreshold m h) ^ 2 :=
+      div_nonneg htailNonneg (sq_nonneg (manuscriptMomentThreshold m h))
+    have hlargeTail :
+        (2 : Real) ^ (-(sourceRankExponent m : Real) * ((s : Real) - 1)) /
+          (manuscriptMomentThreshold m h) ^ 2 <=
+        2 * (2 : Real) ^ (-(sourceRankExponent m : Real) * ((s : Real) - 1)) /
+          (manuscriptMomentThreshold m h) ^ 2 := by
+      calc
+        _ <= _ + _ := le_add_of_nonneg_right htailOver0
+        _ = _ := by ring
+    calc
+      2 * (thresholdTerm + highTerm) <=
+          2 * (thresholdTerm +
+            (2 : Real) ^ (-(sourceRankExponent m : Real) * ((s : Real) - 1)) /
+              (manuscriptMomentThreshold m h) ^ 2) := by
+        exact mul_le_mul_of_nonneg_left
+          (add_le_add_left htail (thresholdTerm)) (by norm_num)
+      _ <= 2 * (2 *
+          (2 : Real) ^ (-(sourceRankExponent m : Real) * ((s : Real) - 1)) /
+            (manuscriptMomentThreshold m h) ^ 2 + thresholdTerm) := by
+        gcongr
+      _ <= (additiveRat : Real) / 2 := by
+        have hconvert :
+            ((((successMargin E / 4) *
+              ((2 : Rat) ^ (n - (c + m * ActualStarFixedRhoDimensionGuard.leafK m h)) /
+                (2 : Rat) ^ n) : Rat) : Rat) : Real) =
+              (additiveRat : Real) := by
+          simpa [hcNat, hsNat] using hadditiveSame
+        rw [← hconvert]
+        exact hhigh
+  have hRhsComponents :
+      2 * selected_actual_analytic_rhs (n := n) (c := c) (s := s) (m := m)
+        C T f (sourceRankExponent m) (sourceMomentP m) (2 * (e : Real))
+        (manuscriptMomentThreshold m h) <=
+        (firstRat : Real) + (additiveRat : Real) / 2 := by
+    rw [hRhsEq]
+    calc
+      2 * (lowTerm + thresholdTerm + highTerm) =
+          2 * lowTerm + 2 * (thresholdTerm + highTerm) := by ring
+      _ <= (firstRat : Real) + (additiveRat : Real) / 2 :=
+        add_le_add hLowTerm hhighActual
+  have hstrict : (firstRat : Real) + (additiveRat : Real) / 2 < (X : Real) := by
+    linarith [hselectorReal, haddPos]
+  exact lt_of_le_of_lt hRhsComponents hstrict
+
+
+set_option maxHeartbeats 800000 in
+/-- The original side score and the original full failed-zoom family feed one
+and the same selected complement and functional.  The failure family is
+transported to that complement's coordinate leaf, and the fixed large dyadic
+P9C caller then supplies the actual star-mass-to-moment bound at the same
+source functional.  The selector base explicitly includes the analytic
+margin floor; no final margin, beta, PR, or moment estimate is an input. -/
+theorem original_score_and_failure_select_same_actual_moment_witness
+    {N rows : Nat} (I : ActualOccurrenceAllocation.Instance N rows)
+    (copies : Nat) {L samplerA : Nat} {m : Nat}
+    (U : TaggedGoodU I copies (SamplerParameters.blocks samplerA
+      (ActualCmmsaParameterReconciliation.hBlock L m)))
+    (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+    (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+    (cutoff : Real -> Nat)
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max
+        (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+          (fun _ => sourceMarginHeightFloor m) cutoff j) (j + 2)) L =
+        (m : WithBot Nat))
+    (hA : 1 <= samplerA)
+    (hscore : ActualTaggedMZSideDraw.sideConditionalDensity I copies U
+        (ActualStarFixedRhoDimensionGuard.leafT m
+          (ActualCmmsaParameterReconciliation.hBlock L m))
+        (ActualCmmsaParameterReconciliation.hBlock L m) m C T >=
+      ActualStarAcceptedGoodMass.successMargin
+        (ActualStarFixedRhoDimensionGuard.badExponent m
+          (ActualCmmsaParameterReconciliation.hBlock L m)))
+    (e : Rat)
+    (hfailSource : forall (A : SideComplement I copies U)
+      (q : Nat) (Q : Grass A.1 q)
+      (P : ActualMaximalPairLadder.DecodedPair Q
+        (ActualStarFixedRhoDimensionGuard.leafT m
+            (ActualCmmsaParameterReconciliation.hBlock L m) +
+          ActualStarFixedRhoDimensionGuard.leafK m
+            (ActualCmmsaParameterReconciliation.hBlock L m))),
+      q + ActualMaximalPairLadder.codim P.W = sourceRankExponent m ->
+        Ne (Fintype.card (ActualMaximalPairLadder.Zoom Q P)) 0 ->
+          ActualMaximalPairLadder.agreement
+            (ActualTaggedComplementStarDensityBridge.transportedLeafTable
+              I copies U A T) Q P <= e)
+    (he : manuscriptAgreementFloor m
+        (ActualCmmsaParameterReconciliation.hBlock L m) < (e : Real))
+    (he' : (e : Real) < 2 * manuscriptAgreementFloor m
+        (ActualCmmsaParameterReconciliation.hBlock L m))
+    (hHC : ActualSelectedComplementAnalyticMoment.HC46ExactContract)
+    (hSpectral : ActualSelectedComplementAnalyticMoment.Spectral47ExactContract cutoff) :
+    exists A : SideComplement I copies U,
+    exists fCoord : Module.Dual (ZMod 2)
+      (ActualComplementCoordinateMassBridge.CoordAmbient
+        (SamplerParameters.blocks samplerA
+          (ActualCmmsaParameterReconciliation.hBlock L m))),
+    selected_actual_weighted_signal_bundle
+      (m := m)
+      (E := ActualStarFixedRhoDimensionGuard.badExponent m
+        (ActualCmmsaParameterReconciliation.hBlock L m))
+      (P := ActualOriginalFailureFixedMomentCaller.fixedMomentP m)
+      (ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound I copies U A
+        (ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+          I copies U A (fun _ => sourceMarginHeightFloor m) cutoff hsel hA))
+      (ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+      (ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable I copies U A T)
+      fCoord /\
+    selected_actual_coordinate_score_bundle
+      (m := m)
+      (E := ActualStarFixedRhoDimensionGuard.badExponent m
+        (ActualCmmsaParameterReconciliation.hBlock L m))
+      (ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound I copies U A
+        (ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+          I copies U A (fun _ => sourceMarginHeightFloor m) cutoff hsel hA))
+      (ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+      (ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable I copies U A T) /\
+    exists fSource : Module.Dual (ZMod 2) A.1,
+      ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A fSource =
+        fCoord /\
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := A.1) (m := m) (Nat.le_add_right
+          (ActualStarFixedRhoDimensionGuard.leafT m
+            (ActualCmmsaParameterReconciliation.hBlock L m))
+          (ActualStarFixedRhoDimensionGuard.leafK m
+            (ActualCmmsaParameterReconciliation.hBlock L m)))
+        (ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+          I copies U A (fun _ => sourceMarginHeightFloor m) cutoff hsel hA)
+        (ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C)
+        (ActualTaggedComplementStarDensityBridge.transportedLeafTable I copies U A T)
+        fSource) =
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := ActualComplementCoordinateMassBridge.CoordAmbient
+          (SamplerParameters.blocks samplerA
+            (ActualCmmsaParameterReconciliation.hBlock L m))) (m := m)
+        (Nat.le_add_right
+          (ActualStarFixedRhoDimensionGuard.leafT m
+            (ActualCmmsaParameterReconciliation.hBlock L m))
+          (ActualStarFixedRhoDimensionGuard.leafK m
+            (ActualCmmsaParameterReconciliation.hBlock L m)))
+        (ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound I copies U A
+          (ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+            I copies U A (fun _ => sourceMarginHeightFloor m) cutoff hsel hA))
+        (ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+        (ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable I copies U A T)
+        (ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A fSource)) /\
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := A.1) (m := m)
+        (Nat.le_add_right
+          (ActualStarFixedRhoDimensionGuard.leafT m
+            (ActualCmmsaParameterReconciliation.hBlock L m))
+          (ActualStarFixedRhoDimensionGuard.leafK m
+            (ActualCmmsaParameterReconciliation.hBlock L m)))
+        (ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+          I copies U A (fun _ => sourceMarginHeightFloor m) cutoff hsel hA)
+        (ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C)
+        (ActualTaggedComplementStarDensityBridge.transportedLeafTable I copies U A T)
+        fSource : Real) <=
+        2 * ActualSelectedComplementAnalyticMoment.selected_actual_analytic_rhs
+          (n := 2 * SamplerParameters.blocks samplerA
+            (ActualCmmsaParameterReconciliation.hBlock L m))
+          (c := ActualStarFixedRhoDimensionGuard.leafT m
+            (ActualCmmsaParameterReconciliation.hBlock L m))
+          (s := ActualStarFixedRhoDimensionGuard.leafK m
+            (ActualCmmsaParameterReconciliation.hBlock L m))
+          (m := m)
+          (ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable
+            I copies U A C)
+          (ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable
+            I copies U A T)
+          (ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A fSource)
+          (sourceRankExponent m) (ActualOriginalFailureFixedMomentCaller.fixedMomentP m)
+          (2 * (e : Real))
+          (ActualSelectedComplementAnalyticNumerics.manuscriptMomentThreshold m
+            (ActualCmmsaParameterReconciliation.hBlock L m)) := by
+  let base : Nat -> Nat := fun _ => sourceMarginHeightFloor m
+  let h := ActualCmmsaParameterReconciliation.hBlock L m
+  let J := SamplerParameters.blocks samplerA h
+  let c := ActualStarFixedRhoDimensionGuard.leafT m h
+  let s := ActualStarFixedRhoDimensionGuard.leafK m h
+  have hparams := ActualSelectedSpectralParameters.selected_spectral_parameters
+    base cutoff hsel
+  rcases hparams with ⟨hm256, hh, hdiv, hhpos, hspos, hsplit, hrhoPos,
+    hrho, hcReal, hsReal, hbaseFloor, hcutFloor⟩
+  have hJ : h ^ 2 < J := selected_actual_height_square_lt_blocks base cutoff hsel hA
+  have hguardBase := ActualStarFixedRhoDimensionGuard.selected_fixedRho_quotient_dimension_guard
+    base hA hsel
+  have hguard : m * (2 * h - c) +
+      ActualStarFixedRhoDimensionGuard.badExponent m h + 2 <= 2 * J - c := by
+    have hsplit' : c + s = 2 * h := by simpa [c, s, h] using hsplit
+    have hsub : 2 * h - c = s := by omega
+    simpa [J, h, c, s, hsub] using hguardBase
+  have hP : 0 < ActualOriginalFailureFixedMomentCaller.fixedMomentP m := by
+    unfold ActualOriginalFailureFixedMomentCaller.fixedMomentP
+    positivity
+  have htle : c <= 2 * h := by omega
+  have hle : h <= h ^ 2 := by
+    simpa [pow_two] using Nat.le_mul_of_pos_left h hhpos
+  have hhJ : h <= J := hle.trans_lt hJ |>.le
+  obtain ⟨A, fCoord, hweighted, hdom, hbeta, hholder, hscoreCoord⟩ :=
+    actual_side_score_selects_same_coordinate_functional
+      (I := I) (copies := copies) (U := U)
+      (t := c) (h := h) (k := m)
+      (E := ActualStarFixedRhoDimensionGuard.badExponent m h)
+      (P := ActualOriginalFailureFixedMomentCaller.fixedMomentP m)
+      htle hhJ C T (by omega) hguard hscore hP
+  let fSource : Module.Dual (ZMod 2) A.1 :=
+    fCoord.comp
+      (ActualComplementCoordinateMassBridge.actualCoordinateEquiv I copies U A).toLinearMap
+  have hcoord : ActualComplementCoordinateMassBridge.coordinateFunctional
+      I copies U A fSource = fCoord := by
+    ext x
+    simp [fSource, ActualComplementCoordinateMassBridge.coordinateFunctional]
+  have hsourceDim := ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+    I copies U A base cutoff hsel hA
+  have hcoordDim := ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound
+    I copies U A hsourceDim
+  have hmassCoord := ActualComplementCoordinateMassBridge.matchingStarMass_actual_coordinate
+    I copies U A (Nat.le_add_right c s) hsourceDim C T fSource
+  have hsignalBundle : selected_actual_weighted_signal_bundle
+      (m := m) (E := ActualStarFixedRhoDimensionGuard.badExponent m h)
+      (P := ActualOriginalFailureFixedMomentCaller.fixedMomentP m) hcoordDim
+      (ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+      (ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable I copies U A T)
+      fCoord := by
+    have htuple := And.intro hweighted (And.intro hdom (And.intro hbeta hholder))
+    simpa [selected_actual_weighted_signal_bundle, c, s, h, J, base,
+      ActualComplementCoordinateMassBridge.CoordAmbient, hsplit] using htuple
+  have hscoreBundle : selected_actual_coordinate_score_bundle
+      (m := m) (E := ActualStarFixedRhoDimensionGuard.badExponent m h) hcoordDim
+      (ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C)
+      (ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable I copies U A T) := by
+    simpa [selected_actual_coordinate_score_bundle, c, s, h, J, base,
+      ActualComplementCoordinateMassBridge.CoordAmbient, hsplit] using hscoreCoord
+  have hfloorPos : 0 < manuscriptAgreementFloor m h := by
+    unfold manuscriptAgreementFloor
+    exact Real.rpow_pos_of_pos (by norm_num) _
+  have hePos : 0 < (e : Real) := hfloorPos.trans he
+  have he0 : (0 : Rat) <= e := by exact_mod_cast hePos.le
+  refine ⟨A, fCoord, hsignalBundle, hscoreBundle, fSource, hcoord, ?_, ?_⟩
+  · simpa [c, s, h, J, ActualCmmsaParameterReconciliation.hBlock,
+      SamplerParameters.blocks, ActualComplementCoordinateMassBridge.CoordAmbient] using hmassCoord
+  have hfixed := ActualOriginalFailureFixedMomentCaller.selected_actual_fixed_moment_bound_from_source_failure
+    I copies U A C T fSource base cutoff hsel hA (sourceRankExponent m)
+    (by
+      have hm : 0 < m := by omega
+      have hdom := low_HC_height_floor_dominates_m_squared hm
+      have hm1 : 1 <= m := by omega
+      have hm3le4 : m ^ 3 <= m ^ 4 := by
+        calc
+          m ^ 3 = m ^ 3 * 1 := by simp
+          _ <= m ^ 3 * m := Nat.mul_le_mul_left (m ^ 3) hm1
+          _ = m ^ 4 := by ring
+      have hbig : sourceRankExponent m < 2 * (4000 * m ^ 2) ^ 2 := by
+        dsimp [sourceRankExponent]
+        nlinarith [hm3le4]
+      have hbase : sourceMarginHeightFloor m <= h := by
+        simpa [base, h] using hbaseFloor
+      have hfloor : sourceLowHCHeightFloor m <= h :=
+        (Nat.le_max_right _ _).trans hbase
+      have hscaled := Nat.mul_le_mul_left 2 hdom
+      have hheight := Nat.mul_le_mul_left 2 hfloor
+      have hsplit' : c + s = 2 * h := by
+        simpa [c, s, h] using hsplit
+      dsimp [c, s, ActualStarFixedRhoDimensionGuard.leafT,
+        ActualStarFixedRhoDimensionGuard.leafK] at hsplit' ⊢
+      omega)
+    e he0 (hfailSource A) hHC hSpectral
+    (ActualSelectedComplementAnalyticNumerics.manuscriptMomentThreshold m h)
+    (Real.rpow_pos_of_pos (by norm_num) _)
+  rcases hfixed with ⟨_, _, _, _, _, _, hmass⟩
+  simpa [hcoord, ActualCmmsaParameterReconciliation.hBlock,
+    SamplerParameters.blocks] using hmass
+
+theorem original_score_and_failure_same_witness_contradiction
+    {N rows : Nat} (I : ActualOccurrenceAllocation.Instance N rows)
+    (copies : Nat) {L samplerA : Nat} {m : Nat}
+    (U : TaggedGoodU I copies (SamplerParameters.blocks samplerA
+      (ActualCmmsaParameterReconciliation.hBlock L m)))
+    (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+    (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+    (cutoff : Real -> Nat)
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max
+        (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+          (fun _ => sourceMarginHeightFloor m) cutoff j) (j + 2)) L =
+        (m : WithBot Nat))
+    (hA : 1 <= samplerA)
+    (hscore : ActualTaggedMZSideDraw.sideConditionalDensity I copies U
+        (ActualStarFixedRhoDimensionGuard.leafT m
+          (ActualCmmsaParameterReconciliation.hBlock L m))
+        (ActualCmmsaParameterReconciliation.hBlock L m) m C T >=
+      ActualStarAcceptedGoodMass.successMargin
+        (ActualStarFixedRhoDimensionGuard.badExponent m
+          (ActualCmmsaParameterReconciliation.hBlock L m)))
+    (e : Rat)
+    (hfailSource : forall (A : SideComplement I copies U)
+      (q : Nat) (Q : Grass A.1 q)
+      (P : ActualMaximalPairLadder.DecodedPair Q
+        (ActualStarFixedRhoDimensionGuard.leafT m
+            (ActualCmmsaParameterReconciliation.hBlock L m) +
+          ActualStarFixedRhoDimensionGuard.leafK m
+            (ActualCmmsaParameterReconciliation.hBlock L m))),
+      q + ActualMaximalPairLadder.codim P.W = sourceRankExponent m ->
+        Ne (Fintype.card (ActualMaximalPairLadder.Zoom Q P)) 0 ->
+          ActualMaximalPairLadder.agreement
+            (ActualTaggedComplementStarDensityBridge.transportedLeafTable
+              I copies U A T) Q P <= e)
+    (he : manuscriptAgreementFloor m
+        (ActualCmmsaParameterReconciliation.hBlock L m) < (e : Real))
+    (he' : (e : Real) < 2 * manuscriptAgreementFloor m
+        (ActualCmmsaParameterReconciliation.hBlock L m))
+    (hHC : ActualSelectedComplementAnalyticMoment.HC46ExactContract)
+    (hSpectral : ActualSelectedComplementAnalyticMoment.Spectral47ExactContract cutoff) :
+    False := by
+  have hresult := original_score_and_failure_select_same_actual_moment_witness
+    I copies U C T cutoff hsel hA hscore e hfailSource he he' hHC hSpectral
+  rcases hresult with ⟨A, fCoord, hsignalBundle, _, fSource, hcoord,
+    hmassEq, hmassBound⟩
+  let base : Nat → Nat := fun _ => sourceMarginHeightFloor m
+  let h := ActualCmmsaParameterReconciliation.hBlock L m
+  let J := SamplerParameters.blocks samplerA h
+  let c := ActualStarFixedRhoDimensionGuard.leafT m h
+  let s := ActualStarFixedRhoDimensionGuard.leafK m h
+  let n := 2 * J
+  have hparams := ActualSelectedSpectralParameters.selected_spectral_parameters
+    base cutoff hsel
+  rcases hparams with ⟨hm256, hh, hdiv, hhpos, hspos, hsplit, hrhoPos,
+    hrho, hcReal, hsReal, hbaseFloor, hcutFloor⟩
+  have hJ : h ^ 2 < J := selected_actual_height_square_lt_blocks base cutoff hsel hA
+  have hcLe : c ≤ 2 * J := by
+    have hleSq : h ≤ h ^ 2 := by
+      simpa [pow_two] using Nat.le_mul_of_pos_left h hhpos
+    have hleJ : h ≤ J := hleSq.trans_lt hJ |>.le
+    have hsplit' : c + s = 2 * h := by simpa [c, s, h] using hsplit
+    calc
+      c ≤ c + s := Nat.le_add_right c s
+      _ = 2 * h := hsplit'
+      _ ≤ 2 * J := Nat.mul_le_mul_left 2 hleJ
+  have hbase : sourceMarginHeightFloor m ≤ h := by
+    simpa [base, h] using hbaseFloor
+  have hLowFloor : sourceLowHCHeightFloor m ≤ h := by
+    calc
+      sourceLowHCHeightFloor m ≤ sourceMarginHeightFloor m := Nat.le_max_right _ _
+      _ ≤ h := hbase
+  have hdim : c + m * s ≤ n := by
+    have hguardBase := ActualStarFixedRhoDimensionGuard.selected_fixedRho_quotient_dimension_guard
+      base hA hsel
+    have hsub : 2 * h - c = s := by
+      have hsplit' : c + s = 2 * h := by simpa [c, s, h] using hsplit
+      omega
+    have hguard : m * s +
+        ActualStarFixedRhoDimensionGuard.badExponent m h + 2 ≤ 2 * J - c := by
+      simpa [J, h, c, s, hsub] using hguardBase
+    have hguardFull : c + m * s +
+        ActualStarFixedRhoDimensionGuard.badExponent m h + 2 ≤ 2 * J := by
+      simpa [Nat.add_assoc] using (Nat.le_sub_iff_add_le hcLe).mp hguard
+    dsimp [n, J]
+    omega
+  have hmassdim : c + s <= Module.finrank (ZMod 2) (Fin n -> ZMod 2) := by
+    have hsMul : s <= m * s := Nat.le_mul_of_pos_left s (by omega)
+    have hn : Module.finrank (ZMod 2) (Fin n -> ZMod 2) = n :=
+      Module.finrank_fin_fun (R := ZMod 2) (n := n)
+    omega
+  have hrd : sourceRankExponent m < c + s := by
+    have hmpos : 0 < m := by omega
+    have hm1 : 1 <= m := by omega
+    have hm3le4 : m ^ 3 <= m ^ 4 := by
+      calc
+        m ^ 3 = m ^ 3 * 1 := by simp
+        _ <= m ^ 3 * m := Nat.mul_le_mul_left (m ^ 3) hm1
+        _ = m ^ 4 := by ring
+    have hbig : sourceRankExponent m < 2 * (4000 * m ^ 2) ^ 2 := by
+      dsimp [sourceRankExponent]
+      nlinarith [hm3le4]
+    have hbase : sourceMarginHeightFloor m <= h := by
+      simpa [base, h] using hbaseFloor
+    have hfloor : sourceLowHCHeightFloor m <= h :=
+      (Nat.le_max_right _ _).trans hbase
+    have hlowLarge := low_HC_height_floor_dominates_m_squared hmpos
+    have hheight : 2 * (4000 * m ^ 2) ^ 2 <= 2 * h :=
+      Nat.mul_le_mul_left 2 (hlowLarge.trans hfloor)
+    have hsplit' : c + s = 2 * h := by simpa [c, s, h] using hsplit
+    omega
+  have he0 : (0 : Rat) <= e := by
+    have hfpos : 0 < manuscriptAgreementFloor m h := by
+      unfold manuscriptAgreementFloor
+      exact Real.rpow_pos_of_pos (by norm_num) _
+    have hepos : 0 < (e : Real) := hfpos.trans he
+    exact_mod_cast hepos.le
+  have hfailCoord :=
+    ActualOriginalFailureAnalyticCaller.source_failed_zoom_to_selected_coordinate
+      I U A T e he0 (hfailSource A)
+  let Cc := ActualComplementCoordinateMassBridge.selectedCoordinateCenterTable I copies U A C
+  let Tc := ActualComplementCoordinateMassBridge.selectedCoordinateLeafTable I copies U A T
+  let fc := ActualComplementCoordinateMassBridge.coordinateFunctional I copies U A fSource
+  have hfail : forall (q : Nat) (Q : Grass (Fin n → ZMod 2) q)
+      (P : ActualMaximalPairLadder.DecodedPair Q (c + s)),
+      q + ActualMaximalPairLadder.codim P.W = sourceRankExponent m →
+        Ne (Fintype.card (ActualMaximalPairLadder.Zoom Q P)) 0 →
+          ActualMaximalPairLadder.agreement (fun L => Tc L) Q P ≤ e := by
+    simpa [ActualComplementCoordinateMassBridge.CoordAmbient,
+      ActualLeafLabelRankImageAlignment.Ambient, n, J, c, s, Tc] using hfailCoord
+  have hscoreEq : fc = fCoord := by
+    simpa [fc] using hcoord
+  have hbundle := hsignalBundle
+  dsimp [selected_actual_weighted_signal_bundle] at hbundle
+  rcases hbundle with ⟨hselector, _, haddBeta, _⟩
+  have hrhoFixed : (fixedRho m : Real) =
+      ActualSelectedSpectralParameters.actualSelectedRho m h := by
+    have hfixedRho := ActualMZ24FixedRhoPointwiseSelector.fixedRho_eq_inverse_bOf
+      (m := m) (by omega)
+    have hfixedReal : (fixedRho m : Real) = 1 / (ActualCmmsaParameterReconciliation.bOf m : Real) := by
+      exact_mod_cast hfixedRho
+    rw [hfixedReal, hrho]
+  have hstrict := selected_actual_fixed_functional_rhs_lt_matching_mass
+    (rho := ActualSelectedSpectralParameters.actualSelectedRho m h)
+    (n := n) (c := c) (s := s) (h := h) (m := m) (J := J)
+    (E := ActualStarFixedRhoDimensionGuard.badExponent m h)
+    (e := e) Cc Tc fCoord hm256 hLowFloor rfl rfl
+    (by simpa [c, s, h] using hsplit) hdiv rfl hrd he0 he'
+    hfail (by simpa [c, h] using hcReal) (by simpa [s, h] using hsReal)
+    hrhoFixed hdim hmassdim hselector haddBeta hHC hJ (by rfl)
+  have hmassEqReal :
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := ActualComplementCoordinateMassBridge.CoordAmbient J) (m := m)
+        (Nat.le_add_right c s)
+        (ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound I copies U A
+          (ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+            I copies U A base cutoff hsel hA)) Cc Tc fCoord : Real) =
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := A.1) (m := m) (Nat.le_add_right c s)
+        (ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+          I copies U A base cutoff hsel hA)
+        (ActualTaggedComplementStarDensityBridge.transportedCenterTable I copies U A C)
+        (ActualTaggedComplementStarDensityBridge.transportedLeafTable I copies U A T)
+        fSource : Real) := by
+    have heq := hmassEq
+    simpa [Cc, Tc, fc, hscoreEq] using congrArg (fun x : Rat => (x : Real)) heq.symm
+  have hbound :
+      (ActualOrdinaryStarWeightedSelection.matchingStarMass
+        (V := ActualComplementCoordinateMassBridge.CoordAmbient J) (m := m)
+        (Nat.le_add_right c s)
+        (ActualComplementCoordinateMassBridge.actualCoordinateDimensionBound I copies U A
+          (ActualSelectedComplementAnalyticMoment.selected_actual_source_dimension_bound
+            I copies U A base cutoff hsel hA)) Cc Tc fCoord : Real) <=
+      2 * ActualSelectedComplementAnalyticMoment.selected_actual_analytic_rhs
+        (n := n) (c := c) (s := s) (m := m) Cc Tc fCoord
+        (sourceRankExponent m) (sourceMomentP m) (2 * (e : Real))
+        (ActualSelectedComplementAnalyticNumerics.manuscriptMomentThreshold m h) := by
+    rw [hmassEqReal]
+    simpa [Cc, Tc, fc, n, J, c, s, h,
+      ActualOriginalFailureFixedMomentCaller.fixedMomentP, sourceMomentP,
+      ActualComplementCoordinateMassBridge.CoordAmbient]
+      using hmassBound
+  exact (not_lt_of_ge hbound) hstrict
+
+theorem original_score_and_failure_yields_bad_zoom
+    {N rows : Nat} (I : ActualOccurrenceAllocation.Instance N rows)
+    (copies : Nat) {L samplerA : Nat} {m : Nat}
+    (U : TaggedGoodU I copies (SamplerParameters.blocks samplerA
+      (ActualCmmsaParameterReconciliation.hBlock L m)))
+    (C : ActualTaggedFixedTableAcceptance.TaggedCenterTable I copies)
+    (T : ActualTaggedFixedTableAcceptance.TaggedLeafTable I copies)
+    (cutoff : Real -> Nat)
+    (hsel : ActualCmmsaAdmissibilitySelector.selector
+      (fun j => max
+        (ActualSelectedSpectralParameters.analyticSourceHeightFloor
+          (fun _ => sourceMarginHeightFloor m) cutoff j) (j + 2)) L =
+        (m : WithBot Nat))
+    (hA : 1 <= samplerA)
+    (hscore : ActualTaggedMZSideDraw.sideConditionalDensity I copies U
+        (ActualStarFixedRhoDimensionGuard.leafT m
+          (ActualCmmsaParameterReconciliation.hBlock L m))
+        (ActualCmmsaParameterReconciliation.hBlock L m) m C T >=
+      ActualStarAcceptedGoodMass.successMargin
+        (ActualStarFixedRhoDimensionGuard.badExponent m
+          (ActualCmmsaParameterReconciliation.hBlock L m)))
+    (hHC : ActualSelectedComplementAnalyticMoment.HC46ExactContract)
+    (hSpectral : ActualSelectedComplementAnalyticMoment.Spectral47ExactContract cutoff) :
+    ∃ A : SideComplement I copies U,
+      ∃ q : Nat, ∃ Q : Grass A.1 q,
+      ∃ P : ActualMaximalPairLadder.DecodedPair Q
+        (ActualStarFixedRhoDimensionGuard.leafT m
+            (ActualCmmsaParameterReconciliation.hBlock L m) +
+          ActualStarFixedRhoDimensionGuard.leafK m
+            (ActualCmmsaParameterReconciliation.hBlock L m)),
+        q + ActualMaximalPairLadder.codim P.W = sourceRankExponent m ∧
+        Ne (Fintype.card (ActualMaximalPairLadder.Zoom Q P)) 0 ∧
+        manuscriptAgreementFloor m
+          (ActualCmmsaParameterReconciliation.hBlock L m) <
+          (ActualMaximalPairLadder.agreement
+            (ActualTaggedComplementStarDensityBridge.transportedLeafTable
+              I copies U A T) Q P : Real) := by
+  classical
+  by_contra hNoBadZoom
+  let h := ActualCmmsaParameterReconciliation.hBlock L m
+  have htheta : 0 < manuscriptAgreementFloor m h := by
+    unfold manuscriptAgreementFloor
+    exact Real.rpow_pos_of_pos (by norm_num) _
+  have hgap : manuscriptAgreementFloor m h <
+      2 * manuscriptAgreementFloor m h := by
+    nlinarith
+  obtain ⟨e, he, he'⟩ := exists_rat_btwn hgap
+  have hfailSource : forall (A : SideComplement I copies U)
+      (q : Nat) (Q : Grass A.1 q)
+      (P : ActualMaximalPairLadder.DecodedPair Q
+        (ActualStarFixedRhoDimensionGuard.leafT m h +
+          ActualStarFixedRhoDimensionGuard.leafK m h)),
+      q + ActualMaximalPairLadder.codim P.W = sourceRankExponent m →
+        Ne (Fintype.card (ActualMaximalPairLadder.Zoom Q P)) 0 →
+          ActualMaximalPairLadder.agreement
+            (ActualTaggedComplementStarDensityBridge.transportedLeafTable
+              I copies U A T) Q P ≤ e := by
+    intro A q Q P hrank hcard
+    by_contra hnotle
+    have hnotReal : ¬
+        ((ActualMaximalPairLadder.agreement
+          (ActualTaggedComplementStarDensityBridge.transportedLeafTable
+            I copies U A T) Q P : Rat) : Real) ≤ (e : Real) := by
+      intro hleReal
+      apply hnotle
+      exact_mod_cast hleReal
+    have hgt := lt_of_not_ge hnotReal
+    exact hNoBadZoom ⟨A, q, Q, P, hrank, hcard, he.trans hgt⟩
+  have hfalse := original_score_and_failure_same_witness_contradiction
+    I copies U C T cutoff hsel hA hscore e hfailSource he he' hHC hSpectral
+  exact False.elim hfalse
+
+end
+end PvNP.RealizableHardness.ActualSelectedComplementAnalyticMargin
