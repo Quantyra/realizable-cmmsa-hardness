@@ -287,14 +287,20 @@ proof of an analytic estimate.
 
 The hypercontractive subcontract must use the existing
 `BinaryMatrixFourier.PseudorandomExact`, Boolean indicator, rank projection
-and normalized `lpNorm`: for every matrix shape, nominal restriction budget
-`r`, positive rank `i <= r`, and dyadic `p >= 4`, with `0 <= delta <= 1`,
+and normalized `lpNorm`: for the source-checked matrix shapes with even leaf
+width, nominal restriction budget `r`, positive rank `i <= r`, and dyadic
+`p >= 4`, with nonnegative `delta` and no added `delta <= 1` premise,
 its conclusion is
 `lpNorm p (rankProjection i (indicator f)) <= 2^(500*i^2*p) * delta^(1-2/p)`.
 Dependent or zero restriction equations and zero dimensions remain within
 the typed domain. No basis-invariance or full-rank-conditioning premise
 belongs to this hypercontractive field. The nominal-to-source restriction
 alignment remains an explicit obligation.
+
+The fresh primary-source conditions audit in
+`docs/mz-classical-analytic-contract-conditions-2026-09-29.md` supersedes the
+earlier proposed delta<=1 guard and unrestricted-width wording. It is a
+source-condition assessment, not an inhabited Lean contract.
 
 The spectral subcontract must separately preserve Lemma 4.7's exact
 operators, normalized averages, source applicability and basis-invariance
