@@ -871,8 +871,7 @@ theorem selected_leaf_high_energy_le_spectral
 theorem real_pow_moment_div_m_eq_pow {m k : Nat} (hm : 0 < m)
     (x : Real) (hx : 0 ≤ x) :
     (x ^ m) ^ ((k : Real) / (m : Real)) = x ^ k := by
-  change Real.rpow (Real.rpow x (m : Real)) ((k : Real) / (m : Real)) =
-    Real.rpow x (k : Real)
+  rw [← Real.rpow_natCast x m, ← Real.rpow_natCast x k]
   have hmR : (m : Real) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
   have hexp : (m : Real) * ((k : Real) / (m : Real)) = (k : Real) := by
     field_simp [hmR]
@@ -881,7 +880,6 @@ theorem real_pow_moment_div_m_eq_pow {m k : Nat} (hm : 0 < m)
         Real.rpow x ((m : Real) * ((k : Real) / (m : Real))) :=
       (Real.rpow_mul hx (m : Real) ((k : Real) / (m : Real))).symm
     _ = Real.rpow x (k : Real) := by rw [hexp]
-    _ = x ^ k := by rw [Real.rpow_natCast]
 
 theorem exists_dyadic_moment_exponent_window {m : Nat} (hm : 0 < m) :
     ∃ k q : Nat, k = 2 ^ q ∧ 4 * m ≤ k ∧ k < 8 * m := by
