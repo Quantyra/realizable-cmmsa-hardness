@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
+
+#check globalFunctionalRowEquiv
+#print axioms globalFunctionalRowEquiv
+#check globalFunctionalRow_average_reindex
+#print axioms globalFunctionalRow_average_reindex
+#check actualA18RankOne_entry
+#print axioms actualA18RankOne_entry
+#check toMatrix'_add_rankOne
+#print axioms toMatrix'_add_rankOne
+#check actualA18_sourceSample_eq_ambient
+#print axioms actualA18_sourceSample_eq_ambient
