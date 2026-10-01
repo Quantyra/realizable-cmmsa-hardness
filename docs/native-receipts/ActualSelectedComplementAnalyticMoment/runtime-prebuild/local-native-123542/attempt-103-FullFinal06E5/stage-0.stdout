@@ -1,0 +1,163 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:156:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:157:6: error: 'change' tactic failed, pattern
+  (carrierMean ⊥ ⊤ fun M => Complex.normSq (f (bottomTopAmbientMatrixEquiv M))) ≤ eps
+is not definitionally equal to target
+  (∑ M ∈ Q0.fibre, Complex.normSq ((fun M => f (bottomTopAmbientMatrixEquiv M)) M)) / ↑Q0.fibre.card ≤ eps
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:207:8: error: Type mismatch
+  mul_nonneg
+    (pow_nonneg
+      (Mathlib.Meta.NormNum.isNat_le_true (Mathlib.Meta.NormNum.isNat_ofNat ℝ Nat.cast_zero)
+        (Mathlib.Meta.NormNum.isNat_ofNat ℝ (Eq.refl 2)) (Eq.refl true))
+      ?m.995)
+    heps
+has type
+  0 ≤ 2 ^ ?m.995 * eps
+but is expected to have type
+  (∑ x, 0) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.V✝ d ⧸
+              A →ₗ[PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.F✝]
+            ↥B)) ≤
+    2 ^ (10 * D ^ 2) * eps
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:211:14: error: Type mismatch: After simplification, term
+  hkpos
+ has type
+  l = 0 → ¬h = 0
+but is expected to have type
+  A = ⊥ → ¬n - Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:211:41: error: Type mismatch: After simplification, term
+  hki
+ has type
+  l + h ≤ i
+but is expected to have type
+  Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A +
+      (n - Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B) ≤
+    i
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:213:34: error(lean.unknownIdentifier): Unknown identifier `complexRealDotFinal`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:224:14: error(lean.unknownIdentifier): Unknown identifier `complexRealDotFinal`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:216:6: error: unsolved goals
+case pos
+n d D : ℕ
+eps : ℝ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+l : ℕ := Module.finrank F ↥A
+h : ℕ := Module.finrank F ↥⊤ - Module.finrank F ↥B
+k : ℕ := l + h
+lines : DomainLineFlag ⊥ (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A)
+hlines : lines.endpoint = A
+hypers :
+  CodomainHyperplaneFlag ⊤
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥⊤ -
+      Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+hhypers : hypers.endpoint = B
+hquot : Module.finrank F (W n ⧸ B) + Module.finrank F ↥B = Module.finrank F (W n)
+htop : Module.finrank F ↥⊤ = Module.finrank F (W n)
+hcod : h = Module.finrank F (W n ⧸ B)
+hk : k = Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+heps : 0 ≤ eps
+hkzero : ¬k = 0
+hkpos : k ≠ 0
+levels : Finset ℕ := Finset.range (D + 1)
+g : ℕ → (V d ⧸ A →ₗ[F] ↥B) → ℂ := fun i M => filteredCarrierFunction A B T (complexRankProjection i f) M
+hlevel : ∀ i ∈ levels, (carrierMean A B fun M => Complex.normSq (g i M)) ≤ 2 ^ (10 * D ^ 2) * eps
+i : ℕ
+hi : i ∈ levels
+j : ℕ
+hj : j ∈ levels
+hij : i ≠ j
+hilo : i < k
+hlowNorm : i < Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+hz : filteredCarrierFunction A B T (complexRankProjection i f) = 0
+hzero : g i = fun x => 0
+⊢ (carrierMean A B fun M => sorry ()) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:234:16: error(lean.unknownIdentifier): Unknown identifier `complexRealDotFinal`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:226:8: error: unsolved goals
+case pos
+n d D : ℕ
+eps : ℝ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+l : ℕ := Module.finrank F ↥A
+h : ℕ := Module.finrank F ↥⊤ - Module.finrank F ↥B
+k : ℕ := l + h
+lines : DomainLineFlag ⊥ (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A)
+hlines : lines.endpoint = A
+hypers :
+  CodomainHyperplaneFlag ⊤
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥⊤ -
+      Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+hhypers : hypers.endpoint = B
+hquot : Module.finrank F (W n ⧸ B) + Module.finrank F ↥B = Module.finrank F (W n)
+htop : Module.finrank F ↥⊤ = Module.finrank F (W n)
+hcod : h = Module.finrank F (W n ⧸ B)
+hk : k = Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+heps : 0 ≤ eps
+hkzero : ¬k = 0
+hkpos : k ≠ 0
+levels : Finset ℕ := Finset.range (D + 1)
+g : ℕ → (V d ⧸ A →ₗ[F] ↥B) → ℂ := fun i M => filteredCarrierFunction A B T (complexRankProjection i f) M
+hlevel : ∀ i ∈ levels, (carrierMean A B fun M => Complex.normSq (g i M)) ≤ 2 ^ (10 * D ^ 2) * eps
+i : ℕ
+hi : i ∈ levels
+j : ℕ
+hj : j ∈ levels
+hij : i ≠ j
+hilo : ¬i < k
+hjlo : j < k
+hlowNorm : j < Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+hz : filteredCarrierFunction A B T (complexRankProjection j f) = 0
+hzero : g j = fun x => 0
+⊢ (carrierMean A B fun M => sorry ()) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:238:48: error: Type mismatch: After simplification, term
+  hkpos
+ has type
+  l = 0 → ¬h = 0
+but is expected to have type
+  A = ⊥ → ¬n - Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:239:16: error: Type mismatch: After simplification, term
+  hik
+ has type
+  l + h ≤ i
+but is expected to have type
+  Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A +
+      (n - Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B) ≤
+    i
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:241:48: error: Type mismatch: After simplification, term
+  hkpos
+ has type
+  l = 0 → ¬h = 0
+but is expected to have type
+  A = ⊥ → ¬n - Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:242:16: error: Type mismatch: After simplification, term
+  hjk
+ has type
+  l + h ≤ j
+but is expected to have type
+  Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A +
+      (n - Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B) ≤
+    j
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:224:35: warning: This simp argument is unused:
+  hzero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [complexRealDotFinal]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:234:37: warning: This simp argument is unused:
+  hzero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [complexRealDotFinal]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
