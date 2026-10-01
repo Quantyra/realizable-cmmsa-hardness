@@ -1,0 +1,68 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+import PvNP.RealizableHardness.BinaryMatrixA15BaseCase
+
+namespace PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+
+open ActualBinaryMatrixHC46TypedFourierTransport
+open BinaryMatrixTypedA14Line BinaryMatrixA15BaseCase
+open BinaryMatrixFourier BinaryMatrixComplexA15
+open scoped BigOperators
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+private noncomputable instance carrierMapFintype {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) :
+    Fintype ((V d ⧸ A) →ₗ[F] B) := by
+  classical
+  letI : Fintype (V d ⧸ A) := Fintype.ofFinite _
+  letI : Fintype B := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+private noncomputable instance submoduleFintype {n : Nat}
+    (B : Submodule F (W n)) : Fintype B := Fintype.ofFinite _
+
+/-- A single typed Fourier rank projection cannot have more squared energy
+than the original carrier function. This is the typed Parseval contraction
+needed when applying a tower terminal estimate to its residual-rank projection.
+The proof transports both normalized means through the actual A1 matrix
+coordinate equivalence, then invokes the existing matrix Bessel bound. -/
+theorem typedComplexRankProjection_energy_le {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex) :
+    BinaryMatrixA1TypedFourier.carrierMean A B
+      (fun M => Complex.normSq (typedComplexRankProjection A B j f M)) ≤
+    BinaryMatrixA1TypedFourier.carrierMean A B
+      (fun M => Complex.normSq (f M)) := by
+  classical
+  rw [carrierComplexEnergy_coordinate A B
+        (fun M => typedComplexRankProjection A B j f M),
+      carrierComplexEnergy_coordinate A B f]
+  let fCoord : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A)) → Complex :=
+    fun X => f ((carrierMatrixEquiv A B).symm X)
+  have hprojection :
+      (fun X => typedComplexRankProjection A B j f
+        ((carrierMatrixEquiv A B).symm X)) =
+      complexRankProjection j fCoord := by
+    funext X
+    calc
+      typedComplexRankProjection A B j f ((carrierMatrixEquiv A B).symm X) =
+          carrierTypedComplexRankProjection A B j f
+            ((carrierMatrixEquiv A B).symm X) :=
+        (carrierTypedRankProjection_eq_A14Line A B f
+          ((carrierMatrixEquiv A B).symm X)).symm
+      _ = complexRankProjection j fCoord X := by
+        rw [carrierTypedRankProjection_coordinate]
+        simp [fCoord]
+  rw [hprojection]
+  simpa [fCoord, fibreEnergy, uniformMean] using
+    complexRankProjection_energy_le fCoord
+
+end
+end PvNP.RealizableHardness.ActualTypedABProjectionEnergy
