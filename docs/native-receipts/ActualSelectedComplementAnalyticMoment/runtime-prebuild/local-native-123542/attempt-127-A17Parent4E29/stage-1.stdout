@@ -1,0 +1,120 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.carrierAmbientQuotientHomEquiv {n d : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n)}
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B) :
+  ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d ⧸ A) ⧸
+        Q.domainFixed →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      ↥Q.codomainVariation) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d ⧸
+        Submodule.comap A.mkQ Q.domainFixed →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      ↥(Submodule.map B.subtype Q.codomainVariation)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.carrierAmbientQuotientHomEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.carrierAmbientLiftFibreEquiv {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B) :
+  ↥Q.fibre ≃ ↥(PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierRestriction A B T Q).fibre
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.carrierAmbientLiftFibreEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.carrierAmbientLiftFibreEquiv_normalizedMean {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B)
+  (g : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℝ) :
+  (∑ x, g ↑((carrierAmbientLiftFibreEquiv A B T Q) x)) / ↑(Fintype.card ↥Q.fibre) =
+    (∑ y, g ↑y) /
+      ↑(Fintype.card ↥(PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierRestriction A B T Q).fibre)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.carrierAmbientLiftFibreEquiv_normalizedMean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.liftCarrierMatrix_mem_actual_fibre {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      ↥B)
+  (hM : M ∈ Q.fibre) :
+  PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierMatrix A B T M ∈
+    (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierRestriction A B T Q).fibre
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.liftCarrierMatrix_mem_actual_fibre' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.carrierAmbientLiftFibreEquiv_apply {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      ↥B)
+  (hM : M ∈ Q.fibre) :
+  (carrierAmbientLiftFibreEquiv A B T Q) ⟨M, hM⟩ =
+    ⟨PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierMatrix A B T M, ⋯⟩
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.carrierAmbientLiftFibreEquiv_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.liftCarrierMatrix_normalizedMean {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B)
+  (g : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℝ) :
+  (∑ x, g (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierMatrix A B T ↑x)) /
+      ↑(Fintype.card ↥Q.fibre) =
+    (∑ y, g ↑y) /
+      ↑(Fintype.card ↥(PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierRestriction A B T Q).fibre)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.liftCarrierMatrix_normalizedMean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
