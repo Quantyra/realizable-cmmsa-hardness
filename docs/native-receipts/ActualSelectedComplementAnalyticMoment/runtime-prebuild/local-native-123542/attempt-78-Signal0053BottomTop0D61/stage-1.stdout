@@ -1,0 +1,37 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:139:20: error: don't know how to synthesize implicit argument `d`
+  @bottomTopDomainEquiv ?m.193
+context:
+n d j : ℕ
+f : BinaryMatrix n d → ℂ
+M : V d ⧸ ⊥ →ₗ[F] ↥⊤
+htyped :
+  typedComplexRankProjection ⊥ ⊤ j (fun N => f (bottomTopAmbientMatrixEquiv N)) M =
+    complexLinearMapRankProjection j (fun N => f (LinearMap.toMatrix' (bottomTopCarrierAmbientHomEquiv N))) M
+⊢ ℕ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:139:14: error: failed to infer `let` declaration type
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:138:47: error: unsolved goals
+n d j : ℕ
+f : BinaryMatrix n d → ℂ
+M : V d ⧸ ⊥ →ₗ[F] ↥⊤
+htyped :
+  typedComplexRankProjection ⊥ ⊤ j (fun N => f (bottomTopAmbientMatrixEquiv N)) M =
+    complexLinearMapRankProjection j (fun N => f (LinearMap.toMatrix' (bottomTopCarrierAmbientHomEquiv N))) M
+⊢ complexLinearMapRankProjection j (fun N => f (LinearMap.toMatrix' (bottomTopCarrierAmbientHomEquiv N))) M =
+    complexLinearMapRankProjection j (fun L => f (LinearMap.toMatrix' L)) (bottomTopCarrierAmbientHomEquiv M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:178:39: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Matrix.transpose ?A).rank
+in the target expression
+  ((Matrix.transposeAddEquiv (Fin d) (Fin n) F).toFun (LinearMap.toMatrix' Y)).rank = Module.finrank F ↥Y.range
+
+n d : ℕ
+Y : W n →ₗ[F] V d
+⊢ ((Matrix.transposeAddEquiv (Fin d) (Fin n) F).toFun (LinearMap.toMatrix' Y)).rank = Module.finrank F ↥Y.range
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:238:2: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:255:4: warning: This simp argument is unused:
+  LinearEquiv.arrowCongr_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [bottomTopAmbientMatrixEquiv, bottomTopCarrierAmbientHomEquiv, bottomTopDomainEquiv,
+    bottomTopCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
