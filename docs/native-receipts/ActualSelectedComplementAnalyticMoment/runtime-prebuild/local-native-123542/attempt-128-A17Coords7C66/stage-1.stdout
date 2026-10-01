@@ -1,0 +1,18 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46QuotientCoordinates.quotientCoordinateEquiv.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [FiniteDimensional (ZMod 2) V] (U : Submodule (ZMod 2) V) :
+  (V ⧸ U) ≃ₗ[ZMod 2] Fin (Module.finrank (ZMod 2) (V ⧸ U)) → ZMod 2
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46QuotientCoordinates.quotientCoordinateEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46QuotientCoordinates.quotient_finrank_eq_finrank_sub_one.{u_1}
+  {V : Type u_1} [AddCommGroup V] [Module (ZMod 2) V] [FiniteDimensional (ZMod 2) V] (U : Submodule (ZMod 2) V)
+  (hU : Module.finrank (ZMod 2) ↥U = 1) : Module.finrank (ZMod 2) (V ⧸ U) = Module.finrank (ZMod 2) V - 1
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46QuotientCoordinates.quotient_finrank_eq_finrank_sub_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46QuotientCoordinates.lineQuotientCoordinateEquiv.{u_1} {V : Type u_1}
+  [AddCommGroup V] [Module (ZMod 2) V] [FiniteDimensional (ZMod 2) V] (U : Submodule (ZMod 2) V)
+  (hU : Module.finrank (ZMod 2) ↥U = 1) : (V ⧸ U) ≃ₗ[ZMod 2] Fin (Module.finrank (ZMod 2) V - 1) → ZMod 2
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46QuotientCoordinates.lineQuotientCoordinateEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
