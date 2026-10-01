@@ -1,0 +1,121 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average {n d : ℕ} (v : Fin d → ZMod 2)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.restrictedFunctionals_nonempty_of_ne_zero {d : ℕ}
+  (A : Submodule (ZMod 2) (Fin d → ZMod 2)) (v : ↥A) (hv : ↑v ≠ 0) :
+  Nonempty (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.RestrictedFunctionals A v)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.restrictedFunctionals_nonempty_of_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18SourceSample {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (R : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation)
+  (lambda : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2) (w : Fin n → ZMod 2) :
+  PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18SourceSample_eq_base_add {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (R : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation)
+  (lambda : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2) (w : Fin n → ZMod 2) :
+  actualA18SourceSample Q phi v hv R lambda w =
+    Q.base +
+      LinearMap.toMatrix'
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput Q.codomainVariation
+            (Submodule.factor ⋯) (Classical.choose ⋯) R lambda w ∘ₗ
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed
+              phi).mkQ)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18SourceSample_eq_base_add' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.complex_product_average_eq_iterated.{u_1, u_2}
+  {α : Type u_1} {β : Type u_2} [Fintype α] [Fintype β] (z : α × β → ℂ) :
+  (∑ p, z p) / ↑(Fintype.card (α × β)) = (∑ a, (∑ b, z (a, b)) / ↑(Fintype.card β)) / ↑(Fintype.card α)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.complex_product_average_eq_iterated' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average_eq_sourceCoordinates {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (v : ↥Q.domainFixed)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (hv : phi v = 1)
+  (R : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  actualA18Average (↑v) f
+      ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv Q).symm R) =
+    (∑ p, f (actualA18SourceSample Q (↑p.1) v ⋯ R p.2.1 p.2.2)) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.RestrictedFunctionals Q.domainFixed v ×
+            ((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2) × (Fin n → ZMod 2)))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average_eq_sourceCoordinates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average_eq_average_sourceLineMean
+  {n d : ℕ} (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (v : ↥Q.domainFixed)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (hv : phi v = 1)
+  (R : PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.QuotientHom Q.domainFixed Q.codomainVariation)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  actualA18Average (↑v) f
+      ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv Q).symm R) =
+    (∑ phi', actualA18SourceLineMean Q v phi' R f) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.RestrictedFunctionals Q.domainFixed v))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average_eq_average_sourceLineMean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.normSq_complex_product_average_le.{u_1, u_2}
+  {α : Type u_1} {β : Type u_2} [Fintype α] [Nonempty α] [Fintype β] [Nonempty β] (z : α × β → ℂ) :
+  Complex.normSq ((∑ p, z p) / ↑(Fintype.card (α × β))) ≤
+    (∑ a, Complex.normSq ((∑ b, z (a, b)) / ↑(Fintype.card β))) / ↑(Fintype.card α)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.normSq_complex_product_average_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.real_finite_mean_swap.{u_1, u_2} {α : Type u_1}
+  {β : Type u_2} [Fintype α] [Fintype β] (z : α × β → ℝ) :
+  (∑ b, (∑ a, z (a, b)) / ↑(Fintype.card α)) / ↑(Fintype.card β) =
+    (∑ a, (∑ b, z (a, b)) / ↑(Fintype.card β)) / ↑(Fintype.card α)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.real_finite_mean_swap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18SourceLineMean {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (v : ↥Q.domainFixed)
+  (phi : PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.RestrictedFunctionals Q.domainFixed v)
+  (R : PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.QuotientHom Q.domainFixed Q.codomainVariation)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) : ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18_source_restricted_mean_energy_le_two
+  {n d s : ℕ} {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (v : ↥Q.domainFixed) (hv : ↑v ≠ 0) :
+  (∑ phi,
+        (∑ R, Complex.normSq (actualA18SourceLineMean Q v phi R f)) /
+          ↑(Fintype.card
+              (PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.QuotientHom Q.domainFixed
+                Q.codomainVariation))) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.RestrictedFunctionals Q.domainFixed
+            v)) ≤
+    2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18_source_restricted_mean_energy_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average_normSq_le_sourceMean {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (v : ↥Q.domainFixed) (hv : ↑v ≠ 0)
+  (R : PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.QuotientHom Q.domainFixed Q.codomainVariation)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  Complex.normSq
+      (actualA18Average (↑v) f
+        ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv Q).symm R)) ≤
+    (∑ phi, Complex.normSq (actualA18SourceLineMean Q v phi R f)) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.RestrictedFunctionals Q.domainFixed v))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average_normSq_le_sourceMean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18_parent_fibre_energy_le_two_inside
+  {n d s : ℕ} {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (v : ↥Q.domainFixed) (hv : ↑v ≠ 0) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy Q.fibre (actualA18Average (↑v) f) ≤ 2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18_parent_fibre_energy_le_two_inside' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
