@@ -1,0 +1,52 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:122:82: error: unsolved goals
+n d j : ℕ
+f : BinaryMatrix n d → ℂ
+M N : V d ⧸ ⊥ →ₗ[F] ↥⊤
+⊢ f (LinearMap.toMatrix' (⊤.subtype ∘ₗ N ∘ₗ ⊥.mkQ)) = f (LinearMap.toMatrix' (bottomTopCarrierAmbientHomEquiv N))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:137:47: error: unsolved goals
+n d j : ℕ
+f : BinaryMatrix n d → ℂ
+M : V d ⧸ ⊥ →ₗ[F] ↥⊤
+htyped :
+  typedComplexRankProjection ⊥ ⊤ j (fun N => f (bottomTopAmbientMatrixEquiv N)) M =
+    complexLinearMapRankProjection j (fun N => f (LinearMap.toMatrix' (bottomTopCarrierAmbientHomEquiv N))) M
+⊢ complexLinearMapRankProjection j (fun N => f (LinearMap.toMatrix' (bottomTopCarrierAmbientHomEquiv N))) M =
+    complexLinearMapRankProjection j (fun L => f (LinearMap.toMatrix' L)) (bottomTopCarrierAmbientHomEquiv M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:174:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Matrix.transpose ?A).rank
+in the target expression
+  Matrix.rank ((Matrix.transposeLinearEquiv (Fin d) (Fin n) F F) (LinearMap.toMatrix' Y)) = Module.finrank F ↥Y.range
+
+n d : ℕ
+Y : W n →ₗ[F] V d
+⊢ Matrix.rank ((Matrix.transposeLinearEquiv (Fin d) (Fin n) F F) (LinearMap.toMatrix' Y)) = Module.finrank F ↥Y.range
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:230:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Matrix.rank (ambientFrequencyMatrixEquiv ?Y)
+in the target expression
+  (if Module.finrank PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝ ↥Y.range = j then
+      complexLinearMapFourierCoeff (fun L => f (LinearMap.toMatrix' L)) Y * ↑(traceCharacter Y M)
+    else 0) =
+    if Matrix.rank (ambientFrequencyMatrixEquiv.toEquiv Y) = j then
+      BinaryMatrixA1Complex.complexFourierCoeff f (ambientFrequencyMatrixEquiv.toEquiv Y) *
+        ↑(character (ambientFrequencyMatrixEquiv.toEquiv Y) (LinearMap.toMatrix' M))
+    else 0
+
+n d j : ℕ
+f : BinaryMatrix n d → ℂ
+M : V d →ₗ[F] W n
+Y : W n →ₗ[F] V d
+⊢ (if Module.finrank PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝ ↥Y.range = j then
+      complexLinearMapFourierCoeff (fun L => f (LinearMap.toMatrix' L)) Y * ↑(traceCharacter Y M)
+    else 0) =
+    if Matrix.rank (ambientFrequencyMatrixEquiv.toEquiv Y) = j then
+      BinaryMatrixA1Complex.complexFourierCoeff f (ambientFrequencyMatrixEquiv.toEquiv Y) *
+        ↑(character (ambientFrequencyMatrixEquiv.toEquiv Y) (LinearMap.toMatrix' M))
+    else 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:249:4: warning: This simp argument is unused:
+  LinearEquiv.arrowCongr_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [bottomTopAmbientMatrixEquiv, bottomTopCarrierAmbientHomEquiv, bottomTopDomainEquiv,
+    bottomTopCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
