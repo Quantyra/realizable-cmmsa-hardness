@@ -1,0 +1,62 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:125:4: error: Type mismatch: After simplification, term
+  typed_line_A1_operator_step U A B hU hL T S f N
+ has type
+  @Eq ℂ
+    (typedComplexLineFilter B (Submodule.map U.mkQ A) hL
+      (fun M => complexAmbientAffineRestrict U B T (complexAmbientHybridFilter U B f) M)
+      (S + N ∘ₗ (Submodule.map U.mkQ A).mkQ))
+    (complexAmbientAffineRestrict A B (T + B.subtype ∘ₗ S ∘ₗ U.mkQ) (complexAmbientHybridFilter A B f)
+      ((lineCanonicalEquiv U A B hU) N))
+but is expected to have type
+  @Eq ℂ
+    (typedComplexLineFilter B (Submodule.map U.mkQ A) hL (fun M => filteredCarrierFunction U B T f M)
+      (S + N ∘ₗ (Submodule.map U.mkQ A).mkQ))
+    (filteredCarrierFunction A B (T + B.subtype ∘ₗ S ∘ₗ U.mkQ) f (e N))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:168:11: error: don't know how to synthesize implicit argument `A`
+  @hyperplaneCanonicalEquiv n ?m.108 ?m.109 B H
+context:
+n d D : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hinfl : OriginalActualInfluenceThrough D eps f
+A : Submodule F (V d)
+B : Submodule F (W n)
+H : Submodule F ↥B
+hH : Module.finrank F (↥B ⧸ H) = 1
+T : V d →ₗ[F] W n
+S : V d ⧸ A →ₗ[F] ↥B
+horder : Module.finrank F ↥A + Module.finrank F (W n ⧸ hyperplaneCanonicalCodomain B H) ≤ D
+⊢ Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+    (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ ?m.108)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:168:11: error: don't know how to synthesize implicit argument `d`
+  @hyperplaneCanonicalEquiv n ?m.108 ?m.109 B H
+context:
+n d D : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hinfl : OriginalActualInfluenceThrough D eps f
+A : Submodule F (V d)
+B : Submodule F (W n)
+H : Submodule F ↥B
+hH : Module.finrank F (↥B ⧸ H) = 1
+T : V d →ₗ[F] W n
+S : V d ⧸ A →ₗ[F] ↥B
+horder : Module.finrank F ↥A + Module.finrank F (W n ⧸ hyperplaneCanonicalCodomain B H) ≤ D
+⊢ ℕ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:168:6: error: failed to infer `let` declaration type
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:167:42: error: unsolved goals
+n d D : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hinfl : OriginalActualInfluenceThrough D eps f
+A : Submodule F (V d)
+B : Submodule F (W n)
+H : Submodule F ↥B
+hH : Module.finrank F (↥B ⧸ H) = 1
+T : V d →ₗ[F] W n
+S : V d ⧸ A →ₗ[F] ↥B
+horder : Module.finrank F ↥A + Module.finrank F (W n ⧸ hyperplaneCanonicalCodomain B H) ≤ D
+⊢ (a18UniformMean fun N =>
+      Complex.normSq
+        (typedComplexHyperplaneFilter B H hH (fun M => filteredCarrierFunction A B T f M) (S + H.subtype ∘ₗ N))) ≤
+    eps
