@@ -1,0 +1,243 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalProjection
+import PvNP.RealizableHardness.ActualTypedABHybridSelectorSteps
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixFourier
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+
+open ActualTypedABCanonicalProjection
+open ActualTypedABCanonicalFlag
+open ActualTypedABRankedTower
+open ActualTypedABHybridSelectorSteps
+open BinaryMatrixA1Complex
+open BinaryMatrixA1NestedCarrier
+open BinaryMatrixA15NestedHyperplane
+open BinaryMatrixA15NestedLine
+open BinaryMatrixTypedA14Line
+open BinaryMatrixTypedA14Hyperplane
+open BinaryMatrixTypedA15ReducedGlobal
+open BinaryMatrixTypedA15HyperplaneReducedGlobal
+open BinaryMatrixFourier
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- The current carrier presentation of the manuscript's direct hybrid
+filter followed by its affine restriction. -/
+def filteredCarrierFunction {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) : Complex :=
+  complexAmbientAffineRestrict A B T
+    (complexAmbientHybridFilter A B f) M
+
+/-- Collapsing a genuine zero-base hyperplane suffix by the existing complex
+A1 composition theorem. The induction keeps the original ambient source
+function and total affine base fixed; each selected step changes only the
+actual codomain carrier. -/
+theorem hyperplane_suffix_A1_collapse {n d h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (flag : CodomainHyperplaneFlag B h) :
+    ∀ {r : Nat} (fStored : ((V d ⧸ A) →ₗ[F] B) → Complex)
+      (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex),
+      applyCanonicalFilters (buildHyperplaneSuffix (r := r) (f := fStored) flag)
+        (filteredCarrierFunction A B T f) =
+      filteredCarrierFunction A
+        (rankedTerminalData
+          (buildHyperplaneSuffix (r := r) (f := fStored) flag)).Bend T f := by
+  induction flag with
+  | done B =>
+      intro r fStored T f
+      rfl
+  | @cons B H hH k tail ih =>
+      intro r fStored T f
+      let fChild := fun N : (V d ⧸ A) →ₗ[F] H =>
+        typedHyperplaneReducedWitness (k := r + k) B H hH 0 fStored
+          ((Submodule.equivMapOfInjective B.subtype
+            B.injective_subtype H).symm.toLinearMap.comp N)
+      let tailTower := buildHyperplaneSuffix (r := r) (f := fChild) tail
+      have hstep :
+          (fun M : (V d ⧸ A) →ₗ[F] (H.map B.subtype) =>
+            typedComplexHyperplaneFilter B H hH (filteredCarrierFunction A B T f)
+              (H.subtype.comp
+                ((hyperplaneCanonicalEquiv B H).symm M))) =
+          filteredCarrierFunction A (H.map B.subtype) T f := by
+        funext M
+        simpa [filteredCarrierFunction, add_zero,
+          LinearEquiv.apply_symm_apply] using
+          (typed_hyperplane_A1_operator_step A B H hH T 0 f
+            ((hyperplaneCanonicalEquiv B H).symm M))
+      change applyCanonicalFilters tailTower
+          (fun M : (V d ⧸ A) →ₗ[F] (H.map B.subtype) =>
+            typedComplexHyperplaneFilter B H hH (filteredCarrierFunction A B T f)
+              (H.subtype.comp
+                ((hyperplaneCanonicalEquiv B H).symm M))) =
+        filteredCarrierFunction A
+          (rankedTerminalData tailTower).Bend T f
+      rw [hstep]
+      exact ih fChild T f
+
+/-- The full all-zero-base lines-first suffix collapses by induction using
+the line and hyperplane A1 equations. The source function and affine base
+remain the same while the canonical quotient and subtype carriers evolve. -/
+theorem line_suffix_A1_collapse {n d l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (lines : DomainLineFlag A l) (hypers : CodomainHyperplaneFlag B h) :
+    ∀ {r : Nat} (fStored : ((V d ⧸ A) →ₗ[F] B) → Complex)
+      (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex),
+      applyCanonicalFilters
+        (buildLineSuffix (r := r) (f := fStored) lines hypers)
+        (filteredCarrierFunction A B T f) =
+      filteredCarrierFunction
+        (rankedTerminalData
+          (buildLineSuffix (r := r) (f := fStored) lines hypers)).Aend
+        (rankedTerminalData
+          (buildLineSuffix (r := r) (f := fStored) lines hypers)).Bend T f := by
+  induction lines with
+  | done A =>
+      intro r fStored T f
+      exact hyperplane_suffix_A1_collapse hypers fStored T f
+  | @cons A A' hA hL k tail ih =>
+      intro r fStored T f
+      let fChild := fun M : (V d ⧸ A') →ₗ[F] B =>
+        typedLineReducedWitness (k := r + (h + k)) B
+          (A'.map A.mkQ) hL 0 fStored
+          (M.comp (nestedDomainEquiv A A' hA).toLinearMap)
+      let tailTower := buildLineSuffix (r := r) (f := fChild) tail hypers
+      have hstep :
+          (fun M : (V d ⧸ A') →ₗ[F] B =>
+            typedComplexLineFilter B (A'.map A.mkQ) hL
+              (filteredCarrierFunction A B T f)
+              (((lineCanonicalEquiv A A' B hA).symm M).comp
+                (A'.map A.mkQ).mkQ)) =
+          filteredCarrierFunction A' B T f := by
+        funext M
+        simpa [filteredCarrierFunction, add_zero,
+          LinearEquiv.apply_symm_apply] using
+          (typed_line_A1_operator_step A A' B hA hL T 0 f
+            ((lineCanonicalEquiv A A' B hA).symm M))
+      change applyCanonicalFilters tailTower
+          (fun M : (V d ⧸ A') →ₗ[F] B =>
+            typedComplexLineFilter B (A'.map A.mkQ) hL
+              (filteredCarrierFunction A B T f)
+              (((lineCanonicalEquiv A A' B hA).symm M).comp
+                (A'.map A.mkQ).mkQ)) =
+        filteredCarrierFunction (rankedTerminalData tailTower).Aend
+          (rankedTerminalData tailTower).Bend T f
+      rw [hstep]
+      exact ih fChild T f
+
+/-- The source tower's first actual line step inserts its prescribed carrier
+map into the ambient affine base; after that step, the proved zero-base
+suffix collapse applies to the remaining line and hyperplane flags. -/
+theorem canonical_line_head_A1_collapse {n d r l h : Nat}
+    {A A' : Submodule F (V d)} {B : Submodule F (W n)}
+    (hA : A ≤ A')
+    (hL : Module.finrank F (A'.map A.mkQ) = 1)
+    (tail : DomainLineFlag A' l)
+    (hypers : CodomainHyperplaneFlag B h)
+    (S : (V d ⧸ A) →ₗ[F] B)
+    (ambientf : BinaryMatrix n d → Complex) :
+    let fStored : ((V d ⧸ A) →ₗ[F] B) → Complex :=
+      fun M => filteredCarrierFunction A B 0 ambientf M
+    let fChild : ((V d ⧸ A') →ₗ[F] B) → Complex :=
+      fun M => typedLineReducedWitness (k := r + (h + l)) B
+        (A'.map A.mkQ) hL S fStored
+        (M.comp (nestedDomainEquiv A A' hA).toLinearMap)
+    let tailTower := buildLineSuffix (r := r) (f := fChild) tail hypers
+    applyCanonicalFilters
+        (buildCanonicalSourceTower (r := r) (f := fStored)
+          (.cons hA hL tail) hypers S) fStored =
+      filteredCarrierFunction (rankedTerminalData tailTower).Aend
+        (rankedTerminalData tailTower).Bend
+        (B.subtype.comp (S.comp A.mkQ)) ambientf := by
+  dsimp only
+  let fStored : ((V d ⧸ A) →ₗ[F] B) → Complex :=
+    fun M => filteredCarrierFunction A B 0 ambientf M
+  let fChild : ((V d ⧸ A') →ₗ[F] B) → Complex :=
+    fun M => typedLineReducedWitness (k := r + (h + l)) B
+      (A'.map A.mkQ) hL S fStored
+      (M.comp (nestedDomainEquiv A A' hA).toLinearMap)
+  let tailTower := buildLineSuffix (r := r) (f := fChild) tail hypers
+  have hstep :
+      (fun M : (V d ⧸ A') →ₗ[F] B =>
+        typedComplexLineFilter B (A'.map A.mkQ) hL fStored
+          (S + ((lineCanonicalEquiv A A' B hA).symm M).comp
+            (A'.map A.mkQ).mkQ)) =
+        filteredCarrierFunction A' B
+          (B.subtype.comp (S.comp A.mkQ)) ambientf := by
+    funext M
+    simpa [fStored, filteredCarrierFunction,
+      LinearEquiv.apply_symm_apply] using
+      (typed_line_A1_operator_step A A' B hA hL 0 S ambientf
+        ((lineCanonicalEquiv A A' B hA).symm M))
+  change applyCanonicalFilters tailTower
+      (fun M : (V d ⧸ A') →ₗ[F] B =>
+        typedComplexLineFilter B (A'.map A.mkQ) hL fStored
+          (S + ((lineCanonicalEquiv A A' B hA).symm M).comp
+            (A'.map A.mkQ).mkQ)) =
+    filteredCarrierFunction (rankedTerminalData tailTower).Aend
+      (rankedTerminalData tailTower).Bend
+      (B.subtype.comp (S.comp A.mkQ)) ambientf
+  rw [hstep]
+  exact line_suffix_A1_collapse tail hypers fChild
+    (B.subtype.comp (S.comp A.mkQ)) ambientf
+
+/-- The corresponding first-step law when the source has no domain-line
+constraint to peel. The prescribed map is inserted at the first actual
+hyperplane step, followed by the zero-base hyperplane suffix. -/
+theorem canonical_hyperplane_head_A1_collapse {n d r h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (H : Submodule F B)
+    (hH : Module.finrank F (B ⧸ H) = 1)
+    (tail : CodomainHyperplaneFlag (H.map B.subtype) h)
+    (S : (V d ⧸ A) →ₗ[F] B)
+    (ambientf : BinaryMatrix n d → Complex) :
+    let fStored : ((V d ⧸ A) →ₗ[F] B) → Complex :=
+      fun M => filteredCarrierFunction A B 0 ambientf M
+    let fChild : ((V d ⧸ A) →ₗ[F] (H.map B.subtype)) → Complex :=
+      fun M => typedHyperplaneReducedWitness (k := r + h) B H hH S fStored
+        ((Submodule.equivMapOfInjective B.subtype B.injective_subtype H).symm.toLinearMap.comp M)
+    let tailTower := buildHyperplaneSuffix (r := r) (f := fChild) tail
+    applyCanonicalFilters
+        (buildCanonicalSourceTower (r := r) (f := fStored)
+          (.done A) (.cons H hH tail) S) fStored =
+      filteredCarrierFunction A (rankedTerminalData tailTower).Bend
+        (B.subtype.comp (S.comp A.mkQ)) ambientf := by
+  dsimp only
+  let fStored : ((V d ⧸ A) →ₗ[F] B) → Complex :=
+    fun M => filteredCarrierFunction A B 0 ambientf M
+  let fChild : ((V d ⧸ A) →ₗ[F] (H.map B.subtype)) → Complex :=
+    fun M => typedHyperplaneReducedWitness (k := r + h) B H hH S fStored
+      ((Submodule.equivMapOfInjective B.subtype B.injective_subtype H).symm.toLinearMap.comp M)
+  let tailTower := buildHyperplaneSuffix (r := r) (f := fChild) tail
+  have hstep :
+      (fun M : (V d ⧸ A) →ₗ[F] (H.map B.subtype) =>
+        typedComplexHyperplaneFilter B H hH fStored
+          (S + H.subtype.comp
+            ((BinaryMatrixA15CanonicalRank.hyperplaneCanonicalEquiv B H).symm M))) =
+        filteredCarrierFunction A (H.map B.subtype)
+          (B.subtype.comp (S.comp A.mkQ)) ambientf := by
+    funext M
+    simpa [fStored, filteredCarrierFunction,
+      BinaryMatrixA15CanonicalRank.hyperplaneCanonicalEquiv,
+      LinearEquiv.apply_symm_apply] using
+      (typed_hyperplane_A1_operator_step A B H hH 0 S ambientf
+        ((BinaryMatrixA15CanonicalRank.hyperplaneCanonicalEquiv B H).symm M))
+  change applyCanonicalFilters tailTower
+      (fun M : (V d ⧸ A) →ₗ[F] (H.map B.subtype) =>
+        typedComplexHyperplaneFilter B H hH fStored
+          (S + H.subtype.comp
+            ((BinaryMatrixA15CanonicalRank.hyperplaneCanonicalEquiv B H).symm M))) =
+    filteredCarrierFunction A (rankedTerminalData tailTower).Bend
+      (B.subtype.comp (S.comp A.mkQ)) ambientf
+  rw [hstep]
+  exact hyperplane_suffix_A1_collapse tail fChild
+    (B.subtype.comp (S.comp A.mkQ)) ambientf
+
+end
+end PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
