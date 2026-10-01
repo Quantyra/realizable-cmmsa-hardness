@@ -1,0 +1,142 @@
+import PvNP.RealizableHardness.ActualTypedIntrinsicWitnessNaturality
+import PvNP.RealizableHardness.ActualTypedIntrinsicHyperplaneNaturality
+
+namespace PvNP.RealizableHardness.ActualTypedMixedTower
+
+open ActualTypedIntrinsicWitnessNaturality
+open ActualTypedIntrinsicHyperplaneNaturality
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+
+private noncomputable instance towerSubmoduleFintype {C : Type*}
+    [Fintype C] [AddCommGroup C] [Module F C]
+    (H : Submodule F C) : Fintype H := Fintype.ofFinite H
+
+private noncomputable instance towerLinearMapFintype {D C : Type*}
+    [Finite D] [Finite C] [AddCommGroup D] [Module F D]
+    [AddCommGroup C] [Module F C] : Fintype (D →ₗ[F] C) := by
+  classical
+  letI : Fintype D := Fintype.ofFinite D
+  letI : Fintype C := Fintype.ofFinite C
+  exact FunLike.fintype _
+
+private noncomputable instance towerLinearMapDecidableEq {D C : Type*}
+    [AddCommGroup D] [Module F D]
+    [AddCommGroup C] [Module F C]
+    [Fintype (D →ₗ[F] C)] : DecidableEq (D →ₗ[F] C) := Classical.decEq _
+
+universe u v
+
+/-- A genuine finite typed mixed flag. Each constructor records one actual
+line or codomain-hyperplane A15 operation, including its affine base and the
+resulting carrier and signal. Thus the recursive index cannot silently
+replace the current function by a rank projection or change its base. -/
+inductive ActualTypedMixedTower :
+    (D : Type u) → (C : Type v) →
+    [AddCommGroup D] → [Module F D] → [Fintype D] →
+    [AddCommGroup C] → [Module F C] → [Fintype C] →
+    ((D →ₗ[F] C) → Complex) → Nat → Type (max u v + 1)
+  | done {D : Type u} {C : Type v}
+      [AddCommGroup D] [Module F D] [Fintype D]
+      [AddCommGroup C] [Module F C] [Fintype C]
+      (f : (D →ₗ[F] C) → Complex) : ActualTypedMixedTower D C f 0
+  | line {D : Type u} {C : Type v}
+      [AddCommGroup D] [Module F D] [Fintype D]
+      [AddCommGroup C] [Module F C] [Fintype C]
+      (L : Submodule F D) (hL : Module.finrank F L = 1)
+      (v : D) (hv : v ∈ L) (hv0 : v ≠ 0)
+      (k : Nat) (T : D →ₗ[F] C)
+      (f : (D →ₗ[F] C) → Complex)
+      (tail : ActualTypedMixedTower (D ⧸ L) C
+        (intrinsicReducedLineWitness v k L.mkQ T f) k) :
+      ActualTypedMixedTower D C f (k + 1)
+
+  | hyperplane {D : Type u} {C : Type v}
+      [AddCommGroup D] [Module F D] [Fintype D]
+      [AddCommGroup C] [Module F C] [Fintype C]
+      (H : Submodule F C) (hH : Module.finrank F (C ⧸ H) = 1)
+      (psi : C →ₗ[F] F) (hker : LinearMap.ker psi = H)
+      (k : Nat) (T : D →ₗ[F] C)
+      (f : (D →ₗ[F] C) → Complex)
+      (tail : ActualTypedMixedTower D H
+        (fun N => intrinsicHyperplaneP psi k f (T + H.subtype.comp N)) k) :
+      ActualTypedMixedTower D C f (k + 1)
+
+/-- Every recorded operation removes one dimension from exactly one carrier.
+Consequently a tower of length `k` cannot exceed the total domain-plus-range
+dimension. This invariant is the finite termination measure for the mixed
+induction; it does not impose an artificial ambient-width bound. -/
+theorem length_le_total_finrank {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    {f : (D →ₗ[F] C) → Complex} {k : Nat}
+    (tower : ActualTypedMixedTower D C f k) :
+    k ≤ Module.finrank F D + Module.finrank F C := by
+  induction tower with
+  | done f => simp
+  | @line D C _ _ _ _ _ _ L hL v hv hv0 k T f tail ih =>
+      have hquot := L.finrank_quotient_add_finrank
+      have hdim : Module.finrank F D =
+          Module.finrank F (D ⧸ L) + 1 := by
+        omega
+      omega
+  | @hyperplane D C _ _ _ _ _ _ H hH psi hker k T f tail ih =>
+      have hquot := H.finrank_quotient_add_finrank
+      have hdim : Module.finrank F C =
+          Module.finrank F H + 1 := by
+        omega
+      omega
+
+/-- Appending a line step uses the actual quotient map and the manuscript's
+two-scale line polynomial on the affine translate of the tail map. -/
+def lineStepSignal {D Q C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup Q] [Module F Q]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (v : D) (j : Nat) (q : D →ₗ[F] Q)
+    (T : D →ₗ[F] C) (f : (D →ₗ[F] C) → Complex) :
+    (Q →ₗ[F] C) → Complex := intrinsicReducedLineWitness v j q T f
+
+/-- Appending a codomain hyperplane step retains the same ambient affine base
+and inserts the actual subtype inclusion in the successor carrier. -/
+def hyperplaneStepSignal {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    (H : Submodule F C)
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (psi : C →ₗ[F] F) (j : Nat)
+    (T : D →ₗ[F] C) (f : (D →ₗ[F] C) → Complex) :
+    (D →ₗ[F] H) → Complex :=
+  fun N => intrinsicHyperplaneP psi j f (T + H.subtype.comp N)
+
+theorem lineStepSignal_eq_intrinsic {D Q C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup Q] [Module F Q]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (v : D) (j : Nat) (q : D →ₗ[F] Q)
+    (T : D →ₗ[F] C) (f : (D →ₗ[F] C) → Complex)
+    (N : Q →ₗ[F] C) :
+    lineStepSignal v j q T f N = intrinsicLineP v j f (T + N.comp q) := rfl
+
+theorem hyperplaneStepSignal_eq_intrinsic {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    (H : Submodule F C)
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (psi : C →ₗ[F] F) (j : Nat)
+    (T : D →ₗ[F] C) (f : (D →ₗ[F] C) → Complex)
+    (N : D →ₗ[F] H) :
+    hyperplaneStepSignal H psi j T f N =
+      intrinsicHyperplaneP psi j f (T + H.subtype.comp N) := rfl
+
+end
+end PvNP.RealizableHardness.ActualTypedMixedTower
