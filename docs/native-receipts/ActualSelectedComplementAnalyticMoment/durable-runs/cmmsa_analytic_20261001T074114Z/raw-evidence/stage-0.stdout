@@ -1,0 +1,145 @@
+✖ [3048/3048] Building PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning (38s)
+trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/cslib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean -o /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.olean -i /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.ilean -c /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.c --setup /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.setup.json --json
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:57:4: Unused tactic linter: `change dualRestriction A (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:60:4: Unused tactic linter: `change dualRestriction A (δ.1 + φ₀) = ψ` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:110:4: Unused tactic linter: `change dualRestrictionAt A w (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:113:4: Unused tactic linter: `change dualRestrictionAt A w (δ.1 + φ₀) = z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:263:8: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq W (f ((Submodule.inclusion ⋯) ⟨a, ha⟩)) (g ((Submodule.inclusion ⋯) ⟨a, ha⟩))
+but is expected to have type
+  @Eq W (f ⟨a, ⋯⟩) (g ⟨a, ⋯⟩)
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:245:4: unsolved goals
+case left
+K : Type u_1
+V : Type u_2
+inst✝⁴ : Field K
+inst✝³ : AddCommGroup V
+inst✝² : Module K V
+W : Type u_3
+inst✝¹ : AddCommGroup W
+inst✝ : Module K W
+A : Submodule K V
+w : V
+hw : w ∉ A
+f g : ↥(spanExtensionSubmodule A w) →ₗ[K] W
+h : (dualSupVectorCoordinateMap A w) f = (dualSupVectorCoordinateMap A w) g
+x : ↥(spanExtensionSubmodule A w)
+hA : ((dualSupVectorCoordinateMap A w) f).1 = ((dualSupVectorCoordinateMap A w) g).1
+hwv : ((dualSupVectorCoordinateMap A w) f).2 = ((dualSupVectorCoordinateMap A w) g).2
+a : V
+ha : a ∈ A
+b : V
+hb : b ∈ K ∙ w
+hxb : a + b = ↑x
+c : K
+hc : c • w = b
+a' : ↥(spanExtensionSubmodule A w) := ⟨a, ⋯⟩
+w' : ↥(spanExtensionSubmodule A w) := ⟨w, ⋯⟩
+hxeq : x = a' + c • w'
+hfa : f a' = g a'
+hwfg : f w' = g w'
+⊢ g a' + c • g w' = g (a' + c • w')
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:280:64: Unknown constant `Submodule.coe_inclusion_apply`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:316:35: declaration uses `sorry`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:304:18: declaration uses `sorry`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:345:20: declaration uses `sorry`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:330:8: declaration uses `sorry`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:418:15: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:419:16: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:415:78: unsolved goals
+case e
+V : Type u_2
+inst✝³ : AddCommGroup V
+inst✝² : Fintype V
+inst✝¹ : AddCommGroup V
+inst✝ : Module (ZMod 2) V
+B B' : Submodule (ZMod 2) V
+hB : B ≤ B'
+hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1
+⊢ { w // ↑w ∈ B } ≃ ↥B
+
+V : Type u_2
+inst✝³ : AddCommGroup V
+inst✝² : Fintype V
+inst✝¹ : AddCommGroup V
+inst✝ : Module (ZMod 2) V
+B B' : Submodule (ZMod 2) V
+hB : B ≤ B'
+hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1
+e : { w // ↑w ∈ B } ≃ ↥B := ?e
+⊢ {w | ↑w ∉ B}.card = Fintype.card ↥B
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:409:0: internal exception #3
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:424:19: Overlapping instance parameters in `PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.binary_submodule_complement_card_eq.right_inv`:
+
+⚠️ There are 2 `[AddCommGroup V]` instances; one is sufficient.
+
+Note: This linter can be disabled with `set_option linter.overlappingInstances false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:420:18: Overlapping instance parameters in `PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.binary_submodule_complement_card_eq.left_inv`:
+
+⚠️ There are 2 `[AddCommGroup V]` instances; one is sufficient.
+
+Note: This linter can be disabled with `set_option linter.overlappingInstances false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:419:16: Overlapping instance parameters in `PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.binary_submodule_complement_card_eq.invFun`:
+
+⚠️ There are 2 `[AddCommGroup V]` instances; one is sufficient.
+
+Note: This linter can be disabled with `set_option linter.overlappingInstances false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:418:15: Overlapping instance parameters in `PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.binary_submodule_complement_card_eq.toFun`:
+
+⚠️ There are 2 `[AddCommGroup V]` instances; one is sufficient.
+
+Note: This linter can be disabled with `set_option linter.overlappingInstances false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:412:8: Overlapping instance parameters in `PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.binary_submodule_complement_card_eq`:
+
+⚠️ There are 2 `[AddCommGroup V]` instances; one is sufficient.
+
+Note: This linter can be disabled with `set_option linter.overlappingInstances false`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:427:2: unexpected token 'have'; expected command
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:482:59: Unknown constant `Submodule.coe_inclusion_apply`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:482:8: Type mismatch: After simplification, term
+  this
+ has type
+  @Eq K (f ((Submodule.inclusion ⋯) ⟨a, ha⟩)) (g ((Submodule.inclusion ⋯) ⟨a, ha⟩))
+but is expected to have type
+  @Eq K (f ⟨a, ⋯⟩) (g ⟨a, ⋯⟩)
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:466:4: unsolved goals
+case left
+K : Type u_1
+V : Type u_2
+inst✝² : Field K
+inst✝¹ : AddCommGroup V
+inst✝ : Module K V
+A : Submodule K V
+w : V
+hw : w ∉ A
+f g : ↥(spanExtensionSubmodule A w) →ₗ[K] K
+h : (dualSupCoordinateMap A w) f = (dualSupCoordinateMap A w) g
+x : ↥(spanExtensionSubmodule A w)
+hA : ((dualSupCoordinateMap A w) f).1 = ((dualSupCoordinateMap A w) g).1
+hwv : ((dualSupCoordinateMap A w) f).2 = ((dualSupCoordinateMap A w) g).2
+a : V
+ha : a ∈ A
+b : V
+hb : b ∈ K ∙ w
+hxb : a + b = ↑x
+c : K
+hc : c • w = b
+a' : ↥(spanExtensionSubmodule A w) := ⟨a, ⋯⟩
+w' : ↥(spanExtensionSubmodule A w) := ⟨w, ⋯⟩
+hxeq : x = a' + c • w'
+hfa : f a' = g a'
+hwfg : f w' = g w'
+⊢ g a' + c • g w' = g (a' + c • w')
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:499:64: Unknown constant `Submodule.coe_inclusion_apply`
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
