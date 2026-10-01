@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+
+#check restrictedFunctionalKernel_finrank_drop
+#print axioms restrictedFunctionalKernel_finrank_drop
+#check codimension_drop_of_one_dim_extension
+#print axioms codimension_drop_of_one_dim_extension
+#check actual_expanded_outside_column_energy_le_two
+#print axioms actual_expanded_outside_column_energy_le_two
