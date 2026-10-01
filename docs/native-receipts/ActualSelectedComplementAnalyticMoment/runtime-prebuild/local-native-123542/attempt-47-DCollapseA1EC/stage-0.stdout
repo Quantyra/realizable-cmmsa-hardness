@@ -1,0 +1,78 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:324:8: error: 'change' tactic failed, pattern
+  typedComplexHyperplaneFilter B H hH (filteredCarrierFunction A B T f) (H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (Submodule.map B.subtype H) T
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) f) (e (e.symm M))
+is not definitionally equal to target
+  typedComplexHyperplaneFilter B H hH (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M)
+      (0 + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (hyperplaneCanonicalCodomain B H) (T + B.subtype ∘ₗ 0 ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (hyperplaneCanonicalCodomain B H) f) ((hyperplaneCanonicalEquiv B H) (e.symm M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:335:8: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildHyperplaneSuffix, applyCanonicalFilters, zero_add, rankedTerminalData,
+    BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:385:8: error: 'change' tactic failed, pattern
+  typedComplexLineFilter B (Submodule.map A.mkQ A') hL (filteredCarrierFunction A B T f)
+      (e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' B T (complexAmbientHybridFilter A' B f) (e (e.symm M))
+is not definitionally equal to target
+  typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M)
+      (0 + e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' B (T + B.subtype ∘ₗ 0 ∘ₗ A.mkQ) (complexAmbientHybridFilter A' B f)
+      ((lineCanonicalEquiv A A' B hA) (e.symm M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:397:8: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildLineSuffix, applyCanonicalFilters, zero_add, rankedTerminalData]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:452:4: error: 'change' tactic failed, pattern
+  typedComplexLineFilter B (Submodule.map A.mkQ A') hL fStored (S + e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' B (B.subtype ∘ₗ S ∘ₗ A.mkQ) (complexAmbientHybridFilter A' B ambientf)
+      (e (e.symm M))
+is not definitionally equal to target
+  typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' B (0 + B.subtype ∘ₗ S ∘ₗ A.mkQ) (complexAmbientHybridFilter A' B ambientf)
+      ((lineCanonicalEquiv A A' B hA) (e.symm M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:519:4: error: 'change' tactic failed, pattern
+  typedComplexHyperplaneFilter B H hH fStored (S + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (Submodule.map B.subtype H) (B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) ambientf) (e (e.symm M))
+is not definitionally equal to target
+  typedComplexHyperplaneFilter B H hH
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (hyperplaneCanonicalCodomain B H) (0 + B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (hyperplaneCanonicalCodomain B H) ambientf)
+      ((hyperplaneCanonicalEquiv B H) (e.symm M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:533:50: warning: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildCanonicalSourceTower, buildHyperplanePrefix, buildHyperplaneSuffix, applyCanonicalFilters,
+    LinearMap.comp_zero, rankedTerminalData, BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:534:4: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildCanonicalSourceTower, buildHyperplanePrefix, buildHyperplaneSuffix, applyCanonicalFilters,
+    zero_add, rankedTerminalData, BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:581:15: error: unsolved goals
+case done.done
+n d r : ℕ
+T : V d ⧸ ⊥ →ₗ[F] ↥⊤
+ambientf : BinaryMatrix n d → ℂ
+⊢ (fun M => complexAmbientAffineRestrict ⊥ ⊤ (⊤.subtype ∘ₗ T ∘ₗ ⊥.mkQ) ambientf M) =
+    filteredCarrierFunction ⊥ ⊤ (⊤.subtype ∘ₗ T ∘ₗ ⊥.mkQ) ambientf
