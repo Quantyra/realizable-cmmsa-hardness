@@ -1,0 +1,56 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastCoordinateSliceEquiv (d : ℕ) :
+  { u // lastVector d ⬝ᵥ u = 1 } ≃ PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.V✝ d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.functionalsAtLastEquiv (d : ℕ) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.FunctionalsAt (lastVector d) ≃
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.V✝ d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.actualA18RankOne_last_eq_lineShift
+  {n d : ℕ} (ψ : PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.FunctionalsAt (lastVector d))
+  (w : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.W✝ n) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.actualA18RankOne (↑ψ) w =
+    PvNP.RealizableHardness.BinaryMatrixLineTranslation.lineShift w ((functionalsAtLastEquiv d) ψ)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.actualA18Average_last_eq_complexLineAverage
+  {n d : ℕ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1) → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average (lastVector d) f M =
+    PvNP.RealizableHardness.BinaryMatrixComplexA15.complexLineAverage f M
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.selected_lastLine_iff_hybridLineSelected
+  {n d : ℕ} (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.F✝ ∙ lastVector d) ⊤
+      (Matrix.toLin' (Matrix.transpose Y)) ↔
+    PvNP.RealizableHardness.BinaryMatrixHybridSelector.hybridLineSelected Y
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.complexAmbientHybridFilter_lastLine_eq
+  {n d : ℕ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1) → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.F✝ ∙ lastVector d) ⊤ f M =
+    PvNP.RealizableHardness.BinaryMatrixComplexA14.complexHybridLineFilter f M
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.complexHybridLineFilter_rankProjection_eq
+  {n d j : ℕ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1) → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA14.complexHybridLineFilter
+      (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection j f) M =
+    PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection j f M -
+      2 ^ j *
+        PvNP.RealizableHardness.BinaryMatrixComplexA15.complexLineAverage
+          (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection j f) M
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.homogeneous_A13_last_coordinate
+  {n d D : ℕ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1) → ℂ)
+  (hD : PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection D f = f)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  f M =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.F✝ ∙ lastVector d) ⊤ f M +
+      2 ^ D * PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average (lastVector d) f M
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.actualA18RankOne_last_eq_lineShift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.actualA18Average_last_eq_complexLineAverage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.complexHybridLineFilter_rankProjection_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.homogeneous_A13_last_coordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
