@@ -181,7 +181,6 @@ sha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256
                 steps.append('if [ "$rc" -ne 0 ] && [ "$rc" -ne 125 ]; then aggregate=1; fi')
             obj = '.lake/build/lib/lean/' + pre.removeprefix('lean/').removesuffix('.lean') + '.olean'
             steps.append('if [ "$rc" -eq 0 ]; then sha256sum ' + pre + ' ' + obj + ' >' + stem + '.pins.sha256; fi')
-            steps.append('tar -czf /tmp/TAG-evidence.tar.gz.next -C /tmp/TAG-evidence . && mv /tmp/TAG-evidence.tar.gz.next /tmp/TAG-evidence.tar.gz')
         steps.append('printf "%s\\n" "$aggregate" >/tmp/TAG-evidence/aggregate.native-exit\nexit "$aggregate"')
         prebuild_steps = steps
         remote = remote.replace('timeout --signal=TERM --kill-after=20s 900s lake build MODULE >/tmp/TAG-evidence/build.stdout 2>/tmp/TAG-evidence/build.stderr\nsha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256', '')
@@ -192,7 +191,6 @@ sha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256
     overlay_verify = '\n'.join("echo '" + pin + '  ' + name + "' | sha256sum -c -" for name, pin in overlay_pins.items())
     for key, value in [('OVERLAYOBJECTS', overlay_objects), ('OVERLAYNAMES', ','.join(overlays)), ('OVERLAYPATHS', ' '.join(overlays)), ('OVERLAYVERIFY', overlay_verify), ('WORKTAG', a.reuse_tag or tag), ('REUSEMODE', 'yes' if a.reuse_tag else 'no'), ('CACHESHA', a.cslib_sha or 'UNUSED_REUSE_CACHE'), ('CACHENAME', cache.name if cache else 'UNUSED_REUSE_CACHE'), ('ARCHIVESHA', archive_sha), ('SOURCESHA', a.expected_sha), ('MODULEPATH', module.replace('.', '/')), ('MODULE', module), ('SOURCE', a.source), ('TAG', tag)]:
         remote = remote.replace(key, value)
-    remote = remote.replace('/tmp/' + tag + '-evidence', '/home/dfredriksen_quantyra_org/cmmsa-evidence/' + tag + '-evidence')
     script.write_text(remote, encoding='utf-8', newline='\n')
     preparation = {'prepared': True, 'archive': str(archive), 'script': str(script),
         'source_sha': a.expected_sha, 'archive_sha': archive_sha, 'execute': a.execute,
@@ -218,7 +216,7 @@ sha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256
     finally:
         if started:
             try:
-                cloud(['compute', 'scp', VM + ':/home/dfredriksen_quantyra_org/cmmsa-evidence/' + tag + '-evidence.tar.gz', str(base / (tag + '-evidence.tar.gz')), '--quiet', '--tunnel-through-iap'], 180)
+                cloud(['compute', 'scp', VM + ':/tmp/' + tag + '-evidence.tar.gz', str(base / (tag + '-evidence.tar.gz')), '--quiet', '--tunnel-through-iap'], 180)
             finally:
                 cloud(['compute', 'instances', 'stop', VM, '--quiet'], 300)
                 print('FINAL_VM_STATE', cloud(['compute', 'instances', 'describe', VM, '--format=value(status)']).decode().strip())
