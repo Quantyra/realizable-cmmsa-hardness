@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18EnergyTriangle
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18EnergyTriangle
+
+#check actual_fibre_energy_add_smul_le
+#print axioms actual_fibre_energy_add_smul_le
