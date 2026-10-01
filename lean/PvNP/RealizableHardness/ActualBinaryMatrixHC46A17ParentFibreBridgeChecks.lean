@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge
+
+#check carrierAmbientQuotientHomEquiv
+#print axioms carrierAmbientQuotientHomEquiv
+#check carrierAmbientLiftFibreEquiv
+#print axioms carrierAmbientLiftFibreEquiv
+#check carrierAmbientLiftFibreEquiv_normalizedMean
+#print axioms carrierAmbientLiftFibreEquiv_normalizedMean
+#check liftCarrierMatrix_mem_actual_fibre
+#print axioms liftCarrierMatrix_mem_actual_fibre
