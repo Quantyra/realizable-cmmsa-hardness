@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualAffineRestrictionComposition
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.ActualAffineRestrictionComposition
+
+#check composeActualRestriction
+#check composeActualRestriction_fibre
+#check composeActualRestriction_order_le
+#check composeActualRestriction_fibreEnergy
+#check actualGlobal_compose
+
+#print axioms composeActualRestriction_fibre
+#print axioms composeActualRestriction_order_le
+#print axioms composeActualRestriction_fibreEnergy
+#print axioms actualGlobal_compose

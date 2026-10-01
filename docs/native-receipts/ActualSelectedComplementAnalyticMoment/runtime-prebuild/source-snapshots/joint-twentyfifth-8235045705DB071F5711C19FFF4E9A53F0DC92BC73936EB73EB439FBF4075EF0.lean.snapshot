@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+
+#check complexFourierInversion
+#print axioms complexFourierInversion
+#check complexFourierCoeff_mul_eq_convolution
+#print axioms complexFourierCoeff_mul_eq_convolution
+#check binaryMatrix_rank_add_le
+#print axioms binaryMatrix_rank_add_le
+#check complexFourierSupportedThrough_mul
+#print axioms complexFourierSupportedThrough_mul
