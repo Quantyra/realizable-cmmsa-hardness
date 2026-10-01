@@ -1,0 +1,658 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:139:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 1
+  e ≥ 1
+  e - h ≥ 2
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ -1
+  a - e - g ≥ -1
+where
+ a := ↑s
+ b := ↑Q.order
+ c := ↑(Module.finrank (ZMod 2) ↥Q.codomainVariation)
+ e := ↑(Module.finrank (ZMod 2) ↥Q.domainFixed)
+ g := ↑(Module.finrank (ZMod 2) ((Fin n → ZMod 2) ⧸ Q.codomainVariation))
+ h := ↑(Module.finrank (ZMod 2) ↥(functionalKernelInAmbient Q.domainFixed phi))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:237:10: error: Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`
+  ?a1 = ?a2
+with the goal
+  ↑((stableSourceSampleMap B q phi₀ R lambda w ∘ₗ s) y) = ↑((R + lambda.smulRight w) y)
+
+Note: The full type of `@Subtype.ext` is
+  ∀ {α : Sort ?u.237} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2
+
+X : Type u_1
+X' : Type u_2
+W : Type u_3
+inst✝⁵ : AddCommGroup X
+inst✝⁴ : Module (ZMod 2) X
+inst✝³ : AddCommGroup X'
+inst✝² : Module (ZMod 2) X'
+inst✝¹ : AddCommGroup W
+inst✝ : Module (ZMod 2) W
+q : X' →ₗ[ZMod 2] X
+s : X →ₗ[ZMod 2] X'
+phi₀ : X' →ₗ[ZMod 2] ZMod 2
+v : X'
+hdecomp : ∀ (x : X'), x = s (q x) + phi₀ x • v
+hqs : q ∘ₗ s = LinearMap.id
+hqv : q v = 0
+hphiS : phi₀ ∘ₗ s = 0
+hphiV : phi₀ v = 1
+B : Submodule (ZMod 2) W
+w : ↥B
+R : X →ₗ[ZMod 2] ↥B
+lambda : X →ₗ[ZMod 2] ZMod 2
+hcol : (stableSourceSampleMap B q phi₀ R lambda w) v = w
+x y : X
+⊢ ↑((stableSourceSampleMap B q phi₀ R lambda w ∘ₗ s) y) = ↑((R + lambda.smulRight w) y)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:242:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  stableSourceSampleMap B q phi₀ R lambda w ∘ₗ s
+in the target expression
+  ↑(((fun p => ⟨p.1 v, (p.1 ∘ₗ s - p.2.smulRight (p.1 v), p.2)⟩)
+              ((fun p => (stableSourceSampleMap B q phi₀ p.snd.1 p.snd.2 p.fst, p.snd.2)) ⟨w, (R, lambda)⟩)).snd.1
+        x) =
+    ↑(⟨w, (R, lambda)⟩.snd.1 x)
+
+case fst
+X : Type u_1
+X' : Type u_2
+W : Type u_3
+inst✝⁵ : AddCommGroup X
+inst✝⁴ : Module (ZMod 2) X
+inst✝³ : AddCommGroup X'
+inst✝² : Module (ZMod 2) X'
+inst✝¹ : AddCommGroup W
+inst✝ : Module (ZMod 2) W
+q : X' →ₗ[ZMod 2] X
+s : X →ₗ[ZMod 2] X'
+phi₀ : X' →ₗ[ZMod 2] ZMod 2
+v : X'
+hdecomp : ∀ (x : X'), x = s (q x) + phi₀ x • v
+hqs : q ∘ₗ s = LinearMap.id
+hqv : q v = 0
+hphiS : phi₀ ∘ₗ s = 0
+hphiV : phi₀ v = 1
+B : Submodule (ZMod 2) W
+w : ↥B
+R : X →ₗ[ZMod 2] ↥B
+lambda : X →ₗ[ZMod 2] ZMod 2
+hcol : (stableSourceSampleMap B q phi₀ R lambda w) v = w
+x : X
+hsection : stableSourceSampleMap B q phi₀ R lambda w ∘ₗ s = R + lambda.smulRight w
+⊢ ↑(((fun p => ⟨p.1 v, (p.1 ∘ₗ s - p.2.smulRight (p.1 v), p.2)⟩)
+              ((fun p => (stableSourceSampleMap B q phi₀ p.snd.1 p.snd.2 p.fst, p.snd.2)) ⟨w, (R, lambda)⟩)).snd.1
+        x) =
+    ↑(⟨w, (R, lambda)⟩.snd.1 x)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:228:4: error: unsolved goals
+case snd
+X : Type u_1
+X' : Type u_2
+W : Type u_3
+inst✝⁵ : AddCommGroup X
+inst✝⁴ : Module (ZMod 2) X
+inst✝³ : AddCommGroup X'
+inst✝² : Module (ZMod 2) X'
+inst✝¹ : AddCommGroup W
+inst✝ : Module (ZMod 2) W
+q : X' →ₗ[ZMod 2] X
+s : X →ₗ[ZMod 2] X'
+phi₀ : X' →ₗ[ZMod 2] ZMod 2
+v : X'
+hdecomp : ∀ (x : X'), x = s (q x) + phi₀ x • v
+hqs : q ∘ₗ s = LinearMap.id
+hqv : q v = 0
+hphiS : phi₀ ∘ₗ s = 0
+hphiV : phi₀ v = 1
+B : Submodule (ZMod 2) W
+w : ↥B
+R : X →ₗ[ZMod 2] ↥B
+lambda : X →ₗ[ZMod 2] ZMod 2
+hcol : (stableSourceSampleMap B q phi₀ R lambda w) v = w
+⊢ ((fun p => ⟨p.1 v, (p.1 ∘ₗ s - p.2.smulRight (p.1 v), p.2)⟩)
+          ((fun p => (stableSourceSampleMap B q phi₀ p.snd.1 p.snd.2 p.fst, p.snd.2)) ⟨w, (R, lambda)⟩)).snd.2 =
+    ⟨w, (R, lambda)⟩.snd.2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:297:13: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:299:25: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:353:27: warning: Variable name `ha` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ha
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:363:17: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:369:27: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:436:27: warning: Variable name `ha` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ha
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:442:27: warning: Variable name `ha` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ha
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:452:29: warning: Variable name `ha` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ha
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:465:27: warning: Variable name `ha` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ha
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:467:13: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:471:23: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:528:7: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:617:4: error: Type mismatch: After simplification, term
+  quotientAppendSamplingEquiv_symm_apply B wW w.property q s phi₀ (A'.mkQ ↑v) hdecomp hqs hqv hphiS hphiV R lambda
+ has type
+  (spanExtensionSubmodule B wW).subtype ∘ₗ
+      ↑((quotientAppendSamplingEquiv B wW ⋯ q s phi₀ (A'.mkQ ↑v) hdecomp hqs hqv hphiS hphiV).symm (R, lambda)) =
+    quotientSampleOutput B q phi₀ R lambda wW
+but is expected to have type
+  (spanExtensionSubmodule B wW).subtype ∘ₗ
+      ↑((And.rec
+              (fun left right =>
+                And.rec
+                  (fun left_1 right =>
+                    And.rec
+                      (fun left_2 right =>
+                        And.rec
+                          (fun left_3 right =>
+                            quotientAppendSamplingEquiv B wW ⋯ (Submodule.factor ⋯) (Classical.choose ⋯)
+                              (Classical.choose ⋯) ((functionalKernelInAmbient A phi).mkQ ↑v) right left left_1 left_2
+                              left_3)
+                          right)
+                      right)
+                  right)
+              ⋯).symm
+          (R, lambda)) =
+    quotientSampleOutput B q phi₀ R lambda wW
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:703:4: error: Type mismatch: After simplification, term
+  quotientAppendSamplingEquiv_symm_apply B wW w.property q s phi₀ (A'.mkQ ↑v) hdecomp hqs hqv hphiS hphiV R lambda
+ has type
+  (spanExtensionSubmodule B wW).subtype ∘ₗ
+      ↑((quotientAppendSamplingEquiv B wW ⋯ q s phi₀ (A'.mkQ ↑v) hdecomp hqs hqv hphiS hphiV).symm (R, lambda)) =
+    quotientSampleOutput B q phi₀ R lambda wW
+but is expected to have type
+  (spanExtensionSubmodule B wW).subtype ∘ₗ
+      ↑((And.rec
+              (fun left right =>
+                And.rec
+                  (fun left_1 right =>
+                    And.rec
+                      (fun left_2 right =>
+                        And.rec
+                          (fun left_3 right =>
+                            quotientAppendSamplingEquiv B wW ⋯ (Submodule.factor ⋯) (Classical.choose ⋯)
+                              (Classical.choose ⋯) ((functionalKernelInAmbient A phi).mkQ ↑v) right left left_1 left_2
+                              left_3)
+                          right)
+                      right)
+                  right)
+              ⋯).symm
+          (R, lambda)) =
+    quotientSampleOutput B q phi₀ R lambda wW
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:732:13: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:736:23: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:826:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (∑ x, Complex.normSq (f ↑(e.symm ↑x))) / ↑(Fintype.card { x // p x })
+in the target expression
+  (∑ N, Complex.normSq (f ↑(e.symm ↑N))) / ↑(Fintype.card { N // p N }) ≤ 2 * η
+
+n d s : ℕ
+η : ℝ
+f : BinaryMatrix n d → ℂ
+hf : UpToActualNormSqGlobal s η f
+Q : ActualAffineRestriction n d
+hQ : Q.order ≤ s + 1
+phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2
+v : ↥Q.domainFixed
+hv : phi v = 1
+B' : Submodule (ZMod 2) (Fin n → ZMod 2)
+hB : Q.codomainVariation ≤ B'
+hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥Q.codomainVariation + 1
+A' : Submodule (ZMod 2) (Fin d → ZMod 2) := functionalKernelInAmbient Q.domainFixed phi
+X : Type := (Fin d → ZMod 2) ⧸ Q.domainFixed
+X' : Type := (Fin d → ZMod 2) ⧸ A'
+Q' : ActualAffineRestriction n d := { domainFixed := A', codomainVariation := B', base := Q.base }
+e : ↥Q'.fibre ≃ QuotientHom Q'.domainFixed Q'.codomainVariation := actualFibreQuotientHomEquiv Q'
+p : (X' →ₗ[ZMod 2] ↥B') → Prop := fun N => ↑(N (A'.mkQ ↑v)) ∉ Q.codomainVariation
+g : { N // p N } → ℝ := fun N => Complex.normSq (f ↑(e.symm ↑N))
+hcond :
+  (∑ N with ↑(N ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v)) ∉ Q.codomainVariation,
+        Complex.normSq
+          (f
+            ↑((actualFibreQuotientHomEquiv
+                    { domainFixed := functionalKernelInAmbient Q.domainFixed phi, codomainVariation := B',
+                      base := Q.base }).symm
+                N))) /
+      ↑{N | ↑(N ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v)) ∉ Q.codomainVariation}.card ≤
+    2 * η
+hfilter : (∑ N with p N, Complex.normSq (f ↑(e.symm N))) / ↑(Finset.filter p Finset.univ).card ≤ 2 * η
+⊢ (∑ N, Complex.normSq (f ↑(e.symm ↑N))) / ↑(Fintype.card { N // p N }) ≤ 2 * η
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:856:18: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:857:20: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:859:24: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:860:25: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:861:26: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:862:25: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:863:18: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:863:31: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:865:28: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:866:11: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1011:44: error: Application type mismatch: The last
+  C
+argument has type
+  Type
+of sort `Type 1` but is expected to have type
+  (_ : ↥Q.codomainVariation) × C → ℝ
+of sort `Type` in the application
+  stable_expanded_source_mixture_le_two Q.codomainVariation B' hB hdim C C
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1165:4: warning: This simp argument is unused:
+  Matrix.toLin'_toMatrix'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [actualFibreQuotientHomEquiv, actualFibreLinearEquiv, quotientHomEquiv, ConstrainedMap,
+    LinearMap.toMatrix'_toLin']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1187:25: warning: Variable name `hv` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hv
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1200:27: warning: Variable name `ha` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ha
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1259:27: warning: Variable name `ha` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ha
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1373:23: warning: This simp argument is unused:
+  map_smul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [map_add, ha1, hbq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1386:7: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1387:9: warning: Variable name `u` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _u
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1479:4: error: Type mismatch
+  congrArg (fun F => LinearMap.toMatrix' (Matrix.toLin' Q.base + F)) (Eq.symm hcomp)
+has type
+  LinearMap.toMatrix'
+      (Matrix.toLin' Q.base +
+        quotientSampleOutput Q.codomainVariation (Submodule.factor ⋯) (Classical.choose ⋯) p.snd.1 p.snd.2 ↑↑p.fst ∘ₗ
+          A'.mkQ) =
+    LinearMap.toMatrix'
+      (Matrix.toLin' Q.base +
+        (B'.subtype ∘ₗ
+            ↑((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv Q.codomainVariation B' hB hdim)
+                ⟨p.fst, (p.snd.1, p.snd.2)⟩)) ∘ₗ
+          A'.mkQ)
+but is expected to have type
+  Complex.normSq
+      (f
+        (LinearMap.toMatrix'
+          (Matrix.toLin' Q.base + quotientSampleOutput Q.codomainVariation q phi₀ p.snd.1 p.snd.2 ↑↑p.fst ∘ₗ A'.mkQ))) =
+    Complex.normSq
+      (f
+        (LinearMap.toMatrix'
+          (Matrix.toLin' Q'.base +
+            Q'.codomainVariation.subtype ∘ₗ
+              ↑((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv Q.codomainVariation B' hB hdim) p) ∘ₗ
+                Q'.domainFixed.mkQ)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1481:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ p,
+    Complex.normSq
+      (f
+        (LinearMap.toMatrix'
+          (Matrix.toLin' Q.base + quotientSampleOutput Q.codomainVariation q phi₀ p.snd.1 p.snd.2 ↑↑p.fst ∘ₗ A'.mkQ)))
+in the target expression
+  let hsource := ⋯;
+  let sCoord := Classical.choose hsource;
+  let hphiSource := ⋯;
+  let phi₀ := Classical.choose hphiSource;
+  let A' := functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  let q := Submodule.factor ⋯;
+  let C := (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2);
+  let Outside := { w // ↑w ∉ Q.codomainVariation };
+  (∑ p,
+        Complex.normSq
+          (f
+            (LinearMap.toMatrix'
+              (Matrix.toLin' Q.base +
+                quotientSampleOutput Q.codomainVariation q phi₀ p.snd.1 p.snd.2 ↑↑p.fst ∘ₗ A'.mkQ)))) /
+      ↑(Fintype.card ((_ : Outside) × C)) ≤
+    2 * η
+
+n d s : ℕ
+η : ℝ
+f : BinaryMatrix n d → ℂ
+hf : UpToActualNormSqGlobal s η f
+Q : ActualAffineRestriction n d
+hQ : Q.order ≤ s + 1
+phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2
+v : ↥Q.domainFixed
+hv : phi v = 1
+B' : Submodule (ZMod 2) (Fin n → ZMod 2)
+hB : Q.codomainVariation ≤ B'
+hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥Q.codomainVariation + 1
+hsource : ∃ s phi₀,
+  have q := Submodule.factor ⋯;
+  q ∘ₗ s = LinearMap.id ∧
+    q ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v) = 0 ∧
+      phi₀ ∘ₗ s = 0 ∧
+        phi₀ ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v) = 1 ∧
+          ∀ (x : (Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi),
+            x = s (q x) + phi₀ x • (functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v :=
+  quotientSectionCoordinates_of_restricted_functional Q.domainFixed phi v hv
+sCoord : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] (Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi :=
+  Classical.choose hsource
+hphiSource : ∃ phi₀,
+  have q := Submodule.factor ⋯;
+  q ∘ₗ Classical.choose hsource = LinearMap.id ∧
+    q ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v) = 0 ∧
+      phi₀ ∘ₗ Classical.choose hsource = 0 ∧
+        phi₀ ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v) = 1 ∧
+          ∀ (x : (Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi),
+            x = (Classical.choose hsource) (q x) + phi₀ x • (functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v :=
+  Classical.choose_spec hsource
+phi₀ : (Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi →ₗ[ZMod 2] ZMod 2 := Classical.choose hphiSource
+A' : Submodule (ZMod 2) (Fin d → ZMod 2) := functionalKernelInAmbient Q.domainFixed phi
+X : Type := (Fin d → ZMod 2) ⧸ Q.domainFixed
+X' : Type := (Fin d → ZMod 2) ⧸ A'
+q : X' →ₗ[ZMod 2] X := Submodule.factor ⋯
+C : Type := (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2)
+Outside : Type := { w // ↑w ∉ Q.codomainVariation }
+Q' : ActualAffineRestriction n d := { domainFixed := A', codomainVariation := B', base := Q.base }
+hqs' : Submodule.factor ⋯ ∘ₗ Classical.choose ⋯ = LinearMap.id
+hqv' : (Submodule.factor ⋯) ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v) = 0
+hphiS' : Classical.choose ⋯ ∘ₗ Classical.choose ⋯ = 0
+hphiV' : (Classical.choose ⋯) ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v) = 1
+hdecomp' :
+  ∀ (x : (Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi),
+    x =
+      (Classical.choose ⋯) ((Submodule.factor ⋯) x) +
+        (Classical.choose ⋯) x • (functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v
+hmatrix :
+  ∀ (B' : Submodule (ZMod 2) (Fin n → ZMod 2)) (hB : Q.codomainVariation ≤ B')
+    (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥Q.codomainVariation + 1)
+    (w : { w // ↑w ∉ Q.codomainVariation }) (R : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation)
+    (lambda : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2),
+    B'.subtype ∘ₗ
+        ↑((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv Q.codomainVariation B' hB hdim)
+            ⟨w, (R, lambda)⟩) =
+      quotientSampleOutput Q.codomainVariation (Submodule.factor ⋯) (Classical.choose ⋯) R lambda ↑↑w
+hbound :
+  let A' := functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  (∑ p,
+        Complex.normSq
+          (f
+            ↑((actualFibreQuotientHomEquiv { domainFixed := A', codomainVariation := B', base := Q.base }).symm
+                ↑((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv Q.codomainVariation B' hB hdim)
+                    p)))) /
+      ↑(Fintype.card
+          ((_ : { w // ↑w ∉ Q.codomainVariation }) × (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2))) ≤
+    2 * η
+hsum :
+  ∑ p,
+      Complex.normSq
+        (f
+          (LinearMap.toMatrix'
+            (Matrix.toLin' Q.base +
+              quotientSampleOutput Q.codomainVariation q phi₀ p.snd.1 p.snd.2 ↑↑p.fst ∘ₗ A'.mkQ))) =
+    ∑ p,
+      Complex.normSq
+        (f
+          ↑((actualFibreQuotientHomEquiv Q').symm
+              ↑((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv Q.codomainVariation B' hB hdim) p)))
+⊢ let hsource := ⋯;
+  let sCoord := Classical.choose hsource;
+  let hphiSource := ⋯;
+  let phi₀ := Classical.choose hphiSource;
+  let A' := functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  let q := Submodule.factor ⋯;
+  let C := (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2);
+  let Outside := { w // ↑w ∉ Q.codomainVariation };
+  (∑ p,
+        Complex.normSq
+          (f
+            (LinearMap.toMatrix'
+              (Matrix.toLin' Q.base +
+                quotientSampleOutput Q.codomainVariation q phi₀ p.snd.1 p.snd.2 ↑↑p.fst ∘ₗ A'.mkQ)))) /
+      ↑(Fintype.card ((_ : Outside) × C)) ≤
+    2 * η
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun x_1 => x ∈ Q.domainFixed
+  has type
+    x ∈ functionalKernelInAmbient Q.domainFixed phi → Prop
+  but is expected to have type
+    (∃ a ∈ ↑phi.ker, Q.domainFixed.subtype a = x) → Prop
+  in the application
+    @Exists.casesOn (↥Q.domainFixed) (fun a => a ∈ ↑phi.ker ∧ Q.domainFixed.subtype a = x) fun x_1 => x ∈ Q.domainFixed
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1576:75: error: unexpected identifier; expected '}'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1726:2: error: Type mismatch: After simplification, term
+  hq
+ has type
+  (∑ p,
+        Complex.normSq
+          (f
+            (Q.base +
+              LinearMap.toMatrix'
+                (quotientSampleOutput Q.codomainVariation (Submodule.factor ⋯) (Classical.choose ⋯) p.snd.1 p.snd.2
+                    ↑p.fst ∘ₗ
+                  (functionalKernelInAmbient Q.domainFixed phi).mkQ)))) /
+      ↑(Fintype.card
+          ((_ : { w // Submodule.Quotient.mk w = q }) ×
+            ((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation) ×
+              ((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2))) ≤
+    2 * η
+but is expected to have type
+  (∑ p,
+        Complex.normSq
+          (f
+            (Q.base +
+              LinearMap.toMatrix'
+                (quotientSampleOutput Q.codomainVariation (Submodule.factor ⋯) phi₀ p.snd.1 p.snd.2 ↑p.fst ∘ₗ
+                  (functionalKernelInAmbient Q.domainFixed phi).mkQ)))) /
+      ↑(Fintype.card
+          ((_ : { w // Submodule.Quotient.mk w = q }) ×
+            ((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation) ×
+              ((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2))) ≤
+    2 * η
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1754:30: warning: This simp argument is unused:
+  phiExt
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [quotientSampleOutput, LinearMap.comp_apply, hfactor]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1754:60: warning: This simp argument is unused:
+  hfactor
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [quotientSampleOutput, phiExt, LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1796:62: error: unsolved goals
+α : Type u_1
+β : Type u_2
+inst✝³ : Fintype α
+inst✝² : Nonempty α
+inst✝¹ : Fintype β
+inst✝ : Nonempty β
+z : α → β → ℂ
+hpoint :
+  ∀ (a : α),
+    Complex.normSq ((∑ a_1, z a a_1) / ↑(Fintype.card β)) ≤ (∑ a_1, Complex.normSq (z a a_1)) / ↑(Fintype.card β)
+hsum : ∑ a, Complex.normSq ((∑ b, z a b) / ↑(Fintype.card β)) ≤ ∑ a, (∑ b, Complex.normSq (z a b)) / ↑(Fintype.card β)
+hα : 0 < ↑(Fintype.card α)
+hβ : ↑(Fintype.card β) ≠ 0
+⊢ ∑ x, (∑ b, Complex.normSq (z x b)) * (↑(Fintype.card β))⁻¹ =
+    ↑(Fintype.card α) * ∑ x, ∑ x_1, (↑(Fintype.card β))⁻¹ * Complex.normSq (z x x_1) * (↑(Fintype.card α))⁻¹
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1818:27: warning: Variable name `ha` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ha
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:2008:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:2029:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1999:15: warning: This simp argument is unused:
+  LinearMap.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [F, LinearMap.add_apply, LinearMap.comp_apply, hmk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:1999:36: warning: This simp argument is unused:
+  LinearMap.add_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [F, LinearMap.sub_apply, LinearMap.comp_apply, hmk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18SourceGlobal.lean:2061:8: warning: Variable name `phi` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _phi
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
