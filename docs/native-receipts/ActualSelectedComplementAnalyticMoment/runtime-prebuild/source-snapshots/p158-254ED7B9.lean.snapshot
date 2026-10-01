@@ -1,0 +1,369 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
+
+/-!
+The normalized Jensen layer for the full ambient A18 functional draw.  The
+operator below is the manuscript's actual uniform `(psi,w)` translation
+average; it is not a same-ambient surrogate.
+-/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel
+open BinaryMatrixActualAffine BinaryMatrixComplexA15 BinaryMatrixFourier
+open scoped BigOperators
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+def actualA18Average {n d : ℕ} (v : Fin d → ZMod 2)
+    (f : BinaryMatrix n d → ℂ) (M : BinaryMatrix n d) : ℂ :=
+  (∑ p : FunctionalsAt v × (Fin n → ZMod 2),
+    f (M + actualA18RankOne p.1.1 p.2)) /
+      (Fintype.card (FunctionalsAt v × (Fin n → ZMod 2)) : ℂ)
+
+/-- Nonzero directions have an ambient functional taking value one, hence the
+restricted-functional fibre used by the A18 reindexing is nonempty. -/
+theorem restrictedFunctionals_nonempty_of_ne_zero {d : ℕ}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2)) (v : A)
+    (hv : (v : Fin d → ZMod 2) ≠ 0) :
+    Nonempty (RestrictedFunctionals A v) := by
+  classical
+  obtain ⟨psi, hpsi⟩ := Module.Projective.exists_dual_eq_one (ZMod 2) hv
+  refine ⟨⟨psi.comp A.subtype, ?_⟩⟩
+  simpa using hpsi
+
+noncomputable def actualA18SourceSample {n d : ℕ}
+    (Q : ActualAffineRestriction n d)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (R : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2]
+      Q.codomainVariation)
+    (lambda : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2] ZMod 2)
+    (w : Fin n → ZMod 2) : BinaryMatrix n d :=
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let qdom : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2]
+      ((Fin d → ZMod 2) ⧸ Q.domainFixed) :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let hcoords := quotientSectionCoordinates_of_restricted_functional
+    Q.domainFixed phi v hv
+  let phi₀ := Classical.choose (Classical.choose_spec hcoords)
+  LinearMap.toMatrix' (Matrix.toLin' Q.base +
+    (quotientSampleOutput Q.codomainVariation qdom phi₀ R lambda w).comp
+      (Submodule.mkQ A'))
+
+theorem actualA18SourceSample_eq_base_add {n d : ℕ}
+    (Q : ActualAffineRestriction n d)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (R : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2]
+      Q.codomainVariation)
+    (lambda : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2] ZMod 2)
+    (w : Fin n → ZMod 2) :
+    actualA18SourceSample Q phi v hv R lambda w =
+      Q.base + LinearMap.toMatrix'
+        ((quotientSampleOutput Q.codomainVariation
+          (Submodule.factor (p := functionalKernelInAmbient Q.domainFixed phi)
+            (p' := Q.domainFixed) (by
+              intro x hx
+              rcases hx with ⟨a, ha, rfl⟩
+              exact a.property))
+          (Classical.choose (Classical.choose_spec
+            (quotientSectionCoordinates_of_restricted_functional
+              Q.domainFixed phi v hv))) R lambda w).comp
+          (Submodule.mkQ (functionalKernelInAmbient Q.domainFixed phi))) := by
+  simp [actualA18SourceSample, LinearMap.toMatrix'_toLin']
+
+/-- The exact source-coordinate line mean used by the fixed-functional
+all-columns estimate. -/
+noncomputable def actualA18SourceLineMean {n d : ℕ}
+    (Q : ActualAffineRestriction n d)
+    (v : Q.domainFixed)
+    (phi : RestrictedFunctionals Q.domainFixed v)
+    (R : QuotientHom Q.domainFixed Q.codomainVariation)
+    (f : BinaryMatrix n d → ℂ) : ℂ :=
+  (∑ p : (Fin n → ZMod 2) ×
+      ((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2),
+    f (actualA18SourceSample Q phi.1 v phi.2 R p.2 p.1)) /
+    (Fintype.card ((Fin n → ZMod 2) ×
+      ((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2)) : ℂ)
+
+theorem complex_product_average_eq_iterated
+    {α β : Type*} [Fintype α] [Fintype β]
+    (z : α × β → ℂ) :
+    (∑ p : α × β, z p) / (Fintype.card (α × β) : ℂ) =
+    (∑ a : α, (∑ b : β, z (a, b)) / (Fintype.card β : ℂ)) /
+        (Fintype.card α : ℂ) := by
+  classical
+  rw [Fintype.sum_prod_type, Fintype.card_prod, Nat.cast_mul]
+  conv_lhs => rw [Finset.sum_div]
+  conv_rhs => rw [Finset.sum_div]
+  apply Finset.sum_congr rfl
+  intro a ha
+  conv_rhs => rw [Finset.sum_div]
+  apply Finset.sum_congr rfl
+  intro b hb
+  simp [div_div, mul_comm, mul_left_comm, mul_assoc]
+
+/-- Pointwise reindexing of the *actual* `(psi,w)` operator at each matrix in
+the parent fibre.  The sample identity transports its matrix to the source
+quotient coordinates without changing the statistic. -/
+theorem actualA18Average_eq_sourceCoordinates {n d : ℕ}
+    (Q : ActualAffineRestriction n d)
+    (v : Q.domainFixed)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2) (hv : phi v = 1)
+    (R : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2]
+      Q.codomainVariation)
+    (f : BinaryMatrix n d → ℂ) :
+    actualA18Average (v : Fin d → ZMod 2) f
+        ((actualFibreQuotientHomEquiv Q).symm R).1 =
+      (∑ p : RestrictedFunctionals Q.domainFixed v ×
+          (((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2) ×
+            (Fin n → ZMod 2)),
+        f (actualA18SourceSample Q p.1.1 v p.1.2 R p.2.1 p.2.2)) /
+        (Fintype.card (RestrictedFunctionals Q.domainFixed v ×
+          (((Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2) ×
+            (Fin n → ZMod 2))) : ℂ) := by
+  classical
+  let A := Q.domainFixed
+  let B := Q.codomainVariation
+  let W := Fin n → ZMod 2
+  let Lambda := (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2
+  let G := FunctionalsAt (v : Fin d → ZMod 2)
+  let Phi := RestrictedFunctionals A v
+  let Rtype := (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] B
+  let parent := ((actualFibreQuotientHomEquiv Q).symm R).1
+  let g : G × W → ℂ := fun p =>
+    f (parent + actualA18RankOne p.1.1 p.2)
+  let g' : Phi × (Lambda × W) → ℂ := fun p =>
+    f (actualA18SourceSample Q p.1.1 v p.1.2 R p.2.1 p.2.2)
+  have hpoint : ∀ p, g p = g' (globalFunctionalRowEquiv A v p) := by
+    intro p
+    let e := globalFunctionalRestrictionEquiv A v
+    let z := e p.1
+    have hpsi' : p.1.1 =
+        (restrictedFunctionalExtensionEquiv A z.1.1 v z.1.2 z.2).1 := by
+      have h := congrArg (fun q : G => q.1) (e.left_inv p.1)
+      dsimp [e, z, globalFunctionalRestrictionEquiv] at h
+      exact h.symm
+    have hmatrix := actualA18_sourceSample_eq_ambient Q z.1.1 v z.1.2
+      R z.2 p.2
+    have hparent := actualFibreQuotientHomEquiv_symm_matrix Q R
+    have hpointMatrix :
+        parent + actualA18RankOne p.1.1 p.2 =
+          actualA18SourceSample Q z.1.1 v z.1.2 R z.2 p.2 := by
+      dsimp [parent]
+      rw [hparent]
+      rw [hpsi']
+      exact hmatrix.symm
+    dsimp [g, g']
+    have hidx : globalFunctionalRowEquiv A v p =
+        (z.1, (z.2, p.2)) := rfl
+    rw [hidx]
+    apply congrArg f
+    simpa [hpsi'] using hpointMatrix
+  simpa [actualA18Average, g, g', A, B, W, Lambda, G, Phi, Rtype] using
+    globalFunctionalRow_average_reindex A v g g' hpoint
+
+/-- After reindexing the actual ambient draw, its normalized mean is the
+restricted-functional average of the source line means. The inner row and
+quotient-functional coordinates are only permuted, with no change to the
+statistic or its uniform law. -/
+theorem actualA18Average_eq_average_sourceLineMean {n d : ℕ}
+    (Q : ActualAffineRestriction n d)
+    (v : Q.domainFixed)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2) (hv : phi v = 1)
+    (R : QuotientHom Q.domainFixed Q.codomainVariation)
+    (f : BinaryMatrix n d → ℂ) :
+    actualA18Average (v : Fin d → ZMod 2) f
+        ((actualFibreQuotientHomEquiv Q).symm R).1 =
+      (∑ phi' : RestrictedFunctionals Q.domainFixed v,
+        actualA18SourceLineMean Q v phi' R f) /
+        (Fintype.card (RestrictedFunctionals Q.domainFixed v) : ℂ) := by
+  classical
+  let Phi := RestrictedFunctionals Q.domainFixed v
+  let Lambda := (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2
+  let W := Fin n → ZMod 2
+  let e : Phi × (Lambda × W) ≃ Phi × (W × Lambda) :=
+    Equiv.prodCongr (Equiv.refl Phi) (Equiv.prodComm Lambda W)
+  let g : Phi × (Lambda × W) → ℂ := fun p =>
+    f (actualA18SourceSample Q p.1.1 v p.1.2 R p.2.1 p.2.2)
+  let g' : Phi × (W × Lambda) → ℂ := fun p =>
+    f (actualA18SourceSample Q p.1.1 v p.1.2 R p.2.2 p.2.1)
+  have hsum : (∑ p, g p) = ∑ p, g' p := by
+    calc
+      (∑ p, g p) = ∑ p, g' (e p) := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        rcases p with ⟨phi', lambda, w⟩
+        rfl
+      _ = ∑ p, g' p := Equiv.sum_comp e g'
+  have hcard : Fintype.card (Phi × (Lambda × W)) =
+      Fintype.card (Phi × (W × Lambda)) := Fintype.card_congr e
+  rw [actualA18Average_eq_sourceCoordinates Q v phi hv R f]
+  rw [hsum, hcard, complex_product_average_eq_iterated]
+  simp [actualA18SourceLineMean, Phi, Lambda, W, g, g']
+
+/-- Jensen over the restricted functional at each actual quotient map R. -/
+theorem actualA18Average_normSq_le_sourceMean {n d : ℕ}
+    (Q : ActualAffineRestriction n d)
+    (v : Q.domainFixed) (hv : (v : Fin d → ZMod 2) ≠ 0)
+    (R : QuotientHom Q.domainFixed Q.codomainVariation)
+    (f : BinaryMatrix n d → ℂ) :
+    Complex.normSq (actualA18Average (v : Fin d → ZMod 2) f
+      ((actualFibreQuotientHomEquiv Q).symm R).1) ≤
+      (∑ phi : RestrictedFunctionals Q.domainFixed v,
+        Complex.normSq (actualA18SourceLineMean Q v phi R f)) /
+        (Fintype.card (RestrictedFunctionals Q.domainFixed v) : ℝ) := by
+  classical
+  let Phi := RestrictedFunctionals Q.domainFixed v
+  have hPhi : Nonempty Phi := restrictedFunctionals_nonempty_of_ne_zero
+    Q.domainFixed v hv
+  letI : Nonempty Phi := hPhi
+  rw [actualA18Average_eq_average_sourceLineMean Q v
+    (Classical.choice hPhi).1 (Classical.choice hPhi).2 R f]
+  exact normSq_finite_average_le
+    (fun phi : Phi => actualA18SourceLineMean Q v phi R f)
+
+/-- The normalized complex product mean is controlled by the average of the
+per-first-coordinate normalized means in squared norm. -/
+theorem normSq_complex_product_average_le
+    {α β : Type*} [Fintype α] [Nonempty α]
+    [Fintype β] [Nonempty β] (z : α × β → ℂ) :
+    Complex.normSq
+        ((∑ p : α × β, z p) / (Fintype.card (α × β) : ℂ)) ≤
+      (∑ a : α,
+        Complex.normSq
+          ((∑ b : β, z (a, b)) / (Fintype.card β : ℂ))) /
+        (Fintype.card α : ℝ) := by
+  rw [complex_product_average_eq_iterated]
+  exact normSq_finite_average_le
+    (fun a : α => (∑ b : β, z (a, b)) / (Fintype.card β : ℂ))
+
+/-- The two normalized finite real sums can be exchanged without changing
+their value. -/
+theorem real_finite_mean_swap {α β : Type*} [Fintype α] [Fintype β]
+    (z : α × β → ℝ) :
+    ((∑ b : β, (∑ a : α, z (a, b)) / (Fintype.card α : ℝ)) /
+        (Fintype.card β : ℝ)) =
+      ((∑ a : α, (∑ b : β, z (a, b)) / (Fintype.card β : ℝ)) /
+        (Fintype.card α : ℝ)) := by
+  rw [← Finset.sum_div, ← Finset.sum_div, Finset.sum_comm]
+  ring
+
+/-- Averaging the accepted fixed-functional line-energy estimate over all
+restrictions of the ambient functional preserves the same `2 * eta` bound.
+The nonzero direction supplies nonemptiness internally. -/
+theorem actualA18_source_restricted_mean_energy_le_two
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (v : Q.domainFixed) (hv : (v : Fin d → ZMod 2) ≠ 0) :
+    (∑ phi : RestrictedFunctionals Q.domainFixed v,
+      (∑ R : QuotientHom Q.domainFixed Q.codomainVariation,
+        Complex.normSq (actualA18SourceLineMean Q v phi R f)) /
+        (Fintype.card (QuotientHom Q.domainFixed Q.codomainVariation) : ℝ)) /
+      (Fintype.card (RestrictedFunctionals Q.domainFixed v) : ℝ) ≤ 2 * η := by
+  classical
+  let Phi := RestrictedFunctionals Q.domainFixed v
+  let R := QuotientHom Q.domainFixed Q.codomainVariation
+  have hPhi : Nonempty Phi := restrictedFunctionals_nonempty_of_ne_zero
+    Q.domainFixed v hv
+  letI : Nonempty Phi := hPhi
+  have hcardPhi : 0 < (Fintype.card Phi : ℝ) :=
+    Nat.cast_pos.mpr Fintype.card_pos
+  have hpoint (phi : Phi) :
+      (∑ r : R, Complex.normSq (actualA18SourceLineMean Q v phi r f)) /
+        (Fintype.card R : ℝ) ≤ 2 * η := by
+    simpa [actualA18SourceLineMean, actualA18SourceSample,
+      actualA18SourceSample_eq_base_add, Phi, R] using
+      actual_fixed_functional_line_average_energy_le_two
+        f hf Q hQ phi.1 v phi.2
+  have hsum :
+      (∑ phi : Phi, (∑ r : R,
+        Complex.normSq (actualA18SourceLineMean Q v phi r f)) /
+          (Fintype.card R : ℝ)) ≤
+        ∑ _phi : Phi, 2 * η :=
+    Finset.sum_le_sum (fun phi hphi => hpoint phi)
+  apply (div_le_iff₀ hcardPhi).2
+  calc
+    (∑ phi : Phi, (∑ r : R,
+      Complex.normSq (actualA18SourceLineMean Q v phi r f)) /
+        (Fintype.card R : ℝ)) ≤
+      ∑ _phi : Phi, 2 * η := hsum
+    _ = (2 * η) * (Fintype.card Phi : ℝ) := by simp [mul_comm]
+
+/-- The A18 operator has the required `2 * eta` energy on a parent actual
+fibre whenever the sampled nonzero direction lies in its fixed subspace.
+This combines the exact ambient functional reindexing, Jensen in the
+restricted-functional coordinate, normalized finite-sum exchange, and the
+accepted fixed-functional source bound. -/
+theorem actualA18_parent_fibre_energy_le_two_inside {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (v : Q.domainFixed) (hv : (v : Fin d → ZMod 2) ≠ 0) :
+    fibreEnergy Q.fibre (actualA18Average (v : Fin d → ZMod 2) f) ≤
+      2 * η := by
+  classical
+  let Phi := RestrictedFunctionals Q.domainFixed v
+  let R := QuotientHom Q.domainFixed Q.codomainVariation
+  have hPhi : Nonempty Phi := restrictedFunctionals_nonempty_of_ne_zero
+    Q.domainFixed v hv
+  letI : Nonempty Phi := hPhi
+  have hsource := actualA18_source_restricted_mean_energy_le_two
+    f hf Q hQ v hv
+  rw [actualFibreQuotientHomEquiv_energy]
+  have hsum :
+      (∑ r : R, Complex.normSq
+        (actualA18Average (v : Fin d → ZMod 2) f
+          ((actualFibreQuotientHomEquiv Q).symm r).1)) ≤
+        ∑ r : R,
+          (∑ phi : Phi,
+            Complex.normSq (actualA18SourceLineMean Q v phi r f)) /
+              (Fintype.card Phi : ℝ) :=
+    Finset.sum_le_sum (fun r hr =>
+      actualA18Average_normSq_le_sourceMean Q v hv r f)
+  have hcardR : 0 < (Fintype.card R : ℝ) :=
+    Nat.cast_pos.mpr Fintype.card_pos
+  have hnormalized :
+      (∑ r : R, Complex.normSq
+        (actualA18Average (v : Fin d → ZMod 2) f
+          ((actualFibreQuotientHomEquiv Q).symm r).1)) /
+        (Fintype.card R : ℝ) ≤
+      (∑ r : R,
+          (∑ phi : Phi,
+            Complex.normSq (actualA18SourceLineMean Q v phi r f)) /
+              (Fintype.card Phi : ℝ)) /
+        (Fintype.card R : ℝ) := by
+    exact div_le_div_of_nonneg_right hsum (le_of_lt hcardR)
+  have hswap := real_finite_mean_swap
+    (α := Phi) (β := R)
+    (fun p : Phi × R =>
+      Complex.normSq (actualA18SourceLineMean Q v p.1 p.2 f))
+  calc
+    (∑ r : R, Complex.normSq
+      (actualA18Average (v : Fin d → ZMod 2) f
+        ((actualFibreQuotientHomEquiv Q).symm r).1)) /
+      (Fintype.card R : ℝ) ≤
+      (∑ r : R,
+          (∑ phi : Phi,
+            Complex.normSq (actualA18SourceLineMean Q v phi r f)) /
+              (Fintype.card Phi : ℝ)) /
+        (Fintype.card R : ℝ) := hnormalized
+    _ = (∑ phi : Phi,
+        (∑ r : R,
+          Complex.normSq (actualA18SourceLineMean Q v phi r f)) /
+            (Fintype.card R : ℝ)) /
+          (Fintype.card Phi : ℝ) := hswap
+    _ ≤ 2 * η := by
+      simpa [Phi, R] using hsource
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
