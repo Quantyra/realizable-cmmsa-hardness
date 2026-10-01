@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+
+open PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+
+#check mapReindexEquiv
+#check frequencyReindexEquiv
+#check tracePair_reindex
+#check frequencyReindex_rank
+#check complexLinearMapFourierCoeff_reindex
+#check complexLinearMapRankProjection_reindex
+#check nestedCarrierFourierCoeff
+#check nestedCarrierRankProjection
+#check complexCarrierFourierCoeff_reindex
+#print axioms nestedCarrierFourierCoeff
+#print axioms nestedCarrierRankProjection
+#print axioms complexCarrierFourierCoeff_reindex

@@ -39,5 +39,31 @@
       "--zone=us-central1-a"
     ],
     "exit": 1
+  },
+  {
+    "label": "stop",
+    "args": [
+      "compute",
+      "instances",
+      "stop",
+      "quantyra-lean-builder-01",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "exit": 0
+  },
+  {
+    "label": "describe",
+    "args": [
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-01",
+      "--format=value(status)",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "exit": 0
   }
 ]
