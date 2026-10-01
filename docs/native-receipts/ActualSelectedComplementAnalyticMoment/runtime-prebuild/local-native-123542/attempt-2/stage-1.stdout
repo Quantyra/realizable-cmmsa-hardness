@@ -1,0 +1,77 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18ActualGlobalBridge.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  X - (Q.base + S)
+in the target expression
+  X ∈
+      {M |
+        (∀ a ∈ Q.domainFixed, Matrix.mulVec (M - (Q.base + S)) a = 0) ∧
+          ∀ (v : Fin d → ZMod 2), Matrix.mulVec (M - (Q.base + S)) v ∈ Q.codomainVariation} ↔
+    (∀ a ∈ Q.domainFixed, Matrix.mulVec (X - S - Q.base) a = 0) ∧
+      ∀ (v : Fin d → ZMod 2), Matrix.mulVec (X - S - Q.base) v ∈ Q.codomainVariation
+
+n d : ℕ
+Q : ActualAffineRestriction n d
+S X : BinaryMatrix n d
+hdiff : X - (Q.base + S) = X - S - Q.base
+⊢ X ∈
+      {M |
+        (∀ a ∈ Q.domainFixed, Matrix.mulVec (M - (Q.base + S)) a = 0) ∧
+          ∀ (v : Fin d → ZMod 2), Matrix.mulVec (M - (Q.base + S)) v ∈ Q.codomainVariation} ↔
+    (∀ a ∈ Q.domainFixed, Matrix.mulVec (X - S - Q.base) a = 0) ∧
+      ∀ (v : Fin d → ZMod 2), Matrix.mulVec (X - S - Q.base) v ∈ Q.codomainVariation
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun a => instDecidableAnd
+  has type
+    (a : BinaryMatrix n d) →
+      Decidable
+        ((∀ a_1 ∈ (translateActualRestriction Q S).domainFixed,
+            Matrix.mulVec (a - (translateActualRestriction Q S).base) a_1 = 0) ∧
+          ∀ (v : Fin d → ZMod 2),
+            Matrix.mulVec (a - (translateActualRestriction Q S).base) v ∈
+              (translateActualRestriction Q S).codomainVariation)
+  but is expected to have type
+    DecidablePred fun M =>
+      (∀ a ∈ Q.domainFixed, Matrix.mulVec (M - (Q.base + S)) a = 0) ∧
+        ∀ (v : Fin d → ZMod 2), Matrix.mulVec (M - (Q.base + S)) v ∈ Q.codomainVariation
+  in the application
+    @Finset.filter (BinaryMatrix n d)
+      (fun M =>
+        (∀ a ∈ Q.domainFixed, Matrix.mulVec (M - (Q.base + S)) a = 0) ∧
+          ∀ (v : Fin d → ZMod 2), Matrix.mulVec (M - (Q.base + S)) v ∈ Q.codomainVariation)
+      fun a => instDecidableAnd
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18ActualGlobalBridge.lean:72:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fibreEnergy (translateActualRestriction Q S).fibre f
+in the target expression
+  (fibreEnergy Q.fibre fun M => f (M + S)) ≤ ε
+
+n d r : ℕ
+ε : ℝ
+S : BinaryMatrix n d
+f : BinaryMatrix n d → ℂ
+hf : UpToActualNormSqGlobal r ε f
+Q : ActualAffineRestriction n d
+hQ : Q.order ≤ r
+h : fibreEnergy (translateActualRestriction Q S).fibre f ≤ ε
+⊢ (fibreEnergy Q.fibre fun M => f (M + S)) ≤ ε
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18ActualGlobalBridge.lean:80:27: error: unsolved goals
+n d r : ℕ
+ε : ℝ
+f : BinaryMatrix n d → ℂ
+hf : UpToActualNormSqGlobal r ε f
+Q : ActualAffineRestriction n d := { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }
+⊢ Module.finrank (ZMod 2) ((Fin n → ZMod 2) ⧸ ⊤) ≤ r
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18ActualGlobalBridge.lean:183:23: error: linarith failed to find a contradiction
+n d r : ℕ
+ε : ℝ
+f : BinaryMatrix n (d + 1) → ℂ
+hf : UpToActualNormSqGlobal (r + 1) ε f
+hstrong : UpToActualNormSqGlobal (r + 1) ε (complexLineAverage f)
+Q : ActualAffineRestriction n (d + 1)
+hQ : Q.order ≤ r
+hQ' : Q.order ≤ r + 1
+h : fibreEnergy Q.fibre (complexLineAverage f) ≤ ε
+a✝ : 2 * ε < ε
+⊢ False
+failed
