@@ -1,0 +1,45 @@
+PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopAmbientMatrixEquiv {n d : ℕ} :
+  (PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+      ↥⊤) ≃ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+    PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d
+PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopTypedRankProjection_reindex_hom {n d j : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection ⊥ ⊤ j
+      (fun N => f (bottomTopAmbientMatrixEquiv N)) M =
+    PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.complexLinearMapRankProjection j
+      (fun L => f (LinearMap.toMatrix' L)) (bottomTopCarrierAmbientHomEquiv M)
+PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.ambientHomFourierCoeff_toMatrix {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (Y :
+    PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.W✝
+        n →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+      PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d) :
+  PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.complexLinearMapFourierCoeff
+      (fun M => f (LinearMap.toMatrix' M)) Y =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f (ambientFrequencyMatrixEquiv Y)
+PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.ambientHomRankProjection_toMatrix {n d j : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+      PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.W✝ n) :
+  PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.complexLinearMapRankProjection j
+      (fun L => f (LinearMap.toMatrix' L)) M =
+    PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection j f (LinearMap.toMatrix' M)
+PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopSourceRankProjection {n d j : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection ⊥ ⊤ j
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 f) M =
+    PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection j f (bottomTopAmbientMatrixEquiv M)
+'PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopSourceRankProjection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
