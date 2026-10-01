@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice
+
+#check fixed_slice_reduced_energy_le
+#print axioms fixed_slice_reduced_energy_le
+#check fixed_slice_parent_order_eq
+#print axioms fixed_slice_parent_order_eq

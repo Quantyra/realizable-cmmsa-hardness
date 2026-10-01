@@ -1,0 +1,38 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_reduced_energy_le {n d r : ℕ} {η : ℝ}
+  (A0 A1 :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.W✝ n))
+  (hA : A0 ≤ A1)
+  (g :
+    ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d ⧸ A0) ⧸
+          Submodule.map A0.mkQ A1 →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝]
+        ↥B) →
+      ℂ)
+  (hg :
+    PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal.UpToReducedNormSqGlobal A0 B (Submodule.map A0.mkQ A1)
+      (r - 1) η g)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal.ReducedRestriction A0 B (Submodule.map A0.mkQ A1))
+  (hQ : Q.order ≤ r - 1) :
+  (∑ M ∈ (PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalRestriction B hA Q).fibre,
+        Complex.normSq (g ((PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalEquiv A0 A1 B hA).symm M))) /
+      ↑(PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalRestriction B hA Q).fibre.card ≤
+    η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_reduced_energy_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_parent_order_eq {n d : ℕ}
+  (A0 A1 :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.W✝ n))
+  (hA : A0 ≤ A1)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal.ReducedRestriction A0 B (Submodule.map A0.mkQ A1)) :
+  (PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalRestriction B hA Q).order = Q.order
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_parent_order_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
