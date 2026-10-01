@@ -1,0 +1,396 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17Full
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+import PvNP.RealizableHardness.ActualTypedABFullA16Final
+import PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+import PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+import PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+import PvNP.RealizableHardness.BinaryMatrixActualAffine
+import PvNP.RealizableHardness.BinaryMatrixFourier
+import PvNP.RealizableHardness.ActualTypedABHybridSelectorSteps
+import PvNP.RealizableHardness.BinaryMatrixA15NestedLine
+import PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+
+/-! The original single-derivative influence predicate and the A1 inheritance
+obligations for the A18 induction.  The influence predicate is a full uniform
+mean on each actual quotient carrier; it is not a conditional mean on a
+further affine fibre. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17Full
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+open PvNP.RealizableHardness.ActualTypedABFullA16Final
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualTypedABHybridSelectorSteps
+open PvNP.RealizableHardness.BinaryMatrixA15NestedLine
+open PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Hyperplane
+open scoped BigOperators
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- Original manuscript influence through order `D`: the full normalized
+mean of every actual filtered derivative, for every affine base. -/
+def OriginalActualInfluenceThrough {n d : Nat} (D : Nat) (eps : Real)
+    (f : BinaryMatrix n d → Complex) : Prop :=
+  ∀ (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n),
+    Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ D →
+    carrierMean A B (fun M => Complex.normSq
+      (filteredCarrierFunction A B T f M)) ≤ eps
+
+/-- The order-zero source seed is part of the original influence premise:
+the unrestricted bottom/top derivative is the ambient source. -/
+theorem original_influence_order_zero_seed {n d D : Nat} {eps : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hinfl : OriginalActualInfluenceThrough D eps f) :
+    carrierMean (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n))
+      (fun M => Complex.normSq (filteredCarrierFunction
+        (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) 0 f M)) ≤ eps := by
+  apply hinfl
+  simp only [finrank_bot]
+  have htop : Module.finrank F ((W n) ⧸ (⊤ : Submodule F (W n))) = 0 := by
+    have h := (⊤ : Submodule F (W n)).finrank_quotient_add_finrank
+    rw [finrank_top] at h
+    omega
+  omega
+
+/-- The original influence parameter is nonnegative, obtained from its
+order-zero seed and pointwise nonnegativity of squared complex magnitude. -/
+theorem original_influence_parameter_nonneg {n d D : Nat} {eps : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hinfl : OriginalActualInfluenceThrough D eps f) : 0 ≤ eps := by
+  have hseed := original_influence_order_zero_seed f hinfl
+  have hnonneg : 0 ≤ carrierMean (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) (fun M => Complex.normSq
+        (filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) 0 f M)) := by
+    unfold carrierMean
+    apply div_nonneg
+    · exact Finset.sum_nonneg fun M _ => Complex.normSq_nonneg _
+    · exact Nat.cast_nonneg _
+  exact le_trans hnonneg hseed
+
+/-- A generic normalized finite mean, used on intermediate quotient-Hom
+carriers during A1 composition. -/
+def a18UniformMean {α : Type*} [Fintype α] (g : α → Real) : Real :=
+  (∑ x : α, g x) / (Fintype.card α : Real)
+
+/-- A one-step domain-line derivative on a reduced carrier has exactly the
+same full normalized energy mean as the original derivative on the composed
+domain endpoint. -/
+theorem original_influence_line_A1_mean
+    {n d D : Nat} {eps : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hinfl : OriginalActualInfluenceThrough D eps f)
+    (U A : Submodule F (V d)) (B : Submodule F (W n))
+    (hU : U ≤ A) (hL : Module.finrank F (A.map U.mkQ) = 1)
+    (T : V d →ₗ[F] W n)
+    (S : (V d ⧸ U) →ₗ[F] B)
+    (horder : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ D) :
+    a18UniformMean (fun N : ((V d ⧸ U) ⧸ A.map U.mkQ) →ₗ[F] B =>
+      Complex.normSq (typedComplexLineFilter B (A.map U.mkQ) hL
+        (fun M => filteredCarrierFunction U B T
+          f M)
+        (S + N.comp (A.map U.mkQ).mkQ))) ≤ eps := by
+  let e := lineCanonicalEquiv U A B hU
+  let T' := T + B.subtype.comp (S.comp U.mkQ)
+  let g : ((V d ⧸ A) →ₗ[F] B) → Real := fun M =>
+    Complex.normSq (filteredCarrierFunction A B T' f M)
+  have hstep (N : ((V d ⧸ U) ⧸ A.map U.mkQ) →ₗ[F] B) :
+      typedComplexLineFilter B (A.map U.mkQ) hL
+          (fun M => filteredCarrierFunction U B T
+            f M)
+          (S + N.comp (A.map U.mkQ).mkQ) =
+        filteredCarrierFunction A B T'
+          f (e N) := by
+    simpa [filteredCarrierFunction, T', e] using
+      typed_line_A1_operator_step U A B hU hL T S
+      f N
+  have hsum : (∑ N : ((V d ⧸ U) ⧸ A.map U.mkQ) →ₗ[F] B,
+      Complex.normSq (typedComplexLineFilter B (A.map U.mkQ) hL
+        (fun M => filteredCarrierFunction U B T
+          f M)
+        (S + N.comp (A.map U.mkQ).mkQ))) =
+      ∑ M : (V d ⧸ A) →ₗ[F] B, g M := by
+    calc
+      _ = ∑ N : ((V d ⧸ U) ⧸ A.map U.mkQ) →ₗ[F] B, g (e N) := by
+        apply Finset.sum_congr rfl
+        intro N hN
+        simp only [g, hstep]
+      _ = _ := Equiv.sum_comp e.toEquiv g
+  have hcard : Fintype.card (((V d ⧸ U) ⧸ A.map U.mkQ) →ₗ[F] B) =
+      Fintype.card ((V d ⧸ A) →ₗ[F] B) := Fintype.card_congr e.toEquiv
+  have hmean : a18UniformMean (fun N : ((V d ⧸ U) ⧸ A.map U.mkQ) →ₗ[F] B =>
+      Complex.normSq (typedComplexLineFilter B (A.map U.mkQ) hL
+        (fun M => filteredCarrierFunction U B T
+          f M)
+        (S + N.comp (A.map U.mkQ).mkQ))) =
+      carrierMean A B (fun M => Complex.normSq (filteredCarrierFunction A B T' f M)) := by
+    simp [a18UniformMean, carrierMean, hsum, hcard, g]
+  rw [hmean]
+  exact hinfl A B T' horder
+
+/-- The codomain-hyperplane A1 step likewise reindexes its complete uniform
+mean to the original derivative on the smaller codomain endpoint. -/
+theorem original_influence_hyperplane_A1_mean
+    {n d D : Nat} {eps : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hinfl : OriginalActualInfluenceThrough D eps f)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (H : Submodule F B) (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : V d →ₗ[F] W n)
+    (S : (V d ⧸ A) →ₗ[F] B)
+    (horder : Module.finrank F A +
+      Module.finrank F (W n ⧸ hyperplaneCanonicalCodomain B H) ≤ D) :
+    a18UniformMean (fun N : (V d ⧸ A) →ₗ[F] H =>
+      Complex.normSq (typedComplexHyperplaneFilter B H hH
+        (fun M => filteredCarrierFunction A B T
+          f M)
+        (S + H.subtype.comp N))) ≤ eps := by
+  let e := hyperplaneCanonicalEquiv (A := A) (d := d) B H
+  let T' := T + B.subtype.comp (S.comp A.mkQ)
+  let g : ((V d ⧸ A) →ₗ[F] hyperplaneCanonicalCodomain B H) → Real := fun M =>
+    Complex.normSq (filteredCarrierFunction A
+      (hyperplaneCanonicalCodomain B H) T'
+      f M)
+  have hstep (N : (V d ⧸ A) →ₗ[F] H) :
+      typedComplexHyperplaneFilter B H hH
+          (fun M => filteredCarrierFunction A B T
+            f M)
+          (S + H.subtype.comp N) =
+        filteredCarrierFunction A (hyperplaneCanonicalCodomain B H) T'
+          f (e N) := by
+    simpa [filteredCarrierFunction, T', e] using
+      typed_hyperplane_A1_operator_step A B H hH T S
+      f N
+  have hsum : (∑ N : (V d ⧸ A) →ₗ[F] H,
+      Complex.normSq (typedComplexHyperplaneFilter B H hH
+        (fun M => filteredCarrierFunction A B T
+          f M)
+        (S + H.subtype.comp N))) =
+      ∑ M : (V d ⧸ A) →ₗ[F] hyperplaneCanonicalCodomain B H, g M := by
+    calc
+      _ = ∑ N : (V d ⧸ A) →ₗ[F] H, g (e N) := by
+        apply Finset.sum_congr rfl
+        intro N hN
+        simp only [g, hstep]
+      _ = _ := Equiv.sum_comp e.toEquiv g
+  have hcard : Fintype.card ((V d ⧸ A) →ₗ[F] H) =
+      Fintype.card ((V d ⧸ A) →ₗ[F] hyperplaneCanonicalCodomain B H) :=
+    Fintype.card_congr e.toEquiv
+  have hmean : a18UniformMean (fun N : (V d ⧸ A) →ₗ[F] H =>
+      Complex.normSq (typedComplexHyperplaneFilter B H hH
+        (fun M => filteredCarrierFunction A B T
+          f M)
+        (S + H.subtype.comp N))) =
+      carrierMean A (hyperplaneCanonicalCodomain B H)
+        (fun M => Complex.normSq (filteredCarrierFunction A
+          (hyperplaneCanonicalCodomain B H) T'
+          f M)) := by
+    simp [a18UniformMean, carrierMean, hsum, hcard, g]
+  rw [hmean]
+  exact hinfl A (hyperplaneCanonicalCodomain B H) T' horder
+
+/-- General A1 composition transports the full normalized mean on a nested
+carrier to the original single derivative on the composed endpoint. The
+endpoint's original rank cost is exactly the one charged by the influence
+premise; no recursive globalness or conditional-energy premise is assumed. -/
+theorem original_influence_A1_composition_mean
+    {n d D : Nat} {eps : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hinfl : OriginalActualInfluenceThrough D eps f)
+    (A₂ A₁ : Submodule F (V d)) (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (T : V d →ₗ[F] W n)
+    (S : (V d ⧸ A₂) →ₗ[F] B₂)
+    (horder : Module.finrank F A₁ +
+      Module.finrank F (W n ⧸ B₁) ≤ D) :
+    a18UniformMean (fun N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+        (B₁.comap B₂.subtype) =>
+      Complex.normSq (complexCarrierAffineRestrict A₂ B₂
+        (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+        (complexCarrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ)
+          (B₁.comap B₂.subtype)
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) N)) ≤ eps := by
+  let e := nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB
+  let T' := T + B₂.subtype.comp (S.comp A₂.mkQ)
+  have hstep (N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+      (B₁.comap B₂.subtype)) :
+      complexCarrierAffineRestrict A₂ B₂ (A₁.map A₂.mkQ)
+          (B₁.comap B₂.subtype) S
+          (complexCarrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ)
+            (B₁.comap B₂.subtype)
+            (fun M => filteredCarrierFunction A₂ B₂ T f M)) N =
+        filteredCarrierFunction A₁ B₁ T' f (e N) := by
+    have h := manuscript_A1_complex A₂ A₁ B₁ B₂ hA hB T S
+      f N
+    simpa [complexCarrierAffineRestrict, filteredCarrierFunction, T', e]
+      using h
+  let g : ((V d ⧸ A₁) →ₗ[F] B₁) → Real := fun M =>
+    Complex.normSq (filteredCarrierFunction A₁ B₁ T' f M)
+  have hsum : (∑ N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+        (B₁.comap B₂.subtype),
+      Complex.normSq (complexCarrierAffineRestrict A₂ B₂
+        (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+        (complexCarrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ)
+          (B₁.comap B₂.subtype)
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) N)) =
+      ∑ M : (V d ⧸ A₁) →ₗ[F] B₁, g M := by
+    calc
+      _ = ∑ N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+          (B₁.comap B₂.subtype), g (e N) := by
+        apply Finset.sum_congr rfl
+        intro N hN
+        simp only [g, hstep]
+      _ = _ := Equiv.sum_comp e.toEquiv g
+  have hcard : Fintype.card (((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+      (B₁.comap B₂.subtype)) =
+      Fintype.card ((V d ⧸ A₁) →ₗ[F] B₁) := Fintype.card_congr e.toEquiv
+  have hmean : a18UniformMean (fun N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+      (B₁.comap B₂.subtype) =>
+      Complex.normSq (complexCarrierAffineRestrict A₂ B₂
+        (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+        (complexCarrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ)
+          (B₁.comap B₂.subtype)
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) N)) =
+      carrierMean A₁ B₁ (fun M => Complex.normSq (filteredCarrierFunction A₁ B₁ T'
+        f M)) := by
+    simp [a18UniformMean, carrierMean, hsum, hcard, g]
+  rw [hmean]
+  exact hinfl A₁ B₁ T' horder
+
+/-- Every relative quotient/submodule endpoint has the canonical ambient
+preimage/image representation. This transports the composition mean to
+arbitrary nested endpoints without assuming any conditional fibre bound. -/
+theorem original_influence_A1_relative_mean
+    {n d D : Nat} {eps : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hinfl : OriginalActualInfluenceThrough D eps f)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (A₁₂ : Submodule F (V d ⧸ A₂)) (B₁₂ : Submodule F B₂)
+    (T : V d →ₗ[F] W n)
+    (S : (V d ⧸ A₂) →ₗ[F] B₂)
+    (horder : Module.finrank F (A₁₂.comap A₂.mkQ) +
+      Module.finrank F (W n ⧸ B₁₂.map B₂.subtype) ≤ D) :
+    a18UniformMean (fun N : ((V d ⧸ A₂) ⧸ A₁₂) →ₗ[F] B₁₂ =>
+      Complex.normSq (complexCarrierAffineRestrict A₂ B₂ A₁₂ B₁₂ S
+        (complexCarrierHybridFilter A₂ B₂ A₁₂ B₁₂
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) N)) ≤ eps := by
+  let A₁ : Submodule F (V d) := A₁₂.comap A₂.mkQ
+  let B₁ : Submodule F (W n) := B₁₂.map B₂.subtype
+  have hA : A₂ ≤ A₁ := by
+    intro x hx
+    change A₂.mkQ x ∈ A₁₂
+    have hxker : x ∈ LinearMap.ker A₂.mkQ := by
+      simpa only [Submodule.ker_mkQ] using hx
+    rw [LinearMap.mem_ker.mp hxker]
+    exact A₁₂.zero_mem
+  have hB : B₁ ≤ B₂ := by
+    intro y hy
+    rcases Submodule.mem_map.mp hy with ⟨z, hz, rfl⟩
+    exact z.property
+  have hAmap : A₁.map A₂.mkQ = A₁₂ := by
+    dsimp [A₁]
+    exact Submodule.map_comap_eq_self (by
+      rw [Submodule.range_mkQ]
+      exact le_top)
+  have hBcomap : B₁.comap B₂.subtype = B₁₂ := by
+    ext z
+    constructor
+    · intro hz
+      have hz' : B₂.subtype z ∈ B₁ := hz
+      rcases Submodule.mem_map.mp hz' with ⟨w, hw, hweq⟩
+      have heq : w = z := B₂.injective_subtype hweq
+      simpa [heq] using hw
+    · intro hz
+      exact Submodule.mem_map.mpr ⟨z, hz, rfl⟩
+  have horder' : Module.finrank F A₁ +
+      Module.finrank F (W n ⧸ B₁) ≤ D := by
+    simpa [A₁, B₁] using horder
+  have hcanonical := original_influence_A1_composition_mean f hinfl
+    A₂ A₁ B₁ B₂ hA hB T S horder'
+  rw [← hAmap, ← hBcomap]
+  exact hcanonical
+
+/-- The canonical relative endpoint has additive rank cost. -/
+theorem relative_endpoint_cost_add
+    {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (A₁₂ : Submodule F (V d ⧸ A₂)) (B₁₂ : Submodule F B₂) :
+    Module.finrank F (A₁₂.comap A₂.mkQ) +
+        Module.finrank F (W n ⧸ B₁₂.map B₂.subtype) =
+      (Module.finrank F A₂ + Module.finrank F (W n ⧸ B₂)) +
+        (Module.finrank F A₁₂ + Module.finrank F (B₂ ⧸ B₁₂)) := by
+  let A₁ : Submodule F (V d) := A₁₂.comap A₂.mkQ
+  let B₁ : Submodule F (W n) := B₁₂.map B₂.subtype
+  have hA : A₂ ≤ A₁ := by
+    intro x hx
+    change A₂.mkQ x ∈ A₁₂
+    have hxker : x ∈ LinearMap.ker A₂.mkQ := by
+      simpa only [Submodule.ker_mkQ] using hx
+    rw [LinearMap.mem_ker.mp hxker]
+    exact A₁₂.zero_mem
+  have hAmap : A₁.map A₂.mkQ = A₁₂ := by
+    dsimp [A₁]
+    exact Submodule.map_comap_eq_self (by
+      rw [Submodule.range_mkQ]
+      exact le_top)
+  have hAquot : Module.finrank F ((V d ⧸ A₂) ⧸ A₁₂) =
+      Module.finrank F (V d ⧸ A₁) := by
+    rw [← hAmap]
+    exact (nestedDomainEquiv A₂ A₁ hA).finrank_eq
+  have hA1q := A₁.finrank_quotient_add_finrank
+  have hA2q := A₂.finrank_quotient_add_finrank
+  have hArelq := A₁₂.finrank_quotient_add_finrank
+  rw [hAquot] at hArelq
+  change Module.finrank F (V d ⧸ (A₁₂.comap A₂.mkQ)) +
+      Module.finrank F (A₁₂.comap A₂.mkQ) =
+        Module.finrank F (V d) at hA1q
+  change Module.finrank F (V d ⧸ A₂) + Module.finrank F A₂ =
+      Module.finrank F (V d) at hA2q
+  have hAadd : Module.finrank F A₁ =
+      Module.finrank F A₂ + Module.finrank F A₁₂ := by
+    change Module.finrank F (A₁₂.comap A₂.mkQ) =
+      Module.finrank F A₂ + Module.finrank F A₁₂
+    omega
+  have hBdim : Module.finrank F B₁ = Module.finrank F B₁₂ := by
+    dsimp [B₁]
+    exact Submodule.finrank_map_subtype_eq B₂ B₁₂
+  have hB1q := B₁.finrank_quotient_add_finrank
+  have hB2q := B₂.finrank_quotient_add_finrank
+  have hBrelq := B₁₂.finrank_quotient_add_finrank
+  change Module.finrank F (W n ⧸ (B₁₂.map B₂.subtype)) +
+      Module.finrank F (B₁₂.map B₂.subtype) =
+        Module.finrank F (W n) at hB1q
+  rw [hBdim] at hB1q
+  change Module.finrank F (W n ⧸ B₂) + Module.finrank F B₂ =
+      Module.finrank F (W n) at hB2q
+  have hBadd : Module.finrank F (W n ⧸ B₁) =
+      Module.finrank F (W n ⧸ B₂) + Module.finrank F (B₂ ⧸ B₁₂) := by
+    change Module.finrank F (W n ⧸ (B₁₂.map B₂.subtype)) =
+      Module.finrank F (W n ⧸ B₂) + Module.finrank F (B₂ ⧸ B₁₂)
+    omega
+  rw [hAadd, hBadd]
+  ring
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction
