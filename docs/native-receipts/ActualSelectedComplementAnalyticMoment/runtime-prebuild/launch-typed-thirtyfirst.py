@@ -1,4 +1,4 @@
-import pathlib,json,hashlib,subprocess,sys
+import pathlib,json,hashlib,subprocess,sys,runpy
 repo=pathlib.Path(__file__).resolve().parents[4]
 b=repo/'docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild'
 pins=json.loads((b/'typed-thirtyfirst-pins.json').read_text())
@@ -15,4 +15,5 @@ for source,h in pins.items():
  args+=['--dependency-source',source,'--dependency-sha',h]
  if source not in [pre+n+'.lean' for n in plan] and h.upper() in snapshots:args+=['--dependency-snapshot',source+'='+str(snapshots[h.upper()].relative_to(repo))]
 if '--execute' in sys.argv:args+=['--execute']
-sys.exit(subprocess.call(args,cwd=repo))
+sys.argv=args[1:]
+runpy.run_path(args[1],run_name='__main__')
