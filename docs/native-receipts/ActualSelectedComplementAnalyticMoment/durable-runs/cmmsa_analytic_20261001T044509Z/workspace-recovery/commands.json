@@ -1,0 +1,43 @@
+[
+  {
+    "label": "start",
+    "args": [
+      "compute",
+      "instances",
+      "start",
+      "quantyra-lean-builder-01",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "exit": 0
+  },
+  {
+    "label": "inspect",
+    "args": [
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-01",
+      "--quiet",
+      "--tunnel-through-iap",
+      "--command=date -u; ls -ld /tmp/cmmsa_analytic_20261001T044509Z*; find /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z -maxdepth 2 -name '*044509*'; ps -eo pid,etimes,args | head -40; journalctl -b -1 --no-pager -n 100; if test -d /tmp/cmmsa_analytic_20261001T044509Z-evidence; then tar -czf /home/dfredriksen_quantyra_org/recovered-044509.tar.gz -C /tmp/cmmsa_analytic_20261001T044509Z-evidence .; fi",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "exit": 0
+  },
+  {
+    "label": "scp",
+    "args": [
+      "compute",
+      "scp",
+      "quantyra-lean-builder-01:/home/dfredriksen_quantyra_org/recovered-044509.tar.gz",
+      "C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\native-receipts\\ActualSelectedComplementAnalyticMoment\\durable-runs\\cmmsa_analytic_20261001T044509Z\\recovered-044509.tar.gz",
+      "--quiet",
+      "--tunnel-through-iap",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a"
+    ],
+    "exit": 1
+  }
+]
