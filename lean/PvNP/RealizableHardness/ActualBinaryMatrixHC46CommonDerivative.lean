@@ -1,0 +1,270 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46MixedPeeling
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46CommonDerivative
+
+open BinaryMatrixFourier BinaryMatrixComplexA14 BinaryMatrixComplexA15
+open ActualBinaryMatrixHC46MixedPeeling
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private theorem complexFourierCoeff_add {n d : Nat}
+    (f g : BinaryMatrix n d -> Complex) (Y : BinaryMatrix n d) :
+    BinaryMatrixA1Complex.complexFourierCoeff (fun M => f M + g M) Y =
+      BinaryMatrixA1Complex.complexFourierCoeff f Y +
+        BinaryMatrixA1Complex.complexFourierCoeff g Y := by
+  unfold BinaryMatrixA1Complex.complexFourierCoeff
+  simp_rw [add_mul]
+  rw [Finset.sum_add_distrib, add_div]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro M hM
+  ring
+
+/-- The complex hybrid-line derivative is a finite Fourier sum and is linear
+in its function argument. -/
+theorem complexHybridLineDerivative_add {n d : Nat}
+    (t : Fin n -> ZMod 2) (f g : BinaryMatrix n (d + 1) -> Complex)
+    (M : BinaryMatrix n d) :
+    complexHybridLineDerivative t (fun X => f X + g X) M =
+      complexHybridLineDerivative t f M +
+        complexHybridLineDerivative t g M := by
+  unfold complexHybridLineDerivative complexHybridLineFilter
+  simp_rw [complexFourierCoeff_add]
+  simp_rw [add_mul]
+  rw [Finset.sum_add_distrib]
+
+/-- The codomain derivative is the transposed line derivative, hence has the
+same finite-sum linearity. -/
+theorem complexHyperplaneDerivative_add {n d : Nat}
+    (t : Fin d -> ZMod 2) (f g : BinaryMatrix (n + 1) d -> Complex)
+    (M : BinaryMatrix n d) :
+    complexHyperplaneDerivative t (fun X => f X + g X) M =
+      complexHyperplaneDerivative t f M +
+        complexHyperplaneDerivative t g M := by
+  unfold complexHyperplaneDerivative
+  simpa [complexTranspose] using
+    complexHybridLineDerivative_add t
+      (fun X => f X.transpose) (fun X => g X.transpose) M.transpose
+
+private theorem rankProjection_idempotent {n d j : Nat}
+    (f : BinaryMatrix n d -> Real) :
+    rankProjection j (rankProjection j f) = rankProjection j f := by
+  funext M
+  unfold rankProjection
+  apply Finset.sum_congr rfl
+  intro Y hY
+  rw [fourierCoeff_rankProjection]
+  have hYrank : Y.rank = j := (Finset.mem_filter.mp hY).2
+  simp [hYrank]
+
+/-- The complex rank filter is idempotent, by the coefficient formula for
+the underlying real Fourier rank projection. -/
+theorem complexRankProjection_idempotent {n d j : Nat}
+    (f : BinaryMatrix n d -> Complex) :
+    complexRankProjection j (complexRankProjection j f) =
+      complexRankProjection j f := by
+  funext M
+  apply Complex.ext
+  · rw [complexRankProjection_re, complexRankProjection_re]
+    exact congrFun (rankProjection_idempotent
+      (j := j) (fun X => (f X).re)) M
+  · rw [complexRankProjection_im, complexRankProjection_im]
+    exact congrFun (rankProjection_idempotent
+      (j := j) (fun X => (f X).im)) M
+
+/-- Projection-free recursion for prescribed hybrid line derivatives.
+Unlike the rank-specific A14 chain this operator contains no rank parameter. -/
+def commonLineDerivativeChain {n d : Nat} :
+    (k : Nat) ->
+    (f : BinaryMatrix n (d + k) -> Complex) ->
+    (t : Fin k -> Fin n -> ZMod 2) ->
+    BinaryMatrix n d -> Complex
+  | 0, f, _ => f
+  | k + 1, f, t =>
+      commonLineDerivativeChain k
+        (fun M => complexHybridLineDerivative (t (Fin.last k)) f M)
+        (fun i => t i.castSucc)
+
+/-- Projection-free recursion for prescribed hybrid hyperplane derivatives. -/
+def commonHyperplaneDerivativeChain {n d : Nat} :
+    (k : Nat) ->
+    (f : BinaryMatrix (n + k) d -> Complex) ->
+    (t : Fin k -> Fin d -> ZMod 2) ->
+    BinaryMatrix n d -> Complex
+  | 0, f, _ => f
+  | k + 1, f, t =>
+      commonHyperplaneDerivativeChain k
+        (fun M => complexHyperplaneDerivative (t (Fin.last k)) f M)
+        (fun i => t i.castSucc)
+
+/-- Projection-free mixed derivative operator: perform the chosen line
+derivatives, then the chosen hyperplane derivatives. -/
+def commonMixedDerivativeChain {n d : Nat} (k l : Nat)
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2) : BinaryMatrix n d -> Complex :=
+  commonHyperplaneDerivativeChain l
+    (commonLineDerivativeChain k f tLine) tHyp
+
+/-- A rank-specific line chain is exactly the rank-r projection of the
+common derivative recursion, so the derivative operator itself is independent
+of r. -/
+theorem coordinateLineDerivativeChain_eq_projected_common
+    {n d r k : Nat} (f : BinaryMatrix n (d + k) -> Complex)
+    (t : Fin k -> Fin n -> ZMod 2) :
+    coordinateLineDerivativeChain r k f t =
+      fun M => complexRankProjection r (commonLineDerivativeChain k f t) M := by
+  induction k generalizing d with
+  | zero => rfl
+  | succ k ih =>
+      funext M
+      exact congrFun
+        (ih (f := fun X =>
+          complexHybridLineDerivative (t (Fin.last k)) f X)
+          (t := fun i => t i.castSucc)) M
+
+/-- The codomain analogue: all rank dependence resides in the final spectral
+projection, while the recursive hyperplane operator is rank-free. -/
+theorem coordinateHyperplaneDerivativeChain_eq_projected_common
+    {n d r k : Nat} (f : BinaryMatrix (n + k) d -> Complex)
+    (t : Fin k -> Fin d -> ZMod 2) :
+    coordinateHyperplaneDerivativeChain r k f t =
+      fun M => complexRankProjection r (commonHyperplaneDerivativeChain k f t) M := by
+  induction k generalizing n with
+  | zero => rfl
+  | succ k ih =>
+      funext M
+      exact congrFun
+        (ih (f := fun X =>
+          complexHyperplaneDerivative (t (Fin.last k)) f X)
+        (t := fun i => t i.castSucc)) M
+
+/-- Repeated fixed-base line derivatives of a pure input rank level remain
+in the exact rank level prescribed by the number of removed columns.  This
+is the support fact that permits removing an intermediate projection in a
+mixed chain. -/
+theorem commonLineDerivativeChain_pure_rank
+    {n d r k : Nat} (f : BinaryMatrix n (d + k) -> Complex)
+    (t : Fin k -> Fin n -> ZMod 2) :
+    commonLineDerivativeChain k
+        (complexRankProjection (r + k) f) t =
+      fun M => complexRankProjection r
+        (commonLineDerivativeChain k
+          (complexRankProjection (r + k) f) t) M := by
+  induction k generalizing d with
+  | zero =>
+      simpa [commonLineDerivativeChain] using
+        (complexRankProjection_idempotent (j := r) f).symm
+  | succ k ih =>
+      let f' : BinaryMatrix n (d + k) -> Complex := fun M =>
+        complexHybridLineDerivative (t (Fin.last k))
+          (complexRankProjection (r + (k + 1)) f) M
+      let t' : Fin k -> Fin n -> ZMod 2 := fun i => t i.castSucc
+      have hA14 : f' = complexRankProjection (r + k)
+          (fun M => complexLineP (r + k) f
+            (rawLastColumn M (t (Fin.last k)))) := by
+        funext M
+        exact (BinaryMatrixComplexA14.complex_A14_fixedLine
+          (t (Fin.last k)) f M).symm
+      have hfixed : complexRankProjection (r + k) f' = f' := by
+        rw [hA14, complexRankProjection_idempotent]
+      change commonLineDerivativeChain k f' t' =
+        fun M => complexRankProjection r
+          (commonLineDerivativeChain k f' t') M
+      calc
+        commonLineDerivativeChain k f' t' =
+            commonLineDerivativeChain k
+              (complexRankProjection (r + k) f') t' := by
+          exact congrArg (fun g => commonLineDerivativeChain k g t') hfixed.symm
+        _ = fun M => complexRankProjection r
+              (commonLineDerivativeChain k
+                (complexRankProjection (r + k) f') t') M :=
+          ih (f := f') (t := t')
+        _ = fun M => complexRankProjection r
+              (commonLineDerivativeChain k f' t') M := by
+          funext M
+          exact congrArg (fun g => complexRankProjection r g M)
+            (congrArg (fun g => commonLineDerivativeChain k g t') hfixed)
+
+/-- The matching pure-level support theorem for fixed-base hyperplane
+derivatives. -/
+theorem commonHyperplaneDerivativeChain_pure_rank
+    {n d r k : Nat} (f : BinaryMatrix (n + k) d -> Complex)
+    (t : Fin k -> Fin d -> ZMod 2) :
+    commonHyperplaneDerivativeChain k
+        (complexRankProjection (r + k) f) t =
+      fun M => complexRankProjection r
+        (commonHyperplaneDerivativeChain k
+          (complexRankProjection (r + k) f) t) M := by
+  induction k generalizing n with
+  | zero =>
+      simpa [commonHyperplaneDerivativeChain] using
+        (complexRankProjection_idempotent (j := r) f).symm
+  | succ k ih =>
+      let f' : BinaryMatrix (n + k) d -> Complex := fun M =>
+        complexHyperplaneDerivative (t (Fin.last k))
+          (complexRankProjection (r + (k + 1)) f) M
+      let t' : Fin k -> Fin d -> ZMod 2 := fun i => t i.castSucc
+      have hA14 : f' = complexRankProjection (r + k)
+          (fun M => complexHyperplaneP (r + k) f
+            (rawLastRow M (t (Fin.last k)))) := by
+        funext M
+        exact (BinaryMatrixComplexA14.complex_A14_fixedHyperplane
+          (t (Fin.last k)) f M).symm
+      have hfixed : complexRankProjection (r + k) f' = f' := by
+        rw [hA14, complexRankProjection_idempotent]
+      change commonHyperplaneDerivativeChain k f' t' =
+        fun M => complexRankProjection r
+          (commonHyperplaneDerivativeChain k f' t') M
+      calc
+        commonHyperplaneDerivativeChain k f' t' =
+            commonHyperplaneDerivativeChain k
+              (complexRankProjection (r + k) f') t' := by
+          exact congrArg (fun g => commonHyperplaneDerivativeChain k g t') hfixed.symm
+        _ = fun M => complexRankProjection r
+              (commonHyperplaneDerivativeChain k
+                (complexRankProjection (r + k) f') t') M :=
+          ih (f := f') (t := t')
+        _ = fun M => complexRankProjection r
+              (commonHyperplaneDerivativeChain k f' t') M := by
+          funext M
+          exact congrArg (fun g => complexRankProjection r g M)
+            (congrArg (fun g => commonHyperplaneDerivativeChain k g t') hfixed)
+
+/-- On a pure input rank level, the mixed A14 chain factors into the
+projection-free common line and hyperplane recursions with the two rank
+projections prescribed by the actual rank losses. -/
+theorem mixedCoordinateDerivativeChain_eq_projected_common
+    {n d r k l : Nat}
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2) :
+    mixedCoordinateDerivativeChain r k l
+        (complexRankProjection ((r + l) + k) f) tLine tHyp =
+      fun M => complexRankProjection r
+        (commonMixedDerivativeChain k l
+          (complexRankProjection ((r + l) + k) f) tLine tHyp) M := by
+  change coordinateHyperplaneDerivativeChain r l
+      (coordinateLineDerivativeChain (r + l) k
+        (complexRankProjection ((r + l) + k) f) tLine) tHyp = _
+  rw [coordinateHyperplaneDerivativeChain_eq_projected_common]
+  have hline := commonLineDerivativeChain_pure_rank
+    (r := r + l) (f := f) (t := tLine)
+  have hline' : coordinateLineDerivativeChain (r + l) k
+      (complexRankProjection ((r + l) + k) f) tLine =
+      commonLineDerivativeChain k
+        (complexRankProjection ((r + l) + k) f) tLine := by
+    rw [coordinateLineDerivativeChain_eq_projected_common]
+    -- The pure-level theorem identifies the common output with its
+    -- rank-(r+l) projection; the two source rank expressions normalize.
+    simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hline.symm
+  funext M
+  simp only [commonMixedDerivativeChain]
+  rw [hline']
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46CommonDerivative

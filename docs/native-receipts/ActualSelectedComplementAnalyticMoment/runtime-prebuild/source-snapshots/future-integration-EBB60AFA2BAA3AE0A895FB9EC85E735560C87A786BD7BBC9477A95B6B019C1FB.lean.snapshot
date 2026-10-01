@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualFiniteBinaryImageOrbit
+
+open PvNP.RealizableHardness.ActualFiniteBinaryImageOrbit
+
+#check PvNP.RealizableHardness.ActualFiniteBinaryImageOrbit.exists_domain_equiv_of_surjective
+#print axioms PvNP.RealizableHardness.ActualFiniteBinaryImageOrbit.exists_domain_equiv_of_surjective
