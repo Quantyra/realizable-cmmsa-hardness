@@ -1,0 +1,140 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:159:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:243:6: error: unsolved goals
+case pos
+n d D : ℕ
+eps : ℝ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+l : ℕ := Module.finrank F ↥A
+h : ℕ := Module.finrank F ↥⊤ - Module.finrank F ↥B
+k : ℕ := l + h
+lines : DomainLineFlag ⊥ (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A)
+hlines : lines.endpoint = A
+hypers :
+  CodomainHyperplaneFlag ⊤
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥⊤ -
+      Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+hhypers : hypers.endpoint = B
+hquot : Module.finrank F (W n ⧸ B) + Module.finrank F ↥B = Module.finrank F (W n)
+htop : Module.finrank F ↥⊤ = Module.finrank F (W n)
+hcod : h = Module.finrank F (W n ⧸ B)
+hk : k = Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+heps : 0 ≤ eps
+hkzero : ¬k = 0
+hkpos : k ≠ 0
+levels : Finset ℕ := Finset.range (D + 1)
+g : ℕ → (V d ⧸ A →ₗ[F] ↥B) → ℂ := fun i M => filteredCarrierFunction A B T (complexRankProjection i f) M
+hlevel : ∀ i ∈ levels, (carrierMean A B fun M => Complex.normSq (g i M)) ≤ 2 ^ (10 * D ^ 2) * eps
+i : ℕ
+hi : i ∈ levels
+j : ℕ
+hj : j ∈ levels
+hij : i ≠ j
+hilo : i < k
+hlowNorm : i < Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+hz : filteredCarrierFunction A B T (complexRankProjection i f) = 0
+hzero : g i = fun x => 0
+⊢ (carrierMean A B fun M => 0) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:253:8: error: unsolved goals
+case pos
+n d D : ℕ
+eps : ℝ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+l : ℕ := Module.finrank F ↥A
+h : ℕ := Module.finrank F ↥⊤ - Module.finrank F ↥B
+k : ℕ := l + h
+lines : DomainLineFlag ⊥ (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A)
+hlines : lines.endpoint = A
+hypers :
+  CodomainHyperplaneFlag ⊤
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥⊤ -
+      Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+hhypers : hypers.endpoint = B
+hquot : Module.finrank F (W n ⧸ B) + Module.finrank F ↥B = Module.finrank F (W n)
+htop : Module.finrank F ↥⊤ = Module.finrank F (W n)
+hcod : h = Module.finrank F (W n ⧸ B)
+hk : k = Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+heps : 0 ≤ eps
+hkzero : ¬k = 0
+hkpos : k ≠ 0
+levels : Finset ℕ := Finset.range (D + 1)
+g : ℕ → (V d ⧸ A →ₗ[F] ↥B) → ℂ := fun i M => filteredCarrierFunction A B T (complexRankProjection i f) M
+hlevel : ∀ i ∈ levels, (carrierMean A B fun M => Complex.normSq (g i M)) ≤ 2 ^ (10 * D ^ 2) * eps
+i : ℕ
+hi : i ∈ levels
+j : ℕ
+hj : j ∈ levels
+hij : i ≠ j
+hilo : ¬i < k
+hjlo : j < k
+hlowNorm : j < Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+hz : filteredCarrierFunction A B T (complexRankProjection j f) = 0
+hzero : g j = fun x => 0
+⊢ (carrierMean A B fun M => 0) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:280:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun M => filteredCarrierFunction A B T (complexRankProjection i f) M
+in the target expression
+  (carrierMean A B fun M => complexRealDotFinal (g i M) (g j M)) = 0
+
+case neg
+n d D : ℕ
+eps : ℝ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+l : ℕ := Module.finrank F ↥A
+h : ℕ := Module.finrank F ↥⊤ - Module.finrank F ↥B
+k : ℕ := l + h
+lines : DomainLineFlag ⊥ (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A)
+hlines : lines.endpoint = A
+hypers :
+  CodomainHyperplaneFlag ⊤
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥⊤ -
+      Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+hhypers : hypers.endpoint = B
+hquot : Module.finrank F (W n ⧸ B) + Module.finrank F ↥B = Module.finrank F (W n)
+htop : Module.finrank F ↥⊤ = Module.finrank F (W n)
+hcod : h = Module.finrank F (W n ⧸ B)
+hk : k = Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+heps : 0 ≤ eps
+hkzero : ¬k = 0
+hkpos : k ≠ 0
+levels : Finset ℕ := Finset.range (D + 1)
+g : ℕ → (V d ⧸ A →ₗ[F] ↥B) → ℂ := fun i M => filteredCarrierFunction A B T (complexRankProjection i f) M
+hlevel : ∀ i ∈ levels, (carrierMean A B fun M => Complex.normSq (g i M)) ≤ 2 ^ (10 * D ^ 2) * eps
+i : ℕ
+hi : i ∈ levels
+j : ℕ
+hj : j ∈ levels
+hij : i ≠ j
+hilo : ¬i < k
+hjlo : ¬j < k
+hik : k ≤ i
+hjk : k ≤ j
+hkpos' : l + h ≠ 0
+hik' : l + h ≤ i
+hjk' : l + h ≤ j
+phiI : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hri :
+  (fun M => filteredCarrierFunction A B T (complexRankProjection i f) M) =
+    typedComplexRankProjection A B (i - (h + l)) phiI
+phiJ : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hrj :
+  (fun M => filteredCarrierFunction A B T (complexRankProjection j f) M) =
+    typedComplexRankProjection A B (j - (h + l)) phiJ
+hres : i - k ≠ j - k
+⊢ (carrierMean A B fun M => complexRealDotFinal (g i M) (g j M)) = 0
