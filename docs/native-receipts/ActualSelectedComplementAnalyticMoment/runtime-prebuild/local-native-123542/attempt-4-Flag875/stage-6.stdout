@@ -1,0 +1,164 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:75:8: warning: Unused tactic linter: `change tail.endpoint ≤ Anew` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:78:8: warning: Unused tactic linter: `change Module.finrank F (Anew.map tail.endpoint.mkQ) = 1` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:98:6: error: Type mismatch: After simplification, term
+  ih hle' hstep'
+ has type
+  @Eq (Submodule F (V d))
+    (rec (motive := fun {A0} {k} flag =>
+        flag.endpoint ≤ Anew → Module.finrank F ↥(Submodule.map flag.endpoint.mkQ Anew) = 1 → DomainLineFlag A0 (k + 1))
+        (fun A0 hle hstep => cons hle ⋯ (done Anew))
+        (fun {A A'} hA hL {k} tail ih hle hstep => cons hA hL (ih hle hstep)) tail hle' hstep').endpoint
+    Anew
+but is expected to have type
+  @Eq (Submodule F (V d))
+    (rec (motive := fun {A0} {k} flag =>
+        flag.endpoint ≤ Anew → Module.finrank F ↥(Submodule.map flag.endpoint.mkQ Anew) = 1 → DomainLineFlag A0 (k + 1))
+        (fun A0 hle hstep => cons hle ⋯ (done Anew))
+        (fun {A A'} hA hL {k} tail ih hle hstep => cons hA hL (ih hle hstep)) tail hle hstep).endpoint
+    Anew
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:115:11: error: unsolved goals
+case done
+n : ℕ
+B✝ : Submodule F (W n)
+k : ℕ
+B : Submodule F (W n)
+⊢ Module.finrank F ↥B = Module.finrank F ↥B
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:131:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 1
+  a ≥ 0
+  a - b ≤ -1
+  a - b + d ≤ -2
+where
+ a := ↑k
+ b := ↑(Module.finrank F ↥B)
+ c := ↑(Module.finrank (ZMod 2) ↥H)
+ d := ↑(Module.finrank F ↥tail.endpoint)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:198:8: error: Dependent elimination failed: Failed to solve equation
+  ⊥ = B
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:240:14: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 1
+where
+ a := ↑(Module.finrank F ↥B)
+ b := ↑(Module.finrank F ↥(Submodule.map B✝.subtype ↑↑(Classical.choice ⋯)))
+ c := ↑(Module.finrank F ↥B✝)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:330:14: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 1
+  d - e ≤ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≤ 0
+  a ≥ 0
+  a - d ≤ -1
+where
+ a := ↑(Module.finrank F ↥K)
+ b := ↑(Module.finrank (ZMod 2) ↥K)
+ c := ↑(Module.finrank (ZMod 2) ↥H)
+ d := ↑(Module.finrank F ↥B)
+ e := ↑(Module.finrank F ↥(Submodule.map B.subtype ↑↑(Classical.choice ⋯)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:348:4: error: Dependent elimination failed: Failed to solve equation
+  { carrier := {0}, add_mem' := ⋯, zero_mem' := ⋯, smul_mem' := ⋯ } = flag.endpoint
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:417:21: error: expected token
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:413:2: error: Unnecessary `generalizing` argument: Variable `f` is generalized automatically
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:416:31: error: unsolved goals
+case f'
+n d r : ℕ
+A✝ : Submodule F (V d)
+B : Submodule F (W n)
+l : ℕ
+A A' : Submodule F (V d)
+hA : A ≤ A'
+hL : Module.finrank F ↥(Submodule.map A.mkQ A') = 1
+k : ℕ
+tail : DomainLineFlag A' k
+ih : {f : (V d ⧸ A' →ₗ[F] ↥B) → ℂ} → {h : ℕ} → CodomainHyperplaneFlag B h → ActualTypedABRankedTower A' B f r (h + k)
+f : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+h : ℕ
+hypers : CodomainHyperplaneFlag B h
+⊢ (_ : sorry) ×' (_ : sorry) ×' sorry
+
+case cons
+n d r : ℕ
+A✝ : Submodule F (V d)
+B : Submodule F (W n)
+l : ℕ
+A A' : Submodule F (V d)
+hA : A ≤ A'
+hL : Module.finrank F ↥(Submodule.map A.mkQ A') = 1
+k : ℕ
+tail : DomainLineFlag A' k
+ih : {f : (V d ⧸ A' →ₗ[F] ↥B) → ℂ} → {h : ℕ} → CodomainHyperplaneFlag B h → ActualTypedABRankedTower A' B f r (h + k)
+f : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+h : ℕ
+hypers : CodomainHyperplaneFlag B h
+f' : (_ : sorry) ×' (_ : sorry) ×' sorry := ?f'
+⊢ ActualTypedABRankedTower A B f r (h + (k + 1))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:464:6: error: Type mismatch: After simplification, term
+  ih
+ has type
+  @Eq
+    (Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.W✝ n))
+    (rankedTerminalData
+        (CodomainHyperplaneFlag.rec (motive := fun {B} {h} flag =>
+          {f : (V d ⧸ A →ₗ[F] ↥B) → ℂ} → ActualTypedABRankedTower A B f r h)
+          (fun B {f} => ActualTypedABRankedTower.done f r)
+          (fun {B} H hH {k} tail ih {f} => ActualTypedABRankedTower.hyperplane hH 0 f ih) tail)).Bend
+    tail.endpoint
+but is expected to have type
+  @Eq
+    (Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.W✝ n))
+    (rankedTerminalData
+        (CodomainHyperplaneFlag.rec (motive := fun {B} {h} flag =>
+          {f : (V d ⧸ A →ₗ[F] ↥B) → ℂ} → ActualTypedABRankedTower A B f r h)
+          (fun B {f} => ActualTypedABRankedTower.done f r)
+          (fun {B} H hH {k} tail ih {f} => ActualTypedABRankedTower.hyperplane hH 0 f ih) tail)).Bend
+    (CodomainHyperplaneFlag.cons H hH tail).endpoint
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:495:6: error: Type mismatch: After simplification, term
+  buildHyperplaneSuffix_endpoint tail
+ has type
+  @Eq
+    (Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.W✝ n))
+    (rankedTerminalData
+        (CodomainHyperplaneFlag.rec (motive := fun {B} {h} flag =>
+          {f : (V d ⧸ A →ₗ[F] ↥B) → ℂ} → ActualTypedABRankedTower A B f r h)
+          (fun B {f} => ActualTypedABRankedTower.done f r)
+          (fun {B} H hH {k} tail ih {f} => ActualTypedABRankedTower.hyperplane hH 0 f ih) tail)).Bend
+    tail.endpoint
+but is expected to have type
+  @Eq
+    (Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.W✝ n))
+    (rankedTerminalData
+        (ActualTypedABRankedTower.hyperplane hH T f
+          (CodomainHyperplaneFlag.rec (motive := fun {B} {h} flag =>
+            {f : (V d ⧸ A →ₗ[F] ↥B) → ℂ} → ActualTypedABRankedTower A B f r h)
+            (fun B {f} => ActualTypedABRankedTower.done f r)
+            (fun {B} H hH {k} tail ih {f} => ActualTypedABRankedTower.hyperplane hH 0 f ih) tail))).Bend
+    (CodomainHyperplaneFlag.cons H hH tail).endpoint
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:528:13: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:517:8: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalFlag.lean:546:6: error: Type mismatch: After simplification, term
+  buildLineSuffix_endpoints tail hypers
+ has type
+  And ((rankedTerminalData (buildLineSuffix tail hypers)).Aend = tail.endpoint)
+    ((rankedTerminalData (buildLineSuffix tail hypers)).Bend = hypers.endpoint)
+but is expected to have type
+  And
+    ((rankedTerminalData (ActualTypedABRankedTower.line hA hL T f (buildLineSuffix tail hypers))).Aend = tail.endpoint)
+    ((rankedTerminalData (ActualTypedABRankedTower.line hA hL T f (buildLineSuffix tail hypers))).Bend =
+      hypers.endpoint)
