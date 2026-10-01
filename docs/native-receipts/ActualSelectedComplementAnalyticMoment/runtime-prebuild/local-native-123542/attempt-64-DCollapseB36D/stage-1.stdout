@@ -1,0 +1,286 @@
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥B) :
+  ℂ
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.complexAmbientHybridFilter_bot_top {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter ⊥ ⊤ f = f
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.complexAmbientHybridFilter_bot_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction_bot_top {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 f M =
+    f (LinearMap.toMatrix' (⊤.subtype ∘ₗ M ∘ₗ ⊥.mkQ))
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction_bot_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.hyperplane_suffix_A1_collapse {n d h : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n)}
+  (flag : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag B h) {r : ℕ}
+  (fStored :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+        ↥B) →
+      ℂ)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildHyperplaneSuffix flag)
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f) =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildHyperplaneSuffix flag)).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildHyperplaneSuffix flag)).Bend
+      T f
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.hyperplane_suffix_A1_collapse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.line_suffix_A1_collapse {n d l h : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n)}
+  (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag A l)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag B h) {r : ℕ}
+  (fStored :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+        ↥B) →
+      ℂ)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildLineSuffix lines hypers)
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f) =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildLineSuffix lines hypers)).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildLineSuffix lines hypers)).Bend
+      T f
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.line_suffix_A1_collapse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.canonical_line_head_A1_collapse {n d r l h : ℕ}
+  {A A' :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n)}
+  (hA : A ≤ A')
+  (hL : Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝ ↥(Submodule.map A.mkQ A') = 1)
+  (tail : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag A' l)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag B h)
+  (S :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥B)
+  (ambientf : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  have fStored := fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B 0 ambientf M;
+  let fChild := fun M =>
+    PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal.typedLineReducedWitness B (Submodule.map A.mkQ A') hL S
+      fStored (M ∘ₗ ↑(PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.nestedDomainEquiv A A' hA));
+  let tailTower := PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildLineSuffix tail hypers;
+  PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower
+        (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag.cons hA hL tail) hypers S)
+      fStored =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tailTower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tailTower).Bend (B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      ambientf
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.canonical_line_head_A1_collapse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.canonical_hyperplane_head_A1_collapse {n d r h : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n)}
+  (H : Submodule PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝ ↥B)
+  (hH : Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝ (↥B ⧸ H) = 1)
+  (tail : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag (Submodule.map B.subtype H) h)
+  (S :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥B)
+  (ambientf : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  have fStored := fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B 0 ambientf M;
+  let fChild := fun M =>
+    PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal.typedHyperplaneReducedWitness B H hH S fStored
+      (↑(Submodule.equivMapOfInjective B.subtype ⋯ H).symm ∘ₗ M);
+  let tailTower := PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildHyperplaneSuffix tail;
+  PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower
+        (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag.done A)
+        (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag.cons H hH tail) S)
+      fStored =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tailTower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tailTower).Bend (B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      ambientf
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.canonical_hyperplane_head_A1_collapse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.canonical_source_tower_A1_collapse {n d r l h : ℕ}
+  (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag ⊥ l)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag ⊤ h)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤)
+  (ambientf : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  have ambientBase := ⊤.subtype ∘ₗ T ∘ₗ ⊥.mkQ;
+  have source := fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 ambientf M;
+  let tower := PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers T;
+  PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters tower
+      (if h + l = 0 then fun M =>
+        PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ ambientBase ambientf M
+      else source) =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend ambientBase ambientf
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.canonical_source_tower_A1_collapse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction_bot_top_base {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.W✝ n)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ T f M =
+    f (LinearMap.toMatrix' (T + ⊤.subtype ∘ₗ M ∘ₗ ⊥.mkQ))
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction_bot_top_base' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.zero_step_carrier_pointwise {n d : ℕ}
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ (⊤.subtype ∘ₗ T ∘ₗ ⊥.mkQ) f M =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 f (T + M)
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.zero_step_carrier_pointwise' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.zero_step_carrier_energy_mean {n d : ℕ}
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean ⊥ ⊤ fun M =>
+      Complex.normSq
+        (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ (⊤.subtype ∘ₗ T ∘ₗ ⊥.mkQ) f
+          M)) =
+    PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean ⊥ ⊤ fun M =>
+      Complex.normSq (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 f M)
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.zero_step_carrier_energy_mean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.bottom_top_typedProjection_coordinate {n d j : ℕ}
+  (g :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+          ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+        ↥⊤) →
+      ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection ⊥ ⊤ j g M =
+    PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection j
+      (fun X => g ((PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.carrierMatrixEquiv ⊥ ⊤).symm X))
+      ((PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.carrierMatrixEquiv ⊥ ⊤) M)
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.bottom_top_typedProjection_coordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.bottom_top_frequency_rank {n d : ℕ}
+  (Y :
+    ↥⊤ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸ ⊥) :
+  Matrix.rank ((PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.carrierFrequencyEquiv ⊥ ⊤) Y) =
+    Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝ ↥Y.range
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.bottom_top_frequency_rank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.bottom_top_frequency_trace {n d : ℕ}
+  (Y :
+    ↥⊤ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸ ⊥)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter Y M =
+    PvNP.RealizableHardness.BinaryMatrixFourier.character
+      ((PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.carrierFrequencyEquiv ⊥ ⊤) Y)
+      ((PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.carrierMatrixEquiv ⊥ ⊤) M)
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.bottom_top_frequency_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.zero_step_coordinate_energy_mean {n d : ℕ}
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+      ↥⊤)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun X =>
+      Complex.normSq
+        (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ (⊤.subtype ∘ₗ T ∘ₗ ⊥.mkQ) f
+          ((PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.carrierMatrixEquiv ⊥ ⊤).symm X))) =
+    PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun X =>
+      Complex.normSq
+        (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 f
+          ((PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.carrierMatrixEquiv ⊥ ⊤).symm X))
+'PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.zero_step_coordinate_energy_mean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
