@@ -1,0 +1,90 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:33:5: warning: Variable name `T` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _T
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:128:60: error: unsolved goals
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+Q : CarrierRestriction A B
+M : V d ⧸ A →ₗ[F] ↥B
+hM : M ∈ Q.fibre
+coords : QuotientHom (liftCarrierRestriction A B T Q).domainFixed (liftCarrierRestriction A B T Q).codomainVariation :=
+  (carrierAmbientQuotientHomEquiv T Q) ((carrierFibreQuotientHomEquiv Q) ⟨M, hM⟩)
+e : ↥(liftCarrierRestriction A B T Q).fibre ≃
+  QuotientHom (liftCarrierRestriction A B T Q).domainFixed (liftCarrierRestriction A B T Q).codomainVariation :=
+  actualFibreQuotientHomEquiv (liftCarrierRestriction A B T Q)
+q : (Fin d → ZMod 2) ⧸ (liftCarrierRestriction A B T Q).domainFixed
+v : Fin d → ZMod 2
+⊢ coords (Submodule.Quotient.mk v) =
+    (e ⟨LinearMap.toMatrix' T + LinearMap.toMatrix' (B.subtype ∘ₗ M ∘ₗ A.mkQ), ⋯⟩) (Submodule.Quotient.mk v)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:133:12: warning: This simp argument is unused:
+  carrierAmbientQuotientHomEquiv
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [liftCarrierMatrix, liftCarrierRestriction, carrierFibreQuotientHomEquiv, actualFibreQuotientHomEquiv,
+    Submodule.liftQ_mkQ, LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.add_apply, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:135:8: warning: This simp argument is unused:
+  carrierFibreQuotientHomEquiv
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction, actualFibreQuotientHomEquiv,
+    Submodule.liftQ_mkQ, LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.add_apply, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:135:38: warning: This simp argument is unused:
+  actualFibreQuotientHomEquiv
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction, carrierFibreQuotientHomEquiv,
+    Submodule.liftQ_mkQ, LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.add_apply, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:136:8: warning: This simp argument is unused:
+  Submodule.liftQ_mkQ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction, carrierFibreQuotientHomEquiv,
+    actualFibreQuotientHomEquiv, LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.add_apply,
+    Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:136:29: warning: This simp argument is unused:
+  LinearMap.comp_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction, carrierFibreQuotientHomEquiv,
+    actualFibreQuotientHomEquiv, Submodule.liftQ_mkQ, LinearMap.sub_apply, LinearMap.add_apply, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:136:51: warning: This simp argument is unused:
+  LinearMap.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction, carrierFibreQuotientHomEquiv,
+    actualFibreQuotientHomEquiv, Submodule.liftQ_mkQ, LinearMap.comp_apply, LinearMap.add_apply,
+    Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:137:8: warning: This simp argument is unused:
+  LinearMap.add_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction, carrierFibreQuotientHomEquiv,
+    actualFibreQuotientHomEquiv, Submodule.liftQ_mkQ, LinearMap.comp_apply, LinearMap.sub_apply,
+    Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:137:29: warning: This simp argument is unused:
+  Matrix.toLin'_toMatrix'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction, carrierFibreQuotientHomEquiv,
+    actualFibreQuotientHomEquiv, Submodule.liftQ_mkQ, LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.add_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
