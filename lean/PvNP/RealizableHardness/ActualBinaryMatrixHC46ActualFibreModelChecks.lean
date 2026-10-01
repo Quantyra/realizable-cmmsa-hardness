@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel
+
+#check quotientHomEquiv
+#check actualAffineDifference_iff
+#check actualFibreQuotientHomEquiv
+#check actualFibreQuotientHomEquiv_energy
+
+#print axioms quotientHomEquiv
+#print axioms actualFibreQuotientHomEquiv
+#print axioms actualFibreQuotientHomEquiv_energy
