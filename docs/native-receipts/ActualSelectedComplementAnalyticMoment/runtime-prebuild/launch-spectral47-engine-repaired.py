@@ -8,6 +8,6 @@ args=[sys.executable,str(b/'runtime-prebuild/cmmsa_analytic_gcp_durable_prebuild
 for source,pin in pins.items():
  if source!=target:args.extend(['--dependency-source',source,'--dependency-sha',pin])
 args.extend(['--dependency-snapshot','lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46.lean=docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/source-snapshots/hc46-padding-6693B9B8.lean.snapshot'])
-args.extend(['--dependency-snapshot','lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean=docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/source-snapshots/surjection-counting-2A1629B2.lean.snapshot','--dependency-snapshot','lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean=docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/source-snapshots/surjection-counting-checks-0ACAB9C4.lean.snapshot'])
+args.extend(['--dependency-snapshot','lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean=docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/source-snapshots/surjection-counting-078F35DE.lean.snapshot','--dependency-snapshot','lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean=docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/source-snapshots/surjection-counting-checks-0ACAB9C4.lean.snapshot'])
 args.append('--execute')
 sys.exit(subprocess.call(args,cwd=repo))
