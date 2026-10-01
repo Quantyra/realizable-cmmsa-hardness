@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage
+
+#check carrierOfParent
+#print axioms carrierOfParent
+#check lift_carrierOfParent_eq
+#print axioms lift_carrierOfParent_eq
+#check carrierOfParent_order_eq
+#print axioms carrierOfParent_order_eq
+#check carrierOfParent_order_lift
+#print axioms carrierOfParent_order_lift
+#check actual_derivative_bounds_every_parent_containing_line
+#print axioms actual_derivative_bounds_every_parent_containing_line
