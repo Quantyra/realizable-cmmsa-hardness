@@ -1,0 +1,17 @@
+{
+  "tag": "cmmsa_analytic_20261001T100420Z",
+  "args": [
+    "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+    "compute",
+    "ssh",
+    "quantyra-lean-builder-01",
+    "--quiet",
+    "--tunnel-through-iap",
+    "--project=quantyra-lean-cert-20260915",
+    "--zone=us-central1-a",
+    "--command=for f in /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_analytic_20261001T100420Z-evidence/stage-*.native-exit; do test -f \"$f\" && echo \"$f\" && cat \"$f\"; done; ps -eo pid,etime,args | grep \"[b]in/lean\" | head -2"
+  ],
+  "native_exit_code": 1,
+  "stdout": "",
+  "stderr": "FATAL ERROR: Remote side unexpectedly closed network connection\n\nRecommendation: To check for possible causes of SSH connectivity issues and get\nrecommendations, rerun the ssh command with the --troubleshoot option.\n\ngcloud compute ssh quantyra-lean-builder-01 --project=quantyra-lean-cert-20260915 --zone=us-central1-a --troubleshoot\n\nOr, to investigate an IAP tunneling issue:\n\ngcloud compute ssh quantyra-lean-builder-01 --project=quantyra-lean-cert-20260915 --zone=us-central1-a --troubleshoot --tunnel-through-iap\n\nERROR: (gcloud.compute.ssh) [C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\sdk\\plink.exe] exited with return code [1].\n"
+}
