@@ -1,0 +1,42 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:53:4: warning: This simp argument is unused:
+  LinearEquiv.apply_symm_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [bottomTopCarrierAmbientHomEquiv_apply, bottomTopDomainEquiv, bottomTopCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:86:43: error: invalid `▸` notation, expected result type of cast is 
+  M u - Q.base u ∈ Q.codomainVariation
+however, the equality 
+  heval
+of type 
+  Matrix.mulVec (bottomTopAmbientMatrixEquiv M - bottomTopAmbientMatrixEquiv Q.base) (bottomTopDomainEquiv u) =
+    bottomTopCodomainEquiv ((M - Q.base) (bottomTopDomainEquiv.symm (bottomTopDomainEquiv u)))
+does not contain the expected result type on either the left or the right hand side
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:99:53: error: Application type mismatch: The argument
+  hz
+has type
+  (M - Q.base) u = 0
+but is expected to have type
+  (M - Q.base) (bottomTopDomainEquiv.symm (bottomTopDomainEquiv u)) = ?m.436
+in the application
+  congrArg (⇑bottomTopCodomainEquiv) hz
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:109:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Matrix.mulVec (bottomTopAmbientMatrixEquiv M - bottomTopAmbientMatrixEquiv Q.base) (bottomTopDomainEquiv u)
+in the target expression
+  Matrix.mulVec (bottomTopAmbientMatrixEquiv M - (bottomTopActualRestriction Q).base) (bottomTopDomainEquiv u) ∈
+    (bottomTopActualRestriction Q).codomainVariation
+
+case mpr.right
+n d : ℕ
+Q : CarrierRestriction ⊥ ⊤
+M : V d ⧸ ⊥ →ₗ[F] ↥⊤
+hD : ∀ a ∈ Q.domainFixed, (M - Q.base) a = 0
+hC : ∀ (v : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ ⊥), (M - Q.base) v ∈ Q.codomainVariation
+a : Fin d → ZMod 2
+u : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸ ⊥ := bottomTopDomainEquiv.symm a
+hu : bottomTopDomainEquiv u = a
+hz : (M - Q.base) u ∈ Q.codomainVariation
+hm : bottomTopCodomainEquiv ((M - Q.base) u) ∈ Submodule.map (↑bottomTopCodomainEquiv) Q.codomainVariation
+⊢ Matrix.mulVec (bottomTopAmbientMatrixEquiv M - (bottomTopActualRestriction Q).base) (bottomTopDomainEquiv u) ∈
+    (bottomTopActualRestriction Q).codomainVariation
