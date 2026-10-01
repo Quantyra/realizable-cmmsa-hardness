@@ -1,0 +1,111 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:38:22: error: unsolved goals
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+Q : CarrierRestriction A B
+P : Submodule F (V d) := Submodule.comap A.mkQ Q.domainFixed
+x : V d
+hx : x ∈ A
+⊢ Submodule.Quotient.mk x ∈ Q.domainFixed
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:47:4: error: Type mismatch
+  (LinearEquiv.ofEq ?m.231 ?m.232 ?m.249).trans ?m.280
+has type
+  ↥?m.231 ≃ₛₗ[?m.269] ?m.255
+but is expected to have type
+  ((V d ⧸ A) ⧸ Q.domainFixed) ≃ₗ[F] V d ⧸ P
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:41:10: warning: This simp argument is unused:
+  P
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:111:60: error: unsolved goals
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+Q : CarrierRestriction A B
+M : V d ⧸ A →ₗ[F] ↥B
+hM : M ∈ Q.fibre
+q : (Fin d → ZMod 2) ⧸ (liftCarrierRestriction A B T Q).domainFixed
+v : Fin d → ZMod 2
+⊢ (((MatrixLiftNominalDomain.actualFibreLinearEquiv
+              { domainFixed := Submodule.comap A.mkQ Q.domainFixed,
+                codomainVariation := Submodule.map B.subtype Q.codomainVariation,
+                base := LinearMap.toMatrix' (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ) }).trans
+          ({ toFun := fun L => ⟨↑L - (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ), ⋯⟩,
+                invFun := fun f => ⟨↑f + (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ), ⋯⟩, left_inv := ⋯, right_inv := ⋯ }.trans
+            (quotientHomEquiv (Submodule.comap A.mkQ Q.domainFixed)
+                (Submodule.map B.subtype Q.codomainVariation)).symm))
+        (({ toFun := fun x => Q.domainFixed.liftQ (LinearMap.codRestrict Q.codomainVariation (↑x - Q.base) ⋯) ⋯,
+                invFun := fun N => ⟨Q.base + Q.codomainVariation.subtype ∘ₗ N ∘ₗ Q.domainFixed.mkQ, ⋯⟩, left_inv := ⋯,
+                right_inv := ⋯ }.trans
+            ((sorry (Submodule.comap A.mkQ Q.domainFixed)).toEquiv.trans
+              ((MatrixLiftNominalDomain.actualFibreLinearEquiv
+                      { domainFixed := Submodule.comap A.mkQ Q.domainFixed,
+                        codomainVariation := Submodule.map B.subtype Q.codomainVariation,
+                        base := LinearMap.toMatrix' (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ) }).trans
+                  ({ toFun := fun L => ⟨↑L - (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ), ⋯⟩,
+                        invFun := fun f => ⟨↑f + (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ), ⋯⟩, left_inv := ⋯,
+                        right_inv := ⋯ }.trans
+                    (quotientHomEquiv (Submodule.comap A.mkQ Q.domainFixed)
+                        (Submodule.map B.subtype Q.codomainVariation)).symm)).symm))
+          ⟨M, hM⟩))
+      (Submodule.Quotient.mk v) =
+    (((MatrixLiftNominalDomain.actualFibreLinearEquiv
+              { domainFixed := Submodule.comap A.mkQ Q.domainFixed,
+                codomainVariation := Submodule.map B.subtype Q.codomainVariation,
+                base := LinearMap.toMatrix' (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ) }).trans
+          ({ toFun := fun L => ⟨↑L - (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ), ⋯⟩,
+                invFun := fun f => ⟨↑f + (T + B.subtype ∘ₗ Q.base ∘ₗ A.mkQ), ⋯⟩, left_inv := ⋯, right_inv := ⋯ }.trans
+            (quotientHomEquiv (Submodule.comap A.mkQ Q.domainFixed)
+                (Submodule.map B.subtype Q.codomainVariation)).symm))
+        ⟨LinearMap.toMatrix' T + LinearMap.toMatrix' (B.subtype ∘ₗ M ∘ₗ A.mkQ), ⋯⟩)
+      (Submodule.Quotient.mk v)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:118:38: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:121:4: warning: This simp argument is unused:
+  Submodule.liftQ_mkQ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientLiftFibreEquiv, carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction,
+    carrierFibreQuotientHomEquiv, actualFibreQuotientHomEquiv, LinearMap.comp_apply, LinearMap.sub_apply,
+    LinearMap.add_apply, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:121:25: warning: This simp argument is unused:
+  LinearMap.comp_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientLiftFibreEquiv, carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction,
+    carrierFibreQuotientHomEquiv, actualFibreQuotientHomEquiv, Submodule.liftQ_mkQ, LinearMap.sub_apply,
+    LinearMap.add_apply, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:121:47: warning: This simp argument is unused:
+  LinearMap.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientLiftFibreEquiv, carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction,
+    carrierFibreQuotientHomEquiv, actualFibreQuotientHomEquiv, Submodule.liftQ_mkQ, LinearMap.comp_apply,
+    LinearMap.add_apply, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:122:4: warning: This simp argument is unused:
+  LinearMap.add_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierAmbientLiftFibreEquiv, carrierAmbientQuotientHomEquiv, liftCarrierMatrix, liftCarrierRestriction,
+    carrierFibreQuotientHomEquiv, actualFibreQuotientHomEquiv, Submodule.liftQ_mkQ, LinearMap.comp_apply,
+    LinearMap.sub_apply, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:136:2: error: Type mismatch: After simplification, term
+  carrierAmbientLiftFibreEquiv_normalizedMean A B T Q g
+ has type
+  (∑ x, g ↑((carrierAmbientLiftFibreEquiv A B T Q) x)) / ↑(Fintype.card ↥Q.fibre) =
+    (∑ y, g ↑y) / ↑(Fintype.card ↥(liftCarrierRestriction A B T Q).fibre)
+but is expected to have type
+  (∑ x, g (liftCarrierMatrix A B T ↑x)) / ↑(Fintype.card ↥Q.fibre) =
+    (∑ y, g ↑y) / ↑(Fintype.card ↥(liftCarrierRestriction A B T Q).fibre)
