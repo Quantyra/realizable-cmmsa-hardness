@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness
+
+#check booleanIndicatorComplex
+#check complexRankProjection_boolean_eq
+#check complexRankProjection_boolean_normSq
+#check exactPR_to_raw_normSqGlobal
+#check exactPR_to_actual_normSqGlobal
+#check exactPR_to_actual_A15_fixedLine
+
+#print axioms exactPR_to_raw_normSqGlobal
+#print axioms exactPR_to_actual_normSqGlobal
+#print axioms exactPR_to_actual_A15_fixedLine
+#print axioms complexRankProjection_boolean_eq
+#print axioms complexRankProjection_boolean_normSq

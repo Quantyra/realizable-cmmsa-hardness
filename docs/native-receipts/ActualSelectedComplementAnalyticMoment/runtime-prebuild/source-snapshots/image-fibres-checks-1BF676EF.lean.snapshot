@@ -1,0 +1,19 @@
+import PvNP.RealizableHardness.ActualFiniteBinaryImageFibres
+
+open PvNP.RealizableHardness.ActualFiniteBinaryImageFibres
+
+#check MatrixImageFibre
+#check SurjectionImageFibre
+#check matrixImageFibreEquivSurjections
+#check card_matrixImageFibre
+#check appendDomainEquiv
+#check appendLeftProjection_surjective
+#check appendDomain_decomposition
+#check AppendedZeroSurjectionFibre
+#check appendedZeroSurjectionEquiv
+#check card_appendedZeroSurjectionFibre
+
+#print axioms matrixImageFibreEquivSurjections
+#print axioms card_matrixImageFibre
+#print axioms appendedZeroSurjectionEquiv
+#print axioms card_appendedZeroSurjectionFibre
