@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46FinitePeeling
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46FinitePeeling
+
+#check coordinateLinePeel
+#check coordinateHyperplanePeel
+#check coordinateLinePeel_global
+#check coordinateHyperplanePeel_global
+#print axioms coordinateLinePeel_global
+#print axioms coordinateHyperplanePeel_global
