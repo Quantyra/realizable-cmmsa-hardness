@@ -8,6 +8,7 @@ open PvNP.RealizableHardness.BinaryMatrixFourier
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46
 open PvNP.RealizableHardness.BinaryMatrixComplexA15
 open PvNP.RealizableHardness.BinaryMatrixComplexA14
+open PvNP.RealizableHardness.BinaryMatrixHybridSelector
 open scoped BigOperators
 
 set_option autoImplicit false
@@ -28,7 +29,7 @@ theorem complexRankProjection_boolean_eq {n d j : Nat}
   · rw [complexRankProjection_re]
     simp [booleanIndicatorComplex]
   · rw [complexRankProjection_im]
-    simp [booleanIndicatorComplex, rankProjection]
+    simp [booleanIndicatorComplex, rankProjection, fourierCoeff, uniformMean]
 
 /-- Squared complex magnitude agrees pointwise with the real squared
 projection used by HC46. -/
@@ -38,6 +39,7 @@ theorem complexRankProjection_boolean_normSq {n d j : Nat}
       (rankProjection j (indicator b) M) ^ 2 := by
   rw [complexRankProjection_boolean_eq]
   simp [Complex.normSq_ofReal]
+  ring
 
 /-- Exact nominal-budget Boolean pseudorandomness gives the corresponding
 complex squared-norm bound on every nonempty or empty raw affine fibre.  The

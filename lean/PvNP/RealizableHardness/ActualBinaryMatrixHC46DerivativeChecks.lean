@@ -17,7 +17,6 @@ open PvNP.RealizableHardness.BinaryMatrixFirstDerivative
 open PvNP.RealizableHardness.BinaryMatrixLineA15
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46Derivative
 
-#check BinaryMatrixA1NestedCarrier.Selected
 #check rank_eq_drop_add_hybrid_indicator
 #check manuscript_A1_restrict_filter
 #check actual_affine_hybrid_composition
