@@ -1,0 +1,57 @@
+✖ [3048/3048] Building PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning (37s)
+trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/cslib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean -o /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.olean -i /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.ilean -c /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.c --setup /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.setup.json --json
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:57:4: Unused tactic linter: `change dualRestriction A (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:60:4: Unused tactic linter: `change dualRestriction A (δ.1 + φ₀) = ψ` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:110:4: Unused tactic linter: `change dualRestrictionAt A w (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:113:4: Unused tactic linter: `change dualRestrictionAt A w (δ.1 + φ₀) = z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:270:8: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq W (((dualSupVectorCoordinateMap A w) f).1 ⟨a, ha⟩) (((dualSupVectorCoordinateMap A w) g).1 ⟨a, ha⟩)
+but is expected to have type
+  @Eq W (f a') (g a')
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:324:35: declaration uses `sorry`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:312:18: declaration uses `sorry`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:353:20: declaration uses `sorry`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:338:8: declaration uses `sorry`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:441:4: Type mismatch: After simplification, term
+  Fintype.card_congr e
+ has type
+  Fintype.card { w // ↑w ∈ B } = Fintype.card ↥B
+but is expected to have type
+  {w | ↑w ∈ B}.card = Fintype.card ↥B
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:450:19: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Fintype.card ↥B'
+in the target expression
+  2 ^ Module.finrank (ZMod 2) ↥B + {a | ↑a ∉ B}.card = Finset.univ.card
+
+V : Type u_2
+inst✝² : AddCommGroup V
+inst✝¹ : Fintype V
+inst✝ : Module (ZMod 2) V
+B B' : Submodule (ZMod 2) V
+hB : B ≤ B'
+hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1
+e : { w // ↑w ∈ B } ≃ ↥B :=
+  { toFun := fun w => ⟨↑↑w, ⋯⟩, invFun := fun w => ⟨⟨↑w, ⋯⟩, ⋯⟩, left_inv := ⋯, right_inv := ⋯ }
+hin : {w | ↑w ∈ B}.card = Fintype.card ↥B
+hcardB : Fintype.card ↥B = 2 ^ Module.finrank (ZMod 2) ↥B
+hcardB' : Fintype.card ↥B' = 2 ^ Module.finrank (ZMod 2) ↥B'
+hsplit : 2 ^ Module.finrank (ZMod 2) ↥B + {a | ↑a ∉ B}.card = Finset.univ.card
+⊢ {w | ↑w ∉ B}.card = Fintype.card ↥B
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:501:8: Type mismatch: After simplification, term
+  this
+ has type
+  @Eq K (((dualSupCoordinateMap A w) f).1 ⟨a, ha⟩) (((dualSupCoordinateMap A w) g).1 ⟨a, ha⟩)
+but is expected to have type
+  @Eq K (f a') (g a')
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
