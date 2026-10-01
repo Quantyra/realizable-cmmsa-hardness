@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualTypedABMixedTower
+
+open PvNP.RealizableHardness.ActualTypedABMixedTower
+
+#check ActualTypedABMixedTower
+#check ActualTypedABMixedTower.done
+#check ActualTypedABMixedTower.line
+#check ActualTypedABMixedTower.hyperplane
+#check lineSuccessorQuotientEquiv
+#check lineSuccessor_inclusion
+#check hyperplaneSuccessor_le
+#check hyperplaneSuccessorEquiv
+#check adapted_length_le_total_finrank
+#print axioms hyperplaneSuccessor_le
+#print axioms hyperplaneSuccessorEquiv
+#print axioms adapted_length_le_total_finrank
