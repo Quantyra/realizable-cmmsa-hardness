@@ -1,0 +1,69 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport
+
+/-! The codomain-normal parent-fibre case follows from the accepted
+inside-domain energy estimate after exact matrix transposition. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18CodomainNormalEnergy
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport
+open BinaryMatrixActualAffine BinaryMatrixComplexA15 BinaryMatrixFourier
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- If a nonzero direction belongs to the domain fixed by the transposed
+parent restriction, then the original parent fibre has the same `2 * eta`
+energy bound for the exact transposed A18 operator. This is the
+codomain-normal case; it does not assert a bound for arbitrary fixed
+directions outside the transposed fixed domain. -/
+theorem actualA18_parent_fibre_energy_le_two_codomain_normal
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (v : (transposeActualRestriction Q).domainFixed)
+    (hv : (v : Fin n → ZMod 2) ≠ 0) :
+    fibreEnergy Q.fibre
+      (actualA18TransposeAverage (v : Fin n → ZMod 2)
+        f) ≤ 2 * η := by
+  classical
+  let QT := transposeActualRestriction Q
+  have hfT : UpToActualNormSqGlobal s η (complexTranspose f) :=
+    upToActualNormSqGlobal_transpose f hf
+  have hQT : QT.order ≤ s + 1 :=
+    le_trans (transposeActualRestriction_order_le Q) hQ
+  have hinside := actualA18_parent_fibre_energy_le_two_inside
+    (complexTranspose f) hfT QT hQT v hv
+  have hfib : QT.fibre = Q.fibre.image Matrix.transpose :=
+    transposeActualRestriction_fibre Q
+  rw [hfib] at hinside
+  have hi : Set.InjOn
+      (Matrix.transpose : BinaryMatrix n d → BinaryMatrix d n) Q.fibre :=
+    Matrix.transpose_injective.injOn
+  have henergy :
+      fibreEnergy (Q.fibre.image Matrix.transpose)
+        (actualA18Average (v : Fin n → ZMod 2) (complexTranspose f)) =
+      fibreEnergy Q.fibre
+        (fun M => actualA18Average (v : Fin n → ZMod 2)
+          (complexTranspose f) M.transpose) := by
+    simpa only [fibreEnergy, Finset.sum_image hi,
+      Finset.card_image_iff.mpr hi, Matrix.transpose_transpose]
+  rw [henergy] at hinside
+  have hoperator :
+      (fun M : BinaryMatrix n d => actualA18Average
+        (v : Fin n → ZMod 2) (complexTranspose f) M.transpose) =
+      actualA18TransposeAverage (v : Fin n → ZMod 2)
+        f := by
+    funext M
+    simpa [complexTranspose, Matrix.transpose_transpose] using
+      (complexTranspose_actualA18Average (v : Fin n → ZMod 2)
+        (complexTranspose f) M)
+  rw [hoperator] at hinside
+  exact hinside
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18CodomainNormalEnergy
