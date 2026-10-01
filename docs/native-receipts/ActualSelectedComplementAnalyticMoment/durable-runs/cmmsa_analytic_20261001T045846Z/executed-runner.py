@@ -193,7 +193,6 @@ sha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256
     for key, value in [('OVERLAYOBJECTS', overlay_objects), ('OVERLAYNAMES', ','.join(overlays)), ('OVERLAYPATHS', ' '.join(overlays)), ('OVERLAYVERIFY', overlay_verify), ('WORKTAG', a.reuse_tag or tag), ('REUSEMODE', 'yes' if a.reuse_tag else 'no'), ('CACHESHA', a.cslib_sha or 'UNUSED_REUSE_CACHE'), ('CACHENAME', cache.name if cache else 'UNUSED_REUSE_CACHE'), ('ARCHIVESHA', archive_sha), ('SOURCESHA', a.expected_sha), ('MODULEPATH', module.replace('.', '/')), ('MODULE', module), ('SOURCE', a.source), ('TAG', tag)]:
         remote = remote.replace(key, value)
     remote = remote.replace('/tmp/' + tag + '-evidence', '/home/dfredriksen_quantyra_org/cmmsa-evidence/' + tag + '-evidence')
-    remote = remote.replace('mkdir -p /home/dfredriksen_quantyra_org/cmmsa-evidence/', 'test \"$HOME\" = /home/dfredriksen_quantyra_org\ntest -d \"$HOME\" && test -w \"$HOME\"\nmkdir -p /home/dfredriksen_quantyra_org/cmmsa-evidence/', 1)
     script.write_text(remote, encoding='utf-8', newline='\n')
     preparation = {'prepared': True, 'archive': str(archive), 'script': str(script),
         'source_sha': a.expected_sha, 'archive_sha': archive_sha, 'execute': a.execute,
