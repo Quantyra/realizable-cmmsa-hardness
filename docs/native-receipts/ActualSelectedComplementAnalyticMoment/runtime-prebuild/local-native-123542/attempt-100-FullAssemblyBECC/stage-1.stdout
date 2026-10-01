@@ -1,0 +1,143 @@
+PvNP.RealizableHardness.ActualTypedABFullA16Assembly.filteredCarrierFunction_reconstruct_range_of_support {n d D : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝]
+      PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝]
+      ↥B) :
+  ∑ i ∈ Finset.range (D + 1),
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T
+        (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection i f) M =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f M
+'PvNP.RealizableHardness.ActualTypedABFullA16Assembly.filteredCarrierFunction_reconstruct_range_of_support' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABFullA16Assembly.selected_frequency_rank_lower_bound {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n))
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hsel : PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected A B (Matrix.toLin' (Matrix.transpose Y))) :
+  Module.finrank PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝ ↥A +
+      Module.finrank PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+        (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n ⧸ B) ≤
+    Matrix.rank Y
+'PvNP.RealizableHardness.ActualTypedABFullA16Assembly.selected_frequency_rank_lower_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABFullA16Assembly.filteredCarrierFunction_rankProjection_zero_of_below_carrier
+  {n d i : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝]
+      PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hi :
+    i <
+      Module.finrank PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+          (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n ⧸ B)) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T
+      (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection i f) =
+    0
+'PvNP.RealizableHardness.ActualTypedABFullA16Assembly.filteredCarrierFunction_rankProjection_zero_of_below_carrier' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABFullA16Assembly.filteredCarrierFunction_rankProjection_energy_bound
+  {n d i l h D : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n))
+  (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag ⊥ l) (hlines : lines.endpoint = A)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag ⊤ h)
+  (hhypers : hypers.endpoint = B)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝]
+      PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) (eps : ℝ) (heps : 0 ≤ eps)
+  (hglobal : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal D eps f) (hpositive : l + h ≠ 0)
+  (hlevel : l + h ≤ i) (hi : i ≤ D) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M =>
+      Complex.normSq
+        (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T
+          (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection i f) M)) ≤
+    2 ^ (10 * D ^ 2) * eps
+'PvNP.RealizableHardness.ActualTypedABFullA16Assembly.filteredCarrierFunction_rankProjection_energy_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABFullA16Assembly.filteredCarrierFunction_parameter_nonneg {n d D : ℕ} {eps : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hglobal : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal D eps f) : 0 ≤ eps
+'PvNP.RealizableHardness.ActualTypedABFullA16Assembly.filteredCarrierFunction_parameter_nonneg' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABFullA16Assembly.typedComplexRankProjection_cross_orthogonal {n d i j : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n))
+  (f g :
+    (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝]
+        ↥B) →
+      ℂ)
+  (hij : i ≠ j) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M =>
+      PvNP.RealizableHardness.ActualTypedABFullA16Assembly.complexRealDot✝
+        (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B i f M)
+        (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B j g M)) =
+    0
+'PvNP.RealizableHardness.ActualTypedABFullA16Assembly.typedComplexRankProjection_cross_orthogonal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABFullA16Assembly.carrierEnergy_finite_sum_of_orthogonal {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n))
+  {ι : Type} (s : Finset ι)
+  (g :
+    ι →
+      (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.V✝ d ⧸
+            A →ₗ[PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝]
+          ↥B) →
+        ℂ)
+  (horth :
+    ∀ i ∈ s,
+      ∀ j ∈ s,
+        i ≠ j →
+          (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M =>
+              PvNP.RealizableHardness.ActualTypedABFullA16Assembly.complexRealDot✝ (g i M) (g j M)) =
+            0) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M => Complex.normSq (∑ i ∈ s, g i M)) =
+    ∑ i ∈ s, PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M => Complex.normSq (g i M)
+'PvNP.RealizableHardness.ActualTypedABFullA16Assembly.carrierEnergy_finite_sum_of_orthogonal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
