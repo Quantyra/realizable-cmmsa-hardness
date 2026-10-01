@@ -1,0 +1,34 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:505:42: warning: Variable name `n` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _n
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:516:38: warning: Variable name `d` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _d
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:573:64: error: unsolved goals
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+C : Submodule F (Fin (Module.finrank F (V d ⧸ A)) → F)
+D : Submodule F (Fin (Module.finrank F ↥B) → F)
+R : (Fin (Module.finrank F (V d ⧸ A)) → F) →ₗ[F] Fin (Module.finrank F ↥B) → F
+N : (Fin (Module.finrank F (V d ⧸ A)) → F) ⧸ C →ₗ[F] ↥D
+x :
+  Fin
+      (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+        (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) →
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+eD : (Fin (Module.finrank F (V d ⧸ A)) → F) ≃ₗ[F] V d ⧸ A := (domainBasis A).equivFun.symm
+eC : (Fin (Module.finrank F ↥B) → F) ≃ₗ[F] ↥B := (codomainBasis B).equivFun.symm
+eQ : ((Fin (Module.finrank F (V d ⧸ A)) → F) ⧸ C) ≃ₗ[F] (V d ⧸ A) ⧸ Submodule.map (↑(domainBasis A).equivFun.symm) C :=
+  carrierCoordinateDomainQuotientEquiv A C
+⊢ Submodule.Quotient.mk (∑ i, x i • (domainBasis A) i) = Submodule.Quotient.mk (eD x)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:582:19: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAdd (V d ⧸ A →ₗ[F] ↥B) ↥B ?m.822
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
