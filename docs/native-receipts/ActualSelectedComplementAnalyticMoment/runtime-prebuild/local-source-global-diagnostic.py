@@ -7,6 +7,13 @@ snaps={hashlib.sha256(p.read_bytes()).hexdigest().upper():p for p in (b/'source-
 for s,h in pins.items():
  p=snaps.get(h.upper(),repo/s);data=p.read_bytes();assert hashlib.sha256(data).hexdigest().upper()==h
  q=src/pathlib.Path(s).relative_to('lean');q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(data)
+cached=repo/'.lake/build/lib/lean'
+linked=0
+for file in cached.rglob('*'):
+ if file.is_file():
+  dest=lib/file.relative_to(cached)
+  if not dest.exists():dest.parent.mkdir(parents=True,exist_ok=True);os.link(file,dest);linked+=1
+(out/'cached-companions.json').write_text(json.dumps({'linked_existing_cache_files':linked,'no_download':True,'compiled_outputs_preserved':True},indent=2)+'\n')
 paths=[lib,repo/'.lake/build/lib/lean']+[p/'.lake/build/lib/lean' for p in (repo/'.lake/packages').iterdir() if (p/'.lake/build/lib/lean').exists()]
 env=os.environ.copy();env['LEAN_PATH']=';'.join(str(p.resolve()) for p in paths)
 seen=set();records=[]
