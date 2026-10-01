@@ -1,0 +1,33 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:474:2: error: unsolved goals
+case pos
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+A₁₂ : Submodule F (V d ⧸ A)
+B₁₂ : Submodule F ↥B
+g : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+M : V d ⧸ A →ₗ[F] ↥B
+eD : (Fin (Module.finrank F (V d ⧸ A)) → F) ≃ₗ[F] V d ⧸ A := (domainBasis A).equivFun.symm
+eC : (Fin (Module.finrank F ↥B) → F) ≃ₗ[F] ↥B := (codomainBasis B).equivFun.symm
+eY : (↥B →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸
+      A) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝]
+  BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥B)
+    (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ A)) :=
+  carrierFrequencyEquiv A B
+hselected :
+  ∀ (Y : ↥B →ₗ[F] V d ⧸ A),
+    Selected (Submodule.map (↑eD.symm) A₁₂) (Submodule.map (↑eC.symm) B₁₂) (Matrix.toLin' (Matrix.transpose (eY Y))) ↔
+      Selected A₁₂ B₁₂ Y
+Y :
+  ↥B →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ A
+h : Selected A₁₂ B₁₂ Y
+h' :
+  Selected (Submodule.map (↑(domainBasis A).equivFun) A₁₂) (Submodule.map (↑(codomainBasis B).equivFun) B₁₂)
+    (Matrix.toLin' (Matrix.transpose (eY Y)))
+⊢ complexFourierCoeff (fun X => g ((carrierMatrixEquiv A B).symm X)) ((carrierFrequencyEquiv A B) Y) *
+      ↑(character ((carrierFrequencyEquiv A B) Y) ((carrierMatrixEquiv A B) M)) =
+    complexFourierCoeff (fun X => g ((carrierMatrixEquiv A B).symm X)) (eY Y) *
+      ↑(character (eY Y) ((carrierMatrixEquiv A B) M))
