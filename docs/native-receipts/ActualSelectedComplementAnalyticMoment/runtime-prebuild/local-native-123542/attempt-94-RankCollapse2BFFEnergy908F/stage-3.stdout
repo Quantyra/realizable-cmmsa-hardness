@@ -1,0 +1,29 @@
+PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy.canonical_source_rank_projection_energy
+  {n d r l h D : ℕ} (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag ⊥ l)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag ⊤ h)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy.W✝ n)
+  (ambientf : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) (hpositive : l + h ≠ 0)
+  (hlevel : r + (h + l) ≤ D) (eps : ℝ) (heps : 0 ≤ eps)
+  (hglobal :
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.UpToTypedNormSqGlobal ⊥ ⊤ (r + (h + l)) eps fun M =>
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 ambientf M) :
+  have source := fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 ambientf M;
+  let tower :=
+    PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers
+      (PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.initialBottomTopBase T);
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend fun M =>
+      Complex.normSq
+        (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction
+          (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend
+          (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend T
+          (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M)) ≤
+    2 ^ (10 * D ^ 2) * eps
+'PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy.canonical_source_rank_projection_energy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

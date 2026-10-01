@@ -1,0 +1,25 @@
+PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionCollapse.canonical_source_rank_projection_collapse
+  {n d r l h : ℕ} (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag ⊥ l)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag ⊤ h)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionCollapse.W✝ n)
+  (ambientf : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) (hpositive : l + h ≠ 0) :
+  have source := fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 ambientf M;
+  let tower :=
+    PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers
+      (PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.initialBottomTopBase T);
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend r
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).fend =
+    fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend T
+      (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M
+'PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionCollapse.canonical_source_rank_projection_collapse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
