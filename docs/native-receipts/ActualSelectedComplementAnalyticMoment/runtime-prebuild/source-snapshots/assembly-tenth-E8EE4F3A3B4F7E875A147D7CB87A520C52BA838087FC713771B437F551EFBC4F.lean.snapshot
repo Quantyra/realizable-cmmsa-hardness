@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant
+
+open PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant
+open PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+
+#check rankProjection_parseval_restricted_eq
+#print axioms rankProjection_parseval_restricted_eq
+#check append_dyadic_factor_le_spectral_factor
+#print axioms append_dyadic_factor_le_spectral_factor
+#check spectral47_exact_contract_inhabitant
+#print axioms spectral47_exact_contract_inhabitant

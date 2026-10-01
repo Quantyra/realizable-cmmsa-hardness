@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualFiniteFrameProductRatio
+
+open PvNP.RealizableHardness.ActualFiniteFrameProductRatio
+
+#check frameProduct_scaled_le_all
+#print axioms frameProduct_scaled_le_all
+#check frameProduct_ratio_le
+#print axioms frameProduct_ratio_le

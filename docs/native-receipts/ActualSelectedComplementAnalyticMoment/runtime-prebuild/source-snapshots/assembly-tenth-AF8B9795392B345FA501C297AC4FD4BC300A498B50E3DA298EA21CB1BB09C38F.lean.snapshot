@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46CommonA16
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46CommonA16
+
+#check complexEnergy_finite_sum_of_orthogonal
+#print axioms complexEnergy_finite_sum_of_orthogonal
+#check complexRankProjection_reconstruct
+#print axioms complexRankProjection_reconstruct
+#check commonMixedDerivativeChain_reconstruct
+#print axioms commonMixedDerivativeChain_reconstruct
+#check commonMixedDerivativeChain_rank_orthogonal
+#print axioms commonMixedDerivativeChain_rank_orthogonal
+#check commonMixedDerivativeChain_complex_energy_sum
+#print axioms commonMixedDerivativeChain_complex_energy_sum

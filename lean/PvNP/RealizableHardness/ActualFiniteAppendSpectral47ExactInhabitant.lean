@@ -1,0 +1,100 @@
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Tactic
+import PvNP.RealizableHardness.ActualFiniteAppendGlobalImageEnergy
+import PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+import PvNP.RealizableHardness.BinaryMatrixFourier
+
+/-!
+Derive the unchanged universal Spectral47 contract from the finite actual
+append-energy estimate. The height/cutoff and rho/split assumptions remain
+visible in the contract, but the finite Fourier argument does not need to
+strengthen them with Booleanity or an ambient-width restriction.
+-/
+namespace PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant
+
+open scoped BigOperators
+open PvNP.RealizableHardness.ActualFiniteAppendGlobalImageEnergy
+open PvNP.RealizableHardness.ActualFiniteAppendSpectral47
+open PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator
+open PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+open PvNP.RealizableHardness.BinaryMatrixFourier
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Parseval identifies the rank-i coefficient mass with the energy of the
+rank-i Fourier projection. -/
+theorem rankProjection_parseval_restricted_eq {n d i : Nat}
+    (F : BinaryMatrix n d → Real) :
+    (∑ Z ∈ (Finset.univ : Finset (BinaryMatrix n d)).filter
+        (fun Z => Z.rank = i),
+      (fourierCoeff F Z) ^ 2) =
+      uniformMean (fun M : BinaryMatrix n d =>
+        (rankProjection i F M) ^ 2) := by
+  rw [← fourier_parseval (rankProjection i F)]
+  rw [Finset.sum_filter]
+  apply Finset.sum_congr rfl
+  intro Z hZ
+  rw [fourierCoeff_rankProjection]
+  by_cases h : Z.rank = i <;> simp [h]
+
+/-- The dyadic contraction factor is no larger than the first factor in the
+unchanged Spectral47 right-hand side. -/
+theorem append_dyadic_factor_le_spectral_factor {i s : Nat} :
+    (2 : Real) ^ (-((i : Real) * (s : Real))) ≤
+      (2 : Real) ^ (-(i : Real) * ((s : Real) - 1)) := by
+  have hi : 0 ≤ (i : Real) := Nat.cast_nonneg i
+  have hs : (s : Real) - 1 ≤ (s : Real) := by linarith
+  have hmul : (i : Real) * ((s : Real) - 1) ≤ (i : Real) * (s : Real) :=
+    mul_le_mul_of_nonneg_left hs hi
+  have hexp : -((i : Real) * (s : Real)) ≤
+      -(i : Real) * ((s : Real) - 1) := by
+    calc
+      -((i : Real) * (s : Real)) ≤ -((i : Real) * ((s : Real) - 1)) :=
+        neg_le_neg hmul
+      _ = -(i : Real) * ((s : Real) - 1) := by ring
+  exact Real.rpow_le_rpow_of_exponent_le (by norm_num : (1 : Real) ≤ 2) hexp
+
+/-- Every level of the actual unconditional append operator satisfies the
+exact universal Spectral47 contract, including its nonnegative `+3` term. -/
+theorem spectral47_exact_contract_inhabitant (sourceHeightCutoff : Real → Nat) :
+    Spectral47ExactContract sourceHeightCutoff := by
+  intro n c s h i rho F basisInv hEven hi hRho hc hs hHeight
+  have hglobal := append_rank_projection_energy_le hi F basisInv
+  have hparseval := rankProjection_parseval_restricted_eq (i := i) F
+  have hglobal' :
+      uniformMean (fun M : BinaryMatrix n c =>
+        (appendAverage (rankProjection i F) M) ^ 2) ≤
+      (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        uniformMean (fun W : BinaryMatrix n (c + s) =>
+          (rankProjection i F W) ^ 2) := by
+    rw [hparseval] at hglobal
+    exact hglobal
+  have hpow :
+      (2 : Real) ^ (-((i : Real) * (s : Real))) ≤
+        (2 : Real) ^ (-(i : Real) * ((s : Real) - 1)) :=
+    append_dyadic_factor_le_spectral_factor
+  have henergy : 0 ≤ uniformMean (fun W : BinaryMatrix n (c + s) =>
+      (rankProjection i F W) ^ 2) := by
+    unfold uniformMean
+    apply div_nonneg
+    · apply Finset.sum_nonneg
+      intro W hW
+      exact sq_nonneg _
+    · exact Nat.cast_nonneg _
+  calc
+    uniformMean (fun M : BinaryMatrix n c =>
+        (appendAverage (rankProjection i F) M) ^ 2) ≤
+      (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        uniformMean (fun W : BinaryMatrix n (c + s) =>
+          (rankProjection i F W) ^ 2) := hglobal'
+    _ ≤ ((2 : Real) ^ (-(i : Real) * ((s : Real) - 1)) +
+          3 * (2 : Real) ^ ((i : Real) - (n : Real))) *
+          uniformMean (fun W : BinaryMatrix n (c + s) =>
+            (rankProjection i F W) ^ 2) := by
+      apply mul_le_mul_of_nonneg_right _ henergy
+      exact le_add_of_nonneg_right (by positivity)
+
+end
+end PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant

@@ -1,0 +1,169 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+import PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal
+import PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Reduced
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane
+import PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneGlobal
+import PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReduced
+import PvNP.RealizableHardness.BinaryMatrixCodomainA15
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46PA4Transport
+
+open BinaryMatrixFourier BinaryMatrixComplexA15
+open BinaryMatrixTypedA15AdaptedGlobal BinaryMatrixTypedA15ReducedGlobal
+open BinaryMatrixTypedA15Transport BinaryMatrixFirstDerivative
+open BinaryMatrixLineA15
+open BinaryMatrixTypedA15HyperplaneReducedGlobal
+open BinaryMatrixTypedA15HyperplaneGlobal
+open BinaryMatrixCodomainA15
+open BinaryMatrixTypedA15OneStep BinaryMatrixTypedA15Reduced
+open BinaryMatrixTypedA15Hyperplane BinaryMatrixTypedA15HyperplaneReduced
+open BinaryMatrixTypedA15HyperplaneGlobal
+
+set_option autoImplicit false
+noncomputable section
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d -> F
+
+/-- The coordinate function used by the prescribed-base typed A15 line
+witness. -/
+def typedLineCoordinateOutput {n d k : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) :
+    BinaryMatrix (Module.finrank F B)
+      (Module.finrank F ((V d ⧸ A) ⧸ L)) -> Complex :=
+  fun X => typedLineP B L hL k f
+    ((lineMatrixEquiv B L hL).symm
+      (rawLastColumn X (lineBaseColumn B L hL T)))
+
+/-- Coordinate displacement of the prescribed base in the reduced matrix
+coordinates. -/
+def typedLineCoordinateShift {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (T : (V d ⧸ A) →ₗ[F] B) :
+    BinaryMatrix (Module.finrank F B)
+      (Module.finrank F ((V d ⧸ A) ⧸ L)) :=
+  dropLastMatrix (lineMatrixEquiv B L hL T)
+
+/-- Exact PA4 prescribed-base identity. The typed reduced witness at the
+reduced-coordinate point is the coordinate witness translated by the actual
+base displacement `c`; the displacement is retained, not set to zero. -/
+theorem typedLineReducedWitness_eq_coordinate_shift {n d k : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex)
+    (X : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F ((V d ⧸ A) ⧸ L))) :
+    typedLineReducedWitness (k := k) B L hL T f
+      ((reducedMatrixEquiv B L).symm X) =
+        typedLineCoordinateOutput (k := k) A B L hL T f
+          (X + typedLineCoordinateShift A B L hL T) := by
+  let e := lineMatrixEquiv B L hL
+  let r := reducedMatrixEquiv B L
+  let t := lineBaseColumn B L hL T
+  let c := dropLastMatrix (e T)
+  let G := typedLineCoordinateOutput (k := k) A B L hL T f
+  have hw := typed_line_coordinate_witness_fixed_base (k := k)
+    B L hL T (r.symm X) f
+  rw [dropLast_lineMatrix_fixed_base] at hw
+  rw [r.apply_symm_apply] at hw
+  rw [add_comm c X] at hw
+  simpa [typedLineReducedWitness, G, typedLineCoordinateOutput,
+    typedLineCoordinateShift, e, r, c, t] using hw
+
+/-- Translate coordinate globalness through the actual prescribed-base
+shift, then transport from coordinate to reduced typed restrictions. -/
+theorem typedLineReducedWitness_global_of_coordinate {n d k : Nat}
+    {eps : Real}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex)
+    (heps : 0 <= eps)
+    (hcoord : UpToActualNormSqGlobal k eps
+      (typedLineCoordinateOutput (k := k) A B L hL T f)) :
+    UpToReducedNormSqGlobal A B L k eps
+      (typedLineReducedWitness (k := k) B L hL T f) := by
+  let c := typedLineCoordinateShift A B L hL T
+  let G := typedLineCoordinateOutput (k := k) A B L hL T f
+  have htranslated := translate_actual_complex c G heps hcoord
+  apply (BinaryMatrixTypedA15ReducedGlobal.reduced_global_iff_coordinate A B L
+    (typedLineReducedWitness (k := k) B L hL T f)).mpr
+  intro R hR
+  have h := htranslated R hR
+  have hEq : (fun X => typedLineReducedWitness (k := k) B L hL T f
+      ((reducedMatrixEquiv B L).symm X)) =
+      (fun X => G (X + c)) := by
+    funext X
+    exact typedLineReducedWitness_eq_coordinate_shift A B L hL T f X
+  simpa only [hEq] using h
+
+/-- Coordinate function for the prescribed-base typed codomain-hyperplane
+witness. -/
+def typedHyperplaneCoordinateOutput {n d k : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (H : Submodule F B) (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) :
+    BinaryMatrix (Module.finrank F H)
+      (Module.finrank F (V d ⧸ A)) -> Complex :=
+  fun X => typedHyperplaneP B H hH k f
+    ((hyperplaneMatrixEquiv B H hH).symm
+      (rawLastRow X (hyperplaneBaseRow B H hH T)))
+
+/-- Actual nonzero prescribed-base displacement for codomain hyperplane
+coordinates. -/
+def typedHyperplaneCoordinateShift {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (H : Submodule F B) (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B) :
+    BinaryMatrix (Module.finrank F H)
+      (Module.finrank F (V d ⧸ A)) :=
+  dropLastRow (hyperplaneMatrixEquiv B H hH T)
+
+theorem typedHyperplaneReducedWitness_eq_coordinate_shift {n d k : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (H : Submodule F B) (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex)
+    (X : BinaryMatrix (Module.finrank F H)
+      (Module.finrank F (V d ⧸ A))) :
+    typedHyperplaneReducedWitness (k := k) B H hH T f
+      ((hyperplaneReducedMatrixEquiv H).symm X) =
+        typedHyperplaneCoordinateOutput (k := k) A B H hH T f
+          (X + typedHyperplaneCoordinateShift A B H hH T) := by
+  simpa [typedHyperplaneCoordinateOutput, typedHyperplaneCoordinateShift] using
+    hyperplane_witness_coordinate_shift B H hH T f X
+
+theorem typedHyperplaneReducedWitness_global_of_coordinate {n d k : Nat}
+    {eps : Real}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (H : Submodule F B) (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex)
+    (heps : 0 <= eps)
+    (hcoord : UpToActualNormSqGlobal k eps
+      (typedHyperplaneCoordinateOutput (k := k) A B H hH T f)) :
+    UpToHyperplaneReducedNormSqGlobal A B H k eps
+      (typedHyperplaneReducedWitness (k := k) B H hH T f) := by
+  let c := typedHyperplaneCoordinateShift A B H hH T
+  let G := typedHyperplaneCoordinateOutput (k := k) A B H hH T f
+  have htranslated := translate_actual_complex c G heps hcoord
+  apply BinaryMatrixTypedA15HyperplaneReducedGlobal.reduced_global_iff_coordinate
+    A B H hH (typedHyperplaneReducedWitness (k := k) B H hH T f) |>.mpr
+  intro R hR
+  have h := htranslated R hR
+  have hEq : (fun X => typedHyperplaneReducedWitness (k := k) B H hH T f
+      ((hyperplaneReducedMatrixEquiv H).symm X)) =
+      (fun X => G (X + c)) := by
+    funext X
+    exact typedHyperplaneReducedWitness_eq_coordinate_shift A B H hH T f X
+  simpa only [hEq] using h
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46PA4Transport
