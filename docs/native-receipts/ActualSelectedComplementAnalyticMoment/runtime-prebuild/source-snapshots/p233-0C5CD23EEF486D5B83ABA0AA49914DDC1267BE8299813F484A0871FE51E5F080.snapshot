@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition
+
+#check lastCoordinateSliceEquiv
+#check functionalsAtLastEquiv
+#check actualA18RankOne_last_eq_lineShift
+#check actualA18Average_last_eq_complexLineAverage
+#check selected_lastLine_iff_hybridLineSelected
+#check complexAmbientHybridFilter_lastLine_eq
+#check complexHybridLineFilter_rankProjection_eq
+#check homogeneous_A13_last_coordinate
+
+#print axioms actualA18RankOne_last_eq_lineShift
+#print axioms actualA18Average_last_eq_complexLineAverage
+#print axioms complexHybridLineFilter_rankProjection_eq
+#print axioms homogeneous_A13_last_coordinate
