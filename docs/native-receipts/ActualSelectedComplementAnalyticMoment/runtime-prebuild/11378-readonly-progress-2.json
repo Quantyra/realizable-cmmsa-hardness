@@ -1,0 +1,16 @@
+{
+  "args": [
+    "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+    "compute",
+    "ssh",
+    "quantyra-lean-builder-01",
+    "--quiet",
+    "--tunnel-through-iap",
+    "--project=quantyra-lean-cert-20260915",
+    "--zone=us-central1-a",
+    "--command=for f in /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_analytic_20261001T084002Z-evidence/stage-*.native-exit; do test -f \"$f\" && echo \"$f\" && cat \"$f\"; done; ps -eo pid,etime,args | grep \"[b]in/lean\" | head -2"
+  ],
+  "native_exit_code": 0,
+  "stdout": "/home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_analytic_20261001T084002Z-evidence/stage-0.native-exit\n0\n",
+  "stderr": ""
+}
