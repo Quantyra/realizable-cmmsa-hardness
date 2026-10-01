@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+
+open PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+
+#check bottomTopAmbientMatrixEquiv
+#check bottomTopTypedRankProjection_reindex_hom
+#check ambientHomFourierCoeff_toMatrix
+#check ambientHomRankProjection_toMatrix
+#check bottomTopSourceRankProjection
+#print axioms bottomTopSourceRankProjection
