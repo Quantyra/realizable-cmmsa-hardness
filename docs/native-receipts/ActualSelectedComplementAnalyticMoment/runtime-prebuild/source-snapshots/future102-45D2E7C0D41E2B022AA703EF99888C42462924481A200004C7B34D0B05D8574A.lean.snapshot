@@ -1,0 +1,18 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
+
+#check quotientSampleOutput
+#check quotientSampleOutput_section
+#check quotientSampleOutput_newColumn
+#check quotientSampleOutput_range_stable
+#check quotientSampleOutput_range_expanded
+#check productMapFromCoordinates
+#check coordinatesOfMap
+#check fixedColumnCoordinateEquiv
+
+#print axioms quotientSampleOutput_section
+#print axioms quotientSampleOutput_newColumn
+#print axioms quotientSampleOutput_range_stable
+#print axioms quotientSampleOutput_range_expanded
+#print axioms fixedColumnCoordinateEquiv
