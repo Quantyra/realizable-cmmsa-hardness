@@ -1,0 +1,33 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.actual_fibre_base_mem {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) : Q.base ∈ Q.fibre
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.rawOfActual_base_mem {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) :
+  Q.base ∈ (PvNP.RealizableHardness.BinaryMatrixActualAffine.rawOfActual Q).fibre
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.transposeActualRestriction {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) :
+  PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction d n
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.transposeActualRestriction_order_le {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) :
+  (transposeActualRestriction Q).order ≤ Q.order
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.transposeActualRestriction_fibre {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) :
+  (transposeActualRestriction Q).fibre = Finset.image Matrix.transpose Q.fibre
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.upToActualNormSqGlobal_transpose {n d r : ℕ} {η : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal r η f) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal r η fun M => f (Matrix.transpose M)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.actual_fibre_base_mem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.rawOfActual_base_mem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.transposeActualRestriction_order_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.transposeActualRestriction_fibre' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.upToActualNormSqGlobal_transpose' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

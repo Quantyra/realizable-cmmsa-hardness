@@ -1,0 +1,7 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage
+
+#check actualA18TransposeAverage
+#check complexTranspose_actualA18Average
+#print axioms complexTranspose_actualA18Average

@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport
+
+#check actual_fibre_base_mem
+#check rawOfActual_base_mem
+#check transposeActualRestriction
+#check transposeActualRestriction_order_le
+#check transposeActualRestriction_fibre
+#check upToActualNormSqGlobal_transpose
+
+#print axioms actual_fibre_base_mem
+#print axioms rawOfActual_base_mem
+#print axioms transposeActualRestriction_order_le
+#print axioms transposeActualRestriction_fibre
+#print axioms upToActualNormSqGlobal_transpose
