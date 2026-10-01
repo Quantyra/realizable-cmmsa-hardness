@@ -1,0 +1,90 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalProjection.lean:220:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?e ((LinearEquiv.symm ?e) ?c)
+in the target expression
+  typedComplexRankProjection A (Submodule.map B.subtype H) (r + k)
+      (fun M => typedHyperplaneReducedWitness B H hH T f ((hyperplaneCanonicalEquiv B H).symm M))
+      ((hyperplaneCanonicalEquiv B H) ((hyperplaneCanonicalEquiv B H).symm M)) =
+    typedComplexHyperplaneFilter B H hH (typedComplexRankProjection A B (r + k + 1) f)
+      (T + H.subtype ∘ₗ (hyperplaneCanonicalEquiv B H).symm M)
+
+n d r✝ k✝ : ℕ
+A✝ : Submodule F (V d)
+B✝ : Submodule F (W n)
+f✝ : (V d ⧸ A✝ →ₗ[F] ↥B✝) → ℂ
+A :
+  Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝ (PvNP.RealizableHardness.ActualTypedABRankedTower.V✝ d)
+B :
+  Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝ (PvNP.RealizableHardness.ActualTypedABRankedTower.W✝ n)
+H : Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝ ↥B
+hH : Module.finrank PvNP.RealizableHardness.ActualTypedABRankedTower.F✝ (↥B ⧸ H) = 1
+r k : ℕ
+T : PvNP.RealizableHardness.ActualTypedABRankedTower.V✝ d ⧸ A →ₗ[PvNP.RealizableHardness.ActualTypedABRankedTower.F✝] ↥B
+f :
+  (PvNP.RealizableHardness.ActualTypedABRankedTower.V✝ d ⧸ A →ₗ[PvNP.RealizableHardness.ActualTypedABRankedTower.F✝]
+      ↥B) →
+    ℂ
+tail :
+  ActualTypedABRankedTower A (Submodule.map B.subtype H)
+    (fun N => typedHyperplaneReducedWitness B H hH T f (↑(Submodule.equivMapOfInjective B.subtype ⋯ H).symm ∘ₗ N)) r k
+ih :
+  typedComplexRankProjection (rankedTerminalData tail).Aend (rankedTerminalData tail).Bend r
+      (rankedTerminalData tail).fend =
+    applyCanonicalFilters tail
+      (typedComplexRankProjection A (Submodule.map B.subtype H) (r + k) fun N =>
+        typedHyperplaneReducedWitness B H hH T f (↑(Submodule.equivMapOfInjective B.subtype ⋯ H).symm ∘ₗ N))
+M :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.V✝ d ⧸ A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA14Line.F✝]
+    ↥(Submodule.map B.subtype H)
+e : (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+    ↥H) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+  PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+    ↥(hyperplaneCanonicalCodomain B H) :=
+  hyperplaneCanonicalEquiv B H
+hflatten :
+  (fun X => typedHyperplaneReducedWitness B H hH T f ((hyperplaneCanonicalEquiv B H).symm X)) = fun X =>
+    typedHyperplaneReducedWitness B H hH T f (↑(Submodule.equivMapOfInjective B.subtype ⋯ H).symm ∘ₗ X)
+hs :
+  typedComplexRankProjection A (Submodule.map B.subtype H) (r + k)
+      (fun M => typedHyperplaneReducedWitness B H hH T f ((hyperplaneCanonicalEquiv B H).symm M))
+      ((hyperplaneCanonicalEquiv B H) ((hyperplaneCanonicalEquiv B H).symm M)) =
+    typedComplexHyperplaneFilter B H hH (typedComplexRankProjection A B (r + k + 1) f)
+      (T + H.subtype ∘ₗ (hyperplaneCanonicalEquiv B H).symm M)
+⊢ typedComplexRankProjection A (Submodule.map B.subtype H) (r + k)
+      (fun M => typedHyperplaneReducedWitness B H hH T f (↑(Submodule.equivMapOfInjective B.subtype ⋯ H).symm ∘ₗ M)) M =
+    typedComplexHyperplaneFilter B H hH (typedComplexRankProjection A B (r + k + 1) f)
+      (T + H.subtype ∘ₗ (hyperplaneCanonicalEquiv B H).symm M)
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    hyperplaneCanonicalEquiv B H
+  has type
+    @LinearEquiv PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+      PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ Field.toSemifield.toDivisionSemiring.toSemiring
+      Field.toSemifield.toDivisionSemiring.toSemiring
+      (RingHom.id PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝)
+      (RingHom.id PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝) ⋯ ⋯
+      (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+        ↥H)
+      (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+        ↥(hyperplaneCanonicalCodomain B H))
+      LinearMap.addCommMonoid LinearMap.addCommMonoid LinearMap.module LinearMap.module
+  but is expected to have type
+    @LinearEquiv PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+      PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ Field.toSemifield.toDivisionSemiring.toSemiring
+      Field.toSemifield.toDivisionSemiring.toSemiring
+      (RingHom.id PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝)
+      (RingHom.id PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝) ⋯ ⋯
+      (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+        ↥H)
+      (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+        ↥(Submodule.map B.subtype H))
+      LinearMap.addCommMonoid LinearMap.addCommMonoid LinearMap.module LinearMap.module
+  in the application
+    (hyperplaneCanonicalEquiv B H).symm
