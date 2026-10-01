@@ -1,0 +1,141 @@
+PvNP.RealizableHardness.ActualTypedABCanonicalProjection.canonical_line_successor_projection {n d j : ℕ}
+  (A A' :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.W✝ n))
+  (hA : A ≤ A')
+  (hL : Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝ ↥(Submodule.map A.mkQ A') = 1)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+      ↥B)
+  (f :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+        ↥B) →
+      ℂ)
+  (N :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸ A) ⧸
+        Submodule.map A.mkQ A' →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+      ↥B) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A' B j
+      (fun M =>
+        PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal.typedLineReducedWitness B (Submodule.map A.mkQ A') hL
+          T f ((PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M))
+      ((PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA) N) =
+    PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B (j + 1) f)
+      (T + N ∘ₗ (Submodule.map A.mkQ A').mkQ)
+'PvNP.RealizableHardness.ActualTypedABCanonicalProjection.canonical_line_successor_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalProjection.canonical_hyperplane_successor_projection {n d j : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.W✝ n))
+  (H : Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝ ↥B)
+  (hH : Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝ (↥B ⧸ H) = 1)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+      ↥B)
+  (f :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+        ↥B) →
+      ℂ)
+  (N :
+    PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+      ↥H) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A (Submodule.map B.subtype H) j
+      (fun M =>
+        PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal.typedHyperplaneReducedWitness B H hH T f
+          ((PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv B H).symm M))
+      ((PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv B H) N) =
+    PvNP.RealizableHardness.BinaryMatrixTypedA14Hyperplane.typedComplexHyperplaneFilter B H hH
+      (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B (j + 1) f) (T + H.subtype ∘ₗ N)
+'PvNP.RealizableHardness.ActualTypedABCanonicalProjection.canonical_hyperplane_successor_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters {n d r k : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.W✝ n)}
+  {f :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+        ↥B) →
+      ℂ}
+  (tower : PvNP.RealizableHardness.ActualTypedABRankedTower.ActualTypedABRankedTower A B f r k) :
+  ((PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+        ↥B) →
+      ℂ) →
+    (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+          (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+              tower).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+        ↥(PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend) →
+      ℂ
+PvNP.RealizableHardness.ActualTypedABCanonicalProjection.ranked_terminal_projection_eq_canonicalFilters {n d r k : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.W✝ n)}
+  {f :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+        ↥B) →
+      ℂ}
+  (tower : PvNP.RealizableHardness.ActualTypedABRankedTower.ActualTypedABRankedTower A B f r k) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend r
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).fend =
+    PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters tower
+      (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B (r + k) f)
+'PvNP.RealizableHardness.ActualTypedABCanonicalProjection.ranked_terminal_projection_eq_canonicalFilters' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalProjection.canonical_source_tower_projection_eq_filters {n d r l h : ℕ}
+  {A0 :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d)}
+  {B0 :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.W✝ n)}
+  {f :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+          A0 →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+        ↥B0) →
+      ℂ}
+  (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag A0 l)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag B0 h)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+        A0 →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝]
+      ↥B0) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers T)).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers T)).Bend
+      r
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers T)).fend =
+    PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers T)
+      (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A0 B0 (r + (h + l)) f)
+'PvNP.RealizableHardness.ActualTypedABCanonicalProjection.canonical_source_tower_projection_eq_filters' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
