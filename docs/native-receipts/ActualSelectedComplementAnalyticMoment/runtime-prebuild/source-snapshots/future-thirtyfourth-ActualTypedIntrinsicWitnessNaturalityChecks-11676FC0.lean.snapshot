@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualTypedIntrinsicWitnessNaturality
+
+open PvNP.RealizableHardness.ActualTypedIntrinsicWitnessNaturality
+open PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+
+#check intrinsicLineAverage_reindex
+#print axioms intrinsicLineAverage_reindex
+#check intrinsicLineIminusE_reindex
+#print axioms intrinsicLineIminusE_reindex
+#check intrinsicLineP_reindex
+#print axioms intrinsicLineP_reindex
+#check intrinsicReducedLineWitness_reindex
+#print axioms intrinsicReducedLineWitness_reindex
+#check typedLineP_eq_intrinsic
+#print axioms typedLineP_eq_intrinsic
+#check typedLineReducedWitness_eq_intrinsic
+#print axioms typedLineReducedWitness_eq_intrinsic
