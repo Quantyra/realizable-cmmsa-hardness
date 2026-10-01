@@ -1,0 +1,21 @@
+import PvNP.RealizableHardness.ActualFiniteAppendSpectral47
+
+open PvNP.RealizableHardness.ActualFiniteAppendSpectral47
+open PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+
+#check pairing_eq_trace_transpose_mul
+#check pairing_mul_right_transpose
+#check fourierCoeff_mul_right_transpose_eq
+#check rank_mul_right_transpose_eq
+#check rankProjection_mul_right_eq
+#check appendAverage_rankProjection_surviving_sum
+#check appendAverage_character_pair
+#check appendAverage_rankProjection_energy_eq
+#check Spectral47ExactContract
+
+#print axioms pairing_mul_right_transpose
+#print axioms fourierCoeff_mul_right_transpose_eq
+#print axioms rankProjection_mul_right_eq
+#print axioms appendAverage_rankProjection_surviving_sum
+#print axioms appendAverage_character_pair
+#print axioms appendAverage_rankProjection_energy_eq
