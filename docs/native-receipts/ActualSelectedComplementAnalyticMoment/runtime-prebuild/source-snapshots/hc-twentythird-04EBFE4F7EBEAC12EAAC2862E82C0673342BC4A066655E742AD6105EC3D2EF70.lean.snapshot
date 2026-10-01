@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualRawRestrictionComposition
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.ActualRawRestrictionComposition
+
+#check composeRawRestriction
+#check composeRawRestriction_budget
+#check composeRawRestriction_fibre
+#check composeRawRestriction_fibreEnergy
+#check rawGlobal_compose
+
+#print axioms composeRawRestriction_budget
+#print axioms composeRawRestriction_fibre
+#print axioms composeRawRestriction_fibreEnergy
+#print axioms rawGlobal_compose

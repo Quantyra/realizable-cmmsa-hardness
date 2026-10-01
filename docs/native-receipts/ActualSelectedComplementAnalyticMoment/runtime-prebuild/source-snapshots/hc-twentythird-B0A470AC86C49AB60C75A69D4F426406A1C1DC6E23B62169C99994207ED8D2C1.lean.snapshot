@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A16Energy
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A16Energy
+
+#check commonMixedDerivativeChain_energy_le_A16
+#print axioms commonMixedDerivativeChain_energy_le_A16

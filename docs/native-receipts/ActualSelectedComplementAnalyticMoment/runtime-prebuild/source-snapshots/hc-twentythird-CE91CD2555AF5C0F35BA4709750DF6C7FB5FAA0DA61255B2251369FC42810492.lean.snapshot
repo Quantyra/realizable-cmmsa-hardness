@@ -1,0 +1,243 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+
+open BinaryMatrixFourier BinaryMatrixTypedA15Transport
+open BinaryMatrixA1Phase BinaryMatrixA1CharacterBridge BinaryMatrixA1Complex
+open BinaryMatrixA1TypedFourier
+open BinaryMatrixTypedA14Line
+open ActualFiniteDegreeFourierReconstruction
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d -> F
+private abbrev W (n : Nat) := Fin n -> F
+
+private noncomputable instance carrierMapFintype {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) :
+    Fintype ((V d ⧸ A) →ₗ[F] B) := by
+  classical
+  letI : Fintype (V d ⧸ A) := Fintype.ofFinite _
+  letI : Fintype B := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+private noncomputable instance carrierFrequencyFintype {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) :
+    Fintype (B →ₗ[F] (V d ⧸ A)) := by
+  classical
+  letI : Fintype B := Fintype.ofFinite _
+  letI : Fintype (V d ⧸ A) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+/-- The dual coordinate map on frequencies is transposed because typed
+frequencies run from the output carrier back to the input quotient. -/
+def carrierFrequencyEquiv {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) :
+    (B →ₗ[F] (V d ⧸ A)) ≃ₗ[F]
+      BinaryMatrix (Module.finrank F B) (Module.finrank F (V d ⧸ A)) :=
+  ((LinearEquiv.arrowCongr (codomainBasis B).equivFun
+      (domainBasis A).equivFun).trans LinearMap.toMatrix').trans
+    (Matrix.transposeLinearEquiv _ _ F F)
+
+theorem carrierFrequency_toLin {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : B →ₗ[F] (V d ⧸ A)) :
+    (carrierFrequencyEquiv A B Y).transpose.toLin' =
+      (domainBasis A).equivFun.toLinearMap.comp
+        (Y.comp (codomainBasis B).equivFun.symm.toLinearMap) := by
+  simp only [carrierFrequencyEquiv, LinearEquiv.trans_apply,
+    Matrix.transposeLinearEquiv_apply]
+  apply LinearMap.ext
+  intro x
+  simp [LinearEquiv.arrowCongr_apply]
+
+theorem carrierMatrix_toLin {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    (carrierMatrixEquiv A B M).toLin' =
+      (codomainBasis B).equivFun.toLinearMap.comp
+        (M.comp (domainBasis A).equivFun.symm.toLinearMap) := by
+  apply LinearMap.ext
+  intro x
+  change (carrierMatrixEquiv A B M).mulVec x =
+    (codomainBasis B).equivFun
+      (M ((domainBasis A).equivFun.symm x))
+  have h := LinearMap.toMatrix_mulVec_repr (domainBasis A)
+    (codomainBasis B) M ((domainBasis A).equivFun.symm x)
+  rw [(domainBasis A).equivFun.apply_symm_apply x] at h
+  exact h
+
+/-- The normalized typed-carrier mean is preserved by the actual A1 matrix
+coordinate equivalence, for every scalar-valued function on that carrier. -/
+theorem carrierMean_coordinate {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : ((V d ⧸ A) →ₗ[F] B) -> Real) :
+    carrierMean A B g =
+      uniformMean (fun X => g ((carrierMatrixEquiv A B).symm X)) := by
+  unfold carrierMean BinaryMatrixFourier.uniformMean
+  have hsum :
+      (∑ M : (V d ⧸ A) →ₗ[F] B, g M) =
+        ∑ X : BinaryMatrix (Module.finrank F B) (Module.finrank F (V d ⧸ A)),
+          g ((carrierMatrixEquiv A B).symm X) := by
+    apply Fintype.sum_equiv (carrierMatrixEquiv A B).toEquiv
+    intro M
+    simp
+  rw [hsum]
+  congr 1
+  exact_mod_cast Fintype.card_congr (carrierMatrixEquiv A B).toEquiv
+
+/-- The complex norm-square energy itself is preserved by carrier
+coordinates; this is the measure-transport step for a typed A16 bound. -/
+theorem carrierComplexEnergy_coordinate {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : ((V d ⧸ A) →ₗ[F] B) -> Complex) :
+    carrierMean A B (fun M => Complex.normSq (g M)) =
+      uniformMean (fun X =>
+        Complex.normSq (g ((carrierMatrixEquiv A B).symm X))) := by
+  exact carrierMean_coordinate A B (fun M => Complex.normSq (g M))
+
+theorem carrierFrequency_tracePair {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : B →ₗ[F] (V d ⧸ A)) (M : (V d ⧸ A) →ₗ[F] B) :
+    tracePair Y M = pairing (carrierFrequencyEquiv A B Y)
+      (carrierMatrixEquiv A B M) := by
+  rw [← tracePair_matrix, carrierFrequency_toLin, carrierMatrix_toLin]
+  unfold tracePair
+  let eU := (domainBasis A).equivFun
+  have hc :
+      (eU.toLinearMap.comp
+          (Y.comp (codomainBasis B).equivFun.symm.toLinearMap)).comp
+        ((codomainBasis B).equivFun.toLinearMap.comp
+          (M.comp eU.symm.toLinearMap)) = eU.conj (Y.comp M) := by
+    ext x
+    simp [LinearEquiv.conj_apply]
+  rw [hc, LinearMap.trace_conj']
+
+theorem carrierFrequency_rank {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : B →ₗ[F] (V d ⧸ A)) :
+    (carrierFrequencyEquiv A B Y).rank =
+      Module.finrank F (LinearMap.range Y) := by
+  rw [← Matrix.rank_transpose (carrierFrequencyEquiv A B Y)]
+  rw [Matrix.rank_eq_finrank_range_toLin
+    (carrierFrequencyEquiv A B Y).transpose
+    (Pi.basisFun F _) (Pi.basisFun F _)]
+  rw [Matrix.toLin_eq_toLin', carrierFrequency_toLin]
+  have hpre : LinearMap.range
+      (Y.comp (codomainBasis B).equivFun.symm.toLinearMap) =
+      LinearMap.range Y := by
+    rw [LinearMap.range_comp]
+    simp
+  rw [LinearMap.range_comp, hpre]
+  exact (domainBasis A).equivFun.finrank_map_eq (LinearMap.range Y)
+
+theorem carrierFrequency_character {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : B →ₗ[F] (V d ⧸ A)) (M : (V d ⧸ A) →ₗ[F] B) :
+    traceCharacter Y M =
+      character (carrierFrequencyEquiv A B Y) (carrierMatrixEquiv A B M) := by
+  rw [traceCharacter, character, carrierFrequency_tracePair]
+
+/-- Typed and coordinate Fourier coefficients agree under the actual A1
+carrier coordinate equivalence and its transpose-aware frequency map. -/
+theorem carrierFourierCoeff_coordinate {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex)
+    (Y : B →ₗ[F] (V d ⧸ A)) :
+    complexCarrierFourierCoeff A B f Y =
+      complexFourierCoeff
+        (fun X => f ((carrierMatrixEquiv A B).symm X))
+        (carrierFrequencyEquiv A B Y) := by
+  unfold complexCarrierFourierCoeff complexFourierCoeff
+  have hs :
+      (∑ M : (V d ⧸ A) →ₗ[F] B,
+        f M * (traceCharacter Y M : Complex)) =
+      ∑ X : BinaryMatrix (Module.finrank F B) (Module.finrank F (V d ⧸ A)),
+        f ((carrierMatrixEquiv A B).symm X) *
+          (character (carrierFrequencyEquiv A B Y) X : Complex) := by
+    apply Fintype.sum_equiv (carrierMatrixEquiv A B).toEquiv
+    intro M
+    rw [carrierFrequency_character A B Y M]
+    simp
+  rw [hs]
+  congr 1
+  exact_mod_cast Fintype.card_congr (carrierMatrixEquiv A B).toEquiv
+
+/-- Rank-j projection on the typed carrier is the actual coordinate rank-j
+projection after transporting both input and its selected frequency set. -/
+def carrierTypedComplexRankProjection {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (j : Nat) (f : ((V d ⧸ A) →ₗ[F] B) -> Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) : Complex :=
+  ∑ Y ∈ (Finset.univ : Finset (B →ₗ[F] (V d ⧸ A))).filter
+      (fun Y => Module.finrank F (LinearMap.range Y) = j),
+    complexCarrierFourierCoeff A B f Y * (traceCharacter Y M : Complex)
+
+/-- The general-carrier rank projection is the same typed projection already
+used by the A14 line and fixed-base statements. -/
+theorem carrierTypedRankProjection_eq_A14Line {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    carrierTypedComplexRankProjection A B j f M =
+      typedComplexRankProjection A B j f M := by
+  rfl
+
+theorem carrierTypedRankProjection_coordinate {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    carrierTypedComplexRankProjection A B j f M =
+      complexRankProjection j
+        (fun X => f ((carrierMatrixEquiv A B).symm X))
+        (carrierMatrixEquiv A B M) := by
+  unfold carrierTypedComplexRankProjection complexRankProjection
+  simp only [Finset.sum_filter]
+  apply Fintype.sum_equiv (carrierFrequencyEquiv A B).toEquiv
+  intro Y
+  rw [← carrierFrequency_rank A B Y,
+    carrierFourierCoeff_coordinate A B f Y,
+    carrierFrequency_character A B Y M]
+  simp
+
+/-- Fourier support through D on typed carriers is equivalent to coordinate
+Fourier support. The statement uses actual range ranks on both sides. -/
+def CarrierComplexFourierSupportedThrough {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (D : Nat) (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) : Prop :=
+  ∀ Y : B →ₗ[F] (V d ⧸ A),
+    D < Module.finrank F (LinearMap.range Y) ->
+      complexCarrierFourierCoeff A B f Y = 0
+
+theorem carrierFourier_support_iff_coordinate {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) (D : Nat)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) :
+    CarrierComplexFourierSupportedThrough A B D f ↔
+      ComplexFourierSupportedThrough D
+        (fun X => f ((carrierMatrixEquiv A B).symm X)) := by
+  constructor
+  · intro hf Y hY
+    let Z := (carrierFrequencyEquiv A B).symm Y
+    have hZ : D < Module.finrank F
+        (LinearMap.range ((carrierFrequencyEquiv A B).symm Y)) := by
+      rw [← carrierFrequency_rank A B ((carrierFrequencyEquiv A B).symm Y)]
+      simpa [Z] using hY
+    have hzero := hf ((carrierFrequencyEquiv A B).symm Y) hZ
+    rw [carrierFourierCoeff_coordinate A B f] at hzero
+    simpa [Z] using hzero
+  · intro hf Y hY
+    have hzero := hf (carrierFrequencyEquiv A B Y) (by
+      simpa [carrierFrequency_rank] using hY)
+    rw [← carrierFourierCoeff_coordinate A B f Y] at hzero
+    exact hzero
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
