@@ -1,0 +1,2149 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceConditioning
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel
+import PvNP.RealizableHardness.BinaryMatrixActualAffine
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+
+/-!
+The source-defined expanded A18 branch on the actual affine matrix fibre.
+The restricted-functional outside-column event is measured using the actual
+quotient-Hom representation of the affine fibre. The order drop is derived
+from the kernel of the restricted functional and the one-dimensional
+codomain extension; no conditional-energy or event-density premise is
+introduced.
+-/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceConditioning
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel
+open PvNP.RealizableHardness.MatrixLiftNominalDomain
+open BinaryMatrixActualAffine BinaryMatrixComplexA15 BinaryMatrixFourier
+open scoped BigOperators
+
+attribute [local instance] Classical.propDecidable
+
+private theorem andRec_projection
+    {P Q : Prop} {α : Sort*} (hp : P ∧ Q) (f : P → Q → α) :
+    And.rec f hp = f hp.1 hp.2 := by
+  cases hp
+  rfl
+
+/-- The source globalness parameter is nonnegative, by the order-zero
+whole-space restriction. This local fact avoids importing the unrelated
+fixed-coordinate line-average bridge. -/
+theorem actual_source_parameter_nonneg {n d r : ℕ} {ε : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal r ε f) : 0 ≤ ε := by
+  let Q : ActualAffineRestriction n d :=
+    { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }
+  have htop : Module.finrank (ZMod 2)
+      ((Fin n → ZMod 2) ⧸ (⊤ : Submodule (ZMod 2) (Fin n → ZMod 2))) = 0 := by
+    have h := (⊤ : Submodule (ZMod 2) (Fin n → ZMod 2)).finrank_quotient_add_finrank
+    rw [finrank_top] at h
+    omega
+  have hQ : Q.order ≤ r := by
+    dsimp [Q, ActualAffineRestriction.order]
+    rw [finrank_bot, htop]
+    omega
+  have henergy : 0 ≤ fibreEnergy Q.fibre f := by
+    unfold fibreEnergy
+    apply div_nonneg
+    · exact Finset.sum_nonneg fun M _ => Complex.normSq_nonneg (f M)
+    · exact Nat.cast_nonneg _
+  exact le_trans henergy (hf Q hQ)
+
+/-- The actual restricted-functional kernel loses one dimension. -/
+theorem restrictedFunctionalKernel_finrank_drop
+    {X : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [Module.Finite (ZMod 2) X]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1) :
+    Module.finrank (ZMod 2) (functionalKernelInAmbient A phi) + 1 =
+      Module.finrank (ZMod 2) A := by
+  have hsurj : Function.Surjective phi := by
+    intro y
+    refine ⟨y • v, ?_⟩
+    simp [map_smul, hv]
+  have hrange : LinearMap.range phi = ⊤ := LinearMap.range_eq_top.mpr hsurj
+  have hrank := LinearMap.finrank_range_add_finrank_ker phi
+  rw [hrange] at hrank
+  have hker : Module.finrank (ZMod 2) (LinearMap.ker phi) + 1 =
+      Module.finrank (ZMod 2) A := by
+    simpa [Nat.add_comm] using hrank
+  change Module.finrank (ZMod 2) ((LinearMap.ker phi).map A.subtype) + 1 = _
+  rw [Submodule.finrank_map_subtype_eq]
+  exact hker
+
+/-- Enlarging the binary codomain by one dimension lowers its quotient
+codimension by one. -/
+theorem codimension_drop_of_one_dim_extension
+    {W : Type*} [AddCommGroup W] [Module (ZMod 2) W]
+    [Module.Finite (ZMod 2) W]
+    (B B' : Submodule (ZMod 2) W)
+    (hdim : Module.finrank (ZMod 2) B' = Module.finrank (ZMod 2) B + 1) :
+    Module.finrank (ZMod 2) (W ⧸ B') + 1 =
+      Module.finrank (ZMod 2) (W ⧸ B) := by
+  have hB := B.finrank_quotient_add_finrank
+  have hB' := B'.finrank_quotient_add_finrank
+  omega
+
+/-- On the actual affine fibre with the functional-kernel domain and
+one-dimensional expanded codomain, the source globalness hypothesis at
+order `s+1` gives a conditional outside-column energy bound `2η`. The
+statistic is the actual squared output of the matrix in the affine fibre,
+transported through the accepted quotient-Hom equivalence. -/
+theorem actual_expanded_outside_column_energy_le_two
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d)
+    (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (B' : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (hB : Q.codomainVariation ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' =
+      Module.finrank (ZMod 2) Q.codomainVariation + 1) :
+    (∑ N ∈ (Finset.univ : Finset
+      ((Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi →ₗ[ZMod 2] B')).filter
+        (fun N =>
+          (N (Submodule.mkQ (functionalKernelInAmbient Q.domainFixed phi) (v : Fin d → ZMod 2)) :
+            Fin n → ZMod 2) ∉ Q.codomainVariation),
+        Complex.normSq (f ((actualFibreQuotientHomEquiv
+          ({ domainFixed := functionalKernelInAmbient Q.domainFixed phi
+             codomainVariation := B'
+             base := Q.base })).symm N))) /
+      ((Finset.univ : Finset
+        ((Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi →ₗ[ZMod 2] B')).filter
+          (fun N =>
+            (N (Submodule.mkQ (functionalKernelInAmbient Q.domainFixed phi) (v : Fin d → ZMod 2)) :
+              Fin n → ZMod 2) ∉ Q.codomainVariation)).card
+      ≤ 2 * η := by
+  classical
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let Q' : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := B', base := Q.base }
+  have hAdim : Module.finrank (ZMod 2) A' + 1 =
+      Module.finrank (ZMod 2) Q.domainFixed := by
+    simpa [A'] using restrictedFunctionalKernel_finrank_drop
+      Q.domainFixed phi v hv
+  have hBcodim : Module.finrank (ZMod 2)
+      ((Fin n → ZMod 2) ⧸ B') + 1 =
+      Module.finrank (ZMod 2)
+        ((Fin n → ZMod 2) ⧸ Q.codomainVariation) :=
+    codimension_drop_of_one_dim_extension Q.codomainVariation B' hdim
+  have hQorder :
+      Module.finrank (ZMod 2) Q.domainFixed +
+        Module.finrank (ZMod 2)
+          ((Fin n → ZMod 2) ⧸ Q.codomainVariation) ≤ s + 1 := by
+    simpa [ActualAffineRestriction.order] using hQ
+  have horderdrop : Q'.order + 2 = Q.order := by
+    change Module.finrank (ZMod 2) A' +
+        Module.finrank (ZMod 2) ((Fin n → ZMod 2) ⧸ B') + 2 =
+      Module.finrank (ZMod 2) Q.domainFixed +
+        Module.finrank (ZMod 2) ((Fin n → ZMod 2) ⧸ Q.codomainVariation)
+    rw [← hAdim, ← hBcodim]
+    omega
+  have hsmall : Q'.order ≤ s - 1 := by
+    have hsmall' : Q'.order + 2 ≤ s + 1 := by
+      rw [horderdrop]
+      exact hQ
+    omega
+  let e := actualFibreQuotientHomEquiv Q'
+  let g : (((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B') → ℝ :=
+    fun N => Complex.normSq (f (e.symm N))
+  have hg : ∀ N, 0 ≤ g N := fun N => Complex.normSq_nonneg _
+  have hconditional := restrictedFunctional_outsideColumn_mean_le_two
+    Q.domainFixed phi v hv Q.codomainVariation B' hB hdim g hg
+  have hglobalSmall : fibreEnergy Q'.fibre f ≤ η := hf Q' (by omega)
+  have henergy :
+      (∑ N : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B', g N) /
+        (Fintype.card (((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B') : ℝ) ≤ η := by
+    rw [← actualFibreQuotientHomEquiv_energy Q' f]
+    exact hglobalSmall
+  have hconditional' :
+      (∑ N ∈ (Finset.univ : Finset
+        (((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B')).filter
+          (fun N => (N (Submodule.mkQ A' (v : Fin d → ZMod 2)) :
+            Fin n → ZMod 2) ∉ Q.codomainVariation), g N) /
+        ((Finset.univ : Finset
+          (((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B')).filter
+            (fun N => (N (Submodule.mkQ A' (v : Fin d → ZMod 2)) :
+              Fin n → ZMod 2) ∉ Q.codomainVariation)).card ≤
+      2 * ((∑ N : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B', g N) /
+        (Fintype.card (((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B') : ℝ)) := by
+    simpa [A', g, e] using hconditional
+  calc
+    _ = (∑ N ∈ (Finset.univ : Finset
+        (((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B')).filter
+          (fun N => (N (Submodule.mkQ A' (v : Fin d → ZMod 2)) :
+            Fin n → ZMod 2) ∉ Q.codomainVariation), g N) /
+        ((Finset.univ : Finset
+          (((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B')).filter
+            (fun N => (N (Submodule.mkQ A' (v : Fin d → ZMod 2)) :
+              Fin n → ZMod 2) ∉ Q.codomainVariation)).card := by
+          rfl
+    _ ≤ 2 * ((∑ N : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B', g N) /
+          (Fintype.card (((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] B') : ℝ)) :=
+      hconditional'
+    _ ≤ 2 * η :=
+      mul_le_mul_of_nonneg_left henergy (by norm_num)
+
+/-- Codomain-valued stable sample map in quotient-section coordinates. -/
+noncomputable def stableSourceSampleMap
+    {X X' W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup X'] [Module (ZMod 2) X']
+    [AddCommGroup W] [Module (ZMod 2) W]
+    (B : Submodule (ZMod 2) W) (q : X' →ₗ[ZMod 2] X)
+    (phi₀ : X' →ₗ[ZMod 2] ZMod 2)
+    (R : X →ₗ[ZMod 2] B) (lambda : X →ₗ[ZMod 2] ZMod 2) (w : B) :
+    X' →ₗ[ZMod 2] B := by
+  let F := quotientSampleOutput B q phi₀ R lambda (w : W)
+  exact F.codRestrict B (fun x => by
+    have hx : F x ∈ LinearMap.range F := ⟨x, rfl⟩
+    exact quotientSampleOutput_range_stable B q phi₀ R lambda (w : W)
+      w.property hx)
+
+/-- The complete stable source draw `(w,R,lambda)` pushes forward uniformly
+to the actual map on the larger quotient, with an independent uniform
+functional coordinate left over. In particular this includes every `w`
+(including zero), rather than conditioning on a fixed column. -/
+noncomputable def stableSourceCoordinatesEquiv
+    {X X' W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup X'] [Module (ZMod 2) X']
+    [AddCommGroup W] [Module (ZMod 2) W]
+    (q : X' →ₗ[ZMod 2] X) (s : X →ₗ[ZMod 2] X')
+    (phi₀ : X' →ₗ[ZMod 2] ZMod 2) (v : X')
+    (hdecomp : ∀ x, x = s (q x) + phi₀ x • v)
+    (hqs : q.comp s = LinearMap.id) (hqv : q v = 0)
+    (hphiS : phi₀.comp s = 0) (hphiV : phi₀ v = 1)
+    (B : Submodule (ZMod 2) W) :
+    (Σ w : B, (X →ₗ[ZMod 2] B) × (X →ₗ[ZMod 2] ZMod 2)) ≃
+      (X' →ₗ[ZMod 2] B) × (X →ₗ[ZMod 2] ZMod 2) where
+  toFun p :=
+    (stableSourceSampleMap B q phi₀ p.2.1 p.2.2 p.1, p.2.2)
+  invFun p :=
+    ⟨p.1 v, (p.1.comp s - p.2.smulRight (p.1 v), p.2)⟩
+  left_inv p := by
+    rcases p with ⟨w, coords⟩
+    rcases coords with ⟨R, lambda⟩
+    have hcol : stableSourceSampleMap B q phi₀ R lambda w v = w := by
+      apply Subtype.ext
+      change quotientSampleOutput B q phi₀ R lambda (w : W) v = (w : W)
+      exact quotientSampleOutput_newColumn B q phi₀ R lambda (w : W) v hqv hphiV
+    apply Sigma.ext hcol
+    · apply heq_of_eq
+      apply Prod.ext
+      · apply LinearMap.ext
+        intro x
+        apply Subtype.ext
+        have hsection :
+            (stableSourceSampleMap B q phi₀ R lambda w).comp s =
+              R + lambda.smulRight w := by
+          ext y
+          change quotientSampleOutput B q phi₀ R lambda (w : W) (s y) =
+            (R y : W) + lambda y • (w : W)
+          exact quotientSampleOutput_section B q s phi₀ R lambda
+            (w : W) hqs hphiS y
+        change (((stableSourceSampleMap B q phi₀ R lambda w).comp s) x -
+          lambda x • (stableSourceSampleMap B q phi₀ R lambda w v : W)) =
+            (R x : W)
+        rw [hsection, hcol]
+        change ((R x : W) + lambda x • (w : W) -
+          lambda x • (w : W)) = (R x : W)
+        simp [sub_eq_add_neg,
+          add_assoc, add_left_comm, add_comm]
+      · rfl
+  right_inv p := by
+    apply Prod.ext
+    · apply LinearMap.ext
+      intro x
+      apply Subtype.ext
+      have hdecompN : p.1 x = p.1 (s (q x)) + phi₀ x • p.1 v := by
+        have h := congrArg p.1 (hdecomp x)
+        simpa using h
+      change quotientSampleOutput B q phi₀
+        (p.1.comp s - p.2.smulRight (p.1 v)) p.2 (p.1 v) x = p.1 x
+      simp only [quotientSampleOutput, LinearMap.add_apply,
+        LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.smulRight_apply]
+      rw [hdecompN]
+      simp [sub_eq_add_neg, add_smul, add_assoc, add_left_comm, add_comm]
+    · rfl
+
+/-- An independent finite coordinate does not change a normalized uniform
+mean of a statistic that ignores that coordinate. -/
+theorem uniformMean_product_fst
+    {α β : Type*} [Fintype α] [Fintype β] [Nonempty β]
+    (g : α → ℝ) :
+    (∑ p : α × β, g p.1) / (Fintype.card (α × β) : ℝ) =
+      (∑ a : α, g a) / (Fintype.card α : ℝ) := by
+  have hsum : (∑ p : α × β, g p.1) =
+      (Fintype.card β : ℝ) * (∑ a : α, g a) := by
+    rw [Fintype.sum_prod_type]
+    simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+    rw [Finset.mul_sum]
+  have hcard : (Fintype.card (α × β) : ℝ) =
+      (Fintype.card α : ℝ) * (Fintype.card β : ℝ) := by simp
+  have hβ : (Fintype.card β : ℝ) ≠ 0 := by
+    exact_mod_cast (Fintype.card_ne_zero : Fintype.card β ≠ 0)
+  rw [hsum, hcard]
+  field_simp
+
+/-- The full stable source draw has exactly the uniform normalized mean on
+the quotient maps; the independent functional coordinate cancels from the
+normalization. This averages over the source column `w` as well as both
+linear-map coordinates. -/
+theorem stableSource_uniformMean_eq
+    {X X' W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup X'] [Module (ZMod 2) X']
+    [AddCommGroup W] [Module (ZMod 2) W]
+    [Fintype X] [Fintype X'] [Fintype W]
+    (q : X' →ₗ[ZMod 2] X) (s : X →ₗ[ZMod 2] X')
+    (phi₀ : X' →ₗ[ZMod 2] ZMod 2) (v : X')
+    (hdecomp : ∀ x, x = s (q x) + phi₀ x • v)
+    (hqs : q.comp s = LinearMap.id) (hqv : q v = 0)
+    (hphiS : phi₀.comp s = 0) (hphiV : phi₀ v = 1)
+    (B : Submodule (ZMod 2) W)
+    (g : (X' →ₗ[ZMod 2] B) → ℝ) :
+    (∑ p : Σ w : B, (X →ₗ[ZMod 2] B) × (X →ₗ[ZMod 2] ZMod 2),
+      g (stableSourceSampleMap B q phi₀ p.2.1 p.2.2 p.1)) /
+        (Fintype.card (Σ w : B,
+          (X →ₗ[ZMod 2] B) × (X →ₗ[ZMod 2] ZMod 2)) : ℝ) =
+      (∑ N : X' →ₗ[ZMod 2] B, g N) /
+        (Fintype.card (X' →ₗ[ZMod 2] B) : ℝ) := by
+  classical
+  let e := stableSourceCoordinatesEquiv q s phi₀ v hdecomp hqs hqv
+    hphiS hphiV B
+  have hsum :
+      (∑ p : Σ w : B, (X →ₗ[ZMod 2] B) ×
+        (X →ₗ[ZMod 2] ZMod 2),
+        g (stableSourceSampleMap B q phi₀ p.2.1 p.2.2 p.1)) =
+      ∑ z : (X' →ₗ[ZMod 2] B) × (X →ₗ[ZMod 2] ZMod 2), g z.1 := by
+    calc
+      (∑ p : Σ w : B, (X →ₗ[ZMod 2] B) ×
+          (X →ₗ[ZMod 2] ZMod 2),
+          g (stableSourceSampleMap B q phi₀ p.2.1 p.2.2 p.1)) =
+        ∑ p : Σ w : B, (X →ₗ[ZMod 2] B) ×
+          (X →ₗ[ZMod 2] ZMod 2), g (e p).1 := by
+            apply Finset.sum_congr rfl
+            intro p hp
+            rfl
+      _ = ∑ z : (X' →ₗ[ZMod 2] B) ×
+          (X →ₗ[ZMod 2] ZMod 2), g z.1 :=
+            Equiv.sum_comp e (fun z : (X' →ₗ[ZMod 2] B) ×
+              (X →ₗ[ZMod 2] ZMod 2) => g z.1)
+  have hcard :
+      Fintype.card (Σ w : B,
+        (X →ₗ[ZMod 2] B) × (X →ₗ[ZMod 2] ZMod 2)) =
+      Fintype.card ((X' →ₗ[ZMod 2] B) ×
+        (X →ₗ[ZMod 2] ZMod 2)) := Fintype.card_congr e
+  rw [hsum, hcard]
+  exact uniformMean_product_fst g
+
+/-- The complete stable source draw on an actual restricted-functional
+quotient is bounded by the original globalness hypothesis. The section
+coordinates are obtained from the source functional itself; the target mean
+is the normalized energy of an actual affine matrix fibre with one less
+order. -/
+theorem actual_stable_source_energy_le
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1) :
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let Q' : ActualAffineRestriction n d :=
+      { domainFixed := A', codomainVariation := Q.codomainVariation,
+        base := Q.base }
+    let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+    let X' := (Fin d → ZMod 2) ⧸ A'
+    let q : X' →ₗ[ZMod 2] X :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    ∃ sCoord : X →ₗ[ZMod 2] X',
+      ∃ phi₀ : X' →ₗ[ZMod 2] ZMod 2,
+        q.comp sCoord = LinearMap.id ∧
+        q (Submodule.mkQ A' (v : Fin d → ZMod 2)) = 0 ∧
+        phi₀.comp sCoord = 0 ∧
+        phi₀ (Submodule.mkQ A' (v : Fin d → ZMod 2)) = 1 ∧
+        (∀ x, x = sCoord (q x) + phi₀ x •
+          Submodule.mkQ A' (v : Fin d → ZMod 2)) ∧
+        (∑ p : Σ w : Q.codomainVariation,
+            (X →ₗ[ZMod 2] Q.codomainVariation) ×
+              (X →ₗ[ZMod 2] ZMod 2),
+            Complex.normSq (f ((actualFibreQuotientHomEquiv Q').symm
+              (stableSourceSampleMap Q.codomainVariation q phi₀
+                p.2.1 p.2.2 p.1)))) /
+          (Fintype.card (Σ w : Q.codomainVariation,
+            (X →ₗ[ZMod 2] Q.codomainVariation) ×
+              (X →ₗ[ZMod 2] ZMod 2)) : ℝ) ≤ η := by
+  classical
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let Q' : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := Q.codomainVariation,
+      base := Q.base }
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let X' := (Fin d → ZMod 2) ⧸ A'
+  let q : X' →ₗ[ZMod 2] X :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  rcases quotientSectionCoordinates_of_restricted_functional
+      Q.domainFixed phi v hv with
+    ⟨sCoord, phi₀, hqs, hqv, hphiS, hphiV, hdecomp⟩
+  let e := actualFibreQuotientHomEquiv Q'
+  let g : (X' →ₗ[ZMod 2] Q.codomainVariation) → ℝ :=
+    fun N => Complex.normSq (f (e.symm N))
+  have hAdim : Module.finrank (ZMod 2) A' + 1 =
+      Module.finrank (ZMod 2) Q.domainFixed := by
+    simpa [A'] using restrictedFunctionalKernel_finrank_drop
+      Q.domainFixed phi v hv
+  have horder : Q'.order ≤ s := by
+    dsimp [Q', ActualAffineRestriction.order]
+    dsimp [ActualAffineRestriction.order] at hQ
+    omega
+  have hmean := stableSource_uniformMean_eq
+    q sCoord phi₀ (Submodule.mkQ A' (v : Fin d → ZMod 2))
+    hdecomp hqs hqv hphiS hphiV Q.codomainVariation g
+  have henergy :
+      (∑ N : X' →ₗ[ZMod 2] Q.codomainVariation, g N) /
+        (Fintype.card (X' →ₗ[ZMod 2] Q.codomainVariation) : ℝ) ≤ η := by
+    rw [← actualFibreQuotientHomEquiv_energy Q' f]
+    exact hf Q' horder
+  refine ⟨sCoord, phi₀, hqs, hqv, hphiS, hphiV, hdecomp, ?_⟩
+  change
+    (∑ p : Σ w : Q.codomainVariation,
+        (X →ₗ[ZMod 2] Q.codomainVariation) ×
+          (X →ₗ[ZMod 2] ZMod 2),
+        g (stableSourceSampleMap Q.codomainVariation q phi₀
+          p.2.1 p.2.2 p.1)) /
+      (Fintype.card (Σ w : Q.codomainVariation,
+        (X →ₗ[ZMod 2] Q.codomainVariation) ×
+          (X →ₗ[ZMod 2] ZMod 2)) : ℝ) ≤ η
+  rw [hmean]
+  exact henergy
+
+/-- Stable source energy for a specified section coordinate system. This lets
+the zero quotient-coset estimate use the same source coordinates as every
+one-dimensional expanded coset. -/
+theorem actual_stable_source_energy_le_of_coordinates
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (sCoord : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2]
+      ((Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi))
+    (phi₀ : ((Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi) →ₗ[ZMod 2] ZMod 2)
+    (hqs : (Submodule.factor
+      (p := functionalKernelInAmbient Q.domainFixed phi)
+      (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)).comp sCoord = LinearMap.id)
+    (hqv : Submodule.factor
+      (p := functionalKernelInAmbient Q.domainFixed phi)
+      (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+      (Submodule.mkQ (functionalKernelInAmbient Q.domainFixed phi) (v : Fin d → ZMod 2)) = 0)
+    (hphiS : phi₀.comp sCoord = 0)
+    (hphiV : phi₀ (Submodule.mkQ (functionalKernelInAmbient Q.domainFixed phi)
+      (v : Fin d → ZMod 2)) = 1)
+    (hdecomp : ∀ x, x = sCoord
+      (Submodule.factor (p := functionalKernelInAmbient Q.domainFixed phi)
+        (p' := Q.domainFixed) (by
+          intro y hy
+          rcases hy with ⟨a, ha, rfl⟩
+          exact a.property) x) +
+      phi₀ x • Submodule.mkQ (functionalKernelInAmbient Q.domainFixed phi)
+        (v : Fin d → ZMod 2)) :
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let Q' : ActualAffineRestriction n d :=
+      { domainFixed := A', codomainVariation := Q.codomainVariation,
+        base := Q.base }
+    let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+    let X' := (Fin d → ZMod 2) ⧸ A'
+    let q : X' →ₗ[ZMod 2] X :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    (∑ p : Σ w : Q.codomainVariation,
+        (X →ₗ[ZMod 2] Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2),
+        Complex.normSq (f ((actualFibreQuotientHomEquiv Q').symm
+          (stableSourceSampleMap Q.codomainVariation q phi₀ p.2.1 p.2.2 p.1)))) /
+      (Fintype.card (Σ w : Q.codomainVariation,
+        (X →ₗ[ZMod 2] Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2)) : ℝ) ≤ η := by
+  classical
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let Q' : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := Q.codomainVariation,
+      base := Q.base }
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let X' := (Fin d → ZMod 2) ⧸ A'
+  let q : X' →ₗ[ZMod 2] X :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let e := actualFibreQuotientHomEquiv Q'
+  let g : (X' →ₗ[ZMod 2] Q.codomainVariation) → ℝ :=
+    fun N => Complex.normSq (f (e.symm N))
+  have hAdim : Module.finrank (ZMod 2) A' + 1 =
+      Module.finrank (ZMod 2) Q.domainFixed := by
+    simpa [A'] using restrictedFunctionalKernel_finrank_drop
+      Q.domainFixed phi v hv
+  have horder : Q'.order ≤ s := by
+    dsimp [Q', ActualAffineRestriction.order]
+    dsimp [ActualAffineRestriction.order] at hQ
+    omega
+  have hmean := stableSource_uniformMean_eq
+    q sCoord phi₀ (Submodule.mkQ A' (v : Fin d → ZMod 2))
+    hdecomp hqs hqv hphiS hphiV Q.codomainVariation g
+  have henergy :
+      (∑ N : X' →ₗ[ZMod 2] Q.codomainVariation, g N) /
+        (Fintype.card (X' →ₗ[ZMod 2] Q.codomainVariation) : ℝ) ≤ η := by
+    rw [← actualFibreQuotientHomEquiv_energy Q' f]
+    exact hf Q' horder
+  change
+    (∑ p : Σ w : Q.codomainVariation,
+        (X →ₗ[ZMod 2] Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2),
+        g (stableSourceSampleMap Q.codomainVariation q phi₀ p.2.1 p.2.2 p.1)) /
+      (Fintype.card (Σ w : Q.codomainVariation,
+        (X →ₗ[ZMod 2] Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2)) : ℝ) ≤ η
+  rw [hmean]
+  exact henergy
+
+/-- For a fixed codimension-one codomain extension, the complete source draw
+over all outside columns and quotient-coordinate pairs is equivalent to the
+actual quotient maps conditioned on their distinguished column lying outside
+the old codomain. The per-column equivalences are derived from the actual
+restricted-functional fibre map and the span equality for every outside
+column. -/
+noncomputable def actual_expanded_source_coordinates_equiv
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    [Fintype X] [Fintype W]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1)
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' =
+      Module.finrank (ZMod 2) B + 1) :
+    (Σ w : {w : B' // (w : W) ∉ B},
+      ((X ⧸ A) →ₗ[ZMod 2] B) × ((X ⧸ A) →ₗ[ZMod 2] ZMod 2)) ≃
+    {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B' //
+      (N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) : W) ∉ B} := by
+  classical
+  let qv : X ⧸ functionalKernelInAmbient A phi :=
+    Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)
+  let Wout := {w : B' // (w : W) ∉ B}
+  let Fiber (w : Wout) :=
+    {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B' //
+      N qv = w.1}
+  let coordinates (w : Wout) : Fiber w ≃
+      ((X ⧸ A) →ₗ[ZMod 2] B) × ((X ⧸ A) →ₗ[ZMod 2] ZMod 2) :=
+    actualOutsideColumnFiberCoordinates A phi v hv B B' w.1 w.2
+      (spanExtension_eq_of_codim_one B B' hB hdim w.1 w.2)
+  let fibers :
+      (Σ w : Wout,
+        ((X ⧸ A) →ₗ[ZMod 2] B) × ((X ⧸ A) →ₗ[ZMod 2] ZMod 2)) ≃
+      Σ w : Wout, Fiber w :=
+    Equiv.sigmaCongrRight (fun w => (coordinates w).symm)
+  exact fibers.trans (outsideColumnSigmaEquiv B B' hB qv).symm
+
+/-- After forgetting the codomain subtype, the expanded source-coordinate
+map is precisely the affine quotient sample. This is the pointwise bridge
+from the finite source draw to the matrix statistic used by A18. -/
+theorem actual_expanded_source_coordinates_coe
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    [Fintype X] [Fintype W]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1)
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' = Module.finrank (ZMod 2) B + 1) :
+    let A' := functionalKernelInAmbient A phi
+    let q : (X ⧸ A') →ₗ[ZMod 2] (X ⧸ A) :=
+      Submodule.factor (p := A') (p' := A) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    ∃ phi₀ : (X ⧸ A') →ₗ[ZMod 2] ZMod 2,
+      ∃ s : (X ⧸ A) →ₗ[ZMod 2] (X ⧸ A'),
+      q.comp s = LinearMap.id ∧
+      q (Submodule.mkQ A' (v : X)) = 0 ∧
+      phi₀.comp s = 0 ∧
+      phi₀ (Submodule.mkQ A' (v : X)) = 1 ∧
+      (∀ x, x = s (q x) + phi₀ x • Submodule.mkQ A' (v : X)) ∧
+      ∀ (w : {w : B' // (w : W) ∉ B})
+        (R : (X ⧸ A) →ₗ[ZMod 2] B)
+        (lambda : (X ⧸ A) →ₗ[ZMod 2] ZMod 2),
+        B'.subtype.comp
+          (((actual_expanded_source_coordinates_equiv A phi v hv B B' hB hdim)
+            ⟨w, (R, lambda)⟩).1) =
+          quotientSampleOutput B q phi₀ R lambda (w : W) := by
+  classical
+  let A' := functionalKernelInAmbient A phi
+  let q : (X ⧸ A') →ₗ[ZMod 2] (X ⧸ A) :=
+    Submodule.factor (p := A') (p' := A) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  have hsource := quotientSectionCoordinates_of_restricted_functional A phi v hv
+  let s := Classical.choose hsource
+  have hphiSource := Classical.choose_spec hsource
+  let phi₀ := Classical.choose hphiSource
+  let hparts := Classical.choose_spec hphiSource
+  have hpartsEq : hparts =
+      ⟨hparts.1, hparts.2.1, hparts.2.2.1,
+        hparts.2.2.2.1, hparts.2.2.2.2⟩ := Subsingleton.elim _ _
+  let hqs := hparts.1
+  let hqv := hparts.2.1
+  let hphiS := hparts.2.2.1
+  let hphiV := hparts.2.2.2.1
+  let hdecomp := hparts.2.2.2.2
+  refine ⟨phi₀, s, hqs, hqv, hphiS, hphiV, hdecomp, ?_⟩
+  intro w R lambda
+  let wW : W := w.1
+  have hspan : spanExtensionSubmodule B wW = B' :=
+    spanExtension_eq_of_codim_one B B' hB hdim w.1 w.2
+  let eW : spanExtensionSubmodule B wW ≃ₗ[ZMod 2] B' :=
+    LinearEquiv.ofEq _ _ hspan
+  let eFixed := restrictedFunctionalAppendSamplingEquiv A phi v hv B wW w.2
+  let eFiber := actualOutsideColumnFiberCoordinates A phi v hv B B'
+    w.1 w.2 hspan
+  let N := eFiber.symm (R, lambda)
+  have happended :
+      (spanExtensionSubmodule B wW).subtype.comp
+          ((restrictedFunctionalAppendSamplingEquiv A phi v hv B wW w.2).symm
+            (R, lambda)).1 =
+        quotientSampleOutput B q phi₀ R lambda wW := by
+    simpa only [restrictedFunctionalAppendSamplingEquiv, andRec_projection] using
+      (quotientAppendSamplingEquiv_symm_apply B wW w.2 q s phi₀
+        (Submodule.mkQ A' (v : X)) hdecomp hqs hqv hphiS hphiV R lambda)
+  have hNmap : N.1 = eW.toLinearMap.comp (eFixed.symm (R, lambda)).1 := by
+    rfl
+  have hcoerce : B'.subtype.comp eW.toLinearMap =
+      (spanExtensionSubmodule B wW).subtype := by
+    ext z
+    rfl
+  dsimp [actual_expanded_source_coordinates_equiv]
+  change B'.subtype.comp N.1 = quotientSampleOutput B q phi₀ R lambda wW
+  rw [hNmap, ← LinearMap.comp_assoc, hcoerce]
+  exact happended
+
+/-! The section and independent functional above are chosen from `A`, `phi`,
+and `v` only. This strengthened form fixes them before choosing the
+one-dimensional codomain extension, so quotient-coset fibers share one
+source coordinate system. -/
+theorem actual_expanded_source_coordinates_coe_uniform
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    [Fintype X] [Fintype W]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1)
+    (B : Submodule (ZMod 2) W) :
+    let A' := functionalKernelInAmbient A phi
+    let q : (X ⧸ A') →ₗ[ZMod 2] (X ⧸ A) :=
+      Submodule.factor (p := A') (p' := A) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    let hsource := quotientSectionCoordinates_of_restricted_functional A phi v hv
+    let s := Classical.choose hsource
+    let hphiSource := Classical.choose_spec hsource
+    let phi₀ := Classical.choose hphiSource
+    q.comp s = LinearMap.id ∧
+        q (Submodule.mkQ A' (v : X)) = 0 ∧
+        phi₀.comp s = 0 ∧
+        phi₀ (Submodule.mkQ A' (v : X)) = 1 ∧
+        (∀ x, x = s (q x) + phi₀ x • Submodule.mkQ A' (v : X)) ∧
+        ∀ (B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+          (hdim : Module.finrank (ZMod 2) B' =
+            Module.finrank (ZMod 2) B + 1)
+          (w : {w : B' // (w : W) ∉ B})
+          (R : (X ⧸ A) →ₗ[ZMod 2] B)
+          (lambda : (X ⧸ A) →ₗ[ZMod 2] ZMod 2),
+          B'.subtype.comp
+              (((actual_expanded_source_coordinates_equiv A phi v hv
+                B B' hB hdim) ⟨w, (R, lambda)⟩).1) =
+            quotientSampleOutput B q phi₀ R lambda (w : W) := by
+  classical
+  let A' := functionalKernelInAmbient A phi
+  let q : (X ⧸ A') →ₗ[ZMod 2] (X ⧸ A) :=
+    Submodule.factor (p := A') (p' := A) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  have hsource := quotientSectionCoordinates_of_restricted_functional A phi v hv
+  let s := Classical.choose hsource
+  have hphiSource := Classical.choose_spec hsource
+  let phi₀ := Classical.choose hphiSource
+  let hparts := Classical.choose_spec hphiSource
+  have hpartsEq : hparts =
+      ⟨hparts.1, hparts.2.1, hparts.2.2.1,
+        hparts.2.2.2.1, hparts.2.2.2.2⟩ := Subsingleton.elim _ _
+  let hqs := hparts.1
+  let hqv := hparts.2.1
+  let hphiS := hparts.2.2.1
+  let hphiV := hparts.2.2.2.1
+  let hdecomp := hparts.2.2.2.2
+  refine ⟨hqs, hqv, hphiS, hphiV, hdecomp, ?_⟩
+  intro B' hB hdim w R lambda
+  let wW : W := w.1
+  have hspan : spanExtensionSubmodule B wW = B' :=
+    spanExtension_eq_of_codim_one B B' hB hdim w.1 w.2
+  let eW : spanExtensionSubmodule B wW ≃ₗ[ZMod 2] B' :=
+    LinearEquiv.ofEq _ _ hspan
+  let eFixed := restrictedFunctionalAppendSamplingEquiv A phi v hv B wW w.2
+  let eFiber := actualOutsideColumnFiberCoordinates A phi v hv B B'
+    w.1 w.2 hspan
+  let N := eFiber.symm (R, lambda)
+  have happended :
+      (spanExtensionSubmodule B wW).subtype.comp
+          ((restrictedFunctionalAppendSamplingEquiv A phi v hv B wW w.2).symm
+            (R, lambda)).1 =
+        quotientSampleOutput B q phi₀ R lambda wW := by
+    simpa only [restrictedFunctionalAppendSamplingEquiv, andRec_projection] using
+      (quotientAppendSamplingEquiv_symm_apply B wW w.2 q s phi₀
+        (Submodule.mkQ A' (v : X)) hdecomp hqs hqv hphiS hphiV R lambda)
+  have hNmap : N.1 = eW.toLinearMap.comp (eFixed.symm (R, lambda)).1 := by
+    rfl
+  have hcoerce : B'.subtype.comp eW.toLinearMap =
+      (spanExtensionSubmodule B wW).subtype := by
+    ext z
+    rfl
+  dsimp [actual_expanded_source_coordinates_equiv]
+  change B'.subtype.comp N.1 =
+    quotientSampleOutput B q phi₀ R lambda wW
+  rw [hNmap, ← LinearMap.comp_assoc, hcoerce]
+  exact happended
+
+/-- Exact normalized-mean reindexing for the expanded source draw over all
+outside columns. This is the finite law needed before applying the actual
+outside-column energy estimate. -/
+theorem actual_expanded_source_mean_eq_conditional
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    [Fintype X] [Fintype W]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1)
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' =
+      Module.finrank (ZMod 2) B + 1)
+    (g : {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B' //
+      (N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) : W) ∉ B} → ℝ) :
+    (∑ p : Σ w : {w : B' // (w : W) ∉ B},
+        ((X ⧸ A) →ₗ[ZMod 2] B) × ((X ⧸ A) →ₗ[ZMod 2] ZMod 2),
+        g ((actual_expanded_source_coordinates_equiv
+          A phi v hv B B' hB hdim) p)) /
+      (Fintype.card (Σ w : {w : B' // (w : W) ∉ B},
+        ((X ⧸ A) →ₗ[ZMod 2] B) × ((X ⧸ A) →ₗ[ZMod 2] ZMod 2)) : ℝ) =
+    (∑ N : {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B' //
+        (N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) : W) ∉ B},
+        g N) /
+      (Fintype.card {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B' //
+        (N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) : W) ∉ B} : ℝ) := by
+  classical
+  let e := actual_expanded_source_coordinates_equiv
+    A phi v hv B B' hB hdim
+  have hsum := Equiv.sum_comp e g
+  have hcard := Fintype.card_congr e
+  rw [hsum, hcard]
+
+/-- Convert the outside-map subtype mean to the corresponding filtered
+finite mean without unfolding the dependent map predicate. -/
+theorem outsideMap_subtype_mean_eq_filter
+    {α : Type*} [Fintype α] (p : α → Prop) [DecidablePred p]
+    (g : α → ℝ) :
+    (∑ x : {x : α // p x}, g x.1) / (Fintype.card {x : α // p x} : ℝ) =
+    (∑ x ∈ (Finset.univ : Finset α).filter p, g x) /
+      ((Finset.univ : Finset α).filter p).card := by
+  classical
+  have hsum : (∑ x : {x : α // p x}, g x) =
+      ∑ x ∈ (Finset.univ : Finset α).filter p, g x := by
+    simpa only [Finset.subtype_univ] using
+      (Finset.sum_subtype_eq_sum_filter
+        (s := (Finset.univ : Finset α)) (p := p) g)
+  have hcard : Fintype.card {x : α // p x} =
+      ((Finset.univ : Finset α).filter p).card := by
+    simp only [Fintype.card_subtype]
+  rw [hsum, hcard]
+
+/-- The expanded source draw over all outside columns has normalized squared
+energy at most `2η`. The outside-column coordinates are reindexed to the
+actual quotient maps, and the factor two is discharged by the proved
+half-mass event together with the globalness bound on the lower-order actual
+restriction. -/
+theorem actual_expanded_source_energy_le_two
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (B' : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (hB : Q.codomainVariation ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' =
+      Module.finrank (ZMod 2) Q.codomainVariation + 1) :
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+    (∑ p : Σ w : {w : B' // (w : Fin n → ZMod 2) ∉ Q.codomainVariation},
+        ((X →ₗ[ZMod 2] Q.codomainVariation) ×
+          (X →ₗ[ZMod 2] ZMod 2)),
+        Complex.normSq (f ((actualFibreQuotientHomEquiv
+          ({ domainFixed := A', codomainVariation := B', base := Q.base })).symm
+          (actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv
+            Q.codomainVariation B' hB hdim p)))) /
+      (Fintype.card (Σ w : {w : B' //
+        (w : Fin n → ZMod 2) ∉ Q.codomainVariation},
+          (X →ₗ[ZMod 2] Q.codomainVariation) ×
+            (X →ₗ[ZMod 2] ZMod 2)) : ℝ) ≤ 2 * η := by
+  classical
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let X' := (Fin d → ZMod 2) ⧸ A'
+  let Q' : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := B', base := Q.base }
+  let e := actualFibreQuotientHomEquiv Q'
+  let p : (X' →ₗ[ZMod 2] B') → Prop := fun N =>
+    (N (Submodule.mkQ A' (v : Fin d → ZMod 2)) : Fin n → ZMod 2) ∉
+      Q.codomainVariation
+  let g : {N : X' →ₗ[ZMod 2] B' // p N} → ℝ :=
+    fun N => Complex.normSq (f (e.symm N.1))
+  have hcond := actual_expanded_outside_column_energy_le_two
+    f hf Q hQ phi v hv B' hB hdim
+  have hfilter :
+      (∑ N ∈ (Finset.univ : Finset (X' →ₗ[ZMod 2] B')).filter p,
+        Complex.normSq (f (e.symm N))) /
+        ((Finset.univ : Finset (X' →ₗ[ZMod 2] B')).filter p).card ≤
+      2 * η := by
+    simpa [A', X', Q', e, p] using hcond
+  have hsubtype :
+      (∑ N : {N : X' →ₗ[ZMod 2] B' // p N}, g N) /
+      (Fintype.card {N : X' →ₗ[ZMod 2] B' // p N} : ℝ) ≤
+      2 * η := by
+    change
+      (∑ N : {N : X' →ₗ[ZMod 2] B' // p N},
+        Complex.normSq (f (e.symm N))) /
+        (Fintype.card {N : X' →ₗ[ZMod 2] B' // p N} : ℝ) ≤ 2 * η
+    calc
+      (∑ N : {N : X' →ₗ[ZMod 2] B' // p N},
+          Complex.normSq (f (e.symm N))) /
+          (Fintype.card {N : X' →ₗ[ZMod 2] B' // p N} : ℝ) =
+        (∑ N ∈ (Finset.univ : Finset (X' →ₗ[ZMod 2] B')).filter p,
+          Complex.normSq (f (e.symm N))) /
+          ((Finset.univ : Finset (X' →ₗ[ZMod 2] B')).filter p).card :=
+        outsideMap_subtype_mean_eq_filter p
+          (fun N : X' →ₗ[ZMod 2] B' => Complex.normSq (f (e.symm N)))
+      _ ≤ 2 * η := hfilter
+  have hsource := actual_expanded_source_mean_eq_conditional
+    Q.domainFixed phi v hv Q.codomainVariation B' hB hdim g
+  change
+    (∑ p₀ : Σ w : {w : B' // (w : Fin n → ZMod 2) ∉
+        Q.codomainVariation},
+        ((X →ₗ[ZMod 2] Q.codomainVariation) ×
+          (X →ₗ[ZMod 2] ZMod 2)),
+        g ((actual_expanded_source_coordinates_equiv
+          Q.domainFixed phi v hv Q.codomainVariation B' hB hdim) p₀)) /
+      (Fintype.card (Σ w : {w : B' // (w : Fin n → ZMod 2) ∉
+        Q.codomainVariation},
+          (X →ₗ[ZMod 2] Q.codomainVariation) ×
+            (X →ₗ[ZMod 2] ZMod 2)) : ℝ) ≤ 2 * η
+  rw [hsource]
+  exact hsubtype
+
+/-- Combine the stable and outside-column source draws over a binary
+codimension-one extension. The two source populations have equal size by
+the geometric complement count, so their mixture is the arithmetic mean of
+the stable and conditioned-expanded energies. -/
+theorem stable_expanded_source_mixture_le_two
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    [Fintype X] [Fintype W]
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' = Module.finrank (ZMod 2) B + 1)
+    (C : Type*) [Fintype C] [Nonempty C]
+    (gStable : (Σ w : B, C) → ℝ)
+    (gExpanded : (Σ w : {w : B' // (w : W) ∉ B}, C) → ℝ)
+    {η : ℝ} (hη : 0 ≤ η)
+    (hStable : (∑ p : Σ w : B, C, gStable p) /
+        (Fintype.card (Σ w : B, C) : ℝ) ≤ η)
+    (hExpanded : (∑ p : Σ w : {w : B' // (w : W) ∉ B}, C, gExpanded p) /
+        (Fintype.card (Σ w : {w : B' // (w : W) ∉ B}, C) : ℝ) ≤ 2 * η) :
+    (∑ p : Sum (Σ w : B, C) (Σ w : {w : B' // (w : W) ∉ B}, C),
+        Sum.elim gStable gExpanded p) /
+      (Fintype.card (Sum (Σ w : B, C)
+        (Σ w : {w : B' // (w : W) ∉ B}, C)) : ℝ) ≤ 2 * η := by
+  classical
+  let O := {w : B' // (w : W) ∉ B}
+  let S := Σ w : B, C
+  let E := Σ w : O, C
+  have hO : Fintype.card O = Fintype.card B := by
+    dsimp [O]
+    rw [Fintype.card_subtype]
+    exact binary_submodule_complement_card_eq B B' hB hdim
+  have hSC : Fintype.card S = Fintype.card B * Fintype.card C := by
+    dsimp [S]
+    rw [Fintype.card_sigma]
+    simp
+  have hEC : Fintype.card E = Fintype.card O * Fintype.card C := by
+    dsimp [E]
+    rw [Fintype.card_sigma]
+    simp
+  have hpop : Fintype.card S = Fintype.card E := by
+    rw [hSC, hEC, hO]
+  have hSpos : 0 < (Fintype.card S : ℝ) := by
+    apply Nat.cast_pos.mpr
+    exact Fintype.card_pos_iff.mpr ⟨⟨0, Classical.choice ‹Nonempty C›⟩⟩
+  have hsum :
+      (∑ p : Sum S E, Sum.elim gStable gExpanded p) =
+        (∑ p : S, gStable p) + (∑ p : E, gExpanded p) := by
+    rw [Fintype.sum_sum_type]
+    simp only [Sum.elim_inl, Sum.elim_inr]
+  have hcard :
+      (Fintype.card (Sum S E) : ℝ) = 2 * (Fintype.card S : ℝ) := by
+    rw [Fintype.card_sum]
+    push_cast
+    rw [hpop.symm]
+    ring
+  have hmean :
+      ((∑ p : Sum S E, Sum.elim gStable gExpanded p) /
+        (Fintype.card (Sum S E) : ℝ)) =
+      (((∑ p : S, gStable p) / (Fintype.card S : ℝ)) +
+        ((∑ p : E, gExpanded p) / (Fintype.card E : ℝ))) / 2 := by
+    rw [hsum, hcard, hpop.symm]
+    field_simp [ne_of_gt hSpos]
+  change ((∑ p : Sum S E, Sum.elim gStable gExpanded p) /
+      (Fintype.card (Sum S E) : ℝ)) ≤ 2 * η
+  rw [hmean]
+  have hsumBound :
+      (∑ p : S, gStable p) / (Fintype.card S : ℝ) +
+        (∑ p : E, gExpanded p) / (Fintype.card E : ℝ) ≤ η + 2 * η :=
+    add_le_add hStable hExpanded
+  calc
+    _ ≤ (η + 2 * η) / 2 :=
+      div_le_div_of_nonneg_right hsumBound (by norm_num)
+    _ ≤ 2 * η := by nlinarith
+
+/-- The source-actual stable/expanded mixture itself has energy at most
+`2η`. The stable coordinates use the actual fibre with the restricted
+functional kernel and old codomain; the expanded coordinates use the same
+kernel and the one-dimensional codomain extension. Their population sizes
+are equal by the binary outside-column count, so this is the full two-branch
+source mean, not an assumed conditional weighting. -/
+theorem actual_A18_source_branch_mixture_energy_le_two
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (B' : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (hB : Q.codomainVariation ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' =
+      Module.finrank (ZMod 2) Q.codomainVariation + 1) :
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let X0 := Fin d → ZMod 2
+    let X := X0 ⧸ Q.domainFixed
+    let X' := X0 ⧸ A'
+    let q : X' →ₗ[ZMod 2] X :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    ∃ sCoord : X →ₗ[ZMod 2] X',
+      ∃ phi₀ : X' →ₗ[ZMod 2] ZMod 2,
+      q.comp sCoord = LinearMap.id ∧
+      q (Submodule.mkQ A' (v : X0)) = 0 ∧
+      phi₀.comp sCoord = 0 ∧
+      phi₀ (Submodule.mkQ A' (v : X0)) = 1 ∧
+      (∀ x, x = sCoord (q x) + phi₀ x • Submodule.mkQ A' (v : X0)) ∧
+      let C := (X →ₗ[ZMod 2] Q.codomainVariation) ×
+        (X →ₗ[ZMod 2] ZMod 2)
+      let Stable := Σ w : Q.codomainVariation, C
+      let Outside := {w : B' // (w : Fin n → ZMod 2) ∉ Q.codomainVariation}
+      let Expanded := Σ w : Outside, C
+      let QStable : ActualAffineRestriction n d :=
+        { domainFixed := A', codomainVariation := Q.codomainVariation,
+          base := Q.base }
+      let QExpanded : ActualAffineRestriction n d :=
+        { domainFixed := A', codomainVariation := B', base := Q.base }
+      (∑ p : Sum Stable Expanded,
+        Sum.elim
+          (fun p => Complex.normSq (f ((actualFibreQuotientHomEquiv
+            QStable).symm (stableSourceSampleMap Q.codomainVariation q
+              phi₀ p.2.1 p.2.2 p.1)).1))
+          (fun p => Complex.normSq (f ((actualFibreQuotientHomEquiv
+            QExpanded).symm ((actual_expanded_source_coordinates_equiv
+              Q.domainFixed phi v hv Q.codomainVariation B' hB hdim p).1)).1)) p) /
+        (Fintype.card (Sum Stable Expanded) : ℝ) ≤ 2 * η := by
+  classical
+  obtain ⟨sCoord, phi₀, hqs, hqv, hphiS, hphiV, hdecomp, hstable⟩ :=
+    actual_stable_source_energy_le f hf Q hQ phi v hv
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let X0 := Fin d → ZMod 2
+  let X := X0 ⧸ Q.domainFixed
+  let X' := X0 ⧸ A'
+  let q : X' →ₗ[ZMod 2] X :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let C : Type := (X →ₗ[ZMod 2] Q.codomainVariation) ×
+    (X →ₗ[ZMod 2] ZMod 2)
+  let Stable := Σ w : Q.codomainVariation, C
+  let Outside := {w : B' // (w : Fin n → ZMod 2) ∉ Q.codomainVariation}
+  let Expanded := Σ w : Outside, C
+  let QStable : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := Q.codomainVariation,
+      base := Q.base }
+  let QExpanded : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := B', base := Q.base }
+  let gStable : Stable → ℝ := fun p => Complex.normSq (f
+    ((actualFibreQuotientHomEquiv QStable).symm
+      (stableSourceSampleMap Q.codomainVariation q phi₀
+        p.2.1 p.2.2 p.1)).1)
+  let gExpanded : Expanded → ℝ := fun p => Complex.normSq (f
+    ((actualFibreQuotientHomEquiv QExpanded).symm
+      ((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv
+        Q.codomainVariation B' hB hdim p).1)).1)
+  have hstable' : (∑ p : Stable, gStable p) /
+      (Fintype.card Stable : ℝ) ≤ η := by
+    simpa [A', X, X', q, C, Stable, QStable, gStable] using hstable
+  have hexpanded := actual_expanded_source_energy_le_two
+    f hf Q hQ phi v hv B' hB hdim
+  have hexpanded' : (∑ p : Expanded, gExpanded p) /
+      (Fintype.card Expanded : ℝ) ≤ 2 * η := by
+    simpa [A', X, X', q, C, Outside, Expanded, QExpanded, gExpanded] using
+      hexpanded
+  have hη : 0 ≤ η := actual_source_parameter_nonneg f hf
+  have hmixed := stable_expanded_source_mixture_le_two
+    Q.codomainVariation B' hB hdim (X := X) (C := C) gStable gExpanded hη hstable' hexpanded'
+  refine ⟨sCoord, phi₀, hqs, hqv, hphiS, hphiV, hdecomp, ?_⟩
+  simpa [A', X0, X, X', q, C, Stable, Outside, Expanded,
+    QStable, QExpanded, gStable, gExpanded] using hmixed
+
+/-- The ambient column set is the dependent sum of quotient cosets modulo
+`B`. This is the exact grouping that assigns each outside column to its
+unique one-dimensional extension `B ⊔ span{w}`. -/
+noncomputable def quotientCosetColumnEquiv
+    {W : Type*} [AddCommGroup W] [Module (ZMod 2) W]
+    (B : Submodule (ZMod 2) W) :
+    (Σ q : W ⧸ B, {w : W // Submodule.mkQ B w = q}) ≃ W where
+  toFun p := p.2.1
+  invFun w := ⟨Submodule.mkQ B w, ⟨w, rfl⟩⟩
+  left_inv p := by
+    rcases p with ⟨q, w, hw⟩
+    cases hw
+    rfl
+  right_inv w := rfl
+
+/-- Every quotient coset has exactly the cardinality of `B`; the chosen
+representative only translates the coset and does not change its size. -/
+noncomputable def quotientCosetFibreEquiv
+    {W : Type*} [AddCommGroup W] [Module (ZMod 2) W] [Fintype W]
+    (B : Submodule (ZMod 2) W) (q : W ⧸ B) :
+    {w : W // Submodule.mkQ B w = q} ≃ B := by
+  classical
+  let w₀ := Classical.choose (Submodule.mkQ_surjective B q)
+  have hw₀ : Submodule.mkQ B w₀ = q :=
+    Classical.choose_spec (Submodule.mkQ_surjective B q)
+  refine
+    { toFun := fun w => ⟨w.1 - w₀, ?_⟩
+      invFun := fun b => ⟨(b : W) + w₀, ?_⟩
+      left_inv := ?_
+      right_inv := ?_ }
+  · have hz : Submodule.mkQ B (w.1 - w₀) = 0 := by
+      simp [map_sub, w.2, hw₀]
+    have hk : w.1 - w₀ ∈ LinearMap.ker (Submodule.mkQ B) :=
+      LinearMap.mem_ker.mpr hz
+    rw [Submodule.ker_mkQ] at hk
+    exact hk
+  · have hbker : (b : W) ∈ LinearMap.ker (Submodule.mkQ B) := by
+      rw [Submodule.ker_mkQ]
+      exact b.property
+    have hbzero := LinearMap.mem_ker.mp hbker
+    simp [map_add, hbzero, hw₀]
+  · intro w
+    apply Subtype.ext
+    simp
+  · intro b
+    apply Subtype.ext
+    simp
+
+/-- Cardinality form of the quotient-coset translation equivalence. -/
+theorem quotientCosetFibre_card
+    {W : Type*} [AddCommGroup W] [Module (ZMod 2) W] [Fintype W]
+    (B : Submodule (ZMod 2) W) (q : W ⧸ B) :
+    Fintype.card {w : W // Submodule.mkQ B w = q} = Fintype.card B :=
+  Fintype.card_congr (quotientCosetFibreEquiv B q)
+
+/-- Quotient-coset partition of an ambient column paired with any independent
+finite coordinate. This is the finite reindexing used to group all columns
+by their actual extension of `B`. -/
+noncomputable def quotientCosetColumnProductEquiv
+    {W C : Type*} [AddCommGroup W] [Module (ZMod 2) W]
+    (B : Submodule (ZMod 2) W) :
+    (Σ q : W ⧸ B, {w : W // Submodule.mkQ B w = q} × C) ≃ W × C where
+  toFun p := (p.2.1.1, p.2.2)
+  invFun z := ⟨Submodule.mkQ B z.1, (⟨z.1, rfl⟩, z.2)⟩
+  left_inv p := by
+    rcases p with ⟨q, w, c⟩
+    rcases w with ⟨w, hw⟩
+    cases hw
+    rfl
+  right_inv z := rfl
+
+/-- Exact finite-sum reindexing by quotient cosets. -/
+theorem quotientCosetColumnProduct_sum
+    {W C : Type*} [AddCommGroup W] [Module (ZMod 2) W]
+    [Fintype W] [Fintype C]
+    (B : Submodule (ZMod 2) W) (g : W × C → ℝ) :
+    (∑ p : Σ q : W ⧸ B, {w : W // Submodule.mkQ B w = q} × C,
+      g (p.2.1.1, p.2.2)) = ∑ z : W × C, g z := by
+  let e := quotientCosetColumnProductEquiv (C := C) B
+  change (∑ p, g (e p)) = ∑ z, g z
+  exact Equiv.sum_comp e g
+
+/-- If every quotient-coset conditional mean of a nonnegative statistic is
+at most `2η`, then so is its ambient-column mean. The proof uses the exact
+quotient-coset partition and the translation equivalence showing all fibers
+have equal size. -/
+theorem quotientCoset_partition_mean_le_two
+    {W C : Type*} [AddCommGroup W] [Module (ZMod 2) W]
+    [Fintype W] [Fintype C] [Nonempty C]
+    (B : Submodule (ZMod 2) W) (g : W × C → ℝ) {η : ℝ}
+    (hfiber : ∀ q : W ⧸ B,
+      (∑ z : {w : W // Submodule.mkQ B w = q} × C, g (z.1.1, z.2)) /
+        (Fintype.card ({w : W // Submodule.mkQ B w = q} × C) : ℝ) ≤ 2 * η) :
+    (∑ z : W × C, g z) / (Fintype.card (W × C) : ℝ) ≤ 2 * η := by
+  classical
+  let Fiber (q : W ⧸ B) := {w : W // Submodule.mkQ B w = q} × C
+  let SigmaFiber := Σ q : W ⧸ B, Fiber q
+  let gFiber : SigmaFiber → ℝ := fun p => g (p.2.1.1, p.2.2)
+  have hcard : Fintype.card SigmaFiber = Fintype.card (W × C) :=
+    Fintype.card_congr (quotientCosetColumnProductEquiv B)
+  have hsumFiber : (∑ p : SigmaFiber, gFiber p) =
+      ∑ q : W ⧸ B, ∑ z : Fiber q, g (z.1.1, z.2) := by
+    rw [Fintype.sum_sigma]
+  have hgroup_pos (q : W ⧸ B) : 0 < (Fintype.card (Fiber q) : ℝ) := by
+    apply Nat.cast_pos.mpr
+    apply Fintype.card_pos_iff.mpr
+    let w₀ := Classical.choose (Submodule.mkQ_surjective B q)
+    have hw₀ : Submodule.mkQ B w₀ = q :=
+      Classical.choose_spec (Submodule.mkQ_surjective B q)
+    exact ⟨⟨⟨w₀, hw₀⟩, Classical.choice ‹Nonempty C›⟩⟩
+  have hgroup_sum (q : W ⧸ B) :
+      (∑ z : Fiber q, g (z.1.1, z.2)) ≤
+        (2 * η) * (Fintype.card (Fiber q) : ℝ) :=
+    (div_le_iff₀ (hgroup_pos q)).mp (by simpa [Fiber] using hfiber q)
+  have hsum_bound : (∑ p : SigmaFiber, gFiber p) ≤
+      (2 * η) * (Fintype.card SigmaFiber : ℝ) := by
+    rw [hsumFiber]
+    calc
+      (∑ q : W ⧸ B, ∑ z : Fiber q, g (z.1.1, z.2)) ≤
+          ∑ q : W ⧸ B,
+            (2 * η) * (Fintype.card (Fiber q) : ℝ) :=
+        Finset.sum_le_sum (fun q hq => hgroup_sum q)
+      _ = (2 * η) * (Fintype.card SigmaFiber : ℝ) := by
+        rw [← Finset.mul_sum]
+        congr 1
+        rw [Fintype.card_sigma]
+        push_cast
+        rfl
+  have hpos : 0 < (Fintype.card (W × C) : ℝ) := by
+    exact Nat.cast_pos.mpr (Fintype.card_pos_iff.mpr ⟨(0, Classical.choice ‹Nonempty C›)⟩)
+  rw [← quotientCosetColumnProduct_sum B g, ← hcard]
+  apply (div_le_iff₀ (by simpa [hcard] using hpos)).mpr
+  change (∑ p : SigmaFiber, gFiber p) ≤
+    (2 * η) * (Fintype.card SigmaFiber : ℝ)
+  exact hsum_bound
+
+/-- The accepted actual fibre quotient equivalence uses the manuscript's
+affine matrix formula: base plus the matrix of the quotient map lifted into
+the codomain variation subspace. -/
+theorem actualFibreQuotientHomEquiv_symm_matrix
+    {n d : ℕ} (Q : ActualAffineRestriction n d)
+    (N : QuotientHom Q.domainFixed Q.codomainVariation) :
+    ((actualFibreQuotientHomEquiv Q).symm N).1 =
+      LinearMap.toMatrix'
+        (Matrix.toLin' Q.base +
+          Q.codomainVariation.subtype.comp
+            (N.comp Q.domainFixed.mkQ)) := by
+  simp [actualFibreQuotientHomEquiv, actualFibreLinearEquiv,
+    quotientHomEquiv, ConstrainedMap, LinearMap.toMatrix'_toLin',
+    Matrix.toLin'_toMatrix']
+  rw [add_comm]
+
+/-- Coercion of the stable codomain-valued source map is exactly the
+unconstrained `W`-valued quotient sample. -/
+theorem stableSourceSampleMap_coe
+    {X X' W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup X'] [Module (ZMod 2) X']
+    [AddCommGroup W] [Module (ZMod 2) W]
+    (B : Submodule (ZMod 2) W) (q : X' →ₗ[ZMod 2] X)
+    (phi₀ : X' →ₗ[ZMod 2] ZMod 2)
+    (R : X →ₗ[ZMod 2] B) (lambda : X →ₗ[ZMod 2] ZMod 2) (w : B) :
+    B.subtype.comp (stableSourceSampleMap B q phi₀ R lambda w) =
+      quotientSampleOutput B q phi₀ R lambda (w : W) := by
+  ext x
+  rfl
+
+/-- Matrix form of the stable source sample in the actual affine-fibre
+representation, with all quotient maps kept at their ambient dimensions. -/
+theorem actual_stable_source_matrix_formula
+    {n d : ℕ} (Q : ActualAffineRestriction n d)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (phi₀ : ((Fin d → ZMod 2) ⧸
+        functionalKernelInAmbient Q.domainFixed phi) →ₗ[ZMod 2] ZMod 2)
+    (R : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2]
+      Q.codomainVariation)
+    (lambda : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2] ZMod 2)
+    (w : Q.codomainVariation) :
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+    let X' := (Fin d → ZMod 2) ⧸ A'
+    let q : X' →ₗ[ZMod 2] X :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    let Q' : ActualAffineRestriction n d :=
+      { domainFixed := A', codomainVariation := Q.codomainVariation,
+        base := Q.base }
+    ((actualFibreQuotientHomEquiv Q').symm
+      (stableSourceSampleMap Q.codomainVariation q phi₀ R lambda w)).1 =
+      LinearMap.toMatrix'
+        (Matrix.toLin' Q.base +
+          (quotientSampleOutput Q.codomainVariation q phi₀ R lambda
+            (w : Fin n → ZMod 2)).comp (Submodule.mkQ A')) := by
+  classical
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let X' := (Fin d → ZMod 2) ⧸ A'
+  let q : X' →ₗ[ZMod 2] X :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let Q' : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := Q.codomainVariation,
+      base := Q.base }
+  let N := stableSourceSampleMap Q.codomainVariation q phi₀ R lambda w
+  have hco := stableSourceSampleMap_coe Q.codomainVariation q phi₀ R lambda w
+  have hcomp : Q.codomainVariation.subtype.comp
+        (N.comp (Submodule.mkQ A')) =
+      (quotientSampleOutput Q.codomainVariation q phi₀ R lambda
+        (w : Fin n → ZMod 2)).comp (Submodule.mkQ A') := by
+    exact congrArg
+      (fun F : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] (Fin n → ZMod 2) =>
+        F.comp (Submodule.mkQ A')) hco
+  calc
+    ((actualFibreQuotientHomEquiv Q').symm N).1 =
+        LinearMap.toMatrix' (Matrix.toLin' Q.base +
+          Q.codomainVariation.subtype.comp (N.comp (Submodule.mkQ A'))) :=
+      actualFibreQuotientHomEquiv_symm_matrix Q' N
+    _ = LinearMap.toMatrix' (Matrix.toLin' Q.base +
+        (quotientSampleOutput Q.codomainVariation q phi₀ R lambda
+          (w : Fin n → ZMod 2)).comp (Submodule.mkQ A')) := by
+      exact congrArg (fun F => LinearMap.toMatrix' (Matrix.toLin' Q.base + F)) hcomp
+/-- Pointwise matrix form of the expanded source bridge. It identifies the
+actual affine-fibre matrix with the manuscript sample `base + quotientSample`
+for the same outside column and the same source coordinates. -/
+theorem actual_expanded_source_matrix_formula
+    {n d : ℕ} (Q : ActualAffineRestriction n d)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (B' : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (hB : Q.codomainVariation ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' =
+      Module.finrank (ZMod 2) Q.codomainVariation + 1) :
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let Q' : ActualAffineRestriction n d :=
+      { domainFixed := A', codomainVariation := B', base := Q.base }
+    let X := Fin d → ZMod 2
+    let q : (X ⧸ A') →ₗ[ZMod 2] (X ⧸ Q.domainFixed) :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    ∃ phi₀ : (X ⧸ A') →ₗ[ZMod 2] ZMod 2,
+      ∃ sCoord : (X ⧸ Q.domainFixed) →ₗ[ZMod 2] (X ⧸ A'),
+      q.comp sCoord = LinearMap.id ∧
+      q (Submodule.mkQ A' (v : X)) = 0 ∧
+      phi₀.comp sCoord = 0 ∧
+      phi₀ (Submodule.mkQ A' (v : X)) = 1 ∧
+      (∀ x, x = sCoord (q x) + phi₀ x • Submodule.mkQ A' (v : X)) ∧
+      ∀ (w : {w : B' // (w : Fin n → ZMod 2) ∉ Q.codomainVariation})
+        (R : (X ⧸ Q.domainFixed) →ₗ[ZMod 2] Q.codomainVariation)
+        (lambda : (X ⧸ Q.domainFixed) →ₗ[ZMod 2] ZMod 2),
+        ((actualFibreQuotientHomEquiv Q').symm
+          ((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv
+            Q.codomainVariation B' hB hdim ⟨w, (R, lambda)⟩).1)).1 =
+        LinearMap.toMatrix'
+          (Matrix.toLin' Q.base +
+            (quotientSampleOutput Q.codomainVariation q phi₀ R lambda
+              (w : Fin n → ZMod 2)).comp (Submodule.mkQ A')) := by
+  classical
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let Q' : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := B', base := Q.base }
+  let X := Fin d → ZMod 2
+  let q : (X ⧸ A') →ₗ[ZMod 2] (X ⧸ Q.domainFixed) :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  obtain ⟨phi₀, sCoord, hqs, hqv, hphiS, hphiV, hdecomp, hcoerce⟩ :=
+    actual_expanded_source_coordinates_coe Q.domainFixed phi v hv
+      Q.codomainVariation B' hB hdim
+  refine ⟨phi₀, sCoord, hqs, hqv, hphiS, hphiV, hdecomp, ?_⟩
+  intro w R lambda
+  let N := (actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv
+    Q.codomainVariation B' hB hdim ⟨w, (R, lambda)⟩).1
+  have hsample := hcoerce w R lambda
+  have hcomp : B'.subtype.comp (N.comp (Submodule.mkQ A')) =
+      (quotientSampleOutput Q.codomainVariation q phi₀ R lambda
+        (w : Fin n → ZMod 2)).comp (Submodule.mkQ A') := by
+    apply LinearMap.ext
+    intro x
+    have hx := congrArg (fun F => F (Submodule.mkQ A' x)) hsample
+    simpa [N, LinearMap.comp_apply] using hx
+  calc
+    ((actualFibreQuotientHomEquiv Q').symm N).1 =
+        LinearMap.toMatrix'
+          (Matrix.toLin' Q.base + B'.subtype.comp
+            (N.comp (Submodule.mkQ A'))) :=
+      actualFibreQuotientHomEquiv_symm_matrix Q' N
+    _ = LinearMap.toMatrix'
+        (Matrix.toLin' Q.base +
+          (quotientSampleOutput Q.codomainVariation q phi₀ R lambda
+            (w : Fin n → ZMod 2)).comp (Submodule.mkQ A')) := by
+      rw [hcomp]
+
+
+
+/-- A nonzero quotient coset of `B` is exactly the outside-column set in
+its one-dimensional extension by any chosen representative. This identifies
+the dependent quotient partition with the actual expanded codomain fibre. -/
+noncomputable def quotientCosetFibreEquiv_extension
+    {W : Type*} [AddCommGroup W] [Module (ZMod 2) W] [Fintype W]
+    (B : Submodule (ZMod 2) W) (w₀ : W) (hw₀ : w₀ ∉ B) :
+    {w : W // Submodule.mkQ B w = Submodule.mkQ B w₀} ≃
+      {u : spanExtensionSubmodule B w₀ // (u : W) ∉ B} := by
+  classical
+  refine
+    { toFun := fun w => ⟨⟨w.1, ?_⟩, ?_⟩
+      invFun := fun u => ⟨u.1, ?_⟩
+      left_inv := ?_
+      right_inv := ?_ }
+  · have hzero : Submodule.mkQ B (w.1 - w₀) = 0 := by
+      simp [map_sub, w.2]
+    have hker : w.1 - w₀ ∈ LinearMap.ker (Submodule.mkQ B) :=
+      LinearMap.mem_ker.mpr hzero
+    rw [Submodule.ker_mkQ] at hker
+    apply Submodule.mem_sup.mpr
+    refine ⟨w.1 - w₀, hker, w₀,
+      Submodule.subset_span (Set.mem_singleton w₀), ?_⟩
+    abel
+  · intro hB
+    have hkerw : w.1 ∈ LinearMap.ker (Submodule.mkQ B) := by
+      rw [Submodule.ker_mkQ]
+      exact hB
+    have hqzero := LinearMap.mem_ker.mp hkerw
+    rw [w.2] at hqzero
+    have hker₀ : w₀ ∈ LinearMap.ker (Submodule.mkQ B) :=
+      LinearMap.mem_ker.mpr hqzero
+    rw [Submodule.ker_mkQ] at hker₀
+    exact hw₀ hker₀
+  · rcases Submodule.mem_sup.mp u.1.property with ⟨b, hb, c, hc, hbc⟩
+    rcases Submodule.mem_span_singleton.mp hc with ⟨a, ha⟩
+    have hu : (u.1 : W) = b + a • w₀ := by
+      calc
+        (u.1 : W) = b + c := hbc.symm
+        _ = b + a • w₀ := by rw [ha]
+    have ha0 : a ≠ 0 := by
+      intro ha0
+      apply u.2
+      rw [hu, ha0, zero_smul]
+      exact B.add_mem hb (B.zero_mem)
+    have ha1 : a = 1 := by
+      fin_cases a
+      · exact False.elim (ha0 rfl)
+      · rfl
+    have hbker : b ∈ LinearMap.ker (Submodule.mkQ B) := by
+      rw [Submodule.ker_mkQ]
+      exact hb
+    have hbq := LinearMap.mem_ker.mp hbker
+    calc
+      Submodule.mkQ B (u.1 : W) = Submodule.mkQ B (b + a • w₀) :=
+        congrArg (Submodule.mkQ B) hu
+      _ = Submodule.mkQ B w₀ := by
+        simp [map_add, map_smul, ha1, hbq]
+  · intro w
+    apply Subtype.ext
+    rfl
+  · intro u
+    apply Subtype.ext
+    rfl
+
+/-- The quotient-coset equivalence also transports the complete source tuple,
+with all independent quotient-map coordinates unchanged. -/
+noncomputable def quotientCosetSourceFibreEquiv
+    {W C : Type*} [AddCommGroup W] [Module (ZMod 2) W] [Fintype W]
+    (B : Submodule (ZMod 2) W) (w₀ : W) (hw₀ : w₀ ∉ B) :
+    (Σ w : {w : W // Submodule.mkQ B w = Submodule.mkQ B w₀}, C) ≃
+      (Σ u : {u : spanExtensionSubmodule B w₀ // (u : W) ∉ B}, C) where
+  toFun p := ⟨quotientCosetFibreEquiv_extension B w₀ hw₀ p.1, p.2⟩
+  invFun p := ⟨(quotientCosetFibreEquiv_extension B w₀ hw₀).symm p.1, p.2⟩
+  left_inv p := by
+    rcases p with ⟨w, c⟩
+    apply Sigma.ext
+    · exact (quotientCosetFibreEquiv_extension B w₀ hw₀).symm_apply_apply w
+    · rfl
+  right_inv p := by
+    rcases p with ⟨u, c⟩
+    apply Sigma.ext
+    · exact (quotientCosetFibreEquiv_extension B w₀ hw₀).apply_symm_apply u
+    · rfl
+/-- The expanded outside-column energy bound in the common, source-chosen
+quotient coordinates. The coordinate witness is fixed before `B'`, and the
+actual quotient-fibre matrix is identified pointwise with the same affine
+matrix statistic. -/
+theorem actual_expanded_source_energy_le_two_common_coordinates
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (B' : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (hB : Q.codomainVariation ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' =
+      Module.finrank (ZMod 2) Q.codomainVariation + 1) :
+    let hsource := quotientSectionCoordinates_of_restricted_functional
+      Q.domainFixed phi v hv
+    let sCoord := Classical.choose hsource
+    let hphiSource := Classical.choose_spec hsource
+    let phi₀ := Classical.choose hphiSource
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+    let q : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] X :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    let C := (X →ₗ[ZMod 2] Q.codomainVariation) ×
+      (X →ₗ[ZMod 2] ZMod 2)
+    let Outside := {w : B' // (w : Fin n → ZMod 2) ∉ Q.codomainVariation}
+    (∑ p : Σ w : Outside, C,
+      Complex.normSq (f (LinearMap.toMatrix'
+        (Matrix.toLin' Q.base +
+          (quotientSampleOutput Q.codomainVariation q phi₀
+            p.2.1 p.2.2 (p.1 : Fin n → ZMod 2)).comp (Submodule.mkQ A'))))) /
+      (Fintype.card (Σ w : Outside, C) : ℝ) ≤ 2 * η := by
+  classical
+  let hsource := quotientSectionCoordinates_of_restricted_functional
+    Q.domainFixed phi v hv
+  let sCoord := Classical.choose hsource
+  let hphiSource := Classical.choose_spec hsource
+  let phi₀ := Classical.choose hphiSource
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let X' := (Fin d → ZMod 2) ⧸ A'
+  let q : X' →ₗ[ZMod 2] X :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let C := (X →ₗ[ZMod 2] Q.codomainVariation) ×
+    (X →ₗ[ZMod 2] ZMod 2)
+  let Outside := {w : B' // (w : Fin n → ZMod 2) ∉ Q.codomainVariation}
+  let Q' : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := B', base := Q.base }
+  have hcoords := actual_expanded_source_coordinates_coe_uniform
+    Q.domainFixed phi v hv Q.codomainVariation
+  rcases hcoords with ⟨hqs', hqv', hphiS', hphiV', hdecomp', hmatrix⟩
+  have hbound := actual_expanded_source_energy_le_two
+    f hf Q hQ phi v hv B' hB hdim
+  have hsum :
+      (∑ p : Σ w : Outside, C,
+        Complex.normSq (f (LinearMap.toMatrix'
+          (Matrix.toLin' Q.base +
+            (quotientSampleOutput Q.codomainVariation q
+              phi₀ p.2.1 p.2.2 (p.1 : Fin n → ZMod 2)).comp
+              (Submodule.mkQ A'))))) =
+      ∑ p : Σ w : Outside, C,
+        Complex.normSq (f ((actualFibreQuotientHomEquiv Q').symm
+          ((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv
+            Q.codomainVariation B' hB hdim p).1)).1) := by
+    apply Finset.sum_congr rfl
+    intro p hp
+    have hpoint := hmatrix B' hB hdim p.1 p.2.1 p.2.2
+    have hmat := actualFibreQuotientHomEquiv_symm_matrix Q'
+      ((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv
+        Q.codomainVariation B' hB hdim p).1)
+    have hcomp := congrArg (fun F => F.comp (Submodule.mkQ A')) hpoint
+    apply congrArg (fun M => Complex.normSq (f M))
+    rw [hmat]
+    exact congrArg
+      (fun F => LinearMap.toMatrix' (Matrix.toLin' Q.base + F))
+      (by simpa [LinearMap.comp_assoc, Q', A', q, phi₀] using hcomp.symm)
+  change
+    (∑ p : Σ w : Outside, C,
+      Complex.normSq (f (LinearMap.toMatrix'
+        (Matrix.toLin' Q.base +
+          (quotientSampleOutput Q.codomainVariation q phi₀
+            p.2.1 p.2.2 (p.1 : Fin n → ZMod 2)).comp
+              (Submodule.mkQ A'))))) /
+      (Fintype.card (Σ w : Outside, C) : ℝ) ≤ 2 * η
+  rw [hsum]
+  simpa [A', X, X', q, C, Outside, Q'] using hbound
+
+
+/-- Every quotient-coset conditional source mean is bounded by `2η`.
+The zero coset is the stable source law; each nonzero coset is the outside
+column law in its one-dimensional span extension. The section coordinates
+are fixed once from the source functional, before the coset is chosen. -/
+theorem actual_source_quotient_coset_mean_le_two
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1) :
+    let hsource := quotientSectionCoordinates_of_restricted_functional
+      Q.domainFixed phi v hv
+    let sCoord := Classical.choose hsource
+    let hphiSource := Classical.choose_spec hsource
+    let phi₀ := Classical.choose hphiSource
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let qdom : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] X :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    let C := (X →ₗ[ZMod 2] Q.codomainVariation) ×
+      (X →ₗ[ZMod 2] ZMod 2)
+    let sample : (Fin n → ZMod 2) × C → BinaryMatrix n d := fun z =>
+      LinearMap.toMatrix' (Matrix.toLin' Q.base +
+        (quotientSampleOutput Q.codomainVariation qdom phi₀
+          z.2.1 z.2.2 z.1).comp (Submodule.mkQ A'))
+    ∀ q : (Fin n → ZMod 2) ⧸ Q.codomainVariation,
+    (∑ p : Σ w : {w : Fin n → ZMod 2 //
+          Submodule.mkQ Q.codomainVariation w = q}, C,
+        Complex.normSq (f (sample (p.1.1, p.2)))) /
+        (Fintype.card (Σ w : {w : Fin n → ZMod 2 //
+          Submodule.mkQ Q.codomainVariation w = q}, C) : ℝ) ≤ 2 * η := by
+  classical
+  dsimp only
+  let hsource := quotientSectionCoordinates_of_restricted_functional
+    Q.domainFixed phi v hv
+  let sCoord := Classical.choose hsource
+  let hphiSource := Classical.choose_spec hsource
+  let phi₀ := Classical.choose hphiSource
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let X' := (Fin d → ZMod 2) ⧸ A'
+  let qdom : X' →ₗ[ZMod 2] X :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let QStable : ActualAffineRestriction n d :=
+    { domainFixed := A', codomainVariation := Q.codomainVariation,
+      base := Q.base }
+  let C := (X →ₗ[ZMod 2] Q.codomainVariation) ×
+    (X →ₗ[ZMod 2] ZMod 2)
+  let sample : (Fin n → ZMod 2) × C → BinaryMatrix n d := fun z =>
+    LinearMap.toMatrix' (Matrix.toLin' Q.base +
+      (quotientSampleOutput Q.codomainVariation qdom phi₀
+        z.2.1 z.2.2 z.1).comp (Submodule.mkQ A'))
+  have hcoords := actual_expanded_source_coordinates_coe_uniform
+    Q.domainFixed phi v hv Q.codomainVariation
+  rcases hcoords with ⟨hqs, hqv, hphiS, hphiV, hdecomp, hmatrix⟩
+  have hstable := actual_stable_source_energy_le_of_coordinates
+    f hf Q hQ phi v hv sCoord phi₀ hqs hqv hphiS hphiV hdecomp
+  intro q
+  by_cases hzero : q = (0 : (Fin n → ZMod 2) ⧸ Q.codomainVariation)
+  · subst q
+    let F0 := {w : Fin n → ZMod 2 //
+      Submodule.mkQ Q.codomainVariation w = 0}
+    let e0 : F0 ≃ Q.codomainVariation :=
+      { toFun := fun w => ⟨w.1, by
+          have hk : w.1 ∈ LinearMap.ker (Submodule.mkQ Q.codomainVariation) :=
+            LinearMap.mem_ker.mpr w.2
+          rw [Submodule.ker_mkQ] at hk
+          exact hk⟩
+        invFun := fun b => ⟨b, by simp⟩
+        left_inv := by intro w; apply Subtype.ext; rfl
+        right_inv := by intro b; apply Subtype.ext; rfl }
+    let e0Sigma : (Σ w : F0, C) ≃ (Σ w : Q.codomainVariation, C) :=
+      Equiv.sigmaCongr e0 (fun _ => Equiv.refl C)
+    have hsum0 :
+        (∑ p : Σ w : F0, C, Complex.normSq (f (sample (p.1.1, p.2)))) =
+        ∑ p : Σ w : Q.codomainVariation, C,
+          Complex.normSq (f (sample (p.1.1, p.2))) := by
+      simpa [e0Sigma, e0, F0, sample] using
+        (Equiv.sum_comp e0Sigma (fun p : Σ w : Q.codomainVariation, C =>
+          Complex.normSq (f (sample (p.1.1, p.2)))))
+    have hcard0 : Fintype.card (Σ w : F0, C) =
+        Fintype.card (Σ w : Q.codomainVariation, C) :=
+      Fintype.card_congr e0Sigma
+    have hstat :
+        (∑ p : Σ w : Q.codomainVariation, C,
+          Complex.normSq (f (sample (p.1.1, p.2)))) =
+        ∑ p : Σ w : Q.codomainVariation, C,
+          Complex.normSq (f ((actualFibreQuotientHomEquiv QStable).symm
+            (stableSourceSampleMap Q.codomainVariation qdom phi₀
+              p.2.1 p.2.2 p.1)).1) := by
+      apply Finset.sum_congr rfl
+      intro p hp
+      have hm := actual_stable_source_matrix_formula Q phi v hv
+        phi₀ p.2.1 p.2.2 p.1
+      simpa [sample, A', qdom] using
+        congrArg (fun M => Complex.normSq (f M)) hm
+    have hmean :
+        (∑ p : Σ w : Q.codomainVariation, C,
+          Complex.normSq (f ((actualFibreQuotientHomEquiv QStable).symm
+            (stableSourceSampleMap Q.codomainVariation qdom phi₀
+              p.2.1 p.2.2 p.1)).1)) /
+          (Fintype.card (Σ w : Q.codomainVariation, C) : ℝ) ≤ η := by
+      simpa [A', X, qdom, C] using hstable
+    have hη := actual_source_parameter_nonneg f hf
+    have htwice : η ≤ 2 * η := by linarith
+    rw [hsum0, hcard0]
+    rw [hstat]
+    exact hmean.trans htwice
+  · let w₀ := Classical.choose (Submodule.mkQ_surjective Q.codomainVariation q)
+    have hw₀q : Submodule.mkQ Q.codomainVariation w₀ = q :=
+      Classical.choose_spec (Submodule.mkQ_surjective Q.codomainVariation q)
+    have hw₀ : w₀ ∉ Q.codomainVariation := by
+      intro hw
+      have hk : w₀ ∈ LinearMap.ker (Submodule.mkQ Q.codomainVariation) := by
+        rw [Submodule.ker_mkQ]
+        exact hw
+      have hzero' := LinearMap.mem_ker.mp hk
+      apply hzero
+      calc
+        q = Submodule.mkQ Q.codomainVariation w₀ := hw₀q.symm
+        _ = 0 := hzero'
+    let B' := spanExtensionSubmodule Q.codomainVariation w₀
+    have hB : Q.codomainVariation ≤ B' := by
+      dsimp [B', spanExtensionSubmodule]
+      exact le_sup_left
+    have hdim : Module.finrank (ZMod 2) B' =
+        Module.finrank (ZMod 2) Q.codomainVariation + 1 := by
+      rw [B', spanExtensionSubmodule,
+        Submodule.finrank_sup_span_singleton hw₀]
+    have hexpanded := actual_expanded_source_energy_le_two_common_coordinates
+      f hf Q hQ phi v hv B' hB hdim
+    let Outside := {u : B' // (u : Fin n → ZMod 2) ∉ Q.codomainVariation}
+    let Fq := {w : Fin n → ZMod 2 //
+      Submodule.mkQ Q.codomainVariation w = q}
+    let ec : Fq ≃ Outside :=
+      let e0 := quotientCosetFibreEquiv_extension Q.codomainVariation w₀ hw₀
+      { toFun := fun w => e0
+          ⟨w.1, w.2.trans hw₀q.symm⟩
+        invFun := fun u =>
+          ⟨(e0.symm u).1, (e0.symm u).2.trans hw₀q⟩
+        left_inv := by
+          intro w
+          apply Subtype.ext
+          exact congrArg Subtype.val
+            (e0.left_inv ⟨w.1, w.2.trans hw₀q.symm⟩)
+        right_inv := by
+          intro u
+          apply Subtype.ext
+          exact congrArg Subtype.val
+            (e0.right_inv u) }
+    let eSigma : (Σ w : Fq, C) ≃ (Σ w : Outside, C) :=
+      Equiv.sigmaCongr ec (fun _ => Equiv.refl C)
+    have hsum :
+        (∑ p : Σ w : Fq, C, Complex.normSq (f (sample (p.1.1, p.2)))) =
+        ∑ p : Σ w : Outside, C, Complex.normSq (f (sample (p.1.1, p.2))) := by
+      simpa [eSigma, ec, Fq, Outside, sample] using
+        (Equiv.sum_comp eSigma (fun p : Σ w : Outside, C =>
+          Complex.normSq (f (sample (p.1.1, p.2)))))
+    have hcard : Fintype.card (Σ w : Fq, C) =
+        Fintype.card (Σ w : Outside, C) := Fintype.card_congr eSigma
+    dsimp [A', X, qdom, C, B', Outside, Fq] at hexpanded ⊢
+    rw [hsum, hcard]
+
+/-- The quotient-coset conditional estimates combine into the full source
+sample mean by the exact finite quotient partition of the distinguished
+column. -/
+theorem actual_source_all_columns_mean_le_two
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1) :
+    let hsource := quotientSectionCoordinates_of_restricted_functional
+      Q.domainFixed phi v hv
+    let sCoord := Classical.choose hsource
+    let hphiSource := Classical.choose_spec hsource
+    let phi₀ := Classical.choose hphiSource
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+    let qdom : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2] X :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    let C := (X →ₗ[ZMod 2] Q.codomainVariation) ×
+      (X →ₗ[ZMod 2] ZMod 2)
+    let sample : (Fin n → ZMod 2) × C → BinaryMatrix n d := fun z =>
+      LinearMap.toMatrix' (Matrix.toLin' Q.base +
+        (quotientSampleOutput Q.codomainVariation qdom phi₀
+          z.2.1 z.2.2 z.1).comp (Submodule.mkQ A'))
+    (∑ z : (Fin n → ZMod 2) × C, Complex.normSq (f (sample z))) /
+      (Fintype.card ((Fin n → ZMod 2) × C) : ℝ) ≤ 2 * η := by
+  classical
+  let hsource := quotientSectionCoordinates_of_restricted_functional
+    Q.domainFixed phi v hv
+  let sCoord := Classical.choose hsource
+  let hphiSource := Classical.choose_spec hsource
+  let phi₀ := Classical.choose hphiSource
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let X' := (Fin d → ZMod 2) ⧸ A'
+  let qdom : X' →ₗ[ZMod 2] X :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let C := (X →ₗ[ZMod 2] Q.codomainVariation) ×
+    (X →ₗ[ZMod 2] ZMod 2)
+  let sample : (Fin n → ZMod 2) × C → BinaryMatrix n d := fun z =>
+    LinearMap.toMatrix' (Matrix.toLin' Q.base +
+      (quotientSampleOutput Q.codomainVariation qdom phi₀
+        z.2.1 z.2.2 z.1).comp (Submodule.mkQ A'))
+  let g : (Fin n → ZMod 2) × C → ℝ :=
+    fun z => Complex.normSq (f (sample z))
+  have hcoset := actual_source_quotient_coset_mean_le_two f hf Q hQ phi v hv
+  apply quotientCoset_partition_mean_le_two Q.codomainVariation g
+  intro q
+  let Fq := {w : Fin n → ZMod 2 //
+    Submodule.mkQ Q.codomainVariation w = q}
+  let S := Σ w : Fq, C
+  let e : S ≃ Fq × C :=
+    { toFun := fun p => (p.1, p.2)
+      invFun := fun z => ⟨z.1, z.2⟩
+      left_inv := fun p => rfl
+      right_inv := fun z => rfl }
+  have hsum : (∑ p : S, g (p.1.1, p.2)) =
+      ∑ z : Fq × C, g (z.1.1, z.2) := by
+    exact Equiv.sum_comp e (fun z : Fq × C => g (z.1.1, z.2))
+  have hcard : Fintype.card S = Fintype.card (Fq × C) :=
+    Fintype.card_congr e
+  have hq := hcoset q
+  rw [← hsum, ← hcard]
+  simpa [A', X, X', qdom, C, sample, g, Fq, S, phi₀] using hq
+
+/-- The source sample is the actual parent-fibre matrix plus the line
+translation. This identity is independent of a choice of basis and is the
+operator bridge needed to apply Jensen to `E_U`. -/
+theorem quotientSampleOutput_eq_parent_add_line
+    {K X X' W : Type*} [Field K]
+    [AddCommGroup X] [Module K X] [AddCommGroup X'] [Module K X']
+    [AddCommGroup W] [Module K W]
+    (A' A : Submodule K X) (hA : A' ≤ A)
+    (B : Submodule K W)
+    (phi₀ : (X ⧸ A') →ₗ[K] K)
+    (R : (X ⧸ A) →ₗ[K] B) (lambda : (X ⧸ A) →ₗ[K] K) (w : W) :
+    let q : (X ⧸ A') →ₗ[K] (X ⧸ A) :=
+      Submodule.factor (p := A') (p' := A) hA
+    let phiExt : X →ₗ[K] K :=
+      phi₀.comp (Submodule.mkQ A') + lambda.comp (Submodule.mkQ A)
+    (quotientSampleOutput B q phi₀ R lambda w).comp (Submodule.mkQ A') =
+      B.subtype.comp (R.comp (Submodule.mkQ A)) + phiExt.smulRight w := by
+  classical
+  let q : (X ⧸ A') →ₗ[K] (X ⧸ A) :=
+    Submodule.factor (p := A') (p' := A) hA
+  let phiExt : X →ₗ[K] K :=
+    phi₀.comp (Submodule.mkQ A') + lambda.comp (Submodule.mkQ A)
+  have hfactor : q.comp (Submodule.mkQ A') = Submodule.mkQ A := by
+    ext x
+    rfl
+  ext x
+  simp [quotientSampleOutput, phiExt, LinearMap.comp_apply, hfactor]
+
+/-! Finite complex Jensen used by the actual A18 sampling argument. -/
+theorem normSq_finite_average_le {α : Type*} [Fintype α] [Nonempty α]
+    (z : α → ℂ) :
+    Complex.normSq ((∑ a, z a) / (Fintype.card α : ℂ)) ≤
+      (∑ a, Complex.normSq (z a)) / (Fintype.card α : ℝ) := by
+  have hr := sum_div_card_sq_le_sum_sq_div_card
+    (s := (Finset.univ : Finset α)) (f := fun a => (z a).re)
+  have hi := sum_div_card_sq_le_sum_sq_div_card
+    (s := (Finset.univ : Finset α)) (f := fun a => (z a).im)
+  simpa [Complex.normSq_apply, ← pow_two, div_pow, add_div,
+    Finset.sum_add_distrib] using add_le_add hr hi
+
+/-- Jensen in the line variables, followed by averaging the parent-fibre
+variable. This form is the exact normalization needed before applying the
+all-columns source bound. -/
+theorem normSq_iterated_average_le
+    {α β : Type*} [Fintype α] [Nonempty α] [Fintype β] [Nonempty β]
+    (z : α → β → ℂ) :
+    (∑ a, Complex.normSq
+        ((∑ b, z a b) / (Fintype.card β : ℂ))) /
+        (Fintype.card α : ℝ) ≤
+      (∑ p : α × β, Complex.normSq (z p.1 p.2)) /
+        (Fintype.card (α × β) : ℝ) := by
+  have hpoint (a : α) := normSq_finite_average_le (z a)
+  have hsum :
+      (∑ a, Complex.normSq
+        ((∑ b, z a b) / (Fintype.card β : ℂ))) ≤
+      ∑ a, (∑ b, Complex.normSq (z a b)) /
+        (Fintype.card β : ℝ) :=
+    Finset.sum_le_sum (fun a ha => hpoint a)
+  have hα : 0 < (Fintype.card α : ℝ) := Nat.cast_pos.mpr Fintype.card_pos
+  have hβ : (Fintype.card β : ℝ) ≠ 0 := by
+    exact_mod_cast Fintype.card_ne_zero
+  apply (div_le_iff₀ hα).2
+  calc
+    (∑ a, Complex.normSq
+      ((∑ b, z a b) / (Fintype.card β : ℂ))) ≤
+      ∑ a, (∑ b, Complex.normSq (z a b)) /
+        (Fintype.card β : ℝ) := hsum
+    _ = ((∑ p : α × β, Complex.normSq (z p.1 p.2)) /
+        (Fintype.card (α × β) : ℝ)) * (Fintype.card α : ℝ) := by
+      rw [← Finset.sum_div, Fintype.sum_prod_type,
+        Fintype.card_prod, Nat.cast_mul]
+      field_simp [hβ, hα.ne']
+
+/-- Jensen in the source line variables after fixing the restriction of the
+functional to the parent domain. The right side is exactly the all-columns
+sample already bounded above; this is the conditional A18 energy step. -/
+theorem actual_fixed_functional_line_average_energy_le_two
+    {n d s : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal s η f)
+    (Q : ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1) :
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+    let X' := (Fin d → ZMod 2) ⧸ A'
+    let qdom : X' →ₗ[ZMod 2] X :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    let R := X →ₗ[ZMod 2] Q.codomainVariation
+    let Lambda := X →ₗ[ZMod 2] ZMod 2
+    let C := R × Lambda
+    let sample : (Fin n → ZMod 2) × C → BinaryMatrix n d := fun z =>
+      LinearMap.toMatrix' (Matrix.toLin' Q.base +
+        (quotientSampleOutput Q.codomainVariation qdom
+          (Classical.choose (Classical.choose_spec
+            (quotientSectionCoordinates_of_restricted_functional
+              Q.domainFixed phi v hv))) z.2.1 z.2.2 z.1).comp
+          (Submodule.mkQ A'))
+    let lineMean (r : R) :=
+      (∑ p : (Fin n → ZMod 2) × Lambda,
+        f (sample (p.1, (r, p.2)))) /
+        (Fintype.card ((Fin n → ZMod 2) × Lambda) : ℂ)
+    (∑ r : R, Complex.normSq (lineMean r)) / (Fintype.card R : ℝ) ≤
+      2 * η := by
+  classical
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed
+  let X' := (Fin d → ZMod 2) ⧸ A'
+  let qdom : X' →ₗ[ZMod 2] X :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let R := X →ₗ[ZMod 2] Q.codomainVariation
+  let Lambda := X →ₗ[ZMod 2] ZMod 2
+  let C := R × Lambda
+  let hsource := quotientSectionCoordinates_of_restricted_functional
+    Q.domainFixed phi v hv
+  let phi₀ := Classical.choose (Classical.choose_spec hsource)
+  let sample : (Fin n → ZMod 2) × C → BinaryMatrix n d := fun z =>
+    LinearMap.toMatrix' (Matrix.toLin' Q.base +
+      (quotientSampleOutput Q.codomainVariation qdom phi₀
+        z.2.1 z.2.2 z.1).comp (Submodule.mkQ A'))
+  let lineMean (r : R) :=
+    (∑ p : (Fin n → ZMod 2) × Lambda,
+      f (sample (p.1, (r, p.2)))) /
+      (Fintype.card ((Fin n → ZMod 2) × Lambda) : ℂ)
+  let W := Fin n → ZMod 2
+  let e : R × (W × Lambda) ≃ W × (R × Lambda) :=
+    { toFun := fun p => (p.2.1, (p.1, p.2.2))
+      invFun := fun p => (p.2.1, (p.1, p.2.2))
+      left_inv := fun p => rfl
+      right_inv := fun p => rfl }
+  have hsum :
+      (∑ p : R × (W × Lambda),
+        Complex.normSq (f (sample (p.2.1, (p.1, p.2.2))))) =
+      ∑ z : W × (R × Lambda), Complex.normSq (f (sample z)) := by
+    exact Equiv.sum_comp e (fun z => Complex.normSq (f (sample z)))
+  have hcard : Fintype.card (R × (W × Lambda)) =
+      Fintype.card (W × (R × Lambda)) := Fintype.card_congr e
+  have hiter := normSq_iterated_average_le
+    (fun r : R => fun p : W × Lambda =>
+      f (sample (p.1, (r, p.2))))
+  have hall := actual_source_all_columns_mean_le_two
+    f hf Q hQ phi v hv
+  have hall' :
+      (∑ z : W × (R × Lambda), Complex.normSq (f (sample z))) /
+        (Fintype.card (W × (R × Lambda)) : ℝ) ≤ 2 * η := by
+    simpa [A', X, X', qdom, C, sample, R, Lambda, W, hsource, phi₀] using hall
+  have hsourceavg :
+      (∑ p : R × (W × Lambda),
+        Complex.normSq (f (sample (p.2.1, (p.1, p.2.2))))) /
+        (Fintype.card (R × (W × Lambda)) : ℝ) ≤ 2 * η := by
+    rw [hsum, hcard]
+    exact hall'
+  have hiter' :
+      (∑ r : R, Complex.normSq (lineMean r)) / (Fintype.card R : ℝ) ≤
+        (∑ p : R × (W × Lambda),
+          Complex.normSq (f (sample (p.2.1, (p.1, p.2.2))))) /
+          (Fintype.card (R × (W × Lambda)) : ℝ) := by
+    simpa [A', X, X', qdom, C, R, Lambda, W, sample, lineMean] using hiter
+  change (∑ r : R, Complex.normSq (lineMean r)) /
+      (Fintype.card R : ℝ) ≤ 2 * η
+  exact hiter'.trans hsourceavg
+
+/-- The canonical reference functional selected by the restricted-kernel
+coordinates extends the given functional on the parent domain. -/
+noncomputable def restrictedFunctionalReference
+    {K X : Type*} [Field K] [AddCommGroup X] [Module K X]
+    (A : Submodule K X) (phi : A →ₗ[K] K) (v : A) (hv : phi v = 1) :
+    X →ₗ[K] K :=
+  (Classical.choose (Classical.choose_spec
+    (quotientSectionCoordinates_of_restricted_functional A phi v hv))).comp
+      (Submodule.mkQ (functionalKernelInAmbient A phi))
+
+theorem restrictedFunctionalReference_extends
+    {K X : Type*} [Field K] [AddCommGroup X] [Module K X]
+    (A : Submodule K X) (phi : A →ₗ[K] K) (v : A) (hv : phi v = 1) :
+    (restrictedFunctionalReference A phi v hv).comp A.subtype = phi := by
+  classical
+  let A' := functionalKernelInAmbient A phi
+  let q : (X ⧸ A') →ₗ[K] (X ⧸ A) :=
+    Submodule.factor (p := A') (p' := A) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let hsource := quotientSectionCoordinates_of_restricted_functional A phi v hv
+  let s := Classical.choose hsource
+  let hphiSource := Classical.choose_spec hsource
+  let phi₀ := Classical.choose hphiSource
+  have hparts := Classical.choose_spec hphiSource
+  rcases hparts with ⟨hqs, hqv, hphiS, hphiV, hdecomp⟩
+  have hfactor : q.comp (Submodule.mkQ A') = Submodule.mkQ A := by
+    ext x
+    rfl
+  ext a
+  let xq := Submodule.mkQ A' (a : X)
+  have hqzero : q xq = 0 := by
+    have hx := congrArg (fun F : X →ₗ[K] X ⧸ A => F a) hfactor
+    have hx' : q xq = Submodule.mkQ A (a : X) := by
+      simpa [xq, LinearMap.comp_apply] using hx
+    exact hx'.trans ((Submodule.Quotient.mk_eq_zero A).mpr a.property)
+  have hclass : xq = phi₀ xq • Submodule.mkQ A' (v : X) := by
+    have h := hdecomp xq
+    rw [hqzero] at h
+    simpa [phi₀] using h
+  have hquot : Submodule.mkQ A' (a : X) =
+      Submodule.mkQ A' ((phi₀ xq • v : A) : X) := by
+    simpa [xq, map_smul] using hclass
+  have hdiff : ((a - phi₀ xq • v : A) : X) ∈ A' := by
+    exact (Submodule.Quotient.eq A').1 hquot
+  change ((a - phi₀ xq • v : A) : X) ∈
+    (LinearMap.ker phi).map A.subtype at hdiff
+  rcases hdiff with ⟨b, hb, hba⟩
+  have hba' : b = a - phi₀ xq • v := Subtype.ext hba
+  have hker := LinearMap.mem_ker.mp hb
+  rw [hba'] at hker
+  have hvalue : phi a = phi₀ xq := by
+    have hzero : phi a - phi₀ xq = 0 := by
+      simpa [map_sub, map_smul, hv] using hker
+    exact (sub_eq_zero.mp hzero)
+  change phi₀ xq = phi a
+  exact hvalue.symm
+
+/-- Global linear functionals extending a fixed restricted functional are
+in bijection with the quotient functionals. This is the dependent
+reindexing from the manuscript's uniform `phi` draw to the source
+coordinates. -/
+noncomputable def restrictedFunctionalExtensionEquiv
+    {K X : Type*} [Field K] [AddCommGroup X] [Module K X]
+    (A : Submodule K X) (phi : A →ₗ[K] K) (v : A) (hv : phi v = 1) :
+    (X ⧸ A →ₗ[K] K) ≃ {psi : X →ₗ[K] K // psi.comp A.subtype = phi} := by
+  classical
+  let phiRef := restrictedFunctionalReference A phi v hv
+  refine
+    { toFun := fun lambda => ⟨phiRef + lambda.comp (Submodule.mkQ A), ?_⟩
+      invFun := fun psi =>
+        A.liftQ (psi.1 - phiRef) (by
+          intro a ha
+          apply LinearMap.mem_ker.mpr
+          have hpsi := congrArg (fun F : A →ₗ[K] K => F ⟨a, ha⟩) psi.2
+          have href := congrArg (fun F : A →ₗ[K] K => F ⟨a, ha⟩)
+            (restrictedFunctionalReference_extends A phi v hv)
+          have heq : psi.1 a = phiRef a := by
+            simpa [LinearMap.comp_apply] using hpsi.trans href.symm
+          simpa [LinearMap.sub_apply] using sub_eq_zero.mpr heq)
+      left_inv := ?_
+      right_inv := ?_ }
+  · apply LinearMap.ext
+    intro a
+    have href := congrArg (fun F : A →ₗ[K] K => F a)
+      (restrictedFunctionalReference_extends A phi v hv)
+    have href' : phiRef (a : X) = phi a := by
+      simpa [phiRef, LinearMap.comp_apply] using href
+    change phiRef (a : X) + lambda (Submodule.mkQ A (a : X)) = phi a
+    rw [href']
+    have hmk : Submodule.mkQ A (a : X) = 0 :=
+      (Submodule.Quotient.mk_eq_zero A).mpr a.property
+    simp [hmk]
+  · intro lambda
+    let F : X →ₗ[K] K :=
+      (phiRef + lambda.comp (Submodule.mkQ A)) - phiRef
+    have hk : A ≤ LinearMap.ker F := by
+      intro a ha
+      apply LinearMap.mem_ker.mpr
+      have hmk : Submodule.mkQ A (a : X) = 0 :=
+        (Submodule.Quotient.mk_eq_zero A).mpr ha
+      simp [F, LinearMap.sub_apply, LinearMap.add_apply,
+        LinearMap.comp_apply, hmk]
+    have hlift := A.liftQ_mkQ F hk
+    apply LinearMap.ext
+    intro y
+    refine Submodule.Quotient.induction_on _ y ?_
+    intro x
+    have hy := congrArg (fun g : X →ₗ[K] K => g x) hlift
+    change (A.liftQ F hk) (Submodule.mkQ A x) = lambda (Submodule.mkQ A x)
+    simpa [F, LinearMap.sub_apply, LinearMap.add_apply,
+      LinearMap.comp_apply] using hy
+  · intro psi
+    apply Subtype.ext
+    apply LinearMap.ext
+    intro x
+    let F : X →ₗ[K] K := psi.1 - phiRef
+    have hk : A ≤ LinearMap.ker F := by
+      intro a ha
+      apply LinearMap.mem_ker.mpr
+      have hmk : Submodule.mkQ A a = 0 :=
+        (Submodule.Quotient.mk_eq_zero A).mpr ha
+      have hpsi := congrArg (fun g : A →ₗ[K] K => g ⟨a, ha⟩) psi.2
+      have href := congrArg (fun g : A →ₗ[K] K => g ⟨a, ha⟩)
+        (restrictedFunctionalReference_extends A phi v hv)
+      have heq : psi.1 a = phiRef a := by
+        simpa [LinearMap.comp_apply] using hpsi.trans href.symm
+      simpa [F, LinearMap.sub_apply, hmk] using sub_eq_zero.mpr heq
+    have hlift := A.liftQ_mkQ F hk
+    have hx := congrArg (fun g : X →ₗ[K] K => g x) hlift
+    have hx' : (A.liftQ F hk) (Submodule.mkQ A x) = F x := by
+      simpa [LinearMap.comp_apply] using hx
+    change phiRef x + (A.liftQ F hk) (Submodule.mkQ A x) = psi.1 x
+    rw [hx']
+    dsimp [F]
+    abel
+
+/-- Changing the restricted functional by equality does not change the
+inverse extension coordinate. The proof fields in the subtype are
+propositionally irrelevant. -/
+private theorem restrictedFunctionalExtension_symm_congr
+    {K X : Type*} [Field K] [AddCommGroup X] [Module K X]
+    (A : Submodule K X) (v : A)
+    (phi₁ phi₂ : A →ₗ[K] K) (hphi : phi₁ = phi₂)
+    (hv₁ : phi₁ v = 1) (hv₂ : phi₂ v = 1)
+    (psi : X →ₗ[K] K)
+    (h₁ : psi.comp A.subtype = phi₁) (h₂ : psi.comp A.subtype = phi₂) :
+    (restrictedFunctionalExtensionEquiv A phi₁ v hv₁).symm ⟨psi, h₁⟩ =
+      (restrictedFunctionalExtensionEquiv A phi₂ v hv₂).symm ⟨psi, h₂⟩ := by
+  cases hphi
+  have hargs :
+      (⟨psi, h₁⟩ : {psi : X →ₗ[K] K // psi.comp A.subtype = phi₁}) =
+        ⟨psi, h₂⟩ := by
+    apply Subtype.ext
+    rfl
+  rw [hargs]
+
+/-- Reindex the uniform global functionals with value one on `v` by their
+restriction to `A` and the residual functional on `X ⧸ A`. -/
+noncomputable def globalFunctionalRestrictionEquiv
+    {K X : Type*} [Field K] [AddCommGroup X] [Module K X]
+    (A : Submodule K X) (v : A) :
+    {psi : X →ₗ[K] K // psi (v : X) = 1} ≃
+      Σ phi : {phi : A →ₗ[K] K // phi v = 1}, X ⧸ A →ₗ[K] K := by
+  classical
+  let Phi := {phi : A →ₗ[K] K // phi v = 1}
+  let Global := {psi : X →ₗ[K] K // psi (v : X) = 1}
+  let restrict : Global → Phi := fun psi =>
+    ⟨psi.1.comp A.subtype, by
+      simpa [LinearMap.comp_apply] using psi.2⟩
+  let residual : (psi : Global) → X ⧸ A →ₗ[K] K := fun psi =>
+    (restrictedFunctionalExtensionEquiv A (restrict psi).1 v
+      (restrict psi).2).symm ⟨psi.1, rfl⟩
+  let assemble : (p : Σ phi : Phi, X ⧸ A →ₗ[K] K) → Global := fun p =>
+    let ext := restrictedFunctionalExtensionEquiv A p.1.1 v p.1.2 p.2
+    ⟨ext.1, by
+      have h := congrArg (fun g : A →ₗ[K] K => g v) ext.2
+      simpa [LinearMap.comp_apply] using h.trans p.1.2⟩
+  refine
+    { toFun := fun psi => ⟨restrict psi, residual psi⟩
+      invFun := assemble
+      left_inv := ?_
+      right_inv := ?_ }
+  · intro psi
+    apply Subtype.ext
+    let phi := restrict psi
+    let e := restrictedFunctionalExtensionEquiv A phi.1 v phi.2
+    have h := e.apply_symm_apply ⟨psi.1, rfl⟩
+    change (e (e.symm ⟨psi.1, rfl⟩)).1 = psi.1
+    exact congrArg Subtype.val h
+  · intro p
+    apply Sigma.ext
+    · apply Subtype.ext
+      apply LinearMap.ext
+      intro a
+      let e := restrictedFunctionalExtensionEquiv A p.1.1 v p.1.2
+      have h := (e p.2).2
+      change ((assemble p).1.comp A.subtype) a = p.1.1 a
+      exact congrArg (fun g : A →ₗ[K] K => g a) h
+    · apply heq_of_eq
+      have hphi : restrict (assemble p) = p.1 := by
+        apply Subtype.ext
+        apply LinearMap.ext
+        intro a
+        let e := restrictedFunctionalExtensionEquiv A p.1.1 v p.1.2
+        have h := (e p.2).2
+        change ((assemble p).1.comp A.subtype) a = p.1.1 a
+        exact congrArg (fun g : A →ₗ[K] K => g a) h
+      have hphiVal := congrArg Subtype.val hphi
+      change residual (assemble p) = p.2
+      dsimp [residual]
+      calc
+        (restrictedFunctionalExtensionEquiv A (restrict (assemble p)).1 v
+            (restrict (assemble p)).2).symm ⟨(assemble p).1, rfl⟩ =
+          (restrictedFunctionalExtensionEquiv A p.1.1 v p.1.2).symm
+            ((restrictedFunctionalExtensionEquiv A p.1.1 v p.1.2) p.2) := by
+              exact restrictedFunctionalExtension_symm_congr A v
+                (restrict (assemble p)).1 p.1.1 hphiVal
+                (restrict (assemble p)).2 p.1.2 (assemble p).1 rfl
+                ((restrictedFunctionalExtensionEquiv A p.1.1 v p.1.2 p.2).2)
+        _ = p.2 :=
+          (restrictedFunctionalExtensionEquiv A p.1.1 v p.1.2).symm_apply_apply p.2
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
