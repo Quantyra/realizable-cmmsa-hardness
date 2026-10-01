@@ -1,0 +1,17 @@
+{
+  "tag": "cmmsa_analytic_20261001T120853Z",
+  "args": [
+    "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+    "compute",
+    "ssh",
+    "quantyra-lean-builder-01",
+    "--quiet",
+    "--tunnel-through-iap",
+    "--project=quantyra-lean-cert-20260915",
+    "--zone=us-central1-a",
+    "--command=ps -eo pid,etime,args | grep -E \"[b]in/lean|[l]ake|[c]mmsa_analytic_20261001T120853Z\" | head -8; ls -l /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_analytic_20261001T120853Z-evidence/stage-* 2>/dev/null; tail -n 6 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_analytic_20261001T120853Z-evidence/stage-0.stdout 2>/dev/null"
+  ],
+  "native_exit_code": 255,
+  "stdout": "",
+  "stderr": "'[l]ake' is not recognized as an internal or external command,\noperable program or batch file.\n"
+}
