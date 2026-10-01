@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceConditioning
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceConditioning
+
+#check spanExtension_eq_of_codim_one
+#check outsideColumnSigmaEquiv
+#check outsideColumnSigma_sum
+#check outsideColumnSigma_mean
+#print axioms spanExtension_eq_of_codim_one
+#print axioms outsideColumnSigmaEquiv
+#print axioms outsideColumnSigma_sum
+#print axioms outsideColumnSigma_mean
