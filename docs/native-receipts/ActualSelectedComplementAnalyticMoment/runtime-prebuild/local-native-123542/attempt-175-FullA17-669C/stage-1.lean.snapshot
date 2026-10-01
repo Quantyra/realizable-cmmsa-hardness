@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17Full
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17Full
+
+#check actual_A17_full_parent_energy
+#print axioms actual_A17_full_parent_energy
