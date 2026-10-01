@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting
+
+open PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting
+
+#check matrix_surjective_iff_rows_independent
+#check surjectiveMatrixFrameEquiv
+#check card_surjective_coordinate_maps
+#check binaryCoordinateEquiv
+#check linearMapCoordinateEquiv
+#check linearMapCoordinateEquiv_surjective_iff
+#check card_surjective_linear_maps
+
+#print axioms matrix_surjective_iff_rows_independent
+#print axioms surjectiveMatrixFrameEquiv
+#print axioms card_surjective_coordinate_maps
+#print axioms linearMapCoordinateEquiv_surjective_iff
+#print axioms card_surjective_linear_maps
