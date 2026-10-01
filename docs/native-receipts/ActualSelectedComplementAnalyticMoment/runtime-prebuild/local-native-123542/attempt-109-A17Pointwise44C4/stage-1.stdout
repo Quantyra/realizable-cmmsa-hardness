@@ -1,0 +1,91 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_reduced_energy_le {n d r : ℕ} {η : ℝ}
+  (A0 A1 :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.W✝ n))
+  (hA : A0 ≤ A1)
+  (g :
+    ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d ⧸ A0) ⧸
+          Submodule.map A0.mkQ A1 →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝]
+        ↥B) →
+      ℂ)
+  (hg :
+    PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal.UpToReducedNormSqGlobal A0 B (Submodule.map A0.mkQ A1)
+      (r - 1) η g)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal.ReducedRestriction A0 B (Submodule.map A0.mkQ A1))
+  (hQ : Q.order ≤ r - 1) :
+  (∑ M ∈ (PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalRestriction B hA Q).fibre,
+        Complex.normSq (g ((PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalEquiv A0 A1 B hA).symm M))) /
+      ↑(PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalRestriction B hA Q).fibre.card ≤
+    η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_reduced_energy_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_parent_order_eq {n d : ℕ}
+  (A0 A1 :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.W✝ n))
+  (hA : A0 ≤ A1)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal.ReducedRestriction A0 B (Submodule.map A0.mkQ A1)) :
+  (PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalRestriction B hA Q).order = Q.order
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_parent_order_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_A1_line_operator_identity {n d : ℕ}
+  (U A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.W✝ n))
+  (hU : U ≤ A)
+  (hL : Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝ ↥(Submodule.map U.mkQ A) = 1)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (N :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d ⧸ U) ⧸
+        Submodule.map U.mkQ A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝]
+      ↥B) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexLineFilter B (Submodule.map U.mkQ A) hL
+      (fun M =>
+        PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict U B T
+          (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter U B f) M)
+      (N ∘ₗ (Submodule.map U.mkQ A).mkQ) =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A B T
+      (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter A B f)
+      ((PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalEquiv U A B hU) N)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_slice_A1_line_operator_identity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_domain_line_derivative_slice_identity {n d : ℕ}
+  (U :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d))
+  (hU : Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝ ↥(Submodule.map ⊥.mkQ U) = 1)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (N :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.V✝ d ⧸ ⊥) ⧸
+        Submodule.map ⊥.mkQ U →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexLineFilter ⊤ (Submodule.map ⊥.mkQ U) hU
+      (fun M =>
+        PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict ⊥ ⊤ T
+          (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter ⊥ ⊤ f) M)
+      (N ∘ₗ (Submodule.map ⊥.mkQ U).mkQ) =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction U ⊤ T f
+      ((PvNP.RealizableHardness.BinaryMatrixA15NestedLine.lineCanonicalEquiv ⊥ U ⊤ ⋯) N)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice.fixed_domain_line_derivative_slice_identity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
