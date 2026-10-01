@@ -1,0 +1,46 @@
+PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.zero_total_flag_length_endpoints {n d l h : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.W✝ n)}
+  (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag ⊥ l) (hlines : lines.endpoint = A)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag ⊤ h)
+  (hhypers : hypers.endpoint = B) (htotal : l + h = 0) : A = ⊥ ∧ B = ⊤
+'PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.zero_total_flag_length_endpoints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.arbitrary_carrier_rank_projection_identity {n d i l h : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.F✝
+      (PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.W✝ n))
+  (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag ⊥ l) (hlines : lines.endpoint = A)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag ⊤ h)
+  (hhypers : hypers.endpoint = B)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.F✝]
+      PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.W✝ n)
+  (ambientf : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) (hpositive : l + h ≠ 0)
+  (hlevel : l + h ≤ i) :
+  have r := i - (l + h);
+  have source := fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 ambientf M;
+  let tower :=
+    PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers
+      (PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.initialBottomTopBase T);
+  have hA := ⋯;
+  have hB := ⋯;
+  have e := PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointHomEquiv hA hB;
+  (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B r fun M =>
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).fend (e.symm M)) =
+    fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T
+      (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection i ambientf) M
+'PvNP.RealizableHardness.ActualTypedABArbitraryRankProjection.arbitrary_carrier_rank_projection_identity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
