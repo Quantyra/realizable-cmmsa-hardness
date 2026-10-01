@@ -1,0 +1,124 @@
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower_A14' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower_energy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower_endpoints {n d r l h : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.W✝ n)}
+  {f :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+        ↥B) →
+      ℂ}
+  (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag A l)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag B h)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+      ↥B) :
+  (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers T)).Aend =
+      lines.endpoint ∧
+    (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData
+          (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers T)).Bend =
+      hypers.endpoint
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower_endpoints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag.appendStep {d : ℕ}
+  {A0 :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d)}
+  {k : ℕ} (flag : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag A0 k)
+  (Anew :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d))
+  (hle : flag.endpoint ≤ Anew)
+  (hstep :
+    Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥(Submodule.map flag.endpoint.mkQ Anew) = 1) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag A0 (k + 1)
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag.endpoint_appendStep' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.fullCodomainHyperplaneFlag {n : ℕ}
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.W✝ n)) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag B
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.fullCodomainHyperplaneFlag' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.fullCodomainHyperplaneFlag_endpoint {n : ℕ}
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.W✝ n)) :
+  (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.fullCodomainHyperplaneFlag B).endpoint = ⊥
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.fullCodomainHyperplaneFlag_endpoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.exists_reverse_codomain_flag {n : ℕ}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.W✝ n)}
+  {k : ℕ} (flag : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag B k) :
+  ∃ lines, lines.endpoint = B
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.exists_reverse_codomain_flag' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.exists_full_domain_line_flag {d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d)) :
+  ∃ lines, lines.endpoint = A
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.exists_full_domain_line_flag' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.codomainFlagToSubcarrier {n : ℕ}
+  (B K :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.W✝ n)) :
+  K ≤ B → { flag // flag.endpoint = K }
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.codomainFlagToSubcarrier' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.exists_canonical_source_flags {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.W✝ n)) :
+  ∃ lines, lines.endpoint = A ∧ ∃ hypers, hypers.endpoint = B
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.exists_canonical_source_flags' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedABCanonicalFlag.exists_canonical_source_tower {n d r : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.W✝ n))
+  (f :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+          ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+        ↥⊤) →
+      ℂ)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+      ↥⊤) :
+  ∃ tower,
+    PvNP.RealizableHardness.ActualTypedABRankedTower.HasRankedA14Semantics tower ∧
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend = A ∧
+        (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend = B
+'PvNP.RealizableHardness.ActualTypedABCanonicalFlag.exists_canonical_source_tower' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
