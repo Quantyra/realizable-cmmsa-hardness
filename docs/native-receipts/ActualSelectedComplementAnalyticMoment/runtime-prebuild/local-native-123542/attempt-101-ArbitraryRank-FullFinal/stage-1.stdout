@@ -1,0 +1,244 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:103:15: error: don't know how to synthesize implicit argument `j`
+  @endpointProjection_natural n d ?m.326 (rankedTerminalData (buildCanonicalSourceTower lines hypers T0)).Aend A
+    (rankedTerminalData (buildCanonicalSourceTower lines hypers T0)).Bend B hA hB (rankedTerminalData tower).fend
+    (e.symm M)
+context:
+n d i l h : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+lines : DomainLineFlag ⊥ l
+hlines : lines.endpoint = A
+hypers : CodomainHyperplaneFlag ⊤ h
+hhypers : hypers.endpoint = B
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hpositive : l + h ≠ 0
+hlevel : l + h ≤ i
+source : (V d ⧸ ⊥ →ₗ[F] ↥⊤) → ℂ := ⋯
+r : ℕ := ⋯
+T0 : PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝]
+  ↥⊤ := ⋯
+tower : ActualTypedABRankedTower ⊥ ⊤ source r (h + l) := ⋯
+hends : (rankedTerminalData (buildCanonicalSourceTower lines hypers T0)).Aend = lines.endpoint ∧
+  (rankedTerminalData (buildCanonicalSourceTower lines hypers T0)).Bend = hypers.endpoint := ⋯
+hA : (rankedTerminalData (buildCanonicalSourceTower lines hypers T0)).Aend = A := ⋯
+hB : (rankedTerminalData (buildCanonicalSourceTower lines hypers T0)).Bend = B := ⋯
+e : (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+      (rankedTerminalData
+          (buildCanonicalSourceTower lines hypers
+            T0)).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+    ↥(rankedTerminalData
+          (buildCanonicalSourceTower lines hypers
+            T0)).Bend) ≃ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+  PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+    ↥B := ⋯
+φ : (V d ⧸ A →ₗ[F] ↥B) → ℂ := ⋯
+hidx : r + (h + l) = i
+hcollapse :
+  typedComplexRankProjection (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend r
+      (rankedTerminalData tower).fend =
+    fun M =>
+    filteredCarrierFunction (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend T
+      (complexRankProjection i f) M
+M : PvNP.RealizableHardness.BinaryMatrixTypedA14Line.V✝ d ⧸ A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA14Line.F✝] ↥B
+⊢ ℕ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:103:9: error: failed to infer `have` declaration type
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:160:28: error: unsolved goals
+n d D : ℕ
+eps : ℝ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+l : ℕ := Module.finrank F ↥A
+h : ℕ := Module.finrank F ↥⊤ - Module.finrank F ↥B
+k : ℕ := l + h
+lines : DomainLineFlag ⊥ (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A)
+hlines : lines.endpoint = A
+hypers :
+  CodomainHyperplaneFlag ⊤
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥⊤ -
+      Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+hhypers : hypers.endpoint = B
+hquot : Module.finrank F (W n ⧸ B) + Module.finrank F ↥B = Module.finrank F (W n)
+htop : Module.finrank F ↥⊤ = Module.finrank F (W n)
+hcod : h = Module.finrank F (W n ⧸ B)
+hk : k = Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+heps : 0 ≤ eps
+hkzero : k = 0
+hlzero : l = 0
+hhzero : h = 0
+hA_dim : Module.finrank F ↥A = 0
+hA : A = ⊥
+hB_dim : Module.finrank F ↥B = Module.finrank F ↥⊤
+hB : B = ⊤
+Q0 : CarrierRestriction ⊥ ⊤ := { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }
+htyped : UpToTypedNormSqGlobal ⊥ ⊤ D eps fun M => f (bottomTopAmbientMatrixEquiv M)
+⊢ Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ (↥⊤ ⧸ ⊤) ≤ D
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:161:6: error: Type mismatch: After simplification, term
+  hQ
+ has type
+  @LE.le ℝ Real.instLE
+    ((∑ M, Complex.normSq (f (bottomTopAmbientMatrixEquiv M))) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸
+              ⊥ →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]
+            ↥⊤)))
+    eps
+but is expected to have type
+  @LE.le ℝ Real.instLE
+    ((∑ x, Complex.normSq (f (LinearMap.toMatrix' (⊤.subtype ∘ₗ x ∘ₗ ⊥.mkQ)))) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.V✝ d ⧸
+              ⊥ →ₗ[PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.F✝]
+            ↥⊤)))
+    eps
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:179:6: error: Tactic `apply` failed: could not unify the conclusion of `Real.rpow_le_rpow_of_exponent_le ?m.609`
+  ?m.606 ^ ?m.607 ≤ ?m.606 ^ ?m.608
+with the goal
+  2 ^ (10 * D ^ 2) ≤ 2 ^ (11 * D ^ 2)
+
+Note: The full type of `Real.rpow_le_rpow_of_exponent_le ?m.609` is
+  ?m.607 ≤ ?m.608 → ?m.606 ^ ?m.607 ≤ ?m.606 ^ ?m.608
+
+n d D : ℕ
+eps : ℝ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+l : ℕ := Module.finrank F ↥A
+h : ℕ := Module.finrank F ↥⊤ - Module.finrank F ↥B
+k : ℕ := l + h
+lines : DomainLineFlag ⊥ (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A)
+hlines : lines.endpoint = A
+hypers :
+  CodomainHyperplaneFlag ⊤
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥⊤ -
+      Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+hhypers : hypers.endpoint = B
+hquot : Module.finrank F (W n ⧸ B) + Module.finrank F ↥B = Module.finrank F (W n)
+htop : Module.finrank F ↥⊤ = Module.finrank F (W n)
+hcod : h = Module.finrank F (W n ⧸ B)
+hk : k = Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+heps : 0 ≤ eps
+hkzero : k = 0
+hlzero : l = 0
+hhzero : h = 0
+hA_dim : Module.finrank F ↥A = 0
+hA : A = ⊥
+hB_dim : Module.finrank F ↥B = Module.finrank F ↥⊤
+hB : B = ⊤
+Q0 : CarrierRestriction ⊥ ⊤ := { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }
+htyped : UpToTypedNormSqGlobal ⊥ ⊤ D eps fun M => f (bottomTopAmbientMatrixEquiv M)
+hzero_mean : (carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ 0 f M)) ≤ eps
+T0 : PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝]
+  ↥⊤ :=
+  initialBottomTopBase T
+hmean :
+  (carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ (⊤.subtype ∘ₗ T0 ∘ₗ ⊥.mkQ) f M)) =
+    carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ 0 f M)
+hbase : ⊤.subtype ∘ₗ T0 ∘ₗ ⊥.mkQ = T
+hshift :
+  (carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ T f M)) =
+    carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ 0 f M)
+⊢ 2 ^ (10 * D ^ 2) ≤ 2 ^ (11 * D ^ 2)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:179:46: error: unsolved goals
+n d D : ℕ
+eps : ℝ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+l : ℕ := Module.finrank F ↥A
+h : ℕ := Module.finrank F ↥⊤ - Module.finrank F ↥B
+k : ℕ := l + h
+lines : DomainLineFlag ⊥ (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥A)
+hlines : lines.endpoint = A
+hypers :
+  CodomainHyperplaneFlag ⊤
+    (Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥⊤ -
+      Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B)
+hhypers : hypers.endpoint = B
+hquot : Module.finrank F (W n ⧸ B) + Module.finrank F ↥B = Module.finrank F (W n)
+htop : Module.finrank F ↥⊤ = Module.finrank F (W n)
+hcod : h = Module.finrank F (W n ⧸ B)
+hk : k = Module.finrank F ↥A + Module.finrank F (W n ⧸ B)
+heps : 0 ≤ eps
+hkzero : k = 0
+hlzero : l = 0
+hhzero : h = 0
+hA_dim : Module.finrank F ↥A = 0
+hA : A = ⊥
+hB_dim : Module.finrank F ↥B = Module.finrank F ↥⊤
+hB : B = ⊤
+Q0 : CarrierRestriction ⊥ ⊤ := { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }
+htyped : UpToTypedNormSqGlobal ⊥ ⊤ D eps fun M => f (bottomTopAmbientMatrixEquiv M)
+hzero_mean : (carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ 0 f M)) ≤ eps
+T0 : PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝]
+  ↥⊤ :=
+  initialBottomTopBase T
+hmean :
+  (carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ (⊤.subtype ∘ₗ T0 ∘ₗ ⊥.mkQ) f M)) =
+    carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ 0 f M)
+hbase : ⊤.subtype ∘ₗ T0 ∘ₗ ⊥.mkQ = T
+hshift :
+  (carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ T f M)) =
+    carrierMean ⊥ ⊤ fun M => Complex.normSq (filteredCarrierFunction ⊥ ⊤ 0 f M)
+⊢ 1 ≤ ?m.606
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:188:68: error: not a positivity goal
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:204:22: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  p ≥ 0
+  o ≥ 0
+  m ≥ 0
+  m - o - p ≥ 0
+  j ≥ 0
+  e ≥ 0
+  e - j ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b + c ≥ 1
+  b + c - j ≥ 1
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑(Module.finrank F ↥⊤)
+ b := ↑(Module.finrank F ↥⊤ - Module.finrank F ↥B)
+ c := ↑(Module.finrank F ↥A)
+ e := ↑D
+ j := ↑i
+ m := ↑?m.850
+ o := ↑(Module.finrank PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝ ↥A)
+ p := ↑(Module.finrank PvNP.RealizableHardness.ActualTypedABFullA16Assembly.F✝
+    (PvNP.RealizableHardness.ActualTypedABFullA16Assembly.W✝ n ⧸ B))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:207:16: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:209:8: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:199:45: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Final.lean:241:4: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
