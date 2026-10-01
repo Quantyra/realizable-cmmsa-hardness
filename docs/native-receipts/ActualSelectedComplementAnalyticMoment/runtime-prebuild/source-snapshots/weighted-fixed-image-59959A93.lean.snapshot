@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualFiniteAppendImageWeighted
+
+open PvNP.RealizableHardness.ActualFiniteAppendImageWeighted
+
+#check RetainedMatrixImageFibre
+#check retainedMatrixImageFibreEquiv
+#print axioms retainedMatrixImageFibreEquiv
+#check card_retainedMatrixImageFibre
+#print axioms card_retainedMatrixImageFibre
+#check retained_fibre_square_sum
+#print axioms retained_fibre_square_sum
