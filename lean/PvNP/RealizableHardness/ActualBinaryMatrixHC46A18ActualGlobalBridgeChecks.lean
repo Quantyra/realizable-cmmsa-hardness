@@ -13,7 +13,11 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18ActualGlobalBridge
 #print axioms fibreEnergy_translateActualRestriction
 #check translate_actual_global
 #print axioms translate_actual_global
+#check actual_global_parameter_nonneg
+#print axioms actual_global_parameter_nonneg
 #check complexLineAverage_actual_global
 #print axioms complexLineAverage_actual_global
+#check complexLineAverage_actual_global_of_global
+#print axioms complexLineAverage_actual_global_of_global
 #check complexLineAverage_actual_global_le_two
 #print axioms complexLineAverage_actual_global_le_two

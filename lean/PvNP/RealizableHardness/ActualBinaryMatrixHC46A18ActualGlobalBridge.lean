@@ -11,7 +11,7 @@ claim that a reduced quotient operator is definitionally this ambient average.
 -/
 namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18ActualGlobalBridge
 
-open BinaryMatrixComplexA15 BinaryMatrixActualAffine BinaryMatrixLineTranslation
+open BinaryMatrixFourier BinaryMatrixComplexA15 BinaryMatrixActualAffine BinaryMatrixLineTranslation
 open scoped BigOperators
 noncomputable section
 attribute [local instance] Classical.propDecidable
@@ -71,6 +71,20 @@ theorem translate_actual_global {n d r : ℕ} {ε : ℝ}
   change fibreEnergy (translateActualRestriction Q S).fibre f ≤ ε at h
   rw [← fibreEnergy_translateActualRestriction Q S f]
   exact h
+
+theorem actual_global_parameter_nonneg {n d r : ℕ} {ε : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal r ε f) : 0 ≤ ε := by
+  let Q : ActualAffineRestriction n d :=
+    { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }
+  have hQ : Q.order ≤ r := by
+    simp [Q, ActualAffineRestriction.order]
+  have henergy : 0 ≤ fibreEnergy Q.fibre f := by
+    unfold fibreEnergy
+    apply div_nonneg
+    · exact Finset.sum_nonneg fun M _ => Complex.normSq_nonneg (f M)
+    · exact Nat.cast_nonneg _
+  exact le_trans henergy (hf Q hQ)
 
 private theorem normSq_average_le {α : Type*} [Fintype α] [Nonempty α]
     (z : α → ℂ) :
@@ -149,13 +163,20 @@ theorem complexLineAverage_actual_global {n d r : ℕ} {ε : ℝ}
   intro p
   exact translate_actual_global (lineShift p.2 p.1) f hf
 
+/-- The actual order-zero contract implies the global parameter is nonnegative. -/
+theorem complexLineAverage_actual_global_of_global {n d r : ℕ} {ε : ℝ}
+    (f : BinaryMatrix n (d + 1) → ℂ)
+    (hf : UpToActualNormSqGlobal r ε f) :
+    UpToActualNormSqGlobal r ε (complexLineAverage f) :=
+  complexLineAverage_actual_global f (actual_global_parameter_nonneg f hf) hf
+
 /-- The source A18-shaped `2ε` conclusion for the full-dimensional line
 average follows from the stronger same-order actual-fibre estimate. -/
 theorem complexLineAverage_actual_global_le_two {n d r : ℕ} {ε : ℝ}
-    (f : BinaryMatrix n (d + 1) → ℂ) (hε : 0 ≤ ε)
+    (f : BinaryMatrix n (d + 1) → ℂ)
     (hf : UpToActualNormSqGlobal (r + 1) ε f) :
     UpToActualNormSqGlobal r (2 * ε) (complexLineAverage f) := by
-  have hstrong := complexLineAverage_actual_global f hε hf
+  have hstrong := complexLineAverage_actual_global_of_global f hf
   intro Q hQ
   have hQ' : Q.order ≤ r + 1 := by omega
   have h := hstrong Q hQ'
