@@ -2,7 +2,7 @@ import pathlib,json,hashlib,subprocess,sys
 repo=pathlib.Path(__file__).resolve().parents[4]
 b=repo/'docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild'
 pins=json.loads((b/'hc-twentyseventh-pins.json').read_text())
-plan=['ActualBinaryMatrixHC46A16Energy', 'ActualBinaryMatrixHC46A16EnergyChecks', 'ActualBinaryMatrixHC46TypedFourierTransport', 'ActualBinaryMatrixHC46TypedFourierTransportChecks', 'ActualBinaryMatrixHC46TypedA14Energy', 'ActualBinaryMatrixHC46TypedA14EnergyChecks']
+plan=['ActualBinaryMatrixHC46A16Energy', 'ActualBinaryMatrixHC46A16EnergyChecks', 'ActualBinaryMatrixHC46TypedFourierTransport', 'ActualBinaryMatrixHC46TypedFourierTransportChecks', 'ActualBinaryMatrixHC46TypedA14Energy', 'ActualBinaryMatrixHC46TypedA14EnergyChecks', 'ActualRawRestrictionComposition', 'ActualRawRestrictionCompositionChecks']
 pre='lean/PvNP/RealizableHardness/'
 target=pre+plan[-1]+'.lean'
 snapshots={hashlib.sha256(p.read_bytes()).hexdigest().upper():p for p in (b/'source-snapshots').glob('*.snapshot')}
