@@ -1,0 +1,53 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.globalFunctionalRowEquiv {n d : ℕ}
+  (A : Submodule (ZMod 2) (Fin d → ZMod 2)) (v : ↥A) :
+  FunctionalsAt ↑v × (Fin n → ZMod 2) ≃
+    RestrictedFunctionals A v × ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) × (Fin n → ZMod 2)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.globalFunctionalRowEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.globalFunctionalRow_average_reindex {n d : ℕ}
+  (A : Submodule (ZMod 2) (Fin d → ZMod 2)) (v : ↥A) (g : FunctionalsAt ↑v × (Fin n → ZMod 2) → ℂ)
+  (g' : RestrictedFunctionals A v × ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) × (Fin n → ZMod 2) → ℂ)
+  (hpoint : ∀ (p : FunctionalsAt ↑v × (Fin n → ZMod 2)), g p = g' ((globalFunctionalRowEquiv A v) p)) :
+  (∑ p, g p) / ↑(Fintype.card (FunctionalsAt ↑v × (Fin n → ZMod 2))) =
+    (∑ p, g' p) /
+      ↑(Fintype.card (RestrictedFunctionals A v × ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) × (Fin n → ZMod 2)))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.globalFunctionalRow_average_reindex' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.actualA18RankOne_entry {n d : ℕ}
+  (psi : AmbientFunctionals) (w : Fin n → ZMod 2) (i : Fin n) (j : Fin d) :
+  actualA18RankOne psi w i j = w i * psi (Pi.single j 1)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.actualA18RankOne_entry' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.toMatrix'_add_rankOne {n d : ℕ}
+  (F : (Fin d → ZMod 2) →ₗ[ZMod 2] Fin n → ZMod 2) (psi : AmbientFunctionals) (w : Fin n → ZMod 2) :
+  LinearMap.toMatrix' (F + LinearMap.smulRight psi w) = LinearMap.toMatrix' F + actualA18RankOne psi w
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.toMatrix'_add_rankOne' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.actualA18_sourceSample_eq_ambient {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (R : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation)
+  (lambda : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2) (w : Fin n → ZMod 2) :
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  have qdom := Submodule.factor ⋯;
+  have hcoords := ⋯;
+  have phi₀ := Classical.choose ⋯;
+  have psi :=
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.restrictedFunctionalExtensionEquiv Q.domainFixed phi
+        v hv)
+      lambda;
+  LinearMap.toMatrix'
+      (Matrix.toLin' Q.base +
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput Q.codomainVariation
+            qdom phi₀ R lambda w ∘ₗ
+          A'.mkQ) =
+    LinearMap.toMatrix' (Matrix.toLin' Q.base + Q.codomainVariation.subtype ∘ₗ R ∘ₗ Q.domainFixed.mkQ) +
+      actualA18RankOne (↑psi) w
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.actualA18_sourceSample_eq_ambient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
