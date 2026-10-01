@@ -1,0 +1,639 @@
+Review this kernel-green HC46 INPUT INGREDIENT packet in the proof-adversarial, complexity-theory, and non-claims lenses. Give separate GO/GO-WITH-NOTES/NO-GO/INCOMPLETE verdicts, exact model, findings and explicit coverage. Read all supplied proof bodies. No tools/writes/compiler/cloud/delegation. This is NOT an HC46ExactContract inhabitant: padding/exact-to-at-most/rankzero, existing A1/A14/A15 bridge and Boolean actual-globalness input only. Positive-rank dyadic HC and arbitrary carrier composition remain open. Do not infer whole-goal completion. Imported Mathlib and A1/A14/A15 proof bodies are outside this packet; disclose dependency limits. Olean hashes receipt-only, binaries not archived. The runtime cleanup status is separately recorded, not inferred from native0.
+
+FILE lean\PvNP\RealizableHardness\ActualBinaryMatrixHC46.lean
+import PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Add one tautological left equation. The nominal budget increases by one,
+while the represented restriction is unchanged. -/
+def padOneLeftRow {n d : Nat} (R : AffineRestriction n d) : AffineRestriction n d where
+  columns := R.columns
+  rows := R.rows + 1
+  rightDirections := R.rightDirections
+  rightValues := R.rightValues
+  leftDirections := fun i j =>
+    if hi : i.val < R.rows then R.leftDirections ⟨i.val, hi⟩ j else 0
+  leftValues := fun i j =>
+    if hi : i.val < R.rows then R.leftValues ⟨i.val, hi⟩ j else 0
+
+@[simp] theorem padOneLeftRow_budget {n d : Nat} (R : AffineRestriction n d) :
+    (padOneLeftRow R).budget = R.budget + 1 := by
+  simp [padOneLeftRow, AffineRestriction.budget, Nat.add_assoc]
+
+/-- The appended zero equation does not change the consistent matrices. -/
+theorem padOneLeftRow_fibre {n d : Nat} (R : AffineRestriction n d) :
+    (padOneLeftRow R).fibre = R.fibre := by
+  ext M
+  simp only [AffineRestriction.fibre, Finset.mem_filter, Finset.mem_univ,
+    true_and]
+  constructor
+  · rintro ⟨hr, hl⟩
+    refine ⟨hr, ?_⟩
+    ext i j
+    let ip : Fin (R.rows + 1) := i.castSucc
+    have hdir : (padOneLeftRow R).leftDirections ip = R.leftDirections i := by
+      ext k
+      simp [padOneLeftRow, ip]
+    have hval : (padOneLeftRow R).leftValues ip = R.leftValues i := by
+      simp [padOneLeftRow, ip]
+    have oldRow := congrFun (congrFun hl ip) j
+    change (∑ k : Fin n,
+        (padOneLeftRow R).leftDirections ip k * M k j) =
+      (padOneLeftRow R).leftValues ip j at oldRow
+    have oldRow' :
+        (∑ k : Fin n, R.leftDirections i k * M k j) =
+          R.leftValues i j := by
+      simpa [padOneLeftRow, ip] using oldRow
+    simpa only [Matrix.mul_apply] using oldRow'
+  · rintro ⟨hr, hl⟩
+    refine ⟨hr, ?_⟩
+    ext i j
+    cases i using Fin.lastCases with
+    | last =>
+        have hdir : (padOneLeftRow R).leftDirections (Fin.last R.rows) = 0 := by
+          ext k
+          simp [padOneLeftRow]
+        have hval : (padOneLeftRow R).leftValues (Fin.last R.rows) = 0 := by
+          ext j
+          simp [padOneLeftRow]
+        change (∑ k : Fin n,
+            (padOneLeftRow R).leftDirections (Fin.last R.rows) k * M k j) =
+          (padOneLeftRow R).leftValues (Fin.last R.rows) j
+        simp [hdir, hval]
+    | cast i =>
+        have hdir : (padOneLeftRow R).leftDirections i.castSucc = R.leftDirections i := by
+          ext k
+          simp [padOneLeftRow]
+        have hval : (padOneLeftRow R).leftValues i.castSucc = R.leftValues i := by
+          simp [padOneLeftRow]
+        have oldRow := congrFun (congrFun hl i) j
+        change (∑ k : Fin n, R.leftDirections i k * M k j) =
+          R.leftValues i j at oldRow
+        have paddedRow :
+            (∑ k : Fin n,
+              (padOneLeftRow R).leftDirections i.castSucc k * M k j) =
+              (padOneLeftRow R).leftValues i.castSucc j := by
+          simpa [padOneLeftRow] using oldRow
+        change (∑ k : Fin n,
+            (padOneLeftRow R).leftDirections i.castSucc k * M k j) =
+          (padOneLeftRow R).leftValues i.castSucc j
+        exact paddedRow
+
+/-- Repeatedly append tautological left equations. -/
+def padLeftRows {n d : Nat} (R : AffineRestriction n d) : Nat → AffineRestriction n d
+  | 0 => R
+  | k + 1 => padOneLeftRow (padLeftRows R k)
+
+@[simp] theorem padLeftRows_budget {n d : Nat} (R : AffineRestriction n d) (k : Nat) :
+    (padLeftRows R k).budget = R.budget + k := by
+  induction k with
+  | zero => simp [padLeftRows]
+  | succ k ih =>
+      rw [padLeftRows, padOneLeftRow_budget, ih]
+      omega
+
+@[simp] theorem padLeftRows_fibre {n d : Nat} (R : AffineRestriction n d) (k : Nat) :
+    (padLeftRows R k).fibre = R.fibre := by
+  induction k with
+  | zero => rfl
+  | succ k ih =>
+      rw [padLeftRows, padOneLeftRow_fibre, ih]
+
+/-- Any consistent restriction whose nominal budget is at most `r` can be
+padded by zero equations to one of nominal budget exactly `r`, without
+changing its fibre or conditional density. This is the budget-normalization
+step used by the manuscript's exact nominal-budget pseudorandomness contract. -/
+def padRestrictionToBudget {n d : Nat} (R : AffineRestriction n d) (r : Nat)
+    (hbudget : R.budget ≤ r) : AffineRestriction n d :=
+  padLeftRows R (r - R.budget)
+
+@[simp] theorem padRestrictionToBudget_budget {n d : Nat}
+    (R : AffineRestriction n d) (r : Nat) (hbudget : R.budget ≤ r) :
+    (padRestrictionToBudget R r hbudget).budget = r := by
+  change (padLeftRows R (r - R.budget)).budget = r
+  rw [padLeftRows_budget]
+  exact Nat.add_sub_of_le hbudget
+
+@[simp] theorem padRestrictionToBudget_fibre {n d : Nat}
+    (R : AffineRestriction n d) (r : Nat) (hbudget : R.budget ≤ r) :
+    (padRestrictionToBudget R r hbudget).fibre = R.fibre := by
+  simp [padRestrictionToBudget]
+
+theorem pseudorandom_atMost_of_exact {n d r : Nat} {eta : Real}
+    {f : BinaryMatrix n d → Bool}
+    (h : PseudorandomExact r eta f) : Pseudorandom r eta f := by
+  intro R hbudget hfibre
+  let R' := padRestrictionToBudget R r hbudget
+  have hbudget' : R'.budget = r := by
+    dsimp [R']
+    exact padRestrictionToBudget_budget R r hbudget
+  have hfibre' : R'.fibre.Nonempty := by
+    change (padRestrictionToBudget R r hbudget).fibre.Nonempty
+    rw [padRestrictionToBudget_fibre]
+    exact hfibre
+  have hden := h R' hbudget' hfibre'
+  have hdensity :
+      (padRestrictionToBudget R r hbudget).density f = R.density f := by
+    simp [AffineRestriction.density, padRestrictionToBudget_fibre]
+  have hden' : R.density f ≤ eta := by
+    change (padRestrictionToBudget R r hbudget).density f ≤ eta at hden
+    rw [hdensity] at hden
+    exact hden
+  exact hden'
+
+/-- Exact-contract rank-zero endpoint. The positive-rank estimate is the
+remaining HC46 engine step. -/
+theorem hc46_rank_zero_exact {n d h r p : Nat} {eta : Real}
+    (_hEven : d = 2 * h) (b : BinaryMatrix n d → Bool)
+    (hPR : PseudorandomExact r eta b) (hp4 : 4 ≤ p)
+    (hpDyadic : ∃ q : Nat, p = 2 ^ q) :
+    lpNorm p (rankProjection 0 (indicator b)) ≤
+      (2 : Real) ^ (500 * 0 ^ 2 * p) *
+        eta ^ (((p : Real) - 2) / (p : Real)) := by
+  have hmeanEta := boolean_mean_le_of_exact b hPR
+  have hmean0 : 0 ≤ uniformMean (indicator b) := uniformMean_indicator_nonneg b
+  have hmean1 : uniformMean (indicator b) ≤ 1 := by
+    have hcard : 0 < (Fintype.card (BinaryMatrix n d) : Real) :=
+      Nat.cast_pos.mpr (Fintype.card_pos_iff.mpr ⟨0⟩)
+    unfold uniformMean
+    rw [div_le_iff₀ hcard]
+    calc
+      (∑ M : BinaryMatrix n d, indicator b M) ≤
+          ∑ _M : BinaryMatrix n d, (1 : Real) := by
+            apply Finset.sum_le_sum
+            intro M hM
+            by_cases hb : b M = true <;> simp [indicator, hb]
+      _ = Fintype.card (BinaryMatrix n d) := by simp
+      _ = (1 : Real) * (Fintype.card (BinaryMatrix n d) : Real) := by ring
+  have hEta0 : 0 ≤ eta := le_trans hmean0 hmeanEta
+  have hp0 : (p : Real) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (by omega : 0 < p))
+  have hexp : (1 : Real) - 2 / (p : Real) =
+      ((p : Real) - 2) / (p : Real) := by
+    field_simp
+  have hpReal : (4 : Real) ≤ (p : Real) := by exact_mod_cast hp4
+  have hpCastPos : (0 : Real) < (p : Real) := by linarith
+  have hAlpha0 : 0 ≤ ((p : Real) - 2) / (p : Real) :=
+    div_nonneg (by linarith) (le_of_lt hpCastPos)
+  have hAlpha1 : ((p : Real) - 2) / (p : Real) ≤ 1 := by
+    rw [div_le_iff₀ hpCastPos]
+    linarith
+  by_cases heta1 : eta ≤ 1
+  · have hzero := binary_hc_rankZero_exact b hp4 hpDyadic hEta0 heta1 hPR
+    simpa [hexp] using hzero
+  · have hnorm1 : lpNorm p (rankProjection 0 (indicator b)) ≤ 1 := by
+      have hpn : p ≠ 0 := by omega
+      rw [lpNorm, lpMoment_rankProjection_zero, one_div,
+        Real.pow_rpow_inv_natCast (abs_nonneg _) hpn,
+        abs_of_nonneg hmean0]
+      exact hmean1
+    have hetaOne : 1 ≤ eta := le_of_lt (lt_of_not_ge heta1)
+    have hpow : 1 ≤ eta ^ (((p : Real) - 2) / (p : Real)) :=
+      Real.one_le_rpow hetaOne hAlpha0
+    simpa [hexp] using hnorm1.trans hpow
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46
+
+
+
+FILE lean\PvNP\RealizableHardness\ActualBinaryMatrixHC46Checks.lean
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46
+
+#check HC46ExactContract
+#check padOneLeftRow_fibre
+#check padLeftRows_budget
+#check padRestrictionToBudget_budget
+#check padRestrictionToBudget_fibre
+#check pseudorandom_atMost_of_exact
+#check hc46_rank_zero_exact
+
+#print axioms padOneLeftRow_fibre
+#print axioms padRestrictionToBudget_budget
+#print axioms padRestrictionToBudget_fibre
+#print axioms pseudorandom_atMost_of_exact
+#print axioms hc46_rank_zero_exact
+
+
+
+FILE lean\PvNP\RealizableHardness\ActualBinaryMatrixHC46Derivative.lean
+import PvNP.RealizableHardness.BinaryMatrixA1Composition
+import PvNP.RealizableHardness.BinaryMatrixLineA14
+import PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+import PvNP.RealizableHardness.BinaryMatrixTypedA15AdaptedGlobal
+
+/-!
+The first positive-rank HC46 engine bridge.  This file keeps the manuscript's
+actual affine restriction, hybrid Fourier filter, and line derivative
+operators together at the boundary where the rank loss is used by (A14).
+The component proofs remain in their focused operator files; this module
+exports their source-shaped composition for the HC46 chain.
+-/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46Derivative
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Composition
+open PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+open PvNP.RealizableHardness.BinaryMatrixHybridSelector
+open PvNP.RealizableHardness.BinaryMatrixLineTranslation
+open PvNP.RealizableHardness.BinaryMatrixLineA14
+open PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+open PvNP.RealizableHardness.BinaryMatrixTypedA15AdaptedGlobal
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Reduced
+open PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
+open PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixFirstDerivative
+open PvNP.RealizableHardness.BinaryMatrixLineA15
+
+set_option autoImplicit false
+noncomputable section
+
+/-- Actual affine restriction after the hybrid Fourier filter, composed
+through nested left/right constraints, equals the single restriction/filter
+at the composed affine base.  This is the manuscript's (A1) operator
+identity used to iterate the derivative argument. -/
+theorem actual_affine_hybrid_composition {n d : ℕ}
+    (A₂ A₁ : Submodule (ZMod 2) (Fin d → ZMod 2))
+    (B₁ B₂ : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (T : (Fin d → ZMod 2) →ₗ[ZMod 2] (Fin n → ZMod 2))
+    (S : ((Fin d → ZMod 2) ⧸ A₂) →ₗ[ZMod 2] B₂)
+    (f : BinaryMatrix n d → ℝ)
+    (N : (((Fin d → ZMod 2) ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[ZMod 2]
+      B₁.comap B₂.subtype) :
+    carrierAffineRestrict A₂ B₂ (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+      (carrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ) (B₁.comap B₂.subtype)
+        (fun M => ambientAffineRestrict A₂ B₂ T
+          (ambientHybridFilter A₂ B₂ f) M)) N =
+      ambientAffineRestrict A₁ B₁
+        (T + B₂.subtype.comp (S.comp A₂.mkQ))
+        (ambientHybridFilter A₁ B₁ f)
+        (nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB N) := by
+  exact manuscript_A1_restrict_filter A₂ A₁ B₁ B₂ hA hB T S f N
+
+/-- The line restriction/rank-projection identity (A14), with the actual
+line-averaging polynomial and actual hybrid derivative.  The selector's
+rank-loss equation ensures precisely the selected rank-`j+1` frequencies
+contribute to output rank `j`; equal induced frequencies are summed before
+projection. -/
+theorem actual_line_rank_projection_derivative_A14 {n d j : ℕ}
+    (t : Fin n → ZMod 2) (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n d) :
+    rankProjection j (rawLastColumnRestrict t (lineP j f)) M =
+      hybridLineDerivative t (rankProjection (j + 1) f) M := by
+  exact rankProjection_rawRestrict_lineP_eq_hybridDerivative t f M
+
+/-- Same-line positive-rank bridge for the next HC46 step: the actual
+one-step A15 globalness witness and the actual typed A14 rank-`j` derivative
+identity hold together for the same source function, fixed affine base, and
+line. This keeps the operator identity available at every subsequent base
+while the A15 bound is applied to the line witness. -/
+theorem actual_typed_line_A14_A15_step {n d k : ℕ} {ε : ℝ}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2))
+    (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (L : Submodule (ZMod 2) ((Fin d → ZMod 2) ⧸ A))
+    (hL : Module.finrank (ZMod 2) L = 1)
+    (T : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B)
+    (f : (((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B) → ℂ)
+    (hε : 0 ≤ ε)
+    (hf : UpToTypedNormSqGlobal A B (k + 1) ε f) :
+    UpToActualNormSqGlobal k (4 * (2 : ℝ) ^ (4 * (k + 1)) * ε)
+      (fun X => typedLineP B L hL k f
+        ((lineMatrixEquiv B L hL).symm
+          (rawLastColumn X (lineBaseColumn B L hL T)))) ∧
+    (∀ N : (((Fin d → ZMod 2) ⧸ A) ⧸ L) →ₗ[ZMod 2] B,
+      reducedComplexRankProjection B L k (typedLineReducedWitness (k := k) B L hL T f) N =
+        typedComplexLineFilter B L hL
+          (typedComplexRankProjection A B (k + 1) f)
+          (T + N.comp L.mkQ)) := by
+  constructor
+  · exact typed_line_coordinate_witness_global A B L hL T f hε hf
+  · intro N
+    exact typed_A14_fixedLine A B L hL T f N
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46Derivative
+
+
+FILE lean\PvNP\RealizableHardness\ActualBinaryMatrixHC46DerivativeChecks.lean
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46Derivative
+
+open PvNP.RealizableHardness.BinaryMatrixA1Composition
+open PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+open PvNP.RealizableHardness.BinaryMatrixHybridSelector
+open PvNP.RealizableHardness.BinaryMatrixLineTranslation
+open PvNP.RealizableHardness.BinaryMatrixLineA14
+open PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+open PvNP.RealizableHardness.BinaryMatrixTypedA15AdaptedGlobal
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Reduced
+open PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
+open PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixFirstDerivative
+open PvNP.RealizableHardness.BinaryMatrixLineA15
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46Derivative
+
+#check rank_eq_drop_add_hybrid_indicator
+#check manuscript_A1_restrict_filter
+#check actual_affine_hybrid_composition
+#check rankProjection_rawRestrict_lineP_eq_hybridDerivative
+#check actual_line_rank_projection_derivative_A14
+#check actual_typed_line_A14_A15_step
+
+#print axioms rank_eq_drop_add_hybrid_indicator
+#print axioms manuscript_A1_restrict_filter
+#print axioms actual_affine_hybrid_composition
+#print axioms actual_line_rank_projection_derivative_A14
+#print axioms actual_typed_line_A14_A15_step
+
+
+FILE lean\PvNP\RealizableHardness\ActualBinaryMatrixHC46BooleanGlobalness.lean
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+import PvNP.RealizableHardness.BinaryMatrixComplexA14
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixComplexA14
+open PvNP.RealizableHardness.BinaryMatrixHybridSelector
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- The complex embedding of the manuscript's Boolean indicator. -/
+def booleanIndicatorComplex {n d : Nat} (b : BinaryMatrix n d → Bool) :
+    BinaryMatrix n d → Complex := fun M => (indicator b M : Complex)
+
+/-- The complex Fourier rank projection of the Boolean indicator is exactly
+the real manuscript rank projection embedded back into `Complex`. -/
+theorem complexRankProjection_boolean_eq {n d j : Nat}
+    (b : BinaryMatrix n d → Bool) (M : BinaryMatrix n d) :
+    complexRankProjection j (booleanIndicatorComplex b) M =
+      (rankProjection j (indicator b) M : Complex) := by
+  apply Complex.ext
+  · rw [complexRankProjection_re]
+    simp [booleanIndicatorComplex]
+  · rw [complexRankProjection_im]
+    simp [booleanIndicatorComplex, rankProjection, fourierCoeff, uniformMean]
+
+/-- Squared complex magnitude agrees pointwise with the real squared
+projection used by HC46. -/
+theorem complexRankProjection_boolean_normSq {n d j : Nat}
+    (b : BinaryMatrix n d → Bool) (M : BinaryMatrix n d) :
+    Complex.normSq (complexRankProjection j (booleanIndicatorComplex b) M) =
+      (rankProjection j (indicator b) M) ^ 2 := by
+  rw [complexRankProjection_boolean_eq]
+  simp [Complex.normSq_ofReal]
+  ring
+
+/-- Exact nominal-budget Boolean pseudorandomness gives the corresponding
+complex squared-norm bound on every nonempty or empty raw affine fibre.  The
+nonempty case is the actual density statement; the empty case uses the
+nonnegativity of the ambient Boolean mean, which also implies `eta ≥ 0`. -/
+theorem exactPR_to_raw_normSqGlobal {n d r : Nat} {eta : Real}
+    (b : BinaryMatrix n d → Bool)
+    (hPR : PseudorandomExact r eta b) :
+    UpToRawNormSqGlobal r eta (booleanIndicatorComplex b) := by
+  have heta0 : 0 ≤ eta :=
+    (uniformMean_indicator_nonneg b).trans (boolean_mean_le_of_exact b hPR)
+  intro R hR
+  by_cases hne : R.fibre.Nonempty
+  · have hden := pseudorandom_atMost_of_exact hPR R hR hne
+    have hsum :
+        (∑ M ∈ R.fibre, Complex.normSq (booleanIndicatorComplex b M)) =
+          ((R.fibre.filter (fun M => b M = true)).card : Real) := by
+      calc
+        (∑ M ∈ R.fibre, Complex.normSq (booleanIndicatorComplex b M)) =
+            ∑ M ∈ R.fibre, if b M = true then (1 : Real) else 0 := by
+              apply Finset.sum_congr rfl
+              intro M hM
+              by_cases hb : b M = true <;>
+                simp [booleanIndicatorComplex, indicator, hb]
+        _ = ∑ M ∈ R.fibre.filter (fun M => b M = true), (1 : Real) := by
+              rw [← Finset.sum_filter]
+        _ = ((R.fibre.filter (fun M => b M = true)).card : Real) := by
+              simp
+    have henergy :
+        fibreEnergy R.fibre (booleanIndicatorComplex b) = R.density b := by
+      unfold fibreEnergy AffineRestriction.density
+      rw [hsum]
+    change fibreEnergy R.fibre (booleanIndicatorComplex b) ≤ eta
+    rw [henergy]
+    exact hden
+  · have hEmpty : R.fibre = ∅ := Finset.not_nonempty_iff_eq_empty.mp hne
+    simp [fibreEnergy, hEmpty, heta0]
+
+/-- The exact Boolean premise also gives the actual-affine form consumed by
+the A15 globalness step. -/
+theorem exactPR_to_actual_normSqGlobal {n d r : Nat} {eta : Real}
+    (b : BinaryMatrix n d → Bool)
+    (hPR : PseudorandomExact r eta b) :
+    UpToActualNormSqGlobal r eta (booleanIndicatorComplex b) := by
+  apply raw_implies_actual
+  exact exactPR_to_raw_normSqGlobal b hPR
+
+/-- One genuine A15 line step from the exact Boolean premise.  The error
+constant is the source's stated `4 * 2^(4*(k+1))` loss; this does not yet
+iterate the dyadic moment argument needed for HC46. -/
+theorem exactPR_to_actual_A15_fixedLine {n d k : Nat} {eta : Real}
+    (t : Fin n → ZMod 2)
+    (b : BinaryMatrix n (d + 1) → Bool)
+    (hPR : PseudorandomExact (k + 1) eta b) :
+    UpToActualNormSqGlobal k
+      (4 * (2 : Real) ^ (4 * (k + 1)) * eta)
+      (fun M => complexLineP k (booleanIndicatorComplex b)
+        (BinaryMatrixFirstDerivative.rawLastColumn M t)) := by
+  have heta0 : 0 ≤ eta :=
+    (uniformMean_indicator_nonneg b).trans (boolean_mean_le_of_exact b hPR)
+  exact actualGlobal_A15_complex_fixedLine t (booleanIndicatorComplex b)
+    heta0 (exactPR_to_actual_normSqGlobal b hPR)
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness
+
+
+FILE lean\PvNP\RealizableHardness\ActualBinaryMatrixHC46BooleanGlobalnessChecks.lean
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness
+
+#check booleanIndicatorComplex
+#check complexRankProjection_boolean_eq
+#check complexRankProjection_boolean_normSq
+#check exactPR_to_raw_normSqGlobal
+#check exactPR_to_actual_normSqGlobal
+#check exactPR_to_actual_A15_fixedLine
+
+#print axioms exactPR_to_raw_normSqGlobal
+#print axioms exactPR_to_actual_normSqGlobal
+#print axioms exactPR_to_actual_A15_fixedLine
+#print axioms complexRankProjection_boolean_eq
+#print axioms complexRankProjection_boolean_normSq
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T013526Z\raw-evidence\stage-0.native-exit
+0
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T013526Z\raw-evidence\stage-0.pins.sha256
+d9ad6a98c41dc1ff2c0cf23d55c8d133e25c87baabb99f1f1d66916a8eaa35c9  lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46.lean
+5d91098208229c943415955078178299895aeb4ad3b8d4d2912de1b8fd4b33c1  .lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46.olean
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T013526Z\raw-evidence\stage-1.native-exit
+0
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T013526Z\raw-evidence\stage-1.pins.sha256
+da60196ad8dca02fb085ac937784fa4c1f33f478b34084497c69b9254c10ac56  lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Checks.lean
+2f494c83dcd8980d27cb737e64c460953b49ebf99a6464521be3f6b6a67a6c49  .lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Checks.olean
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T014757Z\raw-evidence\stage-0.native-exit
+0
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T014757Z\raw-evidence\stage-0.pins.sha256
+144a611eefde9e8748eb3bb5ca35dede89fd4aedad08dbc7ed27f156d66650e0  lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Derivative.lean
+6fcab4f97c0aed2d79abfc0fcf34d5636346bcf88c8bfae66b8fb53e0f0f45fc  .lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Derivative.olean
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T014757Z\raw-evidence\stage-1.native-exit
+0
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T014757Z\raw-evidence\stage-1.pins.sha256
+d77099291728345828787943311048e9b3d32b071e29aa309505b4c2328fce2b  lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DerivativeChecks.lean
+82074d92c95d724639719f8c50d78f7650cc745466d44114e3bbfb955ae95434  .lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DerivativeChecks.olean
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T015449Z\raw-evidence\stage-0.native-exit
+0
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T015449Z\raw-evidence\stage-0.pins.sha256
+a6fb4ca92f38059ad4adcf3ebf61e8cffcfa7239edec31ae46bdf6e0543c2374  lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalness.lean
+60042ced9cb47d30aad141f741d505c450bf9df873a3d6bdf5b1fa24575b91d8  .lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalness.olean
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T015449Z\raw-evidence\stage-1.native-exit
+0
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T015449Z\raw-evidence\stage-1.pins.sha256
+36f1096433584c64e765491c9b7ff619b9819a46a9e128abae596bada9597e11  lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalnessChecks.lean
+dcdfc1eb9f01004db6fd5b1542c7248cdd90abfbb2d9e18341e307b02678bb75  .lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalnessChecks.olean
+
+
+AXIOM PROFILE EXCERPTS docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T013526Z\raw-evidence\stage-1.stdout
+info: lean/PvNP/RealizableHardness/ActualStarQuestionSupport.lean:84:0: 'PvNP.RealizableHardness.ActualStarQuestionSupport.excluded_row_points_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualStarQuestionSupport.lean:85:0: 'PvNP.RealizableHardness.ActualStarQuestionSupport.excluded_row_overlap_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualStarQuestionSupport.lean:86:0: 'PvNP.RealizableHardness.ActualStarQuestionSupport.new_row_private_coordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualStarSpanIntersection.lean:109:0: 'PvNP.RealizableHardness.ActualStarSpanIntersection.equationSpan_inf_coordinateSpace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ExceptionRepair.lean:200:0: 'PvNP.RealizableHardness.exception_completeness' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/ExceptionRepair.lean:201:0: 'PvNP.RealizableHardness.exception_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/Formula.lean:93:0: 'PvNP.RealizableHardness.Formula.repair_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/Formula.lean:94:0: 'PvNP.RealizableHardness.Formula.leaves_repair' depends on axioms: [propext]
+info: lean/PvNP/RealizableHardness/Formula.lean:95:0: 'PvNP.RealizableHardness.Formula.repair_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualQuestionMassBridge.lean:391:0: 'PvNP.RealizableHardness.ActualQuestionMassBridge.conflict_degree_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Checks.lean:15:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46.padOneLeftRow_fibre' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Checks.lean:16:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46.padRestrictionToBudget_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Checks.lean:17:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46.padRestrictionToBudget_fibre' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Checks.lean:18:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46.pseudorandom_atMost_of_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46Checks.lean:19:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46.hc46_rank_zero_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+AXIOM PROFILE EXCERPTS docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T014757Z\raw-evidence\stage-1.stdout
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DerivativeChecks.lean:27:0: 'PvNP.RealizableHardness.BinaryMatrixHybridSelector.rank_eq_drop_add_hybrid_indicator' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DerivativeChecks.lean:28:0: 'PvNP.RealizableHardness.BinaryMatrixA1Composition.manuscript_A1_restrict_filter' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DerivativeChecks.lean:29:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46Derivative.actual_affine_hybrid_composition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DerivativeChecks.lean:30:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46Derivative.actual_line_rank_projection_derivative_A14' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DerivativeChecks.lean:31:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46Derivative.actual_typed_line_A14_A15_step' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+AXIOM PROFILE EXCERPTS docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T015449Z\raw-evidence\stage-1.stdout
+info: lean/PvNP/RealizableHardness/ActualStarQuestionSupport.lean:84:0: 'PvNP.RealizableHardness.ActualStarQuestionSupport.excluded_row_points_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualStarQuestionSupport.lean:85:0: 'PvNP.RealizableHardness.ActualStarQuestionSupport.excluded_row_overlap_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualStarQuestionSupport.lean:86:0: 'PvNP.RealizableHardness.ActualStarQuestionSupport.new_row_private_coordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualStarSpanIntersection.lean:109:0: 'PvNP.RealizableHardness.ActualStarSpanIntersection.equationSpan_inf_coordinateSpace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ExceptionRepair.lean:200:0: 'PvNP.RealizableHardness.exception_completeness' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/ExceptionRepair.lean:201:0: 'PvNP.RealizableHardness.exception_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/Formula.lean:93:0: 'PvNP.RealizableHardness.Formula.repair_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/Formula.lean:94:0: 'PvNP.RealizableHardness.Formula.leaves_repair' depends on axioms: [propext]
+info: lean/PvNP/RealizableHardness/Formula.lean:95:0: 'PvNP.RealizableHardness.Formula.repair_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualQuestionMassBridge.lean:391:0: 'PvNP.RealizableHardness.ActualQuestionMassBridge.conflict_degree_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalnessChecks.lean:12:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness.exactPR_to_raw_normSqGlobal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalnessChecks.lean:13:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness.exactPR_to_actual_normSqGlobal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalnessChecks.lean:14:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness.exactPR_to_actual_A15_fixedLine' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalnessChecks.lean:15:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness.complexRankProjection_boolean_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46BooleanGlobalnessChecks.lean:16:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46BooleanGlobalness.complexRankProjection_boolean_normSq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
