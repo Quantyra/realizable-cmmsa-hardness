@@ -1,0 +1,31 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.actual_derivative_bounds_every_parent_unit_cost
+  {n d r : ℕ} {ε : ℝ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.W✝ n))
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hderiv :
+    ∀
+      (T :
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.V✝
+            d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.F✝]
+          PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.W✝ n),
+      PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal (r - 1) ε
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actualDerivativeCoordinate A B T f))
+  (P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hA : A ≤ P.domainFixed)
+  (hB : P.codomainVariation ≤ B)
+  (hcost :
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.W✝ n ⧸ B) =
+      1)
+  (hP : P.order = r) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy P.fibre
+      (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter A B f) ≤
+    ε
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentEnergy.actual_derivative_bounds_every_parent_unit_cost' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
