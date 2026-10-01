@@ -1,0 +1,121 @@
+✖ [3048/3048] Building PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning (3.7s)
+trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/cslib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean -o /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.olean -i /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.ilean -c /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.c --setup /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.setup.json --json
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:57:4: Unused tactic linter: `change dualRestriction A (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:60:4: Unused tactic linter: `change dualRestriction A (δ.1 + φ₀) = ψ` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:110:4: Unused tactic linter: `change dualRestrictionAt A w (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:113:4: Unused tactic linter: `change dualRestrictionAt A w (δ.1 + φ₀) = z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:175:19: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((dualRestrictionAt A w) ↑φ).1
+in the target expression
+  (dualRestriction A) ↑φ + (dualRestriction A) θ = ψ
+
+case refine_1.fst
+K : Type u_1
+V : Type u_2
+inst✝² : Field K
+inst✝¹ : AddCommGroup V
+inst✝ : Module K V
+A : Submodule K V
+w : V
+hw : w ∉ A
+ψ : ↥A →ₗ[K] K
+y₁ y₂ : K
+hθexists : ∃ g, g ∘ₗ A.subtype = 0 ∧ g w = y₂ - y₁ := LinearMap.exists_extend_of_notMem 0 hw (y₂ - y₁)
+θ : V →ₗ[K] K := Classical.choose hθexists
+hθA : Classical.choose hθexists ∘ₗ A.subtype = 0
+hθw : (Classical.choose hθexists) w = y₂ - y₁
+φ : { φ // (dualRestrictionAt A w) φ = (ψ, y₁) }
+⊢ (dualRestriction A) ↑φ + (dualRestriction A) θ = ψ
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:178:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((dualRestrictionAt A w) ↑φ).2
+in the target expression
+  ↑φ w + θ w = y₂
+
+case refine_1.snd
+K : Type u_1
+V : Type u_2
+inst✝² : Field K
+inst✝¹ : AddCommGroup V
+inst✝ : Module K V
+A : Submodule K V
+w : V
+hw : w ∉ A
+ψ : ↥A →ₗ[K] K
+y₁ y₂ : K
+hθexists : ∃ g, g ∘ₗ A.subtype = 0 ∧ g w = y₂ - y₁ := LinearMap.exists_extend_of_notMem 0 hw (y₂ - y₁)
+θ : V →ₗ[K] K := Classical.choose hθexists
+hθA : Classical.choose hθexists ∘ₗ A.subtype = 0
+hθw : (Classical.choose hθexists) w = y₂ - y₁
+φ : { φ // (dualRestrictionAt A w) φ = (ψ, y₁) }
+⊢ ↑φ w + θ w = y₂
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:182:19: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((dualRestrictionAt A w) ↑φ).1
+in the target expression
+  (dualRestriction A) ↑φ - (dualRestriction A) θ = ψ
+
+case refine_2.fst
+K : Type u_1
+V : Type u_2
+inst✝² : Field K
+inst✝¹ : AddCommGroup V
+inst✝ : Module K V
+A : Submodule K V
+w : V
+hw : w ∉ A
+ψ : ↥A →ₗ[K] K
+y₁ y₂ : K
+hθexists : ∃ g, g ∘ₗ A.subtype = 0 ∧ g w = y₂ - y₁ := LinearMap.exists_extend_of_notMem 0 hw (y₂ - y₁)
+θ : V →ₗ[K] K := Classical.choose hθexists
+hθA : Classical.choose hθexists ∘ₗ A.subtype = 0
+hθw : (Classical.choose hθexists) w = y₂ - y₁
+φ : { φ // (dualRestrictionAt A w) φ = (ψ, y₂) }
+⊢ (dualRestriction A) ↑φ - (dualRestriction A) θ = ψ
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:185:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((dualRestrictionAt A w) ↑φ).2
+in the target expression
+  ↑φ w - θ w = y₁
+
+case refine_2.snd
+K : Type u_1
+V : Type u_2
+inst✝² : Field K
+inst✝¹ : AddCommGroup V
+inst✝ : Module K V
+A : Submodule K V
+w : V
+hw : w ∉ A
+ψ : ↥A →ₗ[K] K
+y₁ y₂ : K
+hθexists : ∃ g, g ∘ₗ A.subtype = 0 ∧ g w = y₂ - y₁ := LinearMap.exists_extend_of_notMem 0 hw (y₂ - y₁)
+θ : V →ₗ[K] K := Classical.choose hθexists
+hθA : Classical.choose hθexists ∘ₗ A.subtype = 0
+hθw : (Classical.choose hθexists) w = y₂ - y₁
+φ : { φ // (dualRestrictionAt A w) φ = (ψ, y₂) }
+⊢ ↑φ w - θ w = y₁
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:209:6: failed to synthesize instance of type class
+  Max (Type u_2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:224:6: failed to synthesize instance of type class
+  Max (Type u_2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:229:6: failed to synthesize
+  Module ?m.95 ?m.100
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:248:13: Tactic `rcases` failed: `b✝ : ?m.51` is not an inductive datatype
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:267:23: failed to synthesize instance of type class
+  Max (Type u_2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning

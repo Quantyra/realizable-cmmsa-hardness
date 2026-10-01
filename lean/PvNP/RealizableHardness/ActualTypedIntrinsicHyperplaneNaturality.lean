@@ -1,0 +1,314 @@
+import PvNP.RealizableHardness.ActualTypedIntrinsicWitnessNaturality
+import PvNP.RealizableHardness.BinaryMatrixTypedHyperplaneIntrinsicP
+
+namespace PvNP.RealizableHardness.ActualTypedIntrinsicHyperplaneNaturality
+
+open ActualTypedIntrinsicWitnessNaturality
+open BinaryMatrixTypedHyperplaneIntrinsicP
+open BinaryMatrixTypedA15HyperplaneGlobal
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+
+/-- Over F₂ a nonzero functional is determined by its kernel. -/
+theorem linearMap_eq_of_ker_eq_F2 {D : Type*}
+    [AddCommGroup D] [Module F D]
+    (φ ψ : D →ₗ[F] F) (hker : LinearMap.ker φ = LinearMap.ker ψ)
+    (hφ : φ ≠ 0) : φ = ψ := by
+  classical
+  ext x
+  have hzero : φ x = 0 ↔ ψ x = 0 := by
+    constructor
+    · intro hx
+      apply LinearMap.mem_ker.mp
+      rw [← hker]
+      exact LinearMap.mem_ker.mpr hx
+    · intro hx
+      apply LinearMap.mem_ker.mp
+      rw [hker]
+      exact LinearMap.mem_ker.mpr hx
+  by_cases hx : φ x = 0
+  · have hy : ψ x = 0 := hzero.mp hx
+    simp [hx, hy]
+  · have hy : ψ x ≠ 0 := by
+      intro hy
+      exact hx (hzero.mpr hy)
+    have hφone : φ x = 1 := by
+      fin_cases hval : φ x <;> simp_all
+    have hψone : ψ x = 1 := by
+      fin_cases hval : ψ x <;> simp_all
+    simp [hφone, hψone]
+
+/-- Adapted defining functionals agree under an equivalence carrying the
+hyperplane exactly onto the source hyperplane.  The F₂ scalar field removes
+the otherwise possible nonzero rescaling. -/
+theorem hyperplaneDefiningFunctional_reindex {n n' : Nat}
+    (B : Submodule F (Fin n → F)) (H : Submodule F B)
+    (hH : Module.finrank F (B ⧸ H) = 1)
+    (B' : Submodule F (Fin n' → F)) (H' : Submodule F B')
+    (hH' : Module.finrank F (B' ⧸ H') = 1)
+    (eC : B' ≃ₗ[F] B)
+    (hmap : H'.map eC.toLinearMap = H) :
+    hyperplaneDefiningFunctional B' H' hH' =
+      (hyperplaneDefiningFunctional B H hH).comp eC.toLinearMap := by
+  let ψ := hyperplaneDefiningFunctional B H hH
+  let ψ' := hyperplaneDefiningFunctional B' H' hH'
+  have hker : LinearMap.ker (ψ.comp eC.toLinearMap) = H' := by
+    ext x
+    constructor
+    · intro hx
+      have hxH : eC x ∈ H := by
+        rw [← hyperplaneDefiningFunctional_ker B H hH]
+        exact LinearMap.mem_ker.mpr (LinearMap.mem_ker.mp hx)
+      have hxMap : eC x ∈ H'.map eC.toLinearMap := by
+        simpa [hmap] using hxH
+      rcases Submodule.mem_map.mp hxMap with ⟨y, hy, hey⟩
+      have hyx : y = x := eC.injective hey
+      simpa [hyx] using hy
+    · intro hx
+      have hxH : eC x ∈ H := by
+        rw [← hmap]
+        exact Submodule.mem_map.mpr ⟨x, hx, rfl⟩
+      have hψ : ψ (eC x) = 0 := by
+        apply LinearMap.mem_ker.mp
+        rw [hyperplaneDefiningFunctional_ker B H hH]
+        exact hxH
+      exact LinearMap.mem_ker.mpr hψ
+  have hψne : ψ ≠ 0 := by
+    intro hψ0
+    have htop : H = ⊤ := by
+      rw [← hyperplaneDefiningFunctional_ker B H hH, hψ0]
+      simp
+    have hz : Module.finrank F (B ⧸ H) = 0 := by simp [htop]
+    omega
+  have hcompne : ψ.comp eC.toLinearMap ≠ 0 := by
+    intro hz
+    apply hψne
+    ext x
+    have hx := congrArg (fun g : B' →ₗ[F] F => g (eC.symm x)) hz
+    simpa [ψ] using hx
+  have hker' : LinearMap.ker (ψ.comp eC.toLinearMap) = LinearMap.ker ψ' := by
+    rw [hker, hyperplaneDefiningFunctional_ker B' H' hH']
+  have heq := linearMap_eq_of_ker_eq_F2
+    (ψ.comp eC.toLinearMap) ψ' hker' hcompne
+  exact heq.symm
+
+/-- Coordinate-free finite conditional average over a domain functional and
+an affine codomain hyperplane. -/
+def intrinsicHyperplaneAverage {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (ψ : C →ₗ[F] F) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) : Complex :=
+  (∑ p : (D →ₗ[F] F) × {w : C // ψ w = 1},
+      f (M + p.1.smulRight p.2.1)) /
+    (Fintype.card ((D →ₗ[F] F) × {w : C // ψ w = 1}) : Complex)
+
+def intrinsicHyperplaneIminusE {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (ψ : C →ₗ[F] F) (a : Real) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) : Complex :=
+  f M - (a : Complex) * intrinsicHyperplaneAverage ψ f M
+
+def intrinsicHyperplaneP {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (ψ : C →ₗ[F] F) (j : Nat) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) : Complex :=
+  intrinsicHyperplaneIminusE ψ (2 ^ (j + 1))
+    (intrinsicHyperplaneIminusE ψ (2 ^ j) f) M
+
+/-- Reindex the hyperplane conditional average through finite linear
+equivalences, transporting the defining functional contravariantly. -/
+theorem intrinsicHyperplaneAverage_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (ψ : C →ₗ[F] F) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) :
+    intrinsicHyperplaneAverage (ψ.comp eC.toLinearMap)
+      (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+      (mapReindexEquiv eD eC M) = intrinsicHyperplaneAverage ψ f M := by
+  classical
+  unfold intrinsicHyperplaneAverage
+  let ePhi : (D →ₗ[F] F) ≃ (D' →ₗ[F] F) where
+    toFun φ := φ.comp eD.toLinearMap
+    invFun φ' := φ'.comp eD.symm.toLinearMap
+    left_inv φ := by ext x; simp
+    right_inv φ' := by ext x; simp
+  let eW : {w : C // ψ w = 1} ≃
+      {w : C' // (ψ.comp eC.toLinearMap) w = 1} where
+    toFun w := ⟨eC.symm w.1, by simpa using w.2⟩
+    invFun w' := ⟨eC w'.1, by simpa using w'.2⟩
+    left_inv w := by apply Subtype.ext; simp
+    right_inv w' := by apply Subtype.ext; simp
+  let eIndex := ePhi.prodCongr eW
+  have hsum :
+      (∑ p : (D' →ₗ[F] F) ×
+          {w : C' // (ψ.comp eC.toLinearMap) w = 1},
+        f ((mapReindexEquiv eD eC).symm
+          (mapReindexEquiv eD eC M + p.1.smulRight p.2.1))) =
+      ∑ p : (D →ₗ[F] F) × {w : C // ψ w = 1},
+        f (M + p.1.smulRight p.2.1) := by
+    symm
+    apply Fintype.sum_equiv eIndex
+    intro p
+    simp [eIndex, ePhi, eW, mapReindexEquiv,
+      LinearEquiv.arrowCongr_apply, LinearMap.comp_apply,
+      LinearMap.smulRight_apply]
+  rw [hsum]
+  congr 1
+  exact_mod_cast (Fintype.card_congr eIndex).symm
+
+theorem intrinsicHyperplaneIminusE_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (ψ : C →ₗ[F] F) (a : Real) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) :
+    intrinsicHyperplaneIminusE (ψ.comp eC.toLinearMap) a
+      (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+      (mapReindexEquiv eD eC M) = intrinsicHyperplaneIminusE ψ a f M := by
+  unfold intrinsicHyperplaneIminusE
+  rw [intrinsicHyperplaneAverage_reindex]
+  simp [mapReindexEquiv]
+
+theorem intrinsicHyperplaneP_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (ψ : C →ₗ[F] F) (j : Nat) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) :
+    intrinsicHyperplaneP (ψ.comp eC.toLinearMap) j
+      (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+      (mapReindexEquiv eD eC M) = intrinsicHyperplaneP ψ j f M := by
+  unfold intrinsicHyperplaneP
+  have hinner :
+      (fun M' => intrinsicHyperplaneIminusE (ψ.comp eC.toLinearMap) (2 ^ j)
+        (fun X => f ((mapReindexEquiv eD eC).symm X)) M') =
+      (fun M' => intrinsicHyperplaneIminusE ψ (2 ^ j) f
+        ((mapReindexEquiv eD eC).symm M')) := by
+    funext M'
+    simpa only [LinearEquiv.apply_symm_apply] using
+      intrinsicHyperplaneIminusE_reindex eD eC ψ (2 ^ j) f
+        ((mapReindexEquiv eD eC).symm M')
+  rw [hinner]
+  exact intrinsicHyperplaneIminusE_reindex eD eC ψ (2 ^ (j + 1))
+    (intrinsicHyperplaneIminusE ψ (2 ^ j) f) M
+
+/-- The ordered line-then-hyperplane operator is natural under the same
+domain/codomain carrier equivalences.  This composes the two distinct
+conditional laws rather than assuming a mixed-operator identity. -/
+def intrinsicMixedLineHyperplaneP {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (v : D) (ψ : C →ₗ[F] F) (j k : Nat)
+    (f : (D →ₗ[F] C) → Complex) (M : D →ₗ[F] C) : Complex :=
+  intrinsicHyperplaneP ψ k (fun X => intrinsicLineP v j f X) M
+
+theorem intrinsicMixedLineHyperplaneP_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (v : D) (ψ : C →ₗ[F] F) (j k : Nat)
+    (f : (D →ₗ[F] C) → Complex) (M : D →ₗ[F] C) :
+    intrinsicMixedLineHyperplaneP (eD.symm v) (ψ.comp eC.toLinearMap) j k
+      (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+      (mapReindexEquiv eD eC M) = intrinsicMixedLineHyperplaneP v ψ j k f M := by
+  unfold intrinsicMixedLineHyperplaneP
+  have hline :
+      (fun M' => intrinsicLineP (eD.symm v) j
+        (fun X => f ((mapReindexEquiv eD eC).symm X)) M') =
+      (fun M' => intrinsicLineP v j f ((mapReindexEquiv eD eC).symm M')) := by
+  funext M'
+    simpa only [LinearEquiv.apply_symm_apply] using
+      intrinsicLineP_reindex eD eC v j f
+        ((mapReindexEquiv eD eC).symm M')
+  rw [hline]
+  exact intrinsicHyperplaneP_reindex eD eC ψ k
+    (fun X => intrinsicLineP v j f X) M
+
+/-- The reduced hyperplane witness is natural for a commuting quotient
+square, with the codomain functional transported along the same equivalence. -/
+def intrinsicReducedHyperplaneWitness {D Q C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup Q] [Module F Q]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (ψ : C →ₗ[F] F) (j : Nat) (q : D →ₗ[F] Q)
+    (T : D →ₗ[F] C) (f : (D →ₗ[F] C) → Complex)
+    (N : Q →ₗ[F] C) : Complex :=
+  intrinsicHyperplaneP ψ j f (T + N.comp q)
+
+theorem intrinsicReducedHyperplaneWitness_reindex {D D' Q Q' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup Q] [Module F Q]
+    [AddCommGroup Q'] [Module F Q']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eQ : Q' ≃ₗ[F] Q) (eC : C' ≃ₗ[F] C)
+    (ψ : C →ₗ[F] F) (j : Nat) (q : D →ₗ[F] Q) (q' : D' →ₗ[F] Q')
+    (hq : ∀ x', eQ (q' x') = q (eD x'))
+    (T : D →ₗ[F] C) (f : (D →ₗ[F] C) → Complex)
+    (N' : Q' →ₗ[F] C') :
+    intrinsicReducedHyperplaneWitness (ψ.comp eC.toLinearMap) j q'
+        (mapReindexEquiv eD eC T)
+        (fun M' => f ((mapReindexEquiv eD eC).symm M')) N' =
+      intrinsicReducedHyperplaneWitness ψ j q T f
+        ((mapReindexEquiv eQ eC).symm N') := by
+  let eM := mapReindexEquiv eD eC
+  let eN := mapReindexEquiv eQ eC
+  have hbase :
+      eM (T + ((eN.symm N').comp q)) = eM T + N'.comp q' := by
+    apply LinearMap.ext
+    intro x'
+    simp [eM, eN, mapReindexEquiv, LinearEquiv.arrowCongr_apply,
+      LinearMap.comp_apply, hq]
+  unfold intrinsicReducedHyperplaneWitness
+  rw [← hbase]
+  exact intrinsicHyperplaneP_reindex eD eC ψ j f
+    (T + (eN.symm N').comp q)
+
+end
+end PvNP.RealizableHardness.ActualTypedIntrinsicHyperplaneNaturality

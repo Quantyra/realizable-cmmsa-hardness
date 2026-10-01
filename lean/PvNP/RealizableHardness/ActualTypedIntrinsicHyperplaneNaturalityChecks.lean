@@ -1,0 +1,18 @@
+import PvNP.RealizableHardness.ActualTypedIntrinsicHyperplaneNaturality
+
+open PvNP.RealizableHardness.ActualTypedIntrinsicHyperplaneNaturality
+
+#check linearMap_eq_of_ker_eq_F2
+#print axioms linearMap_eq_of_ker_eq_F2
+#check hyperplaneDefiningFunctional_reindex
+#print axioms hyperplaneDefiningFunctional_reindex
+#check intrinsicHyperplaneAverage_reindex
+#print axioms intrinsicHyperplaneAverage_reindex
+#check intrinsicHyperplaneIminusE_reindex
+#print axioms intrinsicHyperplaneIminusE_reindex
+#check intrinsicHyperplaneP_reindex
+#print axioms intrinsicHyperplaneP_reindex
+#check intrinsicMixedLineHyperplaneP_reindex
+#print axioms intrinsicMixedLineHyperplaneP_reindex
+#check intrinsicReducedHyperplaneWitness_reindex
+#print axioms intrinsicReducedHyperplaneWitness_reindex
