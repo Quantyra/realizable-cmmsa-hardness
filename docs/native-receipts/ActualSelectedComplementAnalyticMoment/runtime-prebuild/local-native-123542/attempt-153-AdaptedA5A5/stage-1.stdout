@@ -1,0 +1,71 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix {n d : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝
+        d ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ d)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix_add {n d : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝
+        d ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ d)
+  (M N : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  domainPullMatrix e (M + N) = domainPullMatrix e M + domainPullMatrix e N
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix_symm_apply {n d : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝
+        d ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ d)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  domainPullMatrix e.symm (domainPullMatrix e M) = M
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix_rankOne {n d : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝
+        d ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ d)
+  (ψ :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.F✝)
+  (w : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.W✝ n) :
+  domainPullMatrix e (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.actualA18RankOne ψ w) =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.actualA18RankOne (ψ ∘ₗ ↑e) w
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.functionalsAtPullEquiv {d : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝
+        (d + 1) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ (d + 1))
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ (d + 1))
+  (hv : e (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d) = v) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.FunctionalsAt v ≃
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.FunctionalsAt
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.actualA18Average_domainPull {n d : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝
+        (d + 1) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ (d + 1))
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ (d + 1))
+  (hv : e (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d) = v)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1) → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average v f M =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d)
+      (fun N => f (domainPullMatrix e.symm N)) (domainPullMatrix e M)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.exists_adaptedDomainEquiv (d : ℕ)
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.V✝ (d + 1)) (hv : v ≠ 0) :
+  ∃ e, e (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d) = v
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix_rankOne' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.functionalsAtPullEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.actualA18Average_domainPull' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.exists_adaptedDomainEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
