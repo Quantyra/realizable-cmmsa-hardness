@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentCoverage
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17GenericParentCoverage
+
+#check carrierOfParentAB
+#print axioms carrierOfParentAB
+#check lift_carrierOfParentAB_eq
+#print axioms lift_carrierOfParentAB_eq
+#check carrierOfParentAB_order_decomp
+#print axioms carrierOfParentAB_order_decomp
+#check carrierOfParentAB_order_le
+#print axioms carrierOfParentAB_order_le
+#check actual_derivative_bounds_parent_carrier_fibre
+#print axioms actual_derivative_bounds_parent_carrier_fibre
+#check actual_derivative_bounds_lifted_parent_fibre
+#print axioms actual_derivative_bounds_lifted_parent_fibre

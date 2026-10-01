@@ -1,0 +1,305 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition
+import PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+import PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+
+/-! Frequency and selected-filter covariance for the actual A18 domain draw.
+The chosen ambient equivalence carries the canonical final-coordinate line to
+the specified nonzero line; both the frequency predicate and matrix draw are
+transported by that same equivalence. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition
+open PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+open PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+open BinaryMatrixFourier BinaryMatrixHybridSelector BinaryMatrixNestedSelectorA1
+open BinaryMatrixComplexA14 BinaryMatrixA1Phase
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d -> F
+private abbrev W (n : Nat) := Fin n -> F
+
+private noncomputable instance homFintype {n d : Nat} :
+    Fintype (V d →ₗ[F] W n) := by
+  classical
+  letI : Fintype (V d) := Fintype.ofFinite _
+  letI : Fintype (W n) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+private noncomputable instance frequencyFintype {n d : Nat} :
+    Fintype (W n →ₗ[F] V d) := by
+  classical
+  letI : Fintype (W n) := Fintype.ofFinite _
+  letI : Fintype (V d) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+/-- The selected-frequency predicate is transported from the last-coordinate
+line to `span {v}` by the same map used to pull back matrices. -/
+theorem domainLineSelected_reindex {n d : Nat}
+    (e : V (d + 1) ≃ₗ[F] V (d + 1)) (v : V (d + 1))
+    (hv : e (lastVector d) = v) (Y : W n →ₗ[F] V (d + 1)) :
+    Selected (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n))
+        (frequencyReindexEquiv e (LinearEquiv.refl F (W n)) Y) ↔
+      Selected (Submodule.span F ({v} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n)) Y := by
+  let A₀ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({lastVector d} : Set (V (d + 1)))
+  let Aᵥ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({v} : Set (V (d + 1)))
+  have hinv : e.symm v = lastVector d := by
+    rw [← hv]
+    exact e.symm_apply_apply _
+  have hA : Aᵥ.map e.symm.toLinearMap = A₀ := by
+    dsimp [Aᵥ, A₀]
+    rw [Submodule.map_span]
+    congr 1
+    ext x
+    simp [hinv]
+  have hB : (⊤ : Submodule F (W n)).map
+      (LinearEquiv.refl F (W n)).symm.toLinearMap = ⊤ := by
+    simp
+  have h := selected_reindex_mapped e (LinearEquiv.refl F (W n))
+    Aᵥ (⊤ : Submodule F (W n)) Y
+  rw [hA, hB] at h
+  exact h
+
+/-- The full selected Fourier filter on linear maps is covariant under the
+actual domain pullback, with no change to the normalized finite draw. -/
+theorem complexLinearMapSelectedFilter_domainPull {n : Nat}
+    (d : Nat) (e : V (d + 1) ≃ₗ[F] V (d + 1))
+    (v : V (d + 1)) (hv : e (lastVector d) = v)
+    (g : (V (d + 1) →ₗ[F] W n) → Complex)
+    (M : V (d + 1) →ₗ[F] W n) :
+    complexLinearMapSelectedFilter
+      (Selected (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n)))
+      (fun N => g ((mapReindexEquiv e (LinearEquiv.refl F (W n))).symm N))
+      (mapReindexEquiv e (LinearEquiv.refl F (W n)) M) =
+    complexLinearMapSelectedFilter
+      (Selected (Submodule.span F ({v} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n))) g M := by
+  classical
+  let A₀ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({lastVector d} : Set (V (d + 1)))
+  let Aᵥ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({v} : Set (V (d + 1)))
+  have hP : ∀ Y : W n →ₗ[F] V (d + 1),
+      Selected A₀ (⊤ : Submodule F (W n))
+          (frequencyReindexEquiv e (LinearEquiv.refl F (W n)) Y) ↔
+        Selected Aᵥ (⊤ : Submodule F (W n)) Y := by
+    intro Y
+    exact domainLineSelected_reindex e v hv Y
+  simpa [A₀, Aᵥ, mapReindexEquiv, frequencyReindexEquiv] using
+    complexLinearMapSelectedFilter_reindex e (LinearEquiv.refl F (W n))
+      (Selected Aᵥ (⊤ : Submodule F (W n)))
+      (Selected A₀ (⊤ : Submodule F (W n))) hP g M
+
+set_option maxHeartbeats 800000 in
+set_option diagnostics true in
+/-- Identify the ambient matrix hybrid filter with its genuine ambient-Hom
+Fourier sum. Frequencies are transported by the transpose-aware matrix
+equivalence, so both the selected predicate and the trace pairing are exact. -/
+private theorem complexAmbientHybridFilter_eq_homFilter_aux {n d : Nat}
+    (A : Submodule F (V d)) (f : BinaryMatrix n d -> Complex)
+    (M : BinaryMatrix n d) :
+    complexAmbientHybridFilter A (⊤ : Submodule F (W n)) f M =
+      complexLinearMapSelectedFilter
+        (Selected A (⊤ : Submodule F (W n)))
+        (fun L => f (LinearMap.toMatrix' L)) (Matrix.toLin' M) := by
+  classical
+  let e := ambientFrequencyMatrixEquiv (n := n) (d := d)
+  let g : (V d →ₗ[F] W n) → Complex := fun L => f (LinearMap.toMatrix' L)
+  have hfreq (Y : W n →ₗ[F] V d) :
+      (e Y).transpose.toLin' = Y := by
+    change (Matrix.transpose (Matrix.transpose (LinearMap.toMatrix' Y))).toLin' = Y
+    rw [Matrix.transpose_transpose]
+    exact Matrix.toLin'_toMatrix' Y
+  have hterm (Y : W n →ₗ[F] V d) :
+      (if Selected A (⊤ : Submodule F (W n)) Y then
+          complexLinearMapFourierCoeff g Y *
+            (traceCharacter Y (Matrix.toLin' M) : Complex)
+        else 0) =
+      (if Selected A (⊤ : Submodule F (W n)) (e Y).transpose.toLin' then
+          complexFourierCoeff f (e Y) *
+            (character (e Y) M : Complex)
+        else 0) := by
+    have hcoeff : complexLinearMapFourierCoeff g Y =
+        complexFourierCoeff f (e Y) := by
+      simpa only [g] using ambientHomFourierCoeff_toMatrix f Y
+    have hchar : traceCharacter Y (Matrix.toLin' M) = character (e Y) M := by
+      simpa only [LinearMap.toMatrix'_toLin'] using
+        ambientFrequencyMatrixEquiv_character Y (Matrix.toLin' M)
+    rw [hfreq Y]
+    by_cases hsel : Selected A (⊤ : Submodule F (W n)) Y
+    · simp only [if_pos hsel, hcoeff, hchar]
+    · simp only [if_neg hsel, hcoeff, hchar]
+  change
+    (∑ X : BinaryMatrix n d,
+      if Selected A (⊤ : Submodule F (W n)) X.transpose.toLin' then
+        complexFourierCoeff f X * (character X M : Complex) else 0) =
+    (∑ Y : W n →ₗ[F] V d,
+      if Selected A (⊤ : Submodule F (W n)) Y then
+        complexLinearMapFourierCoeff g Y *
+          (traceCharacter Y (Matrix.toLin' M) : Complex) else 0)
+  let G : BinaryMatrix n d → Complex := fun X =>
+    if Selected A (⊤ : Submodule F (W n)) X.transpose.toLin' then
+      complexFourierCoeff f X * (character X M : Complex) else 0
+  calc
+    _ = ∑ Y : W n →ₗ[F] V d, G (e Y) :=
+      (Equiv.sum_comp e G).symm
+    _ = ∑ Y : W n →ₗ[F] V d,
+        (if Selected A (⊤ : Submodule F (W n)) Y then
+          complexLinearMapFourierCoeff g Y *
+            (traceCharacter Y (Matrix.toLin' M) : Complex)
+         else 0) := by
+      apply Finset.sum_congr rfl
+      intro Y hY
+      exact (hterm Y).symm
+
+/-- Rank projections and the selected-frequency predicate use the same
+domain-coordinate pullback. -/
+theorem complexRankProjection_domainPull {n d j : Nat}
+    (e : V (d + 1) ≃ₗ[F] V (d + 1))
+    (f : BinaryMatrix n (d + 1) → Complex)
+    (M : BinaryMatrix n (d + 1)) :
+    complexRankProjection j (fun N => f (domainPullMatrix e.symm N))
+        (domainPullMatrix e M) = complexRankProjection j f M :=
+  ActualBinaryMatrixHC46A17AdaptedLineDecomposition.complexRankProjection_domainPull
+    e f M
+
+/-- The actual matrix hybrid filter is the transpose-aware ambient-Hom
+selected filter. -/
+theorem complexAmbientHybridFilter_eq_homFilter {n d : Nat}
+    (A : Submodule F (V d)) (f : BinaryMatrix n d → Complex)
+    (M : BinaryMatrix n d) :
+    complexAmbientHybridFilter A (⊤ : Submodule F (W n)) f M =
+      complexLinearMapSelectedFilter
+        (Selected A (⊤ : Submodule F (W n)))
+        (fun L => f (LinearMap.toMatrix' L)) (Matrix.toLin' M) := by
+  exact complexAmbientHybridFilter_eq_homFilter_aux A f M
+
+/-- Pulling back the matrix and signal preserves the arbitrary-line ambient
+hybrid filter. This is the matrix realization of the selected-frequency
+covariance, with the exact same transpose-aware Fourier law. -/
+theorem complexAmbientHybridFilter_domainPull_succ {n d : Nat}
+    (e : V (d + 1) ≃ₗ[F] V (d + 1)) (v : V (d + 1))
+    (hv : e (lastVector d) = v)
+    (f : BinaryMatrix n (d + 1) → Complex) (M : BinaryMatrix n (d + 1)) :
+    complexAmbientHybridFilter
+        (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n))
+        (fun N => f (domainPullMatrix e.symm N)) (domainPullMatrix e M) =
+      complexAmbientHybridFilter
+        (Submodule.span F ({v} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n)) f M := by
+  classical
+  let A₀ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({lastVector d} : Set (V (d + 1)))
+  let Aᵥ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({v} : Set (V (d + 1)))
+  let emap := mapReindexEquiv e (LinearEquiv.refl F (W n))
+  let g : (V (d + 1) →ₗ[F] W n) → Complex :=
+    fun L => f (LinearMap.toMatrix' L)
+  have hsignal :
+      (fun L : V (d + 1) →ₗ[F] W n =>
+        (fun N => f (domainPullMatrix e.symm N)) (LinearMap.toMatrix' L)) =
+      (fun L : V (d + 1) →ₗ[F] W n => g (emap.symm L)) := by
+    funext L
+    have hL : emap.symm L = L.comp e.symm.toLinearMap := by
+      ext x
+      simp [emap, mapReindexEquiv]
+    rw [hL]
+    simpa [g] using
+      congrArg f (domainPullMatrix_symm_toMatrix e L)
+  have hmap :
+      emap (Matrix.toLin' M) =
+        (Matrix.toLin' M).comp e.toLinearMap := by
+    ext x
+    simp [emap, mapReindexEquiv, domainPullMatrix, Matrix.toLin'_toMatrix']
+  rw [complexAmbientHybridFilter_eq_homFilter
+        (A := A₀) (fun N => f (domainPullMatrix e.symm N))
+        (domainPullMatrix e M),
+      complexAmbientHybridFilter_eq_homFilter (A := Aᵥ) f M]
+  have hbase : Matrix.toLin' (domainPullMatrix e M) = emap (Matrix.toLin' M) := by
+    rw [hmap]
+    simp only [domainPullMatrix, Matrix.toLin'_toMatrix']
+  rw [hsignal, hbase]
+  exact complexLinearMapSelectedFilter_domainPull d e v hv g (Matrix.toLin' M)
+
+/-- Exact A13 decomposition for an arbitrary nonzero line in a positive
+domain dimension. The adapted coordinates are constructed from `v`; no
+line-compatibility identity is assumed. -/
+theorem homogeneous_A13_arbitrary_line_succ {n d D : Nat}
+    (v : V (d + 1)) (hv : v ≠ 0)
+    (f : BinaryMatrix n (d + 1) → Complex)
+    (hD : complexRankProjection D f = f)
+    (M : BinaryMatrix n (d + 1)) :
+    f M = complexAmbientHybridFilter
+      (Submodule.span F ({v} : Set (V (d + 1))))
+      (⊤ : Submodule F (W n)) f M +
+      (2 : Complex) ^ D * actualA18Average v f M := by
+  classical
+  obtain ⟨e, he⟩ := exists_adaptedDomainEquiv d v hv
+  let fPull : BinaryMatrix n (d + 1) → Complex :=
+    fun N => f (domainPullMatrix e.symm N)
+  have hDPull : complexRankProjection D fPull = fPull := by
+    funext N
+    have hcov := complexRankProjection_domainPull (j := D) e f
+      (domainPullMatrix e.symm N)
+    have hInv : domainPullMatrix e (domainPullMatrix e.symm N) = N := by
+      simpa only [LinearEquiv.symm_symm] using
+        domainPullMatrix_symm_apply e.symm N
+    rw [hInv] at hcov
+    exact hcov.trans (congrFun hD (domainPullMatrix e.symm N))
+  have hcanonical := homogeneous_A13_last_coordinate
+    fPull hDPull (domainPullMatrix e M)
+  have hfilter := complexAmbientHybridFilter_domainPull_succ e v he f M
+  have haverage := actualA18Average_domainPull e v he f M
+  have hbase : fPull (domainPullMatrix e M) = f M := by
+    simp [fPull, domainPullMatrix_symm_apply]
+  calc
+    f M = fPull (domainPullMatrix e M) := hbase.symm
+    _ = complexAmbientHybridFilter
+          (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+          (⊤ : Submodule F (W n)) fPull (domainPullMatrix e M) +
+        (2 : Complex) ^ D * actualA18Average (lastVector d) fPull
+          (domainPullMatrix e M) := hcanonical
+    _ = complexAmbientHybridFilter
+          (Submodule.span F ({v} : Set (V (d + 1))))
+          (⊤ : Submodule F (W n)) f M +
+        (2 : Complex) ^ D * actualA18Average v f M := by
+      rw [hfilter, ← haverage]
+
+/-- Full positive-dimension arbitrary-line form of the homogeneous A13
+decomposition. Dimension zero has no nonzero direction, so the successor
+construction above covers every possible input. -/
+theorem homogeneous_A13_arbitrary_line {n d D : Nat}
+    (v : V d) (hv : v ≠ 0)
+    (f : BinaryMatrix n d → Complex)
+    (hD : complexRankProjection D f = f)
+    (M : BinaryMatrix n d) :
+    f M = complexAmbientHybridFilter
+      (Submodule.span F ({v} : Set (V d)))
+      (⊤ : Submodule F (W n)) f M +
+      (2 : Complex) ^ D * actualA18Average v f M := by
+  cases d with
+  | zero =>
+      have hv0 : v = 0 := Subsingleton.elim _ _
+      exact (hv hv0).elim
+  | succ d =>
+      exact homogeneous_A13_arbitrary_line_succ v hv f hD M
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance
