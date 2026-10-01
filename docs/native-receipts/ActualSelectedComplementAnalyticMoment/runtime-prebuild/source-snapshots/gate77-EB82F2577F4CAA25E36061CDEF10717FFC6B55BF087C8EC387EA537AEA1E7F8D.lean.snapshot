@@ -1,0 +1,174 @@
+import PvNP.RealizableHardness.ActualTypedABRankedTower
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalFlag
+
+open ActualTypedABRankedTower
+open ActualTypedABMixedTower
+open BinaryMatrixA1NestedCarrier
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- A source-chosen sequence of one-dimensional quotient-domain directions.
+Each child is the actual larger ambient subspace, retaining the quotient
+inclusions used by the A1 carrier identities. -/
+inductive DomainLineFlag {d : Nat} :
+    Submodule F (V d) → Nat → Type 1
+  | done (A : Submodule F (V d)) : DomainLineFlag A 0
+  | cons {A A' : Submodule F (V d)}
+      (hA : A ≤ A')
+      (hL : Module.finrank F (A'.map A.mkQ) = 1)
+      {k : Nat} (tail : DomainLineFlag A' k) : DomainLineFlag A (k + 1)
+
+/-- A source-chosen sequence of codomain hyperplanes. The carrier after each
+step is exactly the ambient image of the chosen hyperplane. -/
+inductive CodomainHyperplaneFlag {n : Nat} :
+    Submodule F (W n) → Nat → Type 1
+  | done (B : Submodule F (W n)) : CodomainHyperplaneFlag B 0
+  | cons {B : Submodule F (W n)} (H : Submodule F B)
+      (hH : Module.finrank F (B ⧸ H) = 1) {k : Nat}
+      (tail : CodomainHyperplaneFlag (H.map B.subtype) k) :
+      CodomainHyperplaneFlag B (k + 1)
+
+/-- The exact terminal domain carrier selected by a domain-line flag. -/
+def DomainLineFlag.endpoint {d : Nat} {A : Submodule F (V d)} {k : Nat} :
+    DomainLineFlag A k → Submodule F (V d)
+  | .done A => A
+  | .cons _ _ tail => tail.endpoint
+
+/-- The exact terminal ambient codomain carrier selected by a hyperplane flag.
+Each recursive flag is already expressed as a submodule of the same ambient
+space, so its endpoint is the requested nested image itself. -/
+def CodomainHyperplaneFlag.endpoint {n : Nat} {B : Submodule F (W n)} {k : Nat} :
+    CodomainHyperplaneFlag B k → Submodule F (W n)
+  | .done B => B
+  | .cons _ _ tail => tail.endpoint
+
+/-- Execute an all-zero-base hyperplane suffix as genuine typed A15 steps. -/
+def buildHyperplaneSuffix {n d : Nat} {r h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} :
+    (flag : CodomainHyperplaneFlag B h) →
+      ActualTypedABRankedTower A B f r h
+  | .done _ => .done f r
+  | @CodomainHyperplaneFlag.cons n B H hH k tail =>
+      .hyperplane hH 0 f
+        (buildHyperplaneSuffix (f := fun N =>
+          typedHyperplaneReducedWitness (k := r + k)
+            B H hH 0 f
+            ((Submodule.equivMapOfInjective B.subtype
+              B.injective_subtype H).symm.toLinearMap.comp N)) tail)
+
+/-- Execute a hyperplane flag whose first step receives the specified affine
+base; all later steps use zero base. -/
+def buildHyperplanePrefix {n d : Nat} {r h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} :
+    (flag : CodomainHyperplaneFlag B h) →
+    (T : (V d ⧸ A) →ₗ[F] B) → ActualTypedABRankedTower A B f r h
+  | .done _, _ => .done f r
+  | @CodomainHyperplaneFlag.cons n B H hH k tail, T =>
+      .hyperplane hH T f
+        (buildHyperplaneSuffix (f := fun N =>
+          typedHyperplaneReducedWitness (k := r + k)
+            B H hH T f
+            ((Submodule.equivMapOfInjective B.subtype
+              B.injective_subtype H).symm.toLinearMap.comp N)) tail)
+
+/-- Execute a line flag suffix followed by the codomain hyperplane suffix;
+all steps in both suffixes use zero base. -/
+def buildLineSuffix {n d : Nat} {r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} :
+    (lines : DomainLineFlag A l) →
+    (hypers : CodomainHyperplaneFlag B h) →
+    ActualTypedABRankedTower A B f r (h + l)
+  | .done _, hypers => buildHyperplaneSuffix hypers
+  | @DomainLineFlag.cons d A A' hA hL k tail, hypers =>
+      .line hA hL 0 f
+        (buildLineSuffix tail hypers (f := fun M =>
+          typedLineReducedWitness (k := r + (h + k))
+            B (A'.map A.mkQ) hL 0 f
+            (M.comp (nestedDomainEquiv A A' hA))))
+
+/-- Construct the source-canonical line-first, hyperplane-second tower.
+The supplied ambient affine base is used at the first selected step; the
+actual A15 recursion uses zero base at every later step. -/
+def buildCanonicalSourceTower {n d : Nat} {r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l)
+    (hypers : CodomainHyperplaneFlag B h)
+    (T : (V d ⧸ A) →ₗ[F] B) :
+    ActualTypedABRankedTower A B f r (h + l) := by
+  cases lines with
+  | done A => exact buildHyperplanePrefix hypers T
+  | @cons d A A' hA hL k tail =>
+      exact .line hA hL T f
+        (buildLineSuffix tail hypers (f := fun M =>
+          typedLineReducedWitness (k := r + (h + k))
+            B (A'.map A.mkQ) hL T f
+            (M.comp (nestedDomainEquiv A A' hA))))
+
+/-- Every canonical source tower has the exact A14 selected-operator
+identities at its chosen line and hyperplane steps. -/
+theorem buildCanonicalSourceTower_A14 {n d : Nat} {r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l)
+    (hypers : CodomainHyperplaneFlag B h)
+    (T : (V d ⧸ A) →ₗ[F] B) :
+    HasRankedA14Semantics (buildCanonicalSourceTower lines hypers T) :=
+  ranked_tower_has_A14_semantics _
+
+/-- The constructed tower terminates at the endpoints named by its actual
+domain and codomain flags. This records the carrier identity, rather than
+only the local A14 equations along the tower. -/
+theorem buildCanonicalSourceTower_endpoints {n d : Nat} {r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l)
+    (hypers : CodomainHyperplaneFlag B h)
+    (T : (V d ⧸ A) →ₗ[F] B) :
+    (rankedTerminalData (buildCanonicalSourceTower lines hypers T)).Aend =
+        lines.endpoint ∧
+      (rankedTerminalData (buildCanonicalSourceTower lines hypers T)).Bend =
+        hypers.endpoint := by
+  induction lines generalizing B f with
+  | done A =>
+      induction hypers with
+      | done B => rfl
+      | @cons n B H hH k tail ih => exact ih
+  | @cons d A A' hA hL k tail ih =>
+      simpa [buildCanonicalSourceTower, DomainLineFlag.endpoint,
+        CodomainHyperplaneFlag.endpoint] using ih hypers
+
+/-- The canonical line-first/hyperplane-second source tower inherits the
+actual per-level energy estimate from the original function's globalness;
+the carrier, affine base, and terminal rank are those generated above. -/
+theorem buildCanonicalSourceTower_energy {n d : Nat} {r l h D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l)
+    (hypers : CodomainHyperplaneFlag B h)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (hlevel : r + (h + l) ≤ D) :
+    ∀ eps : Real, 0 ≤ eps → UpToTypedNormSqGlobal A B (r + (h + l)) eps f →
+      (∑ M : ((V d ⧸ (rankedTerminalData
+          (buildCanonicalSourceTower lines hypers T)).Aend) →ₗ[F]
+          (rankedTerminalData (buildCanonicalSourceTower lines hypers T)).Bend),
+          Complex.normSq ((rankedTerminalData
+            (buildCanonicalSourceTower lines hypers T)).fend M)) /
+          Fintype.card ((V d ⧸ (rankedTerminalData
+            (buildCanonicalSourceTower lines hypers T)).Aend) →ₗ[F]
+              (rankedTerminalData (buildCanonicalSourceTower lines hypers T)).Bend) ≤
+        (2 : Real) ^ (10 * D ^ 2) * eps := by
+  exact ranked_tower_terminal_energy (buildCanonicalSourceTower lines hypers T)
+    hlevel
+
+end
+end PvNP.RealizableHardness.ActualTypedABCanonicalFlag
