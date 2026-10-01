@@ -1,0 +1,137 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:109:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:118:21: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:118:21: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hsel, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:140:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:285:66: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:512:4: error: unsolved goals
+case pos
+n d i : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+M : V d ⧸ A →ₗ[F] ↥B
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ i
+qY : BinaryMatrix n d → ↥B →ₗ[F] V d ⧸ A := fun Y => selectedCarrierFrequency A B Y
+cY : BinaryMatrix n d → ℂ := fun Y => complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+N :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥B
+Y : BinaryMatrix n d
+a✝ : Y ∈ Finset.univ
+hsel : Selected A B (Matrix.toLin' (Matrix.transpose Y))
+⊢ (traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) N =
+        traceCharacter (selectedCarrierFrequency A B Y) N ∨
+      traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T = 0) ∨
+    complexFourierCoeff f Y = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:527:6: error: unsolved goals
+case pos
+n d i : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+M : V d ⧸ A →ₗ[F] ↥B
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ i
+qY : BinaryMatrix n d → ↥B →ₗ[F] V d ⧸ A := fun Y => selectedCarrierFrequency A B Y
+cY : BinaryMatrix n d → ℂ := fun Y => complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+hsignal :
+  filteredCarrierFunction A B T f = fun N =>
+    ∑ Y, if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then cY Y * ↑(traceCharacter (qY Y) N) else 0
+Y : BinaryMatrix n d
+a✝ : Y ∈ Finset.univ
+hsel : Selected A B (Matrix.toLin' (Matrix.transpose Y))
+hrank : Matrix.rank Y = i
+⊢ (traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M =
+        traceCharacter (selectedCarrierFrequency A B Y) M ∨
+      traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T = 0) ∨
+    complexFourierCoeff f Y = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:547:23: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:581:8: error: unsolved goals
+case pos
+n d i : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+M : V d ⧸ A →ₗ[F] ↥B
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ i
+qY : BinaryMatrix n d → ↥B →ₗ[F] V d ⧸ A := fun Y => selectedCarrierFrequency A B Y
+cY : BinaryMatrix n d → ℂ := fun Y => complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+hsignal :
+  filteredCarrierFunction A B T f = fun N =>
+    ∑ Y, if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then cY Y * ↑(traceCharacter (qY Y) N) else 0
+hlhs :
+  filteredCarrierFunction A B T (complexRankProjection i f) M =
+    ∑ Y,
+      if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then
+        if Matrix.rank Y = i then cY Y * ↑(traceCharacter (qY Y) M) else 0
+      else 0
+hrhs :
+  typedComplexRankProjection A B (i - (Module.finrank F ↥A + Module.finrank F (W n ⧸ B)))
+      (filteredCarrierFunction A B T f) M =
+    ∑ Y,
+      if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then
+        if Module.finrank F ↥(qY Y).range = i - (Module.finrank F ↥A + Module.finrank F (W n ⧸ B)) then
+          cY Y * ↑(traceCharacter (qY Y) M)
+        else 0
+      else 0
+Y : BinaryMatrix n d
+a✝ : Y ∈ Finset.univ
+hsel : Selected A B (Matrix.toLin' (Matrix.transpose Y))
+hres :
+  Matrix.rank Y = i ↔
+    Module.finrank F ↥(selectedCarrierFrequency A B Y).range = i - (Module.finrank F ↥A + Module.finrank F (W n ⧸ B))
+hrank : Matrix.rank Y = i
+hrank' :
+  Module.finrank F ↥(selectedCarrierFrequency A B Y).range = i - (Module.finrank F ↥A + Module.finrank F (W n ⧸ B))
+⊢ ¬Module.finrank F ↥(qY Y).range = i - (Module.finrank F ↥A + Module.finrank F (W n ⧸ B)) →
+    cY Y = 0 ∨ traceCharacter (qY Y) M = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:528:27: warning: This simp argument is unused:
+  cY
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hsel, hrank, qY, Complex.ofReal_mul, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:528:31: warning: This simp argument is unused:
+  qY
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hsel, hrank, cY, Complex.ofReal_mul, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:528:55: warning: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hsel, hrank, cY, qY, Complex.ofReal_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:553:29: warning: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hrank, cY, qY]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18DerivativeRankProjection.lean:582:29: warning: This simp argument is unused:
+  hrank'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hsel, hrank]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
