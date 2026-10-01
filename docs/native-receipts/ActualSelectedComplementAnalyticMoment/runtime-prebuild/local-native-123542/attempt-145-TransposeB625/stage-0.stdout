@@ -1,0 +1,51 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:69:12: error: typeclass instance problem is stuck
+  RingHomSurjective ?m.239
+
+Note: Lean will not try to resolve this typeclass instance problem because the first, second, third, fourth, and fifth type arguments to `RingHomSurjective` are metavariables. These arguments must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:70:38: error: Application type mismatch: The argument
+  hcoord (eD.symm v)
+has type
+  eN (f.dualMap (eD.symm v)) = (Matrix.mulVecLin Y) (eD (eD.symm v))
+but is expected to have type
+  ↑(dualCoordinateEquiv n) (f.dualMap (eD.symm v)) = (Matrix.mulVecLin Y) v
+in the application
+  ⟨hφ, hcoord (eD.symm v)⟩
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:78:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Matrix.mulVecLin Y) (eD ψ)
+in the target expression
+  Matrix.mulVec Y (eD ψ) = x
+
+n d : ℕ
+Y : BinaryMatrix n d
+eN : Module.Dual F (V n) ≃ₗ[F] V n := dualCoordinateEquiv n
+eD : Module.Dual F (V d) ≃ₗ[F] V d := dualCoordinateEquiv d
+f : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := (Matrix.transpose Y).mulVecLin
+hcoord : ∀ (φ : Module.Dual F (V d)), eN (f.dualMap φ) = (Matrix.mulVecLin Y) (eD φ)
+x : Fin n → ZMod 2
+φ : Module.Dual F (V n)
+hφ : φ ∈ ↑(Matrix.transpose Y).mulVecLin.ker.dualAnnihilator
+hx : ↑(dualCoordinateEquiv n) φ = x
+ψ : Module.Dual (ZMod 2) (Fin d → ZMod 2)
+hψ : f.dualMap ψ = φ
+⊢ Matrix.mulVec Y (eD ψ) = x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:89:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Matrix.mulVecLin ?Y).range
+in the target expression
+  Selected ⊥ B (Matrix.toLin' (Matrix.transpose Y)) ↔ Selected (coordinateDualAnnihilator B) ⊤ (Matrix.toLin' Y)
+
+n d : ℕ
+B : Submodule F (V n)
+Y : BinaryMatrix n d
+⊢ Selected ⊥ B (Matrix.toLin' (Matrix.transpose Y)) ↔ Selected (coordinateDualAnnihilator B) ⊤ (Matrix.toLin' Y)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:129:45: error: unexpected token 'where'; expected ':=' or '|'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:129:6: error: Missing cases:
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:127:58: error: unsolved goals
+n d : ℕ
+B : Submodule F (V n)
+f : BinaryMatrix n d → ℂ
+M : BinaryMatrix d n
+e : BinaryMatrix n d ≃ BinaryMatrix d n := nomatch
+⊢ complexTranspose (complexAmbientHybridFilter ⊥ B f) M =
+    complexAmbientHybridFilter (coordinateDualAnnihilator B) ⊤ (complexTranspose f) M
