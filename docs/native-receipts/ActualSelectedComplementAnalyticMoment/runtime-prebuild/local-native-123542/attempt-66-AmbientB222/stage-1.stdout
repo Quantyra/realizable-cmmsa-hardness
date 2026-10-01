@@ -1,0 +1,35 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.functionalVectorEquiv (d : ℕ) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.Dual✝ d ≃
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.V✝ d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.functionalVectorEquiv_dotProduct {d : ℕ}
+  (psi : PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.Dual✝ d)
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.V✝ d) :
+  v ⬝ᵥ (functionalVectorEquiv d) psi = psi v
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.functionalVectorEquiv_symm_apply_single {d : ℕ}
+  (u : PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.V✝ d) (j : Fin d) :
+  ((functionalVectorEquiv d).symm u) (Pi.single j 1) = u j
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.functionalsAtVectorEquiv {d : ℕ}
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.V✝ d) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge.FunctionalsAt v ≃ { u // v ⬝ᵥ u = 1 }
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.ambientCodomainHyperplaneAverage {n d : ℕ}
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.V✝ d)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix d n → ℂ)
+  (N : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix d n) : ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.actualA18TransposeAverage_eq_ambientCodomainHyperplaneAverage
+  {n d : ℕ} (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.V✝ d)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix d n → ℂ)
+  (N : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix d n) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage.actualA18TransposeAverage v f N =
+    ambientCodomainHyperplaneAverage v f N
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.functionalVectorEquiv_dotProduct' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.functionalVectorEquiv_symm_apply_single' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.functionalsAtVectorEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.actualA18TransposeAverage_eq_ambientCodomainHyperplaneAverage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

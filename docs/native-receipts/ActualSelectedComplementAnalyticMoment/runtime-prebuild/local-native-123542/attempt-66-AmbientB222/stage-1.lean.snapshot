@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw
+
+#check functionalVectorEquiv
+#check functionalVectorEquiv_dotProduct
+#check functionalVectorEquiv_symm_apply_single
+#check functionalsAtVectorEquiv
+#check ambientCodomainHyperplaneAverage
+#check actualA18TransposeAverage_eq_ambientCodomainHyperplaneAverage
+
+#print axioms functionalVectorEquiv_dotProduct
+#print axioms functionalVectorEquiv_symm_apply_single
+#print axioms functionalsAtVectorEquiv
+#print axioms actualA18TransposeAverage_eq_ambientCodomainHyperplaneAverage
