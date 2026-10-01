@@ -1,0 +1,28 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:162:10: error: 'change' tactic failed, pattern
+  complexLinearMapRankProjection j (fun N => f (LinearMap.toMatrix' (eH N))) M =
+    complexLinearMapRankProjection j (fun L => f (LinearMap.toMatrix' L)) (eH M)
+is not definitionally equal to target
+  complexLinearMapRankProjection j (fun M' => f (LinearMap.toMatrix' ((mapReindexEquiv eD eC).symm M')))
+      ((mapReindexEquiv eD eC) (eH M)) =
+    complexLinearMapRankProjection j (fun L => f (LinearMap.toMatrix' L)) (eH M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:183:28: error: Application type mismatch: The argument
+  Pi.basisFun F (Fin n)
+has type
+  Module.Basis (Fin n) F (Fin n → F)
+but is expected to have type
+  Module.Basis (Fin d) F ?m.126
+in the application
+  Matrix.rank_eq_finrank_range_toLin (LinearMap.toMatrix' Y) (Pi.basisFun F (Fin n))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:176:83: error: unsolved goals
+n d : ℕ
+Y : W n →ₗ[F] V d
+⊢ (LinearMap.toMatrix' Y).rank = Module.finrank F ↥Y.range
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:250:2: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:267:4: warning: This simp argument is unused:
+  LinearEquiv.arrowCongr_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [bottomTopAmbientMatrixEquiv, bottomTopCarrierAmbientHomEquiv, bottomTopDomainEquiv,
+    bottomTopCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
