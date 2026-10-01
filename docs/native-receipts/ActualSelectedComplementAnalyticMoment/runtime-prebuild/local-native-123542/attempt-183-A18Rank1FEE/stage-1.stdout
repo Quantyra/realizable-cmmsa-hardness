@@ -1,0 +1,125 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.selected_frequency_rank_eq_carrier_rank_add_cost
+  {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n))
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hsel : PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected A B (Matrix.toLin' (Matrix.transpose Y))) :
+  Matrix.rank Y =
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n ⧸ B) +
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+        ↥(PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.selectedCarrierFrequency✝ A B
+              Y).range
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.selected_frequency_rank_eq_carrier_rank_add_cost' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.complexFourierCoeff_character {n d : ℕ}
+  (Y Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff
+      (fun M => ↑(PvNP.RealizableHardness.BinaryMatrixFourier.character Y M)) Z =
+    if Z = Y then 1 else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.complexFourierCoeff_character' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.filteredCarrierFunction_character {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n)
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝]
+      ↥B) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T
+      (fun X => ↑(PvNP.RealizableHardness.BinaryMatrixFourier.character Y X)) M =
+    if PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected A B (Matrix.toLin' (Matrix.transpose Y)) then
+      ↑(PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T *
+          PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter
+            (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M)
+    else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.filteredCarrierFunction_character' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.filteredCarrierFunction_fourier_expansion
+  {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝]
+      ↥B) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f M =
+    ∑ Y,
+      if PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected A B (Matrix.toLin' (Matrix.transpose Y)) then
+        PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y *
+          ↑(PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T *
+              PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter
+                (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M)
+      else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.filteredCarrierFunction_fourier_expansion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.actual_derivative_rank_projection_zero_below_cost
+  {n d i : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hi :
+    i <
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n ⧸ B)) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T
+      (PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection i f) =
+    0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.actual_derivative_rank_projection_zero_below_cost' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.typed_carrier_rank_projection_energy_le
+  {n d j : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n))
+  (g :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝]
+        ↥B) →
+      ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M =>
+      Complex.normSq (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B j g M)) ≤
+    PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M => Complex.normSq (g M)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.typed_carrier_rank_projection_energy_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
