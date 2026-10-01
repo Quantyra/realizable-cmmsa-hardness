@@ -1,0 +1,105 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeGlobalTransfer
+
+/-! Every actual parent restriction whose fixed domain contains the chosen
+line is a lift of a carrier restriction on the line quotient. This converts
+the derivative estimate on quotient fibres into the corresponding estimate
+for all such original parent fibres. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeGlobalTransfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge
+open PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+def carrierOfParent {n d : Nat} (U : Submodule F (V d))
+    (P : ActualAffineRestriction n d) :
+    CarrierRestriction U (⊤ : Submodule F (W n)) where
+  domainFixed := P.domainFixed.map U.mkQ
+  codomainVariation := P.codomainVariation.comap (⊤ : Submodule F (W n)).subtype
+  base := 0
+
+theorem lift_carrierOfParent_eq {n d : Nat}
+    (U : Submodule F (V d)) (P : ActualAffineRestriction n d)
+    (hU : U ≤ P.domainFixed) :
+    liftCarrierRestriction U (⊤ : Submodule F (W n))
+      (Matrix.toLin' P.base) (carrierOfParent U P) = P := by
+  cases P with
+  | mk Pdomain Pcodomain Pbase =>
+    change ActualAffineRestriction.mk
+        ((Pdomain.map U.mkQ).comap U.mkQ)
+        ((Pcodomain.comap (⊤ : Submodule F (W n)).subtype).map
+          (⊤ : Submodule F (W n)).subtype)
+        (LinearMap.toMatrix' (Matrix.toLin' Pbase +
+          (⊤ : Submodule F (W n)).subtype.comp
+            ((0 : (V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))).comp U.mkQ))) =
+      ActualAffineRestriction.mk Pdomain Pcodomain Pbase
+    congr 1
+    · rw [Submodule.comap_map_mkQ]
+      exact sup_eq_left.mpr hU
+    · exact Submodule.map_comap_eq_self (by
+        rw [Submodule.range_subtype]
+        exact le_top)
+    · simp [LinearMap.toMatrix'_toLin']
+
+theorem carrierOfParent_order_eq {n d : Nat}
+    (U : Submodule F (V d)) (hUdim : Module.finrank F U = 1)
+    (P : ActualAffineRestriction n d) (hU : U ≤ P.domainFixed)
+    : (carrierOfParent U P).order + 1 = P.order := by
+  have heq := lift_carrierOfParent_eq U P hU
+  have horder := liftCarrierRestriction_order U
+    (⊤ : Submodule F (W n)) (Matrix.toLin' P.base) (carrierOfParent U P)
+  have htop : Module.finrank F ((W n) ⧸ (⊤ : Submodule F (W n))) = 0 := by
+    have hq := (⊤ : Submodule F (W n)).finrank_quotient_add_finrank
+    rw [finrank_top] at hq
+    omega
+  rw [htop, hUdim] at horder
+  have hPorder := congrArg ActualAffineRestriction.order heq
+  have hsum : 1 + (carrierOfParent U P).order = P.order := by
+    calc
+      _ = 1 + 0 + (carrierOfParent U P).order := by simp
+      _ = (liftCarrierRestriction U (⊤ : Submodule F (W n))
+          (Matrix.toLin' P.base) (carrierOfParent U P)).order := horder.symm
+      _ = P.order := hPorder
+  omega
+
+theorem carrierOfParent_order_lift {n d r : Nat}
+    (U : Submodule F (V d)) (hUdim : Module.finrank F U = 1)
+    (P : ActualAffineRestriction n d) (hU : U ≤ P.domainFixed)
+    (hP : P.order ≤ r) :
+    (carrierOfParent U P).order ≤ r - 1 := by
+  have heq := carrierOfParent_order_eq U hUdim P hU
+  omega
+
+theorem actual_derivative_bounds_every_parent_containing_line
+    {n d r : Nat} {ε : Real}
+    (U : Submodule F (V d)) (hUdim : Module.finrank F U = 1)
+    (f : BinaryMatrix n d → Complex)
+    (hderiv : ∀ T : V d →ₗ[F] W n,
+      UpToActualNormSqGlobal (r - 1) ε
+        (fixedDomainDerivativeCoordinate U T f))
+    (P : ActualAffineRestriction n d) (hU : U ≤ P.domainFixed)
+    (hP : P.order ≤ r) :
+    fibreEnergy P.fibre (complexAmbientHybridFilter U
+      (⊤ : Submodule F (W n)) f) ≤ ε := by
+  let Q := carrierOfParent U P
+  have hQ := carrierOfParent_order_lift U hUdim P hU hP
+  have heq := lift_carrierOfParent_eq U P hU
+  have henergy := actual_fixed_domain_derivative_lift_fibre_energy_le
+    U (Matrix.toLin' P.base) f (hderiv (Matrix.toLin' P.base)) Q hQ
+  simpa [Q, heq] using henergy
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage
