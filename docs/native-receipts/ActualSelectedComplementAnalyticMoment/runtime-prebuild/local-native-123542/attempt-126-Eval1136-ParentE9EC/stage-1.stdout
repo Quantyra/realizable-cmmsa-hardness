@@ -1,0 +1,9 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreEvaluation.actualFibreQuotientHomEquiv_apply_mkQ {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d)
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (hY : Y ∈ Q.fibre) (v : Fin d → ZMod 2) :
+  ↑(((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv Q) ⟨Y, hY⟩)
+        (Q.domainFixed.mkQ v)) =
+    Matrix.mulVec (Y - Q.base) v
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreEvaluation.actualFibreQuotientHomEquiv_apply_mkQ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
