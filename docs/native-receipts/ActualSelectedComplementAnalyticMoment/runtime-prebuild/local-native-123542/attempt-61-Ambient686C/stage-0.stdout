@@ -1,0 +1,89 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:37:27: warning: This simp argument is unused:
+  eq_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Pi.single_apply, Finset.sum_ite_eq']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:37:36: warning: This simp argument is unused:
+  Finset.sum_ite_eq'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Pi.single_apply, eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:44:44: warning: This simp argument is unused:
+  mul_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [map_sum, map_smul, smul_eq_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:51:2: error: 'change' tactic failed, pattern
+  (Pi.basisFun F (Fin d)).dualBasis.equivFun ((Pi.basisFun F (Fin d)).dualBasis.equivFun.symm u) j = u j
+is not definitionally equal to target
+  (functionalVectorEquiv d) ((functionalVectorEquiv d).symm u) = u
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:64:9: error: Type mismatch: After simplification, term
+  u.property
+ has type
+  v ⬝ᵥ ↑u = 1
+but is expected to have type
+  ((functionalVectorEquiv d).symm ↑u) v = 1
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:98:39: error: unsolved goals
+n d : ℕ
+v : V d
+f : BinaryMatrix d n → ℂ
+N : BinaryMatrix d n
+e : FunctionalsAt v × V n ≃ Dual n × { u // v ⬝ᵥ u = 1 } := transposeIndexEquiv v
+g : FunctionalsAt v × V n → ℂ := fun p => f (N + Matrix.transpose (actualA18RankOne (↑p.1) p.2))
+g' : Dual n × { u // v ⬝ᵥ u = 1 } → ℂ := fun p => f (N + LinearMap.toMatrix' (LinearMap.smulRight p.1 ↑p.2))
+psi : FunctionalsAt v
+w : V n
+i : Fin d
+j : Fin n
+⊢ w j = ((↑(Pi.basisFun F (Fin n)).dualBasis.equivFun).symm w) (Pi.single j 1) ∨ ↑psi (Pi.single i 1) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:103:41: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:103:10: warning: This simp argument is unused:
+  g
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g', e, transposeIndexEquiv, functionalsAtVectorEquiv, actualA18RankOne_entry,
+    functionalVectorEquiv_symm_apply_single, functionalVectorEquiv, Module.Basis.dualBasis_equivFun, Pi.basisFun_apply,
+    LinearMap.toMatrix'_apply, LinearMap.smulRight_apply, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:103:13: warning: This simp argument is unused:
+  g'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g, e, transposeIndexEquiv, functionalsAtVectorEquiv, actualA18RankOne_entry,
+    functionalVectorEquiv_symm_apply_single, functionalVectorEquiv, Module.Basis.dualBasis_equivFun, Pi.basisFun_apply,
+    LinearMap.toMatrix'_apply, LinearMap.smulRight_apply, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:104:30: warning: This simp argument is unused:
+  functionalVectorEquiv_symm_apply_single
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g, g', e, transposeIndexEquiv, functionalsAtVectorEquiv, actualA18RankOne_entry, functionalVectorEquiv,
+    Module.Basis.dualBasis_equivFun, Pi.basisFun_apply, LinearMap.toMatrix'_apply, LinearMap.smulRight_apply, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:105:29: warning: This simp argument is unused:
+  Module.Basis.dualBasis_equivFun
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g, g', e, transposeIndexEquiv, functionalsAtVectorEquiv, actualA18RankOne_entry,
+    functionalVectorEquiv_symm_apply_single, functionalVectorEquiv, Pi.basisFun_apply, LinearMap.toMatrix'_apply,
+    LinearMap.smulRight_apply, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18AmbientHyperplaneLaw.lean:106:60: warning: This simp argument is unused:
+  mul_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g, g', e, transposeIndexEquiv, functionalsAtVectorEquiv, actualA18RankOne_entry,
+    functionalVectorEquiv_symm_apply_single, functionalVectorEquiv, Module.Basis.dualBasis_equivFun, Pi.basisFun_apply,
+    LinearMap.toMatrix'_apply, LinearMap.smulRight_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
