@@ -1,0 +1,384 @@
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+import PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy
+import PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46FourierA16
+import PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+import PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+
+/-! A finite-degree assembly layer for actual affine carrier functions.
+This file first records the exact finite reconstruction after the selected
+hybrid filter and affine restriction. The energy assembly uses the canonical
+rank-level estimate and residual-rank orthogonality. -/
+
+namespace PvNP.RealizableHardness.ActualTypedABFullA16Assembly
+
+open ActualFiniteDegreeFourierReconstruction
+open ActualTypedABCanonicalDCollapse
+open ActualBinaryMatrixHC46TypedFourierTransport
+open ActualTypedABProjectionEnergy
+open ActualTypedABBottomTopRankReindex
+open ActualTypedABCanonicalFlag
+open ActualTypedABCanonicalEndpointCollapse
+open ActualTypedABCanonicalRankProjectionEnergy
+open ActualTypedABCanonicalRankProjectionCollapse
+open ActualTypedABOriginalGlobalBridgeClean
+open ActualTypedABRankedTower
+open ActualBinaryMatrixHC46A18SourceGlobal
+open BinaryMatrixTypedA15Transport BinaryMatrixA1TypedFourier
+open BinaryMatrixA1Complex BinaryMatrixFourier BinaryMatrixComplexA14
+open BinaryMatrixComplexA15 BinaryMatrixTypedA14Line
+open BinaryMatrixNestedSelectorA1
+open BinaryMatrixActualAffine
+open scoped BigOperators
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+private def complexRealDot (z w : Complex) : Real :=
+  z.re * w.re + z.im * w.im
+
+/-- Distinct typed carrier rank projections are orthogonal in the actual
+normalized carrier mean. The proof transports to the genuine coordinate
+matrix space and uses Fourier Parseval support; it does not assume an
+orthogonality premise for the full A16 assembly. -/
+theorem typedComplexRankProjection_cross_orthogonal {n d i j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f g : ((V d ⧸ A) →ₗ[F] B) → Complex) (hij : i ≠ j) :
+    carrierMean A B (fun M => complexRealDot
+      (typedComplexRankProjection A B i f M)
+      (typedComplexRankProjection A B j g M)) = 0 := by
+  let fCoord : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A)) → Complex :=
+    fun X => f ((carrierMatrixEquiv A B).symm X)
+  let gCoord : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A)) → Complex :=
+    fun X => g ((carrierMatrixEquiv A B).symm X)
+  have hfi (X : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A))) :
+      typedComplexRankProjection A B i f ((carrierMatrixEquiv A B).symm X) =
+        complexRankProjection i fCoord X := by
+    calc
+      typedComplexRankProjection A B i f ((carrierMatrixEquiv A B).symm X) =
+          carrierTypedComplexRankProjection A B i f
+            ((carrierMatrixEquiv A B).symm X) :=
+        (carrierTypedRankProjection_eq_A14Line A B f
+          ((carrierMatrixEquiv A B).symm X)).symm
+      _ = complexRankProjection i fCoord X := by
+        rw [carrierTypedRankProjection_coordinate]
+        simp only [fCoord, LinearEquiv.apply_symm_apply]
+  have hgj (X : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A))) :
+      typedComplexRankProjection A B j g ((carrierMatrixEquiv A B).symm X) =
+        complexRankProjection j gCoord X := by
+    calc
+      typedComplexRankProjection A B j g ((carrierMatrixEquiv A B).symm X) =
+          carrierTypedComplexRankProjection A B j g
+            ((carrierMatrixEquiv A B).symm X) :=
+        (carrierTypedRankProjection_eq_A14Line A B g
+          ((carrierMatrixEquiv A B).symm X)).symm
+      _ = complexRankProjection j gCoord X := by
+        rw [carrierTypedRankProjection_coordinate]
+        simp only [gCoord, LinearEquiv.apply_symm_apply]
+  rw [carrierMean_coordinate]
+  have hreal :
+      uniformMean (fun X =>
+        (complexRankProjection i fCoord X).re *
+          (complexRankProjection j gCoord X).re) = 0 := by
+    simp_rw [complexRankProjection_re]
+    exact ActualBinaryMatrixHC46FourierA16.rankProjection_inner_eq_zero
+      (fun X => (fCoord X).re) (fun X => (gCoord X).re) hij
+  have himag :
+      uniformMean (fun X =>
+        (complexRankProjection i fCoord X).im *
+          (complexRankProjection j gCoord X).im) = 0 := by
+    simp_rw [complexRankProjection_im]
+    exact ActualBinaryMatrixHC46FourierA16.rankProjection_inner_eq_zero
+      (fun X => (fCoord X).im) (fun X => (gCoord X).im) hij
+  unfold uniformMean at hreal himag
+  have hdot :
+      (fun X => complexRealDot
+        (typedComplexRankProjection A B i f ((carrierMatrixEquiv A B).symm X))
+        (typedComplexRankProjection A B j g ((carrierMatrixEquiv A B).symm X))) =
+      (fun X =>
+        (complexRankProjection i fCoord X).re *
+          (complexRankProjection j gCoord X).re +
+        (complexRankProjection i fCoord X).im *
+          (complexRankProjection j gCoord X).im) := by
+    funext X
+    simp only [complexRealDot, hfi X, hgj X]
+  rw [hdot]
+  unfold uniformMean
+  simp only [Finset.sum_add_distrib, add_div, hreal, himag]
+  ring
+
+/-- Complex squared energy is additive across any finite orthogonal family on
+an actual typed carrier. This is the carrier-coordinate transport of the
+finite Parseval identity, with orthogonality as the only analytic premise. -/
+theorem carrierEnergy_finite_sum_of_orthogonal {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    {ι : Type} (s : Finset ι)
+    (g : ι → ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (horth : ∀ i ∈ s, ∀ j ∈ s, i ≠ j →
+      carrierMean A B (fun M => complexRealDot (g i M) (g j M)) = 0) :
+    carrierMean A B (fun M => Complex.normSq (∑ i ∈ s, g i M)) =
+      ∑ i ∈ s, carrierMean A B (fun M => Complex.normSq (g i M)) := by
+  let gCoord : ι → BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A)) → Complex :=
+    fun i X => g i ((carrierMatrixEquiv A B).symm X)
+  have horthCoord : ∀ i ∈ s, ∀ j ∈ s, i ≠ j →
+      uniformMean (fun X => complexRealDot (gCoord i X) (gCoord j X)) = 0 := by
+    intro i hi j hj hij
+    simpa only [gCoord, carrierMean_coordinate] using horth i hi j hj hij
+  have henergy := ActualBinaryMatrixHC46CommonA16.complexEnergy_finite_sum_of_orthogonal
+    s gCoord horthCoord
+  have hcoordSum :
+      (fun X => ∑ i ∈ s, gCoord i X) =
+        fun X => (∑ i ∈ s, g i ((carrierMatrixEquiv A B).symm X)) := by
+    funext X
+    simp [gCoord]
+  calc
+    carrierMean A B (fun M => Complex.normSq (∑ i ∈ s, g i M)) =
+        uniformMean (fun X => Complex.normSq
+          (∑ i ∈ s, g i ((carrierMatrixEquiv A B).symm X))) :=
+      carrierMean_coordinate A B _
+    _ = ∑ i ∈ s, uniformMean (fun X => Complex.normSq (gCoord i X)) := by
+      change uniformMean (fun X => Complex.normSq (∑ i ∈ s, gCoord i X)) = _
+      exact henergy
+    _ = ∑ i ∈ s, carrierMean A B
+          (fun M => Complex.normSq (g i M)) := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      symm
+      exact carrierMean_coordinate A B _
+
+private theorem complexFourierCoeff_add {n d : Nat}
+    (f g : BinaryMatrix n d → Complex) (Y : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => f M + g M) Y =
+      complexFourierCoeff f Y + complexFourierCoeff g Y := by
+  unfold complexFourierCoeff
+  simp_rw [add_mul]
+  rw [Finset.sum_add_distrib, add_div]
+
+private theorem complexAmbientHybridFilter_add {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f g : BinaryMatrix n d → Complex) (M : BinaryMatrix n d) :
+    complexAmbientHybridFilter A B (fun X => f X + g X) M =
+      complexAmbientHybridFilter A B f M +
+        complexAmbientHybridFilter A B g M := by
+  unfold complexAmbientHybridFilter
+  simp_rw [complexFourierCoeff_add, add_mul]
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  by_cases hsel : Selected A B Y.transpose.toLin'
+  <;> simp [hsel]
+
+private theorem complexAmbientHybridFilter_finset_sum {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    {ι : Type} (s : Finset ι) (g : ι → BinaryMatrix n d → Complex)
+    (M : BinaryMatrix n d) :
+    complexAmbientHybridFilter A B (fun X => ∑ i ∈ s, g i X) M =
+      ∑ i ∈ s, complexAmbientHybridFilter A B (g i) M := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp [complexAmbientHybridFilter, complexFourierCoeff]
+  | @insert a s ha ih =>
+      simp only [Finset.sum_insert ha]
+      rw [complexAmbientHybridFilter_add, ih]
+
+private theorem filteredCarrierFunction_finset_sum {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) {ι : Type} (s : Finset ι)
+    (g : ι → BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    filteredCarrierFunction A B T (fun X => ∑ i ∈ s, g i X) M =
+      ∑ i ∈ s, filteredCarrierFunction A B T (g i) M := by
+  unfold filteredCarrierFunction complexAmbientAffineRestrict
+  exact complexAmbientHybridFilter_finset_sum A B s g
+    (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ)))
+
+/-- The selected-frequency predicate forces the matrix rank to pay for both
+the constrained input subspace and the unconstrained output quotient. -/
+theorem selected_frequency_rank_lower_bound {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d)
+    (hsel : Selected A B Y.transpose.toLin') :
+    Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ Y.rank := by
+  let L : W n →ₗ[F] V d := Y.transpose.toLin'
+  let qL : W n →ₗ[F] (V d ⧸ A) := A.mkQ.comp L
+  let R : Submodule F (V d) := LinearMap.range L
+  let AR : Submodule F R := A.comap R.subtype
+  let qR : R →ₗ[F] (V d ⧸ A) := A.mkQ.comp R.subtype
+  have hAR : A ≤ R := hsel.1
+  have hARdim : Module.finrank F AR = Module.finrank F A := by
+    exact (Submodule.comapSubtypeEquivOfLe hAR).finrank_eq
+  have hkerR : LinearMap.ker qR = AR := by
+    simp [qR, AR, LinearMap.ker_comp]
+  have hfactor : qL = qR.comp L.rangeRestrict := by
+    ext x
+    rfl
+  have hqrange : LinearMap.range qL = LinearMap.range qR := by
+    rw [hfactor]
+    exact LinearMap.range_comp_of_range_eq_top qR
+      (LinearMap.range_rangeRestrict L)
+  have hqrank : Module.finrank F (LinearMap.range qL) =
+      Module.finrank F (LinearMap.range qR) :=
+    congrArg (fun S : Submodule F (V d ⧸ A) => Module.finrank F S) hqrange
+  have hnullR := LinearMap.finrank_range_add_finrank_ker qR
+  have hdimR : Module.finrank F R =
+      Module.finrank F (LinearMap.range qL) + Module.finrank F A := by
+    rw [hqrank, ← hARdim, ← hkerR, hnullR]
+  have hmatrixRank : Y.rank = Module.finrank F R := by
+    change Matrix.rank Y = Module.finrank F (LinearMap.range L)
+    rw [← Matrix.rank_transpose Y]
+    rw [Matrix.rank_eq_finrank_range_toLin Y.transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)]
+    rw [Matrix.toLin_eq_toLin']
+  have hkerBound : LinearMap.ker qL ≤ B := by
+    intro x hx
+    have hxzero : A.mkQ (L x) = 0 := by
+      simpa [qL, LinearMap.mem_ker] using hx
+    have hxA : L x ∈ A := by
+      rw [← LinearMap.mem_ker, Submodule.ker_mkQ]
+      exact hxzero
+    exact hsel.2 x hxA
+  have hnullL := LinearMap.finrank_range_add_finrank_ker qL
+  have hkerDim : Module.finrank F (LinearMap.ker qL) ≤ Module.finrank F B :=
+    Submodule.finrank_mono hkerBound
+  have hquotB := (B.finrank_quotient_add_finrank)
+  have hqLower : Module.finrank F (W n ⧸ B) ≤
+      Module.finrank F (LinearMap.range qL) := by omega
+  rw [hmatrixRank, hdimR]
+  omega
+
+/-- A rank projection below the selected-carrier threshold is annihilated by
+the actual hybrid filter, independently of ambient matrix width. -/
+theorem complexAmbientHybridFilter_rankProjection_zero_of_below_carrier
+    {n d i : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex)
+    (hi : i < Module.finrank F A + Module.finrank F (W n ⧸ B)) :
+    complexAmbientHybridFilter A B (complexRankProjection i f) = 0 := by
+  funext M
+  unfold complexAmbientHybridFilter
+  apply Finset.sum_eq_zero
+  intro Y hY
+  by_cases hsel : Selected A B Y.transpose.toLin'
+  · have hnot : Y.rank ≠ i := by
+      have hrank := selected_frequency_rank_lower_bound A B Y hsel
+      omega
+    simp [hsel, complexRankProjection_fourier_support f Y hnot]
+  · simp [hsel]
+
+/-- The same low-rank annihilation holds after the actual affine carrier
+restriction. -/
+theorem filteredCarrierFunction_rankProjection_zero_of_below_carrier
+    {n d i : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hi : i < Module.finrank F A + Module.finrank F (W n ⧸ B)) :
+    filteredCarrierFunction A B T (complexRankProjection i f) = 0 := by
+  unfold filteredCarrierFunction complexAmbientAffineRestrict
+  rw [complexAmbientHybridFilter_rankProjection_zero_of_below_carrier
+    A B f hi]
+  funext M
+  simp
+
+/-- Each retained rank level inherits the canonical A16 bound from the
+original actual globalness premise. The endpoint equalities identify the
+source-chosen tower with the requested arbitrary typed carriers. -/
+theorem filteredCarrierFunction_rankProjection_energy_bound
+    {n d i l h D : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (lines : DomainLineFlag (⊥ : Submodule F (V d)) l)
+    (hlines : lines.endpoint = A)
+    (hypers : CodomainHyperplaneFlag (⊤ : Submodule F (W n)) h)
+    (hhypers : hypers.endpoint = B)
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (eps : Real) (heps : 0 ≤ eps)
+    (hglobal : UpToActualNormSqGlobal D eps f)
+    (hpositive : l + h ≠ 0) (hlevel : l + h ≤ i) (hi : i ≤ D) :
+    carrierMean A B (fun M => Complex.normSq
+      (filteredCarrierFunction A B T (complexRankProjection i f) M)) ≤
+        (2 : Real) ^ (10 * D ^ 2) * eps := by
+  let source : ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) → Complex := fun M =>
+    filteredCarrierFunction (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) 0 f M
+  let r := i - (h + l)
+  let T0 := initialBottomTopBase T
+  let tower := buildCanonicalSourceTower (r := r) (f := source)
+    lines hypers T0
+  have hsource : source =
+      (fun M => f (bottomTopAmbientMatrixEquiv M)) := by
+    funext M
+    calc
+      filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) 0 f M =
+        f (LinearMap.toMatrix'
+          (0 + (⊤ : Submodule F (W n)).subtype.comp
+            (M.comp (Submodule.mkQ (⊥ : Submodule F (V d)))))) := by
+              simpa only [zero_add] using
+                (filteredCarrierFunction_bot_top_base f 0 M)
+      _ = f (bottomTopAmbientMatrixEquiv M) := by
+        rw [bottomTopAmbientMatrixEquiv_apply]
+        simp
+  have hglobalTyped := actual_global_to_bottomTop_typed f hglobal
+  rw [← hsource] at hglobalTyped
+  have hidx : r + (h + l) = i := by
+    dsimp [r]
+    omega
+  have hglobalI : UpToTypedNormSqGlobal
+      (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) i eps source := by
+    intro Q hQ
+    exact hglobalTyped Q (hQ.trans hi)
+  have hbound := canonical_source_rank_projection_energy
+    (r := r) lines hypers T f hpositive (by simpa [hidx] using hi)
+    eps heps (by simpa [hidx] using hglobalI)
+  have hends := buildCanonicalSourceTower_endpoints
+    (r := r) (f := source) lines hypers T0
+  have hAend : (rankedTerminalData tower).Aend = A := hends.1.trans hlines
+  have hBend : (rankedTerminalData tower).Bend = B := hends.2.trans hhypers
+  change carrierMean (rankedTerminalData tower).Aend
+      (rankedTerminalData tower).Bend
+      (fun M => Complex.normSq (filteredCarrierFunction
+        (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend T
+        (complexRankProjection (r + (h + l)) f) M)) ≤ _ at hbound
+  rw [hAend, hBend, hidx] at hbound
+  exact hbound
+
+/-- The actual source's globalness implies a nonnegative energy parameter;
+this is used only as the scalar factor in the final finite sum. -/
+theorem filteredCarrierFunction_parameter_nonneg {n d D : Nat}
+    {eps : Real} (f : BinaryMatrix n d → Complex)
+    (hglobal : UpToActualNormSqGlobal D eps f) : 0 ≤ eps :=
+  actual_source_parameter_nonneg f hglobal
+
+/-- The literal finite rank reconstruction commutes with the actual selected
+hybrid filter and the chosen affine carrier restriction. It is valid for
+arbitrary carriers, bases, and ambient widths; the only degree premise is the
+source Fourier coefficient support predicate. -/
+theorem filteredCarrierFunction_reconstruct_range_of_support
+    {n d D : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    (∑ i ∈ Finset.range (D + 1),
+      filteredCarrierFunction A B T (complexRankProjection i f) M) =
+      filteredCarrierFunction A B T f M := by
+  have hsource :
+      (fun X => ∑ i ∈ Finset.range (D + 1), complexRankProjection i f X) = f := by
+    funext X
+    exact complexRankProjection_reconstruct_range_of_support f hsupport X
+  rw [← filteredCarrierFunction_finset_sum A B T
+    (Finset.range (D + 1)) (fun i => complexRankProjection i f) M]
+  exact congrArg (fun g : BinaryMatrix n d → Complex =>
+    filteredCarrierFunction A B T g M) hsource
+
+end
+end PvNP.RealizableHardness.ActualTypedABFullA16Assembly
