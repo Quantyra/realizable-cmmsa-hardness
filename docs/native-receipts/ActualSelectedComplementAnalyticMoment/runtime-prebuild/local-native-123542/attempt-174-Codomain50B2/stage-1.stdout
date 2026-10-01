@@ -1,0 +1,28 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.actual_A17_codomain_branch {n d r D : ℕ} {η₁ η₂ : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsource : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal (r - 1) η₂ f)
+  (hderiv :
+    ∀
+      (A :
+        Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.V✝ d))
+      (B :
+        Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.W✝ n))
+      (T :
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.V✝
+            d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.F✝]
+          PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.W✝ n),
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.F✝ ↥A +
+            Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.F✝
+              (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.W✝ n ⧸ B) =
+          1 →
+        PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal (r - 1) η₁
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actualDerivativeCoordinate A B T f))
+  (hD : PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection D f = f) (hDpos : 1 ≤ D) (hr : 1 ≤ r)
+  (P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hPorder : P.order = r)
+  (hPdomain : P.domainFixed = ⊥) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy P.fibre f ≤ 2 * η₁ + 4 * 2 ^ (2 * D) * η₂
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch.actual_A17_codomain_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
