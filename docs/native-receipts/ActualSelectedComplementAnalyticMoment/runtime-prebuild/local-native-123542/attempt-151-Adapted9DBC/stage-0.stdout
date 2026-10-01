@@ -1,0 +1,86 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:37:26: warning: This simp argument is unused:
+  Matrix.toLin'_toMatrix'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainPullMatrix, Matrix.toLin'_apply', LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:44:26: warning: This simp argument is unused:
+  Matrix.toLin'_toMatrix'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainPullMatrix, Matrix.toLin'_apply', LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:95:6: error: don't know how to synthesize implicit argument `j`
+  @ambientHomRankProjection_toMatrix n d ?m.359 (fun N => f (domainPullMatrix e.symm N)) (Matrix.toLin' M ∘ₗ ↑e)
+context:
+n d j : ℕ
+e : V d ≃ₗ[F] V d
+f : BinaryMatrix n d → ℂ
+M : BinaryMatrix n d
+g : (V d →ₗ[F] W n) → ℂ := ⋯
+g' : (V d →ₗ[F] W n) → ℂ := ⋯
+emap : (V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝]
+    W n) ≃ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝]
+  V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] W n := ⋯
+hfun : ∀ (L : V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] W n), g (emap.symm L) = g' L
+hmain :
+  complexLinearMapRankProjection j (fun M' => g ((mapReindexEquiv e (LinearEquiv.refl F (W n))).symm M'))
+      ((mapReindexEquiv e (LinearEquiv.refl F (W n))) (Matrix.toLin' M)) =
+    complexLinearMapRankProjection j g (Matrix.toLin' M)
+⊢ ℕ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:94:9: error: failed to infer `have` declaration type
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:82:35: warning: This simp argument is unused:
+  LinearEquiv.arrowCongr_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [emap, mapReindexEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:188:2: error: 'change' tactic failed, pattern
+  (∑
+        p ∈
+          @Finset.univ (FunctionalsAt v × W n)
+            (@instFintypeProd (FunctionalsAt v) (W n)
+              (@Subtype.fintype AmbientFunctionals (fun psi => psi v = 1) (fun a => ZMod.decidableEq 2 (a v) 1)
+                PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝)
+              Pi.instFintype),
+        f (M + actualA18RankOne (↑p.1) p.2)) /
+      ↑(Fintype.card (FunctionalsAt v × W n)) =
+    (∑ p, f (domainPullMatrix e.symm (domainPullMatrix e M + actualA18RankOne (↑p.1) p.2))) /
+      ↑(Fintype.card (FunctionalsAt (lastVector d) × W n))
+is not definitionally equal to target
+  (∑
+        p ∈
+          @Finset.univ (FunctionalsAt v × (Fin n → ZMod 2))
+            (@instFintypeProd (FunctionalsAt v) (Fin n → ZMod 2)
+              (@Subtype.fintype AmbientFunctionals (fun psi => psi v = 1) (fun a => ZMod.decidableEq 2 (a v) 1)
+                ActualBinaryMatrixHC46A18Conditioning.linearMapFintype)
+              Pi.instFintype),
+        f (M + actualA18RankOne (↑p.1) p.2)) /
+      ↑(Fintype.card (FunctionalsAt v × (Fin n → ZMod 2))) =
+    (∑ p, (fun N => f (domainPullMatrix e.symm N)) (domainPullMatrix e M + actualA18RankOne (↑p.1) p.2)) /
+      ↑(Fintype.card (FunctionalsAt (lastVector d) × (Fin n → ZMod 2)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:236:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:229:23: warning: This simp argument is unused:
+  FiniteDimensional.basisSingleton_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e₀, b₀, hu₀]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:231:23: warning: This simp argument is unused:
+  FiniteDimensional.basisSingleton_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [eᵥ, bᵥ, hv₀]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
