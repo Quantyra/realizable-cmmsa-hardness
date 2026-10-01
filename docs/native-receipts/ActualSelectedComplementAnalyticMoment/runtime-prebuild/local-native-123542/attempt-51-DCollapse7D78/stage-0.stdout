@@ -1,0 +1,179 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:328:14: error: Type mismatch: After simplification, term
+  hs
+ has type
+  @Eq ℂ
+    (typedComplexHyperplaneFilter B H hH
+      (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M) (H.subtype ∘ₗ e.symm M))
+    (complexAmbientAffineRestrict A (Submodule.map B.subtype H) T
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) f) ((hyperplaneCanonicalEquiv B H) (e.symm M)))
+but is expected to have type
+  @Eq ℂ
+    (typedComplexHyperplaneFilter B H hH (filteredCarrierFunction A B T f)
+      (H.subtype ∘ₗ (hyperplaneCanonicalEquiv B H).symm M))
+    (complexAmbientAffineRestrict A (Submodule.map B.subtype H) T
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) f) (e (e.symm M)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:332:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  e (e.symm ?c)
+in the target expression
+  complexAmbientAffineRestrict A (Submodule.map B.subtype H) T
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) f) (e (e.symm M)) =
+    filteredCarrierFunction A (Submodule.map B.subtype H) T f M
+
+n d h : ℕ
+A : Submodule F (V d)
+B✝ : Submodule F (W n)
+B :
+  Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝
+    (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.W✝ n)
+H : Submodule PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ ↥B
+hH : Module.finrank PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝ (↥B ⧸ H) = 1
+k : ℕ
+tail : CodomainHyperplaneFlag (Submodule.map B.subtype H) k
+ih :
+  ∀ {r : ℕ} (fStored : (V d ⧸ A →ₗ[F] ↥(Submodule.map B.subtype H)) → ℂ) (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → ℂ),
+    applyCanonicalFilters (buildHyperplaneSuffix tail) (filteredCarrierFunction A (Submodule.map B.subtype H) T f) =
+      filteredCarrierFunction (rankedTerminalData (buildHyperplaneSuffix tail)).Aend
+        (rankedTerminalData (buildHyperplaneSuffix tail)).Bend T f
+r : ℕ
+fStored : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+fChild : (V d ⧸ A →ₗ[F] ↥(Submodule.map B.subtype H)) → ℂ :=
+  fun N => typedHyperplaneReducedWitness B H hH 0 fStored (↑(Submodule.equivMapOfInjective B.subtype ⋯ H).symm ∘ₗ N)
+tailTower : ActualTypedABRankedTower A (Submodule.map B.subtype H) fChild r k := buildHyperplaneSuffix tail
+M : V d ⧸ A →ₗ[F] ↥(Submodule.map B.subtype H)
+e : (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+    ↥H) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+  PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+    ↥(hyperplaneCanonicalCodomain B H) :=
+  hyperplaneCanonicalEquiv B H
+hs :
+  typedComplexHyperplaneFilter B H hH (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M)
+      (0 + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (hyperplaneCanonicalCodomain B H) (T + B.subtype ∘ₗ 0 ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (hyperplaneCanonicalCodomain B H) f) ((hyperplaneCanonicalEquiv B H) (e.symm M))
+⊢ complexAmbientAffineRestrict A (Submodule.map B.subtype H) T
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) f) (e (e.symm M)) =
+    filteredCarrierFunction A (Submodule.map B.subtype H) T f M
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    M
+  has type
+    @LinearMap F F Field.toSemifield.toDivisionSemiring.toSemiring Field.toSemifield.toDivisionSemiring.toSemiring
+      (RingHom.id F) (V d ⧸ A) (↥(Submodule.map B.subtype H)) (Submodule.Quotient.addCommMonoid A)
+      (Submodule.map B.subtype H).addCommMonoid (Submodule.Quotient.module A) AddSubgroupClass.instZModModule
+  but is expected to have type
+    @LinearMap PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+      PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ Field.toSemifield.toDivisionSemiring.toSemiring
+      Field.toSemifield.toDivisionSemiring.toSemiring
+      (RingHom.id PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝)
+      (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸ A) (↥(hyperplaneCanonicalCodomain B H))
+      (Submodule.Quotient.addCommMonoid A) (hyperplaneCanonicalCodomain B H).addCommMonoid (Submodule.Quotient.module A)
+      AddSubgroupClass.instZModModule
+  in the application
+    e.symm M
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:335:8: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildHyperplaneSuffix, applyCanonicalFilters, zero_add, rankedTerminalData,
+    BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:388:14: error: Type mismatch: After simplification, term
+  hs
+ has type
+  @Eq ℂ
+    (typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M)
+      (e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ))
+    (complexAmbientAffineRestrict A' B T (complexAmbientHybridFilter A' B f)
+      ((lineCanonicalEquiv A A' B hA) (e.symm M)))
+but is expected to have type
+  @Eq ℂ
+    (typedComplexLineFilter B (Submodule.map A.mkQ A') hL (filteredCarrierFunction A B T f)
+      ((lineCanonicalEquiv A A' B hA).symm M ∘ₗ (Submodule.map A.mkQ A').mkQ))
+    (complexAmbientAffineRestrict A' B T (complexAmbientHybridFilter A' B f) (e (e.symm M)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:394:8: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildLineSuffix, applyCanonicalFilters, zero_add, rankedTerminalData]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:523:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  e (e.symm ?c)
+in the target expression
+  complexAmbientAffineRestrict A (Submodule.map B.subtype H) (B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) ambientf) (e (e.symm M)) =
+    filteredCarrierFunction A (Submodule.map B.subtype H) (B.subtype ∘ₗ S ∘ₗ A.mkQ) ambientf M
+
+n d r h : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+H : Submodule F ↥B
+hH : Module.finrank F (↥B ⧸ H) = 1
+tail : CodomainHyperplaneFlag (Submodule.map B.subtype H) h
+S : V d ⧸ A →ₗ[F] ↥B
+ambientf : BinaryMatrix n d → ℂ
+fStored : (V d ⧸ A →ₗ[F] ↥B) → ℂ := fun M => filteredCarrierFunction A B 0 ambientf M
+fChild : (V d ⧸ A →ₗ[F] ↥(Submodule.map B.subtype H)) → ℂ :=
+  fun M => typedHyperplaneReducedWitness B H hH S fStored (↑(Submodule.equivMapOfInjective B.subtype ⋯ H).symm ∘ₗ M)
+tailTower : ActualTypedABRankedTower A (Submodule.map B.subtype H) fChild r h := buildHyperplaneSuffix tail
+M : V d ⧸ A →ₗ[F] ↥(Submodule.map B.subtype H)
+e : (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+    ↥H) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+  PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+    ↥(hyperplaneCanonicalCodomain B H) :=
+  hyperplaneCanonicalEquiv B H
+hs :
+  typedComplexHyperplaneFilter B H hH
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (hyperplaneCanonicalCodomain B H) (0 + B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (hyperplaneCanonicalCodomain B H) ambientf)
+      ((hyperplaneCanonicalEquiv B H) (e.symm M))
+⊢ complexAmbientAffineRestrict A (Submodule.map B.subtype H) (B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) ambientf) (e (e.symm M)) =
+    filteredCarrierFunction A (Submodule.map B.subtype H) (B.subtype ∘ₗ S ∘ₗ A.mkQ) ambientf M
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    M
+  has type
+    @LinearMap F F Field.toSemifield.toDivisionSemiring.toSemiring Field.toSemifield.toDivisionSemiring.toSemiring
+      (RingHom.id F) (V d ⧸ A) (↥(Submodule.map B.subtype H)) (Submodule.Quotient.addCommMonoid A)
+      (Submodule.map B.subtype H).addCommMonoid (Submodule.Quotient.module A) AddSubgroupClass.instZModModule
+  but is expected to have type
+    @LinearMap PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+      PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ Field.toSemifield.toDivisionSemiring.toSemiring
+      Field.toSemifield.toDivisionSemiring.toSemiring
+      (RingHom.id PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝)
+      (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸ A) (↥(hyperplaneCanonicalCodomain B H))
+      (Submodule.Quotient.addCommMonoid A) (hyperplaneCanonicalCodomain B H).addCommMonoid (Submodule.Quotient.module A)
+      AddSubgroupClass.instZModModule
+  in the application
+    e.symm M
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:526:50: warning: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildCanonicalSourceTower, buildHyperplanePrefix, buildHyperplaneSuffix, applyCanonicalFilters,
+    LinearMap.comp_zero, rankedTerminalData, BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:527:4: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildCanonicalSourceTower, buildHyperplanePrefix, buildHyperplaneSuffix, applyCanonicalFilters,
+    zero_add, rankedTerminalData, BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
