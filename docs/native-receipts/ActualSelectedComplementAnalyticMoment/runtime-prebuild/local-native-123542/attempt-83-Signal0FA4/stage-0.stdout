@@ -1,0 +1,67 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalSignalCollapse.lean:72:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  complexAmbientHybridFilter ⊥ ⊤ ?f
+in the target expression
+  (fun M => filteredCarrierFunction ⊥ ⊤ T g M) = filteredCarrierFunction ⊥ ⊤ T g
+
+case done.done
+n d r : ℕ
+fStored : (V d ⧸ ⊥ →ₗ[F] ↥⊤) → ℂ
+T : V d →ₗ[F] W n
+g : BinaryMatrix n d → ℂ
+carrierBase : PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝]
+  ↥⊤ :=
+  initialBottomTopBase T
+hbase : ⊤.subtype ∘ₗ carrierBase ∘ₗ ⊥.mkQ = T
+tower : ActualTypedABRankedTower ⊥ ⊤ fStored r (0 + 0) :=
+  buildCanonicalSourceTower (DomainLineFlag.done ⊥) (CodomainHyperplaneFlag.done ⊤) carrierBase
+⊢ (fun M => filteredCarrierFunction ⊥ ⊤ T g M) = filteredCarrierFunction ⊥ ⊤ T g
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Submodule.Quotient.addCommMonoid
+      (rankedTerminalData
+          (buildCanonicalSourceTower (DomainLineFlag.done ⊥) (CodomainHyperplaneFlag.done ⊤)
+            (initialBottomTopBase T))).Aend
+  has type
+    AddCommMonoid
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸
+        (rankedTerminalData
+            (buildCanonicalSourceTower (DomainLineFlag.done ⊥) (CodomainHyperplaneFlag.done ⊤)
+              (initialBottomTopBase T))).Aend)
+  but is expected to have type
+    AddCommMonoid (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸ ⊥)
+  in the application
+    @LinearMap PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝
+      PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝ Field.toSemifield.toDivisionSemiring.toSemiring
+      Field.toSemifield.toDivisionSemiring.toSemiring
+      (RingHom.id PvNP.RealizableHardness.ActualTypedABCanonicalProjection.F✝)
+      (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.V✝ d ⧸ ⊥) (↥⊤)
+      (Submodule.Quotient.addCommMonoid
+        (rankedTerminalData
+            (buildCanonicalSourceTower (DomainLineFlag.done ⊥) (CodomainHyperplaneFlag.done ⊤)
+              (initialBottomTopBase T))).Aend)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalSignalCollapse.lean:75:21: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalSignalCollapse.lean:112:17: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalSignalCollapse.lean:144:8: error: Type mismatch
+  typed_line_A1_operator_step ⊥ A' ⊤ hA hL 0 carrierBase g (e.symm M)
+has type
+  typedComplexLineFilter ⊤ (Submodule.map ⊥.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict ⊥ ⊤ 0 (complexAmbientHybridFilter ⊥ ⊤ g) M)
+      (carrierBase + e.symm M ∘ₗ (Submodule.map ⊥.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' ⊤ (0 + ⊤.subtype ∘ₗ carrierBase ∘ₗ ⊥.mkQ) (complexAmbientHybridFilter A' ⊤ g)
+      ((lineCanonicalEquiv ⊥ A' ⊤ hA) (e.symm M))
+but is expected to have type
+  typedComplexLineFilter ⊤ (Submodule.map ⊥.mkQ A') hL
+      (fun N => complexAmbientAffineRestrict ⊥ ⊤ 0 (complexAmbientHybridFilter ⊥ ⊤ g) N)
+      (carrierBase + e.symm M ∘ₗ (Submodule.map ⊥.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' ⊤ T (complexAmbientHybridFilter A' ⊤ g) M
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalSignalCollapse.lean:70:21: warning: This simp argument is unused:
+  tower
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildCanonicalSourceTower, buildHyperplanePrefix, applyCanonicalFilters, rankedTerminalData,
+    Nat.zero_add, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
