@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A16LevelBound
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A16LevelBound
+
+#check mixedCoordinatePeelLoss_le_A16_level_envelope
+#print axioms mixedCoordinatePeelLoss_le_A16_level_envelope
+#check mixedCoordinateDerivativeChain_energy_bound_le_A16_level_envelope
+#print axioms mixedCoordinateDerivativeChain_energy_bound_le_A16_level_envelope
