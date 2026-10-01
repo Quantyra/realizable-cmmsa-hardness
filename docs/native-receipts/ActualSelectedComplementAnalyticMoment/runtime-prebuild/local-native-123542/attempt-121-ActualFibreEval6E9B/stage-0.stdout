@@ -1,0 +1,38 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46ActualFibreEvaluation.lean:24:33: error: unsolved goals
+n d : ℕ
+Q : ActualAffineRestriction n d
+Y : BinaryMatrix n d
+hY : Y ∈ Q.fibre
+v : Fin d → ZMod 2
+⊢ ↑(({ toFun := fun f => Q.domainFixed.liftQ (LinearMap.codRestrict Q.codomainVariation ↑f ⋯) ⋯,
+            invFun := fun g => ⟨Q.codomainVariation.subtype ∘ₗ g ∘ₗ Q.domainFixed.mkQ, ⋯⟩, left_inv := ⋯,
+            right_inv := ⋯ }
+          ({ toFun := fun L => ⟨↑L - Matrix.toLin' Q.base, ⋯⟩, invFun := fun f => ⟨↑f + Matrix.toLin' Q.base, ⋯⟩,
+              left_inv := ⋯, right_inv := ⋯ }
+            ⟨Matrix.toLin' Y, ⋯⟩))
+        (Submodule.Quotient.mk v)) =
+    Matrix.mulVec Y v - Matrix.mulVec Q.base v
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46ActualFibreEvaluation.lean:26:34: warning: This simp argument is unused:
+  Submodule.liftQ_mkQ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [actualFibreQuotientHomEquiv, actualFibreLinearEquiv, quotientHomEquiv, Equiv.symm,
+    LinearMap.codRestrict_apply, Matrix.toLin'_apply, Matrix.sub_mulVec]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46ActualFibreEvaluation.lean:26:55: warning: This simp argument is unused:
+  LinearMap.codRestrict_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [actualFibreQuotientHomEquiv, actualFibreLinearEquiv, quotientHomEquiv, Equiv.symm, Submodule.liftQ_mkQ,
+    Matrix.toLin'_apply, Matrix.sub_mulVec]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46ActualFibreEvaluation.lean:27:4: warning: This simp argument is unused:
+  Matrix.toLin'_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [actualFibreQuotientHomEquiv, actualFibreLinearEquiv, quotientHomEquiv, Equiv.symm, Submodule.liftQ_mkQ,
+    LinearMap.codRestrict_apply, Matrix.sub_mulVec]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
