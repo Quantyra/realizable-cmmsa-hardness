@@ -1,0 +1,19 @@
+﻿import PvNP.RealizableHardness.ActualBinaryMatrixHC46
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46
+
+#check HC46ExactContract
+#check padOneLeftRow_fibre
+#check padLeftRows_budget
+#check padRestrictionToBudget_budget
+#check padRestrictionToBudget_fibre
+#check pseudorandom_atMost_of_exact
+#check hc46_rank_zero_exact
+
+#print axioms padOneLeftRow_fibre
+#print axioms padRestrictionToBudget_budget
+#print axioms padRestrictionToBudget_fibre
+#print axioms pseudorandom_atMost_of_exact
+#print axioms hc46_rank_zero_exact
