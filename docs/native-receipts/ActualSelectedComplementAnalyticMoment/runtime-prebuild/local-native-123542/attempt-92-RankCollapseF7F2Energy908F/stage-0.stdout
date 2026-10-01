@@ -1,0 +1,21 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalRankProjectionCollapse.lean:72:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  filteredCarrierFunction ⊥ ⊤ 0 ?f ?M
+in the target expression
+  typedComplexRankProjection ⊥ ⊤ (r + (h + l)) (filteredCarrierFunction ⊥ ⊤ 0 ambientf) M =
+    BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf (bottomTopAmbientMatrixEquiv M)
+
+n d r l h : ℕ
+lines : DomainLineFlag ⊥ l
+hypers : CodomainHyperplaneFlag ⊤ h
+T : V d →ₗ[F] W n
+ambientf : BinaryMatrix n d → ℂ
+hpositive : l + h ≠ 0
+source : (V d ⧸ ⊥ →ₗ[F] ↥⊤) → ℂ := fun M => filteredCarrierFunction ⊥ ⊤ 0 ambientf M
+tower : ActualTypedABRankedTower ⊥ ⊤ source r (h + l) := buildCanonicalSourceTower lines hypers (initialBottomTopBase T)
+M : PvNP.RealizableHardness.BinaryMatrixTypedA14Line.V✝ d ⧸ ⊥ →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA14Line.F✝] ↥⊤
+hb :
+  typedComplexRankProjection ⊥ ⊤ (r + (h + l)) (filteredCarrierFunction ⊥ ⊤ 0 ambientf) M =
+    BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf (bottomTopAmbientMatrixEquiv M)
+⊢ typedComplexRankProjection ⊥ ⊤ (r + (h + l)) (filteredCarrierFunction ⊥ ⊤ 0 ambientf) M =
+    filteredCarrierFunction ⊥ ⊤ 0 (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalRankProjectionCollapse.lean:87:8: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
