@@ -1,0 +1,608 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_source_parameter_nonneg {n d r : ℕ} {ε : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal r ε f) : 0 ≤ ε
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_source_parameter_nonneg' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.restrictedFunctionalKernel_finrank_drop.{u_1}
+  {X : Type u_1} [AddCommGroup X] [Module (ZMod 2) X] [Module.Finite (ZMod 2) X] (A : Submodule (ZMod 2) X)
+  (phi : ↥A →ₗ[ZMod 2] ZMod 2) (v : ↥A) (hv : phi v = 1) :
+  Module.finrank (ZMod 2)
+        ↥(PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient A phi) +
+      1 =
+    Module.finrank (ZMod 2) ↥A
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.restrictedFunctionalKernel_finrank_drop' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.codimension_drop_of_one_dim_extension.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module (ZMod 2) W] [Module.Finite (ZMod 2) W] (B B' : Submodule (ZMod 2) W)
+  (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1) :
+  Module.finrank (ZMod 2) (W ⧸ B') + 1 = Module.finrank (ZMod 2) (W ⧸ B)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.codimension_drop_of_one_dim_extension' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_outside_column_energy_le_two {n d s : ℕ}
+  {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (B' : Submodule (ZMod 2) (Fin n → ZMod 2)) (hB : Q.codomainVariation ≤ B')
+  (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥Q.codomainVariation + 1) :
+  (∑ N with
+        ↑(N
+              ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient
+                    Q.domainFixed phi).mkQ
+                ↑v)) ∉
+          Q.codomainVariation,
+        Complex.normSq
+          (f
+            ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv
+                    {
+                      domainFixed :=
+                        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient
+                          Q.domainFixed phi,
+                      codomainVariation := B', base := Q.base }).symm
+                N))) /
+      ↑{N |
+            ↑(N
+                  ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient
+                        Q.domainFixed phi).mkQ
+                    ↑v)) ∉
+              Q.codomainVariation}.card ≤
+    2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_outside_column_energy_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stableSourceSampleMap.{u_1, u_2, u_3} {X : Type u_1}
+  {X' : Type u_2} {W : Type u_3} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup X'] [Module (ZMod 2) X']
+  [AddCommGroup W] [Module (ZMod 2) W] (B : Submodule (ZMod 2) W) (q : X' →ₗ[ZMod 2] X) (phi₀ : X' →ₗ[ZMod 2] ZMod 2)
+  (R : X →ₗ[ZMod 2] ↥B) (lambda : X →ₗ[ZMod 2] ZMod 2) (w : ↥B) : X' →ₗ[ZMod 2] ↥B
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stableSourceCoordinatesEquiv.{u_1, u_2, u_3}
+  {X : Type u_1} {X' : Type u_2} {W : Type u_3} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup X']
+  [Module (ZMod 2) X'] [AddCommGroup W] [Module (ZMod 2) W] (q : X' →ₗ[ZMod 2] X) (s : X →ₗ[ZMod 2] X')
+  (phi₀ : X' →ₗ[ZMod 2] ZMod 2) (v : X') (hdecomp : ∀ (x : X'), x = s (q x) + phi₀ x • v) (hqs : q ∘ₗ s = LinearMap.id)
+  (hqv : q v = 0) (hphiS : phi₀ ∘ₗ s = 0) (hphiV : phi₀ v = 1) (B : Submodule (ZMod 2) W) :
+  (_ : ↥B) × (X →ₗ[ZMod 2] ↥B) × (X →ₗ[ZMod 2] ZMod 2) ≃ (X' →ₗ[ZMod 2] ↥B) × (X →ₗ[ZMod 2] ZMod 2)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stableSourceCoordinatesEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.uniformMean_product_fst.{u_1, u_2} {α : Type u_1}
+  {β : Type u_2} [Fintype α] [Fintype β] [Nonempty β] (g : α → ℝ) :
+  (∑ p, g p.1) / ↑(Fintype.card (α × β)) = (∑ a, g a) / ↑(Fintype.card α)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.uniformMean_product_fst' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stableSource_uniformMean_eq.{u_1, u_2, u_3} {X : Type u_1}
+  {X' : Type u_2} {W : Type u_3} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup X'] [Module (ZMod 2) X']
+  [AddCommGroup W] [Module (ZMod 2) W] [Fintype X] [Fintype X'] [Fintype W] (q : X' →ₗ[ZMod 2] X) (s : X →ₗ[ZMod 2] X')
+  (phi₀ : X' →ₗ[ZMod 2] ZMod 2) (v : X') (hdecomp : ∀ (x : X'), x = s (q x) + phi₀ x • v) (hqs : q ∘ₗ s = LinearMap.id)
+  (hqv : q v = 0) (hphiS : phi₀ ∘ₗ s = 0) (hphiV : phi₀ v = 1) (B : Submodule (ZMod 2) W) (g : (X' →ₗ[ZMod 2] ↥B) → ℝ) :
+  (∑ p, g (stableSourceSampleMap B q phi₀ p.snd.1 p.snd.2 p.fst)) /
+      ↑(Fintype.card ((_ : ↥B) × (X →ₗ[ZMod 2] ↥B) × (X →ₗ[ZMod 2] ZMod 2))) =
+    (∑ N, g N) / ↑(Fintype.card (X' →ₗ[ZMod 2] ↥B))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stableSource_uniformMean_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_stable_source_energy_le {n d s : ℕ} {η : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1) :
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let Q' := { domainFixed := A', codomainVariation := Q.codomainVariation, base := Q.base };
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  let X' := (Fin d → ZMod 2) ⧸ A';
+  have q := Submodule.factor ⋯;
+  ∃ sCoord phi₀,
+    q ∘ₗ sCoord = LinearMap.id ∧
+      q (A'.mkQ ↑v) = 0 ∧
+        phi₀ ∘ₗ sCoord = 0 ∧
+          phi₀ (A'.mkQ ↑v) = 1 ∧
+            (∀ (x : X'), x = sCoord (q x) + phi₀ x • A'.mkQ ↑v) ∧
+              (∑ p,
+                    Complex.normSq
+                      (f
+                        ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv
+                                Q').symm
+                            (stableSourceSampleMap Q.codomainVariation q phi₀ p.snd.1 p.snd.2 p.fst)))) /
+                  ↑(Fintype.card
+                      ((_ : ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2))) ≤
+                η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_stable_source_energy_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_coordinates_equiv.{u_1, u_2}
+  {X : Type u_1} {W : Type u_2} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup W] [Module (ZMod 2) W] [Fintype X]
+  [Fintype W] (A : Submodule (ZMod 2) X) (phi : ↥A →ₗ[ZMod 2] ZMod 2) (v : ↥A) (hv : phi v = 1)
+  (B B' : Submodule (ZMod 2) W) (hB : B ≤ B') (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1) :
+  (_ : { w // ↑w ∉ B }) × (X ⧸ A →ₗ[ZMod 2] ↥B) × (X ⧸ A →ₗ[ZMod 2] ZMod 2) ≃
+    { N //
+      ↑(N
+            ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient A phi).mkQ
+              ↑v)) ∉
+        B }
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_coordinates_equiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_coordinates_coe.{u_1, u_2}
+  {X : Type u_1} {W : Type u_2} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup W] [Module (ZMod 2) W] [Fintype X]
+  [Fintype W] (A : Submodule (ZMod 2) X) (phi : ↥A →ₗ[ZMod 2] ZMod 2) (v : ↥A) (hv : phi v = 1)
+  (B B' : Submodule (ZMod 2) W) (hB : B ≤ B') (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1) :
+  let A' := PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient A phi;
+  have q := Submodule.factor ⋯;
+  ∃ phi₀ s,
+    q ∘ₗ s = LinearMap.id ∧
+      q (A'.mkQ ↑v) = 0 ∧
+        phi₀ ∘ₗ s = 0 ∧
+          phi₀ (A'.mkQ ↑v) = 1 ∧
+            (∀ (x : X ⧸ A'), x = s (q x) + phi₀ x • A'.mkQ ↑v) ∧
+              ∀ (w : { w // ↑w ∉ B }) (R : X ⧸ A →ₗ[ZMod 2] ↥B) (lambda : X ⧸ A →ₗ[ZMod 2] ZMod 2),
+                B'.subtype ∘ₗ ↑((actual_expanded_source_coordinates_equiv A phi v hv B B' hB hdim) ⟨w, (R, lambda)⟩) =
+                  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput B q phi₀ R
+                    lambda ↑↑w
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_coordinates_coe' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_matrix_formula {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (B' : Submodule (ZMod 2) (Fin n → ZMod 2)) (hB : Q.codomainVariation ≤ B')
+  (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥Q.codomainVariation + 1) :
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let Q' := { domainFixed := A', codomainVariation := B', base := Q.base };
+  let X := Fin d → ZMod 2;
+  have q := Submodule.factor ⋯;
+  ∃ phi₀ sCoord,
+    q ∘ₗ sCoord = LinearMap.id ∧
+      q (A'.mkQ ↑v) = 0 ∧
+        phi₀ ∘ₗ sCoord = 0 ∧
+          phi₀ (A'.mkQ ↑v) = 1 ∧
+            (∀ (x : X ⧸ A'), x = sCoord (q x) + phi₀ x • A'.mkQ ↑v) ∧
+              ∀ (w : { w // ↑w ∉ Q.codomainVariation }) (R : X ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation)
+                (lambda : X ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2),
+                ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv Q').symm
+                      ↑((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv Q.codomainVariation B' hB hdim)
+                          ⟨w, (R, lambda)⟩)) =
+                  LinearMap.toMatrix'
+                    (Matrix.toLin' Q.base +
+                      PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput
+                          Q.codomainVariation q phi₀ R lambda ↑↑w ∘ₗ
+                        A'.mkQ)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_matrix_formula' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_mean_eq_conditional.{u_1, u_2}
+  {X : Type u_1} {W : Type u_2} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup W] [Module (ZMod 2) W] [Fintype X]
+  [Fintype W] (A : Submodule (ZMod 2) X) (phi : ↥A →ₗ[ZMod 2] ZMod 2) (v : ↥A) (hv : phi v = 1)
+  (B B' : Submodule (ZMod 2) W) (hB : B ≤ B') (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1)
+  (g :
+    { N //
+        ↑(N
+              ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient A
+                    phi).mkQ
+                ↑v)) ∉
+          B } →
+      ℝ) :
+  (∑ p, g ((actual_expanded_source_coordinates_equiv A phi v hv B B' hB hdim) p)) /
+      ↑(Fintype.card ((_ : { w // ↑w ∉ B }) × (X ⧸ A →ₗ[ZMod 2] ↥B) × (X ⧸ A →ₗ[ZMod 2] ZMod 2))) =
+    (∑ N, g N) /
+      ↑(Fintype.card
+          { N //
+            ↑(N
+                  ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient A
+                        phi).mkQ
+                    ↑v)) ∉
+              B })
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_mean_eq_conditional' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.outsideMap_subtype_mean_eq_filter.{u_1} {α : Type u_1}
+  [Fintype α] (p : α → Prop) [DecidablePred p] (g : α → ℝ) :
+  (∑ x, g ↑x) / ↑(Fintype.card { x // p x }) = (∑ x with p x, g x) / ↑(Finset.filter p Finset.univ).card
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.outsideMap_subtype_mean_eq_filter' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_energy_le_two {n d s : ℕ} {η : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (B' : Submodule (ZMod 2) (Fin n → ZMod 2)) (hB : Q.codomainVariation ≤ B')
+  (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥Q.codomainVariation + 1) :
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  (∑ p,
+        Complex.normSq
+          (f
+            ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv
+                    { domainFixed := A', codomainVariation := B', base := Q.base }).symm
+                ↑((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv Q.codomainVariation B' hB hdim)
+                    p)))) /
+      ↑(Fintype.card
+          ((_ : { w // ↑w ∉ Q.codomainVariation }) × (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2))) ≤
+    2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_energy_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stable_expanded_source_mixture_le_two.{u_1, u_2, u_3}
+  {X : Type u_1} {W : Type u_2} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup W] [Module (ZMod 2) W] [Fintype X]
+  [Fintype W] (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+  (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1) (C : Type u_3) [Fintype C] [Nonempty C]
+  (gStable : (_ : ↥B) × C → ℝ) (gExpanded : (_ : { w // ↑w ∉ B }) × C → ℝ) {η : ℝ} (hη : 0 ≤ η)
+  (hStable : (∑ p, gStable p) / ↑(Fintype.card ((_ : ↥B) × C)) ≤ η)
+  (hExpanded : (∑ p, gExpanded p) / ↑(Fintype.card ((_ : { w // ↑w ∉ B }) × C)) ≤ 2 * η) :
+  (∑ p, Sum.elim gStable gExpanded p) / ↑(Fintype.card ((_ : ↥B) × C ⊕ (_ : { w // ↑w ∉ B }) × C)) ≤ 2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stable_expanded_source_mixture_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_A18_source_branch_mixture_energy_le_two {n d s : ℕ}
+  {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (B' : Submodule (ZMod 2) (Fin n → ZMod 2)) (hB : Q.codomainVariation ≤ B')
+  (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥Q.codomainVariation + 1) :
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let X0 := Fin d → ZMod 2;
+  let X := X0 ⧸ Q.domainFixed;
+  let X' := X0 ⧸ A';
+  have q := Submodule.factor ⋯;
+  ∃ sCoord phi₀,
+    q ∘ₗ sCoord = LinearMap.id ∧
+      q (A'.mkQ ↑v) = 0 ∧
+        phi₀ ∘ₗ sCoord = 0 ∧
+          phi₀ (A'.mkQ ↑v) = 1 ∧
+            (∀ (x : X'), x = sCoord (q x) + phi₀ x • A'.mkQ ↑v) ∧
+              let C := (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2);
+              let Stable := (_ : ↥Q.codomainVariation) × C;
+              let Outside := { w // ↑w ∉ Q.codomainVariation };
+              let Expanded := (_ : Outside) × C;
+              let QStable := { domainFixed := A', codomainVariation := Q.codomainVariation, base := Q.base };
+              let QExpanded := { domainFixed := A', codomainVariation := B', base := Q.base };
+              (∑ p,
+                    Sum.elim
+                      (fun p =>
+                        Complex.normSq
+                          (f
+                            ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv
+                                    QStable).symm
+                                (stableSourceSampleMap Q.codomainVariation q phi₀ p.snd.1 p.snd.2 p.fst))))
+                      (fun p =>
+                        Complex.normSq
+                          (f
+                            ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv
+                                    QExpanded).symm
+                                ↑((actual_expanded_source_coordinates_equiv Q.domainFixed phi v hv Q.codomainVariation
+                                      B' hB hdim)
+                                    p))))
+                      p) /
+                  ↑(Fintype.card (Stable ⊕ Expanded)) ≤
+                2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_A18_source_branch_mixture_energy_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetColumnEquiv.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module (ZMod 2) W] (B : Submodule (ZMod 2) W) : (q : W ⧸ B) × { w // B.mkQ w = q } ≃ W
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetColumnEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetFibreEquiv.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module (ZMod 2) W] [Fintype W] (B : Submodule (ZMod 2) W) (q : W ⧸ B) : { w // B.mkQ w = q } ≃ ↥B
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetFibreEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetFibre_card.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module (ZMod 2) W] [Fintype W] (B : Submodule (ZMod 2) W) (q : W ⧸ B) :
+  Fintype.card { w // B.mkQ w = q } = Fintype.card ↥B
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetFibre_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetColumnProductEquiv.{u_1, u_2} {W : Type u_1}
+  {C : Type u_2} [AddCommGroup W] [Module (ZMod 2) W] (B : Submodule (ZMod 2) W) :
+  (q : W ⧸ B) × { w // B.mkQ w = q } × C ≃ W × C
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetColumnProductEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetColumnProduct_sum.{u_1, u_2} {W : Type u_1}
+  {C : Type u_2} [AddCommGroup W] [Module (ZMod 2) W] [Fintype W] [Fintype C] (B : Submodule (ZMod 2) W)
+  (g : W × C → ℝ) : ∑ p, g (↑p.snd.1, p.snd.2) = ∑ z, g z
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetColumnProduct_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCoset_partition_mean_le_two.{u_1, u_2}
+  {W : Type u_1} {C : Type u_2} [AddCommGroup W] [Module (ZMod 2) W] [Fintype W] [Fintype C] [Nonempty C]
+  (B : Submodule (ZMod 2) W) (g : W × C → ℝ) {η : ℝ}
+  (hfiber : ∀ (q : W ⧸ B), (∑ z, g (↑z.1, z.2)) / ↑(Fintype.card ({ w // B.mkQ w = q } × C)) ≤ 2 * η) :
+  (∑ z, g z) / ↑(Fintype.card (W × C)) ≤ 2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCoset_partition_mean_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actualFibreQuotientHomEquiv_symm_matrix {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d)
+  (N : PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.QuotientHom Q.domainFixed Q.codomainVariation) :
+  ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv Q).symm N) =
+    LinearMap.toMatrix' (Matrix.toLin' Q.base + Q.codomainVariation.subtype ∘ₗ N ∘ₗ Q.domainFixed.mkQ)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actualFibreQuotientHomEquiv_symm_matrix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetFibreEquiv_extension.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module (ZMod 2) W] [Fintype W] (B : Submodule (ZMod 2) W) (w₀ : W) (hw₀ : w₀ ∉ B) :
+  { w // B.mkQ w = B.mkQ w₀ } ≃ { u // ↑u ∉ B }
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetFibreEquiv_extension' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetSourceFibreEquiv.{u_1, u_2} {W : Type u_1}
+  {C : Type u_2} [AddCommGroup W] [Module (ZMod 2) W] [Fintype W] (B : Submodule (ZMod 2) W) (w₀ : W) (hw₀ : w₀ ∉ B) :
+  (_ : { w // B.mkQ w = B.mkQ w₀ }) × C ≃ (_ : { u // ↑u ∉ B }) × C
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientCosetSourceFibreEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stableSourceSampleMap_coe.{u_1, u_2, u_3} {X : Type u_1}
+  {X' : Type u_2} {W : Type u_3} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup X'] [Module (ZMod 2) X']
+  [AddCommGroup W] [Module (ZMod 2) W] (B : Submodule (ZMod 2) W) (q : X' →ₗ[ZMod 2] X) (phi₀ : X' →ₗ[ZMod 2] ZMod 2)
+  (R : X →ₗ[ZMod 2] ↥B) (lambda : X →ₗ[ZMod 2] ZMod 2) (w : ↥B) :
+  B.subtype ∘ₗ stableSourceSampleMap B q phi₀ R lambda w =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput B q phi₀ R lambda ↑w
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.stableSourceSampleMap_coe' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_stable_source_matrix_formula {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (phi₀ :
+    (Fin d → ZMod 2) ⧸
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed
+          phi →ₗ[ZMod 2]
+      ZMod 2)
+  (R : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation)
+  (lambda : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2) (w : ↥Q.codomainVariation) :
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  let X' := (Fin d → ZMod 2) ⧸ A';
+  have q := Submodule.factor ⋯;
+  let Q' := { domainFixed := A', codomainVariation := Q.codomainVariation, base := Q.base };
+  ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv Q').symm
+        (stableSourceSampleMap Q.codomainVariation q phi₀ R lambda w)) =
+    LinearMap.toMatrix'
+      (Matrix.toLin' Q.base +
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput Q.codomainVariation q
+            phi₀ R lambda ↑w ∘ₗ
+          A'.mkQ)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_stable_source_matrix_formula' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_stable_source_energy_le_of_coordinates {n d s : ℕ}
+  {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (sCoord :
+    (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2]
+      (Fin d → ZMod 2) ⧸
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed
+          phi)
+  (phi₀ :
+    (Fin d → ZMod 2) ⧸
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed
+          phi →ₗ[ZMod 2]
+      ZMod 2)
+  (hqs : Submodule.factor ⋯ ∘ₗ sCoord = LinearMap.id)
+  (hqv :
+    (Submodule.factor ⋯)
+        ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed
+              phi).mkQ
+          ↑v) =
+      0)
+  (hphiS : phi₀ ∘ₗ sCoord = 0)
+  (hphiV :
+    phi₀
+        ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed
+              phi).mkQ
+          ↑v) =
+      1)
+  (hdecomp :
+    ∀
+      (x :
+        (Fin d → ZMod 2) ⧸
+          PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed
+            phi),
+      x =
+        sCoord ((Submodule.factor ⋯) x) +
+          phi₀ x •
+            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient
+                  Q.domainFixed phi).mkQ
+              ↑v) :
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let Q' := { domainFixed := A', codomainVariation := Q.codomainVariation, base := Q.base };
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  let X' := (Fin d → ZMod 2) ⧸ A';
+  have q := Submodule.factor ⋯;
+  (∑ p,
+        Complex.normSq
+          (f
+            ↑((PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel.actualFibreQuotientHomEquiv Q').symm
+                (stableSourceSampleMap Q.codomainVariation q phi₀ p.snd.1 p.snd.2 p.fst)))) /
+      ↑(Fintype.card ((_ : ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2))) ≤
+    η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_stable_source_energy_le_of_coordinates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_coordinates_coe_uniform.{u_1, u_2}
+  {X : Type u_1} {W : Type u_2} [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup W] [Module (ZMod 2) W] [Fintype X]
+  [Fintype W] (A : Submodule (ZMod 2) X) (phi : ↥A →ₗ[ZMod 2] ZMod 2) (v : ↥A) (hv : phi v = 1)
+  (B : Submodule (ZMod 2) W) :
+  let A' := PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient A phi;
+  have q := Submodule.factor ⋯;
+  have hsource := ⋯;
+  have s := Classical.choose hsource;
+  have hphiSource := ⋯;
+  have phi₀ := Classical.choose hphiSource;
+  q ∘ₗ s = LinearMap.id ∧
+    q (A'.mkQ ↑v) = 0 ∧
+      phi₀ ∘ₗ s = 0 ∧
+        phi₀ (A'.mkQ ↑v) = 1 ∧
+          (∀ (x : X ⧸ A'), x = s (q x) + phi₀ x • A'.mkQ ↑v) ∧
+            ∀ (B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+              (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1) (w : { w // ↑w ∉ B })
+              (R : X ⧸ A →ₗ[ZMod 2] ↥B) (lambda : X ⧸ A →ₗ[ZMod 2] ZMod 2),
+              B'.subtype ∘ₗ ↑((actual_expanded_source_coordinates_equiv A phi v hv B B' hB hdim) ⟨w, (R, lambda)⟩) =
+                PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput B q phi₀ R
+                  lambda ↑↑w
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_coordinates_coe_uniform' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_energy_le_two_common_coordinates
+  {n d s : ℕ} {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1)
+  (B' : Submodule (ZMod 2) (Fin n → ZMod 2)) (hB : Q.codomainVariation ≤ B')
+  (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥Q.codomainVariation + 1) :
+  have hsource := ⋯;
+  have sCoord := Classical.choose hsource;
+  have hphiSource := ⋯;
+  have phi₀ := Classical.choose hphiSource;
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  have q := Submodule.factor ⋯;
+  let C := (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2);
+  let Outside := { w // ↑w ∉ Q.codomainVariation };
+  (∑ p,
+        Complex.normSq
+          (f
+            (LinearMap.toMatrix'
+              (Matrix.toLin' Q.base +
+                PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput
+                    Q.codomainVariation q phi₀ p.snd.1 p.snd.2 ↑↑p.fst ∘ₗ
+                  A'.mkQ)))) /
+      ↑(Fintype.card ((_ : Outside) × C)) ≤
+    2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_expanded_source_energy_le_two_common_coordinates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_source_quotient_coset_mean_le_two {n d s : ℕ}
+  {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1) :
+  have hsource := ⋯;
+  have sCoord := Classical.choose hsource;
+  have hphiSource := ⋯;
+  have phi₀ := Classical.choose hphiSource;
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  have qdom := Submodule.factor ⋯;
+  let C := (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2);
+  have sample := fun z =>
+    LinearMap.toMatrix'
+      (Matrix.toLin' Q.base +
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput Q.codomainVariation
+            qdom phi₀ z.2.1 z.2.2 z.1 ∘ₗ
+          A'.mkQ);
+  ∀ (q : (Fin n → ZMod 2) ⧸ Q.codomainVariation),
+    (∑ p, Complex.normSq (f (sample (↑p.fst, p.snd)))) /
+        ↑(Fintype.card ((_ : { w // Q.codomainVariation.mkQ w = q }) × C)) ≤
+      2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_source_quotient_coset_mean_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_source_all_columns_mean_le_two {n d s : ℕ} {η : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1) :
+  have hsource := ⋯;
+  have sCoord := Classical.choose hsource;
+  have hphiSource := ⋯;
+  have phi₀ := Classical.choose hphiSource;
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  have qdom := Submodule.factor ⋯;
+  let C := (X →ₗ[ZMod 2] ↥Q.codomainVariation) × (X →ₗ[ZMod 2] ZMod 2);
+  have sample := fun z =>
+    LinearMap.toMatrix'
+      (Matrix.toLin' Q.base +
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput Q.codomainVariation
+            qdom phi₀ z.2.1 z.2.2 z.1 ∘ₗ
+          A'.mkQ);
+  (∑ z, Complex.normSq (f (sample z))) / ↑(Fintype.card ((Fin n → ZMod 2) × C)) ≤ 2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_source_all_columns_mean_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.normSq_finite_average_le.{u_1} {α : Type u_1} [Fintype α]
+  [Nonempty α] (z : α → ℂ) :
+  Complex.normSq ((∑ a, z a) / ↑(Fintype.card α)) ≤ (∑ a, Complex.normSq (z a)) / ↑(Fintype.card α)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.normSq_finite_average_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.normSq_iterated_average_le.{u_1, u_2} {α : Type u_1}
+  {β : Type u_2} [Fintype α] [Nonempty α] [Fintype β] [Nonempty β] (z : α → β → ℂ) :
+  (∑ a, Complex.normSq ((∑ b, z a b) / ↑(Fintype.card β))) / ↑(Fintype.card α) ≤
+    (∑ p, Complex.normSq (z p.1 p.2)) / ↑(Fintype.card (α × β))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.normSq_iterated_average_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_fixed_functional_line_average_energy_le_two
+  {n d s : ℕ} {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2) (v : ↥Q.domainFixed) (hv : phi v = 1) :
+  let A' :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.functionalKernelInAmbient Q.domainFixed phi;
+  let X := (Fin d → ZMod 2) ⧸ Q.domainFixed;
+  let X' := (Fin d → ZMod 2) ⧸ A';
+  have qdom := Submodule.factor ⋯;
+  let R := X →ₗ[ZMod 2] ↥Q.codomainVariation;
+  let Lambda := X →ₗ[ZMod 2] ZMod 2;
+  let C := R × Lambda;
+  have sample := fun z =>
+    LinearMap.toMatrix'
+      (Matrix.toLin' Q.base +
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput Q.codomainVariation
+            qdom (Classical.choose ⋯) z.2.1 z.2.2 z.1 ∘ₗ
+          A'.mkQ);
+  have lineMean := fun r => (∑ p, f (sample (p.1, r, p.2))) / ↑(Fintype.card ((Fin n → ZMod 2) × Lambda));
+  (∑ r, Complex.normSq (lineMean r)) / ↑(Fintype.card R) ≤ 2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.actual_fixed_functional_line_average_energy_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientSampleOutput_eq_parent_add_line.{u_1, u_2, u_3,
+    u_4}
+  {K : Type u_1} {X : Type u_2} {X' : Type u_3} {W : Type u_4} [Field K] [AddCommGroup X] [Module K X] [AddCommGroup X']
+  [Module K X'] [AddCommGroup W] [Module K W] (A' A : Submodule K X) (hA : A' ≤ A) (B : Submodule K W)
+  (phi₀ : X ⧸ A' →ₗ[K] K) (R : X ⧸ A →ₗ[K] ↥B) (lambda : X ⧸ A →ₗ[K] K) (w : W) :
+  have q := Submodule.factor hA;
+  have phiExt := phi₀ ∘ₗ A'.mkQ + lambda ∘ₗ A.mkQ;
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw.quotientSampleOutput B q phi₀ R lambda w ∘ₗ
+      A'.mkQ =
+    B.subtype ∘ₗ R ∘ₗ A.mkQ + phiExt.smulRight w
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.quotientSampleOutput_eq_parent_add_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.restrictedFunctionalReference_extends.{u_1, u_2}
+  {K : Type u_1} {X : Type u_2} [Field K] [AddCommGroup X] [Module K X] (A : Submodule K X) (phi : ↥A →ₗ[K] K) (v : ↥A)
+  (hv : phi v = 1) : restrictedFunctionalReference A phi v hv ∘ₗ A.subtype = phi
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.restrictedFunctionalReference_extends' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.restrictedFunctionalExtensionEquiv.{u_1, u_2}
+  {K : Type u_1} {X : Type u_2} [Field K] [AddCommGroup X] [Module K X] (A : Submodule K X) (phi : ↥A →ₗ[K] K) (v : ↥A)
+  (hv : phi v = 1) : (X ⧸ A →ₗ[K] K) ≃ { psi // psi ∘ₗ A.subtype = phi }
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.restrictedFunctionalExtensionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.globalFunctionalRestrictionEquiv.{u_1, u_2} {K : Type u_1}
+  {X : Type u_2} [Field K] [AddCommGroup X] [Module K X] (A : Submodule K X) (v : ↥A) :
+  { psi // psi ↑v = 1 } ≃ (_ : { phi // phi v = 1 }) × (X ⧸ A →ₗ[K] K)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal.globalFunctionalRestrictionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
