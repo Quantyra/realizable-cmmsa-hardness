@@ -1,0 +1,771 @@
+import PvNP.RealizableHardness.ActualTypedABFullA16Assembly
+import PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+import PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+import PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixComplexA14
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+import PvNP.RealizableHardness.BinaryMatrixFirstDerivative
+import PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+import PvNP.RealizableHardness.ActualTypedABHybridSelectorSteps
+import PvNP.RealizableHardness.BinaryMatrixA1Phase
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+
+/-! Rank bookkeeping for the actual A18 affine derivative carrier. The
+selected ambient frequencies have a fixed rank cost, and their induced
+carrier frequency retains the residual rank. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+open PvNP.RealizableHardness.BinaryMatrixComplexA14
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+open PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualTypedABFullA16Assembly
+open PvNP.RealizableHardness.BinaryMatrixFirstDerivative
+open PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+open PvNP.RealizableHardness.ActualTypedABHybridSelectorSteps
+open PvNP.RealizableHardness.BinaryMatrixA1Phase
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+open scoped BigOperators
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+private def selectedCarrierFrequency {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d) : B →ₗ[F] (V d ⧸ A) :=
+  (A.mkQ).comp ((Y.transpose.toLin').domRestrict B)
+
+/-- Fourier coefficient of one ambient character, in the complex convention
+used by the affine selector. -/
+theorem complexFourierCoeff_character {n d : Nat}
+    (Y Z : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => (character Y M : Complex)) Z =
+      if Z = Y then 1 else 0 := by
+  by_cases h : Z = Y
+  · subst Z
+    apply Complex.ext
+    · rw [complexFourierCoeff_re]
+      simp [fourierCoeff_character]
+    · rw [complexFourierCoeff_im]
+      simp [fourierCoeff, uniformMean]
+  · apply Complex.ext
+    · rw [complexFourierCoeff_re]
+      simp [fourierCoeff_character, h]
+    · rw [complexFourierCoeff_im]
+      simp [fourierCoeff, uniformMean, h]
+
+/-- The affine selector sends a single ambient character to its induced
+carrier character, multiplied by the phase of the fixed affine base. -/
+theorem filteredCarrierFunction_character {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (Y : BinaryMatrix n d)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    filteredCarrierFunction A B T (fun X => (character Y X : Complex)) M =
+      if Selected A B Y.transpose.toLin' then
+        ((traceCharacter Y.transpose.toLin' T *
+          traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+      else 0 := by
+  classical
+  unfold filteredCarrierFunction complexAmbientAffineRestrict
+    complexAmbientHybridFilter
+  simp_rw [complexFourierCoeff_character]
+  have hsum :
+      (∑ X : BinaryMatrix n d,
+        if Selected A B X.transpose.toLin' then
+          (if X = Y then (1 : Complex) else 0) *
+            (character X (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) : Complex)
+        else 0) =
+      if Selected A B Y.transpose.toLin' then
+        (character Y (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) : Complex)
+      else 0 := by
+    have hterm (X : BinaryMatrix n d) :
+        (if Selected A B X.transpose.toLin' then
+          (if X = Y then (1 : Complex) else 0) *
+            (character X (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) : Complex)
+         else 0) =
+        (if X = Y then
+          if Selected A B Y.transpose.toLin' then
+            (character Y (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) : Complex)
+          else 0 else 0) := by
+      by_cases hXY : X = Y
+      · subst X
+        simp
+      · simp [hXY]
+    simp_rw [hterm]
+    simp
+  rw [hsum]
+  by_cases hsel : Selected A B Y.transpose.toLin'
+  · simp only [hsel, if_pos]
+    have hchar : character Y
+        (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) =
+        traceCharacter Y.transpose.toLin'
+          (T + B.subtype.comp (M.comp A.mkQ)) := by
+      simpa only [Matrix.toLin'_toMatrix'] using
+        (traceCharacter_eq_matrix_character Y
+          (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ)))).symm
+    rw [hchar, selected_affine_phase_factor]
+  · simp only [hsel, if_neg, ↓reduceIte]
+
+/-- Finite Fourier expansion of the actual affine carrier filter. Each
+selected ambient character contributes its trace phase and induced carrier
+character. -/
+theorem filteredCarrierFunction_fourier_expansion {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    filteredCarrierFunction A B T f M =
+      ∑ Y : BinaryMatrix n d,
+        if Selected A B Y.transpose.toLin' then
+          complexFourierCoeff f Y *
+            ((traceCharacter Y.transpose.toLin' T *
+              traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+        else 0 := by
+  classical
+  unfold filteredCarrierFunction complexAmbientAffineRestrict
+    complexAmbientHybridFilter
+  apply Finset.sum_congr rfl
+  intro Y _
+  by_cases hsel : Selected A B Y.transpose.toLin'
+  · simp only [hsel, if_pos]
+    have hchar : character Y
+        (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) =
+        traceCharacter Y.transpose.toLin' T *
+          traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M := by
+      calc
+        character Y (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) =
+            traceCharacter Y.transpose.toLin'
+              ((LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))).toLin') :=
+          (traceCharacter_eq_matrix_character Y
+            (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ)))).symm
+        _ = traceCharacter Y.transpose.toLin'
+              (T + B.subtype.comp (M.comp A.mkQ)) := by
+          rw [Matrix.toLin'_toMatrix']
+        _ = traceCharacter Y.transpose.toLin' T *
+              traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M :=
+          selected_affine_phase_factor A B Y.transpose.toLin' T M
+    rw [hchar]
+  · simp [hsel]
+
+/-- The real carrier Fourier coefficient of one carrier character is a
+point mass, by carrier-character orthogonality. -/
+private theorem carrierFourierCoeff_character {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y Z : B →ₗ[F] (V d ⧸ A)) :
+    BinaryMatrixA1TypedFourier.carrierFourierCoeff A B
+      (fun M => traceCharacter Y M) Z = if Z = Y then 1 else 0 := by
+  unfold BinaryMatrixA1TypedFourier.carrierFourierCoeff
+  rw [BinaryMatrixA1TypedFourier.carrierCharacter_orthogonality]
+  by_cases h : Z = Y
+  · subst Z
+    simp
+  · have h' : Y ≠ Z := fun hz => h hz.symm
+    simp [h, h']
+
+/-- A carrier character has a point-mass typed Fourier transform. -/
+theorem complexCarrierFourierCoeff_character {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y Z : B →ₗ[F] (V d ⧸ A)) :
+    complexCarrierFourierCoeff A B
+      (fun M => (traceCharacter Y M : Complex)) Z =
+      if Z = Y then 1 else 0 := by
+  by_cases h : Z = Y
+  · subst Z
+    apply Complex.ext
+    · rw [complexCarrierFourierCoeff_re]
+      simp [carrierFourierCoeff_character]
+    · rw [complexCarrierFourierCoeff_im]
+      simp [BinaryMatrixA1TypedFourier.carrierFourierCoeff,
+        BinaryMatrixA1TypedFourier.carrierMean]
+  · apply Complex.ext
+    · rw [complexCarrierFourierCoeff_re]
+      simp [carrierFourierCoeff_character, h]
+    · rw [complexCarrierFourierCoeff_im]
+      simp [BinaryMatrixA1TypedFourier.carrierFourierCoeff,
+        BinaryMatrixA1TypedFourier.carrierMean, h]
+
+/-- The typed rank projection acts diagonally on a carrier character. -/
+theorem typedComplexRankProjection_character {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : B →ₗ[F] (V d ⧸ A))
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    typedComplexRankProjection A B j
+      (fun N => (traceCharacter Y N : Complex)) M =
+      if Module.finrank F (LinearMap.range Y) = j then
+        (traceCharacter Y M : Complex) else 0 := by
+  classical
+  unfold typedComplexRankProjection
+  simp only [Finset.sum_filter]
+  simp_rw [complexCarrierFourierCoeff_character]
+  have hterm (Z : B →ₗ[F] (V d ⧸ A)) :
+      (if Module.finrank F (LinearMap.range Z) = j then
+        (if Z = Y then (1 : Complex) else 0) *
+          (traceCharacter Z M : Complex) else 0) =
+      (if Z = Y then
+        if Module.finrank F (LinearMap.range Y) = j then
+          (traceCharacter Y M : Complex) else 0 else 0) := by
+    by_cases hZY : Z = Y
+    · subst Z
+      simp
+    · simp [hZY]
+  simp_rw [hterm]
+  simp
+
+/-- Carrier Fourier coefficients commute with finite sums of signals. -/
+theorem complexCarrierFourierCoeff_finset_sum {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    {ι : Type} (s : Finset ι)
+    (g : ι → ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (Z : B →ₗ[F] (V d ⧸ A)) :
+    complexCarrierFourierCoeff A B (fun M => ∑ i ∈ s, g i M) Z =
+      ∑ i ∈ s, complexCarrierFourierCoeff A B (g i) Z := by
+  classical
+  unfold complexCarrierFourierCoeff
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  simp_rw [Finset.sum_div]
+
+/-- Carrier Fourier coefficients are complex-linear in the signal. -/
+theorem complexCarrierFourierCoeff_smul {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (c : Complex) (g : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (Z : B →ₗ[F] (V d ⧸ A)) :
+    complexCarrierFourierCoeff A B (fun M => c * g M) Z =
+      c * complexCarrierFourierCoeff A B g Z := by
+  classical
+  unfold complexCarrierFourierCoeff
+  have hsum :
+      (∑ M : (V d ⧸ A) →ₗ[F] B,
+        c * g M * (BinaryMatrixA1Phase.traceCharacter Z M : Complex)) =
+      c * (∑ M : (V d ⧸ A) →ₗ[F] B,
+        g M * (BinaryMatrixA1Phase.traceCharacter Z M : Complex)) := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro M _
+    ring
+  rw [hsum]
+  ring
+
+/-- The typed rank projection is linear over finite sums of signals. -/
+theorem typedComplexRankProjection_finset_sum {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    {ι : Type} (s : Finset ι)
+    (g : ι → ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    typedComplexRankProjection A B j (fun N => ∑ i ∈ s, g i N) M =
+      ∑ i ∈ s, typedComplexRankProjection A B j (g i) M := by
+  classical
+  unfold typedComplexRankProjection
+  simp_rw [complexCarrierFourierCoeff_finset_sum, Finset.sum_mul]
+  rw [Finset.sum_comm]
+
+/-- The typed rank projection is complex-linear in its input signal. -/
+theorem typedComplexRankProjection_smul {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (c : Complex) (g : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    typedComplexRankProjection A B j (fun N => c * g N) M =
+      c * typedComplexRankProjection A B j g M := by
+  classical
+  unfold typedComplexRankProjection
+  simp_rw [complexCarrierFourierCoeff_smul]
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro Y _
+  by_cases h : Module.finrank F (LinearMap.range Y) = j <;> simp [h, mul_assoc]
+
+/-- The complex rank projection retains exactly the Fourier coefficient on
+its selected rank layer. -/
+theorem complexFourierCoeff_rankProjection {n d i : Nat}
+    (f : BinaryMatrix n d → Complex) (Y : BinaryMatrix n d) :
+    complexFourierCoeff (complexRankProjection i f) Y =
+      if Y.rank = i then complexFourierCoeff f Y else 0 := by
+  by_cases h : Y.rank = i
+  · apply Complex.ext
+    · simp [complexFourierCoeff_re, complexRankProjection_re,
+        fourierCoeff_rankProjection, h]
+    · simp [complexFourierCoeff_im, complexRankProjection_im,
+        fourierCoeff_rankProjection, h]
+  · apply Complex.ext
+    · simp [complexFourierCoeff_re, complexRankProjection_re,
+        fourierCoeff_rankProjection, h]
+    · simp [complexFourierCoeff_im, complexRankProjection_im,
+        fourierCoeff_rankProjection, h]
+
+/-- Ambient Fourier coefficients commute with finite sums. -/
+theorem complexFourierCoeff_finset_sum {n d : Nat}
+    {ι : Type} (s : Finset ι)
+    (g : ι → BinaryMatrix n d → Complex) (Y : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => ∑ i ∈ s, g i M) Y =
+      ∑ i ∈ s, complexFourierCoeff (g i) Y := by
+  classical
+  unfold complexFourierCoeff
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  simp_rw [Finset.sum_div]
+
+/-- Ambient Fourier coefficients are complex-linear in the signal. -/
+theorem complexFourierCoeff_smul {n d : Nat}
+    (c : Complex) (g : BinaryMatrix n d → Complex) (Y : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => c * g M) Y =
+      c * complexFourierCoeff g Y := by
+  classical
+  unfold complexFourierCoeff
+  have hsum :
+      (∑ M : BinaryMatrix n d,
+        c * g M * (character Y M : Complex)) =
+      c * (∑ M : BinaryMatrix n d,
+        g M * (character Y M : Complex)) := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro M _
+    ring
+  rw [hsum]
+  ring
+
+/-- The actual affine carrier filter is linear over finite signal sums. -/
+theorem filteredCarrierFunction_finset_sum {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) {ι : Type} (s : Finset ι)
+    (g : ι → BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    filteredCarrierFunction A B T (fun X => ∑ i ∈ s, g i X) M =
+      ∑ i ∈ s, filteredCarrierFunction A B T (g i) M := by
+  classical
+  simp_rw [filteredCarrierFunction_fourier_expansion,
+    complexFourierCoeff_finset_sum]
+  have hsum :
+      (∑ Y : BinaryMatrix n d,
+        if Selected A B Y.transpose.toLin' then
+          (∑ i ∈ s, complexFourierCoeff (g i) Y) *
+            ((traceCharacter Y.transpose.toLin' T *
+              traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+        else 0) =
+      ∑ i ∈ s, ∑ Y : BinaryMatrix n d,
+        if Selected A B Y.transpose.toLin' then
+          complexFourierCoeff (g i) Y *
+            ((traceCharacter Y.transpose.toLin' T *
+              traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+        else 0 := by
+    calc
+      _ = ∑ Y : BinaryMatrix n d, ∑ i ∈ s,
+            if Selected A B Y.transpose.toLin' then
+              complexFourierCoeff (g i) Y *
+                ((traceCharacter Y.transpose.toLin' T *
+                  traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+            else 0 := by
+          apply Finset.sum_congr rfl
+          intro Y _
+          by_cases hsel : Selected A B Y.transpose.toLin'
+          · simp [hsel, Finset.sum_mul]
+          · simp [hsel]
+      _ = ∑ i ∈ s, ∑ Y : BinaryMatrix n d,
+            if Selected A B Y.transpose.toLin' then
+              complexFourierCoeff (g i) Y *
+                ((traceCharacter Y.transpose.toLin' T *
+                  traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+            else 0 := Finset.sum_comm
+  exact hsum
+
+/-- The actual affine carrier filter is complex-linear in the signal. -/
+theorem filteredCarrierFunction_smul {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (c : Complex)
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    filteredCarrierFunction A B T (fun X => c * f X) M =
+      c * filteredCarrierFunction A B T f M := by
+  classical
+  simp_rw [filteredCarrierFunction_fourier_expansion, complexFourierCoeff_smul]
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro Y _
+  by_cases h : Selected A B Y.transpose.toLin' <;> simp [h, mul_assoc]
+
+/-- On a selected ambient frequency, rank splits into the fixed carrier
+cost plus the rank of its induced carrier frequency. -/
+theorem selected_frequency_rank_eq_carrier_rank_add_cost
+    {n d : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d)
+    (hsel : Selected A B Y.transpose.toLin') :
+    Y.rank = Module.finrank F A + Module.finrank F (W n ⧸ B) +
+      Module.finrank F (LinearMap.range (selectedCarrierFrequency A B Y)) := by
+  classical
+  let L : W n →ₗ[F] V d := Y.transpose.toLin'
+  let qL : W n →ₗ[F] (V d ⧸ A) := A.mkQ.comp L
+  let R : Submodule F (V d) := LinearMap.range L
+  let AR : Submodule F R := A.comap R.subtype
+  let qR : R →ₗ[F] (V d ⧸ A) := A.mkQ.comp R.subtype
+  let qB : B →ₗ[F] (V d ⧸ A) := qL.domRestrict B
+  have hAR : A ≤ R := hsel.1
+  have hARdim : Module.finrank F AR = Module.finrank F A := by
+    exact (Submodule.comapSubtypeEquivOfLe hAR).finrank_eq
+  have hkerR : LinearMap.ker qR = AR := by
+    simp [qR, AR, LinearMap.ker_comp]
+  have hfactor : qL = qR.comp L.rangeRestrict := by
+    ext x
+    rfl
+  have hqrange : LinearMap.range qL = LinearMap.range qR := by
+    rw [hfactor]
+    exact LinearMap.range_comp_of_range_eq_top qR
+      (LinearMap.range_rangeRestrict L)
+  have hqrank : Module.finrank F (LinearMap.range qL) =
+      Module.finrank F (LinearMap.range qR) :=
+    congrArg (fun S : Submodule F (V d ⧸ A) => Module.finrank F S) hqrange
+  have hnullR := LinearMap.finrank_range_add_finrank_ker qR
+  have hdimR : Module.finrank F R =
+      Module.finrank F (LinearMap.range qL) + Module.finrank F A := by
+    rw [hqrank]
+    rw [hkerR, hARdim] at hnullR
+    exact hnullR.symm
+  have hmatrixRank : Y.rank = Module.finrank F R := by
+    change Matrix.rank Y = Module.finrank F (LinearMap.range L)
+    rw [← Matrix.rank_transpose Y]
+    rw [Matrix.rank_eq_finrank_range_toLin Y.transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)]
+    rw [Matrix.toLin_eq_toLin']
+  have hkerBound : LinearMap.ker qL ≤ B := by
+    intro x hx
+    have hxzero : A.mkQ (L x) = 0 := by
+      simpa [qL, LinearMap.mem_ker] using hx
+    have hxA : L x ∈ A := by
+      have hmem : L x ∈ LinearMap.ker A.mkQ := LinearMap.mem_ker.mpr hxzero
+      rw [Submodule.ker_mkQ] at hmem
+      exact hmem
+    exact hsel.2 x hxA
+  have hkerB : LinearMap.ker qB =
+      (LinearMap.ker qL).comap B.subtype := by
+    ext b
+    simp [qB, qL, LinearMap.mem_ker, LinearMap.domRestrict_apply]
+  have hkerDim : Module.finrank F (LinearMap.ker qB) =
+      Module.finrank F (LinearMap.ker qL) := by
+    rw [hkerB]
+    exact (Submodule.comapSubtypeEquivOfLe hkerBound).finrank_eq
+  have hnullL := LinearMap.finrank_range_add_finrank_ker qL
+  have hnullB := LinearMap.finrank_range_add_finrank_ker qB
+  have hquotB := B.finrank_quotient_add_finrank
+  change Module.finrank F (W n ⧸ B) + Module.finrank F B =
+      Module.finrank F (W n) at hquotB
+  have hqRankSplit : Module.finrank F (LinearMap.range qL) =
+      Module.finrank F (W n ⧸ B) + Module.finrank F (LinearMap.range qB) := by
+    rw [hkerDim] at hnullB
+    omega
+  calc
+    Y.rank = Module.finrank F R := hmatrixRank
+    _ = Module.finrank F (LinearMap.range qL) + Module.finrank F A := hdimR
+    _ = Module.finrank F (W n ⧸ B) +
+          Module.finrank F (LinearMap.range qB) + Module.finrank F A := by
+      rw [hqRankSplit]
+    _ = Module.finrank F A + Module.finrank F (W n ⧸ B) +
+          Module.finrank F (LinearMap.range qB) := by omega
+
+/-- At every layer above the selected-carrier cost, ambient rank `i` is
+exactly residual carrier rank `i - cost`. -/
+theorem selected_frequency_rank_eq_iff_residual {n d i : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d)
+    (hsel : Selected A B Y.transpose.toLin')
+    (hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ i) :
+    Y.rank = i ↔
+      Module.finrank F
+        (LinearMap.range (selectedCarrierFrequency A B Y)) =
+          i - (Module.finrank F A + Module.finrank F (W n ⧸ B)) := by
+  rw [selected_frequency_rank_eq_carrier_rank_add_cost A B Y hsel]
+  omega
+
+/-- The actual A18 affine derivative transports the ambient rank-i
+projection to the residual typed rank layer, with the exact selected-frequency
+rank cost. This identity is valid for arbitrary affine base and carrier. -/
+theorem filteredCarrierFunction_rankProjection_eq_typed {n d i : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B)
+    (hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ i) :
+    filteredCarrierFunction A B T (complexRankProjection i f) M =
+      typedComplexRankProjection A B
+        (i - (Module.finrank F A + Module.finrank F (W n ⧸ B)))
+        (filteredCarrierFunction A B T f) M := by
+  classical
+  let qY := fun Y : BinaryMatrix n d => selectedCarrierFrequency A B Y
+  let cY := fun Y : BinaryMatrix n d =>
+    complexFourierCoeff f Y * (traceCharacter Y.transpose.toLin' T : Complex)
+  have hqY (Y : BinaryMatrix n d) :
+      qY Y = (A.mkQ).comp (Y.transpose.toLin'.comp B.subtype) := by
+    change (A.mkQ).comp ((Y.transpose.toLin').domRestrict B) = _
+    ext b
+    rfl
+  have hsignal : filteredCarrierFunction A B T f =
+      fun N : (V d ⧸ A) →ₗ[F] B =>
+        ∑ Y : BinaryMatrix n d,
+          if Selected A B Y.transpose.toLin' then
+            cY Y * (traceCharacter (qY Y) N : Complex) else 0 := by
+    funext N
+    rw [filteredCarrierFunction_fourier_expansion]
+    apply Finset.sum_congr rfl
+    intro Y _
+    by_cases hsel : Selected A B Y.transpose.toLin'
+    · rw [hqY Y]
+      simp [hsel, cY, qY, selectedCarrierFrequency,
+        Complex.ofReal_mul, mul_assoc]
+    · simp [hsel]
+  have hlhs :
+      filteredCarrierFunction A B T (complexRankProjection i f) M =
+        ∑ Y : BinaryMatrix n d,
+          if Selected A B Y.transpose.toLin' then
+            if Y.rank = i then
+              cY Y * (traceCharacter (qY Y) M : Complex) else 0
+          else 0 := by
+    rw [filteredCarrierFunction_fourier_expansion]
+    simp_rw [complexFourierCoeff_rankProjection]
+    apply Finset.sum_congr rfl
+    intro Y _
+    by_cases hsel : Selected A B Y.transpose.toLin'
+    · by_cases hrank : Y.rank = i
+      · rw [hqY Y]
+        simp [hsel, hrank, cY, qY, selectedCarrierFrequency,
+          Complex.ofReal_mul, mul_assoc]
+      · rw [hqY Y]
+        simp [hsel, hrank, cY, qY, selectedCarrierFrequency,
+          Complex.ofReal_mul, mul_assoc]
+    · simp [hsel]
+  have hrhs :
+      typedComplexRankProjection A B
+        (i - (Module.finrank F A + Module.finrank F (W n ⧸ B)))
+        (filteredCarrierFunction A B T f) M =
+        ∑ Y : BinaryMatrix n d,
+          if Selected A B Y.transpose.toLin' then
+            if Module.finrank F (LinearMap.range (qY Y)) =
+                i - (Module.finrank F A + Module.finrank F (W n ⧸ B)) then
+              cY Y * (traceCharacter (qY Y) M : Complex) else 0
+          else 0 := by
+    rw [hsignal]
+    rw [typedComplexRankProjection_finset_sum A B Finset.univ
+      (fun Y N => if Selected A B Y.transpose.toLin' then
+        cY Y * (traceCharacter (qY Y) N : Complex) else 0) M]
+    apply Finset.sum_congr rfl
+    intro Y _
+    by_cases hsel : Selected A B Y.transpose.toLin'
+    · simp only [hsel, if_pos]
+      rw [typedComplexRankProjection_smul,
+        typedComplexRankProjection_character]
+      by_cases hrank : Module.finrank F (LinearMap.range (qY Y)) =
+          i - (Module.finrank F A + Module.finrank F (W n ⧸ B))
+      · simp [hrank, cY, qY, mul_assoc]
+      · simp [hrank, cY, qY, mul_assoc]
+    · have hzero : typedComplexRankProjection A B
+          (i - (Module.finrank F A + Module.finrank F (W n ⧸ B)))
+          (fun _ => (0 : Complex)) M = 0 := by
+        have h := typedComplexRankProjection_smul
+          (j := i - (Module.finrank F A + Module.finrank F (W n ⧸ B)))
+          A B (0 : Complex)
+          (fun _ => (1 : Complex)) M
+        simpa using h
+      simp [hsel, hzero]
+  calc
+    filteredCarrierFunction A B T (complexRankProjection i f) M =
+        ∑ Y : BinaryMatrix n d,
+          if Selected A B Y.transpose.toLin' then
+            if Y.rank = i then
+              cY Y * (traceCharacter (qY Y) M : Complex) else 0
+          else 0 := hlhs
+    _ = ∑ Y : BinaryMatrix n d,
+          if Selected A B Y.transpose.toLin' then
+            if Module.finrank F (LinearMap.range (qY Y)) =
+                i - (Module.finrank F A + Module.finrank F (W n ⧸ B)) then
+              cY Y * (traceCharacter (qY Y) M : Complex) else 0
+          else 0 := by
+      apply Finset.sum_congr rfl
+      intro Y _
+      by_cases hsel : Selected A B Y.transpose.toLin'
+      · have hres := selected_frequency_rank_eq_iff_residual A B Y hsel hcost
+        by_cases hrank : Y.rank = i
+        · have hrank' :
+              Module.finrank F (LinearMap.range (qY Y)) =
+                i - (Module.finrank F A + Module.finrank F (W n ⧸ B)) :=
+            hres.mp hrank
+          simp [hsel, hrank, hrank']
+        · have hrank' :
+              Module.finrank F (LinearMap.range (qY Y)) ≠
+                i - (Module.finrank F A + Module.finrank F (W n ⧸ B)) := by
+            intro hz
+            exact hrank (hres.mpr hz)
+          simp [hsel, hrank, hrank']
+      · simp [hsel]
+    _ = typedComplexRankProjection A B
+          (i - (Module.finrank F A + Module.finrank F (W n ⧸ B)))
+          (filteredCarrierFunction A B T f) M := hrhs.symm
+
+/-- The below-cost ambient rank layer vanishes after the genuine affine
+derivative filter. -/
+theorem actual_derivative_rank_projection_zero_below_cost
+    {n d i : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hi : i < Module.finrank F A + Module.finrank F (W n ⧸ B)) :
+    filteredCarrierFunction A B T (complexRankProjection i f) = 0 :=
+  filteredCarrierFunction_rankProjection_zero_of_below_carrier A B T f hi
+
+/-- On the reduced carrier, a single typed rank projection contracts
+normalized squared energy by Parseval/Bessel. -/
+theorem typed_carrier_rank_projection_energy_le
+    {n d j : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : ((V d ⧸ A) →ₗ[F] B) → Complex) :
+    BinaryMatrixA1TypedFourier.carrierMean A B
+      (fun M => Complex.normSq (typedComplexRankProjection A B j g M)) ≤
+    BinaryMatrixA1TypedFourier.carrierMean A B
+      (fun M => Complex.normSq (g M)) :=
+  typedComplexRankProjection_energy_le A B g
+
+/-- Filtering an ambient rank layer through any affine carrier cannot
+increase its normalized squared energy. Above the carrier cost this is the
+exact projection identity followed by typed Parseval/Bessel; below the cost
+the filtered layer is zero. -/
+theorem actual_derivative_rank_projection_energy_le
+    {n d i : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex) :
+    BinaryMatrixA1TypedFourier.carrierMean A B
+      (fun M => Complex.normSq
+        (filteredCarrierFunction A B T (complexRankProjection i f) M)) ≤
+    BinaryMatrixA1TypedFourier.carrierMean A B
+      (fun M => Complex.normSq (filteredCarrierFunction A B T f M)) := by
+  classical
+  let cost := Module.finrank F A + Module.finrank F (W n ⧸ B)
+  by_cases hcost : cost ≤ i
+  · have hmean :
+        BinaryMatrixA1TypedFourier.carrierMean A B
+          (fun M => Complex.normSq
+            (filteredCarrierFunction A B T (complexRankProjection i f) M)) =
+        BinaryMatrixA1TypedFourier.carrierMean A B
+          (fun M => Complex.normSq
+            (typedComplexRankProjection A B (i - cost)
+              (filteredCarrierFunction A B T f) M)) := by
+      unfold BinaryMatrixA1TypedFourier.carrierMean
+      apply congrArg (fun s : Real =>
+        s / (Fintype.card ((V d ⧸ A) →ₗ[F] B) : Real))
+      apply Finset.sum_congr rfl
+      intro M hM
+      exact congrArg Complex.normSq
+        (filteredCarrierFunction_rankProjection_eq_typed A B T f M
+          (by simpa [cost] using hcost))
+    rw [hmean]
+    exact typed_carrier_rank_projection_energy_le A B
+      (filteredCarrierFunction A B T f)
+  · have hzero :
+        filteredCarrierFunction A B T (complexRankProjection i f) = 0 := by
+      have hi : i < Module.finrank F A + Module.finrank F (W n ⧸ B) := by
+        have hnot : ¬ Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ i := by
+          simpa [cost] using hcost
+        omega
+      exact actual_derivative_rank_projection_zero_below_cost A B T f hi
+    have hzeroMean :
+        BinaryMatrixA1TypedFourier.carrierMean A B
+          (fun M => Complex.normSq
+            (filteredCarrierFunction A B T (complexRankProjection i f) M)) = 0 := by
+      unfold BinaryMatrixA1TypedFourier.carrierMean
+      simp [hzero]
+    have hnonneg : 0 ≤ BinaryMatrixA1TypedFourier.carrierMean A B
+        (fun M => Complex.normSq (filteredCarrierFunction A B T f M)) := by
+      unfold BinaryMatrixA1TypedFourier.carrierMean
+      apply div_nonneg
+      · exact Finset.sum_nonneg fun M hM => Complex.normSq_nonneg _
+      · exact Nat.cast_nonneg _
+    rw [hzeroMean]
+    exact hnonneg
+
+/-- Fourier support of the actual affine derivative loses exactly the rank
+cost paid by the selected carrier frequencies. Collisions among selected
+ambient frequencies are retained in the finite coefficient sum. -/
+theorem filteredCarrierFunction_support_drop
+    {n d D : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ D) :
+    CarrierComplexFourierSupportedThrough A B
+      (D - (Module.finrank F A + Module.finrank F (W n ⧸ B)))
+      (filteredCarrierFunction A B T f) := by
+  classical
+  let qY := fun Y : BinaryMatrix n d => selectedCarrierFrequency A B Y
+  let cY := fun Y : BinaryMatrix n d =>
+    complexFourierCoeff f Y * (traceCharacter Y.transpose.toLin' T : Complex)
+  have hqY (Y : BinaryMatrix n d) :
+      qY Y = (A.mkQ).comp (Y.transpose.toLin'.comp B.subtype) := by
+    change (A.mkQ).comp ((Y.transpose.toLin').domRestrict B) = _
+    ext b
+    rfl
+  have hsignal : filteredCarrierFunction A B T f =
+      fun N : (V d ⧸ A) →ₗ[F] B =>
+        ∑ Y : BinaryMatrix n d,
+          if Selected A B Y.transpose.toLin' then
+            cY Y * (traceCharacter (qY Y) N : Complex) else 0 := by
+    funext N
+    rw [filteredCarrierFunction_fourier_expansion]
+    apply Finset.sum_congr rfl
+    intro Y hY
+    by_cases hsel : Selected A B Y.transpose.toLin'
+    · rw [hqY Y]
+      simp [hsel, cY, qY, selectedCarrierFrequency,
+        Complex.ofReal_mul, mul_assoc]
+    · simp [hsel]
+  intro Z hZ
+  rw [hsignal]
+  rw [complexCarrierFourierCoeff_finset_sum A B Finset.univ
+    (fun Y M => if Selected A B Y.transpose.toLin' then
+      cY Y * (traceCharacter (qY Y) M : Complex) else 0) Z]
+  apply Finset.sum_eq_zero
+  intro Y hY
+  by_cases hsel : Selected A B Y.transpose.toLin'
+  · simp only [hsel, if_pos]
+    rw [complexCarrierFourierCoeff_smul,
+      complexCarrierFourierCoeff_character]
+    by_cases hfreq : Z = qY Y
+    · subst Z
+      have hYsupport : D < Y.rank := by
+        rw [selected_frequency_rank_eq_carrier_rank_add_cost A B Y hsel]
+        have hres : D -
+            (Module.finrank F A + Module.finrank F (W n ⧸ B)) <
+              Module.finrank F
+                (LinearMap.range (selectedCarrierFrequency A B Y)) := by
+          simpa [qY] using hZ
+        omega
+      have hzero := hsupport Y hYsupport
+      simp [cY, hzero]
+    · simp [hfreq]
+  · have hzero :
+        (fun M => if Selected A B Y.transpose.toLin' then
+          cY Y * (traceCharacter (qY Y) M : Complex) else 0) =
+        (fun _ => (0 : Complex)) := by
+      funext M
+      simp [hsel]
+    rw [hzero]
+    simp [complexCarrierFourierCoeff,
+      BinaryMatrixA1TypedFourier.carrierMean]
+
+/-- In standard carrier coordinates, the same actual derivative loses the
+same rank cost; this is the degree-support form consumed by A18. -/
+theorem actualDerivativeCoordinate_support_drop
+    {n d D : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ D) :
+    ComplexFourierSupportedThrough
+      (D - (Module.finrank F A + Module.finrank F (W n ⧸ B)))
+      (actualDerivativeCoordinate A B T f) := by
+  have hcarrier := filteredCarrierFunction_support_drop A B T f hsupport hcost
+  exact (carrierFourier_support_iff_coordinate A B
+    (D - (Module.finrank F A + Module.finrank F (W n ⧸ B)))
+    (filteredCarrierFunction A B T f)).mp (by simpa using hcarrier)
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
