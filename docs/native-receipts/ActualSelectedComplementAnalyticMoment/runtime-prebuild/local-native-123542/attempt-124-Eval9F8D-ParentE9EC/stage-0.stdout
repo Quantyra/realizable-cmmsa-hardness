@@ -1,0 +1,36 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46ActualFibreEvaluation.lean:41:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun L => ⟨↑L - Matrix.toLin' Q.base, ⋯⟩
+  has type
+    { f //
+        f ∘ₗ Q.domainFixed.subtype = Matrix.toLin' Q.base ∘ₗ Q.domainFixed.subtype ∧
+          actualLeftMap Q ∘ₗ f = actualLeftMap Q ∘ₗ Matrix.toLin' Q.base } →
+      { f // f ∘ₗ Q.domainFixed.subtype = 0 ∧ f.range ≤ Q.codomainVariation }
+  but is expected to have type
+    { f //
+        f ∘ₗ Q.domainFixed.subtype = Matrix.toLin' Q.base ∘ₗ Q.domainFixed.subtype ∧
+          actualLeftMap Q ∘ₗ f = actualLeftMap Q ∘ₗ Matrix.toLin' Q.base } →
+      ConstrainedMap Q.domainFixed Q.codomainVariation
+  in the application
+    @Equiv.mk
+      { f //
+        f ∘ₗ Q.domainFixed.subtype = Matrix.toLin' Q.base ∘ₗ Q.domainFixed.subtype ∧
+          actualLeftMap Q ∘ₗ f = actualLeftMap Q ∘ₗ Matrix.toLin' Q.base }
+      (ConstrainedMap Q.domainFixed Q.codomainVariation) fun L => ⟨↑L - Matrix.toLin' Q.base, ⋯⟩
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46ActualFibreEvaluation.lean:39:17: warning: This simp argument is unused:
+  actualFibreQuotientHomEquiv
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Equiv.trans_apply, actualFibreLinearEquiv, Equiv.coe_fn_mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46ActualFibreEvaluation.lean:39:46: warning: This simp argument is unused:
+  Equiv.trans_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [actualFibreQuotientHomEquiv, actualFibreLinearEquiv, Equiv.coe_fn_mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
