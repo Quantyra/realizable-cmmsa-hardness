@@ -1,0 +1,67 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.coordinateDualAnnihilator {n : ℕ}
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.V✝ n)) :
+  Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.V✝ n)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.coordinateDualAnnihilator' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.coordinateDualAnnihilator_finrank {n : ℕ}
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.V✝ n)) :
+  Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+        ↥(coordinateDualAnnihilator B) +
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝ ↥B =
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.V✝ n)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.coordinateDualAnnihilator_finrank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.coordinateDualAnnihilator_finrank_one {n : ℕ}
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.V✝ n))
+  (hB :
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.V✝ n ⧸ B) =
+      1) :
+  Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+      ↥(coordinateDualAnnihilator B) =
+    1
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.coordinateDualAnnihilator_finrank_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.transposeActualRestriction_domainFixed_eq_coordinateDualAnnihilator
+  {n d : ℕ} (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) :
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.transposeActualRestriction Q).domainFixed =
+    coordinateDualAnnihilator Q.codomainVariation
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.transposeActualRestriction_domainFixed_eq_coordinateDualAnnihilator' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.selected_bot_iff_coordinateDualAnnihilator_top
+  {n d : ℕ}
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.V✝ n))
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected ⊥ B (Matrix.toLin' (Matrix.transpose Y)) ↔
+    PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected (coordinateDualAnnihilator B) ⊤ (Matrix.toLin' Y)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.selected_bot_iff_coordinateDualAnnihilator_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.complexAmbientHybridFilter_transpose_bot
+  {n d : ℕ}
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.V✝ n))
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix d n) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.complexTranspose
+      (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter ⊥ B f) M =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter (coordinateDualAnnihilator B) ⊤
+      (PvNP.RealizableHardness.BinaryMatrixComplexA15.complexTranspose f) M
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter.complexAmbientHybridFilter_transpose_bot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
