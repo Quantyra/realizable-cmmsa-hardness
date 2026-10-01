@@ -1,4 +1,4 @@
-﻿import PvNP.RealizableHardness.ActualBinaryMatrixHC46
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46
 
 open PvNP.RealizableHardness.BinaryMatrixFourier
 open PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment
