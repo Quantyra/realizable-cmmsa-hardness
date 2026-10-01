@@ -1,0 +1,25 @@
+PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse.canonical_source_signal_A1_collapse {n d r l h : ℕ}
+  (lines : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.DomainLineFlag ⊥ l)
+  (hypers : PvNP.RealizableHardness.ActualTypedABCanonicalFlag.CodomainHyperplaneFlag ⊤ h)
+  (fStored :
+    (PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse.V✝ d ⧸
+          ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse.F✝]
+        ↥⊤) →
+      ℂ)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse.W✝ n)
+  (g : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  have carrierBase := PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.initialBottomTopBase T;
+  let tower := PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers carrierBase;
+  PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters tower
+      (if h + l = 0 then fun M =>
+        PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ T g M
+      else fun M => PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 g M) =
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend T g
+'PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse.canonical_source_signal_A1_collapse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
