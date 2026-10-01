@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualFiniteAppendImagePerImageEnergy
+
+open PvNP.RealizableHardness.ActualFiniteAppendImagePerImageEnergy
+
+#check retained_fourier_square_sum
+#print axioms retained_fourier_square_sum
+#check image_fibre_fourier_square_sum
+#print axioms image_fibre_fourier_square_sum
+#check per_image_fourier_energy_ratio
+#print axioms per_image_fourier_energy_ratio

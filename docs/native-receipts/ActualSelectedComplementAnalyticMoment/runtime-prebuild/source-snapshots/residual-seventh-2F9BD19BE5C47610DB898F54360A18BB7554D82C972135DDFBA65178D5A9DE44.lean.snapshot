@@ -1,0 +1,121 @@
+import Mathlib.LinearAlgebra.Matrix.Rank
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Tactic
+import PvNP.RealizableHardness.ActualFiniteBinaryImageFibres
+import PvNP.RealizableHardness.GrassmannCounting
+
+/-!
+Per-image retained-frequency counting for the actual appended Fourier operator.
+The fibre is fixed by the *same* image subspace throughout; no cross-image
+coefficient constancy or full-rank sampling law is used.
+-/
+namespace PvNP.RealizableHardness.ActualFiniteAppendImageWeighted
+
+open PvNP.RealizableHardness.ActualFiniteBinaryImageFibres
+open PvNP.RealizableHardness.GrassmannCounting
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Rank-`i` matrices with fixed image `E` whose associated surjection
+vanishes on the appended coordinate summand. -/
+def RetainedMatrixImageFibre {n c s i : Nat}
+    (E : Submodule (ZMod 2) (Coord n))
+    (hE : Module.finrank (ZMod 2) E = i) :=
+  {A : MatrixImageFibre n (c + s) i E //
+    (matrixImageFibreEquivSurjections E hE A).val.comp
+      (appendRightInjection c s) = 0}
+
+/-- The zero-appended part of a fixed-image matrix fibre is exactly the
+surjection fibre on the base coordinates. This is a fibrewise equivalence,
+not a statement after summing over image subspaces. -/
+def retainedMatrixImageFibreEquiv {n c s i : Nat}
+    (E : Submodule (ZMod 2) (Coord n))
+    (hE : Module.finrank (ZMod 2) E = i) :
+    RetainedMatrixImageFibre E hE ≃ AppendedZeroSurjectionFibre c s E where
+  toFun A :=
+    ⟨(matrixImageFibreEquivSurjections E hE A.val).val,
+      ⟨(matrixImageFibreEquivSurjections E hE A.val).property, A.property⟩⟩
+  invFun f := by
+    let g : SurjectionImageFibre (c + s) E := ⟨f.val, f.property.1⟩
+    let A : MatrixImageFibre n (c + s) i E :=
+      (matrixImageFibreEquivSurjections E hE).symm g
+    have hA : matrixImageFibreEquivSurjections E hE A = g :=
+      (matrixImageFibreEquivSurjections E hE).apply_symm_apply g
+    exact ⟨A, by simpa [g, hA] using f.property.2⟩
+  left_inv A := by
+    apply Subtype.ext
+    exact (matrixImageFibreEquivSurjections E hE).symm_apply_apply A.val
+  right_inv f := by
+    apply Subtype.ext
+    exact congrArg Subtype.val
+      ((matrixImageFibreEquivSurjections E hE).apply_symm_apply
+        ⟨f.val, f.property.1⟩)
+
+/-- The frame-product ratio estimate in denominator-free natural form.
+This keeps the per-image count arithmetic exact before any real normalization. -/
+theorem frameProduct_scaled_le {c s i : Nat} (hi : i ≤ c) :
+    2 ^ (s * i) * frameProduct c i ≤ frameProduct (c + s) i := by
+  have hprod :
+      (∏ j : Fin i, 2 ^ s * (2 ^ c - 2 ^ j.val)) ≤
+        ∏ j : Fin i, (2 ^ (c + s) - 2 ^ j.val) := by
+    apply Finset.prod_le_prod
+    · intro j hj
+      exact Nat.zero_le _
+    · intro j hj
+      have hjc : j.val ≤ c := by omega
+      have hab : 2 ^ j.val ≤ 2 ^ c :=
+        Nat.pow_le_pow_right (by decide) hjc
+      have hq : 1 ≤ 2 ^ s := Nat.one_le_pow s 2 (by decide)
+      have hqa : 2 ^ c ≤ 2 ^ s * 2 ^ c := by
+        simpa using Nat.mul_le_mul_right (2 ^ c) hq
+      have hbqa : 2 ^ j.val ≤ 2 ^ s * 2 ^ c := hab.trans hqa
+      have hsum :
+          2 ^ s * (2 ^ c - 2 ^ j.val) + 2 ^ j.val ≤ 2 ^ s * 2 ^ c := by
+        calc
+          2 ^ s * (2 ^ c - 2 ^ j.val) + 2 ^ j.val ≤
+              2 ^ s * (2 ^ c - 2 ^ j.val) + 2 ^ s * 2 ^ j.val := by
+                exact Nat.add_le_add_left
+                  (Nat.mul_le_mul_right (2 ^ j.val) hq) _
+          _ = 2 ^ s * 2 ^ c := by
+                rw [← Nat.mul_add, Nat.sub_add_cancel hab]
+      have hfactor :
+          2 ^ s * (2 ^ c - 2 ^ j.val) ≤ 2 ^ s * 2 ^ c - 2 ^ j.val :=
+        (Nat.le_sub_iff_add_le hbqa).2 hsum
+      simpa [Nat.pow_add, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hfactor
+  calc
+    2 ^ (s * i) * frameProduct c i =
+        ∏ j : Fin i, 2 ^ s * (2 ^ c - 2 ^ j.val) := by
+          simp [frameProduct, Finset.prod_mul_distrib, pow_mul, Nat.mul_comm]
+    _ ≤ ∏ j : Fin i, (2 ^ (c + s) - 2 ^ j.val) := hprod
+    _ = frameProduct (c + s) i := rfl
+
+/-- Exact finite count of retained rank-`i`, image-`E` matrices. The proof
+uses the matrix/surjection equivalence and the actual appended-zero
+surjection equivalence; it does not postulate a fibre count. -/
+theorem card_retainedMatrixImageFibre {n c s i : Nat}
+    (E : Submodule (ZMod 2) (Coord n))
+    (hE : Module.finrank (ZMod 2) E = i) :
+    Nat.card (RetainedMatrixImageFibre (c := c) (s := s) E hE) =
+      frameProduct c i := by
+  rw [Nat.card_congr (retainedMatrixImageFibreEquiv E hE)]
+  simpa [hE] using card_appendedZeroSurjectionFibre (c := c) (s := s) E
+
+/-- For any real statistic constant on a fixed image fibre, the retained
+squared mass factors by the exact finite retained count. This is the local
+weighted step used before summing over distinct `E`. -/
+theorem retained_fibre_square_sum {n c s i : Nat}
+    (E : Submodule (ZMod 2) (Coord n))
+    (hE : Module.finrank (ZMod 2) E = i)
+    (a : MatrixImageFibre n (c + s) i E → Real)
+    (v : Real) (ha : ∀ A, a A = v) :
+    ∑ A : RetainedMatrixImageFibre (c := c) (s := s) E hE, (a A.val) ^ 2 =
+      (Fintype.card (RetainedMatrixImageFibre (c := c) (s := s) E hE) : Real) * v ^ 2 := by
+  have hconst : ∀ A : RetainedMatrixImageFibre (c := c) (s := s) E hE,
+      a A.val = v := fun A => ha A.val
+  simp_rw [hconst]
+  simp
+
+end
+end PvNP.RealizableHardness.ActualFiniteAppendImageWeighted

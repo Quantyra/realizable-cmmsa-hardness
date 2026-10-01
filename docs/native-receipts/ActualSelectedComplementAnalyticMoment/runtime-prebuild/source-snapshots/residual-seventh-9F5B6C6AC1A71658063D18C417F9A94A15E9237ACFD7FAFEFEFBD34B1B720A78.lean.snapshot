@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualFiniteAppendImageTailBridge
+
+open PvNP.RealizableHardness.ActualFiniteAppendImageTailBridge
+
+#check appendMatrix_tail_comp_zero_iff
+#print axioms appendMatrix_tail_comp_zero_iff
+#check appendedFrequencyPart_zero_iff_kills
+#print axioms appendedFrequencyPart_zero_iff_kills
+#check retained_iff_appendedFrequencyPart_zero
+#print axioms retained_iff_appendedFrequencyPart_zero
