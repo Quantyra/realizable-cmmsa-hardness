@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse
+
+open PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse
+
+#check canonical_source_signal_A1_collapse
+#print axioms canonical_source_signal_A1_collapse
