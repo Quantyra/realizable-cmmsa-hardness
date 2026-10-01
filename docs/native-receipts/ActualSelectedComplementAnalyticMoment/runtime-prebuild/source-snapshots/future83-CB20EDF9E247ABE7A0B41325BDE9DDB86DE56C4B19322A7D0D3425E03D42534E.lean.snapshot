@@ -1,0 +1,446 @@
+import PvNP.RealizableHardness.ActualTypedABRankedTower
+import PvNP.RealizableHardness.ActualMZ24HyperplaneSupport
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalFlag
+
+open ActualTypedABRankedTower
+open ActualTypedABMixedTower
+open BinaryMatrixA1NestedCarrier
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+private noncomputable instance flagSubmoduleFintype {E : Type*}
+    [Fintype E] [AddCommGroup E] [Module F E]
+    (S : Submodule F E) : Fintype S := Fintype.ofFinite S
+
+/-- A source-chosen sequence of one-dimensional quotient-domain directions.
+Each child is the actual larger ambient subspace, retaining the quotient
+inclusions used by the A1 carrier identities. -/
+inductive DomainLineFlag {d : Nat} :
+    Submodule F (V d) → Nat → Type 1
+  | done (A : Submodule F (V d)) : DomainLineFlag A 0
+  | cons {A A' : Submodule F (V d)}
+      (hA : A ≤ A')
+      (hL : Module.finrank F (A'.map A.mkQ) = 1)
+      {k : Nat} (tail : DomainLineFlag A' k) : DomainLineFlag A (k + 1)
+
+/-- A source-chosen sequence of codomain hyperplanes. The carrier after each
+step is exactly the ambient image of the chosen hyperplane. -/
+inductive CodomainHyperplaneFlag {n : Nat} :
+    Submodule F (W n) → Nat → Type 1
+  | done (B : Submodule F (W n)) : CodomainHyperplaneFlag B 0
+  | cons {B : Submodule F (W n)} (H : Submodule F B)
+      (hH : Module.finrank F (B ⧸ H) = 1) {k : Nat}
+      (tail : CodomainHyperplaneFlag (H.map B.subtype) k) :
+      CodomainHyperplaneFlag B (k + 1)
+
+/-- The exact terminal domain carrier selected by a domain-line flag. -/
+def DomainLineFlag.endpoint {d : Nat} {A : Submodule F (V d)} {k : Nat} :
+    DomainLineFlag A k → Submodule F (V d)
+  | .done A => A
+  | .cons _ _ tail => tail.endpoint
+
+/-- Append one genuine one-dimensional quotient step at the terminal end of
+an existing domain flag. This is the constructor needed to build a complete
+flag upward from a recursively chosen hyperplane of the requested endpoint. -/
+def DomainLineFlag.appendStep {d : Nat} {A0 : Submodule F (V d)}
+    {k : Nat} (flag : DomainLineFlag A0 k)
+    (Anew : Submodule F (V d))
+    (hle : flag.endpoint ≤ Anew)
+    (hstep : Module.finrank F (Anew.map flag.endpoint.mkQ) = 1) :
+    DomainLineFlag A0 (k + 1) := by
+  induction flag with
+  | done A0 =>
+      exact .cons hle hstep (.done Anew)
+  | @cons d A A' hA hL k tail ih =>
+      exact .cons hA hL
+        (ih Anew (by simpa [DomainLineFlag.endpoint] using hle)
+          (by simpa [DomainLineFlag.endpoint] using hstep))
+
+/-- Appending a line step changes the endpoint to exactly the new target. -/
+theorem DomainLineFlag.endpoint_appendStep {d : Nat} {A0 : Submodule F (V d)}
+    {k : Nat} (flag : DomainLineFlag A0 k)
+    (Anew : Submodule F (V d))
+    (hle : flag.endpoint ≤ Anew)
+    (hstep : Module.finrank F (Anew.map flag.endpoint.mkQ) = 1) :
+  (flag.appendStep Anew hle hstep).endpoint = Anew := by
+  induction flag with
+  | done A0 => rfl
+  | @cons d A A' hA hL k tail ih =>
+      simpa [DomainLineFlag.appendStep, DomainLineFlag.endpoint] using
+        (ih Anew (by simpa [DomainLineFlag.endpoint] using hle)
+          (by simpa [DomainLineFlag.endpoint] using hstep))
+
+/-- The exact terminal ambient codomain carrier selected by a hyperplane flag.
+Each recursive flag is already expressed as a submodule of the same ambient
+space, so its endpoint is the requested nested image itself. -/
+def CodomainHyperplaneFlag.endpoint {n : Nat} {B : Submodule F (W n)} {k : Nat} :
+    CodomainHyperplaneFlag B k → Submodule F (W n)
+  | .done B => B
+  | .cons _ _ tail => tail.endpoint
+
+/-- The dimension drops by exactly one at every step of a codomain flag. -/
+theorem CodomainHyperplaneFlag.endpoint_finrank {n : Nat}
+    {B : Submodule F (W n)} {k : Nat}
+    (flag : CodomainHyperplaneFlag B k) :
+    Module.finrank F flag.endpoint + k = Module.finrank F B := by
+  induction flag with
+  | done B => simp [CodomainHyperplaneFlag.endpoint]
+  | @cons n B H hH k tail ih =>
+      have hquot := H.finrank_quotient_add_finrank
+      have hmap : Module.finrank F (H.map B.subtype) = Module.finrank F H := by
+        rw [Submodule.finrank_map_subtype_eq]
+      have hstep : Module.finrank F (H.map B.subtype) + 1 = Module.finrank F B := by
+        omega
+      simp only [CodomainHyperplaneFlag.endpoint]
+      omega
+
+/-- The image of the current carrier in the quotient by an actual
+codimension-one child has dimension one. This is the quotient-domain step
+needed when reversing a hyperplane flag into a domain-line flag. -/
+private theorem hyperplane_map_quotient_finrank_one {n : Nat}
+    (B : Submodule F (W n)) (H : Submodule F B)
+    (hH : Module.finrank F (B ⧸ H) = 1) :
+    Module.finrank F (B.map (H.map B.subtype).mkQ) = 1 := by
+  let B' : Submodule F (W n) := H.map B.subtype
+  let q : B →ₗ[F] (W n ⧸ B') := B'.mkQ.comp B.subtype
+  have hker : LinearMap.ker q = H := by
+    ext x
+    change q x = 0 ↔ x ∈ H
+    change B'.mkQ (B.subtype x) = 0 ↔ x ∈ H
+    rw [Submodule.mkQ_apply_eq_zero]
+    change B.subtype x ∈ B' ↔ x ∈ H
+    rw [B']
+    constructor
+    · intro hx
+      rcases Submodule.mem_map.mp hx with ⟨y, hy, hxy⟩
+      have hyx : y = x := B.subtype.injective hxy
+      simpa [hyx] using hy
+    · intro hx
+      exact Submodule.mem_map.mpr ⟨x, hx, rfl⟩
+  have hrange : LinearMap.range q = B.map B'.mkQ := by
+    simp [q, B', LinearMap.range_comp]
+  have hquot := q.quotKerEquivRange.finrank_eq
+  rw [hker, hrange] at hquot
+  simpa [hH] using hquot.symm
+
+/-- Reversing a genuine codomain-hyperplane flag gives a genuine
+domain-line flag from its endpoint to its initial carrier. The dimension-one
+certificate at each reversed step is computed from the actual quotient map. -/
+theorem exists_reverse_codomain_flag {n : Nat}
+    {B : Submodule F (W n)} {k : Nat}
+    (flag : CodomainHyperplaneFlag B k) :
+    ∃ lines : DomainLineFlag flag.endpoint k, lines.endpoint = B := by
+  induction flag with
+  | done B => exact ⟨.done B, rfl⟩
+  | @cons n B H hH k tail ih =>
+      rcases ih with ⟨lines, hlines⟩
+      have hle : lines.endpoint ≤ B := by
+        rw [hlines]
+        exact hyperplaneSuccessor_le B H
+      have hstep :
+          Module.finrank F (B.map lines.endpoint.mkQ) = 1 := by
+        rw [hlines]
+        exact hyperplane_map_quotient_finrank_one B H hH
+      refine ⟨lines.appendStep B hle hstep, ?_⟩
+      exact DomainLineFlag.endpoint_appendStep lines B hle hstep
+
+/-- Choose a complete actual hyperplane flag in every finite binary
+codomain subspace. The recursion uses an actual hyperplane of the current
+subspace and terminates at its bottom subspace. -/
+noncomputable def fullCodomainHyperplaneFlag {n : Nat} :
+    (B : Submodule F (W n)) →
+      CodomainHyperplaneFlag B (Module.finrank F B)
+  | B => by
+      classical
+      by_cases hzero : Module.finrank F B = 0
+      · have hB : B = ⊥ := (Submodule.finrank_eq_zero).mp hzero
+        subst B
+        simpa using (CodomainHyperplaneFlag.done (B := (⊥ : Submodule F (W n))))
+      · have hbot : (⊥ : Submodule F B) ≠ ⊤ := by
+          intro h
+          have hdim := congrArg (Module.finrank F) h
+          simp at hdim
+          omega
+        let selected := Classical.choice
+          (ActualMZ24HyperplaneSupport.exists_hyperplane_containing_of_ne_top
+            (V := B) (⊥ : Submodule F B) hbot)
+        let H : Submodule F B := selected.1.1
+        have hcod :
+            ActualMZ24HyperplaneSupport.relativeCodim (V := B) H = 1 :=
+          selected.1.2
+        have hquot : Module.finrank F (B ⧸ H) = 1 := by
+          have hsub := H.finrank_quotient_add_finrank
+          rw [ActualMZ24HyperplaneSupport.relativeCodim_eq_finrank_sub] at hcod
+          omega
+        let B' : Submodule F (W n) := H.map B.subtype
+        have hdim : Module.finrank F B' + 1 = Module.finrank F B := by
+          change Module.finrank F (H.map B.subtype) + 1 = Module.finrank F B
+          rw [Submodule.finrank_map_subtype_eq]
+          have hsub := H.finrank_quotient_add_finrank
+          rw [ActualMZ24HyperplaneSupport.relativeCodim_eq_finrank_sub] at hcod
+          omega
+        have tail := fullCodomainHyperplaneFlag B'
+        simpa [B', hdim] using
+          (CodomainHyperplaneFlag.cons (B := B) H hquot tail)
+termination_by B => Module.finrank F B
+decreasing_by omega
+
+/-- The full flag chosen above really descends from the requested carrier to
+its bottom subspace, with no endpoint witness supplied by the caller. -/
+theorem fullCodomainHyperplaneFlag_endpoint {n : Nat}
+    (B : Submodule F (W n)) :
+    (fullCodomainHyperplaneFlag B).endpoint = ⊥ := by
+  have hdim :=
+    CodomainHyperplaneFlag.endpoint_finrank (fullCodomainHyperplaneFlag B)
+  have hzero : Module.finrank F (fullCodomainHyperplaneFlag B).endpoint = 0 := by
+    omega
+  exact Submodule.finrank_eq_zero.mp hzero
+
+/-- A codomain flag can descend from any finite carrier to any specified
+subcarrier. At each recursive step the selected actual hyperplane contains
+the target; recursion is on the dimension difference. -/
+noncomputable def codomainFlagToSubcarrier {n : Nat} :
+    (B K : Submodule F (W n)) → K ≤ B →
+      {flag : CodomainHyperplaneFlag B
+        (Module.finrank F B - Module.finrank F K) // flag.endpoint = K}
+  | B, K, hKB => by
+      classical
+      by_cases hEq : B = K
+      · subst K
+        exact ⟨.done B, rfl⟩
+      · let KB : Submodule F B := K.comap B.subtype
+        have hnot : ¬ B ≤ K := by
+          intro hBK
+          exact hEq (le_antisymm hKB hBK)
+        have hKBtop : KB ≠ ⊤ := by
+          intro htop
+          apply hnot
+          intro x hx
+          have hxKB : (⟨x, hx⟩ : B) ∈ KB := by
+            rw [htop]
+            trivial
+          simpa [KB] using hxKB
+        let selected := Classical.choice
+          (ActualMZ24HyperplaneSupport.exists_hyperplane_containing_of_ne_top
+            (V := B) KB hKBtop)
+        let H : Submodule F B := selected.1.1
+        have hHcod :
+            ActualMZ24HyperplaneSupport.relativeCodim (V := B) H = 1 :=
+          selected.1.2
+        have hH : Module.finrank F (B ⧸ H) = 1 := by
+          have hdim := H.finrank_quotient_add_finrank
+          rw [ActualMZ24HyperplaneSupport.relativeCodim_eq_finrank_sub] at hHcod
+          omega
+        have hcontain : KB ≤ H := selected.2
+        let B' : Submodule F (W n) := H.map B.subtype
+        have hKB' : K ≤ B' := by
+          intro x hx
+          apply Submodule.mem_map.mpr
+          refine ⟨⟨x, hKB hx⟩, ?_, rfl⟩
+          exact hcontain (by simpa [KB] using hx)
+        have hmap : Module.finrank F B' = Module.finrank F H := by
+          exact Submodule.finrank_map_subtype_eq B H
+        have hdim : Module.finrank F B' + 1 = Module.finrank F B := by
+          rw [hmap]
+          have hquot := H.finrank_quotient_add_finrank
+          omega
+        have htail := codomainFlagToSubcarrier B' K hKB'
+        have hlen :
+            (Module.finrank F B' - Module.finrank F K) + 1 =
+              Module.finrank F B - Module.finrank F K := by omega
+        refine ⟨?_, ?_⟩
+        · simpa [hlen] using
+            (CodomainHyperplaneFlag.cons (B := B) H hH htail.1)
+        · simpa [CodomainHyperplaneFlag.endpoint] using htail.2
+termination_by B K hKB => Module.finrank F B - Module.finrank F K
+decreasing_by omega
+
+/-- Every finite binary domain subspace admits a concrete complete line flag
+from bottom to that exact endpoint, obtained by reversing the actual
+hyperplane flag in the same ambient space. -/
+theorem exists_full_domain_line_flag {d : Nat}
+    (A : Submodule F (V d)) :
+    ∃ lines : DomainLineFlag (⊥ : Submodule F (V d))
+      (Module.finrank F A), lines.endpoint = A := by
+  let flag := fullCodomainHyperplaneFlag A
+  have hbottom : flag.endpoint = (⊥ : Submodule F (V d)) :=
+    fullCodomainHyperplaneFlag_endpoint A
+  obtain ⟨lines, htop⟩ := exists_reverse_codomain_flag flag
+  cases hbottom
+  exact ⟨lines, htop⟩
+
+/-- Execute an all-zero-base hyperplane suffix as genuine typed A15 steps. -/
+def buildHyperplaneSuffix {n d : Nat} {r h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} :
+    (flag : CodomainHyperplaneFlag B h) →
+      ActualTypedABRankedTower A B f r h
+  | .done _ => .done f r
+  | @CodomainHyperplaneFlag.cons n B H hH k tail =>
+      .hyperplane hH 0 f
+        (buildHyperplaneSuffix (f := fun N =>
+          typedHyperplaneReducedWitness (k := r + k)
+            B H hH 0 f
+            ((Submodule.equivMapOfInjective B.subtype
+              B.injective_subtype H).symm.toLinearMap.comp N)) tail)
+
+/-- Execute a hyperplane flag whose first step receives the specified affine
+base; all later steps use zero base. -/
+def buildHyperplanePrefix {n d : Nat} {r h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} :
+    (flag : CodomainHyperplaneFlag B h) →
+    (T : (V d ⧸ A) →ₗ[F] B) → ActualTypedABRankedTower A B f r h
+  | .done _, _ => .done f r
+  | @CodomainHyperplaneFlag.cons n B H hH k tail, T =>
+      .hyperplane hH T f
+        (buildHyperplaneSuffix (f := fun N =>
+          typedHyperplaneReducedWitness (k := r + k)
+            B H hH T f
+            ((Submodule.equivMapOfInjective B.subtype
+              B.injective_subtype H).symm.toLinearMap.comp N)) tail)
+
+/-- Execute a line flag suffix followed by the codomain hyperplane suffix;
+all steps in both suffixes use zero base. -/
+def buildLineSuffix {n d : Nat} {r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} :
+    (lines : DomainLineFlag A l) →
+    (hypers : CodomainHyperplaneFlag B h) →
+    ActualTypedABRankedTower A B f r (h + l)
+  | .done _, hypers => buildHyperplaneSuffix hypers
+  | @DomainLineFlag.cons d A A' hA hL k tail, hypers =>
+      .line hA hL 0 f
+        (buildLineSuffix tail hypers (f := fun M =>
+          typedLineReducedWitness (k := r + (h + k))
+            B (A'.map A.mkQ) hL 0 f
+            (M.comp (nestedDomainEquiv A A' hA))))
+
+/-- Construct the source-canonical line-first, hyperplane-second tower.
+The supplied ambient affine base is used at the first selected step; the
+actual A15 recursion uses zero base at every later step. -/
+def buildCanonicalSourceTower {n d : Nat} {r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l)
+    (hypers : CodomainHyperplaneFlag B h)
+    (T : (V d ⧸ A) →ₗ[F] B) :
+    ActualTypedABRankedTower A B f r (h + l) := by
+  cases lines with
+  | done A => exact buildHyperplanePrefix hypers T
+  | @cons d A A' hA hL k tail =>
+      exact .line hA hL T f
+        (buildLineSuffix tail hypers (f := fun M =>
+          typedLineReducedWitness (k := r + (h + k))
+            B (A'.map A.mkQ) hL T f
+            (M.comp (nestedDomainEquiv A A' hA))))
+
+/-- Every canonical source tower has the exact A14 selected-operator
+identities at its chosen line and hyperplane steps. -/
+theorem buildCanonicalSourceTower_A14 {n d : Nat} {r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l)
+    (hypers : CodomainHyperplaneFlag B h)
+    (T : (V d ⧸ A) →ₗ[F] B) :
+    HasRankedA14Semantics (buildCanonicalSourceTower lines hypers T) :=
+  ranked_tower_has_A14_semantics _
+
+/-- A zero-base hyperplane suffix terminates at the endpoint named by its flag. -/
+theorem buildHyperplaneSuffix_endpoint {n d r h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (flag : CodomainHyperplaneFlag B h) :
+    (rankedTerminalData (buildHyperplaneSuffix (r := r) (A := A) (f := f) flag)).Bend =
+      flag.endpoint := by
+  induction flag generalizing f with
+  | done B => rfl
+  | @cons n B H hH k tail ih =>
+      simpa [buildHyperplaneSuffix] using
+        (ih (f := fun N => typedHyperplaneReducedWitness (k := r + k)
+          B H hH 0 f
+          ((Submodule.equivMapOfInjective B.subtype B.injective_subtype H).symm.toLinearMap.comp N)))
+
+/-- A hyperplane prefix keeps the same actual terminal carrier. -/
+theorem buildHyperplanePrefix_endpoint {n d r h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (flag : CodomainHyperplaneFlag B h) (T : (V d ⧸ A) →ₗ[F] B) :
+    (rankedTerminalData (buildHyperplanePrefix (r := r) (A := A) (f := f) flag T)).Bend =
+      flag.endpoint := by
+  cases flag with
+  | done B => rfl
+  | @cons n B H hH k tail =>
+      simpa [buildHyperplanePrefix, buildHyperplaneSuffix] using
+        (buildHyperplaneSuffix_endpoint (r := r) (A := A) (f := fun N =>
+          typedHyperplaneReducedWitness (k := r + k) B H hH T f
+            ((Submodule.equivMapOfInjective B.subtype B.injective_subtype H).symm.toLinearMap.comp N)) tail)
+
+/-- A line suffix followed by its hyperplane suffix terminates at the named
+nested carriers, without replacing either endpoint by an arbitrary witness. -/
+theorem buildLineSuffix_endpoints {n d r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l) (hypers : CodomainHyperplaneFlag B h) :
+    (rankedTerminalData (buildLineSuffix (r := r) (f := f) lines hypers)).Aend = lines.endpoint ∧
+      (rankedTerminalData (buildLineSuffix (r := r) (f := f) lines hypers)).Bend = hypers.endpoint := by
+  induction lines generalizing f with
+  | done A => exact ⟨rfl, buildHyperplaneSuffix_endpoint (r := r) (A := A) (f := f) hypers⟩
+  | @cons d A A' hA hL k tail ih =>
+      simpa [buildLineSuffix, DomainLineFlag.endpoint] using
+        (ih (f := fun M => typedLineReducedWitness (k := r + (h + k))
+          B (A'.map A.mkQ) hL 0 f (M.comp (nestedDomainEquiv A A' hA))) hypers)
+
+/-- The canonical source tower terminates at the requested endpoints of its
+line and hyperplane flags. -/
+theorem buildCanonicalSourceTower_endpoints {n d : Nat} {r l h : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l) (hypers : CodomainHyperplaneFlag B h)
+    (T : (V d ⧸ A) →ₗ[F] B) :
+    (rankedTerminalData (buildCanonicalSourceTower (r := r) lines hypers T)).Aend =
+        lines.endpoint ∧
+      (rankedTerminalData (buildCanonicalSourceTower (r := r) lines hypers T)).Bend =
+        hypers.endpoint := by
+  cases lines with
+  | done A =>
+      exact ⟨rfl, buildHyperplanePrefix_endpoint (r := r) (A := A)
+        (f := f) hypers T⟩
+  | @cons d A A' hA hL k tail =>
+      simpa [buildCanonicalSourceTower, DomainLineFlag.endpoint] using
+        (buildLineSuffix_endpoints (r := r) (f := fun M =>
+          typedLineReducedWitness (k := r + (h + k))
+            B (A'.map A.mkQ) hL T f
+            (M.comp (nestedDomainEquiv A A' hA))) tail hypers)
+
+/-- The canonical line-first/hyperplane-second source tower inherits the
+actual per-level energy estimate from the original function's globalness;
+the carrier, affine base, and terminal rank are those generated above. -/
+theorem buildCanonicalSourceTower_energy {n d : Nat} {r l h D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (lines : DomainLineFlag A l)
+    (hypers : CodomainHyperplaneFlag B h)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (hlevel : r + (h + l) ≤ D) :
+    ∀ eps : Real, 0 ≤ eps → UpToTypedNormSqGlobal A B (r + (h + l)) eps f →
+      (∑ M : ((V d ⧸ (rankedTerminalData
+          (buildCanonicalSourceTower lines hypers T)).Aend) →ₗ[F]
+          (rankedTerminalData (buildCanonicalSourceTower lines hypers T)).Bend),
+          Complex.normSq ((rankedTerminalData
+            (buildCanonicalSourceTower lines hypers T)).fend M)) /
+          Fintype.card ((V d ⧸ (rankedTerminalData
+            (buildCanonicalSourceTower lines hypers T)).Aend) →ₗ[F]
+              (rankedTerminalData (buildCanonicalSourceTower lines hypers T)).Bend) ≤
+        (2 : Real) ^ (10 * D ^ 2) * eps := by
+  exact ranked_tower_terminal_energy (buildCanonicalSourceTower lines hypers T)
+    hlevel
+
+end
+end PvNP.RealizableHardness.ActualTypedABCanonicalFlag
