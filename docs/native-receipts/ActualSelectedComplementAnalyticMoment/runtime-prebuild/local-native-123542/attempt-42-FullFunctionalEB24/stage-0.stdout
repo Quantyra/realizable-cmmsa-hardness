@@ -1,0 +1,32 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18FullFunctionalBridge.lean:163:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18FullFunctionalBridge.lean:143:36: error: unsolved goals
+n d : ℕ
+Q : ActualAffineRestriction n d
+phi : ↥Q.domainFixed →ₗ[ZMod 2] ZMod 2
+v : ↥Q.domainFixed
+hv : phi v = 1
+R : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ↥Q.codomainVariation
+lambda : (Fin d → ZMod 2) ⧸ Q.domainFixed →ₗ[ZMod 2] ZMod 2
+w : Fin n → ZMod 2
+A' : Submodule (ZMod 2) (Fin d → ZMod 2) := functionalKernelInAmbient Q.domainFixed phi
+qdom : (Fin d → ZMod 2) ⧸ A' →ₗ[ZMod 2] (Fin d → ZMod 2) ⧸ Q.domainFixed := Submodule.factor ⋯
+hcoords : ∃ s phi₀,
+  have q := Submodule.factor ⋯;
+  q ∘ₗ s = LinearMap.id ∧
+    q ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v) = 0 ∧
+      phi₀ ∘ₗ s = 0 ∧
+        phi₀ ((functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v) = 1 ∧
+          ∀ (x : (Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi),
+            x = s (q x) + phi₀ x • (functionalKernelInAmbient Q.domainFixed phi).mkQ ↑v :=
+  quotientSectionCoordinates_of_restricted_functional Q.domainFixed phi v hv
+phi₀ : (Fin d → ZMod 2) ⧸ functionalKernelInAmbient Q.domainFixed phi →ₗ[ZMod 2] ZMod 2 := Classical.choose ⋯
+psi : { psi // psi ∘ₗ Q.domainFixed.subtype = phi } :=
+  (restrictedFunctionalExtensionEquiv Q.domainFixed phi v hv) lambda
+hpsi : ↑psi = phi₀ ∘ₗ A'.mkQ + lambda ∘ₗ Q.domainFixed.mkQ
+hA' : A' ≤ Q.domainFixed
+⊢ LinearMap.toMatrix'
+      (Matrix.toLin' Q.base +
+        quotientSampleOutput Q.codomainVariation (Submodule.factor ⋯) (Classical.choose ⋯) R lambda w ∘ₗ
+          (functionalKernelInAmbient Q.domainFixed phi).mkQ) =
+    LinearMap.toMatrix' (Matrix.toLin' Q.base + Q.codomainVariation.subtype ∘ₗ R ∘ₗ Q.domainFixed.mkQ) +
+      actualA18RankOne (↑((restrictedFunctionalExtensionEquiv Q.domainFixed phi v hv) lambda)) w
