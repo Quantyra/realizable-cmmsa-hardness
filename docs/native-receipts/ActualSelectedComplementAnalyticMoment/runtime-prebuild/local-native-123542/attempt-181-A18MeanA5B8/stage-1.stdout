@@ -1,0 +1,168 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.OriginalActualInfluenceThrough {n d : ℕ}
+  (D : ℕ) (eps : ℝ) (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) : Prop
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.OriginalActualInfluenceThrough' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_order_zero_seed {n d D : ℕ}
+  {eps : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hinfl : OriginalActualInfluenceThrough D eps f) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean ⊥ ⊤ fun M =>
+      Complex.normSq (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 f M)) ≤
+    eps
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_order_zero_seed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_parameter_nonneg {n d D : ℕ}
+  {eps : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hinfl : OriginalActualInfluenceThrough D eps f) : 0 ≤ eps
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_parameter_nonneg' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.a18UniformMean.{u_1} {α : Type u_1} [Fintype α]
+  (g : α → ℝ) : ℝ
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.a18UniformMean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_line_A1_mean {n d D : ℕ}
+  {eps : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hinfl : OriginalActualInfluenceThrough D eps f)
+  (U A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n))
+  (hU : U ≤ A)
+  (hL :
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+        ↥(Submodule.map U.mkQ A) =
+      1)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n)
+  (S :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d ⧸
+        U →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+      ↥B)
+  (horder :
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ B) ≤
+      D) :
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexLineFilter B (Submodule.map U.mkQ A) hL
+          (fun M => PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction U B T f M)
+          (S + N ∘ₗ (Submodule.map U.mkQ A).mkQ))) ≤
+    eps
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_line_A1_mean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_hyperplane_A1_mean
+  {n d D : ℕ} {eps : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hinfl : OriginalActualInfluenceThrough D eps f)
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n))
+  (H : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥B)
+  (hH : Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ (↥B ⧸ H) = 1)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n)
+  (S :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+      ↥B)
+  (horder :
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸
+            PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain B H) ≤
+      D) :
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (PvNP.RealizableHardness.BinaryMatrixTypedA14Hyperplane.typedComplexHyperplaneFilter B H hH
+          (fun M => PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f M)
+          (S + H.subtype ∘ₗ N))) ≤
+    eps
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_hyperplane_A1_mean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_A1_composition_mean
+  {n d D : ℕ} {eps : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hinfl : OriginalActualInfluenceThrough D eps f)
+  (A₂ A₁ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d))
+  (B₁ B₂ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n))
+  (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n)
+  (S :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d ⧸
+        A₂ →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+      ↥B₂)
+  (horder :
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥A₁ +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ B₁) ≤
+      D) :
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierAffineRestrict A₂ B₂ (Submodule.map A₂.mkQ A₁)
+          (Submodule.comap B₂.subtype B₁) S
+          (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierHybridFilter A₂ B₂ (Submodule.map A₂.mkQ A₁)
+            (Submodule.comap B₂.subtype B₁) fun M =>
+            PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A₂ B₂ T f M)
+          N)) ≤
+    eps
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_A1_composition_mean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_A1_relative_mean {n d D : ℕ}
+  {eps : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hinfl : OriginalActualInfluenceThrough D eps f)
+  (A₂ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d))
+  (B₂ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n))
+  (A₁₂ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d ⧸ A₂))
+  (B₁₂ : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥B₂)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n)
+  (S :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d ⧸
+        A₂ →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+      ↥B₂)
+  (horder :
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+          ↥(Submodule.comap A₂.mkQ A₁₂) +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸
+            Submodule.map B₂.subtype B₁₂) ≤
+      D) :
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierAffineRestrict A₂ B₂ A₁₂ B₁₂ S
+          (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierHybridFilter A₂ B₂ A₁₂ B₁₂ fun M =>
+            PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A₂ B₂ T f M)
+          N)) ≤
+    eps
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_A1_relative_mean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
