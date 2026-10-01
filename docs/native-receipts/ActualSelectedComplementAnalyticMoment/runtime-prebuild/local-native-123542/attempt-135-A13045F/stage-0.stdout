@@ -1,0 +1,77 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:45:16: error: Tactic `rfl` failed: The left-hand side
+  ↑((fun φ => ⟨Fin.snoc φ 1, ⋯⟩) ((fun u j => ↑u j.castSucc) u)) j.castSucc
+is not definitionally equal to the right-hand side
+  ↑u j.castSucc
+
+case cast
+d : ℕ
+u : { u // lastVector d ⬝ᵥ u = 1 }
+j : Fin d
+⊢ ↑((fun φ => ⟨Fin.snoc φ 1, ⋯⟩) ((fun u j => ↑u j.castSucc) u)) j.castSucc = ↑u j.castSucc
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:48:4: error: Tactic `rfl` failed: The left-hand side
+  (fun u j => ↑u j.castSucc) ((fun φ => ⟨Fin.snoc φ 1, ⋯⟩) φ) j
+is not definitionally equal to the right-hand side
+  φ j
+
+d : ℕ
+φ : V d
+j : Fin d
+⊢ (fun u j => ↑u j.castSucc) ((fun φ => ⟨Fin.snoc φ 1, ⋯⟩) φ) j = φ j
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:66:32: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:126:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  {Y | Selected (F ∙ lastVector d) ⊤ (Matrix.toLin' (Matrix.transpose Y))}
+in the target expression
+  (∑ Y,
+      if Selected (F ∙ lastVector d) ⊤ (Matrix.toLin' (Matrix.transpose Y)) then
+        complexFourierCoeff f Y * ↑(character Y M)
+      else 0) =
+    ∑ Y with hybridLineSelected Y, complexFourierCoeff f Y * ↑(character Y M)
+
+n d : ℕ
+f : BinaryMatrix n (d + 1) → ℂ
+M : BinaryMatrix n (d + 1)
+hsets :
+  {Y | Selected (F ∙ lastVector d) ⊤ (Matrix.toLin' (Matrix.transpose Y))} =
+    Finset.filter hybridLineSelected Finset.univ
+⊢ (∑ Y,
+      if Selected (F ∙ lastVector d) ⊤ (Matrix.toLin' (Matrix.transpose Y)) then
+        complexFourierCoeff f Y * ↑(character Y M)
+      else 0) =
+    ∑ Y with hybridLineSelected Y, complexFourierCoeff f Y * ↑(character Y M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:134:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (complexRankProjection ?m.45 ?f ?M).re
+in the target expression
+  (complexHybridLineFilter (complexRankProjection j f) M).re =
+    (complexRankProjection j f M - 2 ^ j * complexLineAverage (complexRankProjection j f) M).re
+
+case a
+n d j : ℕ
+f : BinaryMatrix n (d + 1) → ℂ
+M : BinaryMatrix n (d + 1)
+⊢ (complexHybridLineFilter (complexRankProjection j f) M).re =
+    (complexRankProjection j f M - 2 ^ j * complexLineAverage (complexRankProjection j f) M).re
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:153:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (complexRankProjection ?m.50 ?f ?M).im
+in the target expression
+  (complexHybridLineFilter (complexRankProjection j f) M).im =
+    (complexRankProjection j f M - 2 ^ j * complexLineAverage (complexRankProjection j f) M).im
+
+case a
+n d j : ℕ
+f : BinaryMatrix n (d + 1) → ℂ
+M : BinaryMatrix n (d + 1)
+⊢ (complexHybridLineFilter (complexRankProjection j f) M).im =
+    (complexRankProjection j f M - 2 ^ j * complexLineAverage (complexRankProjection j f) M).im
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:193:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  complexHybridLineFilter ?f ?M
+in the target expression
+  f M - 2 ^ D * actualA18Average (lastVector d) f M + 2 ^ D * actualA18Average (lastVector d) f M =
+    complexAmbientHybridFilter (F ∙ lastVector d) ⊤ f M + 2 ^ D * actualA18Average (lastVector d) f M
+
+n d D : ℕ
+f : BinaryMatrix n (d + 1) → ℂ
+hD : complexRankProjection D f = f
+M : BinaryMatrix n (d + 1)
+hproj : complexHybridLineFilter f M = f M - 2 ^ D * actualA18Average (lastVector d) f M
+⊢ f M - 2 ^ D * actualA18Average (lastVector d) f M + 2 ^ D * actualA18Average (lastVector d) f M =
+    complexAmbientHybridFilter (F ∙ lastVector d) ⊤ f M + 2 ^ D * actualA18Average (lastVector d) f M
