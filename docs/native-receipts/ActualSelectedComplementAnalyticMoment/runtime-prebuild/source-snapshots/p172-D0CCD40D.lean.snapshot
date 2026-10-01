@@ -1,0 +1,86 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionCollapse
+import PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+import PvNP.RealizableHardness.ActualTypedABRankedTower
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy
+
+open ActualTypedABCanonicalRankProjectionCollapse
+open ActualTypedABCanonicalFlag
+open ActualTypedABCanonicalProjection
+open ActualTypedABRankedTower
+open ActualTypedABProjectionEnergy
+open BinaryMatrixTypedA15Transport
+open BinaryMatrixA1TypedFourier
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- Per-level energy for the genuine manuscript operator, for a nonempty
+canonical flag. The only globalness input is on the original bottom/top
+source function; the terminal projection is identified with the direct
+affine hybrid restriction before applying the typed Bessel contraction. -/
+theorem canonical_source_rank_projection_energy {n d r l h D : Nat}
+    (lines : DomainLineFlag (⊥ : Submodule F (V d)) l)
+    (hypers : CodomainHyperplaneFlag (⊤ : Submodule F (W n)) h)
+    (T : V d →ₗ[F] W n)
+    (ambientf : BinaryMatrix n d → Complex)
+    (hpositive : l + h ≠ 0)
+    (hlevel : r + (h + l) ≤ D)
+    (eps : Real) (heps : 0 ≤ eps)
+    (hglobal : UpToTypedNormSqGlobal (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) (r + (h + l)) eps
+      (fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) 0 ambientf M)) :
+    let source : ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+        (⊤ : Submodule F (W n))) → Complex := fun M =>
+      filteredCarrierFunction (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) 0 ambientf M
+    let tower := buildCanonicalSourceTower (r := r) (f := source)
+      lines hypers (initialBottomTopBase T)
+    carrierMean (rankedTerminalData tower).Aend
+      (rankedTerminalData tower).Bend
+      (fun M => Complex.normSq (filteredCarrierFunction
+        (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend T
+        (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M)) ≤
+      (2 : Real) ^ (10 * D ^ 2) * eps := by
+  dsimp only
+  let source : ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) → Complex := fun M =>
+    filteredCarrierFunction (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) 0 ambientf M
+  let tower := buildCanonicalSourceTower (r := r) (f := source)
+    lines hypers (initialBottomTopBase T)
+  have hidentity := canonical_source_rank_projection_collapse
+    (r := r) lines hypers T ambientf hpositive
+  have hprojection := typedComplexRankProjection_energy_le
+    (j := r) (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend
+    (rankedTerminalData tower).fend
+  have hterminal := ranked_tower_terminal_energy tower hlevel eps heps hglobal
+  calc
+    carrierMean (rankedTerminalData tower).Aend
+        (rankedTerminalData tower).Bend
+        (fun M => Complex.normSq (filteredCarrierFunction
+          (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend T
+          (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M)) =
+      carrierMean (rankedTerminalData tower).Aend
+        (rankedTerminalData tower).Bend
+        (fun M => Complex.normSq
+          (typedComplexRankProjection (rankedTerminalData tower).Aend
+            (rankedTerminalData tower).Bend r (rankedTerminalData tower).fend M)) := by
+          congr 1
+          funext M
+          exact congrArg Complex.normSq (congrFun hidentity M).symm
+    _ ≤ carrierMean (rankedTerminalData tower).Aend
+        (rankedTerminalData tower).Bend
+        (fun M => Complex.normSq ((rankedTerminalData tower).fend M)) :=
+          hprojection
+    _ ≤ (2 : Real) ^ (10 * D ^ 2) * eps := by
+          simpa [BinaryMatrixA1TypedFourier.carrierMean] using hterminal
+
+end
+end PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy
