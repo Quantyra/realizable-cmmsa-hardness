@@ -1,0 +1,12 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage.actualA18TransposeAverage {n d : ℕ}
+  (v : Fin d → ZMod 2) (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix d n → ℂ)
+  (N : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix d n) : ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage.complexTranspose_actualA18Average {n d : ℕ}
+  (v : Fin d → ZMod 2) (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (N : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix d n) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.complexTranspose
+      (fun M => PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average v f M) N =
+    actualA18TransposeAverage v (PvNP.RealizableHardness.BinaryMatrixComplexA15.complexTranspose f) N
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage.complexTranspose_actualA18Average' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
