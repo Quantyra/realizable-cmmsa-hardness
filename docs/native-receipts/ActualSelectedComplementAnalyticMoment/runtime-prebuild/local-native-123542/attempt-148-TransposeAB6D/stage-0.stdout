@@ -1,0 +1,77 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:93:4: error: Type mismatch: After simplification, term
+  hcoord (eD.symm v)
+ has type
+  @Eq (V n) (eN (f.dualMap (eD.symm v))) ((Matrix.mulVecLin Y) v)
+but is expected to have type
+  @Eq (V n) (↑(dualCoordinateEquiv n) (f.dualMap (eD.symm v))) ((Matrix.mulVecLin Y) v)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:100:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(dualCoordinateEquiv n) phi
+in the target expression
+  eN phi = x
+
+n d : ℕ
+Y : BinaryMatrix n d
+eN : Module.Dual F (V n) ≃ₗ[F] V n := dualCoordinateEquiv n
+eD : Module.Dual F (V d) ≃ₗ[F] V d := dualCoordinateEquiv d
+f : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := (Matrix.transpose Y).mulVecLin
+hcoord : ∀ (φ : Module.Dual F (V d)), eN (f.dualMap φ) = (Matrix.mulVecLin Y) (eD φ)
+x : Fin n → ZMod 2
+phi : Module.Dual F (V n)
+hphi : phi ∈ ↑(Matrix.transpose Y).mulVecLin.ker.dualAnnihilator
+hx : ↑(dualCoordinateEquiv n) phi = x
+psi : Module.Dual (ZMod 2) (Fin d → ZMod 2)
+hpsi : f.dualMap psi = phi
+⊢ eN phi = x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:112:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Submodule (ZMod 2) (Fin n → ZMod 2))
+    (BinaryMatrixActualAffine.rawOfActual Q).leftDirections.transpose.mulVecLin.range
+    (Submodule.map (↑(dualCoordinateEquiv n))
+      (BinaryMatrixActualAffine.rawOfActual Q).leftDirections.mulVecLin.ker.dualAnnihilator)
+but is expected to have type
+  @Eq (Submodule (ZMod 2) (Fin n → ZMod 2))
+    (ActualBinaryMatrixHC46A18TransposeTransport.transposeActualRestriction Q).domainFixed
+    (coordinateDualAnnihilator (BinaryMatrixActualAffine.rawOfActual Q).leftDirections.mulVecLin.ker)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:123:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Matrix.mulVecLin ?Y).range
+in the target expression
+  (⊥ ≤ (Matrix.toLin' (Matrix.transpose Y)).range ∧ ∀ (w : V n), (Matrix.toLin' (Matrix.transpose Y)) w ∈ ⊥ → w ∈ B) ↔
+    coordinateDualAnnihilator B ≤ (Matrix.toLin' Y).range ∧
+      ∀ (w : V d), (Matrix.toLin' Y) w ∈ coordinateDualAnnihilator B → w ∈ ⊤
+
+n d : ℕ
+B : Submodule F (V n)
+Y : BinaryMatrix n d
+⊢ (⊥ ≤ (Matrix.toLin' (Matrix.transpose Y)).range ∧ ∀ (w : V n), (Matrix.toLin' (Matrix.transpose Y)) w ∈ ⊥ → w ∈ B) ↔
+    coordinateDualAnnihilator B ≤ (Matrix.toLin' Y).range ∧
+      ∀ (w : V d), (Matrix.toLin' Y) w ∈ coordinateDualAnnihilator B → w ∈ ⊤
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17TransposeHybridFilter.lean:169:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i,
+    if Selected (coordinateDualAnnihilator B) ⊤ (Matrix.toLin' (Matrix.transpose i)) then
+      complexFourierCoeff (complexTranspose f) i * ↑(character i M)
+    else 0
+in the target expression
+  (∑ Y,
+      if Selected ⊥ B (Matrix.toLin' (Matrix.transpose Y)) then
+        complexFourierCoeff f Y * ↑(character Y (Matrix.transpose M))
+      else 0) =
+    ∑ Y,
+      if Selected (coordinateDualAnnihilator B) ⊤ (Matrix.toLin' (Matrix.transpose Y)) then
+        complexFourierCoeff (fun M => f (Matrix.transpose M)) Y * ↑(character Y M)
+      else 0
+
+n d : ℕ
+B : Submodule F (V n)
+f : BinaryMatrix n d → ℂ
+M : BinaryMatrix d n
+e : BinaryMatrix n d ≃ BinaryMatrix d n :=
+  { toFun := Matrix.transpose, invFun := Matrix.transpose, left_inv := ⋯, right_inv := ⋯ }
+⊢ (∑ Y,
+      if Selected ⊥ B (Matrix.toLin' (Matrix.transpose Y)) then
+        complexFourierCoeff f Y * ↑(character Y (Matrix.transpose M))
+      else 0) =
+    ∑ Y,
+      if Selected (coordinateDualAnnihilator B) ⊤ (Matrix.toLin' (Matrix.transpose Y)) then
+        complexFourierCoeff (fun M => f (Matrix.transpose M)) Y * ↑(character Y M)
+      else 0
