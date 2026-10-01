@@ -2,7 +2,7 @@ import pathlib,json,hashlib,subprocess,sys
 repo=pathlib.Path(__file__).resolve().parents[4]
 b=repo/'docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild'
 pins=json.loads((b/'spectral-fibre-fourth-pins.json').read_text())
-plan=['ActualFiniteAppendSpectral47','ActualFiniteAppendSpectral47Checks','ActualFiniteBinaryImageFibres','ActualFiniteBinaryImageFibresChecks']
+plan=['ActualFiniteAppendSpectral47','ActualFiniteAppendSpectral47Checks','ActualFiniteBinaryImageFibres','ActualFiniteBinaryImageFibresChecks','ActualFiniteBinaryImageOrbitFourier','ActualFiniteBinaryImageOrbitFourierChecks']
 pre='lean/PvNP/RealizableHardness/'
 target=pre+plan[-1]+'.lean'
 snapshots={hashlib.sha256(p.read_bytes()).hexdigest().upper():p for p in (b/'source-snapshots').glob('*.snapshot')}
