@@ -1,0 +1,90 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:43:67: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:43:67: warning: Unused tactic linter: `abel` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:71:8: error: Type mismatch: After simplification, term
+  h0
+ has type
+  @Eq (Fin n → ZMod 2) (B.subtype ((M - Q.base) u)) 0
+but is expected to have type
+  @Eq (W n) (B.subtype ((M - Q.base) u)) (B.subtype 0)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:91:6: error: Tactic `assumption` failed
+
+case mpr.left
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+Q : CarrierRestriction A B
+M : V d ⧸ A →ₗ[F] ↥B
+hfix : ∀ a ∈ Q.domainFixed, (M - Q.base) a = 0
+hvar : ∀ (v : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A), (M - Q.base) v ∈ Q.codomainVariation
+a : Fin d → ZMod 2
+ha : a ∈ (liftCarrierRestriction A B T Q).domainFixed
+hqa : A.mkQ a ∈ Q.domainFixed
+hzero : (M - Q.base) (A.mkQ a) = 0
+⊢ ↑(M (Submodule.Quotient.mk a)) - ↑(Q.base (Submodule.Quotient.mk a)) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:95:42: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.410 = ?m.410
+but is expected to have type
+  B.subtype ((M - Q.base) (A.mkQ v)) =
+    Matrix.mulVec (liftCarrierMatrix A B T M - (liftCarrierRestriction A B T Q).base) v
+in the application
+  ⟨hcv, rfl⟩
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:135:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:148:2: error: unsolved goals
+case refine_2
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+Q : CarrierRestriction A B
+toFun : ↥Q.fibre → (V d ⧸ A) ⧸ Q.domainFixed →ₗ[F] ↥Q.codomainVariation :=
+  fun x =>
+    have hprops := ⋯;
+    let deltaC := LinearMap.codRestrict Q.codomainVariation (↑x - Q.base) ⋯;
+    have hker := ⋯;
+    Q.domainFixed.liftQ deltaC hker
+invFun : ((V d ⧸ A) ⧸ Q.domainFixed →ₗ[F] ↥Q.codomainVariation) → ↥Q.fibre :=
+  fun N => ⟨Q.base + Q.codomainVariation.subtype ∘ₗ N ∘ₗ Q.domainFixed.mkQ, ⋯⟩
+N : (V d ⧸ A) ⧸ Q.domainFixed →ₗ[F] ↥Q.codomainVariation
+x : (V d ⧸ A) ⧸ Q.domainFixed
+u : V d ⧸ A
+⊢ (LinearMap.codRestrict Q.codomainVariation (Q.codomainVariation.subtype ∘ₗ N ∘ₗ Q.domainFixed.mkQ) ⋯) u =
+    N (Submodule.Quotient.mk u)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:146:25: warning: This simp argument is unused:
+  LinearMap.comp_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [toFun, invFun, Submodule.liftQ_mkQ, add_sub_cancel_left]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:147:27: warning: This simp argument is unused:
+  add_sub_cancel_left
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [toFun, invFun, LinearMap.comp_apply, Submodule.liftQ_mkQ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:153:25: warning: This simp argument is unused:
+  LinearMap.comp_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [toFun, invFun, Submodule.liftQ_mkQ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:154:6: warning: This simp argument is unused:
+  Submodule.liftQ_mkQ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [toFun, invFun, LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedCarrierAmbientBudget.lean:208:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
