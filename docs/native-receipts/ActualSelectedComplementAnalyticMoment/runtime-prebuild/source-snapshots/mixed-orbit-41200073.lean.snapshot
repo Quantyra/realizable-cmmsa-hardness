@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46MixedPeeling
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46MixedPeeling
+
+#check mixedCoordinatePeelLoss
+#check mixedCoordinatePeel
+#check mixedCoordinatePeel_global
+#print axioms mixedCoordinatePeel_global
