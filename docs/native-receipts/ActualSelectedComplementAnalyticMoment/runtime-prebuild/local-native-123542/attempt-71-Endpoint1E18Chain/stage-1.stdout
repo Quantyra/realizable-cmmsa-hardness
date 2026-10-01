@@ -1,0 +1,137 @@
+PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointHomEquiv {n d : ℕ}
+  {A₀ A₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d)}
+  {B₀ B₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.W✝ n)}
+  (hA : A₀ = A₁) (hB : B₀ = B₁) :
+  (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+        A₀ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+      ↥B₀) ≃ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+    PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+        A₁ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+      ↥B₁
+PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointHomEquiv_refl {n d : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.W✝ n)}
+  (M :
+    PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+      ↥B) :
+  (endpointHomEquiv ⋯ ⋯) M = M
+PvNP.RealizableHardness.ActualTypedABEndpointTransport.carrierMean_endpoint_transport {n d : ℕ}
+  {A₀ A₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d)}
+  {B₀ B₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.W✝ n)}
+  (hA : A₀ = A₁) (hB : B₀ = B₁)
+  (g :
+    (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+          A₀ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+        ↥B₀) →
+      ℝ) :
+  (BinaryMatrixA1TypedFourier.carrierMean A₁ B₁ fun M => g ((endpointHomEquiv hA hB).symm M)) =
+    BinaryMatrixA1TypedFourier.carrierMean A₀ B₀ g
+PvNP.RealizableHardness.ActualTypedABEndpointTransport.carrierComplexEnergy_endpoint_transport {n d : ℕ}
+  {A₀ A₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d)}
+  {B₀ B₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.W✝ n)}
+  (hA : A₀ = A₁) (hB : B₀ = B₁)
+  (g :
+    (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+          A₀ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+        ↥B₀) →
+      ℂ) :
+  (BinaryMatrixA1TypedFourier.carrierMean A₁ B₁ fun M => Complex.normSq (g ((endpointHomEquiv hA hB).symm M))) =
+    BinaryMatrixA1TypedFourier.carrierMean A₀ B₀ fun M => Complex.normSq (g M)
+PvNP.RealizableHardness.ActualTypedABEndpointTransport.ranked_tower_endpoint_energy {n d r k D : ℕ}
+  {A₀ A₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d)}
+  {B₀ B₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.W✝ n)}
+  {f :
+    (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+          A₀ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+        ↥B₀) →
+      ℂ}
+  (tower : ActualTypedABRankedTower.ActualTypedABRankedTower A₀ B₀ f r k)
+  (hA : (ActualTypedABRankedTower.rankedTerminalData tower).Aend = A₁)
+  (hB : (ActualTypedABRankedTower.rankedTerminalData tower).Bend = B₁) (hlevel : r + k ≤ D) (eps : ℝ) (heps : 0 ≤ eps)
+  (hglobal : BinaryMatrixTypedA15Transport.UpToTypedNormSqGlobal A₀ B₀ (r + k) eps f) :
+  (BinaryMatrixA1TypedFourier.carrierMean A₁ B₁ fun M =>
+      Complex.normSq ((ActualTypedABRankedTower.rankedTerminalData tower).fend ((endpointHomEquiv hA hB).symm M))) ≤
+    2 ^ (10 * D ^ 2) * eps
+PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointProjection_natural {n d j : ℕ}
+  {A₀ A₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d)}
+  {B₀ B₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.W✝ n)}
+  (hA : A₀ = A₁) (hB : B₀ = B₁)
+  (g :
+    (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+          A₀ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+        ↥B₀) →
+      ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+        A₀ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+      ↥B₀) :
+  BinaryMatrixTypedA14Line.typedComplexRankProjection A₀ B₀ j g M =
+    BinaryMatrixTypedA14Line.typedComplexRankProjection A₁ B₁ j (fun N => g ((endpointHomEquiv hA hB).symm N))
+      ((endpointHomEquiv hA hB) M)
+PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointProjection_coordinate_bridge {n d j : ℕ}
+  {A₀ A₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d)}
+  {B₀ B₁ :
+    Submodule PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+      (PvNP.RealizableHardness.ActualTypedABEndpointTransport.W✝ n)}
+  (hA : A₀ = A₁) (hB : B₀ = B₁)
+  (g :
+    (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+          A₀ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+        ↥B₀) →
+      ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+        A₀ →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+      ↥B₀) :
+  ActualBinaryMatrixHC46TypedFourierTransport.carrierTypedComplexRankProjection A₀ B₀ j g M =
+    BinaryMatrixComplexA14.complexRankProjection j
+      (fun X => g ((endpointHomEquiv hA hB).symm ((BinaryMatrixTypedA15Transport.carrierMatrixEquiv A₁ B₁).symm X)))
+      ((BinaryMatrixTypedA15Transport.carrierMatrixEquiv A₁ B₁) ((endpointHomEquiv hA hB) M))
+'PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointHomEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointHomEquiv_refl' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABEndpointTransport.carrierMean_endpoint_transport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABEndpointTransport.carrierComplexEnergy_endpoint_transport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABEndpointTransport.ranked_tower_endpoint_energy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointProjection_natural' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABEndpointTransport.endpointProjection_coordinate_bridge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,117 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalEndpointCollapse.lean:67:48: error: unsolved goals
+case refl.refl
+n d r l h : ℕ
+lines : DomainLineFlag ⊥ l
+hypers : CodomainHyperplaneFlag ⊤ h
+T : V d →ₗ[F] W n
+ambientf : BinaryMatrix n d → ℂ
+source : (V d ⧸ ⊥ →ₗ[F] ↥⊤) → ℂ := fun M => filteredCarrierFunction ⊥ ⊤ 0 ambientf M
+base : V d →ₗ[F] W n := ⊤.subtype ∘ₗ initialBottomTopBase T ∘ₗ ⊥.mkQ
+tower : ActualTypedABRankedTower ⊥ ⊤ source r (h + l) := buildCanonicalSourceTower lines hypers (initialBottomTopBase T)
+hEnd : (rankedTerminalData (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Aend = lines.endpoint ∧
+  (rankedTerminalData (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Bend = hypers.endpoint :=
+  buildCanonicalSourceTower_endpoints lines hypers (initialBottomTopBase T)
+hbase : base = T
+hcollapse :
+  applyCanonicalFilters tower (if h + l = 0 then fun N => filteredCarrierFunction ⊥ ⊤ base ambientf N else source) =
+    filteredCarrierFunction (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend base ambientf
+hA : lines.endpoint = (rankedTerminalData tower).Aend
+hTA : (rankedTerminalData tower).Aend = (rankedTerminalData tower).Aend := Eq.trans hEnd.left hA
+hB : hypers.endpoint = (rankedTerminalData tower).Bend
+hTB : (rankedTerminalData tower).Bend = (rankedTerminalData tower).Bend := Eq.trans hEnd.right hB
+e : (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+      (rankedTerminalData tower).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+    ↥(rankedTerminalData tower).Bend) ≃ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+  PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+      (rankedTerminalData tower).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+    ↥(rankedTerminalData tower).Bend :=
+  endpointHomEquiv hTA hTB
+M : V d ⧸ (rankedTerminalData tower).Aend →ₗ[F] ↥(rankedTerminalData tower).Bend
+⊢ filteredCarrierFunction (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend T ambientf
+      ((Eq.rec (motive := fun a t =>
+            (rankedTerminalData tower).Aend = a →
+              ⋯ ≍ t →
+                (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                      (rankedTerminalData
+                          (buildCanonicalSourceTower lines hypers
+                            (initialBottomTopBase
+                              T))).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                    ↥(rankedTerminalData
+                          (buildCanonicalSourceTower lines hypers
+                            (initialBottomTopBase
+                              T))).Bend) ≃ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                  PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                      (rankedTerminalData tower).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                    ↥(rankedTerminalData tower).Bend)
+            (fun h_1 =>
+              Eq.rec (motive := fun x x_1 =>
+                (hA : (rankedTerminalData (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Aend = x) →
+                  hA ≍ ⋯ →
+                    (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                          (rankedTerminalData
+                              (buildCanonicalSourceTower lines hypers
+                                (initialBottomTopBase
+                                  T))).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                        ↥(rankedTerminalData
+                              (buildCanonicalSourceTower lines hypers
+                                (initialBottomTopBase
+                                  T))).Bend) ≃ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                      PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                          x →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                        ↥(rankedTerminalData tower).Bend)
+                (fun hA h_2 =>
+                  Eq.rec (motive := fun a t =>
+                    (rankedTerminalData tower).Bend = a →
+                      ⋯ ≍ t →
+                        (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                              (rankedTerminalData
+                                  (buildCanonicalSourceTower lines hypers
+                                    (initialBottomTopBase
+                                      T))).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                            ↥(rankedTerminalData
+                                  (buildCanonicalSourceTower lines hypers
+                                    (initialBottomTopBase
+                                      T))).Bend) ≃ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                          PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                              (rankedTerminalData
+                                  (buildCanonicalSourceTower lines hypers
+                                    (initialBottomTopBase
+                                      T))).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                            ↥(rankedTerminalData tower).Bend)
+                    (fun h_3 =>
+                      Eq.rec (motive := fun x x_1 =>
+                        (hB :
+                            (rankedTerminalData
+                                  (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Bend =
+                              x) →
+                          hB ≍ ⋯ →
+                            (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                                  (rankedTerminalData
+                                      (buildCanonicalSourceTower lines hypers
+                                        (initialBottomTopBase
+                                          T))).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                                ↥(rankedTerminalData
+                                      (buildCanonicalSourceTower lines hypers
+                                        (initialBottomTopBase
+                                          T))).Bend) ≃ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                              PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                                  (rankedTerminalData
+                                      (buildCanonicalSourceTower lines hypers
+                                        (initialBottomTopBase
+                                          T))).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                                ↥x)
+                        (fun hB h_4 =>
+                          LinearEquiv.refl PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝
+                            (PvNP.RealizableHardness.ActualTypedABEndpointTransport.V✝ d ⧸
+                                (rankedTerminalData
+                                    (buildCanonicalSourceTower lines hypers
+                                      (initialBottomTopBase
+                                        T))).Aend →ₗ[PvNP.RealizableHardness.ActualTypedABEndpointTransport.F✝]
+                              ↥(rankedTerminalData
+                                    (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Bend))
+                        ⋯ ⋯)
+                    ⋯ ⋯ ⋯)
+                ⋯ ⋯)
+            ⋯ ⋯ ⋯).symm
+        M) =
+    filteredCarrierFunction (rankedTerminalData tower).Aend (rankedTerminalData tower).Bend T ambientf M
