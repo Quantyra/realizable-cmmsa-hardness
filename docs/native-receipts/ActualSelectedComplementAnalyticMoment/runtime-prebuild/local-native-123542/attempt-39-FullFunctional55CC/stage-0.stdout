@@ -1,0 +1,37 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18FullFunctionalBridge.lean:97:11: error: don't know how to synthesize implicit argument `n`
+  @globalFunctionalRowEquiv ?m.92 d A v
+context:
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+v : ↥A
+g : FunctionalsAt ↑v × (Fin n → ZMod 2) → ℂ
+g' : RestrictedFunctionals A v × ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) × (Fin n → ZMod 2) → ℂ
+hpoint : ∀ (p : FunctionalsAt ↑v × (Fin n → ZMod 2)), g p = g' ((globalFunctionalRowEquiv A v) p)
+⊢ ℕ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18FullFunctionalBridge.lean:97:6: error: failed to infer `let` declaration type
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18FullFunctionalBridge.lean:95:38: error: unsolved goals
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+v : ↥A
+g : FunctionalsAt ↑v × (Fin n → ZMod 2) → ℂ
+g' : RestrictedFunctionals A v × ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) × (Fin n → ZMod 2) → ℂ
+hpoint : ∀ (p : FunctionalsAt ↑v × (Fin n → ZMod 2)), g p = g' ((globalFunctionalRowEquiv A v) p)
+⊢ (∑ p, g p) / ↑(Fintype.card (FunctionalsAt ↑v × (Fin n → ZMod 2))) =
+    (∑ p, g' p) /
+      ↑(Fintype.card (RestrictedFunctionals A v × ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) × (Fin n → ZMod 2)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18FullFunctionalBridge.lean:136:57: error: Application type mismatch: The argument
+  phi₀
+has type
+  (Fin d → ZMod 2) →ₗ[ZMod 2] ZMod 2
+but is expected to have type
+  (Fin d → ZMod 2) ⧸ A' →ₗ[ZMod 2] ZMod 2
+in the application
+  quotientSampleOutput Q.codomainVariation qdom phi₀
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18FullFunctionalBridge.lean:153:16: error: Application type mismatch: The argument
+  A'.mkQ
+has type
+  (Fin d → ZMod 2) →ₗ[ZMod 2] (Fin d → ZMod 2) ⧸ A'
+but is expected to have type
+  (Fin d → ZMod 2) →ₛₗ[?m.392] Fin d → ZMod 2
+in the application
+  phi₀ ∘ₛₗ A'.mkQ
