@@ -1,0 +1,16 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABProjectionEnergy.lean:65:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun X => typedComplexRankProjection A B j f ((carrierMatrixEquiv A B).symm X)
+in the target expression
+  (uniformMean fun X => Complex.normSq (typedComplexRankProjection A B j f ((carrierMatrixEquiv A B).symm X))) ≤
+    uniformMean fun X => Complex.normSq (f ((carrierMatrixEquiv A B).symm X))
+
+n d j : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+f : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+fCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => f ((carrierMatrixEquiv A B).symm X)
+hprojection :
+  (fun X => typedComplexRankProjection A B j f ((carrierMatrixEquiv A B).symm X)) = complexRankProjection j fCoord
+⊢ (uniformMean fun X => Complex.normSq (typedComplexRankProjection A B j f ((carrierMatrixEquiv A B).symm X))) ≤
+    uniformMean fun X => Complex.normSq (f ((carrierMatrixEquiv A B).symm X))
