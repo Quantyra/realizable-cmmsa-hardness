@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition
+
+#check domainPullMatrix
+#check domainPullMatrix_add
+#check domainPullMatrix_symm_apply
+#check domainPullMatrix_rankOne
+#check functionalsAtPullEquiv
+#check actualA18Average_domainPull
+#check exists_adaptedDomainEquiv
+
+#print axioms domainPullMatrix_rankOne
+#print axioms functionalsAtPullEquiv
+#print axioms actualA18Average_domainPull
+#print axioms exists_adaptedDomainEquiv
