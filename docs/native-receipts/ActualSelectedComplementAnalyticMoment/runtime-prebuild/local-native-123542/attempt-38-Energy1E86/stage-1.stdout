@@ -1,0 +1,18 @@
+PvNP.RealizableHardness.ActualTypedABProjectionEnergy.typedComplexRankProjection_energy_le {n d j : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABProjectionEnergy.F✝
+      (PvNP.RealizableHardness.ActualTypedABProjectionEnergy.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABProjectionEnergy.F✝
+      (PvNP.RealizableHardness.ActualTypedABProjectionEnergy.W✝ n))
+  (f :
+    (PvNP.RealizableHardness.ActualTypedABProjectionEnergy.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABProjectionEnergy.F✝]
+        ↥B) →
+      ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M =>
+      Complex.normSq (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B j f M)) ≤
+    PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M => Complex.normSq (f M)
+'PvNP.RealizableHardness.ActualTypedABProjectionEnergy.typedComplexRankProjection_energy_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

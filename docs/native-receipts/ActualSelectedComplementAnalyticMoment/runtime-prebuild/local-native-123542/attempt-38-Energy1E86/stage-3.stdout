@@ -1,0 +1,25 @@
+PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.ranked_selected_filters_projection_energy {n d r k D : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.F✝
+      (PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.F✝
+      (PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.W✝ n)}
+  {f :
+    (PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.F✝]
+        ↥B) →
+      ℂ}
+  (tower : PvNP.RealizableHardness.ActualTypedABRankedTower.ActualTypedABRankedTower A B f r k) (hlevel : r + k ≤ D)
+  (eps : ℝ) (heps : 0 ≤ eps)
+  (hglobal : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.UpToTypedNormSqGlobal A B (r + k) eps f) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Aend
+      (PvNP.RealizableHardness.ActualTypedABRankedTower.rankedTerminalData tower).Bend fun M =>
+      Complex.normSq
+        (PvNP.RealizableHardness.ActualTypedABCanonicalProjection.applyCanonicalFilters tower
+          (PvNP.RealizableHardness.BinaryMatrixTypedA14Line.typedComplexRankProjection A B (r + k) f) M)) ≤
+    2 ^ (10 * D ^ 2) * eps
+'PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.ranked_selected_filters_projection_energy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
