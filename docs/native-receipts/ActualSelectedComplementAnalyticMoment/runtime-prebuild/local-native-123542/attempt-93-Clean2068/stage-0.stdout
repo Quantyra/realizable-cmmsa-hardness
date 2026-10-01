@@ -1,0 +1,31 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:53:4: warning: This simp argument is unused:
+  LinearEquiv.apply_symm_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [bottomTopCarrierAmbientHomEquiv_apply, bottomTopDomainEquiv, bottomTopCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:87:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Matrix.mulVec (bottomTopAmbientMatrixEquiv M - bottomTopAmbientMatrixEquiv Q.base) (bottomTopDomainEquiv u)
+in the target expression
+  Matrix.mulVec (bottomTopAmbientMatrixEquiv M - (bottomTopActualRestriction Q).base) (bottomTopDomainEquiv u) ∈
+    (bottomTopActualRestriction Q).codomainVariation
+
+n d : ℕ
+Q : CarrierRestriction ⊥ ⊤
+M : V d ⧸ ⊥ →ₗ[F] ↥⊤
+hD :
+  ∀ a ∈ (bottomTopActualRestriction Q).domainFixed,
+    Matrix.mulVec (bottomTopAmbientMatrixEquiv M - (bottomTopActualRestriction Q).base) a = 0
+hC :
+  ∀ (v : Fin d → ZMod 2),
+    Matrix.mulVec (bottomTopAmbientMatrixEquiv M - (bottomTopActualRestriction Q).base) v ∈
+      (bottomTopActualRestriction Q).codomainVariation
+u : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ ⊥
+hz :
+  Matrix.mulVec (bottomTopAmbientMatrixEquiv M - (bottomTopActualRestriction Q).base) (bottomTopDomainEquiv u) ∈
+    (bottomTopActualRestriction Q).codomainVariation
+heval :
+  Matrix.mulVec (bottomTopAmbientMatrixEquiv M - bottomTopAmbientMatrixEquiv Q.base) (bottomTopDomainEquiv u) =
+    bottomTopCodomainEquiv ((M - Q.base) u)
+⊢ bottomTopCodomainEquiv ((M - Q.base) u) ∈ Submodule.map (↑bottomTopCodomainEquiv) Q.codomainVariation
