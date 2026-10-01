@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.ActualTypedMixedTower
+
+open PvNP.RealizableHardness.ActualTypedMixedTower
+
+#check ActualTypedMixedTower
+#check ActualTypedMixedTower.done
+#check ActualTypedMixedTower.line
+#check ActualTypedMixedTower.hyperplane
+#check lineStepSignal
+#check lineStepSignal_eq_intrinsic
+#print axioms lineStepSignal_eq_intrinsic
+#check hyperplaneStepSignal
+#check hyperplaneStepSignal_eq_intrinsic
+#print axioms hyperplaneStepSignal_eq_intrinsic
