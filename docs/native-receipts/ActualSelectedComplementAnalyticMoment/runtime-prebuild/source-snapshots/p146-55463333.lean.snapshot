@@ -1,0 +1,191 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+import Mathlib.LinearAlgebra.Dual.Lemmas
+
+/-!
+The full-functional A18 sampling bridge.  This file starts from the manuscript's
+ambient draw of a uniform functional `psi` satisfying `psi v = 1` and a uniform
+row vector `w`.  It reindexes that draw by the restriction of `psi` to the
+parent fixed subspace and the quotient residual coordinate.  The affine-fibre
+and Jensen steps are kept with the actual matrix statistic.
+-/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel
+open BinaryMatrixActualAffine BinaryMatrixComplexA15 BinaryMatrixFourier
+open scoped BigOperators
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+abbrev AmbientFunctionals {d : ℕ} :=
+  (Fin d → ZMod 2) →ₗ[ZMod 2] ZMod 2
+
+abbrev FunctionalsAt {d : ℕ} (v : Fin d → ZMod 2) :=
+  {psi : AmbientFunctionals (d := d) // psi v = 1}
+
+abbrev RestrictedFunctionals {d : ℕ} (A : Submodule (ZMod 2)
+    (Fin d → ZMod 2)) (v : A) :=
+  {phi : A →ₗ[ZMod 2] ZMod 2 // phi v = 1}
+
+def actualA18RankOne {n d : ℕ}
+    (psi : AmbientFunctionals (d := d)) (w : Fin n → ZMod 2) :
+    BinaryMatrix n d :=
+  LinearMap.toMatrix' (psi.smulRight w)
+
+theorem actualA18RankOne_entry {n d : ℕ}
+    (psi : AmbientFunctionals (d := d)) (w : Fin n → ZMod 2)
+    (i : Fin n) (j : Fin d) :
+    actualA18RankOne psi w i j = w i * psi (Pi.single j 1) := by
+  simp [actualA18RankOne, LinearMap.toMatrix'_apply,
+    LinearMap.smulRight_apply, mul_comm]
+
+theorem toMatrix'_add_rankOne {n d : ℕ}
+    (F : (Fin d → ZMod 2) →ₗ[ZMod 2] (Fin n → ZMod 2))
+    (psi : AmbientFunctionals (d := d)) (w : Fin n → ZMod 2) :
+    LinearMap.toMatrix' (F + psi.smulRight w) =
+      LinearMap.toMatrix' F + actualA18RankOne psi w := by
+  ext i j
+  simp [actualA18RankOne, LinearMap.toMatrix'_apply,
+    LinearMap.add_apply, LinearMap.smulRight_apply, add_comm, mul_comm]
+
+/-- The ambient functional draw is exactly a dependent draw of a restricted
+functional and its uniform quotient extension coordinate, independently of
+the row vector. -/
+noncomputable def globalFunctionalRowEquiv {n d : ℕ}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2)) (v : A) :
+    (FunctionalsAt (v : Fin d → ZMod 2) × (Fin n → ZMod 2)) ≃
+      RestrictedFunctionals A v ×
+        ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) ×
+          (Fin n → ZMod 2) := by
+  classical
+  let e := globalFunctionalRestrictionEquiv A v
+  refine
+    { toFun := fun p =>
+        let z := e p.1
+        (z.1, z.2, p.2)
+      invFun := fun p => (e.symm ⟨p.1, p.2.1⟩, p.2.2)
+      left_inv := ?_
+      right_inv := ?_ }
+  · intro p
+    rcases p with ⟨psi, w⟩
+    simp [e]
+  · intro p
+    rcases p with ⟨phi, lambda, w⟩
+    simp [e]
+
+/-- Normalized sums over the ambient `(psi,w)` draw and the dependent
+restricted-functional/quotient-coordinate draw agree for every statistic. -/
+theorem globalFunctionalRow_average_reindex {n d : ℕ}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2)) (v : A)
+    (g : FunctionalsAt (v : Fin d → ZMod 2) × (Fin n → ZMod 2) → ℂ)
+    (g' : RestrictedFunctionals A v ×
+      ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) ×
+        (Fin n → ZMod 2) → ℂ)
+    (hpoint : ∀ p, g p = g' (globalFunctionalRowEquiv A v p)) :
+    (∑ p, g p) /
+        (Fintype.card (FunctionalsAt (v : Fin d → ZMod 2) ×
+          (Fin n → ZMod 2)) : ℂ) =
+      (∑ p, g' p) /
+        (Fintype.card (RestrictedFunctionals A v ×
+          ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) ×
+            (Fin n → ZMod 2)) : ℂ) := by
+  classical
+  let e := globalFunctionalRowEquiv (n := n) A v
+  have hsum : (∑ p, g p) = ∑ p, g' p := by
+    calc
+      (∑ p, g p) = ∑ p, g' (e p) := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        exact hpoint p
+      _ = ∑ p, g' p := Equiv.sum_comp e g'
+  have hcard : Fintype.card (FunctionalsAt (v : Fin d → ZMod 2) ×
+      (Fin n → ZMod 2)) =
+    Fintype.card (RestrictedFunctionals A v ×
+      ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ZMod 2) ×
+        (Fin n → ZMod 2)) := Fintype.card_congr e
+  rw [hsum, hcard]
+
+/-- In the quotient coordinates, the source sample is literally the parent
+actual-fibre matrix plus the rank-one matrix drawn from the ambient
+functional and row vector. This is the pointwise identity required before
+any Jensen or finite-law reindexing. -/
+theorem actualA18_sourceSample_eq_ambient
+    {n d : ℕ}
+    (Q : ActualAffineRestriction n d)
+    (phi : Q.domainFixed →ₗ[ZMod 2] ZMod 2)
+    (v : Q.domainFixed) (hv : phi v = 1)
+    (R : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2]
+      Q.codomainVariation)
+    (lambda : ((Fin d → ZMod 2) ⧸ Q.domainFixed) →ₗ[ZMod 2] ZMod 2)
+    (w : Fin n → ZMod 2) :
+    let A' := functionalKernelInAmbient Q.domainFixed phi
+    let qdom : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2]
+        ((Fin d → ZMod 2) ⧸ Q.domainFixed) :=
+      Submodule.factor (p := A') (p' := Q.domainFixed) (by
+        intro x hx
+        rcases hx with ⟨a, ha, rfl⟩
+        exact a.property)
+    let hcoords := quotientSectionCoordinates_of_restricted_functional
+      Q.domainFixed phi v hv
+    let phi₀ := Classical.choose (Classical.choose_spec hcoords)
+    let psi := (restrictedFunctionalExtensionEquiv Q.domainFixed phi v hv) lambda
+    LinearMap.toMatrix'
+        (Matrix.toLin' Q.base +
+          (quotientSampleOutput Q.codomainVariation qdom phi₀ R lambda w).comp
+            (Submodule.mkQ A')) =
+      LinearMap.toMatrix'
+          (Matrix.toLin' Q.base + Q.codomainVariation.subtype.comp
+            (R.comp Q.domainFixed.mkQ)) +
+        actualA18RankOne psi.1 w := by
+  classical
+  let A' := functionalKernelInAmbient Q.domainFixed phi
+  let qdom : ((Fin d → ZMod 2) ⧸ A') →ₗ[ZMod 2]
+      ((Fin d → ZMod 2) ⧸ Q.domainFixed) :=
+    Submodule.factor (p := A') (p' := Q.domainFixed) (by
+      intro x hx
+      rcases hx with ⟨a, ha, rfl⟩
+      exact a.property)
+  let hcoords := quotientSectionCoordinates_of_restricted_functional
+    Q.domainFixed phi v hv
+  let phi₀ := Classical.choose (Classical.choose_spec hcoords)
+  let psi := (restrictedFunctionalExtensionEquiv Q.domainFixed phi v hv) lambda
+  have hpsi : psi.1 =
+      phi₀.comp (Submodule.mkQ A') + lambda.comp Q.domainFixed.mkQ := by
+    simp [psi, phi₀, restrictedFunctionalExtensionEquiv,
+      restrictedFunctionalReference]
+  have hA' : A' ≤ Q.domainFixed := by
+    intro x hx
+    rcases hx with ⟨a, ha, rfl⟩
+    exact a.property
+  have hsource := quotientSampleOutput_eq_parent_add_line
+    A' Q.domainFixed hA' Q.codomainVariation phi₀ R lambda w
+  have hline :
+      (quotientSampleOutput Q.codomainVariation qdom phi₀ R lambda w).comp
+          (Submodule.mkQ A') =
+        Q.codomainVariation.subtype.comp
+            (R.comp Q.domainFixed.mkQ) + psi.1.smulRight w := by
+    simpa [qdom, phi₀, psi, restrictedFunctionalExtensionEquiv,
+      restrictedFunctionalReference] using hsource
+  calc
+    LinearMap.toMatrix'
+        (Matrix.toLin' Q.base +
+          (quotientSampleOutput Q.codomainVariation qdom phi₀ R lambda w).comp
+            (Submodule.mkQ A')) =
+      LinearMap.toMatrix'
+        (Matrix.toLin' Q.base +
+          (Q.codomainVariation.subtype.comp
+            (R.comp Q.domainFixed.mkQ) + psi.1.smulRight w)) := by
+        exact congrArg (fun F => LinearMap.toMatrix' (Matrix.toLin' Q.base + F))
+          hline
+    _ = LinearMap.toMatrix'
+          (Matrix.toLin' Q.base + Q.codomainVariation.subtype.comp
+            (R.comp Q.domainFixed.mkQ)) + actualA18RankOne psi.1 w := by
+        rw [← add_assoc]
+        exact toMatrix'_add_rankOne _ _ _
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
