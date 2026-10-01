@@ -1,0 +1,57 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalProjection.lean:90:8: error: Application type mismatch: The argument
+  ↑(hyperplaneCanonicalEquiv B H).symm ∘ₛₗ ?m.124
+has type
+  ?m.108 →ₛₗ[?m.122]
+    PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ ?m.75 ⧸
+        ?m.76 →ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝]
+      ↥H
+but is expected to have type
+  PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal.F✝]
+    ↥H
+in the application
+  typedHyperplaneReducedWitness B H hH T f (↑(hyperplaneCanonicalEquiv B H).symm ∘ₛₗ ?m.124)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalProjection.lean:145:13: error: unsolved goals
+case done
+n d r✝ k : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+f✝ : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+A✝ :
+  Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝ (PvNP.RealizableHardness.ActualTypedABRankedTower.V✝ d)
+B✝ :
+  Submodule PvNP.RealizableHardness.ActualTypedABRankedTower.F✝ (PvNP.RealizableHardness.ActualTypedABRankedTower.W✝ n)
+f :
+  (PvNP.RealizableHardness.ActualTypedABRankedTower.V✝ d ⧸ A✝ →ₗ[PvNP.RealizableHardness.ActualTypedABRankedTower.F✝]
+      ↥B✝) →
+    ℂ
+r : ℕ
+⊢ typedComplexRankProjection A✝ B✝ r f = typedComplexRankProjection A✝ B✝ r f
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalProjection.lean:157:8: error: Type mismatch: After simplification, term
+  canonical_line_successor_projection A A' B hA hL T f ((lineCanonicalEquiv A A' B hA).symm M)
+ has type
+  @Eq ℂ
+    (typedComplexRankProjection A' B (r + k)
+      (fun M =>
+        typedLineReducedWitness B (Submodule.map A.mkQ A') hL T f
+          (((nestedDomainEquiv A A' hA).arrowCongr
+                (LinearEquiv.refl PvNP.RealizableHardness.BinaryMatrixA15NestedLine.F✝ ↥B)).symm
+            M))
+      M)
+    (typedComplexLineFilter B (Submodule.map A.mkQ A') hL (typedComplexRankProjection A B (r + k + 1) f)
+      (T +
+        ((nestedDomainEquiv A A' hA).arrowCongr
+                (LinearEquiv.refl PvNP.RealizableHardness.BinaryMatrixA15NestedLine.F✝ ↥B)).symm
+            M ∘ₗ
+          (Submodule.map A.mkQ A').mkQ))
+but is expected to have type
+  @Eq ℂ
+    (typedComplexRankProjection A' B (r + k)
+      (fun M => typedLineReducedWitness B (Submodule.map A.mkQ A') hL T f (M ∘ₗ ↑(nestedDomainEquiv A A' hA))) M)
+    (typedComplexLineFilter B (Submodule.map A.mkQ A') hL (typedComplexRankProjection A B (r + k + 1) f)
+      (T +
+        ((nestedDomainEquiv A A' hA).arrowCongr
+                (LinearEquiv.refl PvNP.RealizableHardness.BinaryMatrixA15NestedLine.F✝ ↥B)).symm
+            M ∘ₗ
+          (Submodule.map A.mkQ A').mkQ))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalProjection.lean:194:10: error(lean.unknownIdentifier): Unknown identifier `canonical_hyperplane_successor_projection`
