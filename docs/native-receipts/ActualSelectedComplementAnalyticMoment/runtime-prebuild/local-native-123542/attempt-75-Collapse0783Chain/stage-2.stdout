@@ -1,0 +1,93 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:119:53: error: unsolved goals
+n d j : ℕ
+f : BinaryMatrix n d → ℂ
+M : V d ⧸ ⊥ →ₗ[F] ↥⊤
+⊢ (∑ a,
+      if Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA14Line.F✝ ↥a.range = j then
+        (∑ x, f (bottomTopAmbientMatrixEquiv x) * ↑(traceCharacter a x)) /
+            ↑(Fintype.card
+                (PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸
+                    ⊥ →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝]
+                  ↥⊤)) *
+          ↑(traceCharacter a M)
+      else 0) =
+    ∑ x,
+      if Module.finrank PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝ ↥x.range = j then
+        (∑ x_1, f (LinearMap.toMatrix' (bottomTopCarrierAmbientHomEquiv x_1)) * ↑(traceCharacter x x_1)) /
+            ↑(Fintype.card (V d ⧸ ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] ↥⊤)) *
+          ↑(traceCharacter x M)
+      else 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:132:10: error: Type mismatch: After simplification, term
+  complexLinearMapRankProjection_reindex bottomTopDomainEquiv bottomTopCodomainEquiv j
+    (fun L => f (LinearMap.toMatrix' L)) (bottomTopCarrierAmbientHomEquiv M)
+ has type
+  complexLinearMapRankProjection j
+      (fun M' => f (LinearMap.toMatrix' (((⊥.quotEquivOfEqBot ⋯).symm.arrowCongr Submodule.topEquiv.symm).symm M')))
+      (((⊥.quotEquivOfEqBot ⋯).symm.arrowCongr Submodule.topEquiv.symm)
+        (((⊥.quotEquivOfEqBot ⋯).arrowCongr Submodule.topEquiv) M)) =
+    complexLinearMapRankProjection j (fun L => f (LinearMap.toMatrix' L))
+      (((⊥.quotEquivOfEqBot ⋯).arrowCongr Submodule.topEquiv) M)
+but is expected to have type
+  complexLinearMapRankProjection j
+      (fun N => f (LinearMap.toMatrix' (((⊥.quotEquivOfEqBot ⋯).arrowCongr Submodule.topEquiv) N))) M =
+    complexLinearMapRankProjection j (fun L => f (LinearMap.toMatrix' L))
+      (((⊥.quotEquivOfEqBot ⋯).arrowCongr Submodule.topEquiv) M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:144:59: error: Application type mismatch: The argument
+  d
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.26
+of sort `Type (?u.26 + 1)` in the application
+  Matrix.transposeLinearEquiv d
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:149:6: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:146:8: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:151:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:153:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:151:2: warning: Unused tactic linter: `rw [Matrix.rank_eq_finrank_range_toLin (LinearMap.toMatrix' Y) (Pi.basisFun F (Fin n))
+    (Pi.basisFun F (Fin d))]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:153:2: warning: Unused tactic linter: `simp [Matrix.toLin_eq_toLin', Matrix.toLin'_toMatrix']` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:159:9: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:155:8: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:177:46: error: Tactic `unfold` failed to unfold `uniformMean` in
+  (∑ M, (fun M => f (LinearMap.toMatrix' M)) M * ↑(traceCharacter Y M)) /
+      ↑(Fintype.card
+          ((Fin d → ZMod 2) →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] Fin n → ZMod 2)) =
+    (∑ M, f M * ↑(character (ambientFrequencyMatrixEquiv Y) M)) / ↑(Fintype.card (BinaryMatrix n d))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:203:2: error: Tactic `apply` failed: could not unify the conclusion of `Fintype.sum_equiv ambientFrequencyMatrixEquiv.toEquiv`
+  ∑ x, ?f x = ∑ x, ?g x
+with the goal
+  (∑ Y,
+      if Module.finrank PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝ ↥Y.range = j then
+        complexLinearMapFourierCoeff (fun L => f (LinearMap.toMatrix' L)) Y * ↑(traceCharacter Y M)
+      else 0) =
+    ∑ Y with Matrix.rank Y = j, BinaryMatrixA1Complex.complexFourierCoeff f Y * ↑(character Y (LinearMap.toMatrix' M))
+
+Note: The full type of `Fintype.sum_equiv ambientFrequencyMatrixEquiv.toEquiv` is
+  ∀ (f : (W n →ₗ[F] V d) → ?m.44) (g : BinaryMatrix n d → ?m.44),
+    (∀ (x : W n →ₗ[F] V d), f x = g (ambientFrequencyMatrixEquiv.toEquiv x)) → ∑ x, f x = ∑ x, g x
+
+n d j : ℕ
+f : BinaryMatrix n d → ℂ
+M : V d →ₗ[F] W n
+⊢ (∑ Y,
+      if Module.finrank PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝ ↥Y.range = j then
+        complexLinearMapFourierCoeff (fun L => f (LinearMap.toMatrix' L)) Y * ↑(traceCharacter Y M)
+      else 0) =
+    ∑ Y with Matrix.rank Y = j, BinaryMatrixA1Complex.complexFourierCoeff f Y * ↑(character Y (LinearMap.toMatrix' M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABBottomTopRankReindex.lean:224:4: warning: This simp argument is unused:
+  LinearEquiv.arrowCongr_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [bottomTopAmbientMatrixEquiv, bottomTopCarrierAmbientHomEquiv, bottomTopDomainEquiv,
+    bottomTopCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

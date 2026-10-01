@@ -1,0 +1,15 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapseChecks
+
+open PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse
+
+#check initialBottomTopBase
+#check initialBottomTopBase_ambient
+#check canonical_source_tower_endpoint_collapse
+
+#print axioms initialBottomTopBase
+#print axioms initialBottomTopBase_ambient
+#print axioms canonical_source_tower_endpoint_collapse
+
+end PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapseChecks

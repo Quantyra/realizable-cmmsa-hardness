@@ -1,0 +1,48 @@
+PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.initialBottomTopBase {n d : ℕ}
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.W✝ n) :
+  PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝ d ⧸
+      ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝]
+    ↥⊤
+PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.initialBottomTopBase_ambient {n d : ℕ}
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.W✝ n) :
+  ⊤.subtype ∘ₗ initialBottomTopBase T ∘ₗ ⊥.mkQ = T
+PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.canonical_source_tower_endpoint_collapse {n d r l h : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝
+      (PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.W✝ n))
+  (lines : ActualTypedABCanonicalFlag.DomainLineFlag ⊥ l)
+  (hypers : ActualTypedABCanonicalFlag.CodomainHyperplaneFlag ⊤ h) (hA : lines.endpoint = A) (hB : hypers.endpoint = B)
+  (T :
+    PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.F✝]
+      PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.W✝ n)
+  (ambientf : BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  have source := fun M => ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ 0 ambientf M;
+  have base := ⊤.subtype ∘ₗ initialBottomTopBase T ∘ₗ ⊥.mkQ;
+  let tower := ActualTypedABCanonicalFlag.buildCanonicalSourceTower lines hypers (initialBottomTopBase T);
+  have hEnd := ⋯;
+  have e := ActualTypedABEndpointTransport.endpointHomEquiv ⋯ ⋯;
+  (fun M =>
+      ActualTypedABCanonicalProjection.applyCanonicalFilters tower
+        (if h + l = 0 then fun N => ActualTypedABCanonicalDCollapse.filteredCarrierFunction ⊥ ⊤ base ambientf N
+        else source)
+        (e.symm M)) =
+    ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T ambientf
+'PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.initialBottomTopBase' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.initialBottomTopBase_ambient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse.canonical_source_tower_endpoint_collapse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
