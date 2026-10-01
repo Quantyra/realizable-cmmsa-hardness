@@ -1,0 +1,28 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:249:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.576 ?m.577 = 0
+in the target expression
+  L x ∈ A
+
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+Y : BinaryMatrix n d
+hsel : Selected A B (Matrix.toLin' (Matrix.transpose Y))
+L : W n →ₗ[F] V d := Matrix.toLin' (Matrix.transpose Y)
+qL : W n →ₗ[F] V d ⧸ A := A.mkQ ∘ₗ L
+R : Submodule F (V d) := L.range
+AR : Submodule F ↥R := Submodule.comap R.subtype A
+qR : ↥R →ₗ[F] V d ⧸ A := A.mkQ ∘ₗ R.subtype
+hAR : A ≤ R
+hARdim : Module.finrank F ↥AR = Module.finrank F ↥A
+hkerR : qR.ker = AR
+hfactor : qL = qR ∘ₗ L.rangeRestrict
+hqrange : qL.range = qR.range
+hqrank : Module.finrank F ↥qL.range = Module.finrank F ↥qR.range
+hnullR : Module.finrank F ↥qR.range + Module.finrank F ↥qR.ker = Module.finrank F ↥R
+hdimR : Module.finrank F ↥R = Module.finrank F ↥qL.range + Module.finrank F ↥A
+hmatrixRank : Matrix.rank Y = Module.finrank F ↥R
+x : W n
+hx : x ∈ qL.ker
+hxzero : A.mkQ (L x) = 0
+⊢ L x ∈ A
