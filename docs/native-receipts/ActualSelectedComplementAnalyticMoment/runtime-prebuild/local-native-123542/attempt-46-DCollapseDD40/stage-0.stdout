@@ -1,0 +1,140 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:291:27: error: unexpected token 'set_option'; expected 'lemma'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:324:8: error: 'change' tactic failed, pattern
+  typedComplexHyperplaneFilter B H hH (filteredCarrierFunction A B T f) (H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (Submodule.map B.subtype H) T
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) f) (e (e.symm M))
+is not definitionally equal to target
+  typedComplexHyperplaneFilter B H hH (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M)
+      (0 + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (hyperplaneCanonicalCodomain B H) (T + B.subtype ∘ₗ 0 ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (hyperplaneCanonicalCodomain B H) f) ((hyperplaneCanonicalEquiv B H) (e.symm M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:335:6: error: 'change' tactic failed, pattern
+  (applyCanonicalFilters tailTower fun M =>
+      typedComplexHyperplaneFilter B H hH (filteredCarrierFunction A B T f)
+        (H.subtype ∘ₗ (hyperplaneCanonicalEquiv B H).symm M)) =
+    filteredCarrierFunction (rankedTerminalData tailTower).Aend (rankedTerminalData tailTower).Bend T f
+is not definitionally equal to target
+  (applyCanonicalFilters
+      (CodomainHyperplaneFlag.rec (motive := fun {B} {h} flag =>
+        {f :
+            (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+                  A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+                ↥B) →
+              ℂ} →
+          ActualTypedABRankedTower A B f r h)
+        (fun B {f} => ActualTypedABRankedTower.done f r)
+        (fun {B} H hH {k} tail ih {f} => ActualTypedABRankedTower.hyperplane hH 0 f ih) tail)
+      fun M =>
+      typedComplexHyperplaneFilter B H hH (filteredCarrierFunction A B T f)
+        (0 + H.subtype ∘ₗ (hyperplaneCanonicalEquiv B H).symm M)) =
+    filteredCarrierFunction
+      (rankedTerminalData
+          (ActualTypedABRankedTower.hyperplane hH 0 fStored
+            (CodomainHyperplaneFlag.rec (motive := fun {B} {h} flag =>
+              {f :
+                  (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+                        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+                      ↥B) →
+                    ℂ} →
+                ActualTypedABRankedTower A B f r h)
+              (fun B {f} => ActualTypedABRankedTower.done f r)
+              (fun {B} H hH {k} tail ih {f} => ActualTypedABRankedTower.hyperplane hH 0 f ih) tail))).Aend
+      (rankedTerminalData
+          (ActualTypedABRankedTower.hyperplane hH 0 fStored
+            (CodomainHyperplaneFlag.rec (motive := fun {B} {h} flag =>
+              {f :
+                  (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+                        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+                      ↥B) →
+                    ℂ} →
+                ActualTypedABRankedTower A B f r h)
+              (fun B {f} => ActualTypedABRankedTower.done f r)
+              (fun {B} H hH {k} tail ih {f} => ActualTypedABRankedTower.hyperplane hH 0 f ih) tail))).Bend
+      T f
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:347:76: error: unexpected token 'set_option'; expected 'lemma'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:383:8: error: 'change' tactic failed, pattern
+  typedComplexLineFilter B (Submodule.map A.mkQ A') hL (filteredCarrierFunction A B T f)
+      (e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' B T (complexAmbientHybridFilter A' B f) (e (e.symm M))
+is not definitionally equal to target
+  typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M)
+      (0 + e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' B (T + B.subtype ∘ₗ 0 ∘ₗ A.mkQ) (complexAmbientHybridFilter A' B f)
+      ((lineCanonicalEquiv A A' B hA) (e.symm M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:395:6: error: 'change' tactic failed, pattern
+  (applyCanonicalFilters tailTower fun M =>
+      typedComplexLineFilter B (Submodule.map A.mkQ A') hL (filteredCarrierFunction A B T f)
+        ((lineCanonicalEquiv A A' B hA).symm M ∘ₗ (Submodule.map A.mkQ A').mkQ)) =
+    filteredCarrierFunction (rankedTerminalData tailTower).Aend (rankedTerminalData tailTower).Bend T f
+is not definitionally equal to target
+  (applyCanonicalFilters
+      (DomainLineFlag.rec (motive := fun {A} {l} lines =>
+        {f :
+            (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+                  A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+                ↥B) →
+              ℂ} →
+          {h : ℕ} → CodomainHyperplaneFlag B h → ActualTypedABRankedTower A B f r (h + l))
+        (fun A {f} {h} hypers => buildHyperplaneSuffix hypers)
+        (fun {A A'} hA hL {k} tail ih {f} {h} hypers => ActualTypedABRankedTower.line hA hL 0 f (ih hypers)) tail
+        hypers)
+      fun M =>
+      typedComplexLineFilter B (Submodule.map A.mkQ A') hL (filteredCarrierFunction A B T f)
+        (0 + (lineCanonicalEquiv A A' B hA).symm M ∘ₗ (Submodule.map A.mkQ A').mkQ)) =
+    filteredCarrierFunction
+      (rankedTerminalData
+          (ActualTypedABRankedTower.line hA hL 0 fStored
+            (DomainLineFlag.rec (motive := fun {A} {l} lines =>
+              {f :
+                  (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+                        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+                      ↥B) →
+                    ℂ} →
+                {h : ℕ} → CodomainHyperplaneFlag B h → ActualTypedABRankedTower A B f r (h + l))
+              (fun A {f} {h} hypers => buildHyperplaneSuffix hypers)
+              (fun {A A'} hA hL {k} tail ih {f} {h} hypers => ActualTypedABRankedTower.line hA hL 0 f (ih hypers)) tail
+              hypers))).Aend
+      (rankedTerminalData
+          (ActualTypedABRankedTower.line hA hL 0 fStored
+            (DomainLineFlag.rec (motive := fun {A} {l} lines =>
+              {f :
+                  (PvNP.RealizableHardness.ActualTypedABCanonicalFlag.V✝ d ⧸
+                        A →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalFlag.F✝]
+                      ↥B) →
+                    ℂ} →
+                {h : ℕ} → CodomainHyperplaneFlag B h → ActualTypedABRankedTower A B f r (h + l))
+              (fun A {f} {h} hypers => buildHyperplaneSuffix hypers)
+              (fun {A A'} hA hL {k} tail ih {f} {h} hypers => ActualTypedABRankedTower.line hA hL 0 f (ih hypers)) tail
+              hypers))).Bend
+      T f
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:408:70: error: unexpected token 'set_option'; expected 'lemma'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:449:4: error: 'change' tactic failed, pattern
+  typedComplexLineFilter B (Submodule.map A.mkQ A') hL fStored (S + e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' B (B.subtype ∘ₗ S ∘ₗ A.mkQ) (complexAmbientHybridFilter A' B ambientf)
+      (e (e.symm M))
+is not definitionally equal to target
+  typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ) =
+    complexAmbientAffineRestrict A' B (0 + B.subtype ∘ₗ S ∘ₗ A.mkQ) (complexAmbientHybridFilter A' B ambientf)
+      ((lineCanonicalEquiv A A' B hA) (e.symm M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:477:64: error: unexpected token 'set_option'; expected 'lemma'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:515:4: error: 'change' tactic failed, pattern
+  typedComplexHyperplaneFilter B H hH fStored (S + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (Submodule.map B.subtype H) (B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) ambientf) (e (e.symm M))
+is not definitionally equal to target
+  typedComplexHyperplaneFilter B H hH
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (hyperplaneCanonicalCodomain B H) (0 + B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (hyperplaneCanonicalCodomain B H) ambientf)
+      ((hyperplaneCanonicalEquiv B H) (e.symm M))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:574:15: error: unsolved goals
+case done.done
+n d r : ℕ
+T : V d ⧸ ⊥ →ₗ[F] ↥⊤
+ambientf : BinaryMatrix n d → ℂ
+⊢ (fun M => complexAmbientAffineRestrict ⊥ ⊤ (⊤.subtype ∘ₗ T ∘ₗ ⊥.mkQ) ambientf M) =
+    filteredCarrierFunction ⊥ ⊤ (⊤.subtype ∘ₗ T ∘ₗ ⊥.mkQ) ambientf
