@@ -1,0 +1,10 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18EnergyTriangle.actual_fibre_energy_add_smul_le {n d : ℕ} {η₁ η₂ c : ℝ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d)
+  (f g h : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) (hc : 0 ≤ c) (hcard : 0 < ↑Q.fibre.card)
+  (hdecomp : ∀ M ∈ Q.fibre, f M = g M + ↑c * h M)
+  (hg : PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy Q.fibre g ≤ η₁)
+  (hh : PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy Q.fibre h ≤ η₂) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy Q.fibre f ≤ 2 * η₁ + 2 * c ^ 2 * η₂
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18EnergyTriangle.actual_fibre_energy_add_smul_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
