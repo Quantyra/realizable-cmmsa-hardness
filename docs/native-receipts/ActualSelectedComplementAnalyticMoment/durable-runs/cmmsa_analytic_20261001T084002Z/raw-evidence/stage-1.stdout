@@ -1,0 +1,151 @@
+⚠ [3048/3049] Replayed PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:57:4: Unused tactic linter: `change dualRestriction A (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:60:4: Unused tactic linter: `change dualRestriction A (δ.1 + φ₀) = ψ` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:110:4: Unused tactic linter: `change dualRestrictionAt A w (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:113:4: Unused tactic linter: `change dualRestrictionAt A w (δ.1 + φ₀) = z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+ℹ [3049/3049] Built PvNP.RealizableHardness.ActualBinaryMatrixHC46A18ConditioningChecks (2.8s)
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:5:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestriction.{u_1, u_2} {K : Type u_1} {V : Type u_2}
+  [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) : (V →ₗ[K] K) →ₗ[K] ↥A →ₗ[K] K
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:6:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestriction_apply.{u_1, u_2} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) (φ : V →ₗ[K] K) (x : ↥A) :
+  ((dualRestriction A) φ) x = φ ↑x
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:7:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionFiberEquivKernel.{u_1, u_2} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) (ψ : ↥A →ₗ[K] K) (φ₀ : V →ₗ[K] K)
+  (hφ₀ : (dualRestriction A) φ₀ = ψ) : { φ // (dualRestriction A) φ = ψ } ≃ { δ // (dualRestriction A) δ = 0 }
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:8:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionFiberEquivKernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:9:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionFiber_card_eq_kernel.{u_1, u_2}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] [Fintype K] [Fintype V] (A : Submodule K V)
+  (ψ : ↥A →ₗ[K] K) (φ₀ : V →ₗ[K] K) (hφ₀ : (dualRestriction A) φ₀ = ψ) :
+  Fintype.card { φ // (dualRestriction A) φ = ψ } = Fintype.card { δ // (dualRestriction A) δ = 0 }
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:10:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionFiber_card_eq_kernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:11:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestriction_preserves_value.{u_1, u_2} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] {A : Submodule K V} (ψ : ↥A →ₗ[K] K) (φ : V →ₗ[K] K)
+  (hφ : (dualRestriction A) φ = ψ) {v : V} (hv : v ∈ A) : φ v = ψ ⟨v, hv⟩
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:12:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestriction_preserves_value' depends on axioms: [propext,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:13:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAt.{u_1, u_2} {K : Type u_1} {V : Type u_2}
+  [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) (w : V) : (V →ₗ[K] K) →ₗ[K] (↥A →ₗ[K] K) × K
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:14:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAtFiberEquivKernel.{u_1, u_2}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) (w : V)
+  (z : (↥A →ₗ[K] K) × K) (φ₀ : V →ₗ[K] K) (hφ₀ : (dualRestrictionAt A w) φ₀ = z) :
+  { φ // (dualRestrictionAt A w) φ = z } ≃ { δ // (dualRestrictionAt A w) δ = 0 }
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:15:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAtFiberEquivKernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:16:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAtFiber_card_eq_kernel.{u_1, u_2}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] [Fintype K] [Fintype V] (A : Submodule K V)
+  (w : V) (z : (↥A →ₗ[K] K) × K) (φ₀ : V →ₗ[K] K) (hφ₀ : (dualRestrictionAt A w) φ₀ = z) :
+  Fintype.card { φ // (dualRestrictionAt A w) φ = z } = Fintype.card { δ // (dualRestrictionAt A w) δ = 0 }
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:17:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAtFiber_card_eq_kernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:18:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAt_surjective_of_notMem.{u_1, u_2}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) {w : V} (hw : w ∉ A)
+  (ψ : ↥A →ₗ[K] K) (y : K) : ∃ φ, (dualRestrictionAt A w) φ = (ψ, y)
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:19:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAt_surjective_of_notMem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:20:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAtFiber_card_eq_of_notMem.{u_1, u_2}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] [Fintype K] [Fintype V] (A : Submodule K V)
+  {w : V} (hw : w ∉ A) (ψ : ↥A →ₗ[K] K) (y₁ y₂ : K) :
+  Fintype.card { φ // (dualRestrictionAt A w) φ = (ψ, y₁) } = Fintype.card { φ // (dualRestrictionAt A w) φ = (ψ, y₂) }
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:21:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAtFiber_card_eq_of_notMem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:22:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAtFiberEquiv_of_notMem.{u_1, u_2}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) {w : V} (hw : w ∉ A)
+  (ψ : ↥A →ₗ[K] K) (y₁ y₂ : K) :
+  { φ // (dualRestrictionAt A w) φ = (ψ, y₁) } ≃ { φ // (dualRestrictionAt A w) φ = (ψ, y₂) }
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:23:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAtFiberEquiv_of_notMem' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:24:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAt_impossible_of_mem.{u_1, u_2}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) {w : V} (hw : w ∈ A)
+  (ψ : ↥A →ₗ[K] K) (y : K) (hy : y ≠ ψ ⟨w, hw⟩) : ¬∃ φ, (dualRestrictionAt A w) φ = (ψ, y)
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:25:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualRestrictionAt_impossible_of_mem' depends on axioms: [propext,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:26:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupCoordinateMap.{u_1, u_2} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) (w : V) :
+  (↥(spanExtensionSubmodule A w) →ₗ[K] K) →ₗ[K] (↥A →ₗ[K] K) × K
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:27:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupCoordinateEquiv.{u_1, u_2} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) {w : V} (hw : w ∉ A) :
+  (↥(spanExtensionSubmodule A w) →ₗ[K] K) ≃ₗ[K] (↥A →ₗ[K] K) × K
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:28:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupCoordinateEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:29:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupCoordinateEquiv_apply.{u_1, u_2} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) {w : V} (hw : w ∉ A)
+  (f : ↥(spanExtensionSubmodule A w) →ₗ[K] K) : (dualSupCoordinateEquiv A hw) f = (f ∘ₗ Submodule.inclusion ⋯, f ⟨w, ⋯⟩)
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:30:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupCoordinateEquiv_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:32:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorCoordinateMap.{u_1, u_2, u_3} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] {W : Type u_3} [AddCommGroup W] [Module K W]
+  (A : Submodule K V) (w : V) : (↥(spanExtensionSubmodule A w) →ₗ[K] W) →ₗ[K] (↥A →ₗ[K] W) × W
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:33:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorCoordinateEquiv.{u_1, u_2, u_3}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] {W : Type u_3} [AddCommGroup W] [Module K W]
+  (A : Submodule K V) {w : V} (hw : w ∉ A) : (↥(spanExtensionSubmodule A w) →ₗ[K] W) ≃ₗ[K] (↥A →ₗ[K] W) × W
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:34:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorCoordinateEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:35:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorCoordinate_card.{u_1, u_2, u_3}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] {W : Type u_3} [Fintype W] [AddCommGroup W]
+  [Module K W] [Fintype V] (A : Submodule K V) {w : V} (hw : w ∉ A) :
+  Fintype.card (↥(spanExtensionSubmodule A w) →ₗ[K] W) = Fintype.card ((↥A →ₗ[K] W) × W)
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:36:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorCoordinate_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:37:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.conditional_uniform_mean_le_two.{u_3} {α : Type u_3}
+  [Fintype α] (p : α → Prop) [DecidablePred p] (hne : (Finset.filter p Finset.univ).Nonempty)
+  (hprob : Fintype.card α ≤ 2 * (Finset.filter p Finset.univ).card) (g : α → ℝ) (hg : ∀ (x : α), 0 ≤ g x) :
+  (∑ x with p x, g x) / ↑(Finset.filter p Finset.univ).card ≤ 2 * ((∑ x, g x) / ↑(Fintype.card α))
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:38:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.conditional_uniform_mean_le_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:39:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.spanExtensionSubmodule.{u_1, u_2} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] (A : Submodule K V) (w : V) : Submodule K V
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:40:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorCoordinateEquiv.{u_1, u_2, u_3}
+  {K : Type u_1} {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] {W : Type u_3} [AddCommGroup W] [Module K W]
+  (A : Submodule K V) {w : V} (hw : w ∉ A) : (↥(spanExtensionSubmodule A w) →ₗ[K] W) ≃ₗ[K] (↥A →ₗ[K] W) × W
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:41:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.binary_submodule_complement_card_eq.{u_2} {V : Type u_2}
+  [AddCommGroup V] [Fintype V] [Module (ZMod 2) V] (B B' : Submodule (ZMod 2) V) (hB : B ≤ B')
+  (hdim : Module.finrank (ZMod 2) ↥B' = Module.finrank (ZMod 2) ↥B + 1) : {w | ↑w ∉ B}.card = Fintype.card ↥B
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:42:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.binary_submodule_complement_card_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:43:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorOutsideEquiv.{u_1, u_2, u_3} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] {W : Type u_3} [AddCommGroup W] [Module K W]
+  (A : Submodule K V) (w : V) (hw : w ∉ A) (B : Submodule K W) :
+  { f // dualSupVectorColumn A w f ∉ B } ≃ { p // p.2 ∉ B }
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:44:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorOutsideEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:45:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorOutside_sum.{u_1, u_2, u_3} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] {W : Type u_3} [AddCommGroup W] [Module K W] [Fintype V]
+  [Fintype W] (A : Submodule K V) (w : V) (hw : w ∉ A) (B : Submodule K W)
+  (g : (↥(spanExtensionSubmodule A w) →ₗ[K] W) → ℝ) : ∑ f, g ↑f = ∑ p, g ((dualSupVectorCoordinateEquiv A hw).symm ↑p)
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:46:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorOutside_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:47:0: PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorOutside_mean.{u_1, u_2, u_3} {K : Type u_1}
+  {V : Type u_2} [Field K] [AddCommGroup V] [Module K V] {W : Type u_3} [AddCommGroup W] [Module K W] [Fintype V]
+  [Fintype W] (A : Submodule K V) (w : V) (hw : w ∉ A) (B : Submodule K W)
+  (g : (↥(spanExtensionSubmodule A w) →ₗ[K] W) → ℝ) :
+  (∑ f, g ↑f) / ↑(Fintype.card { f // dualSupVectorColumn A w f ∉ B }) =
+    (∑ p, g ((dualSupVectorCoordinateEquiv A hw).symm ↑p)) / ↑(Fintype.card { p // p.2 ∉ B })
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18ConditioningChecks.lean:48:0: 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning.dualSupVectorOutside_mean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (3049 jobs).
