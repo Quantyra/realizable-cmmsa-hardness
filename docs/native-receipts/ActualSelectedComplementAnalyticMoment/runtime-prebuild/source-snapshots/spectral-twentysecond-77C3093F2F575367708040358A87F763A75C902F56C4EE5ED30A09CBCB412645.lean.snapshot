@@ -1,0 +1,161 @@
+import Mathlib.LinearAlgebra.Matrix.Rank
+import Mathlib.Algebra.Module.Submodule.Range
+import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+import Mathlib.Tactic
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+
+/-!
+Finite Fourier convolution for the actual complex binary-matrix transform.
+The rank support bound for pointwise products is proved from convolution and
+matrix rank subadditivity, with no ambient-width or Booleanity restriction.
+-/
+namespace PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+
+open scoped BigOperators
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Complex Fourier inversion, obtained componentwise from the established
+real inversion formula and the actual complex coefficient definition. -/
+theorem complexFourierInversion {n d : Nat}
+    (f : BinaryMatrix n d → Complex) (M : BinaryMatrix n d) :
+    (∑ Y : BinaryMatrix n d,
+      complexFourierCoeff f Y * (character Y M : Complex)) = f M := by
+  apply Complex.ext
+  · calc
+      (∑ Y : BinaryMatrix n d,
+        complexFourierCoeff f Y * (character Y M : Complex)).re =
+          ∑ Y : BinaryMatrix n d,
+            fourierCoeff (fun X => (f X).re) Y * character Y M := by
+              rw [Complex.re_sum]
+              apply Finset.sum_congr rfl
+              intro Y hY
+              simp [complexFourierCoeff_re, Complex.mul_re]
+      _ = (f M).re := fourier_inversion (fun X => (f X).re) M
+  · calc
+      (∑ Y : BinaryMatrix n d,
+        complexFourierCoeff f Y * (character Y M : Complex)).im =
+          ∑ Y : BinaryMatrix n d,
+            fourierCoeff (fun X => (f X).im) Y * character Y M := by
+              rw [Complex.im_sum]
+              apply Finset.sum_congr rfl
+              intro Y hY
+              simp [complexFourierCoeff_im, Complex.mul_im]
+      _ = (f M).im := fourier_inversion (fun X => (f X).im) M
+
+/-- The complex Fourier coefficient of a pointwise product is the finite
+convolution of its two coefficient functions. -/
+theorem complexFourierCoeff_mul_eq_convolution {n d : Nat}
+    (f g : BinaryMatrix n d → Complex) (K : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => f M * g M) K =
+      ∑ X : BinaryMatrix n d,
+        complexFourierCoeff g X * complexFourierCoeff f (K + X) := by
+  classical
+  have hinv (M : BinaryMatrix n d) :
+      g M = ∑ X : BinaryMatrix n d,
+        complexFourierCoeff g X * (character X M : Complex) :=
+    (complexFourierInversion g M).symm
+  have hpoint (M : BinaryMatrix n d) :
+      f M * g M * (character K M : Complex) =
+        ∑ X : BinaryMatrix n d,
+          complexFourierCoeff g X *
+            (f M * (character (K + X) M : Complex)) := by
+    rw [hinv M]
+    rw [Finset.mul_sum, Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    intro X hX
+    rw [character_add_left]
+    simp only [Complex.ofReal_mul]
+    ring
+  have hsum :
+      (∑ M : BinaryMatrix n d,
+        f M * g M * (character K M : Complex)) =
+        ∑ X : BinaryMatrix n d,
+          complexFourierCoeff g X *
+            ∑ M : BinaryMatrix n d,
+              f M * (character (K + X) M : Complex) := by
+    calc
+      _ = ∑ M : BinaryMatrix n d,
+            ∑ X : BinaryMatrix n d,
+              complexFourierCoeff g X *
+                (f M * (character (K + X) M : Complex)) := by
+              apply Finset.sum_congr rfl
+              intro M hM
+              exact hpoint M
+      _ = ∑ X : BinaryMatrix n d,
+            ∑ M : BinaryMatrix n d,
+              complexFourierCoeff g X *
+                (f M * (character (K + X) M : Complex)) := Finset.sum_comm
+      _ = ∑ X : BinaryMatrix n d,
+            complexFourierCoeff g X *
+              ∑ M : BinaryMatrix n d,
+                f M * (character (K + X) M : Complex) := by
+              apply Finset.sum_congr rfl
+              intro X hX
+              rw [← Finset.mul_sum]
+  unfold complexFourierCoeff
+  rw [hsum, Finset.sum_div]
+  simp_rw [complexFourierCoeff]
+
+/-- Binary-matrix rank is subadditive under matrix addition. -/
+theorem binaryMatrix_rank_add_le {n d : Nat}
+    (A B : BinaryMatrix n d) : (A + B).rank ≤ A.rank + B.rank := by
+  change Module.finrank (ZMod 2)
+      (LinearMap.range (A + B).mulVecLin) ≤
+    Module.finrank (ZMod 2) (LinearMap.range A.mulVecLin) +
+      Module.finrank (ZMod 2) (LinearMap.range B.mulVecLin)
+  have hle : LinearMap.range (A + B).mulVecLin ≤
+      (LinearMap.range A.mulVecLin ⊔ LinearMap.range B.mulVecLin :
+        Submodule (ZMod 2) (Fin n → ZMod 2)) := by
+    rw [Matrix.mulVecLin_add]
+    exact LinearMap.range_add_le A.mulVecLin B.mulVecLin
+  calc
+    Module.finrank (ZMod 2) (LinearMap.range (A + B).mulVecLin) ≤
+        Module.finrank (ZMod 2)
+          (LinearMap.range A.mulVecLin ⊔ LinearMap.range B.mulVecLin :
+            Submodule (ZMod 2) (Fin n → ZMod 2)) :=
+            Submodule.finrank_mono hle
+    _ ≤ Module.finrank (ZMod 2) (LinearMap.range A.mulVecLin) +
+          Module.finrank (ZMod 2) (LinearMap.range B.mulVecLin) :=
+            Submodule.finrank_add_le_finrank_add_finrank _ _
+
+/-- Pointwise products add Fourier degree: ranks in the product transform
+are bounded by the sum of the two coefficient-support cutoffs. -/
+theorem complexFourierSupportedThrough_mul {n d D₁ D₂ : Nat}
+    (f g : BinaryMatrix n d → Complex)
+    (hf : ComplexFourierSupportedThrough D₁ f)
+    (hg : ComplexFourierSupportedThrough D₂ g) :
+    ComplexFourierSupportedThrough (D₁ + D₂) (fun M => f M * g M) := by
+  intro Y hY
+  rw [complexFourierCoeff_mul_eq_convolution]
+  apply Finset.sum_eq_zero
+  intro X hX
+  by_cases hfx : complexFourierCoeff f (Y + X) = 0
+  · simp [hfx]
+  · by_cases hgx : complexFourierCoeff g X = 0
+    · simp [hgx]
+    · have hfrank : (Y + X).rank ≤ D₁ := by
+        by_contra hnot
+        have hz := hf (Y + X) (Nat.lt_of_not_ge hnot)
+        exact hfx hz
+      have hgrank : X.rank ≤ D₂ := by
+        by_contra hnot
+        have hz := hg X (Nat.lt_of_not_ge hnot)
+        exact hgx hz
+      have hcancel : Y = (Y + X) + X := by
+        ext a b
+        simp [add_assoc, add_self_eq_zero]
+      have hbound : Y.rank ≤ D₁ + D₂ := by
+        calc
+          Y.rank = ((Y + X) + X).rank := congrArg Matrix.rank hcancel
+          _ ≤ (Y + X).rank + X.rank := binaryMatrix_rank_add_le _ _
+          _ ≤ D₁ + D₂ := Nat.add_le_add hfrank hgrank
+      omega
+
+end
+end PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
