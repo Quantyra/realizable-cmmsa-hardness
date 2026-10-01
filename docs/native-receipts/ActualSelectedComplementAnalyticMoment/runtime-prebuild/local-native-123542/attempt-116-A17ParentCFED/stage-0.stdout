@@ -1,0 +1,35 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:55:4: error: Type mismatch
+  (Submodule.equivMapOfInjective B.subtype ⋯ Q.codomainVariation).symm
+has type
+  { x : W n // x ∈ Submodule.map B.subtype Q.codomainVariation } ≃ₗ[F] ↥Q.codomainVariation
+but is expected to have type
+  { x : ↥B // x ∈ Q.codomainVariation } ≃ₗ[F] ↥(Submodule.map B.subtype Q.codomainVariation)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17ParentFibreBridge.lean:121:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  e (e.symm ?x)
+in the target expression
+  e (e.symm ((carrierAmbientQuotientHomEquiv T Q) ((carrierFibreQuotientHomEquiv Q) ⟨M, hM⟩))) =
+    e ⟨liftCarrierMatrix A B T M, ⋯⟩
+
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+Q : CarrierRestriction A B
+M : V d ⧸ A →ₗ[F] ↥B
+hM : M ∈ Q.fibre
+e : ↥(liftCarrierRestriction A B T Q).fibre ≃
+  QuotientHom (liftCarrierRestriction A B T Q).domainFixed (liftCarrierRestriction A B T Q).codomainVariation :=
+  actualFibreQuotientHomEquiv (liftCarrierRestriction A B T Q)
+⊢ e (e.symm ((carrierAmbientQuotientHomEquiv T Q) ((carrierFibreQuotientHomEquiv Q) ⟨M, hM⟩))) =
+    e ⟨liftCarrierMatrix A B T M, ⋯⟩
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (carrierAmbientQuotientHomEquiv T Q) ((carrierFibreQuotientHomEquiv Q) ⟨M, hM⟩)
+  has type
+    V d ⧸ Submodule.comap A.mkQ Q.domainFixed →ₗ[F] ↥(Submodule.map B.subtype Q.codomainVariation)
+  but is expected to have type
+    QuotientHom (liftCarrierRestriction A B T Q).domainFixed (liftCarrierRestriction A B T Q).codomainVariation
+  in the application
+    e.symm ((carrierAmbientQuotientHomEquiv T Q) ((carrierFibreQuotientHomEquiv Q) ⟨M, hM⟩))
