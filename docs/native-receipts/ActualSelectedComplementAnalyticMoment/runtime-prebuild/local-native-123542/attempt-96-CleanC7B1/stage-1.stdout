@@ -1,0 +1,55 @@
+PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTopActualRestriction {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction ⊥ ⊤) :
+  PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d
+PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTop_matrix_sub_mulVec {n d : ℕ}
+  (M T :
+    PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.F✝]
+      ↥⊤)
+  (v : PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.V✝ d) :
+  Matrix.mulVec
+      (PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopAmbientMatrixEquiv M -
+        PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopAmbientMatrixEquiv T)
+      v =
+    PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopCodomainEquiv
+      ((M - T) (PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopDomainEquiv.symm v))
+PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTop_actual_mem_fibre_iff {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction ⊥ ⊤)
+  (M :
+    PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.F✝]
+      ↥⊤) :
+  PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopAmbientMatrixEquiv M ∈
+      (bottomTopActualRestriction Q).fibre ↔
+    M ∈ Q.fibre
+PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTop_actual_fibre_image {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction ⊥ ⊤) :
+  (bottomTopActualRestriction Q).fibre =
+    Finset.image (⇑PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopAmbientMatrixEquiv) Q.fibre
+PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTop_actual_fibre_energy {n d : ℕ}
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction ⊥ ⊤)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy (bottomTopActualRestriction Q).fibre f =
+    (∑ M ∈ Q.fibre,
+        Complex.normSq (f (PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopAmbientMatrixEquiv M))) /
+      ↑Q.fibre.card
+PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.actual_global_to_bottomTop_typed {n d D : ℕ} {eps : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hglobal : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal D eps f) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.UpToTypedNormSqGlobal ⊥ ⊤ D eps fun M =>
+    f (PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.bottomTopAmbientMatrixEquiv M)
+'PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTop_matrix_sub_mulVec' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTop_actual_mem_fibre_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTop_actual_fibre_image' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.bottomTop_actual_fibre_energy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean.actual_global_to_bottomTop_typed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
