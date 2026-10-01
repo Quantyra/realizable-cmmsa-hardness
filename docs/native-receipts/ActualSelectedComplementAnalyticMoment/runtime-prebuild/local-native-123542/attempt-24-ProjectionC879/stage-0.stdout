@@ -1,0 +1,54 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalProjection.lean:165:8: error: Type mismatch: After simplification, term
+  canonical_line_successor_projection A A' B hA hL T f ((lineCanonicalEquiv A A' B hA).symm M)
+ has type
+  typedComplexRankProjection A' B (r + k)
+      (fun M => typedLineReducedWitness B (Submodule.map A.mkQ A') hL T f ((lineCanonicalEquiv A A' B hA).symm M))
+      ((lineCanonicalEquiv A A' B hA) (M ∘ₗ ↑(nestedDomainEquiv A A' hA))) =
+    typedComplexLineFilter B (Submodule.map A.mkQ A') hL (typedComplexRankProjection A B (r + k + 1) f)
+      (T + (M ∘ₗ ↑(nestedDomainEquiv A A' hA)) ∘ₗ (Submodule.map A.mkQ A').mkQ)
+but is expected to have type
+  typedComplexRankProjection A' B (r + k)
+      (fun M => typedLineReducedWitness B (Submodule.map A.mkQ A') hL T f (M ∘ₗ ↑(nestedDomainEquiv A A' hA))) M =
+    typedComplexLineFilter B (Submodule.map A.mkQ A') hL (typedComplexRankProjection A B (r + k + 1) f)
+      (T + (M ∘ₗ ↑(nestedDomainEquiv A A' hA)) ∘ₗ (Submodule.map A.mkQ A').mkQ)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalProjection.lean:201:8: error: Type mismatch: After simplification, term
+  canonical_hyperplane_successor_projection A B H hH T f ((hyperplaneCanonicalEquiv B H).symm M)
+ has type
+  typedComplexRankProjection A (Submodule.map B.subtype H) (r + k)
+      (fun M =>
+        typedHyperplaneReducedWitness B H hH T f
+          (((LinearEquiv.refl PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+                    (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸ A)).arrowCongr
+                (hyperplaneCanonicalCodomainEquiv B H)).symm
+            M))
+      (((LinearEquiv.refl PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+              (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸ A)).arrowCongr
+          (hyperplaneCanonicalCodomainEquiv B H))
+        (((LinearEquiv.refl PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+                  (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸ A)).arrowCongr
+              (hyperplaneCanonicalCodomainEquiv B H)).symm
+          M)) =
+    typedComplexHyperplaneFilter B H hH (typedComplexRankProjection A B (r + k + 1) f)
+      (T +
+        H.subtype ∘ₗ
+          ((LinearEquiv.refl PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+                    (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸ A)).arrowCongr
+                (hyperplaneCanonicalCodomainEquiv B H)).symm
+            M)
+but is expected to have type
+  typedComplexRankProjection A (Submodule.map B.subtype H) (r + k)
+      (fun M => typedHyperplaneReducedWitness B H hH T f (↑(Submodule.equivMapOfInjective B.subtype ⋯ H).symm ∘ₗ M)) M =
+    typedComplexHyperplaneFilter B H hH (typedComplexRankProjection A B (r + k + 1) f)
+      (T +
+        H.subtype ∘ₗ
+          ((LinearEquiv.refl PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+                    (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.V✝ d ⧸ A)).arrowCongr
+                (hyperplaneCanonicalCodomainEquiv B H)).symm
+            M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalProjection.lean:164:12: warning: This simp argument is unused:
+  LinearEquiv.arrowCongr_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [BinaryMatrixA15NestedLine.lineCanonicalEquiv, LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

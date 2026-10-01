@@ -1,0 +1,248 @@
+import PvNP.RealizableHardness.ActualTypedABMixedTower
+import PvNP.RealizableHardness.ActualTypedABRankedTower
+import PvNP.RealizableHardness.ActualTypedABCanonicalFlag
+import PvNP.RealizableHardness.BinaryMatrixA15CanonicalLineRank
+import PvNP.RealizableHardness.BinaryMatrixA15CanonicalRank
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Reduced
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Hyperplane
+import PvNP.RealizableHardness.BinaryMatrixTypedA14HyperplaneReduced
+import PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+import PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal
+import PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalProjection
+
+open ActualTypedABMixedTower
+open ActualTypedABRankedTower
+open ActualTypedABCanonicalFlag
+open BinaryMatrixA1NestedCarrier
+open BinaryMatrixA15CanonicalLineRank
+open BinaryMatrixA15CanonicalRank
+open BinaryMatrixTypedA14FixedBase
+open BinaryMatrixTypedA14HyperplaneFixedBase
+open BinaryMatrixTypedA14Line
+open BinaryMatrixTypedA14Reduced
+open BinaryMatrixTypedA14Hyperplane
+open BinaryMatrixTypedA14HyperplaneReduced
+open BinaryMatrixTypedA15ReducedGlobal
+open BinaryMatrixTypedA15HyperplaneReducedGlobal
+open BinaryMatrixA15NestedHyperplane
+open BinaryMatrixA15NestedLine
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- The exact selected-filter identity for an actual line successor, now
+expressed on the flattened child carrier `V/A'`. The proof composes the
+canonical nested-quotient rank-projection equivalence with the actual fixed-
+base typed A14 equation. -/
+theorem canonical_line_successor_projection {n d j : Nat}
+    (A A' : Submodule F (V d)) (B : Submodule F (W n))
+    (hA : A ≤ A')
+    (hL : Module.finrank F (A'.map A.mkQ) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (N : ((V d ⧸ A) ⧸ A'.map A.mkQ) →ₗ[F] B) :
+    typedComplexRankProjection A' B j
+      (fun M => typedLineReducedWitness (k := j) B
+        (A'.map A.mkQ) hL T f
+        ((BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M))
+      (BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA N) =
+    typedComplexLineFilter B (A'.map A.mkQ) hL
+      (typedComplexRankProjection A B (j + 1) f)
+      (T + N.comp (A'.map A.mkQ).mkQ) := by
+  calc
+    typedComplexRankProjection A' B j
+        (fun M => typedLineReducedWitness (k := j) B
+          (A'.map A.mkQ) hL T f
+          ((BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M))
+        (BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA N) =
+      reducedComplexRankProjection B (A'.map A.mkQ) j
+        (typedLineReducedWitness (k := j) B
+          (A'.map A.mkQ) hL T f) N :=
+            BinaryMatrixA15CanonicalLineRank.lineCanonical_rankProjection
+              A A' B hA
+              (typedLineReducedWitness (k := j) B
+                (A'.map A.mkQ) hL T f) N
+    _ = typedComplexLineFilter B (A'.map A.mkQ) hL
+        (typedComplexRankProjection A B (j + 1) f)
+        (T + N.comp (A'.map A.mkQ).mkQ) :=
+          typed_A14_fixedLine A B (A'.map A.mkQ) hL T f N
+
+/-- The exact selected-filter identity for an actual codomain-hyperplane
+successor, expressed on its genuine embedded child carrier. As in the line
+case, the only transports are the canonical subtype-image equivalence and
+the proved fixed-base typed A14 equation. -/
+theorem canonical_hyperplane_successor_projection {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (H : Submodule F B)
+    (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (N : (V d ⧸ A) →ₗ[F] H) :
+    typedComplexRankProjection A (H.map B.subtype) j
+      (fun M => typedHyperplaneReducedWitness (k := j) B H hH T f
+        ((BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H).symm M))
+      (BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H N) =
+    typedComplexHyperplaneFilter B H hH
+      (typedComplexRankProjection A B (j + 1) f)
+      (T + H.subtype.comp N) := by
+  calc
+    typedComplexRankProjection A (H.map B.subtype) j
+        (fun M => typedHyperplaneReducedWitness (k := j) B H hH T f
+          ((BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H).symm M))
+        (BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H N) =
+      hyperplaneReducedComplexRankProjection B H hH j
+        (typedHyperplaneReducedWitness (k := j) B H hH T f) N :=
+          BinaryMatrixA15CanonicalRank.hyperplaneCanonical_rankProjection
+            B H hH (typedHyperplaneReducedWitness (k := j) B H hH T f) N
+    _ = typedComplexHyperplaneFilter B H hH
+        (typedComplexRankProjection A B (j + 1) f)
+        (T + H.subtype.comp N) :=
+          typed_A14_fixedHyperplane A B H hH T f N
+
+/-- Compose the actual selected line and hyperplane filters along the stored
+ranked tower. The input is already the selected Fourier level; each
+constructor applies its selected filter at the actual affine base and then
+continues on the constructor's genuine child carrier. -/
+noncomputable def applyCanonicalFilters {n d r k : Nat} {A : Submodule F (V d)}
+    {B : Submodule F (W n)} {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (tower : ActualTypedABRankedTower A B f r k) :
+    (((V d ⧸ A) →ₗ[F] B) → Complex) →
+      (((V d ⧸ (rankedTerminalData tower).Aend) →ₗ[F]
+        (rankedTerminalData tower).Bend) → Complex) :=
+  match tower with
+  | .done _ _ => fun g => g
+  | @ActualTypedABRankedTower.line n d A B A' hA hL r k T f tail =>
+      fun g => applyCanonicalFilters tail (fun M =>
+        typedComplexLineFilter B (A'.map A.mkQ) hL g
+          (T + ((BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M).comp
+            (A'.map A.mkQ).mkQ))
+  | @ActualTypedABRankedTower.hyperplane n d A B H hH r k T f tail =>
+      fun g => applyCanonicalFilters tail (fun M =>
+        typedComplexHyperplaneFilter B H hH g
+          (T + H.subtype.comp
+            ((BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H).symm M)))
+
+/-- The terminal rank-r projection of the actual recursively constructed
+witness equals the composition of the manuscript's selected filters applied
+to the original rank-(r+k) projection. This proves the full recursive
+projection identity from the canonical successor identities, rather than
+assuming a terminal-operator compatibility premise. -/
+theorem ranked_terminal_projection_eq_canonicalFilters {n d r k : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    (tower : ActualTypedABRankedTower A B f r k) :
+    typedComplexRankProjection (rankedTerminalData tower).Aend
+      (rankedTerminalData tower).Bend r (rankedTerminalData tower).fend =
+    applyCanonicalFilters tower (typedComplexRankProjection A B (r + k) f) := by
+  induction tower with
+  | done f r =>
+      simp only [rankedTerminalData, applyCanonicalFilters, Nat.add_zero]
+      rfl
+  | @line A B A' hA hL r k T f tail ih =>
+      have hstep :
+          typedComplexRankProjection A' B (r + k)
+            (fun M => typedLineReducedWitness (k := r + k) B
+              (A'.map A.mkQ) hL T f
+              (M.comp (nestedDomainEquiv A A' hA).toLinearMap)) =
+          (fun M => typedComplexLineFilter B (A'.map A.mkQ) hL
+            (typedComplexRankProjection A B (r + k + 1) f)
+            (T + ((BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M).comp
+              (A'.map A.mkQ).mkQ)) := by
+        funext M
+        have hflatten :
+            (BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M =
+              M.comp (nestedDomainEquiv A A' hA).toLinearMap := by
+          ext x
+          simp [BinaryMatrixA15NestedLine.lineCanonicalEquiv,
+            LinearEquiv.arrowCongr_apply, LinearMap.comp_apply]
+        simpa only [hflatten] using
+          canonical_line_successor_projection (j := r + k) A A' B hA hL T f
+            ((BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M)
+      have hlevel : r + k + 1 = r + (k + 1) := Nat.add_assoc _ _ _
+      rw [hlevel.symm]
+      change typedComplexRankProjection (rankedTerminalData tail).Aend
+        (rankedTerminalData tail).Bend r (rankedTerminalData tail).fend =
+        applyCanonicalFilters tail (fun M =>
+          typedComplexLineFilter B (A'.map A.mkQ) hL
+            (typedComplexRankProjection A B (r + k + 1) f)
+            (T + ((BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M).comp
+              (A'.map A.mkQ).mkQ))
+      calc
+        typedComplexRankProjection (rankedTerminalData tail).Aend
+            (rankedTerminalData tail).Bend r (rankedTerminalData tail).fend =
+          applyCanonicalFilters tail
+            (typedComplexRankProjection A' B (r + k)
+              (fun M => typedLineReducedWitness (k := r + k) B
+                (A'.map A.mkQ) hL T f
+                (M.comp (nestedDomainEquiv A A' hA).toLinearMap))) := ih
+        _ = applyCanonicalFilters tail (fun M =>
+            typedComplexLineFilter B (A'.map A.mkQ) hL
+              (typedComplexRankProjection A B (r + k + 1) f)
+              (T + ((BinaryMatrixA15NestedLine.lineCanonicalEquiv A A' B hA).symm M).comp
+                (A'.map A.mkQ).mkQ)) :=
+          congrArg (applyCanonicalFilters tail) hstep
+  | @hyperplane A B H hH r k T f tail ih =>
+      have hstep :
+          typedComplexRankProjection A (H.map B.subtype) (r + k)
+            (fun M => typedHyperplaneReducedWitness (k := r + k) B H hH T f
+              ((Submodule.equivMapOfInjective B.subtype B.injective_subtype H).symm.toLinearMap.comp M)) =
+          (fun M => typedComplexHyperplaneFilter B H hH
+            (typedComplexRankProjection A B (r + k + 1) f)
+            (T + H.subtype.comp
+              ((BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H).symm M))) := by
+        funext M
+        simpa [BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv,
+          LinearEquiv.arrowCongr_apply, LinearMap.comp_apply] using
+          canonical_hyperplane_successor_projection (j := r + k) A B H hH T f
+            ((BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H).symm M)
+      have hlevel : r + k + 1 = r + (k + 1) := Nat.add_assoc _ _ _
+      rw [hlevel.symm]
+      change typedComplexRankProjection (rankedTerminalData tail).Aend
+        (rankedTerminalData tail).Bend r (rankedTerminalData tail).fend =
+        applyCanonicalFilters tail (fun M =>
+          typedComplexHyperplaneFilter B H hH
+            (typedComplexRankProjection A B (r + k + 1) f)
+            (T + H.subtype.comp
+              ((BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H).symm M)))
+      calc
+        typedComplexRankProjection (rankedTerminalData tail).Aend
+            (rankedTerminalData tail).Bend r (rankedTerminalData tail).fend =
+          applyCanonicalFilters tail
+            (typedComplexRankProjection A (H.map B.subtype) (r + k)
+              (fun M => typedHyperplaneReducedWitness (k := r + k) B H hH T f
+                ((Submodule.equivMapOfInjective B.subtype B.injective_subtype H).symm.toLinearMap.comp M))) := ih
+        _ = applyCanonicalFilters tail (fun M =>
+            typedComplexHyperplaneFilter B H hH
+              (typedComplexRankProjection A B (r + k + 1) f)
+              (T + H.subtype.comp
+                ((BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalEquiv (A := A) B H).symm M))) :=
+          congrArg (applyCanonicalFilters tail) hstep
+
+/-- For the actual bottom-to-A domain flag and top-to-B codomain flag, the
+source-canonical first-base/rest-zero tower's residual projection is exactly
+the sequential selected-filter composition. This is the full level-rank
+identity for the canonical source construction. -/
+theorem canonical_source_tower_projection_eq_filters {n d r l h : Nat}
+    {A0 : Submodule F (V d)} {B0 : Submodule F (W n)}
+    {f : ((V d ⧸ A0) →ₗ[F] B0) → Complex}
+    (lines : DomainLineFlag A0 l)
+    (hypers : CodomainHyperplaneFlag B0 h)
+    (T : (V d ⧸ A0) →ₗ[F] B0) :
+    typedComplexRankProjection
+        (rankedTerminalData (buildCanonicalSourceTower (r := r) (f := f) lines hypers T)).Aend
+        (rankedTerminalData (buildCanonicalSourceTower (r := r) (f := f) lines hypers T)).Bend
+        r (rankedTerminalData (buildCanonicalSourceTower (r := r) (f := f) lines hypers T)).fend =
+      applyCanonicalFilters (buildCanonicalSourceTower (r := r) (f := f) lines hypers T)
+        (typedComplexRankProjection A0 B0 (r + (h + l)) f) := by
+  exact ranked_terminal_projection_eq_canonicalFilters
+    (buildCanonicalSourceTower (r := r) (f := f) lines hypers T)
+
+end
+end PvNP.RealizableHardness.ActualTypedABCanonicalProjection
