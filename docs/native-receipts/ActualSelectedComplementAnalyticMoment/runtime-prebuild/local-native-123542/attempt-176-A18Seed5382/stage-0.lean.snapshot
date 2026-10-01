@@ -1,0 +1,80 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17Full
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+import PvNP.RealizableHardness.ActualTypedABFullA16Final
+import PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+import PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+import PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+import PvNP.RealizableHardness.BinaryMatrixActualAffine
+import PvNP.RealizableHardness.BinaryMatrixFourier
+
+/-! The original single-derivative influence predicate and the A1 inheritance
+obligations for the A18 induction.  The influence predicate is a full uniform
+mean on each actual quotient carrier; it is not a conditional mean on a
+further affine fibre. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17Full
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+open PvNP.RealizableHardness.ActualTypedABFullA16Final
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open scoped BigOperators
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- Original manuscript influence through order `D`: the full normalized
+mean of every actual filtered derivative, for every affine base. -/
+def OriginalActualInfluenceThrough {n d : Nat} (D : Nat) (eps : Real)
+    (f : BinaryMatrix n d → Complex) : Prop :=
+  ∀ (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n),
+    Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ D →
+    carrierMean A B (fun M => Complex.normSq
+      (filteredCarrierFunction A B T f M)) ≤ eps
+
+/-- The order-zero source seed is part of the original influence premise:
+the unrestricted bottom/top derivative is the ambient source. -/
+theorem original_influence_order_zero_seed {n d D : Nat} {eps : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hinfl : OriginalActualInfluenceThrough D eps f) :
+    carrierMean (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n))
+      (fun M => Complex.normSq (filteredCarrierFunction
+        (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) 0 f M)) ≤ eps := by
+  apply hinfl
+  simp only [Module.finrank_bot]
+  have htop : Module.finrank F ((W n) ⧸ (⊤ : Submodule F (W n))) = 0 := by
+    have h := (⊤ : Submodule F (W n)).finrank_quotient_add_finrank
+    rw [finrank_top] at h
+    omega
+  omega
+
+/-- The original influence parameter is nonnegative, obtained from its
+order-zero seed and pointwise nonnegativity of squared complex magnitude. -/
+theorem original_influence_parameter_nonneg {n d D : Nat} {eps : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hinfl : OriginalActualInfluenceThrough D eps f) : 0 ≤ eps := by
+  have hseed := original_influence_order_zero_seed f hinfl
+  have hnonneg : 0 ≤ carrierMean (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) (fun M => Complex.normSq
+        (filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) 0 f M)) := by
+    unfold carrierMean
+    apply div_nonneg
+    · exact Finset.sum_nonneg fun M _ => Complex.normSq_nonneg _
+    · exact Nat.cast_nonneg _
+  exact le_trans hnonneg hseed
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction
