@@ -1,0 +1,86 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:323:8: error: Type mismatch: After simplification, term
+  typed_hyperplane_A1_operator_step A B H hH T 0 f (e.symm M)
+ has type
+  typedComplexHyperplaneFilter B H hH (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M)
+      (H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (Submodule.map B.subtype H) T
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) f) ((hyperplaneCanonicalEquiv B H) (e.symm M))
+but is expected to have type
+  typedComplexHyperplaneFilter B H hH (filteredCarrierFunction A B T f)
+      (H.subtype ∘ₗ (hyperplaneCanonicalEquiv B H).symm M) =
+    complexAmbientAffineRestrict A (Submodule.map B.subtype H) T
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) f) M
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:329:8: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildHyperplaneSuffix, applyCanonicalFilters, zero_add, rankedTerminalData,
+    BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:378:8: error: Type mismatch: After simplification, term
+  typed_line_A1_operator_step A A' B hA hL T 0 f (e.symm M)
+ has type
+  @Eq ℂ
+    (typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict A B T (complexAmbientHybridFilter A B f) M)
+      (e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ))
+    (complexAmbientAffineRestrict A' B T (complexAmbientHybridFilter A' B f)
+      ((lineCanonicalEquiv A A' B hA) (e.symm M)))
+but is expected to have type
+  @Eq ℂ
+    (typedComplexLineFilter B (Submodule.map A.mkQ A') hL (filteredCarrierFunction A B T f)
+      ((lineCanonicalEquiv A A' B hA).symm M ∘ₗ (Submodule.map A.mkQ A').mkQ))
+    (complexAmbientAffineRestrict A' B T (complexAmbientHybridFilter A' B f) M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:383:8: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildLineSuffix, applyCanonicalFilters, zero_add, rankedTerminalData]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:437:4: error: Type mismatch: After simplification, term
+  typed_line_A1_operator_step A A' B hA hL 0 S ambientf (e.symm M)
+ has type
+  @Eq ℂ
+    (typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + e.symm M ∘ₗ (Submodule.map A.mkQ A').mkQ))
+    (complexAmbientAffineRestrict A' B (B.subtype ∘ₗ S ∘ₗ A.mkQ) (complexAmbientHybridFilter A' B ambientf)
+      ((lineCanonicalEquiv A A' B hA) (e.symm M)))
+but is expected to have type
+  @Eq ℂ
+    (typedComplexLineFilter B (Submodule.map A.mkQ A') hL
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + (lineCanonicalEquiv A A' B hA).symm M ∘ₗ (Submodule.map A.mkQ A').mkQ))
+    (complexAmbientAffineRestrict A' B (B.subtype ∘ₗ S ∘ₗ A.mkQ) (complexAmbientHybridFilter A' B ambientf) M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:494:4: error: Type mismatch: After simplification, term
+  typed_hyperplane_A1_operator_step A B H hH 0 S ambientf (e.symm M)
+ has type
+  typedComplexHyperplaneFilter B H hH
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + H.subtype ∘ₗ e.symm M) =
+    complexAmbientAffineRestrict A (Submodule.map B.subtype H) (B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) ambientf) ((hyperplaneCanonicalEquiv B H) (e.symm M))
+but is expected to have type
+  typedComplexHyperplaneFilter B H hH
+      (fun M => complexAmbientAffineRestrict A B 0 (complexAmbientHybridFilter A B ambientf) M)
+      (S + H.subtype ∘ₗ (hyperplaneCanonicalEquiv B H).symm M) =
+    complexAmbientAffineRestrict A (Submodule.map B.subtype H) (B.subtype ∘ₗ S ∘ₗ A.mkQ)
+      (complexAmbientHybridFilter A (Submodule.map B.subtype H) ambientf) M
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:500:50: warning: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildCanonicalSourceTower, buildHyperplanePrefix, buildHyperplaneSuffix, applyCanonicalFilters,
+    LinearMap.comp_zero, rankedTerminalData, BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalDCollapse.lean:501:4: warning: This simp argument is unused:
+  LinearMap.comp_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [buildCanonicalSourceTower, buildHyperplanePrefix, buildHyperplaneSuffix, applyCanonicalFilters,
+    zero_add, rankedTerminalData, BinaryMatrixA15NestedHyperplane.hyperplaneCanonicalCodomain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
