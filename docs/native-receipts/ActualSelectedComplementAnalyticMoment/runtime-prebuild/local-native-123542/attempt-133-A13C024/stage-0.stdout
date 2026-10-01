@@ -1,0 +1,89 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:37:29: error: unsolved goals
+d : ℕ
+φ : V d
+⊢ ∑ i, Pi.single (Fin.last d) 1 i * Fin.snoc φ 1 i = 1
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:42:14: error: Type mismatch: After simplification, term
+  u.property
+ has type
+  ∑ i, Pi.single (Fin.last d) 1 i * ↑u i = 1
+but is expected to have type
+  1 = ↑u (Fin.last d)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:58:9: error: unsolved goals
+case last
+n d : ℕ
+ψ : FunctionalsAt (lastVector d)
+w : W n
+i : Fin n
+⊢ w i * ↑ψ (Pi.single (Fin.last d) 1) = w i
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:60:44: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:61:34: warning: This simp argument is unused:
+  functionalVectorEquiv_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [actualA18RankOne_entry, lineShift, lineFunctional, lastVector, functionalsAtLastEquiv,
+    lastCoordinateSliceEquiv, functionalsAtVectorEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:71:42: error: Function expected at
+  complexLineAverage
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  f
+
+Hint: The identifier `complexLineAverage` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:87:56: error: Type mismatch
+  Equiv.sum_comp e ?m.116
+has type
+  ∑ i, ?m.116 (e i) = ∑ i, ?m.116 i
+but is expected to have type
+  ∑ p, f (M + lineShift (e p).2 (e p).1) = ∑ p, f (M + lineShift p.2 p.1)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:91:26: error: Tactic `unfold` failed: Local variable `complexLineAverage` has no definition
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:115:2: error: Tactic `apply` failed: could not unify the conclusion of `Finset.sum_congr rfl`
+  Finset.sum ?m.56 ?m.53 = Finset.sum ?m.56 ?m.54
+with the goal
+  ∑ a with Selected (F ∙ lastVector d) ⊤ (Matrix.toLin' (Matrix.transpose a)),
+      complexFourierCoeff f a * ↑(character a M) =
+    ∑ Y with hybridLineSelected Y, complexFourierCoeff f Y * ↑(character Y M)
+
+Note: The full type of `Finset.sum_congr rfl` is
+  (∀ x ∈ ?m.56, ?m.53 x = ?m.54 x) → Finset.sum ?m.56 ?m.53 = Finset.sum ?m.56 ?m.54
+
+n d : ℕ
+f : BinaryMatrix n (d + 1) → ℂ
+M : BinaryMatrix n (d + 1)
+⊢ ∑ a with Selected (F ∙ lastVector d) ⊤ (Matrix.toLin' (Matrix.transpose a)),
+      complexFourierCoeff f a * ↑(character a M) =
+    ∑ Y with hybridLineSelected Y, complexFourierCoeff f Y * ↑(character Y M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:123:22: error: Function expected at
+  complexLineAverage
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  (complexRankProjection j f)
+
+Hint: The identifier `complexLineAverage` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:174:16: error: don't know how to synthesize implicit argument `complexLineAverage`
+  @complexHybridLineFilter_rankProjection_eq ?m.55 ?m.56 n d D f M
+context:
+n d D : ℕ
+f : BinaryMatrix n (d + 1) → ℂ
+hD : complexRankProjection D f = f
+M : BinaryMatrix n (d + 1)
+⊢ ?m.55
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:174:16: error: don't know how to synthesize implicit argument
+  @complexHybridLineFilter_rankProjection_eq ?m.55 ?m.56 n d D f M
+context:
+n d D : ℕ
+f : BinaryMatrix n (d + 1) → ℂ
+hD : complexRankProjection D f = f
+M : BinaryMatrix n (d + 1)
+⊢ Sort ?u.49
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lean:173:59: error: unsolved goals
+n d D : ℕ
+f : BinaryMatrix n (d + 1) → ℂ
+hD : complexRankProjection D f = f
+M : BinaryMatrix n (d + 1)
+⊢ f M = complexAmbientHybridFilter (F ∙ lastVector d) ⊤ f M + 2 ^ D * actualA18Average (lastVector d) f M
