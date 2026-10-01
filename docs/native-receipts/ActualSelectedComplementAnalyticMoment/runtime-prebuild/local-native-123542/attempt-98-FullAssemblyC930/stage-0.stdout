@@ -1,0 +1,115 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:74:27: error(lean.unknownIdentifier): Unknown constant `PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.carrierMatrixEquiv.apply_symm_apply`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:72:46: error: unsolved goals
+n d i j : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+f g : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hij : i ≠ j
+fCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => f ((carrierMatrixEquiv A B).symm X)
+gCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => g ((carrierMatrixEquiv A B).symm X)
+X : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A))
+⊢ complexRankProjection i (fun X => f ((carrierMatrixEquiv A B).symm X))
+      ((carrierMatrixEquiv A B) ((carrierMatrixEquiv A B).symm X)) =
+    complexRankProjection i (fun X => f ((carrierMatrixEquiv A B).symm X)) X
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:87:27: error(lean.unknownIdentifier): Unknown constant `PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.carrierMatrixEquiv.apply_symm_apply`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:85:46: error: unsolved goals
+n d i j : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+f g : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hij : i ≠ j
+fCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => f ((carrierMatrixEquiv A B).symm X)
+gCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => g ((carrierMatrixEquiv A B).symm X)
+hfi :
+  ∀ (X : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A))),
+    typedComplexRankProjection A B i f ((carrierMatrixEquiv A B).symm X) = complexRankProjection i fCoord X
+X : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A))
+⊢ complexRankProjection j (fun X => g ((carrierMatrixEquiv A B).symm X))
+      ((carrierMatrixEquiv A B) ((carrierMatrixEquiv A B).symm X)) =
+    complexRankProjection j (fun X => g ((carrierMatrixEquiv A B).symm X)) X
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:93:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (complexRankProjection ?m.346 ?f ?M).re
+in the target expression
+  (uniformMean fun X => (complexRankProjection i fCoord X).re * (complexRankProjection j gCoord X).re) = 0
+
+n d i j : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+f g : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hij : i ≠ j
+fCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => f ((carrierMatrixEquiv A B).symm X)
+gCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => g ((carrierMatrixEquiv A B).symm X)
+hfi :
+  ∀ (X : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A))),
+    typedComplexRankProjection A B i f ((carrierMatrixEquiv A B).symm X) = complexRankProjection i fCoord X
+hgj :
+  ∀ (X : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A))),
+    typedComplexRankProjection A B j g ((carrierMatrixEquiv A B).symm X) = complexRankProjection j gCoord X
+⊢ (uniformMean fun X => (complexRankProjection i fCoord X).re * (complexRankProjection j gCoord X).re) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:100:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (complexRankProjection ?m.368 ?f ?M).im
+in the target expression
+  (uniformMean fun X => (complexRankProjection i fCoord X).im * (complexRankProjection j gCoord X).im) = 0
+
+n d i j : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+f g : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hij : i ≠ j
+fCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => f ((carrierMatrixEquiv A B).symm X)
+gCoord : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A)) → ℂ :=
+  fun X => g ((carrierMatrixEquiv A B).symm X)
+hfi :
+  ∀ (X : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A))),
+    typedComplexRankProjection A B i f ((carrierMatrixEquiv A B).symm X) = complexRankProjection i fCoord X
+hgj :
+  ∀ (X : BinaryMatrix (Module.finrank F ↥B) (Module.finrank F (V d ⧸ A))),
+    typedComplexRankProjection A B j g ((carrierMatrixEquiv A B).symm X) = complexRankProjection j gCoord X
+hreal : (uniformMean fun X => (complexRankProjection i fCoord X).re * (complexRankProjection j gCoord X).re) = 0
+⊢ (uniformMean fun X => (complexRankProjection i fCoord X).im * (complexRankProjection j gCoord X).im) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:236:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Module.finrank F ↥qR.range
+in the target expression
+  Module.finrank F ↥R = Module.finrank F ↥qL.range + Module.finrank F ↥A
+
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+Y : BinaryMatrix n d
+hsel : Selected A B (Matrix.toLin' (Matrix.transpose Y))
+L : W n →ₗ[F] V d := Matrix.toLin' (Matrix.transpose Y)
+qL : W n →ₗ[F] V d ⧸ A := A.mkQ ∘ₗ L
+R : Submodule F (V d) := L.range
+AR : Submodule F ↥R := Submodule.comap R.subtype A
+qR : ↥R →ₗ[F] V d ⧸ A := A.mkQ ∘ₗ R.subtype
+hAR : A ≤ R
+hARdim : Module.finrank F ↥AR = Module.finrank F ↥A
+hkerR : qR.ker = AR
+hfactor : qL = qR ∘ₗ L.rangeRestrict
+hqrange : qL.range = qR.range
+hqrank : Module.finrank F ↥qL.range = Module.finrank F ↥qR.range
+hnullR : Module.finrank F ↥qR.range + Module.finrank F ↥qR.ker = Module.finrank F ↥R
+⊢ Module.finrank F ↥R = Module.finrank F ↥qL.range + Module.finrank F ↥A
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:244:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:248:4: error: Type mismatch: After simplification, term
+  hx
+ has type
+  @Membership.mem (V d) (Submodule F (V d)) SetLike.instMembership A (L x)
+but is expected to have type
+  @Membership.mem (V d) (Submodule PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.F✝ (V d)) SetLike.instMembership
+    A ((Matrix.transpose Y).mulVec x)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:338:55: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:342:16: error(lean.unknownIdentifier): Unknown identifier `rankedTerminalData`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:343:16: error(lean.unknownIdentifier): Unknown identifier `rankedTerminalData`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABFullA16Assembly.lean:289:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
