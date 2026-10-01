@@ -1,0 +1,103 @@
+PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierRestriction {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B) :
+  PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d
+PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierMatrix {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n)
+  (M :
+    PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      ↥B) :
+  PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d
+PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierMatrix_sub_mulVec {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B)
+  (M :
+    PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      ↥B)
+  (v : PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d) :
+  Matrix.mulVec (liftCarrierMatrix A B T M - (liftCarrierRestriction A B T Q).base) v =
+    B.subtype ((M - Q.base) (A.mkQ v))
+PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierMatrix_mem_fibre_iff {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B)
+  (M :
+    PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      ↥B) :
+  liftCarrierMatrix A B T M ∈ (liftCarrierRestriction A B T Q).fibre ↔ M ∈ Q.fibre
+PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.carrierFibreQuotientHomEquiv {n d : ℕ}
+  {A :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d)}
+  {B :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n)}
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B) :
+  ↥Q.fibre ≃
+    ((PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d ⧸ A) ⧸
+        Q.domainFixed →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      ↥Q.codomainVariation)
+'PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.carrierFibreQuotientHomEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierRestriction_order {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+      (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n)
+  (Q : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction A B) :
+  (liftCarrierRestriction A B T Q).order =
+    Module.finrank PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+          (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n ⧸ B) +
+      Q.order
+'PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierMatrix_mem_fibre_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierRestriction_order' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
