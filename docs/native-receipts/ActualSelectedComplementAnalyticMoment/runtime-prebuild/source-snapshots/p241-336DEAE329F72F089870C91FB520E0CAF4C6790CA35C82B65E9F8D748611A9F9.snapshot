@@ -1,0 +1,222 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition
+import PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+import PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+
+/-! Change of domain coordinates for the actual A18 line draw.  The
+functional condition and rank-one perturbation are transported together; the
+base matrix and normalized finite law are preserved. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition
+open PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+open PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+open scoped BigOperators
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : ℕ) := Fin d → F
+private abbrev W (n : ℕ) := Fin n → F
+
+/-- Pull an ambient matrix back along a domain-coordinate equivalence. -/
+def domainPullMatrix {n d : ℕ} (e : V d ≃ₗ[F] V d)
+    (M : BinaryMatrix n d) : BinaryMatrix n d :=
+  LinearMap.toMatrix' ((Matrix.toLin' M).comp e.toLinearMap)
+
+theorem domainPullMatrix_add {n d : ℕ} (e : V d ≃ₗ[F] V d)
+    (M N : BinaryMatrix n d) :
+    domainPullMatrix e (M + N) = domainPullMatrix e M + domainPullMatrix e N := by
+  ext i j
+  simp [domainPullMatrix, Matrix.toLin'_toMatrix', Matrix.toLin'_apply',
+    LinearMap.comp_apply]
+
+theorem domainPullMatrix_symm_apply {n d : ℕ} (e : V d ≃ₗ[F] V d)
+    (M : BinaryMatrix n d) :
+    domainPullMatrix e.symm (domainPullMatrix e M) = M := by
+  ext i j
+  simp [domainPullMatrix, Matrix.toLin'_toMatrix', Matrix.toLin'_apply',
+    LinearMap.comp_apply]
+
+theorem domainPullMatrix_rankOne {n d : ℕ} (e : V d ≃ₗ[F] V d)
+    (ψ : V d →ₗ[F] F) (w : W n) :
+    domainPullMatrix e (actualA18RankOne ψ w) =
+      actualA18RankOne (ψ.comp e.toLinearMap) w := by
+  unfold domainPullMatrix actualA18RankOne
+  rw [Matrix.toLin'_toMatrix']
+  congr 1
+  ext x i
+  simp [LinearMap.comp_apply, LinearMap.smulRight_apply]
+
+theorem domainPullMatrix_toMatrix {n d : ℕ} (e : V d ≃ₗ[F] V d)
+    (M : V d →ₗ[F] W n) :
+    domainPullMatrix e (LinearMap.toMatrix' M) =
+      LinearMap.toMatrix' (M.comp e.toLinearMap) := by
+  simp [domainPullMatrix, Matrix.toLin'_toMatrix']
+
+theorem domainPullMatrix_symm_toMatrix {n d : ℕ}
+    (e : V d ≃ₗ[F] V d) (M : V d →ₗ[F] W n) :
+    domainPullMatrix e.symm (LinearMap.toMatrix' M) =
+      LinearMap.toMatrix' (M.comp e.symm.toLinearMap) :=
+  domainPullMatrix_toMatrix e.symm M
+
+/-- Fourier rank projections commute with the same domain-coordinate change.
+This is the spectral covariance needed to transport the homogeneous premise. -/
+theorem complexRankProjection_domainPull {n d j : ℕ}
+    (e : V d ≃ₗ[F] V d) (f : BinaryMatrix n d → ℂ)
+    (M : BinaryMatrix n d) :
+    complexRankProjection j (fun N => f (domainPullMatrix e.symm N))
+        (domainPullMatrix e M) = complexRankProjection j f M := by
+  let g : (V d →ₗ[F] W n) → ℂ := fun L => f (LinearMap.toMatrix' L)
+  let g' : (V d →ₗ[F] W n) → ℂ := fun L =>
+    f (domainPullMatrix e.symm (LinearMap.toMatrix' L))
+  let emap := mapReindexEquiv e (LinearEquiv.refl F (W n))
+  have hfun : ∀ L, g (emap.symm L) = g' L := by
+    intro L
+    simp [g, g', emap, mapReindexEquiv, domainPullMatrix_symm_toMatrix]
+  have hmain := complexLinearMapRankProjection_reindex e
+    (LinearEquiv.refl F (W n)) j g (Matrix.toLin' M)
+  have hleft :
+      complexLinearMapRankProjection j g'
+          ((Matrix.toLin' M).comp e.toLinearMap) =
+        complexRankProjection j
+          (fun N => f (domainPullMatrix e.symm N))
+          (domainPullMatrix e M) := by
+    rw [← ActualTypedABBottomTopRankReindex.ambientHomRankProjection_toMatrix]
+    simp [g', domainPullMatrix_toMatrix]
+  have hright :
+      complexLinearMapRankProjection j g (Matrix.toLin' M) =
+        complexRankProjection j f M := by
+    simpa [g] using
+      ActualTypedABBottomTopRankReindex.ambientHomRankProjection_toMatrix
+        f (Matrix.toLin' M)
+  rw [hleft, hright]
+  simpa [emap, mapReindexEquiv, hfun] using hmain
+
+/-- Reindex the full functional fibre under an adapted coordinate map. -/
+def functionalsAtPullEquiv {d : ℕ} (e : V (d + 1) ≃ₗ[F] V (d + 1))
+    (v : V (d + 1)) (hv : e (lastVector d) = v) :
+    FunctionalsAt v ≃ FunctionalsAt (lastVector d) where
+  toFun ψ := ⟨ψ.1.comp e.toLinearMap, by
+    simpa [LinearMap.comp_apply, hv] using ψ.2⟩
+  invFun ψ := ⟨ψ.1.comp e.symm.toLinearMap, by
+    have hv' : e.symm v = lastVector d := by
+      rw [← hv]
+      exact e.symm_apply_apply _
+    simpa [LinearMap.comp_apply, hv'] using ψ.2⟩
+  left_inv ψ := by
+    apply Subtype.ext
+    ext x
+    simp [LinearMap.comp_apply]
+  right_inv ψ := by
+    apply Subtype.ext
+    ext x
+    simp [LinearMap.comp_apply]
+
+/-- The actual A18 average is covariant under every domain-coordinate
+equivalence carrying the last basis vector to `v`. -/
+theorem actualA18Average_domainPull {n d : ℕ}
+    (e : V (d + 1) ≃ₗ[F] V (d + 1)) (v : V (d + 1))
+    (hv : e (lastVector d) = v)
+    (f : BinaryMatrix n (d + 1) → ℂ) (M : BinaryMatrix n (d + 1)) :
+    actualA18Average v f M =
+      actualA18Average (lastVector d)
+        (fun N => f (domainPullMatrix e.symm N))
+        (domainPullMatrix e M) := by
+  classical
+  let eψ := functionalsAtPullEquiv e v hv
+  let eDraw : FunctionalsAt v × W n ≃ FunctionalsAt (lastVector d) × W n :=
+    Equiv.prodCongr eψ (Equiv.refl (W n))
+  have hpoint : ∀ p : FunctionalsAt v × W n,
+      f (M + actualA18RankOne p.1.1 p.2) =
+        f (domainPullMatrix e.symm
+          (domainPullMatrix e M +
+            actualA18RankOne (eDraw p).1.1 (eDraw p).2)) := by
+    intro p
+    rcases p with ⟨ψ, w⟩
+    have hψ : (eψ ψ).1.comp e.symm.toLinearMap = ψ.1 := by
+      ext x
+      simp [eψ, functionalsAtPullEquiv, LinearMap.comp_apply]
+    rw [domainPullMatrix_add, domainPullMatrix_rankOne,
+      domainPullMatrix_symm_apply]
+    congr 1
+    simpa [eDraw, eψ, functionalsAtPullEquiv] using
+      congrArg (fun q : V (d + 1) →ₗ[F] F => actualA18RankOne q w) hψ
+  have hsum :
+      (∑ p : FunctionalsAt v × W n,
+        f (M + actualA18RankOne p.1.1 p.2)) =
+      ∑ p : FunctionalsAt (lastVector d) × W n,
+        f (domainPullMatrix e.symm
+          (domainPullMatrix e M + actualA18RankOne p.1.1 p.2)) := by
+    calc
+      _ = ∑ p : FunctionalsAt v × W n,
+          f (domainPullMatrix e.symm
+            (domainPullMatrix e M +
+              actualA18RankOne (eDraw p).1.1 (eDraw p).2)) := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        exact hpoint p
+      _ = ∑ p : FunctionalsAt (lastVector d) × W n,
+          f (domainPullMatrix e.symm
+            (domainPullMatrix e M + actualA18RankOne p.1.1 p.2)) :=
+        Equiv.sum_comp eDraw
+          (fun p : FunctionalsAt (lastVector d) × W n =>
+            f (domainPullMatrix e.symm
+              (domainPullMatrix e M + actualA18RankOne p.1.1 p.2)))
+  have hcard : Fintype.card (FunctionalsAt v × W n) =
+      Fintype.card (FunctionalsAt (lastVector d) × W n) :=
+    Fintype.card_congr eDraw
+  unfold actualA18Average
+  rw [hsum, hcard]
+
+/-- Extend the line map sending the final coordinate vector to any nonzero
+vector to an ambient change of coordinates. -/
+theorem exists_adaptedDomainEquiv (d : ℕ) (v : V (d + 1)) (hv : v ≠ 0) :
+    ∃ e : LinearEquiv F (V (d + 1)) (V (d + 1)), e (lastVector d) = v := by
+  let u := lastVector d
+  have hu : u ≠ 0 := by
+    intro h
+    have hlast := congrFun h (Fin.last d)
+    simp [u, lastVector] at hlast
+  let L₀ : Submodule F (V (d + 1)) := Submodule.span F ({u} : Set (V (d + 1)))
+  let Lᵥ : Submodule F (V (d + 1)) := Submodule.span F ({v} : Set (V (d + 1)))
+  have hdim₀ : Module.finrank F L₀ = 1 := by
+    simpa [L₀] using (finrank_span_singleton hu)
+  have hdimᵥ : Module.finrank F Lᵥ = 1 := by
+    simpa [Lᵥ] using (finrank_span_singleton hv)
+  let u₀ : L₀ := ⟨u, Submodule.subset_span (by simp)⟩
+  let v₀ : Lᵥ := ⟨v, Submodule.subset_span (by simp)⟩
+  have hu₀ : u₀ ≠ 0 := by
+    intro h
+    exact hu (congrArg Subtype.val h)
+  have hv₀ : v₀ ≠ 0 := by
+    intro h
+    exact hv (congrArg Subtype.val h)
+  let b₀ := FiniteDimensional.basisSingleton Unit hdim₀ u₀ hu₀
+  let bᵥ := FiniteDimensional.basisSingleton Unit hdimᵥ v₀ hv₀
+  let e₀ : LinearEquiv F L₀ F :=
+    b₀.equivFun.trans (LinearEquiv.funUnique Unit F F)
+  let eᵥ : LinearEquiv F Lᵥ F :=
+    bᵥ.equivFun.trans (LinearEquiv.funUnique Unit F F)
+  have he₀ : e₀ u₀ = 1 := by
+    simp [e₀, b₀, FiniteDimensional.basisSingleton_apply]
+  have heᵥ : eᵥ v₀ = 1 := by
+    simp [eᵥ, bᵥ, FiniteDimensional.basisSingleton_apply]
+  let fLine : LinearEquiv F L₀ Lᵥ := e₀.trans eᵥ.symm
+  have hfLine : fLine u₀ = v₀ := by
+    apply eᵥ.injective
+    simp [fLine, he₀, heᵥ]
+  letI : FiniteDimensional F L₀ := FiniteDimensional.of_finrank_pos (by rw [hdim₀]; norm_num)
+  obtain ⟨e, he⟩ := Submodule.exists_linearEquiv_restrict_eq fLine
+  refine ⟨e, ?_⟩
+  have hrestrict := he u₀
+  have hrestrict' : fLine u₀ = (e u₀ : V (d + 1)) := hrestrict
+  rw [hfLine] at hrestrict'
+  exact hrestrict'
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition
