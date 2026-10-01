@@ -1,0 +1,211 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge
+
+/-! Transfer actual globalness of a fixed-domain derivative to its further
+reduced affine slices, preserving the chosen base and normalized fibre mean. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeGlobalTransfer
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17FixedSlice
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+open PvNP.RealizableHardness.BinaryMatrixA15NestedLine
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-! The fixed-domain derivative on `Hom(V/U,W)`, in its actual matrix
+coordinates. -/
+def fixedDomainDerivativeCoordinate {n d : Nat}
+    (U : Submodule F (V d)) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (X : BinaryMatrix
+      (Module.finrank F (⊤ : Submodule F (W n)))
+      (Module.finrank F (V d ⧸ U))) : Complex :=
+  filteredCarrierFunction U (⊤ : Submodule F (W n)) T f
+    ((carrierMatrixEquiv U (⊤ : Submodule F (W n))).symm X)
+
+/-! The coordinate matrix model and the typed quotient carrier have the same
+order bounds and normalized fibre energies. -/
+theorem actual_derivative_global_implies_typed
+    {n d r : Nat} {ε : Real}
+    (U : Submodule F (V d))
+    (g : ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))) → Complex)
+    (hg : UpToActualNormSqGlobal r ε
+      (fun X => g ((carrierMatrixEquiv U (⊤ : Submodule F (W n))).symm X))) :
+    UpToTypedNormSqGlobal U (⊤ : Submodule F (W n)) r ε g := by
+  exact (typed_global_iff_coordinate U (⊤ : Submodule F (W n)) g).2 hg
+
+/-! Actual-globalness of the fixed-domain derivative yields its complete
+typed globalness on the quotient carrier. This is the input to the
+order-accounted preimage-slice lemma; it does not erase the fixed subspace
+`A/U` when that slice is selected. -/
+theorem actual_fixed_domain_derivative_to_typed_global
+    {n d r : Nat} {ε : Real}
+    (U : Submodule F (V d)) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hderiv : UpToActualNormSqGlobal (r - 1) ε
+      (fixedDomainDerivativeCoordinate U T f)) :
+    UpToTypedNormSqGlobal U (⊤ : Submodule F (W n)) (r - 1) ε
+      (filteredCarrierFunction U (⊤ : Submodule F (W n)) T f) := by
+  exact actual_derivative_global_implies_typed U
+    (filteredCarrierFunction U (⊤ : Submodule F (W n)) T f) (by
+      simpa [fixedDomainDerivativeCoordinate] using hderiv)
+
+/-- Energy of the actual A17 derivative on every quotient-carrier affine
+fibre of order at most `r - 1`. The carrier restriction's order includes its
+fixed domain and codomain costs. -/
+theorem actual_fixed_domain_derivative_carrier_fibre_energy_le
+    {n d r : Nat} {ε : Real}
+    (U : Submodule F (V d)) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hderiv : UpToActualNormSqGlobal (r - 1) ε
+      (fixedDomainDerivativeCoordinate U T f))
+    (Q : CarrierRestriction U (⊤ : Submodule F (W n)))
+    (hQ : Q.order ≤ r - 1) :
+    (∑ M ∈ Q.fibre,
+      Complex.normSq (filteredCarrierFunction U (⊤ : Submodule F (W n)) T f M)) /
+        Q.fibre.card ≤ ε := by
+  exact (actual_fixed_domain_derivative_to_typed_global
+    U T f hderiv) Q hQ
+
+/-- The coordinate-carrier derivative energy is the same uniform mean as
+the ambient hybrid derivative on the affine lift. This is the operator-side
+link to the actual A17 restriction family; the ambient order is recorded
+separately by `actual_fixed_domain_lift_order`. -/
+theorem actual_fixed_domain_derivative_lift_fibre_energy_le
+    {n d r : Nat} {ε : Real}
+    (U : Submodule F (V d)) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hderiv : UpToActualNormSqGlobal (r - 1) ε
+      (fixedDomainDerivativeCoordinate U T f))
+    (Q : CarrierRestriction U (⊤ : Submodule F (W n)))
+    (hQ : Q.order ≤ r - 1) :
+    fibreEnergy (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre
+      (complexAmbientHybridFilter U (⊤ : Submodule F (W n)) f) ≤ ε := by
+  classical
+  let g := fun X : BinaryMatrix n d =>
+    Complex.normSq (complexAmbientHybridFilter U (⊤ : Submodule F (W n)) f X)
+  have hcarrier := actual_fixed_domain_derivative_carrier_fibre_energy_le
+    U T f hderiv Q hQ
+  have hsub :
+      (∑ M : {M : ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))) //
+          M ∈ Q.fibre},
+        Complex.normSq (filteredCarrierFunction U
+          (⊤ : Submodule F (W n)) T f M.1)) /
+          (Fintype.card {M : ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))) //
+            M ∈ Q.fibre} : Real) ≤ ε := by
+    have hsum :
+        (∑ M : {M : ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))) //
+            M ∈ Q.fibre},
+          Complex.normSq (filteredCarrierFunction U
+            (⊤ : Submodule F (W n)) T f M.1)) =
+        ∑ M ∈ Q.fibre,
+          Complex.normSq (filteredCarrierFunction U
+            (⊤ : Submodule F (W n)) T f M) := by
+      have hf : (Finset.univ.filter (fun M => M ∈ Q.fibre)) = Q.fibre := by
+        ext M
+        simp
+      calc
+        _ = ∑ M ∈ Finset.univ.filter (fun M => M ∈ Q.fibre),
+              Complex.normSq (filteredCarrierFunction U
+                (⊤ : Submodule F (W n)) T f M) := by
+                simpa only [Finset.subtype_univ] using
+                  (Finset.sum_subtype_eq_sum_filter
+                    (s := (Finset.univ : Finset
+                      ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))))
+                    (p := fun M => M ∈ Q.fibre)
+                    (fun M => Complex.normSq (filteredCarrierFunction U
+                      (⊤ : Submodule F (W n)) T f M))).symm
+        _ = _ := by rw [hf]
+    have hcard : Fintype.card
+        {M : ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))) // M ∈ Q.fibre} =
+        Q.fibre.card := by simp
+    rw [hsum, hcard]
+    exact hcarrier
+  have hmean := liftCarrierMatrix_normalizedMean U
+    (⊤ : Submodule F (W n)) T Q g
+  have hpoint (M : {M : ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))) //
+      M ∈ Q.fibre}) :
+      complexAmbientHybridFilter U (⊤ : Submodule F (W n)) f
+          (liftCarrierMatrix U (⊤ : Submodule F (W n)) T M.1) =
+        filteredCarrierFunction U (⊤ : Submodule F (W n)) T f M.1 := rfl
+  have hactualsub : fibreEnergy
+      (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre
+      (complexAmbientHybridFilter U (⊤ : Submodule F (W n)) f) =
+      (∑ M : {Y : BinaryMatrix n d //
+          Y ∈ (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre},
+        g M.1) /
+        (Fintype.card {Y : BinaryMatrix n d //
+          Y ∈ (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre} : Real) := by
+    rw [fibreEnergy]
+    have hsum :
+        (∑ M : {Y : BinaryMatrix n d //
+            Y ∈ (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre},
+          g M.1) =
+        ∑ M ∈ (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre,
+          g M := by
+      have hf : (Finset.univ.filter (fun M =>
+          M ∈ (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre)) =
+          (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre := by
+        ext M
+        simp
+      calc
+        _ = ∑ M ∈ Finset.univ.filter (fun M =>
+              M ∈ (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre),
+              g M := by
+                simpa only [Finset.subtype_univ] using
+                  (Finset.sum_subtype_eq_sum_filter
+                    (s := (Finset.univ : Finset (BinaryMatrix n d)))
+                    (p := fun M => M ∈
+                      (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre)
+                    g).symm
+        _ = _ := by rw [hf]
+    have hcard : Fintype.card {Y : BinaryMatrix n d //
+        Y ∈ (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre} =
+        (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).fibre.card := by simp
+    rw [hsum, hcard]
+  rw [hactualsub]
+  rw [← hmean]
+  have hrewrite :
+      (∑ M : {M : ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))) //
+          M ∈ Q.fibre}, g (liftCarrierMatrix U (⊤ : Submodule F (W n)) T M.1)) =
+        ∑ M : {M : ((V d ⧸ U) →ₗ[F] (⊤ : Submodule F (W n))) //
+          M ∈ Q.fibre},
+          Complex.normSq (filteredCarrierFunction U
+            (⊤ : Submodule F (W n)) T f M.1) := by
+    apply Finset.sum_congr rfl
+    intro M hM
+    simp only [g, hpoint]
+  simpa [g, hrewrite] using hsub
+
+/-- A line contributes exactly one unit to the ambient order of the lifted
+parent restriction. Thus a carrier order bound `r - 1` gives ambient order
+at most `r`. -/
+theorem actual_fixed_domain_lift_order
+    {n d r : Nat}
+    (U : Submodule F (V d)) (hU : Module.finrank F U = 1)
+    (T : V d →ₗ[F] W n)
+    (Q : CarrierRestriction U (⊤ : Submodule F (W n)))
+    (hr : 1 ≤ r)
+    (hQ : Q.order ≤ r - 1) :
+    (liftCarrierRestriction U (⊤ : Submodule F (W n)) T Q).order ≤ r := by
+  rw [liftCarrierRestriction_order]
+  have htop : Module.finrank F
+      ((W n) ⧸ (⊤ : Submodule F (W n))) = 0 := by simp
+  rw [htop, hU]
+  omega
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeGlobalTransfer
