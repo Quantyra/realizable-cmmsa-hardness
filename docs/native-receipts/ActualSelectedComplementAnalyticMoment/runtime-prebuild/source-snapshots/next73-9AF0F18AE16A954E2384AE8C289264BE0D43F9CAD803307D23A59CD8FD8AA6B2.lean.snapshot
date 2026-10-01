@@ -1,0 +1,5 @@
+import PvNP.RealizableHardness.ActualTypedABRankedTower
+
+#print axioms PvNP.RealizableHardness.ActualTypedABRankedTower.ranked_tower_terminal_global
+#print axioms PvNP.RealizableHardness.ActualTypedABRankedTower.rankedA15Loss_nonneg
+#print axioms PvNP.RealizableHardness.ActualTypedABRankedTower.rankedA15Loss_le_degree
