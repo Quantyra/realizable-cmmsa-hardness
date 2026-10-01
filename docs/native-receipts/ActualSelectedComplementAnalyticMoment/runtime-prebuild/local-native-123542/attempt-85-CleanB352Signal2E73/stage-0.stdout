@@ -1,0 +1,65 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:39:40: error: unexpected token ':'; expected ')'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:69:11: error: Tactic `rcases` failed: `a✝ : Quot.lift (fun l => bottomTopAmbientMatrixEquiv M ∈ l) ⋯
+  {M |
+      (∀ a ∈ Submodule.map (↑bottomTopDomainEquiv) Q.domainFixed,
+          Matrix.mulVec (M - bottomTopAmbientMatrixEquiv Q.base) a = 0) ∧
+        ∀ (v : Fin d → ZMod 2),
+          Matrix.mulVec (M - bottomTopAmbientMatrixEquiv Q.base) v ∈
+            Submodule.map (↑bottomTopCodomainEquiv) Q.codomainVariation}.val` is not an inductive datatype
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:93:4: error: Tactic `constructor` failed: target is not an inductive datatype
+
+case mpr
+n d : ℕ
+Q : CarrierRestriction ⊥ ⊤
+M : V d ⧸ ⊥ →ₗ[F] ↥⊤
+hD : ∀ a ∈ Q.domainFixed, (M - Q.base) a = 0
+hC : ∀ (v : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ ⊥), (M - Q.base) v ∈ Q.codomainVariation
+⊢ bottomTopAmbientMatrixEquiv M ∈
+    {M |
+      (∀ a ∈ Submodule.map (↑bottomTopDomainEquiv) Q.domainFixed,
+          Matrix.mulVec (M - bottomTopAmbientMatrixEquiv Q.base) a = 0) ∧
+        ∀ (v : Fin d → ZMod 2),
+          Matrix.mulVec (M - bottomTopAmbientMatrixEquiv Q.base) v ∈
+            Submodule.map (↑bottomTopCodomainEquiv) Q.codomainVariation}
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:138:50: error: Application type mismatch: The argument
+  Q.fibre
+has type
+  Finset
+    (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]
+      ↥⊤)
+but is expected to have type
+  Set
+    (PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ ?m.58 ⧸
+        ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+      ↥⊤)
+in the application
+  Set.InjOn (⇑bottomTopAmbientMatrixEquiv) Q.fibre
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABOriginalGlobalBridgeClean.lean:176:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  k ≥ 0
+  j ≥ 0
+  j - k ≥ 1
+  i ≥ 0
+  h ≥ 0
+  h + i ≥ 0
+  g ≥ 0
+  e ≥ 0
+  e - g ≤ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑D
+ b := ↑Q.order
+ c := ↑(Module.finrank F ↥Q.domainFixed)
+ e := ↑(Module.finrank PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝
+    (PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.W✝ n ⧸
+      Submodule.map (↑bottomTopCodomainEquiv) Q.codomainVariation))
+ g := ↑(Module.finrank PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝
+    (PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.W✝ n))
+ h := ↑(Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ (↥⊤ ⧸ Q.codomainVariation))
+ i := ↑(Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥Q.codomainVariation)
+ j := ↑(Module.finrank F (↥⊤ ⧸ Q.codomainVariation))
+ k := ↑(Module.finrank F (W n ⧸ Submodule.map (↑bottomTopCodomainEquiv) Q.codomainVariation))
