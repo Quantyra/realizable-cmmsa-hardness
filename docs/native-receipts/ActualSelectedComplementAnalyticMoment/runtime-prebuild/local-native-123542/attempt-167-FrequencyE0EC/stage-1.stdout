@@ -1,0 +1,136 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.domainLineSelected_reindex {n d : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝
+        (d + 1) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1))
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1))
+  (hv : e (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d) = v)
+  (Y :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.W✝
+        n →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1)) :
+  PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝ ∙
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d)
+      ⊤
+      ((PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.frequencyReindexEquiv e
+          (LinearEquiv.refl PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝
+            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.W✝ n)))
+        Y) ↔
+    PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝ ∙ v) ⊤ Y
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.complexLinearMapSelectedFilter_domainPull
+  {n : ℕ} (d : ℕ)
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝
+        (d + 1) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1))
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1))
+  (hv : e (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d) = v)
+  (g :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝
+          (d + 1) →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝]
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.W✝ n) →
+      ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝
+        (d + 1) →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.W✝ n) :
+  PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.complexLinearMapSelectedFilter
+      (PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝ ∙
+          PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d)
+        ⊤)
+      (fun N =>
+        g
+          ((PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.mapReindexEquiv e
+                (LinearEquiv.refl PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝
+                  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.W✝ n))).symm
+            N))
+      ((PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.mapReindexEquiv e
+          (LinearEquiv.refl PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝
+            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.W✝ n)))
+        M) =
+    PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.complexLinearMapSelectedFilter
+      (PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝ ∙ v) ⊤)
+      g M
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.complexRankProjection_domainPull {n d j : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝
+        (d + 1) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1))
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1) → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection j
+      (fun N => f (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix e.symm N))
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix e M) =
+    PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection j f M
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.complexAmbientHybridFilter_eq_homFilter
+  {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ d))
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter A ⊤ f M =
+    PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.complexLinearMapSelectedFilter
+      (PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected A ⊤) (fun L => f (LinearMap.toMatrix' L))
+      (Matrix.toLin' M)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.complexAmbientHybridFilter_domainPull_succ
+  {n d : ℕ}
+  (e :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝
+        (d + 1) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1))
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1))
+  (hv : e (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d) = v)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1) → ℂ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝ ∙
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.lastVector d)
+      ⊤
+      (fun N => f (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix e.symm N))
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition.domainPullMatrix e M) =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝ ∙ v) ⊤ f M
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.homogeneous_A13_arbitrary_line_succ
+  {n d D : ℕ} (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ (d + 1)) (hv : v ≠ 0)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1) → ℂ)
+  (hD : PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection D f = f)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n (d + 1)) :
+  f M =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝ ∙ v) ⊤ f M +
+      2 ^ D * PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average v f M
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.homogeneous_A13_arbitrary_line {n d D : ℕ}
+  (v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.V✝ d) (hv : v ≠ 0)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hD : PvNP.RealizableHardness.BinaryMatrixComplexA14.complexRankProjection D f = f)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  f M =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.F✝ ∙ v) ⊤ f M +
+      2 ^ D * PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy.actualA18Average v f M
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.domainLineSelected_reindex' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.complexLinearMapSelectedFilter_domainPull' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.complexRankProjection_domainPull' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.complexAmbientHybridFilter_eq_homFilter' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.complexAmbientHybridFilter_domainPull_succ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.homogeneous_A13_arbitrary_line_succ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance.homogeneous_A13_arbitrary_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,19 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance
+
+#check domainLineSelected_reindex
+#check complexLinearMapSelectedFilter_domainPull
+#check complexRankProjection_domainPull
+#check complexAmbientHybridFilter_eq_homFilter
+#check complexAmbientHybridFilter_domainPull_succ
+#check homogeneous_A13_arbitrary_line_succ
+#check homogeneous_A13_arbitrary_line
+
+#print axioms domainLineSelected_reindex
+#print axioms complexLinearMapSelectedFilter_domainPull
+#print axioms complexRankProjection_domainPull
+#print axioms complexAmbientHybridFilter_eq_homFilter
+#print axioms complexAmbientHybridFilter_domainPull_succ
+#print axioms homogeneous_A13_arbitrary_line_succ
+#print axioms homogeneous_A13_arbitrary_line
