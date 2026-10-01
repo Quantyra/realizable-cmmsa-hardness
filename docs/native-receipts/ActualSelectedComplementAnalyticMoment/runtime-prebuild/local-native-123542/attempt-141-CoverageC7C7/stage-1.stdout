@@ -1,0 +1,64 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.carrierOfParent {n d : ℕ}
+  (U :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.V✝ d))
+  (P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.CarrierRestriction U ⊤
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.carrierOfParent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.lift_carrierOfParent_eq {n d : ℕ}
+  (U :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.V✝ d))
+  (P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hU : U ≤ P.domainFixed) :
+  PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.liftCarrierRestriction U ⊤ (Matrix.toLin' P.base)
+      (carrierOfParent U P) =
+    P
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.lift_carrierOfParent_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.carrierOfParent_order_eq {n d : ℕ}
+  (U :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.V✝ d))
+  (hUdim : Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝ ↥U = 1)
+  (P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hU : U ≤ P.domainFixed) :
+  (carrierOfParent U P).order + 1 = P.order
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.carrierOfParent_order_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.carrierOfParent_order_lift {n d r : ℕ}
+  (U :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.V✝ d))
+  (hUdim : Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝ ↥U = 1)
+  (P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hU : U ≤ P.domainFixed)
+  (hP : P.order ≤ r) : (carrierOfParent U P).order ≤ r - 1
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.carrierOfParent_order_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.actual_derivative_bounds_every_parent_containing_line
+  {n d r : ℕ} {ε : ℝ}
+  (U :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.V✝ d))
+  (hUdim : Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝ ↥U = 1)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hderiv :
+    ∀
+      (T :
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.V✝
+            d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.F✝]
+          PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.W✝ n),
+      PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal (r - 1) ε
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.fixedDomainDerivativeCoordinate U T
+          f))
+  (P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hU : U ≤ P.domainFixed)
+  (hP : P.order ≤ r) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy P.fibre
+      (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientHybridFilter U ⊤ f) ≤
+    ε
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentRestrictionCoverage.actual_derivative_bounds_every_parent_containing_line' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
