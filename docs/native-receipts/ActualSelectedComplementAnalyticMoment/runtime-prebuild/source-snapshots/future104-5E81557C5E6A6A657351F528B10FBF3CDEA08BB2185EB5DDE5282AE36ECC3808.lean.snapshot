@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.ActualTypedABIntrinsicTower
+
+open PvNP.RealizableHardness.ActualTypedABIntrinsicTower
+
+#check HasIntrinsicABOperatorSemantics
+#check actual_typed_AB_tower_has_intrinsic_semantics
+#check actual_intrinsic_selected_AB_A16
+#print axioms actual_typed_AB_tower_has_intrinsic_semantics
+#print axioms actual_intrinsic_selected_AB_A16
