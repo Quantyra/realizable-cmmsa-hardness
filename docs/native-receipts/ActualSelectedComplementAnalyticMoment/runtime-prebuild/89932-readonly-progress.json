@@ -1,0 +1,17 @@
+{
+  "tag": "cmmsa_analytic_20261001T110619Z",
+  "args": [
+    "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+    "compute",
+    "ssh",
+    "quantyra-lean-builder-01",
+    "--quiet",
+    "--tunnel-through-iap",
+    "--project=quantyra-lean-cert-20260915",
+    "--zone=us-central1-a",
+    "--command=for f in /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_analytic_20261001T110619Z-evidence/stage-*.native-exit; do test -f \"$f\" && echo \"$f\" && cat \"$f\"; done; ps -eo pid,etime,args | grep \"[b]in/lean\" | head -2"
+  ],
+  "native_exit_code": 0,
+  "stdout": "/home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_analytic_20261001T110619Z-evidence/stage-0.native-exit\n0\n/home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_analytic_20261001T110619Z-evidence/stage-1.native-exit\n0\n   1831       00:04 /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/lean/PvNP/RealizableHardness/ActualTypedABRankedTower.lean -o /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualTypedABRankedTower.olean -i /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualTypedABRankedTower.ilean -c /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualTypedABRankedTower.c --setup /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualTypedABRankedTower.setup.json --json\n",
+  "stderr": ""
+}
