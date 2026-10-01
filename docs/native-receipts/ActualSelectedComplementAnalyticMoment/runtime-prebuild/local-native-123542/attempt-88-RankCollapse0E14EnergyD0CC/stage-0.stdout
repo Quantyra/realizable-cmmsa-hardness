@@ -1,0 +1,28 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalRankProjectionCollapse.lean:64:4: error: Type mismatch: After simplification, term
+  bottomTopSourceRankProjection ambientf M
+ has type
+  @Eq ℂ (typedComplexRankProjection ⊥ ⊤ (r + (h + l)) (filteredCarrierFunction ⊥ ⊤ 0 ambientf) M)
+    (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf (bottomTopAmbientMatrixEquiv M))
+but is expected to have type
+  @Eq ℂ (typedComplexRankProjection ⊥ ⊤ (r + (h + l)) source M)
+    (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf
+      (LinearMap.toMatrix' (⊤.subtype ∘ₗ M ∘ₗ ⊥.mkQ)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualTypedABCanonicalRankProjectionCollapse.lean:75:4: error: Type mismatch: After simplification, term
+  canonical_source_signal_A1_collapse lines hypers source T
+    (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf)
+ has type
+  applyCanonicalFilters (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))
+      (if h = 0 ∧ l = 0 then fun M =>
+        filteredCarrierFunction ⊥ ⊤ T (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M
+      else fun M =>
+        filteredCarrierFunction ⊥ ⊤ 0 (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M) =
+    filteredCarrierFunction (rankedTerminalData (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Aend
+      (rankedTerminalData (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Bend T
+      (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf)
+but is expected to have type
+  (applyCanonicalFilters (buildCanonicalSourceTower lines hypers (initialBottomTopBase T)) fun M =>
+      filteredCarrierFunction ⊥ ⊤ 0 (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M) =
+    fun M =>
+    filteredCarrierFunction (rankedTerminalData (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Aend
+      (rankedTerminalData (buildCanonicalSourceTower lines hypers (initialBottomTopBase T))).Bend T
+      (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M
