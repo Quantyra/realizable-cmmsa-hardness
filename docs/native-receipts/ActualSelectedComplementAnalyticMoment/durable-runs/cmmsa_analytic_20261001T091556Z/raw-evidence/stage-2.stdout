@@ -1,0 +1,429 @@
+⚠ [3048/3049] Replayed PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:57:4: Unused tactic linter: `change dualRestriction A (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:60:4: Unused tactic linter: `change dualRestriction A (δ.1 + φ₀) = ψ` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:110:4: Unused tactic linter: `change dualRestrictionAt A w (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:113:4: Unused tactic linter: `change dualRestrictionAt A w (δ.1 + φ₀) = z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+✖ [3049/3049] Building PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw (12s)
+trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/cslib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean -o /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.olean -i /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.ilean -c /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.c --setup /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.setup.json --json
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:43:16: Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  ↑a
+has type `X` which does not have the necessary form.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:44:65: unsolved goals
+K : Type u_1
+X : Type u_2
+inst✝² : Field K
+inst✝¹ : AddCommGroup X
+inst✝ : Module K X
+A : Submodule K X
+phi : ↥A →ₗ[K] K
+⊢ Submodule.map (Submodule.map A.subtype phi.ker).mkQ A = Submodule.map (Submodule.map A.subtype phi.ker).mkQ A
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:72:9: Unknown constant `Submodule.Quotient.eq.mpr`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:73:4: Type mismatch: After simplification, term
+  Eq.symm hq
+ has type
+  @Eq (X ⧸ functionalKernelInAmbient A phi) ((functionalKernelInAmbient A phi).mkQ (phi aa • ↑v))
+    ((functionalKernelInAmbient A phi).mkQ a)
+but is expected to have type
+  @Eq (X ⧸ functionalKernelInAmbient A phi) (phi aa • (functionalKernelInAmbient A phi).mkQ ↑v)
+    ((functionalKernelInAmbient A phi).mkQ a)
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:91:16: Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  ↑a
+has type `X` which does not have the necessary form.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:115:19: Application type mismatch: The argument
+  q x
+has type
+  X ⧸ A
+but is expected to have type
+  X ⧸ functionalKernelInAmbient A phi
+in the application
+  s (q x)
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:115:17: failed to synthesize instance of type class
+  HAdd (X ⧸ A) (X ⧸ functionalKernelInAmbient A phi) ?m.172
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:110:18: Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  ↑a
+has type `X` which does not have the necessary form.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:113:18: Application type mismatch: The argument
+  s
+has type
+  X ⧸ functionalKernelInAmbient A phi →ₗ[K] X ⧸ A
+but is expected to have type
+  ?m.206 s phi₀ →ₛₗ[?m.209 s phi₀] X ⧸ functionalKernelInAmbient A phi
+in the application
+  phi₀ ∘ₛₗ s
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:163:12: Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  ↑a
+has type `X` which does not have the necessary form.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:165:4: Unknown identifier `quotientSectionCoordinates_of_restricted_functional`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:164:9: Tactic `rcases` failed: `x✝ : ?m.164` is not an inductive datatype
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:303:19: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  qC a
+in the target expression
+  q ↑a - q ↑b = 0
+
+K : Type u_1
+X : Type u_2
+X' : Type u_3
+inst✝⁴ : Field K
+inst✝³ : AddCommGroup X
+inst✝² : Module K X
+inst✝¹ : AddCommGroup X'
+inst✝ : Module K X'
+q : X' →ₗ[K] X
+v : X'
+hq : Function.Surjective ⇑q
+hker : q.ker = K ∙ v
+hv : v ≠ 0
+Kq : Submodule K X' := q.ker
+hker' : Kq = K ∙ v
+eVmap : K →ₗ[K] ↥Kq := { toFun := fun a => ⟨a • v, ⋯⟩, map_add' := ⋯, map_smul' := ⋯ }
+eVmap_inj : Function.Injective ⇑eVmap
+eVmap_surj : Function.Surjective ⇑eVmap
+eV : K ≃ₗ[K] ↥Kq := LinearEquiv.ofBijective eVmap ⋯
+C : Submodule K X'
+hC : IsCompl Kq C
+eSplit : (↥Kq × ↥C) ≃ₗ[K] X' := Kq.prodEquivOfIsCompl C hC
+qC : ↥C →ₗ[K] X := q ∘ₗ C.subtype
+a b : ↥C
+hab : qC a = qC b
+⊢ q ↑a - q ↑b = 0
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:310:26: Unknown constant `Submodule.mem_bot.mp`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:321:4: 'change' tactic failed, pattern
+  q ↑z.1 + q ↑z.2 = q x
+is not definitionally equal to target
+  q (↑z.1 + ↑z.2) = q x
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:335:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Kq
+in the target expression
+  v ∈ q.ker
+
+K : Type u_1
+X : Type u_2
+X' : Type u_3
+inst✝⁴ : Field K
+inst✝³ : AddCommGroup X
+inst✝² : Module K X
+inst✝¹ : AddCommGroup X'
+inst✝ : Module K X'
+q : X' →ₗ[K] X
+v : X'
+hq : Function.Surjective ⇑q
+hker : q.ker = K ∙ v
+hv : v ≠ 0
+Kq : Submodule K X' := q.ker
+hker' : Kq = K ∙ v
+eVmap : K →ₗ[K] ↥Kq := { toFun := fun a => ⟨a • v, ⋯⟩, map_add' := ⋯, map_smul' := ⋯ }
+eVmap_inj : Function.Injective ⇑eVmap
+eVmap_surj : Function.Surjective ⇑eVmap
+eV : K ≃ₗ[K] ↥Kq := LinearEquiv.ofBijective eVmap ⋯
+C : Submodule K X'
+hC : IsCompl Kq C
+eSplit : (↥Kq × ↥C) ≃ₗ[K] X' := Kq.prodEquivOfIsCompl C hC
+qC : ↥C →ₗ[K] X := q ∘ₗ C.subtype
+qC_inj : Function.Injective ⇑qC
+qC_surj : Function.Surjective ⇑qC
+eC : ↥C ≃ₗ[K] X := LinearEquiv.ofBijective qC ⋯
+s : X →ₗ[K] X' := C.subtype ∘ₗ ↑eC.symm
+pK : X' →ₗ[K] ↥Kq := LinearMap.fst K ↥Kq ↥C ∘ₗ ↑eSplit.symm
+phi₀ : X' →ₗ[K] K := ↑eV.symm ∘ₗ pK
+hs : q ∘ₗ s = LinearMap.id
+⊢ v ∈ q.ker
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:341:52: Application type mismatch: The argument
+  hC
+has type
+  IsCompl Kq C
+of sort `Prop` but is expected to have type
+  Submodule ?m.973 ?m.975
+of sort `Type ?u.445` in the application
+  Submodule.prodEquivOfIsCompl_symm_apply_right hC
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:352:32: unsolved goals
+K : Type u_1
+X : Type u_2
+X' : Type u_3
+inst✝⁴ : Field K
+inst✝³ : AddCommGroup X
+inst✝² : Module K X
+inst✝¹ : AddCommGroup X'
+inst✝ : Module K X'
+q : X' →ₗ[K] X
+v : X'
+hq : Function.Surjective ⇑q
+hker : q.ker = K ∙ v
+hv : v ≠ 0
+Kq : Submodule K X' := q.ker
+hker' : Kq = K ∙ v
+eVmap : K →ₗ[K] ↥Kq := { toFun := fun a => ⟨a • v, ⋯⟩, map_add' := ⋯, map_smul' := ⋯ }
+eVmap_inj : Function.Injective ⇑eVmap
+eVmap_surj : Function.Surjective ⇑eVmap
+eV : K ≃ₗ[K] ↥Kq := LinearEquiv.ofBijective eVmap ⋯
+C : Submodule K X'
+hC : IsCompl Kq C
+eSplit : (↥Kq × ↥C) ≃ₗ[K] X' := Kq.prodEquivOfIsCompl C hC
+qC : ↥C →ₗ[K] X := q ∘ₗ C.subtype
+qC_inj : Function.Injective ⇑qC
+qC_surj : Function.Surjective ⇑qC
+eC : ↥C ≃ₗ[K] X := LinearEquiv.ofBijective qC ⋯
+s : X →ₗ[K] X' := C.subtype ∘ₗ ↑eC.symm
+pK : X' →ₗ[K] ↥Kq := LinearMap.fst K ↥Kq ↥C ∘ₗ ↑eSplit.symm
+phi₀ : X' →ₗ[K] K := ↑eV.symm ∘ₗ pK
+hs : q ∘ₗ s = LinearMap.id
+hqv : q v = 0
+hphiS : phi₀ ∘ₗ s = 0
+vk : ↥Kq := ⟨v, ⋯⟩
+hvsplit : eSplit (vk, 0) = v
+hproj : pK v = vk
+⊢ v = ↑((LinearEquiv.ofBijective { toFun := fun a => ⟨a • v, ⋯⟩, map_add' := ⋯, map_smul' := ⋯ } ⋯) 1)
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:363:4: 'change' tactic failed, pattern
+  q ↑z.1 + q ↑z.2 = q x
+is not definitionally equal to target
+  q (↑z.1 + ↑z.2) = q x
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:374:12: This simp argument is unused:
+  phi₀
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [pK, z, eSplit]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:385:36: failed to synthesize instance of type class
+  AddCommMonoid B
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:386:4: failed to synthesize instance of type class
+  AddCommMonoid (B × K)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:396:10: Unknown identifier `add_mem_sup`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:401:4: Tactic `simp` failed with a nested error:
+(deterministic) timeout at `«Lean.Meta.acLt»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:402:19: (deterministic) timeout at `«synthesize pending MVars»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:411:27: Unknown identifier `expandedCodomainCoordinateMap`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:416:8: failed to synthesize
+  CommSemiring W
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:454:6: Unknown identifier `expandedCodomainCoordinateMap`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:451:88: unsolved goals
+K : Type u_1
+W : Type u_4
+inst✝² : Field K
+inst✝¹ : AddCommGroup W
+inst✝ : Module K W
+B : Submodule K W
+w : W
+hw : w ∉ B
+e : (↥B × K) ≃ₗ[K] ↥(spanExtensionSubmodule B w) := expandedCodomainReconstructionEquiv B w hw
+⊢ ↑((LinearEquiv.ofBijective (sorry ()) ⋯) (0, 1)) = w
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:453:13: declaration uses `sorry`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:461:49: failed to synthesize instance of type class
+  AddCommMonoid (B × K)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:462:24: failed to synthesize instance of type class
+  AddCommMonoid B
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:464:5: failed to synthesize instance of type class
+  AddCommMonoid B
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:466:5: failed to synthesize instance of type class
+  AddCommMonoid B
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:470:32: failed to synthesize instance of type class
+  AddCommMonoid (B × K)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:473:7: failed to synthesize instance of type class
+  AddCommMonoid B
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:475:14: unsolved goals
+K : Type u_1
+X : Type u_2
+X' : Type u_3
+W : Type u_4
+inst✝⁶ : Field K
+inst✝⁵ : AddCommGroup X
+inst✝⁴ : Module K X
+inst✝³ : AddCommGroup X'
+inst✝² : Module K X'
+inst✝¹ : AddCommGroup W
+inst✝ : Module K W
+B : Type ?u.93
+eD : X' ≃ₗ[K] X × K
+eC : sorry
+v : X'
+w : W
+hDv : eD v = (0, 1)
+hCw : sorry = (0, 1)
+p : sorry × (X →ₗ[K] K)
+⊢ { N // N v = w }
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:485:16: unsolved goals
+K : Type u_1
+X : Type u_2
+X' : Type u_3
+W : Type u_4
+inst✝⁶ : Field K
+inst✝⁵ : AddCommGroup X
+inst✝⁴ : Module K X
+inst✝³ : AddCommGroup X'
+inst✝² : Module K X'
+inst✝¹ : AddCommGroup W
+inst✝ : Module K W
+B : Type ?u.93
+eD : X' ≃ₗ[K] X × K
+eC : sorry
+v : X'
+w : W
+hDv : eD v = (0, 1)
+hCw : sorry = (0, 1)
+N : { N // N v = w }
+z : X'
+⊢ ↑((fun p => sorry) ((fun N => coordinatesOfMap eD eC ↑N) N)) z = ↑N z
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:519:4: unsolved goals
+case snd
+K : Type u_1
+X : Type u_2
+X' : Type u_3
+W : Type u_4
+inst✝⁶ : Field K
+inst✝⁵ : AddCommGroup X
+inst✝⁴ : Module K X
+inst✝³ : AddCommGroup X'
+inst✝² : Module K X'
+inst✝¹ : AddCommGroup W
+inst✝ : Module K W
+B : Type ?u.93
+eD : X' ≃ₗ[K] X × K
+eC : sorry
+v : X'
+w : W
+hDv : eD v = (0, 1)
+hCw : sorry = (0, 1)
+p : sorry × (X →ₗ[K] K)
+x : X
+⊢ (sorry eD eC ↑sorry).2 x = p.2 x
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:521:12: declaration uses `sorry`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:521:30: declaration uses `sorry`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:521:30: This simp argument is unused:
+  productMapFromCoordinates
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [coordinatesOfMap, LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:522:8: This simp argument is unused:
+  LinearMap.comp_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [coordinatesOfMap, productMapFromCoordinates]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:545:4: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:571:6: Application type mismatch: The argument
+  le_refl ?m.319
+has type
+  ?m.319 ≤ ?m.319
+but is expected to have type
+  B ≤ spanExtensionSubmodule B w
+in the application
+  quotientSampleOutput_range_expanded B (spanExtensionSubmodule B w) (le_refl ?m.319)
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:594:6: 'change' tactic failed, pattern
+  ↑(R x) + lambda x • w = (quotientSampleOutput B q phi₀ R lambda w) (s x)
+is not definitionally equal to target
+  ↑(eRec (R x, lambda x)) = ↑(N (s x))
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:606:6: 'change' tactic failed, pattern
+  (eC (N (eD.symm (x, 0)))).1 = R x
+is not definitionally equal to target
+  ((quotientAppendSamplingEquiv B w hw q s phi₀ v hdecomp hqs hqv hphiS hphiV) ⟨N, hNpoint⟩).1 x = (R, lambda).1 x
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:610:6: 'change' tactic failed, pattern
+  (eC (N (eD.symm (x, 0)))).2 = lambda x
+is not definitionally equal to target
+  ((quotientAppendSamplingEquiv B w hw q s phi₀ v hdecomp hqs hqv hphiS hphiV) ⟨N, hNpoint⟩).2 x = (R, lambda).2 x
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:627:36: Application type mismatch: The argument
+  hNcoerce
+has type
+  (spanExtensionSubmodule B w).subtype ∘ₗ N = quotientSampleOutput B q phi₀ R lambda w
+but is expected to have type
+  (spanExtensionSubmodule B w).subtype ∘ₗ
+      ↑((quotientAppendSamplingEquiv B w hw q s phi₀ v hdecomp hqs hqv hphiS hphiV).symm (R, lambda)) =
+    ?m.926
+in the application
+  Eq.trans (Eq.symm hcoerce) hNcoerce
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:560:69: unsolved goals
+K : Type u_1
+X : Type u_2
+X' : Type u_3
+W : Type u_4
+inst✝⁶ : Field K
+inst✝⁵ : AddCommGroup X
+inst✝⁴ : Module K X
+inst✝³ : AddCommGroup X'
+inst✝² : Module K X'
+inst✝¹ : AddCommGroup W
+inst✝ : Module K W
+B : Submodule K W
+w : W
+hw : w ∉ B
+q : X' →ₗ[K] X
+s : X →ₗ[K] X'
+phi₀ : X' →ₗ[K] K
+v : X'
+hdecomp : ∀ (x : X'), x = s (q x) + phi₀ x • v
+hqs : q ∘ₗ s = LinearMap.id
+hqv : q v = 0
+hphiS : phi₀ ∘ₗ s = 0
+hphiV : phi₀ v = 1
+R : X →ₗ[K] ↥B
+lambda : X →ₗ[K] K
+eD : X' ≃ₗ[K] X × K := quotientSectionCoordinateEquiv q s phi₀ v hdecomp hqs hqv hphiS hphiV
+eC : ↥(spanExtensionSubmodule B w) ≃ₗ[K] ↥B × K := expandedCodomainCoordinateEquiv B w hw
+w' : ↥(spanExtensionSubmodule B w) := ⟨w, ⋯⟩
+hRange : ∀ (x : X'), (quotientSampleOutput B q phi₀ R lambda w) x ∈ spanExtensionSubmodule B w
+N : X' →ₗ[K] ↥(spanExtensionSubmodule B w) :=
+  LinearMap.codRestrict (spanExtensionSubmodule B w) (quotientSampleOutput B q phi₀ R lambda w) hRange
+hNpoint : N v = w'
+hsection_at : ∀ (x : X), eD (s x) = (x, 0)
+hinverse_section : ∀ (x : X), eD.symm (x, 0) = s x
+hcoordinates : ∀ (x : X), eC (N (s x)) = (R x, lambda x)
+hcoords : (quotientAppendSamplingEquiv B w hw q s phi₀ v hdecomp hqs hqv hphiS hphiV) ⟨N, hNpoint⟩ = (R, lambda)
+hInverse : (quotientAppendSamplingEquiv B w hw q s phi₀ v hdecomp hqs hqv hphiS hphiV).symm (R, lambda) = ⟨N, hNpoint⟩
+x : X'
+hInverseVal :
+  ↑((quotientAppendSamplingEquiv B w hw q s phi₀ v hdecomp hqs hqv hphiS hphiV).symm (R, lambda)) = ↑⟨N, hNpoint⟩
+hcoerce :
+  (spanExtensionSubmodule B w).subtype ∘ₗ
+      ↑((quotientAppendSamplingEquiv B w hw q s phi₀ v hdecomp hqs hqv hphiS hphiV).symm (R, lambda)) =
+    (spanExtensionSubmodule B w).subtype ∘ₗ ↑⟨N, hNpoint⟩
+hNcoerce : (spanExtensionSubmodule B w).subtype ∘ₗ N = quotientSampleOutput B q phi₀ R lambda w
+⊢ ((spanExtensionSubmodule B w).subtype ∘ₗ
+        ↑((quotientAppendSamplingEquiv B w hw q s phi₀ v hdecomp hqs hqv hphiS hphiV).symm (R, lambda)))
+      x =
+    (quotientSampleOutput B q phi₀ R lambda w) x
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18QuotientSamplingLaw.lean:626:13: This simp argument is unused:
+  LinearMap.codRestrict_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [N]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
