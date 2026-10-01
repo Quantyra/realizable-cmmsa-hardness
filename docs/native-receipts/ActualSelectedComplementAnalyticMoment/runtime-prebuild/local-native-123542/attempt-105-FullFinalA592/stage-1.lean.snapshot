@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualTypedABFullA16Final
+
+open PvNP.RealizableHardness.ActualTypedABFullA16Final
+
+#check filteredCarrierFunction_energy_le_A16
+#print axioms filteredCarrierFunction_energy_le_A16

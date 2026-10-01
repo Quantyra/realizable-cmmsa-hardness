@@ -1,0 +1,19 @@
+PvNP.RealizableHardness.ActualTypedABFullA16Final.filteredCarrierFunction_energy_le_A16 {n d D : ℕ} {eps : ℝ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Final.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Final.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualTypedABFullA16Final.F✝
+      (PvNP.RealizableHardness.ActualTypedABFullA16Final.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualTypedABFullA16Final.V✝ d →ₗ[PvNP.RealizableHardness.ActualTypedABFullA16Final.F✝]
+      PvNP.RealizableHardness.ActualTypedABFullA16Final.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f)
+  (hglobal : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal D eps f) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M =>
+      Complex.normSq (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f M)) ≤
+    2 ^ (11 * D ^ 2) * eps
+'PvNP.RealizableHardness.ActualTypedABFullA16Final.filteredCarrierFunction_energy_le_A16' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
