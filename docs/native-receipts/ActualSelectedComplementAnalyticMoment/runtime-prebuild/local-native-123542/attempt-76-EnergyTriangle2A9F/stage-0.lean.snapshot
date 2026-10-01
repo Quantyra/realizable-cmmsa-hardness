@@ -1,0 +1,79 @@
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+
+/-! A finite-fibre squared-energy estimate for the final algebraic step of
+the A17 line/hyperplane decomposition.  The restriction/filter identity and
+the two operator energy bounds are separate obligations; this lemma only
+combines them without changing the affine fibre or its normalization. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18EnergyTriangle
+
+open BinaryMatrixActualAffine BinaryMatrixComplexA15 BinaryMatrixFourier
+open scoped BigOperators
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private theorem normSq_add_real_smul_le (z w : ℂ) (c : ℝ) (hc : 0 ≤ c) :
+    Complex.normSq (z + (c : ℂ) * w) ≤
+      2 * Complex.normSq z + 2 * c ^ 2 * Complex.normSq w := by
+  have hnorm : ‖z + (c : ℂ) * w‖ ≤ ‖z‖ + c * ‖w‖ := by
+    calc
+      ‖z + (c : ℂ) * w‖ ≤ ‖z‖ + ‖(c : ℂ) * w‖ := norm_add_le _ _
+      _ = ‖z‖ + c * ‖w‖ := by
+        rw [norm_mul, Complex.norm_real, abs_of_nonneg hc]
+  rw [Complex.normSq_eq_norm_sq, Complex.normSq_eq_norm_sq,
+    Complex.normSq_eq_norm_sq]
+  have hzw : 0 ≤ ‖z‖ := norm_nonneg _
+  have hww : 0 ≤ ‖w‖ := norm_nonneg _
+  have hscale : ‖(c : ℂ) * w‖ = c * ‖w‖ := by
+    rw [norm_mul, Complex.norm_real, abs_of_nonneg hc]
+  rw [hscale] at hnorm
+  nlinarith [sq_nonneg (‖z‖ - c * ‖w‖)]
+
+/-- If a pointwise A17 decomposition `f = g + c h` has the two component
+energy bounds on the same nonempty actual fibre, the squared triangle
+inequality gives `2 η₁ + 2 c² η₂` on that fibre.  A17 obtains `c=2^d` and
+`η₂` equal to the source-average bound; this lemma does not assume either
+operator bound or an alternative sampling law. -/
+theorem actual_fibre_energy_add_smul_le
+    {n d : ℕ} {η₁ η₂ c : ℝ}
+    (Q : ActualAffineRestriction n d)
+    (f g h : BinaryMatrix n d → ℂ)
+    (hc : 0 ≤ c) (hη₁ : 0 ≤ η₁) (hη₂ : 0 ≤ η₂)
+    (hcard : 0 < (Q.fibre.card : ℝ))
+    (hdecomp : ∀ M ∈ Q.fibre, f M = g M + (c : ℂ) * h M)
+    (hg : fibreEnergy Q.fibre g ≤ η₁)
+    (hh : fibreEnergy Q.fibre h ≤ η₂) :
+    fibreEnergy Q.fibre f ≤ 2 * η₁ + 2 * c ^ 2 * η₂ := by
+  classical
+  let N : ℝ := Q.fibre.card
+  have hN : 0 < N := by simpa [N] using hcard
+  have hN0 : 0 ≤ N := le_of_lt hN
+  have hg' : (∑ M ∈ Q.fibre, Complex.normSq (g M)) ≤ η₁ * N := by
+    apply (div_le_iff₀ hN).mp
+    simpa [fibreEnergy, N] using hg
+  have hh' : (∑ M ∈ Q.fibre, Complex.normSq (h M)) ≤ η₂ * N := by
+    apply (div_le_iff₀ hN).mp
+    simpa [fibreEnergy, N] using hh
+  have hsum :
+      (∑ M ∈ Q.fibre, Complex.normSq (f M)) ≤
+        2 * (∑ M ∈ Q.fibre, Complex.normSq (g M)) +
+          2 * c ^ 2 * (∑ M ∈ Q.fibre, Complex.normSq (h M)) := by
+    apply Finset.sum_le_sum
+    intro M hM
+    rw [hdecomp M hM]
+    exact normSq_add_real_smul_le (g M) (h M) c hc
+  apply (div_le_iff₀ hN).2
+  change (∑ M ∈ Q.fibre, Complex.normSq (f M)) ≤
+      (2 * η₁ + 2 * c ^ 2 * η₂) * N
+  calc
+    (∑ M ∈ Q.fibre, Complex.normSq (f M)) ≤
+        2 * (∑ M ∈ Q.fibre, Complex.normSq (g M)) +
+          2 * c ^ 2 * (∑ M ∈ Q.fibre, Complex.normSq (h M)) := hsum
+    _ ≤ 2 * (η₁ * N) + 2 * c ^ 2 * (η₂ * N) := by
+      exact add_le_add (mul_le_mul_of_nonneg_left hg' (by norm_num))
+        (mul_le_mul_of_nonneg_left hh' (by positivity))
+    _ = (2 * η₁ + 2 * c ^ 2 * η₂) * N := by ring
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18EnergyTriangle

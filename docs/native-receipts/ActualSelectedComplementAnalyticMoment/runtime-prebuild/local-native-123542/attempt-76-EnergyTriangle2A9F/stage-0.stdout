@@ -1,0 +1,62 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18EnergyTriangle.lean:23:41: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  |c|
+in the target expression
+  ‖z‖ + ‖c‖ * ‖w‖ = ‖z‖ + c * ‖w‖
+
+z w : ℂ
+c : ℝ
+hc : 0 ≤ c
+⊢ ‖z‖ + ‖c‖ * ‖w‖ = ‖z‖ + c * ‖w‖
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18EnergyTriangle.lean:29:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  |c|
+in the target expression
+  ‖c‖ * ‖w‖ = c * ‖w‖
+
+z w : ℂ
+c : ℝ
+hc : 0 ≤ c
+hnorm : ‖z + ↑c * w‖ ≤ ‖z‖ + c * ‖w‖
+hzw : 0 ≤ ‖z‖
+hww : 0 ≤ ‖w‖
+⊢ ‖c‖ * ‖w‖ = c * ‖w‖
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18EnergyTriangle.lean:30:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ‖↑c * w‖
+in the target expression
+  ‖z + ↑c * w‖ ≤ ‖z‖ + c * ‖w‖
+
+z w : ℂ
+c : ℝ
+hc : 0 ≤ c
+hnorm : ‖z + ↑c * w‖ ≤ ‖z‖ + c * ‖w‖
+hzw : 0 ≤ ‖z‖
+hww : 0 ≤ ‖w‖
+hscale : ‖↑c * w‖ = c * ‖w‖
+⊢ ‖z + ↑c * w‖ ^ 2 ≤ 2 * ‖z‖ ^ 2 + 2 * c ^ 2 * ‖w‖ ^ 2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18EnergyTriangle.lean:62:4: error: Tactic `apply` failed: could not unify the conclusion of `@Finset.sum_le_sum`
+  ∑ i ∈ ?s, ?f i ≤ ∑ i ∈ ?s, ?g i
+with the goal
+  ∑ M ∈ Q.fibre, Complex.normSq (f M) ≤
+    2 * ∑ M ∈ Q.fibre, Complex.normSq (g M) + 2 * c ^ 2 * ∑ M ∈ Q.fibre, Complex.normSq (h M)
+
+Note: The full type of `@Finset.sum_le_sum` is
+  ∀ {ι : Type ?u.154} {N : Type ?u.153} [inst : AddCommMonoid N] [inst_1 : Preorder N] {f g : ι → N} {s : Finset ι}
+    [AddLeftMono N], (∀ i ∈ s, f i ≤ g i) → ∑ i ∈ s, f i ≤ ∑ i ∈ s, g i
+
+n d : ℕ
+η₁ η₂ c : ℝ
+Q : ActualAffineRestriction n d
+f g h : BinaryMatrix n d → ℂ
+hc : 0 ≤ c
+hη₁ : 0 ≤ η₁
+hη₂ : 0 ≤ η₂
+hcard : 0 < ↑Q.fibre.card
+hdecomp : ∀ M ∈ Q.fibre, f M = g M + ↑c * h M
+hg : fibreEnergy Q.fibre g ≤ η₁
+hh : fibreEnergy Q.fibre h ≤ η₂
+N : ℝ := ↑Q.fibre.card
+hN : 0 < N
+hN0 : 0 ≤ N
+hg' : ∑ M ∈ Q.fibre, Complex.normSq (g M) ≤ η₁ * N
+hh' : ∑ M ∈ Q.fibre, Complex.normSq (h M) ≤ η₂ * N
+⊢ ∑ M ∈ Q.fibre, Complex.normSq (f M) ≤
+    2 * ∑ M ∈ Q.fibre, Complex.normSq (g M) + 2 * c ^ 2 * ∑ M ∈ Q.fibre, Complex.normSq (h M)
