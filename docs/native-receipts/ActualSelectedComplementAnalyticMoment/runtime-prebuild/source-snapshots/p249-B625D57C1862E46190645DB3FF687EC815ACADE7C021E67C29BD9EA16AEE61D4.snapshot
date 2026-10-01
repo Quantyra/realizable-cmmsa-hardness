@@ -1,0 +1,152 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixTypedHyperplaneSelector
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Hyperplane
+import PvNP.RealizableHardness.BinaryMatrixCodomainA14
+import Mathlib.LinearAlgebra.Dual.Lemmas
+
+/-! Exact transpose covariance of the ambient hybrid selector and its
+complex Fourier filter. The codomain constraint is transported to the
+coordinate dual annihilator in the transposed domain. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter
+
+open BinaryMatrixFourier BinaryMatrixNestedSelectorA1 BinaryMatrixA1Complex
+open BinaryMatrixTypedHyperplaneSelector BinaryMatrixTypedA14Hyperplane
+open BinaryMatrixCodomainA14 BinaryMatrixComplexA15
+open scoped BigOperators
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (n : Nat) := Fin n → F
+
+private def dualCoordinateEquiv (n : Nat) :
+    Module.Dual F (V n) ≃ₗ[F] V n :=
+  (Pi.basisFun F (Fin n)).dualBasis.equivFun
+
+/-- Vector realization of the linear-functional annihilator under the
+standard coordinate duality. -/
+def coordinateDualAnnihilator {n : Nat}
+    (B : Submodule F (V n)) : Submodule F (V n) :=
+  B.dualAnnihilator.map (dualCoordinateEquiv n).toLinearMap
+
+private theorem dualMap_coordinates {r c : Nat}
+    (M : BinaryMatrix r c) (φ : Module.Dual F (V r)) :
+    (dualCoordinateEquiv c) (M.mulVecLin.dualMap φ) =
+      M.transpose.mulVec ((dualCoordinateEquiv r) φ) := by
+  funext i
+  simp only [dualCoordinateEquiv, Module.Basis.dualBasis_equivFun,
+    Pi.basisFun_apply]
+  simp only [LinearMap.dualMap_apply, Matrix.mulVec, dotProduct,
+    Matrix.mulVecLin_apply]
+  rw [Matrix.mulVec_single_one]
+  conv_lhs => rw [← (Pi.basisFun F (Fin r)).sum_repr (Matrix.col M i)]
+  simp [map_sum, map_smul, Pi.basisFun_repr]
+
+/-- The row-space/range identity in coordinate dual form. -/
+private theorem range_eq_coordinateDualAnnihilator_ker {n d : Nat}
+    (Y : BinaryMatrix n d) :
+    LinearMap.range Y.mulVecLin =
+      (LinearMap.ker Y.transpose.mulVecLin).dualAnnihilator.map
+        (dualCoordinateEquiv n).toLinearMap := by
+  classical
+  let eN := dualCoordinateEquiv n
+  let eD := dualCoordinateEquiv d
+  let f := Y.transpose.mulVecLin
+  have hcoord (φ : Module.Dual F (V d)) :
+      eN (f.dualMap φ) = Y.mulVecLin (eD φ) := by
+    change eN (Y.transpose.mulVecLin.dualMap φ) =
+      Y.mulVec (eD φ)
+    exact dualMap_coordinates Y.transpose φ
+  ext x
+  constructor
+  · rintro ⟨v, rfl⟩
+    have hφ : f.dualMap (eD.symm v) ∈
+        (LinearMap.ker f).dualAnnihilator := by
+      rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
+      exact LinearMap.mem_range_self _
+    exact ⟨f.dualMap (eD.symm v), hφ, hcoord (eD.symm v)⟩
+  · rintro ⟨φ, hφ, hx⟩
+    have hφrange : φ ∈ LinearMap.range f.dualMap := by
+      rw [LinearMap.range_dualMap_eq_dualAnnihilator_ker]
+      exact hφ
+    rcases hφrange with ⟨ψ, hψ⟩
+    have hval : Y.mulVec (eD ψ) = x := by
+      change Y.mulVec (eD ψ) = x
+      rw [← hcoord ψ, hψ, hx]
+    exact ⟨eD ψ, hval⟩
+
+/-- A frequency is selected by the bottom-domain/codomain-`B` hybrid rule
+iff its transpose is selected by the line of functionals annihilating `B`.
+This is the generic subspace statement, not just the hyperplane case. -/
+theorem selected_bot_iff_coordinateDualAnnihilator_top {n d : Nat}
+    (B : Submodule F (V n)) (Y : BinaryMatrix n d) :
+    Selected (⊥ : Submodule F (V d)) B Y.transpose.toLin' ↔
+      Selected (coordinateDualAnnihilator B)
+        (⊤ : Submodule F (V d)) Y.toLin' := by
+  rw [range_eq_coordinateDualAnnihilator_ker]
+  unfold Selected
+  constructor
+  · rintro ⟨_, hpre⟩
+    have hker : LinearMap.ker Y.transpose.toLin' ≤ B := by
+      intro x hx
+      exact hpre x ((LinearMap.mem_ker).mp hx)
+    constructor
+    · intro x hx
+      rcases hx with ⟨φ, hφ, rfl⟩
+      exact ⟨φ, Submodule.dualAnnihilator_anti hker hφ, rfl⟩
+    · intro x _
+      exact Submodule.mem_top x
+  · rintro ⟨hrange, _⟩
+    constructor
+    · exact bot_le
+    · intro x hx
+      have hker : x ∈ LinearMap.ker Y.transpose.toLin' :=
+        (LinearMap.mem_ker).mpr hx
+      have hdual : B.dualAnnihilator ≤
+          (LinearMap.ker Y.transpose.toLin').dualAnnihilator := by
+        intro φ hφ
+        have hmap : dualCoordinateEquiv n φ ∈
+            (LinearMap.ker Y.transpose.toLin').dualAnnihilator.map
+              (dualCoordinateEquiv n).toLinearMap := hrange ⟨φ, hφ, rfl⟩
+        rcases hmap with ⟨ψ, hψ, hEq⟩
+        exact (dualCoordinateEquiv n).injective hEq ▸ hψ
+      exact (Subspace.dualAnnihilator_le_dualAnnihilator_iff.mp hdual) hker
+
+/-- The ambient complex hybrid filter commutes exactly with transposition
+when the codomain constraint is transported to its coordinate dual
+annihilator. -/
+theorem complexAmbientHybridFilter_transpose_bot {n d : Nat}
+    (B : Submodule F (V n)) (f : BinaryMatrix n d → Complex)
+    (M : BinaryMatrix d n) :
+    complexTranspose (complexAmbientHybridFilter
+        (⊥ : Submodule F (V d)) B f) M =
+      complexAmbientHybridFilter (coordinateDualAnnihilator B)
+        (⊤ : Submodule F (V d)) (complexTranspose f) M := by
+  classical
+  let e : BinaryMatrix n d ≃ BinaryMatrix d n where
+    toFun := Matrix.transpose
+    invFun := Matrix.transpose
+    left_inv := Matrix.transpose_transpose
+    right_inv := Matrix.transpose_transpose
+  unfold complexTranspose complexAmbientHybridFilter
+  rw [← Equiv.sum_comp e
+    (fun Z : BinaryMatrix d n =>
+      if Selected (coordinateDualAnnihilator B) (⊤ : Submodule F (V d))
+          Z.transpose.toLin' then
+        complexFourierCoeff (complexTranspose f) Z *
+          (character Z M : Complex) else 0)]
+  apply Finset.sum_congr rfl
+  intro Y _
+  rw [selected_bot_iff_coordinateDualAnnihilator_top]
+  simp only [Matrix.transpose_transpose]
+  by_cases hY : Selected (⊥ : Submodule F (V d)) B Y.transpose.toLin'
+  · simp only [if_pos hY]
+    rw [← complexFourierCoeff_transpose,
+      character_transpose Y M.transpose]
+  · simp only [if_neg hY]
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter
