@@ -1,0 +1,53 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:65:2: warning: Unused tactic linter: `with_unfolding_all
+  change
+    UpToActualNormSqGlobal (r - 1) ε
+      (fun X =>
+        filteredCarrierFunction U (⊤ : Submodule F (W n)) T f
+          ((carrierMatrixEquiv U (⊤ : Submodule F (W n))).symm X))` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:136:13: error: unexpected token ':='; expected ')', ',' or ':'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:133:20: error: Invalid argument name `p` for function `Finset.univ`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:121:46: error: unsolved goals
+case calc.step
+n d r : ℕ
+ε : ℝ
+U : Submodule F (V d)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hderiv : UpToActualNormSqGlobal (r - 1) ε (fixedDomainDerivativeCoordinate U T f)
+Q : CarrierRestriction U ⊤
+hQ : Q.order ≤ r - 1
+g : BinaryMatrix n d → ℝ := fun X => Complex.normSq (complexAmbientHybridFilter U ⊤ f X)
+hcarrier : (∑ M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M)) / ↑Q.fibre.card ≤ ε
+hf : {M | M ∈ Q.fibre} = Q.fibre
+⊢ ∑ M with M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M) =
+    ∑ M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:113:40: error: unsolved goals
+n d r : ℕ
+ε : ℝ
+U : Submodule F (V d)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hderiv : UpToActualNormSqGlobal (r - 1) ε (fixedDomainDerivativeCoordinate U T f)
+Q : CarrierRestriction U ⊤
+hQ : Q.order ≤ r - 1
+g : BinaryMatrix n d → ℝ := fun X => Complex.normSq (complexAmbientHybridFilter U ⊤ f X)
+hcarrier : (∑ M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M)) / ↑Q.fibre.card ≤ ε
+hsum :
+  ∑ M, Complex.normSq (filteredCarrierFunction U ⊤ T f ↑M) =
+    ∑ M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M)
+⊢ (∑ M, Complex.normSq (filteredCarrierFunction U ⊤ T f ↑M)) / ↑(Fintype.card ↥Q.fibre) ≤ ε
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:101:70: error: unsolved goals
+n d r : ℕ
+ε : ℝ
+U : Submodule F (V d)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hderiv : UpToActualNormSqGlobal (r - 1) ε (fixedDomainDerivativeCoordinate U T f)
+Q : CarrierRestriction U ⊤
+hQ : Q.order ≤ r - 1
+g : BinaryMatrix n d → ℝ := fun X => Complex.normSq (complexAmbientHybridFilter U ⊤ f X)
+hcarrier : (∑ M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M)) / ↑Q.fibre.card ≤ ε
+hsub : (∑ M, Complex.normSq (filteredCarrierFunction U ⊤ T f ↑M)) / ↑(Fintype.card ↥Q.fibre) ≤ ε
+⊢ fibreEnergy (liftCarrierRestriction U ⊤ T Q).fibre (complexAmbientHybridFilter U ⊤ f) ≤ ε
