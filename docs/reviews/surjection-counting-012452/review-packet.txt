@@ -1,0 +1,562 @@
+Independently review the pinned finite binary surjection counting ingredient in all three lenses: proof-adversarial, complexity-theory, non-claims. Return explicit GO/GO-WITH-NOTES/NO-GO/INCOMPLETE per lens, severity/source-line findings, actual model/version and source coverage limitations. No commands, writes, compiler, Git, cloud, or delegation required. Do not infer mathematical GO merely from exit0. All five exports: matrix_surjective_iff_rows_independent; surjectiveMatrixFrameEquiv; card_surjective_coordinate_maps; linearMapCoordinateEquiv_surjective_iff; card_surjective_linear_maps. Scope includes all coordinate dimensions (i>d zero case), arbitrary finite-dimensional binary V/W under stated Finite assumptions, exact Nat.card frameProduct identity. Five profiles onlypropext/choice/Quot.sound. This is NOT a universal Spectral47/HC46 inhabitant, weighted fibre bound, complexity reduction, or global goal closure. Batchothermodulesfailed; countalone stage4/5green. Currentwrappercleanup maystillpending; stagekernelreceipts separate. Attest all five complete declarations read. Imported Mathlib and GrassmannCounting proof bodies are outside packet; disclose limits.
+
+FILE lean\PvNP\RealizableHardness\ActualFiniteBinarySurjectionCounting.lean
+import Mathlib.LinearAlgebra.Matrix.Rank
+import Mathlib.LinearAlgebra.Matrix.ToLin
+import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Card
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Tactic
+import PvNP.RealizableHardness.GrassmannCounting
+
+/-!
+Exact finite count of surjective binary linear maps between coordinate spaces.
+
+The proof identifies a matrix map with its ordered family of rows, proves that
+surjectivity is equivalent to row independence using the rank/range identities,
+and applies the finite-field independent-frame count.  Dimensions are separate
+parameters; in particular, the out-of-range case is included by the frame
+count theorem's `i ≤ d` guard.
+-/
+
+namespace PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting
+
+open PvNP.RealizableHardness.GrassmannCounting
+
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+abbrev BinaryCoordinateSpace (n : Nat) := Fin n → ZMod 2
+
+/-- Row independence characterizes surjectivity of the associated matrix map. -/
+theorem matrix_surjective_iff_rows_independent {d i : Nat}
+    (A : Matrix (Fin i) (Fin d) (ZMod 2)) :
+    Function.Surjective A.mulVecLin ↔ LinearIndependent (ZMod 2) A.row := by
+  classical
+  have hrankRange : A.rank =
+      Module.finrank (ZMod 2) (LinearMap.range A.mulVecLin) := by
+    rfl
+  have hcod : Module.finrank (ZMod 2) (Fin i → ZMod 2) = i := by
+    simp
+  have hsurjRank : Function.Surjective A.mulVecLin ↔ A.rank = i := by
+    rw [← LinearMap.range_eq_top]
+    constructor
+    · intro h
+      rw [h] at hrankRange
+      simpa [hcod] using hrankRange
+    · intro h
+      apply (Submodule.eq_top_iff_finrank_eq).2
+      rw [← hrankRange, h]
+      exact hcod.symm
+  have hrowRank : LinearIndependent (ZMod 2) A.row ↔ A.rank = i := by
+    constructor
+    · intro h
+      simpa [Fintype.card_fin] using h.rank_matrix
+    · intro h
+      rw [Matrix.rank_eq_finrank_span_row] at h
+      apply linearIndependent_iff_card_eq_finrank_span.mpr
+      simpa [Fintype.card_fin, Set.finrank] using h.symm
+  exact hsurjRank.trans hrowRank.symm
+
+/-- Surjective maps represented by `i × d` matrices are exactly independent
+ordered `i`-frames in the `d`-dimensional binary coordinate space. -/
+def surjectiveMatrixFrameEquiv (d i : Nat) :
+    {A : Matrix (Fin i) (Fin d) (ZMod 2) // Function.Surjective A.mulVecLin} ≃
+      Frame (BinaryCoordinateSpace d) i := by
+  classical
+  exact (Equiv.refl (Matrix (Fin i) (Fin d) (ZMod 2))).subtypeEquiv
+    (fun A => by
+      change Function.Surjective A.mulVecLin ↔
+        LinearIndependent (ZMod 2) (fun j => A j)
+      simpa [Matrix.row] using matrix_surjective_iff_rows_independent A)
+
+/-- Exact number of surjective linear maps between finite binary coordinate
+spaces.  If the target dimension exceeds the source dimension, the subtype is
+empty and `frameProduct` is the corresponding zero product. -/
+theorem card_surjective_coordinate_maps (d i : Nat) :
+    Nat.card
+      {f : BinaryCoordinateSpace d →ₗ[ZMod 2] BinaryCoordinateSpace i //
+        Function.Surjective f} = frameProduct d i := by
+  classical
+  letI : Fintype {A : Matrix (Fin i) (Fin d) (ZMod 2) //
+      Function.Surjective A.mulVecLin} := Fintype.ofFinite _
+  let e : {A : Matrix (Fin i) (Fin d) (ZMod 2) // Function.Surjective A.mulVecLin} ≃
+      {f : BinaryCoordinateSpace d →ₗ[ZMod 2] BinaryCoordinateSpace i //
+        Function.Surjective f} :=
+    (Matrix.toLin' : Matrix (Fin i) (Fin d) (ZMod 2) ≃ₗ[ZMod 2]
+      (BinaryCoordinateSpace d →ₗ[ZMod 2] BinaryCoordinateSpace i)).toEquiv.subtypeEquiv
+      (fun A => by
+        change Function.Surjective (Matrix.toLin' A) ↔
+          Function.Surjective A.mulVecLin
+        simp [Matrix.toLin'_apply'])
+  have hmaps : Nat.card
+      {f : BinaryCoordinateSpace d →ₗ[ZMod 2] BinaryCoordinateSpace i //
+        Function.Surjective f} =
+      Fintype.card {A : Matrix (Fin i) (Fin d) (ZMod 2) //
+        Function.Surjective A.mulVecLin} := by
+    calc
+      Nat.card {f : BinaryCoordinateSpace d →ₗ[ZMod 2] BinaryCoordinateSpace i //
+          Function.Surjective f} = Nat.card
+          {A : Matrix (Fin i) (Fin d) (ZMod 2) //
+            Function.Surjective A.mulVecLin} := Nat.card_congr e.symm
+      _ = Fintype.card {A : Matrix (Fin i) (Fin d) (ZMod 2) //
+          Function.Surjective A.mulVecLin} := Nat.card_eq_fintype_card
+  have hframes : Fintype.card
+      {A : Matrix (Fin i) (Fin d) (ZMod 2) // Function.Surjective A.mulVecLin} =
+      Fintype.card (Frame (BinaryCoordinateSpace d) i) :=
+    Fintype.card_congr (surjectiveMatrixFrameEquiv d i)
+  rw [hmaps, hframes]
+  by_cases hi : i ≤ d
+  · have hi' : i ≤ Module.finrank (ZMod 2) (BinaryCoordinateSpace d) := by
+      simpa [BinaryCoordinateSpace] using hi
+    simpa [BinaryCoordinateSpace] using
+      (card_frame (V := BinaryCoordinateSpace d) (a := i) hi')
+  · have hd : d < i := Nat.lt_of_not_ge hi
+    have hzero : Fintype.card (Frame (BinaryCoordinateSpace d) i) = 0 := by
+      letI : IsEmpty (Frame (BinaryCoordinateSpace d) i) := ⟨fun f => by
+        have hle := f.property.fintype_card_le_finrank
+        have hle' : i ≤ d := by simpa [BinaryCoordinateSpace] using hle
+        exact (Nat.not_le_of_gt hd) hle'⟩
+      simp
+    have hprod : frameProduct d i = 0 := by
+      unfold frameProduct
+      apply Finset.prod_eq_zero (Finset.mem_univ ⟨d, hd⟩)
+      simp
+    rw [hzero, hprod]
+
+/-- Coordinates on an arbitrary finite-dimensional binary space. -/
+noncomputable def binaryCoordinateEquiv (V : Type*)
+    [AddCommGroup V] [Module (ZMod 2) V] [Finite V]
+    [FiniteDimensional (ZMod 2) V] :
+    V ≃ₗ[ZMod 2] BinaryCoordinateSpace (Module.finrank (ZMod 2) V) :=
+  (Module.finBasis (ZMod 2) V).equivFun
+
+/-- Transport a linear map across coordinate equivalences on its domain and
+codomain. -/
+def linearMapCoordinateEquiv {V W X Y : Type*}
+    [AddCommGroup V] [Module (ZMod 2) V]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup Y] [Module (ZMod 2) Y]
+    (eV : V ≃ₗ[ZMod 2] X) (eW : W ≃ₗ[ZMod 2] Y) :
+    (V →ₗ[ZMod 2] W) ≃ (X →ₗ[ZMod 2] Y) where
+  toFun f := eW.toLinearMap.comp (f.comp eV.symm.toLinearMap)
+  invFun g := eW.symm.toLinearMap.comp (g.comp eV.toLinearMap)
+  left_inv f := by
+    ext v
+    simp
+  right_inv g := by
+    ext x
+    simp
+
+theorem linearMapCoordinateEquiv_surjective_iff {V W X Y : Type*}
+    [AddCommGroup V] [Module (ZMod 2) V]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup Y] [Module (ZMod 2) Y]
+    (eV : V ≃ₗ[ZMod 2] X) (eW : W ≃ₗ[ZMod 2] Y)
+    (f : V →ₗ[ZMod 2] W) :
+    Function.Surjective f ↔
+      Function.Surjective (linearMapCoordinateEquiv eV eW f) := by
+  constructor
+  · intro hf y
+    obtain ⟨w, hw⟩ := hf (eW.symm y)
+    refine ⟨eV w, ?_⟩
+    simp [linearMapCoordinateEquiv, hw]
+  · intro hg y
+    obtain ⟨x, hx⟩ := hg (eW y)
+    refine ⟨eV.symm x, ?_⟩
+    apply eW.injective
+    simpa [linearMapCoordinateEquiv] using hx
+
+/-- Exact surjection count for any finite-dimensional binary vector spaces;
+the formula depends only on their separate source and target dimensions. -/
+theorem card_surjective_linear_maps
+    {V W : Type*} [AddCommGroup V] [Module (ZMod 2) V] [Finite V]
+    [FiniteDimensional (ZMod 2) V]
+    [AddCommGroup W] [Module (ZMod 2) W] [Finite W]
+    [FiniteDimensional (ZMod 2) W] :
+    Nat.card {f : V →ₗ[ZMod 2] W // Function.Surjective f} =
+      frameProduct (Module.finrank (ZMod 2) V) (Module.finrank (ZMod 2) W) := by
+  classical
+  let eV := binaryCoordinateEquiv V
+  let eW := binaryCoordinateEquiv W
+  let e :
+      {f : V →ₗ[ZMod 2] W // Function.Surjective f} ≃
+        {g : BinaryCoordinateSpace (Module.finrank (ZMod 2) V) →ₗ[ZMod 2]
+          BinaryCoordinateSpace (Module.finrank (ZMod 2) W) // Function.Surjective g} :=
+    (linearMapCoordinateEquiv eV eW).subtypeEquiv
+    (fun f => linearMapCoordinateEquiv_surjective_iff eV eW f)
+  rw [Nat.card_congr e]
+  exact card_surjective_coordinate_maps
+    (Module.finrank (ZMod 2) V) (Module.finrank (ZMod 2) W)
+
+end
+end PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting
+
+
+FILE lean\PvNP\RealizableHardness\ActualFiniteBinarySurjectionCountingChecks.lean
+import PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting
+
+open PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting
+
+#check matrix_surjective_iff_rows_independent
+#check surjectiveMatrixFrameEquiv
+#check card_surjective_coordinate_maps
+#check binaryCoordinateEquiv
+#check linearMapCoordinateEquiv
+#check linearMapCoordinateEquiv_surjective_iff
+#check card_surjective_linear_maps
+
+#print axioms matrix_surjective_iff_rows_independent
+#print axioms surjectiveMatrixFrameEquiv
+#print axioms card_surjective_coordinate_maps
+#print axioms linearMapCoordinateEquiv_surjective_iff
+#print axioms card_surjective_linear_maps
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T012452Z\raw-evidence\stage-4.native-exit
+0
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T012452Z\raw-evidence\stage-5.native-exit
+0
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T012452Z\raw-evidence\stage-4.pins.sha256
+10242ef87526fceda64b834f816034d2c3f8ceebee0311017fa84f343673a55f  lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean
+bbb5347ad478362b60fbec1f366227ca0de567afee9b6a05c7bacb013d0761bb  .lake/build/lib/lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.olean
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T012452Z\raw-evidence\stage-5.pins.sha256
+0acab9c452957aae2a54adc5e7765a7771caf4b47ae895b86335b9f8c37ef1b4  lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean
+1274547ea703bfe16fde5469593891c8e334685e5972d93359a42410b6b0aca0  .lake/build/lib/lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.olean
+
+
+FILE docs\native-receipts\ActualSelectedComplementAnalyticMoment\durable-runs\cmmsa_analytic_20261001T012452Z\raw-evidence\stage-5.stdout
+ℹ [3049/3059] Replayed PvNP.RealizableHardness.ExceptionRepair
+info: lean/PvNP/RealizableHardness/ExceptionRepair.lean:200:0: 'PvNP.RealizableHardness.exception_completeness' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/ExceptionRepair.lean:201:0: 'PvNP.RealizableHardness.exception_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [3050/3059] Replayed PvNP.RealizableHardness.Formula
+info: lean/PvNP/RealizableHardness/Formula.lean:93:0: 'PvNP.RealizableHardness.Formula.repair_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: lean/PvNP/RealizableHardness/Formula.lean:94:0: 'PvNP.RealizableHardness.Formula.leaves_repair' depends on axioms: [propext]
+info: lean/PvNP/RealizableHardness/Formula.lean:95:0: 'PvNP.RealizableHardness.Formula.repair_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+⚠ [3051/3059] Replayed PvNP.RealizableHardness.WeightRounding
+warning: lean/PvNP/RealizableHardness/WeightRounding.lean:47:56: `if_false` has been deprecated: Use `ite_false` instead
+warning: lean/PvNP/RealizableHardness/WeightRounding.lean:47:56: `if_false` has been deprecated: Use `ite_false` instead
+warning: lean/PvNP/RealizableHardness/WeightRounding.lean:47:32: This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Bool.false_eq_true, if_false, mul_zero, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/WeightRounding.lean:61:14: This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [3052/3059] Replayed PvNP.RealizableHardness.FiniteSampling
+warning: lean/PvNP/RealizableHardness/FiniteSampling.lean:94:14: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/FiniteSampling.lean:136:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+⚠ [3053/3059] Replayed PvNP.RealizableHardness.TripleRestrictionRank
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:41:39: This simp argument is unused:
+  Fin.sum_univ_succ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Fintype.sum_option, blockMass]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:42:2: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:49:26: `if_true` has been deprecated: Use `ite_true` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:69:19: `if_false` has been deprecated: Use `ite_false` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:91:25: `if_pos` has been deprecated: Use `ite_eq_left` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:92:25: `if_neg` has been deprecated: Use `ite_eq_right` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:92:50: `if_true` has been deprecated: Use `ite_true` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:105:19: `if_pos` has been deprecated: Use `ite_eq_left` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:106:19: `if_neg` has been deprecated: Use `ite_eq_right` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:92:36: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [events, if_neg hi, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:112:39: This simp argument is unused:
+  Fin.sum_univ_succ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Fintype.sum_option, blockMass]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:113:2: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:121:20: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:190:15: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Coeff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:224:15: `if_pos` has been deprecated: Use `ite_eq_left` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:234:15: `if_neg` has been deprecated: Use `ite_eq_right` instead
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:257:25: This simp argument is unused:
+  Coeff
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [s, Fintype.card_fun, ZMod.card]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:257:32: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [s, Coeff, ZMod.card]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:335:49: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [evaluate, Finset.mul_sum, mul_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/TripleRestrictionRank.lean:433:69: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Coeff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [3054/3059] Replayed PvNP.RealizableHardness.SubspaceRestriction
+warning: lean/PvNP/RealizableHardness/SubspaceRestriction.lean:123:52: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [codim, TripleRestrictionRank.Vector, Coord, Nat.mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/SubspaceRestriction.lean:126:52: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [codim, TripleRestrictionRank.Vector, Coord]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [3055/3059] Replayed PvNP.RealizableHardness.PosteriorReweighting
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:25:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.PosteriorReweighting.marginal_nonneg`:
+  [Fintype Q]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype Q] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:36:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.PosteriorReweighting.posterior_normalized`:
+  [Fintype Q]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype Q] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:41:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.PosteriorReweighting.bayes_mass`:
+  [Fintype Q]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype Q] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:46:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.PosteriorReweighting.zero_prior`:
+  [Fintype Q]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype Q] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:49:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.PosteriorReweighting.bayes_ratio`:
+  [Fintype Q]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype Q] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:56:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.PosteriorReweighting.joint_zero_of_marginal_zero`:
+  [Fintype Q]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype Q] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:88:29: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hg, hr]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:90:17: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hg, Bool.not_false, Bool.true_eq, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:90:41: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hb, hg, Bool.not_false, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:100:20: Variable name `hz` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hz
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:109:17: This simp argument is unused:
+  hg
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Bool.not_false, Bool.true_eq, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:109:37: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hg, Bool.not_false, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/PosteriorReweighting.lean:116:17: This simp argument is unused:
+  hg
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Bool.not_true, Bool.false_eq_true, ite_false, add_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [3056/3059] Replayed PvNP.RealizableHardness.GrassmannIncidence
+warning: lean/PvNP/RealizableHardness/GrassmannIncidence.lean:64:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/GrassmannIncidence.lean:79:17: This simp argument is unused:
+  Module.finrank_pi
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Coeff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [3057/3059] Replayed PvNP.RealizableHardness.GrassmannCounting
+warning: lean/PvNP/RealizableHardness/GrassmannCounting.lean:28:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/GrassmannCounting.lean:60:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.GrassmannCounting.flatten_surjective`:
+  [Finite V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Finite V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+warning: lean/PvNP/RealizableHardness/GrassmannCounting.lean:111:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/GrassmannCounting.lean:119:18: `if_pos` has been deprecated: Use `ite_eq_left` instead
+warning: lean/PvNP/RealizableHardness/GrassmannCounting.lean:120:18: `if_neg` has been deprecated: Use `ite_eq_right` instead
+warning: lean/PvNP/RealizableHardness/GrassmannCounting.lean:135:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.GrassmannCounting.include_injective`:
+  [Finite V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Finite V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+warning: lean/PvNP/RealizableHardness/GrassmannCounting.lean:144:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.GrassmannCounting.include_surjective`:
+  [Finite V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Finite V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+⚠ [3058/3059] Replayed PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting
+warning: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean:80:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean:115:6: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+ℹ [3059/3059] Built PvNP.RealizableHardness.ActualFiniteBinarySurjectionCountingChecks (2.3s)
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:5:0: PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.matrix_surjective_iff_rows_independent {d i : ℕ}
+  (A : Matrix (Fin i) (Fin d) (ZMod 2)) : Function.Surjective ⇑A.mulVecLin ↔ LinearIndependent (ZMod 2) A.row
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:6:0: PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.surjectiveMatrixFrameEquiv (d i : ℕ) :
+  { A // Function.Surjective ⇑A.mulVecLin } ≃
+    PvNP.RealizableHardness.GrassmannCounting.Frame (BinaryCoordinateSpace d) i
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:7:0: PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.card_surjective_coordinate_maps (d i : ℕ) :
+  Nat.card { f // Function.Surjective ⇑f } = PvNP.RealizableHardness.GrassmannCounting.frameProduct d i
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:8:0: PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.binaryCoordinateEquiv.{u_1} (V : Type u_1) [AddCommGroup V]
+  [Module (ZMod 2) V] [Finite V] [FiniteDimensional (ZMod 2) V] :
+  V ≃ₗ[ZMod 2] BinaryCoordinateSpace (Module.finrank (ZMod 2) V)
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:9:0: PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.linearMapCoordinateEquiv.{u_1, u_2, u_3, u_4}
+  {V : Type u_1} {W : Type u_2} {X : Type u_3} {Y : Type u_4} [AddCommGroup V] [Module (ZMod 2) V] [AddCommGroup W]
+  [Module (ZMod 2) W] [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup Y] [Module (ZMod 2) Y] (eV : V ≃ₗ[ZMod 2] X)
+  (eW : W ≃ₗ[ZMod 2] Y) : (V →ₗ[ZMod 2] W) ≃ (X →ₗ[ZMod 2] Y)
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:10:0: PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.linearMapCoordinateEquiv_surjective_iff.{u_1, u_2, u_3,
+    u_4}
+  {V : Type u_1} {W : Type u_2} {X : Type u_3} {Y : Type u_4} [AddCommGroup V] [Module (ZMod 2) V] [AddCommGroup W]
+  [Module (ZMod 2) W] [AddCommGroup X] [Module (ZMod 2) X] [AddCommGroup Y] [Module (ZMod 2) Y] (eV : V ≃ₗ[ZMod 2] X)
+  (eW : W ≃ₗ[ZMod 2] Y) (f : V →ₗ[ZMod 2] W) :
+  Function.Surjective ⇑f ↔ Function.Surjective ⇑((linearMapCoordinateEquiv eV eW) f)
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:11:0: PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.card_surjective_linear_maps.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module (ZMod 2) V] [Finite V] [FiniteDimensional (ZMod 2) V] [AddCommGroup W]
+  [Module (ZMod 2) W] [Finite W] [FiniteDimensional (ZMod 2) W] :
+  Nat.card { f // Function.Surjective ⇑f } =
+    PvNP.RealizableHardness.GrassmannCounting.frameProduct (Module.finrank (ZMod 2) V) (Module.finrank (ZMod 2) W)
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:13:0: 'PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.matrix_surjective_iff_rows_independent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:14:0: 'PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.surjectiveMatrixFrameEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:15:0: 'PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.card_surjective_coordinate_maps' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:16:0: 'PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.linearMapCoordinateEquiv_surjective_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCountingChecks.lean:17:0: 'PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting.card_surjective_linear_maps' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Build completed successfully (3059 jobs).
