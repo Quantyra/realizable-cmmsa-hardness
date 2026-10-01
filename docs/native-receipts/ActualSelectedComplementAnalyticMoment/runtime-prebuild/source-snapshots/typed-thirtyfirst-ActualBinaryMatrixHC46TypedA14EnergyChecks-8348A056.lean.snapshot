@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedA14Energy
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedA14Energy
+
+#check reducedCarrierMean_coordinate
+#check typed_line_A14_energy
+#check typed_line_A14_energy_coordinate
+#check typed_hyperplane_A14_energy
+#print axioms typed_line_A14_energy
+#print axioms typed_line_A14_energy_coordinate
+#print axioms typed_hyperplane_A14_energy

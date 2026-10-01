@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualTypedAmbientA14Composition
+
+open PvNP.RealizableHardness.ActualTypedAmbientA14Composition
+
+#check ambientFlatStatistic
+#check ambientNestedStatistic
+#check ambientNestedStatistic_eq_flat
+#check ambient_nested_typed_A14_fixedLine
+
+#print axioms ambientNestedStatistic_eq_flat
+#print axioms ambient_nested_typed_A14_fixedLine

@@ -1,0 +1,474 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+import PvNP.RealizableHardness.BinaryMatrixA15SelectedBridge
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Reduced
+import PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+import PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal
+import PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+
+namespace PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+
+open BinaryMatrixA1Phase BinaryMatrixA1Complex
+open BinaryMatrixA1NestedCarrier
+open BinaryMatrixNestedSelectorA1 BinaryMatrixTypedA14Line
+open BinaryMatrixTypedA14Reduced BinaryMatrixTypedA15ReducedGlobal
+open BinaryMatrixTypedA15HyperplaneReducedGlobal
+open BinaryMatrixTypedA14FixedBase
+open BinaryMatrixA15SelectedBridge
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+private abbrev NestedDomain {d : Nat} (A₂ A₁ : Submodule F (V d)) :=
+  (V d ⧸ A₂) ⧸ A₁.map A₂.mkQ
+private abbrev NestedCodomain {n : Nat}
+    (B₁ B₂ : Submodule F (W n)) := B₁.comap B₂.subtype
+
+private noncomputable instance linearMapFiniteType {D C : Type*}
+    [Finite D] [Finite C] [AddCommGroup D] [Module F D]
+    [AddCommGroup C] [Module F C] : Fintype (D →ₗ[F] C) := by
+  classical
+  letI : Fintype D := Fintype.ofFinite D
+  letI : Fintype C := Fintype.ofFinite C
+  exact FunLike.fintype _
+
+def mapReindexEquiv {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [AddCommGroup D'] [Module F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C) :
+    (D →ₗ[F] C) ≃ₗ[F] (D' →ₗ[F] C') :=
+  LinearEquiv.arrowCongr eD.symm eC.symm
+
+def frequencyReindexEquiv {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [AddCommGroup D'] [Module F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C) :
+    (C →ₗ[F] D) ≃ₗ[F] (C' →ₗ[F] D') :=
+  LinearEquiv.arrowCongr eC.symm eD.symm
+
+theorem tracePair_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Module.Finite F D] [Module.Free F D]
+    [AddCommGroup D'] [Module F D'] [Module.Finite F D'] [Module.Free F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (Y : C →ₗ[F] D) (M : D →ₗ[F] C) :
+    tracePair (frequencyReindexEquiv eD eC Y)
+      (mapReindexEquiv eD eC M) = tracePair Y M := by
+  have hcomp :
+      (frequencyReindexEquiv eD eC Y).comp
+          (mapReindexEquiv eD eC M) =
+        eD.symm.conj (Y.comp M) := by
+    ext x
+    simp [frequencyReindexEquiv, mapReindexEquiv,
+      LinearEquiv.arrowCongr_apply, LinearEquiv.conj_apply]
+  simp [tracePair, hcomp, LinearMap.trace_conj']
+
+theorem frequencyReindex_rank {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [AddCommGroup D'] [Module F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (Y : C →ₗ[F] D) :
+    Module.finrank F (LinearMap.range (frequencyReindexEquiv eD eC Y)) =
+      Module.finrank F (LinearMap.range Y) := by
+  have hpre :
+      LinearMap.range (Y.comp eC.toLinearMap) = LinearMap.range Y := by
+    rw [LinearMap.range_comp]
+    simp
+  change Module.finrank F
+      (LinearMap.range
+        (eD.symm.toLinearMap.comp (Y.comp eC.toLinearMap))) = _
+  rw [LinearMap.range_comp, hpre]
+  exact eD.symm.finrank_map_eq (LinearMap.range Y)
+
+/-- The manuscript hybrid-selection predicate is invariant under simultaneous
+linear reindexing of domain, codomain, and the selected subspaces.  This is the
+range-membership bridge needed to transport a selected carrier filter; it does
+not assume a selected-frequency correspondence. -/
+theorem selected_reindex_mapped {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [AddCommGroup D'] [Module F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (A : Submodule F D) (B : Submodule F C)
+    (Y : C →ₗ[F] D) :
+    Selected (A.map eD.symm.toLinearMap) (B.map eC.symm.toLinearMap)
+      (frequencyReindexEquiv eD eC Y) ↔ Selected A B Y := by
+  constructor
+  · rintro ⟨hrange, hpre⟩
+    constructor
+    · intro a ha
+      have hmap : eD.symm a ∈ A.map eD.symm.toLinearMap :=
+        Submodule.mem_map.mpr ⟨a, ha, rfl⟩
+      rcases LinearMap.mem_range.mp (hrange hmap) with ⟨x, hx⟩
+      refine LinearMap.mem_range.mpr ⟨eC x, ?_⟩
+      simpa [frequencyReindexEquiv] using congrArg eD hx
+    · intro x hx
+      have hmap : frequencyReindexEquiv eD eC Y (eC.symm x) ∈
+          A.map eD.symm.toLinearMap := by
+        simpa [frequencyReindexEquiv] using
+          (Submodule.mem_map.mpr ⟨Y x, hx, rfl⟩ :
+            eD.symm (Y x) ∈ A.map eD.symm.toLinearMap)
+      have hpre' := hpre (eC.symm x) hmap
+      rcases Submodule.mem_map.mp hpre' with ⟨y, hy, hyx⟩
+      have : y = x := eC.symm.injective (by simpa using hyx)
+      simpa [this] using hy
+  · rintro ⟨hrange, hpre⟩
+    constructor
+    · intro a' ha'
+      rcases Submodule.mem_map.mp ha' with ⟨a, ha, haa'⟩
+      rcases LinearMap.mem_range.mp (hrange ha) with ⟨x, hx⟩
+      refine LinearMap.mem_range.mpr ⟨eC.symm x, ?_⟩
+      change eD.symm (Y (eC (eC.symm x))) = a'
+      calc
+        eD.symm (Y (eC (eC.symm x))) = eD.symm a := by
+          simp only [eC.apply_symm_apply]
+          exact congrArg eD.symm hx
+        _ = a' := haa'
+    · intro x' hx'
+      rcases Submodule.mem_map.mp hx' with ⟨a, ha, hEq⟩
+      have hEq' : a = Y (eC x') := by
+        simpa [frequencyReindexEquiv] using congrArg eD hEq
+      have hA : Y (eC x') ∈ A := by
+        rw [← hEq']
+        exact ha
+      have hB := hpre (eC x') hA
+      exact Submodule.mem_map.mpr ⟨eC x', hB, eC.symm_apply_apply x'⟩
+
+/-- Typed one-dimensional line selection is preserved by an actual carrier
+reindexing.  The characterization by `Selected L ⊤` handles the unique
+nonzero generator over `ZMod 2` without choosing a new line witness. -/
+theorem typedLineSelected_reindex_mapped {n d n' d' : Nat}
+    {A : Submodule F (V d)} {A' : Submodule F (V d')}
+    (B : Submodule F (W n)) (B' : Submodule F (W n'))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (eD : (V d' ⧸ A') ≃ₗ[F] (V d ⧸ A))
+    (eB : B' ≃ₗ[F] B)
+    (Y : B →ₗ[F] (V d ⧸ A)) :
+    typedLineSelected B' (L.map eD.symm.toLinearMap)
+      ((eD.symm.finrank_map_eq L).trans hL)
+      (frequencyReindexEquiv eD eB Y) ↔ typedLineSelected B L hL Y := by
+  rw [typedLineSelected_iff_Selected, typedLineSelected_iff_Selected]
+  simpa using selected_reindex_mapped eD eB L (⊤ : Submodule F B) Y
+
+def complexLinearMapFourierCoeff {D C : Type*}
+    [AddCommGroup D] [Module F D] [Module.Finite F D] [Module.Free F D]
+    [AddCommGroup C] [Module F C]
+    [Fintype (D →ₗ[F] C)] [Fintype (C →ₗ[F] D)]
+    (f : (D →ₗ[F] C) → Complex) (Y : C →ₗ[F] D) : Complex :=
+  (∑ M : D →ₗ[F] C, f M * (traceCharacter Y M : Complex)) /
+    (Fintype.card (D →ₗ[F] C) : Complex)
+
+theorem complexLinearMapFourierCoeff_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Module.Finite F D] [Module.Free F D]
+    [AddCommGroup D'] [Module F D'] [Module.Finite F D'] [Module.Free F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    [Fintype (D →ₗ[F] C)] [Fintype (C →ₗ[F] D)]
+    [Fintype (D' →ₗ[F] C')] [Fintype (C' →ₗ[F] D')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (f : (D →ₗ[F] C) → Complex) (Y : C →ₗ[F] D) :
+    complexLinearMapFourierCoeff
+        (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+        (frequencyReindexEquiv eD eC Y) =
+      complexLinearMapFourierCoeff f Y := by
+  unfold complexLinearMapFourierCoeff
+  have hsum :
+      (∑ M' : D' →ₗ[F] C',
+        f ((mapReindexEquiv eD eC).symm M') *
+          (traceCharacter (frequencyReindexEquiv eD eC Y) M' : Complex)) =
+      ∑ M : D →ₗ[F] C, f M * (traceCharacter Y M : Complex) := by
+    symm
+    apply Fintype.sum_equiv (mapReindexEquiv eD eC).toEquiv
+    intro M
+    simp [traceCharacter, tracePair_reindex]
+  rw [hsum]
+  congr 1
+  exact_mod_cast (Fintype.card_congr (mapReindexEquiv eD eC).toEquiv).symm
+
+theorem traceCharacter_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Module.Finite F D] [Module.Free F D]
+    [AddCommGroup D'] [Module F D'] [Module.Finite F D'] [Module.Free F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (Y : C →ₗ[F] D) (M : D →ₗ[F] C) :
+    traceCharacter (frequencyReindexEquiv eD eC Y)
+      (mapReindexEquiv eD eC M) = traceCharacter Y M := by
+  simp [traceCharacter, tracePair_reindex]
+
+def complexLinearMapRankProjection {D C : Type*}
+    [AddCommGroup D] [Module F D] [Module.Finite F D] [Module.Free F D]
+    [AddCommGroup C] [Module F C]
+    [Fintype (D →ₗ[F] C)] [Fintype (C →ₗ[F] D)]
+    (j : Nat) (f : (D →ₗ[F] C) → Complex) (M : D →ₗ[F] C) : Complex :=
+  ∑ Y : C →ₗ[F] D,
+    if Module.finrank F (LinearMap.range Y) = j then
+      complexLinearMapFourierCoeff f Y * (traceCharacter Y M : Complex)
+    else 0
+
+theorem complexLinearMapRankProjection_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Module.Finite F D] [Module.Free F D]
+    [AddCommGroup D'] [Module F D'] [Module.Finite F D'] [Module.Free F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    [Fintype (D →ₗ[F] C)] [Fintype (C →ₗ[F] D)]
+    [Fintype (D' →ₗ[F] C')] [Fintype (C' →ₗ[F] D')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (j : Nat) (f : (D →ₗ[F] C) → Complex) (M : D →ₗ[F] C) :
+    complexLinearMapRankProjection j
+        (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+        (mapReindexEquiv eD eC M) =
+      complexLinearMapRankProjection j f M := by
+  unfold complexLinearMapRankProjection
+  symm
+  apply Fintype.sum_equiv (frequencyReindexEquiv eD eC).toEquiv
+  intro Y
+  change (if Module.finrank F (LinearMap.range Y) = j then
+      complexLinearMapFourierCoeff f Y * (traceCharacter Y M : Complex)
+    else 0) =
+    if Module.finrank F
+        (LinearMap.range (frequencyReindexEquiv eD eC Y)) = j then
+      complexLinearMapFourierCoeff
+          (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+          (frequencyReindexEquiv eD eC Y) *
+        (traceCharacter (frequencyReindexEquiv eD eC Y)
+          ((mapReindexEquiv eD eC) M) : Complex)
+    else 0
+  rw [complexLinearMapFourierCoeff_reindex eD eC f Y,
+    traceCharacter_reindex eD eC Y M]
+  simp [frequencyReindex_rank]
+
+def complexLinearMapSelectedFilter {D C : Type*}
+    [AddCommGroup D] [Module F D] [Module.Finite F D] [Module.Free F D]
+    [AddCommGroup C] [Module F C]
+    [Fintype (D →ₗ[F] C)] [Fintype (C →ₗ[F] D)]
+    (P : (C →ₗ[F] D) → Prop)
+    (f : (D →ₗ[F] C) → Complex) (M : D →ₗ[F] C) : Complex :=
+  ∑ Y : C →ₗ[F] D,
+    if P Y then complexLinearMapFourierCoeff f Y *
+      (traceCharacter Y M : Complex) else 0
+
+theorem complexLinearMapSelectedFilter_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Module.Finite F D] [Module.Free F D]
+    [AddCommGroup D'] [Module F D'] [Module.Finite F D'] [Module.Free F D']
+    [AddCommGroup C] [Module F C] [AddCommGroup C'] [Module F C']
+    [Fintype (D →ₗ[F] C)] [Fintype (C →ₗ[F] D)]
+    [Fintype (D' →ₗ[F] C')] [Fintype (C' →ₗ[F] D')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (P : (C →ₗ[F] D) → Prop) (P' : (C' →ₗ[F] D') → Prop)
+    (hP : ∀ Y, P' (frequencyReindexEquiv eD eC Y) ↔ P Y)
+    (f : (D →ₗ[F] C) → Complex) (M : D →ₗ[F] C) :
+    complexLinearMapSelectedFilter P'
+        (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+        (mapReindexEquiv eD eC M) =
+      complexLinearMapSelectedFilter P f M := by
+  unfold complexLinearMapSelectedFilter
+  symm
+  apply Fintype.sum_equiv (frequencyReindexEquiv eD eC).toEquiv
+  intro Y
+  change (if P Y then
+      complexLinearMapFourierCoeff f Y * (traceCharacter Y M : Complex)
+    else 0) =
+    if P' (frequencyReindexEquiv eD eC Y) then
+      complexLinearMapFourierCoeff
+          (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+          (frequencyReindexEquiv eD eC Y) *
+        (traceCharacter (frequencyReindexEquiv eD eC Y)
+          ((mapReindexEquiv eD eC) M) : Complex)
+    else 0
+  rw [complexLinearMapFourierCoeff_reindex eD eC f Y,
+    traceCharacter_reindex eD eC Y M]
+  simp [hP]
+
+/-- The actual complex typed line filter commutes with carrier reindexing when
+the selected line and codomain carrier are transported by the same linear
+equivalences. -/
+theorem typedComplexLineFilter_reindex_mapped {n d n' d' : Nat}
+    {A : Submodule F (V d)} {A' : Submodule F (V d')}
+    (B : Submodule F (W n)) (B' : Submodule F (W n'))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (eD : (V d' ⧸ A') ≃ₗ[F] (V d ⧸ A))
+    (eB : B' ≃ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    typedComplexLineFilter B' (L.map eD.symm.toLinearMap)
+      ((eD.symm.finrank_map_eq L).trans hL)
+      (fun M' => f ((mapReindexEquiv eD eB).symm M'))
+      (mapReindexEquiv eD eB M) = typedComplexLineFilter B L hL f M := by
+  simpa [typedComplexLineFilter, mapReindexEquiv, frequencyReindexEquiv,
+    complexCarrierFourierCoeff, complexLinearMapFourierCoeff,
+    complexLinearMapSelectedFilter, typedLineSelected_iff_Selected,
+    Finset.sum_filter] using
+    complexLinearMapSelectedFilter_reindex eD eB
+      (fun Y => typedLineSelected B L hL Y)
+      (fun Y' => typedLineSelected B' (L.map eD.symm.toLinearMap)
+        ((eD.symm.finrank_map_eq L).trans hL) Y')
+      (typedLineSelected_reindex_mapped B B' L hL eD eB)
+      f M
+
+/-- The selected-line filter is unchanged by the actual nested quotient and
+codomain-comap carrier update.  The line is transported forward through
+`nestedDomainEquiv`; the codomain uses the manuscript's `B₁.comap B₂.subtype`.
+The first conjunct records preservation of its one-dimensionality. -/
+theorem nestedSelectedLineFilter_reindex {n d : Nat}
+    (A₂ A₁ : Submodule F (V d))
+    (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (L : Submodule F (V d ⧸ A₁)) (hL : Module.finrank F L = 1)
+    (f : ((V d ⧸ A₁) →ₗ[F] B₁) → Complex)
+    (M : (V d ⧸ A₁) →ₗ[F] B₁) :
+    Module.finrank F
+        (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap) = 1 ∧
+      complexLinearMapSelectedFilter
+        (Selected (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+          (⊤ : Submodule F (NestedCodomain B₁ B₂)))
+        (fun M' => f (nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB M'))
+        ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB).symm M) =
+      complexLinearMapSelectedFilter
+        (Selected L (⊤ : Submodule F B₁)) f M := by
+  let eD := nestedDomainEquiv A₂ A₁ hA
+  let eC := nestedCodomainEquiv B₁ B₂ hB
+  have hdim : Module.finrank F
+      (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap) = 1 :=
+    ((nestedDomainEquiv A₂ A₁ hA).symm.finrank_map_eq L).trans hL
+  have htop : (⊤ : Submodule F B₁).map eC.symm.toLinearMap = ⊤ := by
+    apply top_unique
+    intro x hx
+    exact Submodule.mem_map.mpr ⟨eC x, trivial, by simp [eC]⟩
+  have hP : ∀ Y : B₁ →ₗ[F] (V d ⧸ A₁),
+      Selected (L.map eD.symm.toLinearMap)
+        (⊤ : Submodule F (NestedCodomain B₁ B₂))
+        (frequencyReindexEquiv eD eC Y) ↔ Selected L (⊤ : Submodule F B₁) Y := by
+    intro Y
+    have h := selected_reindex_mapped eD eC L (⊤ : Submodule F B₁) Y
+    simpa [eD, eC, htop] using h
+  refine ⟨hdim, ?_⟩
+  simpa [mapReindexEquiv, frequencyReindexEquiv, LinearEquiv.arrowCongr,
+    eD, eC,
+    nestedCarrierEquiv, nestedDomainEquiv, nestedCodomainEquiv,
+    Finset.sum_filter] using
+      complexLinearMapSelectedFilter_reindex eD eC
+      (Selected L (⊤ : Submodule F B₁))
+      (Selected (L.map eD.symm.toLinearMap)
+        (⊤ : Submodule F (NestedCodomain B₁ B₂)))
+      hP f M
+
+/-- The typed line-filter identity at the actual A14 updated affine base.
+The same flat affine base `T + N ∘ L.mkQ` is pulled back through the nested
+quotient/comap carrier equivalence; the selected line is transported with it.
+This is the concrete operator form used when comparing a typed successor
+restriction with its flattened carrier. -/
+theorem nestedUpdatedBaseTypedLineFilter {n d : Nat}
+    (A₂ A₁ : Submodule F (V d))
+    (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (L : Submodule F (V d ⧸ A₁)) (hL : Module.finrank F L = 1)
+    (f : ((V d ⧸ A₁) →ₗ[F] B₁) → Complex)
+    (T : (V d ⧸ A₁) →ₗ[F] B₁)
+    (N : ((V d ⧸ A₁) ⧸ L) →ₗ[F] B₁) :
+    complexLinearMapSelectedFilter
+      (Selected (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+        (⊤ : Submodule F (NestedCodomain B₁ B₂)))
+      (fun M' => f ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB) M'))
+      ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB).symm
+        (T + N.comp L.mkQ)) =
+    complexLinearMapSelectedFilter (Selected L (⊤ : Submodule F B₁))
+      f (T + N.comp L.mkQ) := by
+  exact (nestedSelectedLineFilter_reindex A₂ A₁ B₁ B₂ hA hB
+    L hL f (T + N.comp L.mkQ)).2
+
+/-- The actual fixed-base typed A14 successor identity, expressed on the
+nested quotient/comap carrier at its updated affine base.  Its proof composes
+the manuscript A14 equality with the concrete nested-carrier filter transport;
+the original function, line, and displacement are unchanged. -/
+theorem nestedUpdatedBaseTypedA14 {n d j : Nat}
+    (A₂ A₁ : Submodule F (V d))
+    (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (L : Submodule F (V d ⧸ A₁)) (hL : Module.finrank F L = 1)
+    (f : ((V d ⧸ A₁) →ₗ[F] B₁) → Complex)
+    (T : (V d ⧸ A₁) →ₗ[F] B₁)
+    (N : ((V d ⧸ A₁) ⧸ L) →ₗ[F] B₁) :
+    BinaryMatrixTypedA14Reduced.reducedComplexRankProjection B₁ L j
+      (typedLineReducedWitness (k := j) B₁ L hL T f) N =
+    complexLinearMapSelectedFilter
+      (Selected (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+        (⊤ : Submodule F (NestedCodomain B₁ B₂)))
+      (fun M' => typedComplexRankProjection A₁ B₁ (j + 1) f
+        ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB) M'))
+      ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB).symm
+        (T + N.comp L.mkQ)) := by
+  calc
+    BinaryMatrixTypedA14Reduced.reducedComplexRankProjection B₁ L j
+        (typedLineReducedWitness (k := j) B₁ L hL T f) N =
+      typedComplexLineFilter B₁ L hL
+        (typedComplexRankProjection A₁ B₁ (j + 1) f)
+        (T + N.comp L.mkQ) :=
+          typed_A14_fixedLine A₁ B₁ L hL T f N
+    _ = complexLinearMapSelectedFilter
+        (Selected (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+          (⊤ : Submodule F (NestedCodomain B₁ B₂)))
+        (fun M' => typedComplexRankProjection A₁ B₁ (j + 1) f
+          ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB) M'))
+        ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB).symm
+          (T + N.comp L.mkQ)) := by
+            simpa [typedComplexLineFilter, complexLinearMapSelectedFilter,
+              complexCarrierFourierCoeff, complexLinearMapFourierCoeff,
+              typedLineSelected_iff_Selected, mapReindexEquiv,
+              LinearEquiv.arrowCongr, nestedCarrierEquiv,
+              nestedDomainEquiv, nestedCodomainEquiv] using
+              (nestedUpdatedBaseTypedLineFilter A₂ A₁ B₁ B₂ hA hB
+                L hL (typedComplexRankProjection A₁ B₁ (j + 1) f) T N).symm
+
+theorem nestedCarrierFourierCoeff {n d : Nat}
+    (A₂ A₁ : Submodule F (V d))
+    (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (f : (NestedDomain A₂ A₁ →ₗ[F] NestedCodomain B₁ B₂) → Complex)
+    (Y : NestedCodomain B₁ B₂ →ₗ[F] NestedDomain A₂ A₁) :
+    complexLinearMapFourierCoeff
+        (fun M' => f ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB).symm M'))
+        (frequencyReindexEquiv
+          (nestedDomainEquiv A₂ A₁ hA).symm
+          (nestedCodomainEquiv B₁ B₂ hB).symm Y) =
+      complexLinearMapFourierCoeff f Y := by
+  simpa [mapReindexEquiv, frequencyReindexEquiv,
+    nestedCarrierEquiv, nestedDomainEquiv, nestedCodomainEquiv] using
+      complexLinearMapFourierCoeff_reindex
+        (nestedDomainEquiv A₂ A₁ hA).symm
+        (nestedCodomainEquiv B₁ B₂ hB).symm f Y
+
+theorem nestedCarrierRankProjection {n d j : Nat}
+    (A₂ A₁ : Submodule F (V d))
+    (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (f : (NestedDomain A₂ A₁ →ₗ[F] NestedCodomain B₁ B₂) → Complex)
+    (M : NestedDomain A₂ A₁ →ₗ[F] NestedCodomain B₁ B₂) :
+    complexLinearMapRankProjection j
+        (fun M' => f ((nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB).symm M'))
+        (nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB M) =
+      complexLinearMapRankProjection j f M := by
+  simpa [mapReindexEquiv, frequencyReindexEquiv,
+    nestedCarrierEquiv, nestedDomainEquiv, nestedCodomainEquiv] using
+      complexLinearMapRankProjection_reindex
+        (nestedDomainEquiv A₂ A₁ hA).symm
+        (nestedCodomainEquiv B₁ B₂ hB).symm j f M
+
+theorem complexCarrierFourierCoeff_reindex {n d n' d' : Nat}
+    (A : Submodule F (V d)) (A' : Submodule F (V d'))
+    (B : Submodule F (W n)) (B' : Submodule F (W n'))
+    (eD : (V d' ⧸ A') ≃ₗ[F] (V d ⧸ A))
+    (eC : B' ≃ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (Y : B →ₗ[F] (V d ⧸ A)) :
+    complexCarrierFourierCoeff A' B'
+        (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+        (frequencyReindexEquiv eD eC Y) =
+      complexCarrierFourierCoeff A B f Y := by
+  simpa [complexCarrierFourierCoeff, complexLinearMapFourierCoeff] using
+    complexLinearMapFourierCoeff_reindex eD eC f Y
+
+end
+end PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
