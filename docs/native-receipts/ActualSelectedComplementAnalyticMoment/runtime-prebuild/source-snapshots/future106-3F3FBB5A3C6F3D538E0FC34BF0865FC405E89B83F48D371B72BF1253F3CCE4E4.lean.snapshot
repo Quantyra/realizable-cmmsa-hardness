@@ -1,0 +1,7 @@
+import PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget
+
+open PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget
+
+#check liftCarrierRestriction
+#check liftCarrierRestriction_order
+#print axioms liftCarrierRestriction_order
