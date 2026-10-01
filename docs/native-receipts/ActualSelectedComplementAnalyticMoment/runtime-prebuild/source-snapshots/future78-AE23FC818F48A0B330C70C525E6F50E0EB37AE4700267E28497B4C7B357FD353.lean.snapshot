@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalFlag
+
+#print axioms PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower_A14
+#print axioms PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower_energy
+#check PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower_endpoints
+#print axioms PvNP.RealizableHardness.ActualTypedABCanonicalFlag.buildCanonicalSourceTower_endpoints
