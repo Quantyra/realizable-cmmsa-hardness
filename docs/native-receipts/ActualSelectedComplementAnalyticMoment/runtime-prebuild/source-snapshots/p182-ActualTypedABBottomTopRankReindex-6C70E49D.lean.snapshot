@@ -1,0 +1,288 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse
+import PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+import PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+import PvNP.RealizableHardness.BinaryMatrixFourier
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+
+namespace PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+
+open ActualTypedABCanonicalDCollapse
+open ActualBinaryMatrixHC46TypedFourierTransport
+open ActualTypedFourierEquivNaturality
+open BinaryMatrixFourier BinaryMatrixA1Phase BinaryMatrixA1CharacterBridge
+open BinaryMatrixTypedA14Line BinaryMatrixTypedA15Transport
+open scoped BigOperators
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+private noncomputable instance bottomTopHomFintype {n d : Nat} :
+    Fintype ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) := by
+  classical
+  letI : Fintype (V d ⧸ (⊥ : Submodule F (V d))) := Fintype.ofFinite _
+  letI : Fintype (⊤ : Submodule F (W n)) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+private noncomputable instance bottomTopFrequencyFintype {n d : Nat} :
+    Fintype ((⊤ : Submodule F (W n)) →ₗ[F]
+      (V d ⧸ (⊥ : Submodule F (V d)))) := by
+  classical
+  letI : Fintype (⊤ : Submodule F (W n)) := Fintype.ofFinite _
+  letI : Fintype (V d ⧸ (⊥ : Submodule F (V d))) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+private noncomputable instance ambientHomFintype {n d : Nat} :
+    Fintype (V d →ₗ[F] W n) := by
+  classical
+  letI : Fintype (V d) := Fintype.ofFinite _
+  letI : Fintype (W n) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+private noncomputable instance ambientFrequencyFintype {n d : Nat} :
+    Fintype (W n →ₗ[F] V d) := by
+  classical
+  letI : Fintype (W n) := Fintype.ofFinite _
+  letI : Fintype (V d) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+/-- The actual bottom quotient and top submodule are linearly equivalent to
+
+the original full domain and codomain. -/
+def bottomTopDomainEquiv {d : Nat} :
+    (V d ⧸ (⊥ : Submodule F (V d))) ≃ₗ[F] V d :=
+  (⊥ : Submodule F (V d)).quotEquivOfEqBot rfl
+
+def bottomTopCodomainEquiv {n : Nat} :
+    (⊤ : Submodule F (W n)) ≃ₗ[F] W n :=
+  Submodule.topEquiv
+
+/-- Transport a bottom/top carrier map to its genuine ambient linear map. -/
+def bottomTopCarrierAmbientHomEquiv {n d : Nat} :
+    ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) ≃ₗ[F]
+        (V d →ₗ[F] W n) :=
+  LinearEquiv.arrowCongr bottomTopDomainEquiv bottomTopCodomainEquiv
+
+@[simp]
+theorem bottomTopCarrierAmbientHomEquiv_apply {n d : Nat}
+    (M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) :
+    bottomTopCarrierAmbientHomEquiv M =
+      (⊤ : Submodule F (W n)).subtype.comp
+        (M.comp (Submodule.mkQ (⊥ : Submodule F (V d)))) := by
+  ext x
+  simp [bottomTopCarrierAmbientHomEquiv, bottomTopDomainEquiv,
+    bottomTopCodomainEquiv, LinearEquiv.arrowCongr_apply]
+
+/-- The actual matrix-valued carrier reindexing. It includes both the
+quotient/subtype Hom equivalence and the standard matrix representation. -/
+def bottomTopAmbientMatrixEquiv {n d : Nat} :
+    ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) ≃ₗ[F] BinaryMatrix n d :=
+  (bottomTopCarrierAmbientHomEquiv (n := n) (d := d)).trans LinearMap.toMatrix'
+
+theorem bottomTopAmbientMatrixEquiv_apply {n d : Nat}
+    (M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) :
+    bottomTopAmbientMatrixEquiv M = LinearMap.toMatrix'
+      ((⊤ : Submodule F (W n)).subtype.comp
+        (M.comp (Submodule.mkQ (⊥ : Submodule F (V d))))) := by
+  simp [bottomTopAmbientMatrixEquiv]
+
+/-- Rank-j projection on the bottom/top carrier is the ambient Hom-space
+rank-j projection after the actual matrix linear equivalence. This is the
+rank-reindex bridge for the source's unrestricted initial carrier. -/
+theorem bottomTopTypedRankProjection_reindex_hom {n d j : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) :
+    typedComplexRankProjection (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) j
+      (fun N => f (bottomTopAmbientMatrixEquiv N)) M =
+    ActualTypedFourierEquivNaturality.complexLinearMapRankProjection j
+      (fun L => f (LinearMap.toMatrix' L))
+      (bottomTopCarrierAmbientHomEquiv M) := by
+  classical
+  have htyped :
+      typedComplexRankProjection (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) j
+        (fun N => f (bottomTopAmbientMatrixEquiv N)) M =
+      ActualTypedFourierEquivNaturality.complexLinearMapRankProjection j
+        (fun N => f (LinearMap.toMatrix'
+          (bottomTopCarrierAmbientHomEquiv N))) M := by
+    have hsignal :
+        (fun N => f (bottomTopAmbientMatrixEquiv N)) =
+        (fun N => f (LinearMap.toMatrix' (bottomTopCarrierAmbientHomEquiv N))) := by
+      funext N
+      rw [bottomTopAmbientMatrixEquiv_apply,
+        ← bottomTopCarrierAmbientHomEquiv_apply]
+    rw [hsignal]
+    unfold BinaryMatrixTypedA14Line.typedComplexRankProjection
+      ActualTypedFourierEquivNaturality.complexLinearMapRankProjection
+      BinaryMatrixA1Complex.complexCarrierFourierCoeff
+      ActualTypedFourierEquivNaturality.complexLinearMapFourierCoeff
+    simp only [Finset.sum_filter]
+  calc
+    _ = ActualTypedFourierEquivNaturality.complexLinearMapRankProjection j
+        (fun N => f (LinearMap.toMatrix'
+          (bottomTopCarrierAmbientHomEquiv N))) M := htyped
+    _ = ActualTypedFourierEquivNaturality.complexLinearMapRankProjection j
+        (fun L => f (LinearMap.toMatrix' L))
+        (bottomTopCarrierAmbientHomEquiv M) := by
+          let eD := bottomTopDomainEquiv (d := d)
+          let eC := bottomTopCodomainEquiv (n := n)
+          let eH := bottomTopCarrierAmbientHomEquiv (n := n) (d := d)
+          have he :
+              ActualTypedFourierEquivNaturality.mapReindexEquiv eD eC = eH.symm := by
+            ext L x
+            simp [ActualTypedFourierEquivNaturality.mapReindexEquiv,
+              eD, eC, eH, bottomTopCarrierAmbientHomEquiv,
+              LinearEquiv.arrowCongr_apply]
+          have hfun :
+              (fun N => f (LinearMap.toMatrix'
+                ((ActualTypedFourierEquivNaturality.mapReindexEquiv eD eC).symm N))) =
+              (fun N => f (LinearMap.toMatrix' (eH N))) := by
+            rw [he]
+            rfl
+          have hpoint :
+              ActualTypedFourierEquivNaturality.mapReindexEquiv eD eC
+                (eH M) = M := by
+            rw [he]
+            exact eH.symm_apply_apply M
+          have hr :=
+            ActualTypedFourierEquivNaturality.complexLinearMapRankProjection_reindex
+              eD eC j (fun L => f (LinearMap.toMatrix' L)) (eH M)
+          rw [hfun, hpoint] at hr
+          exact hr
+
+/-- The transpose-aware frequency linear equivalence sends an ambient matrix
+frequency to the corresponding map from the codomain into the domain. -/
+def ambientFrequencyMatrixEquiv {n d : Nat} :
+    (W n →ₗ[F] V d) ≃ₗ[F] BinaryMatrix n d :=
+  (LinearMap.toMatrix').trans (Matrix.transposeLinearEquiv (Fin d) (Fin n) F F)
+
+theorem ambientFrequencyMatrixEquiv_rank {n d : Nat}
+    (Y : W n →ₗ[F] V d) :
+    (ambientFrequencyMatrixEquiv Y).rank = Module.finrank F (LinearMap.range Y) := by
+  rw [ambientFrequencyMatrixEquiv, LinearEquiv.trans_apply,
+    Matrix.transposeLinearEquiv_apply]
+  change (Matrix.transpose (LinearMap.toMatrix' Y)).rank =
+    Module.finrank F (LinearMap.range Y)
+  rw [Matrix.rank_transpose]
+  rw [Matrix.rank_eq_finrank_range_toLin
+    (LinearMap.toMatrix' Y) (Pi.basisFun F (Fin d)) (Pi.basisFun F (Fin n))]
+  simp [Matrix.toLin_eq_toLin', Matrix.toLin'_toMatrix']
+
+theorem ambientFrequencyMatrixEquiv_character {n d : Nat}
+    (Y : W n →ₗ[F] V d) (M : V d →ₗ[F] W n) :
+    traceCharacter Y M =
+      character (ambientFrequencyMatrixEquiv Y) (LinearMap.toMatrix' M) := by
+  simpa [ambientFrequencyMatrixEquiv, traceCharacter, character,
+    Matrix.transposeLinearEquiv_apply] using
+    BinaryMatrixA1CharacterBridge.traceCharacter_eq_matrix_character
+      (LinearMap.toMatrix' Y).transpose (LinearMap.toMatrix' M)
+
+
+
+
+/-- Reindex the ambient linear-map Fourier coefficient to the standard matrix
+Fourier coefficient. The frequency is transposed because the trace pairing
+uses maps in the reverse direction. -/
+theorem ambientHomFourierCoeff_toMatrix {n d : Nat}
+    (f : BinaryMatrix n d → Complex) (Y : W n →ₗ[F] V d) :
+    ActualTypedFourierEquivNaturality.complexLinearMapFourierCoeff
+      (fun M => f (LinearMap.toMatrix' M)) Y =
+    BinaryMatrixA1Complex.complexFourierCoeff f (ambientFrequencyMatrixEquiv Y) := by
+  classical
+  unfold ActualTypedFourierEquivNaturality.complexLinearMapFourierCoeff
+    BinaryMatrixA1Complex.complexFourierCoeff
+  have hsum :
+      (∑ M : V d →ₗ[F] W n,
+        f (LinearMap.toMatrix' M) *
+          (BinaryMatrixA1Phase.traceCharacter Y M : Complex)) =
+      (∑ X : BinaryMatrix n d,
+        f X * (BinaryMatrixFourier.character
+          (ambientFrequencyMatrixEquiv Y) X : Complex)) := by
+    apply Fintype.sum_equiv (LinearMap.toMatrix').toEquiv
+    intro M
+    rw [ambientFrequencyMatrixEquiv_character]
+    simp
+  rw [hsum]
+  congr 1
+  exact_mod_cast Fintype.card_congr (LinearMap.toMatrix').toEquiv
+
+/-- The ambient linear-map rank projection is the matrix rank projection
+under the matrix representation. -/
+theorem ambientHomRankProjection_toMatrix {n d j : Nat}
+    (f : BinaryMatrix n d → Complex) (M : V d →ₗ[F] W n) :
+    ActualTypedFourierEquivNaturality.complexLinearMapRankProjection j
+      (fun L => f (LinearMap.toMatrix' L)) M =
+    BinaryMatrixComplexA14.complexRankProjection j f (LinearMap.toMatrix' M) := by
+  classical
+  unfold ActualTypedFourierEquivNaturality.complexLinearMapRankProjection
+    BinaryMatrixComplexA14.complexRankProjection
+  simp only [Finset.sum_filter]
+  apply Fintype.sum_equiv (ambientFrequencyMatrixEquiv (n := n) (d := d)).toEquiv
+  intro Y
+  change (if Module.finrank F (LinearMap.range Y) = j then
+      ActualTypedFourierEquivNaturality.complexLinearMapFourierCoeff
+        (fun L => f (LinearMap.toMatrix' L)) Y *
+          (traceCharacter Y M : Complex)
+    else 0) =
+    (if (ambientFrequencyMatrixEquiv Y).rank = j then
+      BinaryMatrixA1Complex.complexFourierCoeff f
+        (ambientFrequencyMatrixEquiv Y) *
+          (BinaryMatrixFourier.character (ambientFrequencyMatrixEquiv Y)
+            (LinearMap.toMatrix' M) : Complex)
+    else 0)
+  rw [ambientFrequencyMatrixEquiv_rank, ambientHomFourierCoeff_toMatrix,
+    ambientFrequencyMatrixEquiv_character]
+
+/-- The bottom/top typed projection is the actual ambient matrix projection
+at the matrix of its quotient/subtype carrier map. -/
+theorem bottomTopTypedRankProjection_eq_ambientMatrix {n d j : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) :
+    typedComplexRankProjection (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) j
+      (fun N => f (bottomTopAmbientMatrixEquiv N)) M =
+    BinaryMatrixComplexA14.complexRankProjection j f
+      (bottomTopAmbientMatrixEquiv M) := by
+  rw [bottomTopTypedRankProjection_reindex_hom,
+    ambientHomRankProjection_toMatrix]
+  simp [bottomTopAmbientMatrixEquiv, bottomTopCarrierAmbientHomEquiv,
+    bottomTopDomainEquiv, bottomTopCodomainEquiv,
+    LinearEquiv.arrowCongr_apply]
+
+/-- The actual source's bottom/top initial signal is therefore its ambient
+rank projection, with the genuine quotient/subtype matrix argument. -/
+theorem bottomTopSourceRankProjection {n d j : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) :
+    typedComplexRankProjection (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) j
+      (filteredCarrierFunction (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) 0 f) M =
+    BinaryMatrixComplexA14.complexRankProjection j f
+      (bottomTopAmbientMatrixEquiv M) := by
+  have hfun :
+      filteredCarrierFunction (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) 0 f =
+      fun N => f (bottomTopAmbientMatrixEquiv N) := by
+    funext N
+    rw [ActualTypedABCanonicalDCollapse.filteredCarrierFunction_bot_top]
+    exact congrArg f (bottomTopAmbientMatrixEquiv_apply N).symm
+  rw [hfun]
+  exact bottomTopTypedRankProjection_eq_ambientMatrix f M
+
+end
+end PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
