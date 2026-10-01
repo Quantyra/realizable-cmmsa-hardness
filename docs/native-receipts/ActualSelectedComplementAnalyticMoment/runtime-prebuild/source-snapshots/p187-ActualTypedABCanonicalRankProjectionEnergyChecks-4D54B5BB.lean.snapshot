@@ -1,0 +1,4 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy
+
+#check PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy.canonical_source_rank_projection_energy
+#print axioms PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionEnergy.canonical_source_rank_projection_energy
