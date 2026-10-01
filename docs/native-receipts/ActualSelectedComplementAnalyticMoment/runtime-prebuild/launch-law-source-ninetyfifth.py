@@ -1,0 +1,20 @@
+import pathlib,json,hashlib,subprocess,sys,runpy
+repo=pathlib.Path(__file__).resolve().parents[4]
+b=repo/'docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild'
+pins=json.loads((b/'law-source-ninetyfifth-pins.json').read_text())
+plan=['ActualBinaryMatrixHC46A18QuotientSamplingLaw', 'ActualBinaryMatrixHC46A18QuotientSamplingLawChecks', 'ActualBinaryMatrixHC46A18SourceConditioning', 'ActualBinaryMatrixHC46A18SourceConditioningChecks']
+pre='lean/PvNP/RealizableHardness/'
+target=pre+plan[-1]+'.lean'
+# Final Checks is preserved below as an explicit source snapshot.
+snapshots={hashlib.sha256(p.read_bytes()).hexdigest().upper():p for p in (b/'source-snapshots').glob('*.snapshot')}
+args=[sys.executable,str(b/'cmmsa_analytic_gcp_independent_batch.py'),'--source',target,'--expected-sha',pins[target],'--reuse-tag','cmmsa_analytic_20260930T040837Z','--independent-batch']
+for n in plan:
+ source=pre+n+'.lean';args+=['--prebuild-source',source]
+ if source!=target:args+=['--prebuild-snapshot',source+'='+str(snapshots[pins[source].upper()].relative_to(repo))]
+for source,h in pins.items():
+ if source==target:continue
+ args+=['--dependency-source',source,'--dependency-sha',h]
+ if source not in [pre+n+'.lean' for n in plan] and h.upper() in snapshots:args+=['--dependency-snapshot',source+'='+str(snapshots[h.upper()].relative_to(repo))]
+if '--execute' in sys.argv:args+=['--execute']
+sys.argv=args[1:]
+runpy.run_path(args[1],run_name='__main__')
