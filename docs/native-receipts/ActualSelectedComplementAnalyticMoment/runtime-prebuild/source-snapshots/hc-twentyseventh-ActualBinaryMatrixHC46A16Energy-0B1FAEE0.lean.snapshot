@@ -1,0 +1,153 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A16LevelBound
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46FinitePeeling
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A16Energy
+
+open BinaryMatrixFourier BinaryMatrixComplexA14 BinaryMatrixComplexA15
+open ActualBinaryMatrixHC46CommonDerivative ActualBinaryMatrixHC46CommonA16
+open ActualBinaryMatrixHC46FinitePeeling ActualBinaryMatrixHC46MixedPeeling
+open ActualBinaryMatrixHC46A16LevelBound ActualFiniteDegreeFourierReconstruction
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private theorem succ_le_two_pow (m : Nat) : m + 1 ≤ 2 ^ m := by
+  induction m with
+  | zero => norm_num
+  | succ m ih =>
+      calc
+        m + 1 + 1 ≤ 2 * (m + 1) := by omega
+        _ ≤ 2 * 2 ^ m := Nat.mul_le_mul_left 2 ih
+        _ = 2 ^ (m + 1) := by simp [pow_succ, Nat.mul_comm]
+
+private theorem count_le_two_pow_sq (D : Nat) : D + 1 ≤ 2 ^ (D ^ 2) := by
+  by_cases hD : D = 0
+  · simp [hD]
+  have hDpos : 1 ≤ D := by omega
+  have hDsquare : D ≤ D ^ 2 := by
+    simpa [pow_two] using (Nat.le_mul_self D)
+  exact (succ_le_two_pow D).trans
+    (Nat.pow_le_pow_right Nat.zero_lt_two hDsquare)
+
+/-- The exact finite-degree A16 energy estimate on coordinate carriers. The
+input is the original function, globally bounded through degree D. Fourier
+support through D and the actual mixed A15 one-level bounds provide every
+summand; no final A16 estimate is a premise. -/
+theorem commonMixedDerivativeChain_energy_le_A16
+    {n d k l D : Nat} {eps : Real}
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (heps : 0 ≤ eps)
+    (hglobal : UpToActualNormSqGlobal D eps f) :
+    uniformMean (fun M => Complex.normSq
+      (commonMixedDerivativeChain k l f tLine tHyp M)) ≤
+        (2 : Real) ^ (11 * D ^ 2) * eps := by
+  let levels : Finset Nat := Finset.range (D + 1)
+  let levelFunction : Nat -> BinaryMatrix n d -> Complex := fun i M =>
+    commonMixedDerivativeChain k l (complexRankProjection i f) tLine tHyp M
+  have hdecomp : (fun X => ∑ i ∈ levels, complexRankProjection i f X) = f := by
+    funext X
+    exact complexRankProjection_reconstruct_range_of_support f hsupport X
+  have hlinear := congrArg
+    (fun g => commonMixedDerivativeChain k l g tLine tHyp) hdecomp
+  have hsum := commonMixedDerivativeChain_finset_sum levels
+    (fun i => complexRankProjection i f) tLine tHyp
+  have hrepresentation :
+      commonMixedDerivativeChain k l f tLine tHyp =
+        fun M => ∑ i ∈ levels, levelFunction i M := by
+    funext M
+    calc
+      commonMixedDerivativeChain k l f tLine tHyp M =
+          commonMixedDerivativeChain k l
+            (fun X => ∑ i ∈ levels, complexRankProjection i f X)
+            tLine tHyp M := by
+              exact congrFun hlinear.symm M
+      _ = ∑ i ∈ levels, levelFunction i M := congrFun hsum M
+  have hterm (i : Nat) (hi : i ∈ levels) :
+      uniformMean (fun M => Complex.normSq (levelFunction i M)) ≤
+        (2 : Real) ^ (10 * D ^ 2) * eps := by
+    have hiD : i ≤ D := by
+      exact Nat.lt_succ_iff.mp (Finset.mem_range.mp hi)
+    by_cases hsmall : i < k + l
+    · have hzero := commonMixedDerivativeChain_low_rank_zero
+        f tLine tHyp hsmall
+      rw [show levelFunction i = fun _ => 0 by
+        funext M
+        exact congrFun hzero M]
+      have hnonneg : (0 : Real) <= (2 : Real) ^ (10 * D ^ 2) * eps :=
+        mul_nonneg (pow_nonneg (by norm_num : (0 : Real) <= 2) _) heps
+      simpa [uniformMean, Complex.normSq] using hnonneg
+    · have hlarge : k + l ≤ i := by omega
+      let r : Nat := i - (k + l)
+      have hrindex : r + (k + l) = i := by
+        dsimp [r]
+        exact Nat.sub_add_cancel hlarge
+      have hprojected : complexRankProjection i f =
+          complexRankProjection (r + (k + l)) f := by
+        rw [hrindex]
+      have hchain : levelFunction i =
+          mixedCoordinateDerivativeChain r k l
+            (complexRankProjection (r + (k + l)) f) tLine tHyp := by
+        dsimp [levelFunction]
+        calc
+          commonMixedDerivativeChain k l
+              (complexRankProjection i f) tLine tHyp =
+            commonMixedDerivativeChain k l
+              (complexRankProjection (r + (k + l)) f) tLine tHyp := by
+                exact congrArg
+                  (fun g => commonMixedDerivativeChain k l g tLine tHyp)
+                  hprojected
+          _ = mixedCoordinateDerivativeChain r k l
+                (complexRankProjection (r + (k + l)) f) tLine tHyp :=
+              (mixedCoordinateDerivativeChain_eq_common_assoc
+                (r := r) f tLine tHyp).symm
+      have hglobali : UpToActualNormSqGlobal i eps f := by
+        intro Q hQ
+        exact hglobal Q (hQ.trans hiD)
+      have hglobalRank : UpToActualNormSqGlobal (r + (k + l)) eps f := by
+        simpa only [hrindex] using hglobali
+      have hlevel := mixedCoordinateDerivativeChain_energy_bound_le_A16_level_envelope
+        (D := D) f tLine tHyp (by rw [hrindex]; exact hiD) heps hglobalRank
+      rw [hchain]
+      simpa [fibreEnergy, uniformMean] using hlevel
+  have hsumEnergy : uniformMean (fun M => Complex.normSq
+      (∑ i ∈ levels, levelFunction i M)) =
+      ∑ i ∈ levels, uniformMean (fun M => Complex.normSq (levelFunction i M)) :=
+    ActualBinaryMatrixHC46CommonA16.complexEnergy_finite_sum_of_orthogonal
+      levels levelFunction (by
+        intro i hi j hj hij
+        exact commonMixedDerivativeChain_input_rank_orthogonal
+          hij f tLine tHyp)
+  calc
+    uniformMean (fun M => Complex.normSq
+        (commonMixedDerivativeChain k l f tLine tHyp M)) =
+      ∑ i ∈ levels, uniformMean (fun M => Complex.normSq (levelFunction i M)) := by
+        exact (congrArg
+          (fun g => uniformMean (fun M => Complex.normSq (g M)))
+          hrepresentation).trans hsumEnergy
+    _ ≤ ∑ i ∈ levels, ((2 : Real) ^ (10 * D ^ 2) * eps) :=
+          Finset.sum_le_sum (by
+            intro i hi
+            exact hterm i hi)
+    _ = (D + 1 : Real) * ((2 : Real) ^ (10 * D ^ 2) * eps) := by
+          simp [levels]
+    _ ≤ (2 : Real) ^ (D ^ 2) *
+          ((2 : Real) ^ (10 * D ^ 2) * eps) := by
+          exact mul_le_mul_of_nonneg_right
+            (by exact_mod_cast count_le_two_pow_sq D)
+            (mul_nonneg (pow_nonneg (by norm_num) _) heps)
+    _ = ((2 : Real) ^ (D ^ 2) * (2 : Real) ^ (10 * D ^ 2)) * eps := by
+          ring
+    _ = (2 : Real) ^ (D ^ 2 + 10 * D ^ 2) * eps := by
+          rw [← pow_add]
+    _ = (2 : Real) ^ (11 * D ^ 2) * eps := by
+          congr 1
+          ring
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A16Energy
