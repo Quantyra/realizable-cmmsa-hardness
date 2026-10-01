@@ -1,0 +1,119 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.carrierFunctionCoordinate {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n))
+  (g :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝]
+        ↥B) →
+      ℂ)
+  (X :
+    PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝ ↥B)
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d ⧸ A))) :
+  ℂ
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.carrierFunctionCoordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actual_global_iff_typed_global {n d r : ℕ} {ε : ℝ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n))
+  (g :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝]
+        ↥B) →
+      ℂ) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal r ε (carrierFunctionCoordinate A B g) ↔
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.UpToTypedNormSqGlobal A B r ε g
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actual_global_iff_typed_global' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actual_global_to_typed_global {n d r : ℕ} {ε : ℝ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n))
+  (g :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝]
+        ↥B) →
+      ℂ)
+  (hg : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal r ε (carrierFunctionCoordinate A B g)) :
+  PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.UpToTypedNormSqGlobal A B r ε g
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actual_global_to_typed_global' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actualDerivativeCoordinate {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (X :
+    PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝ ↥B)
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d ⧸ A))) :
+  ℂ
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actualDerivativeCoordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actual_derivative_global_iff_typed {n d r : ℕ}
+  {ε : ℝ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal r ε (actualDerivativeCoordinate A B T f) ↔
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.UpToTypedNormSqGlobal A B r ε
+      (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actual_derivative_global_iff_typed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actualDerivativeCoordinate_top_eq_fixedDomainDerivativeCoordinate
+  {n d : ℕ}
+  (U :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝ d))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  actualDerivativeCoordinate U ⊤ T f =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.fixedDomainDerivativeCoordinate U T f
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actualDerivativeCoordinate_top_eq_fixedDomainDerivativeCoordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actualAffineRestriction_order_formula {n d : ℕ}
+  (P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) :
+  P.order =
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝ ↥P.domainFixed +
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.W✝ n ⧸ P.codomainVariation)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.actualAffineRestriction_order_formula' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
