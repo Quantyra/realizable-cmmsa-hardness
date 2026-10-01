@@ -1,0 +1,90 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+import PvNP.RealizableHardness.BinaryMatrixActualAffine
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeGlobalTransfer
+
+/-! Generic coordinate realization of actual affine derivatives on a
+typed quotient carrier, with the order formula exposed for the A17
+order-one split. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeGlobalTransfer
+
+noncomputable section
+set_option autoImplicit false
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- Standard binary-matrix coordinates for a function on the quotient
+hom-space from `V d / A` to the codomain subspace `B`. -/
+def carrierFunctionCoordinate {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (X : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A))) : Complex :=
+  g ((carrierMatrixEquiv A B).symm X)
+
+/-- Actual-globalness in standard coordinates is exactly typed
+globalness on the quotient carrier. -/
+theorem actual_global_iff_typed_global {n d r : Nat} {ε : Real}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : ((V d ⧸ A) →ₗ[F] B) → Complex) :
+    UpToActualNormSqGlobal r ε (carrierFunctionCoordinate A B g) ↔
+      UpToTypedNormSqGlobal A B r ε g := by
+  exact (typed_global_iff_coordinate A B g).symm
+
+/-- In particular, every original actual-global hypothesis transfers to
+the typed quotient carrier without changing its order or energy parameter. -/
+theorem actual_global_to_typed_global {n d r : Nat} {ε : Real}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (hg : UpToActualNormSqGlobal r ε (carrierFunctionCoordinate A B g)) :
+    UpToTypedNormSqGlobal A B r ε g :=
+  (actual_global_iff_typed_global A B g).mp hg
+
+/-- Standard matrix coordinates of the actual filtered derivative with
+arbitrary domain and codomain endpoints and affine base. -/
+def actualDerivativeCoordinate {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (X : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A))) : Complex :=
+  filteredCarrierFunction A B T f ((carrierMatrixEquiv A B).symm X)
+
+/-- The original actual-global derivative premise transfers to its typed
+quotient carrier for arbitrary `A`, `B`, and affine base `T`. -/
+theorem actual_derivative_global_iff_typed {n d r : Nat} {ε : Real}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex) :
+    UpToActualNormSqGlobal r ε (actualDerivativeCoordinate A B T f) ↔
+      UpToTypedNormSqGlobal A B r ε (filteredCarrierFunction A B T f) := by
+  exact actual_global_iff_typed_global A B (filteredCarrierFunction A B T f)
+
+/-- The generic derivative coordinate specializes definitionally to the
+existing fixed-domain coordinate used by the universal line-derivative
+hypothesis. -/
+theorem actualDerivativeCoordinate_top_eq_fixedDomainDerivativeCoordinate
+    {n d : Nat} (U : Submodule F (V d)) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) :
+    actualDerivativeCoordinate U (⊤ : Submodule F (W n)) T f =
+      fixedDomainDerivativeCoordinate U T f := rfl
+
+/-- The actual restriction order is the sum of its fixed-domain dimension
+and the codimension of its codomain variation. -/
+theorem actualAffineRestriction_order_formula {n d : Nat}
+    (P : ActualAffineRestriction n d) :
+    P.order = Module.finrank F P.domainFixed +
+      Module.finrank F ((W n) ⧸ P.codomainVariation) := rfl
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
