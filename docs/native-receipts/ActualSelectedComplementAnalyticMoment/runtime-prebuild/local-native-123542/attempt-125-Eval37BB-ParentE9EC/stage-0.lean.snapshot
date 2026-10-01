@@ -1,0 +1,52 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel
+
+/-! Pointwise evaluation of the canonical quotient-Hom coordinate of an
+actual affine fibre. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreEvaluation
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreModel
+open PvNP.RealizableHardness.MatrixLiftNominalDomain
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- The quotient-Hom coordinate of an actual fibre point, evaluated at the
+quotient of an ambient vector, is its affine difference on that vector. -/
+theorem actualFibreQuotientHomEquiv_apply_mkQ {n d : Nat}
+    (Q : ActualAffineRestriction n d) (Y : BinaryMatrix n d)
+    (hY : Y ∈ Q.fibre) (v : Fin d → ZMod 2) :
+    (((actualFibreQuotientHomEquiv Q) ⟨Y, hY⟩)
+      (Q.domainFixed.mkQ v) : Fin n → ZMod 2) =
+        (Y - Q.base).mulVec v := by
+  classical
+  let q := quotientHomEquiv Q.domainFixed Q.codomainVariation
+  let c : {g : (Fin d → ZMod 2) →ₗ[ZMod 2] (Fin n → ZMod 2) //
+      g.comp Q.domainFixed.subtype = 0 ∧
+        LinearMap.range g ≤ Q.codomainVariation} :=
+    ⟨Matrix.toLin' (Y - Q.base),
+      (actualAffineDifference_iff Q Y).mp hY⟩
+  have hcomposite :
+      actualFibreQuotientHomEquiv Q ⟨Y, hY⟩ = q.symm c := by
+    with_unfolding_all
+      apply congrArg q.symm
+      apply Subtype.ext
+      apply LinearMap.ext
+      intro x
+      change ((Matrix.toLin' Y - Matrix.toLin' Q.base) x) =
+        Matrix.toLin' (Y - Q.base) x
+      simp only [Matrix.toLin'_apply, Matrix.sub_mulVec]
+  have heval := congrArg
+    (fun z : ConstrainedMap Q.domainFixed Q.codomainVariation => z.1 v)
+    (q.apply_symm_apply c)
+  change Q.codomainVariation.subtype ((q.symm c) (Q.domainFixed.mkQ v)) =
+    c.1 v at heval
+  rw [hcomposite]
+  change ((q.symm c) (Q.domainFixed.mkQ v) : Fin n → ZMod 2) = _
+  exact heval
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46ActualFibreEvaluation
