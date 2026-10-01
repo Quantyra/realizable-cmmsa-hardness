@@ -1,0 +1,38 @@
+✖ [3048/3048] Building PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning (38s)
+trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/packages/cslib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean -o /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.olean -i /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/lib/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.ilean -c /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.c --setup /home/dfredriksen_quantyra_org/cmmsa_analytic_20260930T040837Z/.lake/build/ir/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.setup.json --json
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:57:4: Unused tactic linter: `change dualRestriction A (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:60:4: Unused tactic linter: `change dualRestriction A (δ.1 + φ₀) = ψ` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:110:4: Unused tactic linter: `change dualRestrictionAt A w (φ.1 - φ₀) = 0` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:113:4: Unused tactic linter: `change dualRestrictionAt A w (δ.1 + φ₀) = z` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A18Conditioning.lean:365:10: Type mismatch: After simplification, term
+  Eq.symm (Equiv.sum_comp e.symm fun f => g ↑f)
+ has type
+  @Eq ℝ (∑ i, g ↑i)
+    (∑ x,
+      g
+        ↑({
+              toFun := fun p =>
+                ⟨(LinearEquiv.ofBijective
+                        { toFun := fun f => (f ∘ₗ Submodule.inclusion ⋯, f ⟨w, ⋯⟩), map_add' := ⋯, map_smul' := ⋯ }
+                        ⋯).symm
+                    ↑p,
+                  ⋯⟩,
+              invFun := fun f => ⟨(↑f ∘ₗ Submodule.inclusion ⋯, ↑f ⟨w, ⋯⟩), ⋯⟩, left_inv := ⋯, right_inv := ⋯ }
+            x))
+but is expected to have type
+  @Eq ℝ (∑ f, g ↑f)
+    (∑ p,
+      g
+        ((LinearEquiv.ofBijective
+              { toFun := fun f => (f ∘ₗ Submodule.inclusion ⋯, f ⟨w, ⋯⟩), map_add' := ⋯, map_smul' := ⋯ } ⋯).symm
+          ↑p))
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
