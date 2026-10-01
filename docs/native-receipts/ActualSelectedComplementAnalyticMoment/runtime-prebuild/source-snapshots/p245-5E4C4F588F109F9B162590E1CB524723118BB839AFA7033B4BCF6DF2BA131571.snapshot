@@ -1,0 +1,111 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition
+import PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+
+/-! Frequency and selected-filter covariance for the actual A18 domain draw.
+The chosen ambient equivalence carries the canonical final-coordinate line to
+the specified nonzero line; both the frequency predicate and matrix draw are
+transported by that same equivalence. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17AdaptedLineDecomposition
+open PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+open BinaryMatrixFourier BinaryMatrixHybridSelector
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d -> F
+private abbrev W (n : Nat) := Fin n -> F
+
+private noncomputable instance homFintype {n d : Nat} :
+    Fintype (V d ->ₗ[F] W n) := by
+  classical
+  letI : Fintype (V d) := Fintype.ofFinite _
+  letI : Fintype (W n) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+private noncomputable instance frequencyFintype {n d : Nat} :
+    Fintype (W n ->ₗ[F] V d) := by
+  classical
+  letI : Fintype (W n) := Fintype.ofFinite _
+  letI : Fintype (V d) := Fintype.ofFinite _
+  exact FunLike.fintype _
+
+/-- The selected-frequency predicate is transported from the last-coordinate
+line to `span {v}` by the same map used to pull back matrices. -/
+theorem domainLineSelected_reindex {n d : Nat}
+    (e : V (d + 1) ≃ₗ[F] V (d + 1)) (v : V (d + 1))
+    (hv : e (lastVector d) = v) (Y : W n ->ₗ[F] V (d + 1)) :
+    Selected (Submodule.span F ({v} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n))
+        (frequencyReindexEquiv e (LinearEquiv.refl F (W n)) Y) ↔
+      Selected (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n)) Y := by
+  let A₀ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({lastVector d} : Set (V (d + 1)))
+  let Aᵥ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({v} : Set (V (d + 1)))
+  have hinv : e.symm v = lastVector d := by
+    rw [← hv]
+    exact e.symm_apply_apply _
+  have hA : Aᵥ.map e.symm.toLinearMap = A₀ := by
+    dsimp [Aᵥ, A₀]
+    rw [Submodule.map_span]
+    congr 1
+    ext x
+    simp [hinv]
+  have hB : (⊤ : Submodule F (W n)).map
+      (LinearEquiv.refl F (W n)).symm.toLinearMap = ⊤ := by
+    simp
+  have h := selected_reindex_mapped e (LinearEquiv.refl F (W n))
+    A₀ (⊤ : Submodule F (W n)) Y
+  simpa [A₀, Aᵥ, hA, hB] using h
+
+/-- The full selected Fourier filter on linear maps is covariant under the
+actual domain pullback, with no change to the normalized finite draw. -/
+theorem complexLinearMapSelectedFilter_domainPull {n : Nat}
+    (d : Nat) (e : V (d + 1) ≃ₗ[F] V (d + 1))
+    (v : V (d + 1)) (hv : e (lastVector d) = v)
+    (g : (V (d + 1) ->ₗ[F] W n) -> Complex)
+    (M : V (d + 1) ->ₗ[F] W n) :
+    complexLinearMapSelectedFilter
+      (Selected (Submodule.span F ({v} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n)))
+      (fun N => g ((mapReindexEquiv e (LinearEquiv.refl F (W n))).symm N))
+      (mapReindexEquiv e (LinearEquiv.refl F (W n)) M) =
+    complexLinearMapSelectedFilter
+      (Selected (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n))) g M := by
+  classical
+  let A₀ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({lastVector d} : Set (V (d + 1)))
+  let Aᵥ : Submodule F (V (d + 1)) :=
+    Submodule.span F ({v} : Set (V (d + 1)))
+  have hP : ∀ Y : W n ->ₗ[F] V (d + 1),
+      Selected Aᵥ (⊤ : Submodule F (W n))
+          (frequencyReindexEquiv e (LinearEquiv.refl F (W n)) Y) ↔
+        Selected A₀ (⊤ : Submodule F (W n)) Y := by
+    intro Y
+    exact domainLineSelected_reindex e v hv Y
+  simpa [A₀, Aᵥ, mapReindexEquiv, frequencyReindexEquiv] using
+    complexLinearMapSelectedFilter_reindex e (LinearEquiv.refl F (W n))
+      (Selected A₀ (⊤ : Submodule F (W n)))
+      (Selected Aᵥ (⊤ : Submodule F (W n))) hP g M
+
+/-- Rank projections and the selected-frequency predicate use the same
+domain-coordinate pullback. -/
+theorem complexRankProjection_domainPull {n d j : Nat}
+    (e : V (d + 1) ≃ₗ[F] V (d + 1))
+    (f : BinaryMatrix n (d + 1) -> Complex)
+    (M : BinaryMatrix n (d + 1)) :
+    complexRankProjection j (fun N => f (domainPullMatrix e.symm N))
+        (domainPullMatrix e M) = complexRankProjection j f M :=
+  ActualBinaryMatrixHC46A17AdaptedLineDecomposition.complexRankProjection_domainPull
+    e f M
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainFrequencyCovariance

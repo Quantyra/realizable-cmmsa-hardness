@@ -1,0 +1,203 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixComplexA14
+import PvNP.RealizableHardness.BinaryMatrixLineTranslation
+
+/-! A coordinate-line bridge between the actual A18 functional draw and the
+complex A13 line average.  This module records the exact last-coordinate
+specialization, including the finite-measure reindexing; it does not identify
+an arbitrary line without transporting it by an adapted basis. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw
+open PvNP.RealizableHardness.BinaryMatrixComplexA14
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixLineTranslation
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1Composition
+open PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
+open BinaryMatrixFourier BinaryMatrixHybridSelector
+open scoped BigOperators
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : ℕ) := Fin d → F
+private abbrev W (n : ℕ) := Fin n → F
+
+def lastVector (d : ℕ) : V (d + 1) := Pi.single (Fin.last d) (1 : F)
+
+def lastCoordinateSliceEquiv (d : ℕ) :
+    {u : V (d + 1) // dotProduct (lastVector d) u = 1} ≃ V d where
+  toFun u j := u.1 j.castSucc
+  invFun φ := ⟨Fin.snoc φ 1, by
+    simp [lastVector, dotProduct, Fin.sum_univ_castSucc]⟩
+  left_inv u := by
+    apply Subtype.ext
+    funext j
+    induction j using Fin.lastCases with
+    | last => simpa [lastVector, dotProduct, Fin.sum_univ_castSucc] using u.2.symm
+    | cast j => simp
+  right_inv φ := by
+    funext j
+    simp
+
+def functionalsAtLastEquiv (d : ℕ) :
+    FunctionalsAt (lastVector d) ≃ V d :=
+  (functionalsAtVectorEquiv (lastVector d)).trans
+    (lastCoordinateSliceEquiv d)
+
+theorem actualA18RankOne_last_eq_lineShift {n d : ℕ}
+    (ψ : FunctionalsAt (lastVector d)) (w : W n) :
+    actualA18RankOne ψ.1 w = lineShift w (functionalsAtLastEquiv d ψ) := by
+  ext i j
+  have hψlast : ψ.1 (Pi.single (Fin.last d) (1 : F)) = 1 := by
+    simpa [lastVector] using ψ.2
+  induction j using Fin.lastCases with
+  | last =>
+      simp [actualA18RankOne_entry, lineShift, lineFunctional, hψlast]
+  | cast j =>
+      simp [actualA18RankOne_entry, lineShift, lineFunctional,
+        functionalsAtLastEquiv, lastCoordinateSliceEquiv,
+        functionalsAtVectorEquiv, functionalVectorEquiv_apply]
+
+/-- The actual uniform draw `(psi,w)` at the last coordinate is exactly the
+`(phi,w)` line-translation draw, with no change to its finite law. -/
+theorem actualA18Average_last_eq_complexLineAverage {n d : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℂ) (M : BinaryMatrix n (d + 1)) :
+    actualA18Average (lastVector d) f M = complexLineAverage f M := by
+  classical
+  let e : FunctionalsAt (lastVector d) × W n ≃ V d × W n :=
+    Equiv.prodCongr (functionalsAtLastEquiv d) (Equiv.refl (W n))
+  have hsum :
+      (∑ p : FunctionalsAt (lastVector d) × W n,
+        f (M + actualA18RankOne p.1.1 p.2)) =
+      ∑ p : V d × W n, f (M + lineShift p.2 p.1) := by
+    calc
+      _ = ∑ p : FunctionalsAt (lastVector d) × W n,
+          f (M + lineShift (e p).2 (e p).1) := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        rcases p with ⟨ψ, w⟩
+        exact congrArg f (congrArg (fun X : BinaryMatrix n (d + 1) => M + X)
+          (actualA18RankOne_last_eq_lineShift ψ w))
+      _ = ∑ p : V d × W n, f (M + lineShift p.2 p.1) :=
+        Equiv.sum_comp e (fun p : V d × W n => f (M + lineShift p.2 p.1))
+  have hcard :
+      Fintype.card (FunctionalsAt (lastVector d) × W n) =
+        Fintype.card (V d × W n) := Fintype.card_congr e
+  unfold actualA18Average complexLineAverage
+  rw [hsum, hcard]
+
+theorem selected_lastLine_iff_hybridLineSelected {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) :
+    Selected (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+      (⊤ : Submodule F (W n)) Y.transpose.toLin' ↔ hybridLineSelected Y := by
+  unfold Selected hybridLineSelected
+  constructor
+  · rintro ⟨hspan, hpre⟩
+    exact (Submodule.span_singleton_le_iff_mem _ _).mp hspan
+  · intro h
+    refine ⟨(Submodule.span_singleton_le_iff_mem _ _).mpr h, ?_⟩
+    intro w hw
+    exact Submodule.mem_top
+
+theorem complexAmbientHybridFilter_lastLine_eq {n d : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℂ) (M : BinaryMatrix n (d + 1)) :
+    complexAmbientHybridFilter
+        (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n)) f M = complexHybridLineFilter f M := by
+  classical
+  unfold complexAmbientHybridFilter complexHybridLineFilter
+  have hsets :
+      (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter
+          (fun Y => Selected
+            (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+            (⊤ : Submodule F (W n)) Y.transpose.toLin') =
+        (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter
+          hybridLineSelected := by
+    ext Y
+    simp [selected_lastLine_iff_hybridLineSelected]
+  simp_rw [selected_lastLine_iff_hybridLineSelected]
+  rw [Finset.sum_filter]
+
+theorem complexHybridLineFilter_rankProjection_eq {n d j : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℂ) (M : BinaryMatrix n (d + 1)) :
+    complexHybridLineFilter (complexRankProjection j f) M =
+    complexRankProjection j f M -
+        (2 : ℂ) ^ j * complexLineAverage (complexRankProjection j f) M := by
+  have hpow : (2 : ℂ) ^ j = ((2 : ℝ) ^ j : ℂ) := by norm_cast
+  apply Complex.ext
+  · rw [hpow]
+    simp only [Complex.sub_re, Complex.mul_re, Complex.ofReal_re,
+      Complex.ofReal_im, sub_zero, mul_zero, zero_mul, add_zero]
+    rw [complexRankProjection_re, complexLineAverage_re]
+    unfold complexHybridLineFilter
+    rw [Complex.re_sum]
+    have hfilter :
+        (∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter
+          hybridLineSelected,
+          (complexFourierCoeff (complexRankProjection j f) Y *
+            (character Y M : ℂ)).re) =
+        hybridLineFilter (rankProjection j (fun X => (f X).re)) M := by
+      unfold hybridLineFilter
+      apply Finset.sum_congr rfl
+      intro Y hY
+      simp [complexFourierCoeff_re, complexRankProjection_re,
+        Complex.mul_re]
+    rw [hfilter]
+    have h := hybridLineFilter_rankProjection_eq_sub_translation (j := j)
+      (fun X => (f X).re) M
+    simpa [Complex.mul_re] using h
+  · rw [hpow]
+    simp only [Complex.sub_im, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, sub_zero, mul_zero, zero_mul, add_zero]
+    rw [complexRankProjection_im, complexLineAverage_im]
+    unfold complexHybridLineFilter
+    rw [Complex.im_sum]
+    have hfilter :
+        (∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter
+          hybridLineSelected,
+          (complexFourierCoeff (complexRankProjection j f) Y *
+            (character Y M : ℂ)).im) =
+        hybridLineFilter (rankProjection j (fun X => (f X).im)) M := by
+      unfold hybridLineFilter
+      apply Finset.sum_congr rfl
+      intro Y hY
+      simp [complexFourierCoeff_im, complexRankProjection_im,
+        Complex.mul_im]
+    rw [hfilter]
+    have h := hybridLineFilter_rankProjection_eq_sub_translation (j := j)
+      (fun X => (f X).im) M
+    simpa [Complex.mul_im] using h
+
+/-- Exact homogeneous A13 decomposition in the canonical last-coordinate
+case.  The premise says precisely that `f` is its rank-D Fourier component. -/
+theorem homogeneous_A13_last_coordinate {n d D : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℂ)
+    (hD : complexRankProjection D f = f)
+    (M : BinaryMatrix n (d + 1)) :
+    f M = complexAmbientHybridFilter
+      (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+      (⊤ : Submodule F (W n)) f M +
+      (2 : ℂ) ^ D * actualA18Average (lastVector d) f M := by
+  have hproj := complexHybridLineFilter_rankProjection_eq (j := D) f M
+  rw [hD] at hproj
+  rw [← actualA18Average_last_eq_complexLineAverage] at hproj
+  calc
+    f M = (f M - (2 : ℂ) ^ D * actualA18Average (lastVector d) f M) +
+        (2 : ℂ) ^ D * actualA18Average (lastVector d) f M := by ring
+    _ = complexAmbientHybridFilter
+        (Submodule.span F ({lastVector d} : Set (V (d + 1))))
+        (⊤ : Submodule F (W n)) f M +
+        (2 : ℂ) ^ D * actualA18Average (lastVector d) f M := by
+      rw [complexAmbientHybridFilter_lastLine_eq]
+      rw [hproj]
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition
