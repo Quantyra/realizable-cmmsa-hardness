@@ -1,0 +1,16 @@
+import PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean
+
+open PvNP.RealizableHardness.ActualTypedABOriginalGlobalBridgeClean
+
+#check bottomTopActualRestriction
+#check bottomTop_matrix_sub_mulVec
+#check bottomTop_actual_mem_fibre_iff
+#check bottomTop_actual_fibre_image
+#check bottomTop_actual_fibre_energy
+#check actual_global_to_bottomTop_typed
+
+#print axioms bottomTop_matrix_sub_mulVec
+#print axioms bottomTop_actual_mem_fibre_iff
+#print axioms bottomTop_actual_fibre_image
+#print axioms bottomTop_actual_fibre_energy
+#print axioms actual_global_to_bottomTop_typed
