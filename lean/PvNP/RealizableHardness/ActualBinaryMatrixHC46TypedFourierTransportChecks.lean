@@ -1,0 +1,25 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransportChecks
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+
+#check carrierFrequencyEquiv
+#check carrierFrequency_toLin
+#check carrierMatrix_toLin
+#check carrierFrequency_tracePair
+#check carrierFrequency_rank
+#check carrierFrequency_character
+#check carrierFourierCoeff_coordinate
+#check CarrierComplexFourierSupportedThrough
+#check carrierFourier_support_iff_coordinate
+
+#print axioms carrierFrequency_toLin
+#print axioms carrierMatrix_toLin
+#print axioms carrierFrequency_tracePair
+#print axioms carrierFrequency_rank
+#print axioms carrierFrequency_character
+#print axioms carrierFourierCoeff_coordinate
+#print axioms carrierFourier_support_iff_coordinate
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransportChecks
