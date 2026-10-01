@@ -1,0 +1,47 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:65:2: warning: Unused tactic linter: `with_unfolding_all
+  change
+    UpToActualNormSqGlobal (r - 1) ε
+      (fun X =>
+        filteredCarrierFunction U (⊤ : Submodule F (W n)) T f
+          ((carrierMatrixEquiv U (⊤ : Submodule F (W n))).symm X))` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:130:16: error: Type mismatch: After simplification, term
+  Eq.symm (Finset.sum_subtype_eq_sum_filter fun M => Complex.normSq (filteredCarrierFunction U ⊤ T f M))
+ has type
+  ∑ x ∈ S with x ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f x) =
+    ∑ x ∈ Finset.subtype (fun M => M ∈ Q.fibre) S, Complex.normSq (filteredCarrierFunction U ⊤ T f ↑x)
+but is expected to have type
+  ∑ M, Complex.normSq (filteredCarrierFunction U ⊤ T f ↑M) =
+    ∑ M ∈ S with M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:136:20: error: Tactic `assumption` failed
+
+n d r : ℕ
+ε : ℝ
+U : Submodule F (V d)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hderiv : UpToActualNormSqGlobal (r - 1) ε (fixedDomainDerivativeCoordinate U T f)
+Q : CarrierRestriction U ⊤
+hQ : Q.order ≤ r - 1
+g : BinaryMatrix n d → ℝ := fun X => Complex.normSq (complexAmbientHybridFilter U ⊤ f X)
+hcarrier : (∑ M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M)) / ↑Q.fibre.card ≤ ε
+S : Finset (V d ⧸ U →ₗ[F] ↥⊤) := Finset.univ
+hf : {M | M ∈ Q.fibre} = Q.fibre
+⊢ ∑ M ∈ S with M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M) =
+    ∑ M ∈ Q.fibre, Complex.normSq (filteredCarrierFunction U ⊤ T f M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:172:16: error: Type mismatch: After simplification, term
+  Eq.symm (Finset.sum_subtype_eq_sum_filter g)
+ has type
+  ∑ x with x ∈ (liftCarrierRestriction U ⊤ T Q).fibre, g x = ∑ x, g ↑x
+but is expected to have type
+  ∑ M, g ↑M = ∑ M with M ∈ (liftCarrierRestriction U ⊤ T Q).fibre, g M
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17DerivativeGlobalTransfer.lean:195:2: error: Type mismatch: After simplification, term
+  hsub
+ has type
+  @LE.le ℝ Real.instLE ((∑ M ∈ Q.fibre.attach, Complex.normSq (filteredCarrierFunction U ⊤ T f ↑M)) / ↑Q.fibre.card) ε
+but is expected to have type
+  @LE.le ℝ Real.instLE
+    ((∑ x ∈ Q.fibre.attach, Complex.normSq (complexAmbientHybridFilter U ⊤ f (liftCarrierMatrix U ⊤ T ↑x))) /
+      ↑Q.fibre.card)
+    ε
