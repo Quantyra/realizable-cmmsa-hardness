@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18CodomainNormalEnergy
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18CodomainNormalEnergy
+
+#check actualA18_parent_fibre_energy_le_two_codomain_normal
+#print axioms actualA18_parent_fibre_energy_le_two_codomain_normal
