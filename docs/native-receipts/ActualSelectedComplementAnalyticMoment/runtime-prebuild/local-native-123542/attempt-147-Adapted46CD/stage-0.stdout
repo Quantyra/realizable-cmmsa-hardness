@@ -1,0 +1,162 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:37:26: warning: This simp argument is unused:
+  Matrix.toLin'_toMatrix'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainPullMatrix, Matrix.toLin'_apply', LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:44:26: warning: This simp argument is unused:
+  Matrix.toLin'_toMatrix'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [domainPullMatrix, Matrix.toLin'_apply', LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:54:2: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:80:45: error: unsolved goals
+n d j : ℕ
+e : V d ≃ₗ[F] V d
+f : BinaryMatrix n d → ℂ
+M : BinaryMatrix n d
+g : (V d →ₗ[F] W n) → ℂ := fun L => f (LinearMap.toMatrix' L)
+g' : (V d →ₗ[F] W n) → ℂ := fun L => f (domainPullMatrix e.symm (LinearMap.toMatrix' L))
+emap : (V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝]
+    W n) ≃ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝]
+  V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] W n :=
+  mapReindexEquiv e (LinearEquiv.refl F (W n))
+L : V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] W n
+⊢ f
+      (LinearMap.toMatrix'
+        ((e.symm.arrowCongr (LinearEquiv.refl PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝ (W n))).symm
+          L)) =
+    f (LinearMap.toMatrix' (L ∘ₗ ↑e.symm))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:91:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  complexRankProjection ?m.243 ?f (LinearMap.toMatrix' ?M)
+in the target expression
+  complexLinearMapRankProjection j g' (Matrix.toLin' M ∘ₗ ↑e) =
+    complexRankProjection j (fun N => f (domainPullMatrix e.symm N)) (domainPullMatrix e M)
+
+n d j : ℕ
+e : V d ≃ₗ[F] V d
+f : BinaryMatrix n d → ℂ
+M : BinaryMatrix n d
+g : (V d →ₗ[F] W n) → ℂ := fun L => f (LinearMap.toMatrix' L)
+g' : (V d →ₗ[F] W n) → ℂ := fun L => f (domainPullMatrix e.symm (LinearMap.toMatrix' L))
+emap : (V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝]
+    W n) ≃ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝]
+  V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] W n :=
+  mapReindexEquiv e (LinearEquiv.refl F (W n))
+hfun : ∀ (L : V d →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] W n), g (emap.symm L) = g' L
+hmain :
+  complexLinearMapRankProjection j (fun M' => g ((mapReindexEquiv e (LinearEquiv.refl F (W n))).symm M'))
+      ((mapReindexEquiv e (LinearEquiv.refl F (W n))) (Matrix.toLin' M)) =
+    complexLinearMapRankProjection j g (Matrix.toLin' M)
+⊢ complexLinearMapRankProjection j g' (Matrix.toLin' M ∘ₗ ↑e) =
+    complexRankProjection j (fun N => f (domainPullMatrix e.symm N)) (domainPullMatrix e M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:100:2: error: Type mismatch: After simplification, term
+  hmain
+ has type
+  complexLinearMapRankProjection j
+      (fun M' =>
+        g
+          ((e.symm.arrowCongr
+                (LinearEquiv.refl PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝ (W n))).symm
+            M'))
+      ((e.symm.arrowCongr (LinearEquiv.refl PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝ (W n)))
+        (Matrix.toLin' M)) =
+    complexLinearMapRankProjection j g (Matrix.toLin' M)
+but is expected to have type
+  complexLinearMapRankProjection j g' (Matrix.toLin' M ∘ₗ ↑e) = complexLinearMapRankProjection j g (Matrix.toLin' M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:149:4: error: Type mismatch: After simplification, term
+  congrArg (fun q => actualA18RankOne q w) hψ
+ has type
+  actualA18RankOne ((↑ψ ∘ₗ ↑e) ∘ₗ ↑e.symm) w = actualA18RankOne (↑ψ) w
+but is expected to have type
+  actualA18RankOne (↑ψ) w = actualA18RankOne ((↑ψ ∘ₗ ↑e) ∘ₗ ↑e.symm) w
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:176:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ p, f (M + actualA18RankOne (↑p.1) p.2)
+in the target expression
+  (∑ p, f (M + actualA18RankOne (↑p.1) p.2)) / ↑(Fintype.card (FunctionalsAt v × (Fin n → ZMod 2))) =
+    (∑ p, (fun N => f (domainPullMatrix e.symm N)) (domainPullMatrix e M + actualA18RankOne (↑p.1) p.2)) /
+      ↑(Fintype.card (FunctionalsAt (lastVector d) × (Fin n → ZMod 2)))
+
+n d : ℕ
+e : V (d + 1) ≃ₗ[F] V (d + 1)
+v : V (d + 1)
+hv : e (lastVector d) = v
+f : BinaryMatrix n (d + 1) → ℂ
+M : BinaryMatrix n (d + 1)
+eψ : FunctionalsAt v ≃ FunctionalsAt (lastVector d) := functionalsAtPullEquiv e v hv
+eDraw : FunctionalsAt v × W n ≃ FunctionalsAt (lastVector d) × W n := eψ.prodCongr (Equiv.refl (W n))
+hpoint :
+  ∀ (p : FunctionalsAt v × W n),
+    f (M + actualA18RankOne (↑p.1) p.2) =
+      f (domainPullMatrix e.symm (domainPullMatrix e M + actualA18RankOne (↑(eDraw p).1) (eDraw p).2))
+hsum :
+  ∑ p, f (M + actualA18RankOne (↑p.1) p.2) =
+    ∑ p, f (domainPullMatrix e.symm (domainPullMatrix e M + actualA18RankOne (↑p.1) p.2))
+hcard : Fintype.card (FunctionalsAt v × W n) = Fintype.card (FunctionalsAt (lastVector d) × W n)
+⊢ (∑ p, f (M + actualA18RankOne (↑p.1) p.2)) / ↑(Fintype.card (FunctionalsAt v × (Fin n → ZMod 2))) =
+    (∑ p, (fun N => f (domainPullMatrix e.symm N)) (domainPullMatrix e M + actualA18RankOne (↑p.1) p.2)) /
+      ↑(Fintype.card (FunctionalsAt (lastVector d) × (Fin n → ZMod 2)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:207:26: error: unsolved goals
+d : ℕ
+v : V (d + 1)
+hv : v ≠ 0
+u : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.V✝ (d + 1) := lastVector d
+hu : u ≠ 0
+L₀ : Submodule F (V (d + 1)) := F ∙ u
+Lᵥ : Submodule F (V (d + 1)) := F ∙ v
+hdim₀ : Module.finrank F ↥L₀ = 1
+hdimᵥ : Module.finrank F ↥Lᵥ = 1
+u₀ : ↥L₀ := ⟨u, ⋯⟩
+v₀ : ↥Lᵥ := ⟨v, ⋯⟩
+hu₀ : u₀ ≠ 0
+hv₀ : v₀ ≠ 0
+b₀ : Module.Basis Unit F ↥L₀ := FiniteDimensional.basisSingleton Unit hdim₀ u₀ hu₀
+bᵥ : Module.Basis Unit F ↥Lᵥ := FiniteDimensional.basisSingleton Unit hdimᵥ v₀ hv₀
+e₀ : ↥L₀ ≃ₗ[F] F := b₀.equivFun ≪≫ₗ LinearEquiv.funUnique Unit F F
+eᵥ : ↥Lᵥ ≃ₗ[F] F := bᵥ.equivFun ≪≫ₗ LinearEquiv.funUnique Unit F F
+⊢ ¬u₀ = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:209:26: error: unsolved goals
+d : ℕ
+v : V (d + 1)
+hv : v ≠ 0
+u : PvNP.RealizableHardness.ActualBinaryMatrixHC46A17HomogeneousLineDecomposition.V✝ (d + 1) := lastVector d
+hu : u ≠ 0
+L₀ : Submodule F (V (d + 1)) := F ∙ u
+Lᵥ : Submodule F (V (d + 1)) := F ∙ v
+hdim₀ : Module.finrank F ↥L₀ = 1
+hdimᵥ : Module.finrank F ↥Lᵥ = 1
+u₀ : ↥L₀ := ⟨u, ⋯⟩
+v₀ : ↥Lᵥ := ⟨v, ⋯⟩
+hu₀ : u₀ ≠ 0
+hv₀ : v₀ ≠ 0
+b₀ : Module.Basis Unit F ↥L₀ := FiniteDimensional.basisSingleton Unit hdim₀ u₀ hu₀
+bᵥ : Module.Basis Unit F ↥Lᵥ := FiniteDimensional.basisSingleton Unit hdimᵥ v₀ hv₀
+e₀ : ↥L₀ ≃ₗ[F] F := b₀.equivFun ≪≫ₗ LinearEquiv.funUnique Unit F F
+eᵥ : ↥Lᵥ ≃ₗ[F] F := bᵥ.equivFun ≪≫ₗ LinearEquiv.funUnique Unit F F
+he₀ : e₀ u₀ = 1
+⊢ ¬v₀ = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:215:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:208:18: warning: This simp argument is unused:
+  FiniteDimensional.basisSingleton_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [e₀, b₀]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A17AdaptedLineDecomposition.lean:210:18: warning: This simp argument is unused:
+  FiniteDimensional.basisSingleton_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [eᵥ, bᵥ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
