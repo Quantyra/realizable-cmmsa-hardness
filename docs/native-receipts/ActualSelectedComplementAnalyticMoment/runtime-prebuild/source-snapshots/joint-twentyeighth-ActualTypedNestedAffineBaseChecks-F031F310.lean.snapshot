@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.ActualTypedNestedAffineBase
+
+open PvNP.RealizableHardness.ActualTypedNestedAffineBase
+
+#check firstCarrierAmbientPullback
+#check nestedAmbientPullback
+#check flattenedAmbientPullback
+#check nestedAmbientPullback_eq_flattened
+#check firstCarrierPullback_eq_flattened
+
+#print axioms nestedAmbientPullback_eq_flattened
+#print axioms firstCarrierPullback_eq_flattened

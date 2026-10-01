@@ -1,0 +1,159 @@
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+import PvNP.RealizableHardness.ActualRawRestrictionComposition
+
+namespace PvNP.RealizableHardness.ActualAffineRestrictionComposition
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.ActualRawRestrictionComposition
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- A same-centre composition of two intrinsic affine restrictions. The
+common solutions fix the sum of the domain subspaces and lie in the
+intersection of the codomain variation spaces. -/
+def composeActualRestriction {n d : Nat}
+    (Q P : ActualAffineRestriction n d) (hbase : Q.base = P.base) :
+    ActualAffineRestriction n d where
+  domainFixed := Q.domainFixed ⊔ P.domainFixed
+  codomainVariation := Q.codomainVariation ⊓ P.codomainVariation
+  base := Q.base
+
+private theorem vanishesOnSup_iff {K V W : Type*} [Field K]
+    [AddCommGroup V] [Module K V] [AddCommGroup W] [Module K W]
+    (A B : Submodule K V) (L : V →ₗ[K] W) :
+    (∀ x ∈ A ⊔ B, L x = 0) ↔ (∀ x ∈ A, L x = 0) ∧ (∀ x ∈ B, L x = 0) := by
+  constructor
+  · intro h
+    constructor
+    · intro x hx
+      exact h x (le_sup_left hx)
+    · intro x hx
+      exact h x (le_sup_right hx)
+  · rintro ⟨hA, hB⟩ x hx
+    rcases Submodule.mem_sup.mp hx with ⟨a, ha, b, hb, rfl⟩
+    simp [map_add, hA a ha, hB b hb]
+
+/-- The common fibre is exactly the intersection of the two same-base actual
+fibres; both quotient/domain and codomain conditions are transported exactly. -/
+theorem composeActualRestriction_fibre {n d : Nat}
+    (Q P : ActualAffineRestriction n d) (hbase : Q.base = P.base) :
+    (composeActualRestriction Q P hbase).fibre = Q.fibre ∩ P.fibre := by
+  ext M
+  simp only [ActualAffineRestriction.fibre, Finset.mem_filter, Finset.mem_univ,
+    true_and, composeActualRestriction, Finset.mem_inter]
+  constructor
+  · rintro ⟨hdom, hcod⟩
+    constructor
+    · refine ⟨?_, ?_⟩
+      · intro a ha
+        exact hdom a (le_sup_left ha)
+      · intro v
+        exact hcod v |>.1
+    · refine ⟨?_, ?_⟩
+      · intro a ha
+        simpa [hbase] using hdom a (le_sup_right ha)
+      · intro v
+        exact hcod v |>.2
+  · rintro ⟨⟨hQdom, hQcod⟩, ⟨hPdom, hPcod⟩⟩
+    constructor
+    · intro a ha
+      exact (vanishesOnSup_iff Q.domainFixed P.domainFixed
+        (M - Q.base).mulVecLin).2
+          ⟨hQdom, by simpa [hbase] using hPdom⟩ a ha
+    · intro v
+      exact ⟨hQcod v, by simpa [hbase] using hPcod v⟩
+
+/-- Domain fixed dimensions add at most, while codimensions of intersected
+variation spaces add at most. Thus nominal actual restriction order is
+subadditive under same-centre composition. -/
+theorem composeActualRestriction_order_le {n d : Nat}
+    (Q P : ActualAffineRestriction n d) (hbase : Q.base = P.base) :
+    (composeActualRestriction Q P hbase).order ≤ Q.order + P.order := by
+  let V := Fin n → ZMod 2
+  let B := Q.codomainVariation
+  let C := P.codomainVariation
+  let A := Q.domainFixed
+  let D := P.domainFixed
+  have hdom : Module.finrank (ZMod 2) (A ⊔ D) ≤
+      Module.finrank (ZMod 2) A + Module.finrank (ZMod 2) D := by
+    exact Submodule.finrank_add_le_finrank_add_finrank A D
+  have hdim := Submodule.finrank_sup_add_finrank_inf_eq B C
+  have hsup : Module.finrank (ZMod 2) (B ⊔ C) ≤ Module.finrank (ZMod 2) V :=
+    (B ⊔ C).finrank_le
+  have hquotB := B.finrank_quotient_add_finrank
+  have hquotC := C.finrank_quotient_add_finrank
+  have hquotI := (B ⊓ C).finrank_quotient_add_finrank
+  have hcod : Module.finrank (ZMod 2) (V ⧸ (B ⊓ C)) ≤
+      Module.finrank (ZMod 2) (V ⧸ B) +
+        Module.finrank (ZMod 2) (V ⧸ C) := by
+    omega
+  dsimp [composeActualRestriction, ActualAffineRestriction.order, A, D, B, C, V]
+  omega
+
+/-- Exact normalized-energy transport across same-centre composition. -/
+theorem composeActualRestriction_fibreEnergy {n d : Nat}
+    (Q P : ActualAffineRestriction n d) (hbase : Q.base = P.base)
+    (f : BinaryMatrix n d → ℂ) :
+    fibreEnergy (composeActualRestriction Q P hbase).fibre f =
+      fibreEnergy (Q.fibre ∩ P.fibre) f := by
+  rw [composeActualRestriction_fibre]
+
+/-- Apply an existing actual raw-norm-square global estimate to a composed
+restriction whenever the additive order bound fits the cutoff. -/
+theorem actualGlobal_compose {n d r : Nat} {ε : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal r ε f)
+    (Q P : ActualAffineRestriction n d) (hbase : Q.base = P.base)
+    (horder : Q.order + P.order ≤ r) :
+    fibreEnergy (Q.fibre ∩ P.fibre) f ≤ ε := by
+  rw [← composeActualRestriction_fibre Q P hbase]
+  exact hf (composeActualRestriction Q P hbase)
+    (le_trans (composeActualRestriction_order_le Q P hbase) horder)
+
+/-- For a common solution `T`, raw equation concatenation and intrinsic
+quotient-space composition have exactly the same finite fibre. This is the
+carrier bridge from the stacked raw system to the sum/intersection quotient
+description; it preserves the original normalized sampling law. -/
+theorem raw_to_actual_composition_fibre {n d : Nat}
+    (R S : AffineRestriction n d) (T : BinaryMatrix n d)
+    (hT : T ∈ R.fibre ∩ S.fibre) :
+    (actualOfRaw (composeRawRestriction R S) T).fibre =
+      (composeActualRestriction (actualOfRaw R T) (actualOfRaw S T) rfl).fibre := by
+  have hTs := Finset.mem_inter.mp hT
+  have hRT : T ∈ R.fibre := hTs.1
+  have hST : T ∈ S.fibre := hTs.2
+  have hcomp : T ∈ (composeRawRestriction R S).fibre := by
+    rw [composeRawRestriction_fibre]
+    exact hT
+  rw [actualOfRaw_fibre (composeRawRestriction R S) T hcomp,
+    composeRawRestriction_fibre]
+  rw [composeActualRestriction_fibre,
+    actualOfRaw_fibre R T hRT, actualOfRaw_fibre S T hST]
+
+/-- The actual quotient carrier produced from the stacked raw system has
+order no larger than the sum of the two raw budgets. -/
+theorem raw_to_actual_composition_order_le {n d : Nat}
+    (R S : AffineRestriction n d) (T : BinaryMatrix n d)
+    (hT : T ∈ R.fibre ∩ S.fibre) :
+    (actualOfRaw (composeRawRestriction R S) T).order ≤ R.budget + S.budget := by
+  calc
+    (actualOfRaw (composeRawRestriction R S) T).order ≤
+        (composeRawRestriction R S).budget :=
+      actualOfRaw_order_le_budget (composeRawRestriction R S) T
+    _ = R.budget + S.budget := composeRawRestriction_budget R S
+
+/-- The same carrier bridge is literal equality of normalized squared fibre
+energies, not merely a cardinality comparison. -/
+theorem raw_to_actual_composition_fibreEnergy {n d : Nat}
+    (R S : AffineRestriction n d) (T : BinaryMatrix n d)
+    (hT : T ∈ R.fibre ∩ S.fibre) (f : BinaryMatrix n d → ℂ) :
+    fibreEnergy (actualOfRaw (composeRawRestriction R S) T).fibre f =
+      fibreEnergy
+        (composeActualRestriction (actualOfRaw R T) (actualOfRaw S T) rfl).fibre f := by
+  rw [raw_to_actual_composition_fibre R S T hT]
+
+end PvNP.RealizableHardness.ActualAffineRestrictionComposition
