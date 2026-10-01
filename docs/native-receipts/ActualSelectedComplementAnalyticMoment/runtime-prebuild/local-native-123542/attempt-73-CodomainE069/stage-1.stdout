@@ -1,0 +1,12 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18CodomainNormalEnergy.actualA18_parent_fibre_energy_le_two_codomain_normal
+  {n d s : ℕ} {η : ℝ} (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hf : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal s η f)
+  (Q : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hQ : Q.order ≤ s + 1)
+  (v : ↥(PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport.transposeActualRestriction Q).domainFixed)
+  (hv : ↑v ≠ 0) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy Q.fibre
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage.actualA18TransposeAverage (↑v) f) ≤
+    2 * η
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18CodomainNormalEnergy.actualA18_parent_fibre_energy_le_two_codomain_normal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
