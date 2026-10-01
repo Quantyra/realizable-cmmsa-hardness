@@ -1,0 +1,20 @@
+import PvNP.RealizableHardness.ActualFiniteAppendGlobalImageEnergy
+
+open PvNP.RealizableHardness.ActualFiniteAppendGlobalImageEnergy
+
+#check RankImageSubspaces
+#check RankMatrixType
+#check rankMatrixImageEquivSigma
+#print axioms rankMatrixImageEquivSigma
+#check sum_rank_matrices_by_image
+#print axioms sum_rank_matrices_by_image
+#check sum_retained_matrices_by_image
+#print axioms sum_retained_matrices_by_image
+#check per_image_energy_ratio_of_empty
+#print axioms per_image_energy_ratio_of_empty
+#check per_image_energy_ratio
+#print axioms per_image_energy_ratio
+#check rank_i_retained_energy_le
+#print axioms rank_i_retained_energy_le
+#check append_rank_projection_energy_le
+#print axioms append_rank_projection_energy_le
