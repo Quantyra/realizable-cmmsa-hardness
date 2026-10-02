@@ -1,0 +1,92 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:648:42: warning: Variable name `n` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _n
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:659:38: warning: Variable name `d` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _d
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:733:31: warning: This simp argument is unused:
+  LinearEquiv.apply_symm_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [LinearMap.add_apply, LinearMap.comp_apply, carrierCoordinateBaseLift, LinearEquiv.arrowCongr_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1100:12: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1202:27: error: don't know how to synthesize implicit argument `D`
+  @a18_lower_levels_square_le ?m.1621 r eps hrpos heps
+context:
+D : ℕ
+ihD :
+  ∀ m < D,
+    ∀ {n d r : ℕ} {eps : ℝ} (f : BinaryMatrix n d → ℂ),
+      ComplexFourierSupportedThrough m f →
+        OriginalActualInfluenceThrough m eps f → UpToActualNormSqGlobal r (a18BudgetScale m r eps) f
+r : ℕ
+ihr :
+  ∀ m < r,
+    ∀ {n d : ℕ} {eps : ℝ} (f : BinaryMatrix n d → ℂ),
+      ComplexFourierSupportedThrough D f →
+        OriginalActualInfluenceThrough D eps f → UpToActualNormSqGlobal m (a18BudgetScale D m eps) f
+n d : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hinfl : OriginalActualInfluenceThrough D eps f
+hD0 : ¬D = 0
+hDpos : 1 ≤ D
+hr0 : ¬r = 0
+hrpos : 1 ≤ r
+heps : 0 ≤ eps
+fTop : BinaryMatrix n d → ℂ := ⋯
+htopSupport : ComplexFourierSupportedThrough D fTop
+htopInfl : OriginalActualInfluenceThrough D eps fTop
+hsource : UpToActualNormSqGlobal (r - 1) (a18BudgetScale D (r - 1) eps) fTop
+hderiv :
+  ∀ (A : Submodule F (V d)) (B : Submodule F (W n)) (T : V d →ₗ[F] W n),
+    Module.finrank F ↥A + Module.finrank F (W n ⧸ B) = 1 →
+      UpToActualNormSqGlobal (r - 1) (a18BudgetScale (D - 1) (r - 1) eps) (actualDerivativeCoordinate A B T fTop)
+hdecomp : ∀ (M : BinaryMatrix n d), f M = fTop M + ∑ i ∈ Finset.range D, complexRankProjection i f M
+Q : ActualAffineRestriction n d
+hQ : Q.order ≤ r
+hExact : Q.order = r
+X : Type := ⋯
+this : Nonempty X := ⋯
+gTop : X → ℂ := ⋯
+gLow : ℕ → X → ℂ := ⋯
+hMinkowski : (a18UniformL2 fun x => ∑ i ∈ Finset.range D, gLow i x) ≤ ∑ i ∈ Finset.range D, a18UniformL2 (gLow i)
+hdecompX : (fun x => f ↑x) = fun x => gTop x + ∑ i ∈ Finset.range D, gLow i x
+htopEnergy :
+  fibreEnergy Q.fibre fTop ≤ 2 * a18BudgetScale (D - 1) (r - 1) eps + 4 * 2 ^ (2 * D) * a18BudgetScale D (r - 1) eps
+htopBudget :
+  2 * 2 ^ (10 * (D - 1) * (r - 1)) * eps + 4 * 2 ^ (2 * D) * 2 ^ (10 * D * (r - 1)) * eps ≤
+    9 / 512 * a18BudgetScale D r eps
+htopBudgetScaled :
+  2 * a18BudgetScale (D - 1) (r - 1) eps + 4 * 2 ^ (2 * D) * a18BudgetScale D (r - 1) eps ≤
+    9 / 512 * a18BudgetScale D r eps
+htopL2sq : (a18UniformL2 fun x => fTop ↑x) ^ 2 = fibreEnergy Q.fibre fTop
+htopL2nonneg : 0 ≤ a18UniformL2 gTop
+htopBound : a18UniformL2 gTop ^ 2 ≤ a18BudgetScale D r eps / 4
+hlowEnergy : ∀ i ∈ Finset.range D, fibreEnergy Q.fibre (complexRankProjection i f) ≤ a18BudgetScale i r eps
+hlowL2 : ∀ i ∈ Finset.range D, a18UniformL2 (gLow i) ≤ 2 ^ (5 * i * r) * √eps
+hlowSum : ∑ i ∈ Finset.range D, a18UniformL2 (gLow i) ≤ (∑ i ∈ Finset.range D, 2 ^ (5 * i * r)) * √eps
+hlowSumSq :
+  (∑ i ∈ Finset.range D, a18UniformL2 (gLow i)) ^ 2 * 2 ≤ 2 * ((∑ i ∈ Finset.range D, 2 ^ (5 * i * r)) ^ 2 * eps)
+hL2decomp : (a18UniformL2 fun x => f ↑x) ≤ a18UniformL2 gTop + ∑ i ∈ Finset.range D, a18UniformL2 (gLow i)
+henergyEq : (a18UniformL2 fun x => f ↑x) ^ 2 = fibreEnergy Q.fibre f
+htotalNonneg : 0 ≤ a18UniformL2 fun x => f ↑x
+hsumSq : fibreEnergy Q.fibre f ≤ 2 * a18UniformL2 gTop ^ 2 + 2 * (∑ i ∈ Finset.range D, a18UniformL2 (gLow i)) ^ 2
+⊢ ℕ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1202:17: error: failed to infer `have` declaration type
