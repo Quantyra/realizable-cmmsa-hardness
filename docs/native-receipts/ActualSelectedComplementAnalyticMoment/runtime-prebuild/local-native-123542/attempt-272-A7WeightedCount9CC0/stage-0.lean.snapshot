@@ -1,0 +1,1164 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+import PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+import Mathlib.LinearAlgebra.Projection
+import Mathlib.LinearAlgebra.Isomorphisms
+import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Card
+import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset
+
+/-! Rank-additive predecessors at a fixed frequency.  This module starts the
+actual matrix-to-projection adapter used by the W6 predecessor count; it does
+not import the uncompiled GrassmannCounting draft. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- The transposed linear map represented by a matrix in the manuscript's
+`W n → V d` convention. -/
+def transposeMap {n d : Nat} (M : BinaryMatrix n d) : W n →ₗ[F] V d :=
+  M.transpose.toLin'
+
+private theorem transposeMap_rank {n d : Nat} (M : BinaryMatrix n d) :
+    Module.finrank F (LinearMap.range (transposeMap M)) = M.rank := by
+  change Module.finrank F (LinearMap.range M.transpose.toLin') = M.rank
+  rw [← Matrix.rank_transpose M]
+  rw [Matrix.rank_eq_finrank_range_toLin M.transpose
+    (Pi.basisFun F _) (Pi.basisFun F _)]
+  rw [Matrix.toLin_eq_toLin']
+
+/-- Rank additivity makes the two transposed image subspaces disjoint and
+their sum exactly the image of the parent map.  The map direction is
+`W n → V d`, since `M.transpose.toLin'` is the represented map. -/
+theorem w6_predecessor_range_decomposition {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    LinearMap.range (transposeMap X) ⊓
+        LinearMap.range (transposeMap (Y - X)) = ⊥ ∧
+      LinearMap.range (transposeMap X) ⊔
+        LinearMap.range (transposeMap (Y - X)) =
+          LinearMap.range (transposeMap Y) := by
+  let LX := transposeMap X
+  let LY := transposeMap Y
+  let LZ := transposeMap (Y - X)
+  have hsum : LY = LX + LZ := by
+    ext v i
+    simp [LY, LX, LZ, transposeMap, Matrix.toLin'_apply,
+      Matrix.transpose_sub, Matrix.sub_apply]
+  have hRle : LinearMap.range LY ≤
+      LinearMap.range LX ⊔ LinearMap.range LZ := by
+    have hleft : LinearMap.range LX ≤
+        LinearMap.range LX ⊔ LinearMap.range LZ := le_sup_left
+    have hright : LinearMap.range LZ ≤
+        LinearMap.range LX ⊔ LinearMap.range LZ := le_sup_right
+    intro z hz
+    rcases hz with ⟨v, rfl⟩
+    rw [hsum]
+    change LX v + LZ v ∈ LinearMap.range LX ⊔ LinearMap.range LZ
+    apply add_mem
+    · exact hleft (LinearMap.mem_range_self LX v)
+    · exact hright (LinearMap.mem_range_self LZ v)
+  have hdim : Module.finrank F ↥(LinearMap.range LY) =
+      Module.finrank F ↥(LinearMap.range LX) +
+        Module.finrank F ↥(LinearMap.range LZ) := by
+    rw [transposeMap_rank, transposeMap_rank, transposeMap_rank]
+    exact hXY
+  have hsup_le : Module.finrank F
+      ↥(LinearMap.range LX ⊔ LinearMap.range LZ) ≤
+        Module.finrank F ↥(LinearMap.range LX) +
+          Module.finrank F ↥(LinearMap.range LZ) := by
+    have h := Submodule.finrank_sup_add_finrank_inf_eq
+      (LinearMap.range LX) (LinearMap.range LZ)
+    omega
+  have hsup_dim : Module.finrank F
+      ↥(LinearMap.range LX ⊔ LinearMap.range LZ) =
+        Module.finrank F ↥(LinearMap.range LY) := by
+    have hmono := Submodule.finrank_mono hRle
+    omega
+  have hsum_eq : LinearMap.range LY =
+      LinearMap.range LX ⊔ LinearMap.range LZ :=
+    Submodule.eq_of_le_of_finrank_eq hRle hsup_dim.symm
+  have hinf_dim : Module.finrank F
+      ↥(LinearMap.range LX ⊓ LinearMap.range LZ) = 0 := by
+    have h := Submodule.finrank_sup_add_finrank_inf_eq
+      (LinearMap.range LX) (LinearMap.range LZ)
+    rw [hsup_dim] at h
+    omega
+  have hinf : LinearMap.range LX ⊓ LinearMap.range LZ = ⊥ :=
+    (Submodule.finrank_eq_zero).mp hinf_dim
+  exact ⟨hinf, hsum_eq.symm⟩
+
+/-- The parent's kernel is contained in the predecessor's kernel.  This is
+the well-definedness fact needed to descend `Xᵀ` to `range(Yᵀ)`. -/
+theorem w6_predecessor_ker_le {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    LinearMap.ker (transposeMap Y) ≤ LinearMap.ker (transposeMap X) := by
+  have hsum : transposeMap Y = transposeMap X + transposeMap (Y - X) := by
+    ext v i
+    simp [transposeMap, Matrix.toLin'_apply, Matrix.transpose_sub,
+      Matrix.sub_apply]
+  have hdisj := (w6_predecessor_range_decomposition X Y hXY).1
+  intro v hv
+  apply LinearMap.mem_ker.mpr
+  have hzero := LinearMap.mem_ker.mp hv
+  have hparts : transposeMap X v = -(transposeMap (Y - X) v) := by
+    have := congrArg (fun z : V d => z) (hzero)
+    rw [hsum, LinearMap.add_apply] at this
+    exact (eq_neg_iff_add_eq_zero).2 this
+  have hx : transposeMap X v ∈ LinearMap.range (transposeMap X) :=
+    LinearMap.mem_range_self (transposeMap X) v
+  have hz : -(transposeMap (Y - X) v) ∈ LinearMap.range (transposeMap (Y - X)) :=
+    (LinearMap.range (transposeMap (Y - X))).neg_mem
+      (LinearMap.mem_range_self (transposeMap (Y - X)) v)
+  have hboth : transposeMap X v ∈
+      LinearMap.range (transposeMap X) ⊓ LinearMap.range (transposeMap (Y - X)) :=
+    ⟨hx, by rw [hparts]; exact hz⟩
+  have hbot : transposeMap X v = 0 := by
+    have hm := hboth
+    rw [hdisj] at hm
+    simpa using hm
+  exact hbot
+
+private theorem w6_predecessor_range_le_parent {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    LinearMap.range (transposeMap X) ≤ LinearMap.range (transposeMap Y) := by
+  rw [← (w6_predecessor_range_decomposition X Y hXY).2]
+  exact le_sup_left
+
+/-- The predecessor map, with its codomain restricted to the parent's image.
+This proof-level definition has no containment premise: that fact follows
+from rank additivity. -/
+def w6PredecessorRestrictedMap {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    W n →ₗ[F] LinearMap.range (transposeMap Y) :=
+  (transposeMap X).codRestrict (LinearMap.range (transposeMap Y))
+    (fun v => w6_predecessor_range_le_parent X Y hXY
+      (LinearMap.mem_range_self (transposeMap X) v))
+
+/-- Every rank-additive predecessor descends uniquely to an idempotent on the
+parent image. Its range rank is the predecessor rank, and all facts are
+derived from `w6Precedes`; no factorization or idempotence is a premise. -/
+theorem w6_predecessor_descended_idempotent {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    ∃! q : Module.End F (LinearMap.range (transposeMap Y)),
+      IsIdempotentElem q ∧
+        Module.finrank F (LinearMap.range q) = X.rank ∧
+        q.comp (LinearMap.rangeRestrict (transposeMap Y)) =
+          w6PredecessorRestrictedMap X Y hXY := by
+  classical
+  let LX : W n →ₗ[F] V d := transposeMap X
+  let LY : W n →ₗ[F] V d := transposeMap Y
+  let LZ : W n →ₗ[F] V d := transposeMap (Y - X)
+  let E : Submodule F (V d) := LinearMap.range LY
+  let g : W n →ₗ[F] E := LinearMap.rangeRestrict LY
+  let f : W n →ₗ[F] E := w6PredecessorRestrictedMap X Y hXY
+  have hsum : LY = LX + LZ := by
+    ext v i
+    simp [LY, LX, LZ, transposeMap, Matrix.toLin'_apply,
+      Matrix.transpose_sub, Matrix.sub_apply]
+  have hsurj : Function.Surjective g := by
+    intro z
+    rcases z with ⟨z, hz⟩
+    rcases hz with ⟨v, rfl⟩
+    exact ⟨v, rfl⟩
+  have hker : LinearMap.ker g ≤ LinearMap.ker f := by
+    intro v hv
+    apply LinearMap.mem_ker.mpr
+    apply Subtype.ext
+    have hYzero : LY v = 0 := by
+      have h := congrArg Subtype.val (LinearMap.mem_ker.mp hv)
+      exact h
+    have hXzero := LinearMap.mem_ker.mp
+      (w6_predecessor_ker_le X Y hXY (LinearMap.mem_ker.mpr hYzero))
+    exact hXzero
+  let e := g.quotKerEquivOfSurjective hsurj
+  let qbar := (LinearMap.ker g).liftQ f hker
+  let q : Module.End F E := qbar.comp e.symm.toLinearMap
+  have hfactor : q.comp g = f := by
+    apply LinearMap.ext
+    intro v
+    change q (g v) = f v
+    dsimp [q, qbar, e]
+    rw [LinearMap.quotKerEquivOfSurjective_symm_apply]
+    rfl
+  have hfix : ∀ z : E, z ∈ LinearMap.range f → q z = z := by
+    intro z hz
+    rcases hz with ⟨x, rfl⟩
+    obtain ⟨y, hy⟩ := hsurj (f x)
+    have hLYX : LY y = LX x := by
+      have h₁ := congrArg Subtype.val hy
+      have h₂ : (f x : V d) = LX x := rfl
+      exact h₁.trans h₂
+    have hparts : LX x - LX y = LZ y := by
+      rw [← hLYX, hsum, LinearMap.add_apply]
+      abel
+    have hmemX : LX x - LX y ∈ LinearMap.range LX :=
+      Submodule.sub_mem _ (LinearMap.mem_range_self LX x)
+        (LinearMap.mem_range_self LX y)
+    have hmemZ : LX x - LX y ∈ LinearMap.range LZ := by
+      rw [hparts]
+      exact LinearMap.mem_range_self LZ y
+    have hboth : LX x - LX y ∈
+        LinearMap.range LX ⊓ LinearMap.range LZ := ⟨hmemX, hmemZ⟩
+    have hzero : LX x - LX y = 0 := by
+      have hmem : LX x - LX y ∈ (⊥ : Submodule F (V d)) := by
+        rw [(w6_predecessor_range_decomposition X Y hXY).1] at hboth
+        exact hboth
+      simpa using hmem
+    have hXYval : LX y = LX x := (sub_eq_zero.mp hzero).symm
+    calc
+      q (f x) = q (g y) := by rw [hy]
+      _ = f y := by
+        have h := congrArg (fun L : W n →ₗ[F] E => L y) hfactor
+        simpa only [LinearMap.comp_apply] using h
+      _ = f x := by
+        apply Subtype.ext
+        exact hXYval
+  have hqrange : LinearMap.range q ≤ LinearMap.range f := by
+    rintro z ⟨u, rfl⟩
+    obtain ⟨v, hv⟩ := hsurj u
+    refine ⟨v, ?_⟩
+    have hqu : q u = f v := by
+      calc
+        q u = q (g v) := by rw [hv]
+        _ = f v := by
+          have h := congrArg (fun L : W n →ₗ[F] E => L v) hfactor
+          simpa only [LinearMap.comp_apply] using h
+    exact hqu.symm
+  have hrange : LinearMap.range q = LinearMap.range f := by
+    apply le_antisymm hqrange
+    rintro z ⟨v, rfl⟩
+    refine ⟨g v, ?_⟩
+    have h := congrArg (fun L : W n →ₗ[F] E => L v) hfactor
+    simpa only [LinearMap.comp_apply] using h
+  have hIdem : IsIdempotentElem q := by
+    apply LinearMap.ext
+    intro z
+    change q (q z) = q z
+    apply hfix
+    exact hqrange (LinearMap.mem_range_self q z)
+  have hfrange : Module.finrank F (LinearMap.range f) = X.rank := by
+    have hcomp : E.subtype.comp f = LX := by
+      ext v
+      rfl
+    have hmap : (LinearMap.range f).map E.subtype = LinearMap.range LX := by
+      rw [← LinearMap.range_comp, hcomp]
+    rw [← Submodule.finrank_map_subtype_eq E (LinearMap.range f), hmap,
+      transposeMap_rank]
+  have hqrank : Module.finrank F (LinearMap.range q) = X.rank := by
+    rw [hrange, hfrange]
+  refine ⟨q, ⟨hIdem, hqrank, hfactor⟩, ?_⟩
+  intro q' hq'
+  rcases hq' with ⟨_, _, hfactor'⟩
+  apply LinearMap.ext
+  intro z
+  obtain ⟨v, hv⟩ := hsurj z
+  calc
+    q' z = q' (g v) := by rw [hv]
+    _ = f v := by
+      have h := congrArg (fun L : W n →ₗ[F] E => L v) hfactor'
+      simpa only [LinearMap.comp_apply] using h
+    _ = q (g v) := by
+      have h := congrArg (fun L : W n →ₗ[F] E => L v) hfactor
+      simpa only [LinearMap.comp_apply] using h.symm
+    _ = q z := by rw [hv]
+
+/-- The transpose-map realization of an endomorphism of the parent's image.
+This is the converse construction: restrict `Yᵀ` to its image, apply the
+idempotent, and include the result back into the ambient coordinate space. -/
+def w6IdempotentLiftMap {n d : Nat} (Y : BinaryMatrix n d)
+    (q : Module.End F (LinearMap.range (transposeMap Y))) :
+    W n →ₗ[F] V d :=
+  (LinearMap.range (transposeMap Y)).subtype.comp
+    (q.comp (LinearMap.rangeRestrict (transposeMap Y)))
+
+/-- Convert a linear map `W n → V d` back to the manuscript's `n × d`
+matrix convention. -/
+def w6IdempotentPredecessorMatrix {n d : Nat} (Y : BinaryMatrix n d)
+    (q : Module.End F (LinearMap.range (transposeMap Y))) : BinaryMatrix n d :=
+  (LinearMap.toMatrix' (w6IdempotentLiftMap Y q)).transpose
+
+private theorem transposeMap_w6IdempotentPredecessorMatrix {n d : Nat}
+    (Y : BinaryMatrix n d)
+    (q : Module.End F (LinearMap.range (transposeMap Y))) :
+    transposeMap (w6IdempotentPredecessorMatrix Y q) =
+      w6IdempotentLiftMap Y q := by
+  simp [transposeMap, w6IdempotentPredecessorMatrix,
+    Matrix.transpose_transpose, Matrix.toLin'_toMatrix']
+
+/-- Every idempotent on the parent image gives an actual rank-additive
+predecessor. The rank identity is part of the conclusion, so this is a
+genuine converse to the descended-idempotent construction. -/
+theorem w6_idempotent_gives_predecessor {n d : Nat}
+    (Y : BinaryMatrix n d)
+    (q : Module.End F (LinearMap.range (transposeMap Y)))
+    (hq : IsIdempotentElem q) :
+    w6Precedes (w6IdempotentPredecessorMatrix Y q) Y ∧
+      (w6IdempotentPredecessorMatrix Y q).rank =
+        Module.finrank F (LinearMap.range q) := by
+  classical
+  let LY : W n →ₗ[F] V d := transposeMap Y
+  let E : Submodule F (V d) := LinearMap.range LY
+  let g : W n →ₗ[F] E := LinearMap.rangeRestrict LY
+  let p : Module.End F E := LinearMap.id - q
+  let X : BinaryMatrix n d := w6IdempotentPredecessorMatrix Y q
+  let LX : W n →ₗ[F] V d := transposeMap X
+  let LZ : W n →ₗ[F] V d := transposeMap (Y - X)
+  have hsurj : Function.Surjective g := by
+    intro z
+    rcases z with ⟨z, hz⟩
+    rcases hz with ⟨v, rfl⟩
+    exact ⟨v, rfl⟩
+  have hqfun : ∀ z : E, q (q z) = q z := by
+    intro z
+    have h := congrArg (fun r : Module.End F E => r z) hq
+    simpa [IsIdempotentElem, Module.End.mul_apply] using h
+  have hqp : q.comp p = 0 := by
+    apply LinearMap.ext
+    intro z
+    simp [p, LinearMap.sub_apply, hqfun z]
+  have hpq : q + p = LinearMap.id := by
+    apply LinearMap.ext
+    intro z
+    simp [p, LinearMap.sub_apply, LinearMap.add_apply]
+  have hsup : LinearMap.range q ⊔ LinearMap.range p = ⊤ := by
+    apply le_antisymm le_top
+    intro z hz
+    have hzsum : z = q z + p z := by
+      have hzid := congrArg (fun r : Module.End F E => r z) hpq
+      simpa only [LinearMap.add_apply, LinearMap.id_apply] using hzid.symm
+    rw [hzsum]
+    have hqmem : q z ∈ LinearMap.range q :=
+      LinearMap.mem_range_self q z
+    have hpmem : p z ∈ LinearMap.range p :=
+      LinearMap.mem_range_self p z
+    have hleft : LinearMap.range q ≤ LinearMap.range q ⊔ LinearMap.range p :=
+      le_sup_left
+    have hright : LinearMap.range p ≤ LinearMap.range q ⊔ LinearMap.range p :=
+      le_sup_right
+    exact add_mem (hleft hqmem) (hright hpmem)
+  have hinf : LinearMap.range q ⊓ LinearMap.range p = ⊥ := by
+    apply le_antisymm
+    · intro z hz
+      change z = 0
+      rcases hz.1 with ⟨u, rfl⟩
+      rcases hz.2 with ⟨v, hv⟩
+      have hqfix : q (q u) = q u := hqfun u
+      have hqzero : q (p v) = 0 := by
+        have h := congrArg (fun r : Module.End F E => r v) hqp
+        simpa only [LinearMap.comp_apply, LinearMap.zero_apply] using h
+      calc
+        q u = q (q u) := hqfix.symm
+        _ = q (p v) := (congrArg q hv).symm
+        _ = 0 := hqzero
+    · exact bot_le
+  have hdim : Module.finrank F E =
+      Module.finrank F (LinearMap.range q) +
+        Module.finrank F (LinearMap.range p) := by
+    have h := Submodule.finrank_sup_add_finrank_inf_eq
+      (LinearMap.range q) (LinearMap.range p)
+    rw [hsup, hinf] at h
+    simpa using h
+  have hX : LX = E.subtype.comp (q.comp g) := by
+    dsimp [LX, X, w6IdempotentPredecessorMatrix, w6IdempotentLiftMap,
+      LY, E, g]
+    simp [transposeMap, Matrix.transpose_transpose,
+      Matrix.toLin'_toMatrix'] <;> rfl
+  have hY : LY = E.subtype.comp g := by
+    apply LinearMap.ext
+    intro v
+    rfl
+  have hLZ : LZ = E.subtype.comp (p.comp g) := by
+    have hsum : LY = LX + LZ := by
+      apply LinearMap.ext
+      intro v
+      ext i
+      simp [LY, LX, LZ, transposeMap, Matrix.toLin'_apply,
+        Matrix.transpose_sub, Matrix.sub_apply]
+    have htarget : LX + E.subtype.comp (p.comp g) = LY := by
+      rw [hX, hY]
+      apply LinearMap.ext
+      intro v
+      simp [p, LinearMap.sub_apply, LinearMap.add_apply,
+        LinearMap.comp_apply]
+    calc
+      LZ = LY - LX := by rw [hsum]; abel
+      _ = E.subtype.comp (p.comp g) := by rw [← htarget]; abel
+  have hqg : LinearMap.range (q.comp g) = LinearMap.range q := by
+    apply le_antisymm
+    · rintro z ⟨v, rfl⟩
+      exact ⟨g v, rfl⟩
+    · rintro z ⟨u, rfl⟩
+      obtain ⟨v, hv⟩ := hsurj u
+      refine ⟨v, ?_⟩
+      have h := congrArg q hv
+      simpa only [LinearMap.comp_apply] using h
+  have hpg : LinearMap.range (p.comp g) = LinearMap.range p := by
+    apply le_antisymm
+    · rintro z ⟨v, rfl⟩
+      exact ⟨g v, rfl⟩
+    · rintro z ⟨u, rfl⟩
+      obtain ⟨v, hv⟩ := hsurj u
+      refine ⟨v, ?_⟩
+      have h := congrArg p hv
+      simpa only [LinearMap.comp_apply] using h
+  have hXrange : LinearMap.range LX =
+      (LinearMap.range q).map E.subtype := by
+    rw [hX, LinearMap.range_comp, hqg]
+  have hZrange : LinearMap.range LZ =
+      (LinearMap.range p).map E.subtype := by
+    rw [hLZ, LinearMap.range_comp, hpg]
+  have hXrank : X.rank = Module.finrank F (LinearMap.range q) := by
+    rw [← transposeMap_rank X, hXrange, Submodule.finrank_map_subtype_eq]
+  have hZrank : (Y - X).rank = Module.finrank F (LinearMap.range p) := by
+    rw [← transposeMap_rank (Y - X), hZrange,
+      Submodule.finrank_map_subtype_eq]
+  have hYrank : Y.rank = Module.finrank F E := by
+    rw [← transposeMap_rank Y]
+  constructor
+  · unfold w6Precedes
+    rw [hYrank, hXrank, hZrank]
+    exact hdim
+  · exact hXrank
+
+/-- Rank-k actual predecessors of Y. -/
+def W6RankKPredecessor {n d : Nat} (Y : BinaryMatrix n d) (k : Nat) :=
+  {X : BinaryMatrix n d // w6Precedes X Y ∧ X.rank = k}
+
+/-- Rank-k idempotents on the image of Y transpose. -/
+def W6RankKIdempotent {n d : Nat} (Y : BinaryMatrix n d) (k : Nat) :=
+  {q : Module.End F (LinearMap.range (transposeMap Y)) //
+    IsIdempotentElem q ∧ Module.finrank F (LinearMap.range q) = k}
+
+noncomputable instance w6RankKPredecessorFintype {n d : Nat}
+    (Y : BinaryMatrix n d) (k : Nat) : Fintype (W6RankKPredecessor Y k) := by
+  unfold W6RankKPredecessor
+  exact Fintype.ofFinite _
+
+noncomputable instance w6RankKIdempotentFintype {n d : Nat}
+    (Y : BinaryMatrix n d) (k : Nat) : Fintype (W6RankKIdempotent Y k) := by
+  unfold W6RankKIdempotent
+  exact Fintype.ofFinite _
+
+noncomputable def w6PredecessorDescendedEnd {n d : Nat}
+    (Y X : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    Module.End F (LinearMap.range (transposeMap Y)) :=
+  Classical.choose (ExistsUnique.exists
+    (w6_predecessor_descended_idempotent X Y hXY))
+
+private theorem w6_idempotent_predecessor_factor {n d : Nat}
+    (Y : BinaryMatrix n d)
+    (q : Module.End F (LinearMap.range (transposeMap Y)))
+    (hq : IsIdempotentElem q) :
+    q.comp (LinearMap.rangeRestrict (transposeMap Y)) =
+      w6PredecessorRestrictedMap
+        (w6IdempotentPredecessorMatrix Y q) Y
+        (w6_idempotent_gives_predecessor Y q hq).1 := by
+  let E : Submodule F (V d) := LinearMap.range (transposeMap Y)
+  let g : W n →ₗ[F] E := LinearMap.rangeRestrict (transposeMap Y)
+  let X := w6IdempotentPredecessorMatrix Y q
+  apply LinearMap.ext
+  intro v
+  apply Subtype.ext
+  have h := congrArg (fun L : W n →ₗ[F] V d => L v)
+    (transposeMap_w6IdempotentPredecessorMatrix Y q)
+  simpa [E, g, X, w6IdempotentLiftMap, w6PredecessorRestrictedMap] using h.symm
+
+/-- The actual rank-k predecessor fiber is equivalent to rank-k idempotents
+on the parent's transposed image. -/
+noncomputable def w6_rank_k_predecessor_equiv {n d : Nat}
+    (Y : BinaryMatrix n d) (k : Nat) :
+    W6RankKPredecessor Y k ≃ W6RankKIdempotent Y k where
+  toFun X := by
+    let q := w6PredecessorDescendedEnd Y X.1 X.2.1
+    have hq := Classical.choose_spec (ExistsUnique.exists
+      (w6_predecessor_descended_idempotent X.1 Y X.2.1))
+    refine ⟨q, hq.1, ?_⟩
+    exact hq.2.1.trans X.2.2
+  invFun q := by
+    let X := w6IdempotentPredecessorMatrix Y q.1
+    have h := w6_idempotent_gives_predecessor Y q.1 q.2.1
+    refine ⟨X, h.1, ?_⟩
+    exact h.2.trans q.2.2
+  left_inv := by
+    intro X
+    apply Subtype.ext
+    let q := w6PredecessorDescendedEnd Y X.1 X.2.1
+    have hq := Classical.choose_spec (ExistsUnique.exists
+      (w6_predecessor_descended_idempotent X.1 Y X.2.1))
+    have hfactor := hq.2.2
+    let E : Submodule F (V d) := LinearMap.range (transposeMap Y)
+    let g : W n →ₗ[F] E := LinearMap.rangeRestrict (transposeMap Y)
+    have hcomp : E.subtype.comp (q.comp g) = transposeMap X.1 := by
+      apply LinearMap.ext
+      intro v
+      have h := congrArg (fun L : W n →ₗ[F] E => L v) hfactor
+      have hv := congrArg Subtype.val h
+      simpa [q, w6PredecessorDescendedEnd, g, w6PredecessorRestrictedMap] using hv
+    have hmap : transposeMap (w6IdempotentPredecessorMatrix Y q) =
+        transposeMap X.1 := by
+      calc
+        transposeMap (w6IdempotentPredecessorMatrix Y q) =
+            w6IdempotentLiftMap Y q :=
+          transposeMap_w6IdempotentPredecessorMatrix Y q
+        _ = E.subtype.comp (q.comp g) := rfl
+        _ = transposeMap X.1 := hcomp
+    apply Matrix.transpose_injective
+    exact Matrix.toLin'.injective hmap
+  right_inv := by
+    intro q
+    apply Subtype.ext
+    let X := w6IdempotentPredecessorMatrix Y q.1
+    have hpred := w6_idempotent_gives_predecessor Y q.1 q.2.1
+    have hdesc := w6_predecessor_descended_idempotent X Y hpred.1
+    have hchosen := Classical.choose_spec (ExistsUnique.exists hdesc)
+    have hfactor := w6_idempotent_predecessor_factor Y q.1 q.2.1
+    have hqprop : IsIdempotentElem q.1 ∧
+        Module.finrank F (LinearMap.range q.1) = X.rank ∧
+        q.1.comp (LinearMap.rangeRestrict (transposeMap Y)) =
+          w6PredecessorRestrictedMap X Y hpred.1 := by
+      exact ⟨q.2.1, hpred.2.symm, hfactor⟩
+    change Classical.choose (ExistsUnique.exists hdesc) = q.1
+    exact hdesc.unique hchosen hqprop
+
+/-- Retractions onto a fixed subspace, represented as maps into that
+subspace which fix it pointwise. -/
+def W6Retraction (E : Type*) [AddCommGroup E] [Module F E]
+    (U : Submodule F E) :=
+  {r : E →ₗ[F] U // ∀ u : U, r u = u}
+
+noncomputable instance w6RetractionFintype (E : Type*) [AddCommGroup E] [Module F E]
+    [Fintype E] (U : Submodule F E) [Module.Free F U] [Module.Finite F U] :
+    Fintype (W6Retraction E U) := by
+  unfold W6Retraction
+  exact Fintype.ofFinite _
+
+/-- The affine space of retractions onto `U` is a torsor for maps from the
+quotient by `U` into `U`. The chosen complement supplies an origin; the
+translation vector is the unique map induced by `r - r₀`. -/
+noncomputable def w6_retraction_quotient_equiv (E : Type*) [AddCommGroup E]
+    [Module F E] (U : Submodule F E) [Module.Free F U] [Module.Finite F U]
+    [Finite E] : W6Retraction E U ≃ (E ⧸ U →ₗ[F] U) := by
+  classical
+  let C := Classical.choose U.exists_isCompl
+  let hC : IsCompl U C := Classical.choose_spec U.exists_isCompl
+  let e := U.prodEquivOfIsCompl C hC
+  let r₀ : E →ₗ[F] U :=
+    LinearMap.fst F U C ∘ₗ e.symm.toLinearMap
+  have hr₀ : ∀ u : U, r₀ u = u := by
+    intro u
+    simp [r₀, e, Submodule.prodEquivOfIsCompl_symm_apply_left]
+  refine {
+    toFun := fun r => U.liftQ (r.1 - r₀) ?_
+    invFun := fun h => ⟨r₀ + h.comp U.mkQ, by
+      intro u
+      have hmk : U.mkQ (u : E) = 0 := by
+        apply LinearMap.mem_ker.mp
+        rw [Submodule.ker_mkQ]
+        exact u.property
+      simp [hr₀, hmk]⟩
+    left_inv := ?_
+    right_inv := ?_ }
+  · intro u hu
+    apply LinearMap.mem_ker.mpr
+    apply Subtype.ext
+    simp [r.2 ⟨u, hu⟩, hr₀ ⟨u, hu⟩]
+  · intro r
+    apply Subtype.ext
+    apply LinearMap.ext
+    intro x
+    simp only [LinearMap.add_apply, LinearMap.comp_apply]
+    have hvanish : U ≤ LinearMap.ker (r.1 - r₀) := by
+      intro u hu
+      apply LinearMap.mem_ker.mpr
+      apply Subtype.ext
+      simp [r.2 ⟨u, hu⟩, hr₀ ⟨u, hu⟩]
+    change r₀ x + U.liftQ (r.1 - r₀) hvanish (U.mkQ x) = r.1 x
+    have hlift : U.liftQ (r.1 - r₀) hvanish (U.mkQ x) = (r.1 - r₀) x := by
+      have hcomp := U.liftQ_mkQ (r.1 - r₀) hvanish
+      exact congrArg (fun f : E →ₗ[F] U => f x) hcomp
+    rw [hlift]
+    simp
+  · intro h
+    apply LinearMap.ext
+    intro x
+    obtain ⟨y, rfl⟩ := Submodule.mkQ_surjective U x
+    simp [hr₀]
+
+/-- The number of retractions onto a fixed `k`-dimensional subspace of a
+`j`-dimensional finite binary space. This is the fixed-image factor in the
+predecessor count; image enumeration is handled separately. -/
+theorem w6_card_retractions {E : Type*} {k : Nat}
+    [AddCommGroup E] [Module F E]
+    [Module.Free F E] [Module.Finite F E] [Fintype E]
+    (U : Submodule F E) [Module.Free F U] [Module.Finite F U]
+    (hU : Module.finrank F U = k) :
+    Fintype.card (W6Retraction E U) =
+      2 ^ (k * (Module.finrank F E - k)) := by
+  classical
+  rw [Fintype.card_congr (w6_retraction_quotient_equiv E U)]
+  rw [w6_card_linearMap_binary]
+  have hquot := U.finrank_quotient_add_finrank
+  have hdim : Module.finrank F (E ⧸ U) = Module.finrank F E - k := by
+    rw [hU] at hquot
+    omega
+  rw [hdim, hU, Nat.mul_comm]
+
+/-- Idempotents with a prescribed image `U` are counted by the same fixed
+image factor, through Mathlib's actual idempotent-to-retraction equivalence. -/
+def W6FixedRangeIdempotent (E : Type*) [AddCommGroup E] [Module F E]
+    (U : Submodule F E) :=
+  {q : Module.End F E // IsIdempotentElem q ∧ LinearMap.range q = U}
+
+noncomputable instance w6FixedRangeIdempotentFintype (E : Type*) [AddCommGroup E]
+    [Module F E] [Fintype E] (U : Submodule F E) :
+    Fintype (W6FixedRangeIdempotent E U) := by
+  unfold W6FixedRangeIdempotent
+  exact Fintype.ofFinite _
+
+theorem w6_card_fixed_range_idempotents {E : Type*} {k : Nat}
+    [AddCommGroup E] [Module F E] [Module.Free F E] [Module.Finite F E]
+    [Fintype E] (U : Submodule F E) [Module.Free F U] [Module.Finite F U]
+    (hU : Module.finrank F U = k) :
+    Fintype.card (W6FixedRangeIdempotent E U) =
+      2 ^ (k * (Module.finrank F E - k)) := by
+  classical
+  let e : W6FixedRangeIdempotent E U ≃ W6Retraction E U :=
+    U.isIdempotentElemEquiv
+  calc
+    Fintype.card (W6FixedRangeIdempotent E U) =
+        Fintype.card (W6Retraction E U) := Fintype.card_congr e
+    _ = 2 ^ (k * (Module.finrank F E - k)) :=
+      w6_card_retractions U hU
+
+/-- The Grassmannian of actual subspaces of dimension `a`. -/
+def W6Grass (E : Type*) [AddCommGroup E] [Module F E] (a : Nat) :=
+  {U : Submodule F E // Module.finrank F U = a}
+
+instance w6GrassFinite (E : Type*) [AddCommGroup E] [Module F E]
+    [Fintype E] (a : Nat) : Finite (W6Grass E a) := by
+  unfold W6Grass
+  infer_instance
+
+noncomputable instance w6GrassFintype (E : Type*) [AddCommGroup E]
+    [Module F E] [Fintype E] (a : Nat) : Fintype (W6Grass E a) :=
+  Fintype.ofFinite _
+
+/-- Ordered linearly independent frames. -/
+def W6Frame (E : Type*) [AddCommGroup E] [Module F E] (a : Nat) :=
+  {v : Fin a → E // LinearIndependent F v}
+
+instance w6FrameFinite (E : Type*) [AddCommGroup E] [Module F E]
+    [Fintype E] (a : Nat) : Finite (W6Frame E a) := by
+  unfold W6Frame
+  infer_instance
+
+noncomputable instance w6FrameFintype (E : Type*) [AddCommGroup E]
+    [Module F E] [Fintype E] (a : Nat) : Fintype (W6Frame E a) :=
+  Fintype.ofFinite _
+
+/-- Number of ordered independent frames in an `n`-dimensional binary space. -/
+def w6FrameProduct (n a : Nat) : Nat :=
+  ∏ i : Fin a, (2 ^ n - 2 ^ i.val)
+
+private def w6FlattenFrame {E : Type*} [AddCommGroup E] [Module F E]
+    (a : Nat) : (Σ U : W6Grass E a, W6Frame U.1 a) → W6Frame E a :=
+  fun s => ⟨fun i => (s.2.1 i).1,
+    s.2.2.map' s.1.1.subtype s.1.1.ker_subtype⟩
+
+private theorem w6_span_flatten_frame {E : Type*} [AddCommGroup E]
+    [Module F E] [Module.Free F E] [Module.Finite F E]
+    {a : Nat} (U : W6Grass E a) (v : W6Frame U.1 a) :
+    Submodule.span F (Set.range (w6FlattenFrame a ⟨U, v⟩).1) = U.1 := by
+  apply Submodule.eq_of_le_of_finrank_eq
+  · apply Submodule.span_le.mpr
+    rintro x ⟨i, rfl⟩
+    exact (v.1 i).property
+  · rw [finrank_span_eq_card (w6FlattenFrame a ⟨U, v⟩).property,
+      Fintype.card_fin, U.2]
+
+private theorem w6_flatten_frame_injective {E : Type*} [AddCommGroup E]
+    [Module F E] [Module.Free F E] [Module.Finite F E]
+    [Fintype E] (a : Nat) :
+    Function.Injective (w6FlattenFrame (E := E) a) := by
+  rintro ⟨U, v⟩ ⟨U', v'⟩ h
+  have hUU : U = U' := by
+    apply Subtype.ext
+    rw [← w6_span_flatten_frame U v, ← w6_span_flatten_frame U' v', h]
+  cases hUU
+  have hvv : v = v' := by
+    apply Subtype.ext
+    funext i
+    apply Subtype.ext
+    exact congrFun (congrArg Subtype.val h) i
+  cases hvv
+  rfl
+
+private theorem w6_flatten_frame_surjective {E : Type*} [AddCommGroup E]
+    [Module F E] [Module.Free F E] [Module.Finite F E]
+    [Fintype E] (a : Nat) :
+    Function.Surjective (w6FlattenFrame (E := E) a) := by
+  intro v
+  let U : W6Grass E a := ⟨Submodule.span F (Set.range v.1), by
+    simpa using finrank_span_eq_card v.2⟩
+  let v' : W6Frame U.1 a :=
+    ⟨fun i => ⟨v.1 i, Submodule.subset_span (Set.mem_range_self i)⟩,
+      linearIndependent_span v.2⟩
+  exact ⟨⟨U, v'⟩, Subtype.ext rfl⟩
+
+/-- Choosing a subspace together with one of its bases is equivalent to
+choosing an ambient independent frame. -/
+private noncomputable def w6_frame_decomposition {E : Type*}
+    [AddCommGroup E] [Module F E] [Module.Free F E] [Module.Finite F E]
+    [Fintype E] (a : Nat) :
+    (Σ U : W6Grass E a, W6Frame U.1 a) ≃ W6Frame E a :=
+  Equiv.ofBijective (w6FlattenFrame (E := E) a)
+    ⟨w6_flatten_frame_injective a, w6_flatten_frame_surjective a⟩
+
+private theorem w6_card_frame {E : Type*} [AddCommGroup E] [Module F E]
+    [Module.Free F E] [Module.Finite F E] [Fintype E]
+    (a : Nat) (ha : a ≤ Module.finrank F E) :
+    Fintype.card (W6Frame E a) =
+      w6FrameProduct (Module.finrank F E) a := by
+  have h := card_linearIndependent (K := F) (V := E) ha
+  change Nat.card (W6Frame E a) = _ at h
+  rw [Nat.card_eq_fintype_card] at h
+  simpa [W6Frame, w6FrameProduct] using h
+
+private theorem w6_card_internal_frame {E : Type*} [AddCommGroup E]
+    [Module F E] [Module.Free F E] [Module.Finite F E] [Fintype E]
+    {a : Nat} (U : W6Grass E a) :
+    Fintype.card (W6Frame U.1 a) = w6FrameProduct a a := by
+  simpa [U.2] using (w6_card_frame (E := U.1) a (by rw [U.2]))
+
+/-- Exact double count of subspaces by their ordered bases. -/
+theorem w6_card_grass_mul {E : Type*} [AddCommGroup E] [Module F E]
+    [Module.Free F E] [Module.Finite F E] [Fintype E]
+    (a : Nat) (ha : a ≤ Module.finrank F E) :
+    Fintype.card (W6Grass E a) * w6FrameProduct a a =
+      w6FrameProduct (Module.finrank F E) a := by
+  classical
+  have h := Fintype.card_congr (w6_frame_decomposition (E := E) a)
+  rw [Fintype.card_sigma] at h
+  have hsum : (∑ U : W6Grass E a, Fintype.card (W6Frame U.1 a)) =
+      ∑ _U : W6Grass E a, w6FrameProduct a a := by
+    apply Finset.sum_congr rfl
+    intro U hU
+    exact w6_card_internal_frame U
+  rw [hsum] at h
+  simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul] at h
+  rw [w6_card_frame a ha] at h
+  exact h
+
+private theorem w6_frameProduct_self_pos (a : Nat) :
+    0 < w6FrameProduct a a := by
+  apply Finset.prod_pos
+  intro i hi
+  exact Nat.sub_pos_of_lt (Nat.pow_lt_pow_right (by decide : 1 < 2) i.isLt)
+
+/-- Exact number of `a`-subspaces in an `n`-dimensional binary space, in
+the frame-product form of the Gaussian binomial coefficient. -/
+def w6Gaussian (n a : Nat) : Nat :=
+  if a ≤ n then w6FrameProduct n a / w6FrameProduct a a else 0
+
+theorem w6_card_grass_of_le {E : Type*} [AddCommGroup E] [Module F E]
+    [Module.Free F E] [Module.Finite F E] [Fintype E]
+    (a : Nat) (ha : a ≤ Module.finrank F E) :
+    Fintype.card (W6Grass E a) =
+      w6FrameProduct (Module.finrank F E) a / w6FrameProduct a a := by
+  rw [← w6_card_grass_mul a ha]
+  exact (Nat.mul_div_left _ (w6_frameProduct_self_pos a)).symm
+
+theorem w6_card_grass_of_lt {E : Type*} [AddCommGroup E] [Module F E]
+    [Module.Free F E] [Module.Finite F E] [Fintype E]
+    {a : Nat} (ha : Module.finrank F E < a) :
+    Fintype.card (W6Grass E a) = 0 := by
+  letI : IsEmpty (W6Grass E a) := ⟨fun U => by
+    have h := U.1.finrank_le
+    rw [U.2] at h
+    exact (not_le_of_gt ha) h⟩
+  exact Fintype.card_eq_zero
+
+theorem w6_card_grass {E : Type*} [AddCommGroup E] [Module F E]
+    [Module.Free F E] [Module.Finite F E] [Fintype E] (a : Nat) :
+    Fintype.card (W6Grass E a) = w6Gaussian (Module.finrank F E) a := by
+  by_cases ha : a ≤ Module.finrank F E
+  · rw [w6Gaussian, if_pos ha, w6_card_grass_of_le a ha]
+  · rw [w6Gaussian, if_neg ha,
+      w6_card_grass_of_lt (Nat.lt_of_not_ge ha)]
+
+/-- Rank-`k` idempotents partition by their actual image subspace. -/
+private noncomputable def w6_idempotent_image_equiv {E : Type*}
+    [AddCommGroup E] [Module F E] [Module.Free F E] [Module.Finite F E]
+    [Fintype E] (k : Nat) :
+    {q : Module.End F E // IsIdempotentElem q ∧
+        Module.finrank F (LinearMap.range q) = k} ≃
+      Σ U : W6Grass E k, W6FixedRangeIdempotent E U.1 where
+  toFun q :=
+    ⟨⟨LinearMap.range q.1, q.2.2⟩, ⟨q.1, q.2.1, rfl⟩⟩
+  invFun q :=
+    ⟨q.2.1, q.2.2.1, by rw [q.2.2.2]; exact q.1.2⟩
+  left_inv := by intro q; rfl
+  right_inv := by
+    rintro ⟨U, q⟩
+    have hdim : Module.finrank F (LinearMap.range q.1) = k := by
+      rw [q.2.2]
+      exact U.2
+    let U' : W6Grass E k := ⟨LinearMap.range q.1, hdim⟩
+    have hU : U' = U := by
+      apply Subtype.ext
+      exact q.2.2
+    have hidx : U'.1 = U.1 := congrArg Subtype.val hU
+    have hp : ∀ z : Module.End F E,
+        (IsIdempotentElem z ∧ LinearMap.range z = U'.1) ↔
+          (IsIdempotentElem z ∧ LinearMap.range z = U.1) := by
+      intro z
+      rw [hidx]
+    refine Sigma.ext hU ?_
+    exact (Subtype.heq_iff_coe_eq hp).2 rfl
+
+/-- Actual rank-`k` idempotents on a `j`-dimensional finite binary space.
+The count is obtained by enumerating each image and then its retractions. -/
+theorem w6_card_rank_k_idempotents {E : Type*} [AddCommGroup E]
+    [Module F E] [Module.Free F E] [Module.Finite F E] [Fintype E]
+    (k : Nat) :
+    Fintype.card {q : Module.End F E // IsIdempotentElem q ∧
+        Module.finrank F (LinearMap.range q) = k} =
+      w6Gaussian (Module.finrank F E) k *
+        2 ^ (k * (Module.finrank F E - k)) := by
+  classical
+  rw [Fintype.card_congr (w6_idempotent_image_equiv (E := E) k),
+    Fintype.card_sigma]
+  have hconst : ∀ U : W6Grass E k,
+      Fintype.card (W6FixedRangeIdempotent E U.1) =
+        2 ^ (k * (Module.finrank F E - k)) := by
+    intro U
+    have hU := U.2
+    rw [w6_card_fixed_range_idempotents U.1 hU]
+  simp_rw [hconst, Finset.sum_const, Finset.card_univ, nsmul_eq_mul,
+    Nat.cast_id, w6_card_grass]
+
+/-- Exact number of rank-`k` actual predecessors of a fixed parent matrix.
+The Gaussian factor counts actual image subspaces; the power counts
+retractions onto each image. -/
+theorem w6_card_rank_k_predecessors {n d : Nat}
+    (Y : BinaryMatrix n d) (k : Nat) :
+    Fintype.card (W6RankKPredecessor Y k) =
+      w6Gaussian Y.rank k * 2 ^ (k * (Y.rank - k)) := by
+  classical
+  let E := LinearMap.range (transposeMap Y)
+  have hdim : Module.finrank F E = Y.rank := by
+    dsimp [E]
+    exact transposeMap_rank Y
+  rw [Fintype.card_congr (w6_rank_k_predecessor_equiv Y k)]
+  let e : W6RankKIdempotent Y k ≃
+      {q : Module.End F E // IsIdempotentElem q ∧
+        Module.finrank F (LinearMap.range q) = k} := Equiv.refl _
+  calc
+    Fintype.card (W6RankKIdempotent Y k) =
+        Fintype.card {q : Module.End F E // IsIdempotentElem q ∧
+          Module.finrank F (LinearMap.range q) = k} := Fintype.card_congr e
+    _ = w6Gaussian Y.rank k * 2 ^ (k * (Y.rank - k)) := by
+      rw [w6_card_rank_k_idempotents (E := E) k, hdim]
+
+/-- The normalized binary frame product. -/
+private def w6NormalizedFrame (n a : Nat) : ℚ :=
+  ∏ i ∈ Finset.range a, (1 - (2 : ℚ)^i / 2^n)
+
+private theorem w6_sum_two_pow (a : Nat) :
+    ∑ i ∈ Finset.range a, (2 : ℚ)^i = 2^a - 1 := by
+  induction a with
+  | zero => simp
+  | succ a ih =>
+      rw [Finset.sum_range_succ, ih, pow_succ]
+      ring
+
+private theorem w6_one_sub_sum_le_prod {α : Type*} (s : Finset α)
+    (x : α → ℚ) (hx : ∀ i ∈ s, 0 ≤ x i ∧ x i ≤ 1) :
+    1 - ∑ i ∈ s, x i ≤ ∏ i ∈ s, (1 - x i) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | @insert i s his ih =>
+      have hxi := hx i (Finset.mem_insert_self i s)
+      have hxs : ∀ j ∈ s, 0 ≤ x j ∧ x j ≤ 1 :=
+        fun j hj => hx j (Finset.mem_insert_of_mem hj)
+      have hs : 0 ≤ ∑ j ∈ s, x j := Finset.sum_nonneg (fun j hj => (hxs j hj).1)
+      have hm := mul_le_mul_of_nonneg_left (ih hxs)
+        (sub_nonneg.mpr hxi.2)
+      rw [Finset.sum_insert his, Finset.prod_insert his]
+      nlinarith [mul_nonneg hxi.1 hs]
+
+private theorem w6_normalized_frame_ge_half {a n : Nat}
+    (ha : a + 1 ≤ n) :
+    (1 / 2 : ℚ) ≤ w6NormalizedFrame n a := by
+  have hx : ∀ i ∈ Finset.range a,
+      0 ≤ (2 : ℚ)^i / 2^n ∧ (2 : ℚ)^i / 2^n ≤ 1 := by
+    intro i hi
+    constructor
+    · positivity
+    · apply (div_le_one (by positivity)).mpr
+      apply pow_le_pow_right₀ (by norm_num)
+      have hi' := Finset.mem_range.mp hi
+      omega
+  have hp := w6_one_sub_sum_le_prod (Finset.range a)
+    (fun i => (2 : ℚ)^i / 2^n) hx
+  have hpow : (2 : ℚ)^(a + 1) ≤ 2^n :=
+    pow_le_pow_right₀ (by norm_num) ha
+  rw [pow_succ] at hpow
+  have hs : (∑ i ∈ Finset.range a, (2 : ℚ)^i / 2^n) ≤ 1 / 2 := by
+    rw [← Finset.sum_div, w6_sum_two_pow]
+    apply (div_le_iff₀ (by positivity)).mpr
+    linarith
+  change (1 / 2 : ℚ) ≤ ∏ i ∈ Finset.range a,
+    (1 - (2 : ℚ)^i / 2^n)
+  linarith
+
+private theorem w6_normalized_frame_diagonal_ge_quarter (a : Nat) :
+    (1 / 4 : ℚ) ≤ w6NormalizedFrame a a := by
+  cases a with
+  | zero => norm_num [w6NormalizedFrame]
+  | succ b =>
+      have hb : b + 1 ≤ b + 1 := le_rfl
+      have hhalf := w6_normalized_frame_ge_half (a := b) (n := b + 1) hb
+      have hsplit : w6NormalizedFrame (b + 1) (b + 1) =
+          w6NormalizedFrame (b + 1) b * (1 / 2 : ℚ) := by
+        unfold w6NormalizedFrame
+        rw [Finset.prod_range_succ]
+        have hlast : 1 - (2 : ℚ)^b / 2^(b + 1) = 1 / 2 := by
+          rw [pow_succ]
+          field_simp
+          norm_num
+        rw [hlast]
+      rw [hsplit]
+      have hm := mul_le_mul_of_nonneg_right hhalf (by norm_num : (0 : ℚ) ≤ 1 / 2)
+      nlinarith
+
+private theorem w6_cast_frame_product {a n : Nat} (ha : a ≤ n) :
+    (w6FrameProduct n a : ℚ) =
+      (2 : ℚ)^(n*a) * w6NormalizedFrame n a := by
+  have hf : ∀ i ∈ Finset.range a,
+      ((2^n - 2^i : Nat) : ℚ) =
+        (2 : ℚ)^n * (1 - (2 : ℚ)^i / 2^n) := by
+    intro i hi
+    have hi' : i ≤ n := by
+      have h := Finset.mem_range.mp hi
+      omega
+    rw [Nat.cast_sub (Nat.pow_le_pow_right (by decide : 1 ≤ 2) hi')]
+    push_cast
+    field_simp
+  unfold w6FrameProduct
+  rw [Fin.prod_univ_eq_prod_range (fun i => 2^n - 2^i) a, Nat.cast_prod]
+  calc
+    (∏ i ∈ Finset.range a, ((2^n - 2^i : Nat) : ℚ)) =
+        ∏ i ∈ Finset.range a, ((2 : ℚ)^n *
+          (1 - (2 : ℚ)^i / 2^n)) := by
+            apply Finset.prod_congr rfl
+            intro i hi
+            exact hf i hi
+    _ = (2 : ℚ)^(n*a) * w6NormalizedFrame n a := by
+      rw [Finset.prod_mul_distrib]
+      simp [w6NormalizedFrame, ← pow_mul]
+
+private theorem w6_frame_product_le_pow (n a : Nat) :
+    w6FrameProduct n a ≤ 2^(n*a) := by
+  calc
+    w6FrameProduct n a ≤ ∏ _i : Fin a, 2^n := by
+      apply Finset.prod_le_prod
+      · intro i hi
+        exact Nat.zero_le _
+      · intro i hi
+        exact Nat.sub_le _ _
+    _ = 2^(n*a) := by
+      simp [w6FrameProduct, ← pow_mul]
+
+private theorem w6_frame_product_diagonal_lower (a : Nat) :
+    2^(a*a) ≤ 4 * w6FrameProduct a a := by
+  have hcast := w6_cast_frame_product (a := a) (n := a) le_rfl
+  have hnorm := w6_normalized_frame_diagonal_ge_quarter a
+  have hq : (2 : ℚ)^(a*a) ≤ 4 * (w6FrameProduct a a : ℚ) := by
+    rw [hcast]
+    have hp : 0 ≤ (2 : ℚ)^(a*a) := by positivity
+    have hm := mul_le_mul_of_nonneg_left hnorm hp
+    nlinarith
+  exact_mod_cast hq
+
+/-- Every actual `k`-subspace count is within a factor four of the leading
+binary scale, including `k=0` and the out-of-range zero convention. -/
+theorem w6_gaussian_le_four_pow {j k : Nat} (hkj : k ≤ j) :
+    w6Gaussian j k ≤ 4 * 2^(k*(j-k)) := by
+  rw [w6Gaussian, if_pos hkj]
+  have hnum := w6_frame_product_le_pow j k
+  have hden := w6_frame_product_diagonal_lower k
+  have hexp : k*(j-k) + k*k = j*k := by
+    calc
+      k*(j-k) + k*k = k*((j-k)+k) := by rw [Nat.mul_add]
+      _ = k*j := by rw [Nat.sub_add_cancel hkj]
+      _ = j*k := Nat.mul_comm _ _
+  have hlarge : w6FrameProduct j k ≤
+      (4 * 2^(k*(j-k))) * w6FrameProduct k k := by
+    calc
+      w6FrameProduct j k ≤ 2^(j*k) := hnum
+      _ = 2^(k*(j-k)) * 2^(k*k) := by rw [← hexp, pow_add]
+      _ ≤ 2^(k*(j-k)) * (4 * w6FrameProduct k k) :=
+        Nat.mul_le_mul_left _ hden
+      _ = (4 * 2^(k*(j-k))) * w6FrameProduct k k := by ring
+  exact Nat.div_le_of_le_mul (by simpa only [Nat.mul_comm] using hlarge)
+
+theorem w6_gaussian_le_four_pow_all (j k : Nat) :
+    w6Gaussian j k ≤ 4 * 2^(k*(j-k)) := by
+  by_cases hkj : k ≤ j
+  · exact w6_gaussian_le_four_pow hkj
+  · simp [w6Gaussian, hkj]
+
+/-- The actual fixed-parent predecessor count is bounded by the squared
+leading scale used in the W6 weighted sum. -/
+theorem w6_rank_k_predecessors_le_four_pow {n d : Nat}
+    (Y : BinaryMatrix n d) (k : Nat) :
+    Fintype.card (W6RankKPredecessor Y k) ≤
+      4 * 2^(2 * (k*(Y.rank-k))) := by
+  rw [w6_card_rank_k_predecessors]
+  have hg := w6_gaussian_le_four_pow_all Y.rank k
+  calc
+    w6Gaussian Y.rank k * 2^(k*(Y.rank-k)) ≤
+        (4 * 2^(k*(Y.rank-k))) * 2^(k*(Y.rank-k)) :=
+      Nat.mul_le_mul_right _ hg
+    _ = 4 * 2^(2 * (k*(Y.rank-k))) := by
+      rw [mul_assoc, ← pow_add]
+      congr 1
+      rw [two_mul]
+
+private theorem w6_sum_inv_pow_64_le (m : Nat) :
+    (∑ i ∈ Finset.range m, (1 : ℝ) / (64 : ℝ)^(i+1)) ≤ 1/63 := by
+  have heq : ∀ m : Nat,
+      (∑ i ∈ Finset.range m, (1 : ℝ) / (64 : ℝ)^(i+1)) =
+        (1/63 : ℝ) * (1 - 1/(64 : ℝ)^m) := by
+    intro m
+    induction m with
+    | zero => simp
+    | succ m ih =>
+        rw [Finset.sum_range_succ, ih, pow_succ]
+        have h64 : (64 : ℝ) ≠ 0 := by norm_num
+        field_simp
+        ring
+  rw [heq m]
+  have hnonneg : 0 ≤ (1 : ℝ) / (64 : ℝ)^m := by positivity
+  have hle : (1 : ℝ) - 1/(64 : ℝ)^m ≤ 1 := by linarith
+  nlinarith [mul_le_mul_of_nonneg_left hle (by norm_num : (0 : ℝ) ≤ 1/63)]
+
+private theorem w6_weighted_rank_term_le {n d : Nat}
+    (Y : BinaryMatrix n d) {k : Nat} (hk : 1 ≤ k)
+    (hkj : k ≤ Y.rank) (hjd : Y.rank ≤ d) :
+    ((Fintype.card (W6RankKPredecessor Y k) : ℝ) *
+      (2 : ℝ)^(4*k*(d-k))) / (2 : ℝ)^(6*d*k) ≤
+        4 / (64 : ℝ)^k := by
+  have hcountN := w6_rank_k_predecessors_le_four_pow Y k
+  have hcount : (Fintype.card (W6RankKPredecessor Y k) : ℝ) ≤
+      4 * (2 : ℝ)^(2*(k*(Y.rank-k))) := by
+    exact_mod_cast hcountN
+  have hsub : Y.rank-k ≤ d-k := Nat.sub_le_sub_right hjd k
+  have hfirst : 2*k*(Y.rank-k) ≤ 2*k*(d-k) :=
+    Nat.mul_le_mul_left (2*k) hsub
+  have hk' : (d-k)+1 ≤ d := by omega
+  have hlast : 6*k*(d-k)+6*k ≤ 6*d*k := by
+    calc
+      6*k*(d-k)+6*k = 6*k*((d-k)+1) := by ring
+      _ ≤ 6*k*d := Nat.mul_le_mul_left (6*k) hk'
+      _ = 6*d*k := by ring
+  have hexp : 2*(k*(Y.rank-k))+4*k*(d-k)+6*k ≤ 6*d*k := by
+    calc
+      2*(k*(Y.rank-k))+4*k*(d-k)+6*k =
+          2*k*(Y.rank-k)+4*k*(d-k)+6*k := by ring
+      _ ≤ 6*k*(d-k)+6*k := by nlinarith [hfirst]
+      _ ≤ 6*d*k := hlast
+  have hpow : (2 : ℝ)^(2*(k*(Y.rank-k))+4*k*(d-k)) *
+        (2 : ℝ)^(6*k) ≤ (2 : ℝ)^(6*d*k) := by
+    have hp := pow_le_pow_right₀ (by norm_num : (1:ℝ) ≤ 2) hexp
+    rw [pow_add] at hp
+    exact hp
+  have hratio : (2 : ℝ)^(2*(k*(Y.rank-k))+4*k*(d-k)) /
+        (2 : ℝ)^(6*d*k) ≤ 1/(2:ℝ)^(6*k) := by
+    exact (div_le_div_iff₀ (by positivity : 0 < (2:ℝ)^(6*d*k))
+      (by positivity : 0 < (2:ℝ)^(6*k))).2 (by simpa using hpow)
+  calc
+    ((Fintype.card (W6RankKPredecessor Y k) : ℝ) *
+        (2 : ℝ)^(4*k*(d-k))) / (2 : ℝ)^(6*d*k) ≤
+      (4 * (2 : ℝ)^(2*(k*(Y.rank-k))) *
+        (2 : ℝ)^(4*k*(d-k))) / (2 : ℝ)^(6*d*k) := by
+          apply div_le_div_of_nonneg_right
+          · exact mul_le_mul_of_nonneg_right hcount (by positivity)
+          · positivity
+    _ = 4 * ((2 : ℝ)^(2*(k*(Y.rank-k))+4*k*(d-k)) /
+        (2 : ℝ)^(6*d*k)) := by
+          rw [mul_assoc]
+          rw [← pow_add]
+          ring
+    _ ≤ 4 * (1/(2:ℝ)^(6*k)) :=
+      mul_le_mul_of_nonneg_left hratio (by norm_num)
+    _ = 4/(64:ℝ)^k := by
+      rw [show (64:ℝ) = 2^6 by norm_num, pow_mul]
+      norm_num
+
+/-- For one rank-`j` parent frequency, the actual predecessor counts with
+the W6 weights sum to at most `67/63`. The rank-zero term is exactly one;
+the remaining terms are bounded by a finite geometric tail. -/
+theorem w6_weighted_rank_k_predecessor_sum_le {n d : Nat}
+    (Y : BinaryMatrix n d) (hjd : Y.rank ≤ d) :
+    (∑ k ∈ Finset.range (Y.rank+1),
+      ((Fintype.card (W6RankKPredecessor Y k) : ℝ) *
+        (2 : ℝ)^(4*k*(d-k))) / (2 : ℝ)^(6*d*k)) ≤ 67/63 := by
+  let j := Y.rank
+  have hzero :
+      ((Fintype.card (W6RankKPredecessor Y 0) : ℝ) *
+        (2 : ℝ)^(4*0*(d-0))) / (2 : ℝ)^(6*d*0) = 1 := by
+    rw [w6_card_rank_k_predecessors]
+    simp [w6Gaussian, w6FrameProduct]
+  have htail :
+      (∑ i ∈ Finset.range j,
+        ((Fintype.card (W6RankKPredecessor Y (i+1)) : ℝ) *
+          (2 : ℝ)^(4*(i+1)*(d-(i+1)))) /
+          (2 : ℝ)^(6*d*(i+1))) ≤ 4/63 := by
+    calc
+      _ ≤ ∑ i ∈ Finset.range j, 4/(64 : ℝ)^(i+1) := by
+        apply Finset.sum_le_sum
+        intro i hi
+        have hki : i+1 ≤ Y.rank := by
+          have hi' : i < j := Finset.mem_range.mp hi
+          dsimp [j] at hi'
+          omega
+        have hterm := w6_weighted_rank_term_le Y (k := i+1) (by omega) hki hjd
+        simpa using hterm
+      _ = 4 * (∑ i ∈ Finset.range j, (1:ℝ)/(64:ℝ)^(i+1)) := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro i hi
+        ring
+      _ ≤ 4 * (1/63) := by
+        exact mul_le_mul_of_nonneg_left (w6_sum_inv_pow_64_le j) (by norm_num)
+      _ = 4/63 := by norm_num
+  calc
+    _ = (((Fintype.card (W6RankKPredecessor Y 0) : ℝ) *
+          (2:ℝ)^(4*0*(d-0))) / (2:ℝ)^(6*d*0)) +
+        ∑ i ∈ Finset.range j,
+          ((Fintype.card (W6RankKPredecessor Y (i+1)) : ℝ) *
+            (2:ℝ)^(4*(i+1)*(d-(i+1)))) / (2:ℝ)^(6*d*(i+1)) := by
+      simpa [j] using (Finset.sum_range_succ' (fun k =>
+        ((Fintype.card (W6RankKPredecessor Y k) : ℝ) *
+          (2:ℝ)^(4*k*(d-k))) / (2:ℝ)^(6*d*k)) j)
+    _ ≤ 1 + 4/63 := by
+      rw [hzero]
+      exact add_le_add_left htail 1
+    _ = 67/63 := by norm_num
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
