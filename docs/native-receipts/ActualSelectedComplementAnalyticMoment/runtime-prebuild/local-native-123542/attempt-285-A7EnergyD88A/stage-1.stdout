@@ -1,0 +1,70 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.complex_normSq_sum_le_card_mul_sum_normSq.{u_1}
+  {ι : Type u_1} [Fintype ι] (f : ι → ℂ) : Complex.normSq (∑ i, f i) ≤ ↑(Fintype.card ι) * ∑ i, Complex.normSq (f i)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_carrierCoeff_fiberSum {n d : ℕ}
+  (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (Z :
+    ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.V✝ d ⧸
+        (Matrix.toLin' (Matrix.transpose X)).range) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierFourierCoeff (Matrix.toLin' (Matrix.transpose X)).range
+      (Matrix.toLin' (Matrix.transpose X)).ker
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative X T f) Z =
+    ∑ Y,
+      PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f ↑Y *
+        ↑(PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose ↑Y)) T)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_carrierCoeff_normSq_le_fiber {n d : ℕ}
+  (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (Z :
+    ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.V✝ d ⧸
+        (Matrix.toLin' (Matrix.transpose X)).range) :
+  Complex.normSq
+      (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierFourierCoeff
+        (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative X T f) Z) ≤
+    ↑(Fintype.card
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6ActualPredecessorFrequencyFiber X Z)) *
+      ∑ Y,
+        Complex.normSq
+          (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f ↑Y *
+            ↑(PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose ↑Y)) T))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_carrierCoeff_normSq_le_fiberEnergy
+  {n d : ℕ} (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (Z :
+    ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.V✝ d ⧸
+        (Matrix.toLin' (Matrix.transpose X)).range) :
+  Complex.normSq
+      (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierFourierCoeff
+        (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative X T f) Z) ≤
+    ↑(Fintype.card
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6ActualPredecessorFrequencyFiber X Z)) *
+      ∑ Y, Complex.normSq (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f ↑Y)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.complex_normSq_sum_le_card_mul_sum_normSq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_carrierCoeff_fiberSum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_carrierCoeff_normSq_le_fiber' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_carrierCoeff_normSq_le_fiberEnergy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
