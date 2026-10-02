@@ -3,9 +3,9 @@ repo=pathlib.Path(__file__).resolve().parents[4]
 b=repo/'docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild'
 out=b/'local-native-123542';src=out/'src';lib=out/'lib';out.mkdir(exist_ok=True);log=out/'attempt-258-A7BlockGraph8C22';log.mkdir(exist_ok=True)
 pins=json.loads((b/'local-a18-258-pins.json').read_text())
-snaps={hashlib.sha258(p.read_bytes()).hexdigest().upper():p for p in (b/'source-snapshots').glob('*.snapshot')}
+snaps={hashlib.sha256(p.read_bytes()).hexdigest().upper():p for p in (b/'source-snapshots').glob('*.snapshot')}
 for s,h in pins.items():
- p=snaps.get(h.upper(),repo/s);data=p.read_bytes();assert hashlib.sha258(data).hexdigest().upper()==h
+ p=snaps.get(h.upper(),repo/s);data=p.read_bytes();assert hashlib.sha256(data).hexdigest().upper()==h
  q=src/pathlib.Path(s).relative_to('lean');q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(data)
 cached=repo/'.lake/build/lib/lean'
 linked=0
@@ -28,7 +28,7 @@ def build(n):
  o=lib/rel.with_suffix('.olean');o.parent.mkdir(parents=True,exist_ok=True);idx=len(records)
  with (log/f'stage-{idx}.stdout').open('wb') as stdout,(log/f'stage-{idx}.stderr').open('wb') as stderr:
   (log/f'stage-{idx}.lean.snapshot').write_bytes(p.read_bytes());started=time.time();r=subprocess.run([str(pathlib.Path(os.environ['USERPROFILE'])/'.elan/bin/lean.exe'),'-R',str(src),str(p),'-o',str(o)],cwd=repo,env=env,stdout=stdout,stderr=stderr,timeout=900)
- records.append({'module':n,'exit':r.returncode,'seconds':round(time.time()-started,2),'source_sha':hashlib.sha258(p.read_bytes()).hexdigest().upper()});(log/'stages.json').write_text(json.dumps(records,indent=2)+'\n');print(json.dumps(records[-1]),flush=True)
+ records.append({'module':n,'exit':r.returncode,'seconds':round(time.time()-started,2),'source_sha':hashlib.sha256(p.read_bytes()).hexdigest().upper()});(log/'stages.json').write_text(json.dumps(records,indent=2)+'\n');print(json.dumps(records[-1]),flush=True)
  if r.returncode:failed.add(n)
  return r.returncode==0
 targets=['PvNP.RealizableHardness.'+n+s for n in ['ActualBinaryMatrixHC46A7WeightedPredecessor'] for s in ['', 'Checks']]
