@@ -1,0 +1,43 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own335\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:128:28: error(lean.unknownIdentifier): Unknown identifier `pow_four`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own335\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:128:2: error: Type mismatch: After simplification, term
+  fourier_parseval fun M => f M ^ 2
+ has type
+  (uniformMean fun M => f M ^ 2 * f M ^ 2) = ∑ x, fourierCoeff (fun M => f M ^ 2) x * fourierCoeff (fun M => f M ^ 2) x
+but is expected to have type
+  (uniformMean fun M => f M * f M * f M * f M) =
+    ∑ x, fourierCoeff (fun M => f M * f M) x * fourierCoeff (fun M => f M * f M) x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own335\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:143:4: error: unsolved goals
+case a
+n d : ℕ
+f : BinaryMatrix n d → ℝ
+K : BinaryMatrix n d
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+g : BinaryMatrix n d → ℝ
+Y : BinaryMatrix n d
+⊢ (uniformMean fun M => 0) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own335\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:147:49: error: unsolved goals
+n d : ℕ
+f : BinaryMatrix n d → ℝ
+K : BinaryMatrix n d
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+hreal :
+  ∀ (g : BinaryMatrix n d → ℝ) (Y : BinaryMatrix n d), complexFourierCoeff (fun M => ↑(g M)) Y = ↑(fourierCoeff g Y)
+hmul : complexFourierCoeff (fun M => fc M * fc M) K = ∑ X, complexFourierCoeff fc X * complexFourierCoeff fc (K + X)
+M : BinaryMatrix n d
+⊢ ↑(f M) * ↑(f M) = ↑(f M) ^ 2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own335\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:168:49: error(lean.unknownIdentifier): Unknown constant `Complex.re_mul`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own335\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:168:2: error: Type mismatch: After simplification, term
+  hre
+ has type
+  fourierCoeff (fun M => f M ^ 2) K = ∑ i, (↑(fourierCoeff f i) * ↑(fourierCoeff f (K + i))).re
+but is expected to have type
+  fourierCoeff (fun M => f M ^ 2) K = ∑ X, fourierCoeff f X * fourierCoeff f (K + X)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own335\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:184:4: error: unsolved goals
+case a
+n d D : ℕ
+f : BinaryMatrix n d → ℝ
+hsupport : ∀ (Y : BinaryMatrix n d), D < Matrix.rank Y → fourierCoeff f Y = 0
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+Y : BinaryMatrix n d
+hY : D < Matrix.rank Y
+⊢ fourierCoeff (fun M => 0) Y = 0
