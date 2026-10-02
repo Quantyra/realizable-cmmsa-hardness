@@ -1,0 +1,65 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18InductionBounds.lean:40:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.445 / 512 ≤ ?m.444
+in the target expression
+  2 * 2 ^ (10 * d0 * r0) * eps ≤ a18BudgetScale D r eps / 512
+
+D r : ℕ
+eps : ℝ
+hD : 1 ≤ D
+hr : 1 ≤ r
+heps : 0 ≤ eps
+d0 : ℕ := D - 1
+r0 : ℕ := r - 1
+hd0 : d0 + 1 = D
+hr0 : r0 + 1 = r
+hd0nonneg : 0 ≤ d0
+hr0nonneg : 0 ≤ r0
+hexp1 : 10 * d0 * r0 + 10 ≤ 10 * D * r
+hexp2 : 2 * D + 10 * D * r0 + 8 ≤ 10 * D * r
+hpow1 : 2 ^ (10 * d0 * r0 + 10) ≤ 2 ^ (10 * D * r)
+hpow2 : 2 ^ (2 * D + 10 * D * r0 + 8) ≤ 2 ^ (10 * D * r)
+⊢ 2 * 2 ^ (10 * d0 * r0) * eps ≤ a18BudgetScale D r eps / 512
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18InductionBounds.lean:52:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.512 / 64 ≤ ?m.511
+in the target expression
+  4 * 2 ^ (2 * D) * 2 ^ (10 * D * r0) * eps ≤ a18BudgetScale D r eps / 64
+
+D r : ℕ
+eps : ℝ
+hD : 1 ≤ D
+hr : 1 ≤ r
+heps : 0 ≤ eps
+d0 : ℕ := D - 1
+r0 : ℕ := r - 1
+hd0 : d0 + 1 = D
+hr0 : r0 + 1 = r
+hd0nonneg : 0 ≤ d0
+hr0nonneg : 0 ≤ r0
+hexp1 : 10 * d0 * r0 + 10 ≤ 10 * D * r
+hexp2 : 2 * D + 10 * D * r0 + 8 ≤ 10 * D * r
+hpow1 : 2 ^ (10 * d0 * r0 + 10) ≤ 2 ^ (10 * D * r)
+hpow2 : 2 ^ (2 * D + 10 * D * r0 + 8) ≤ 2 ^ (10 * D * r)
+hfirst : 2 * 2 ^ (10 * d0 * r0) * eps ≤ a18BudgetScale D r eps / 512
+⊢ 4 * 2 ^ (2 * D) * 2 ^ (10 * D * r0) * eps ≤ a18BudgetScale D r eps / 64
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18InductionBounds.lean:112:7: error: Type mismatch
+  2 ^ (5 * D * r) / 31 - ∑ i ∈ Finset.range D, 2 ^ (5 * i * r)
+has type
+  ℝ
+of sort `Type` but is expected to have type
+  0 ≤ ?m.199
+of sort `Prop`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18InductionBounds.lean:131:15: error: don't know how to synthesize implicit argument `D`
+  @a18_lower_levels_square_le ?m.65 r eps hr heps
+context:
+D r : ℕ
+eps : ℝ
+hr : 1 ≤ r
+heps : 0 ≤ eps
+⊢ ℕ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18InductionBounds.lean:131:7: error: failed to infer `have` declaration type
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18InductionBounds.lean:130:34: error: unsolved goals
+D r : ℕ
+eps : ℝ
+hr : 1 ≤ r
+heps : 0 ≤ eps
+⊢ a18BudgetScale D r eps / 2 + 2 * ((∑ i ∈ Finset.range D, 2 ^ (5 * i * r)) ^ 2 * eps) ≤ a18BudgetScale D r eps
