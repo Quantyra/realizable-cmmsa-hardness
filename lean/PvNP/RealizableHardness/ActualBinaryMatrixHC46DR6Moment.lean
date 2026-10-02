@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Incidence
 
 /-!
 Exact complex DR6 assembly boundary.
@@ -7,10 +8,9 @@ Exact complex DR6 assembly boundary.
 For arbitrary finite matrix dimensions and a complex input, this module records
 the additive-square Fourier identity and partitions each convolution fiber
 into the manuscript's F2 obstruction and its complement. The existing matrix
-coverage theorem places every complementary pair in F1. The result bounds the
-fourth moment by the already proved full-scope F1 estimate plus the exact
-complex F2 remainder. It does not assert the separate Möbius estimate or the
-final DR6 theorem.
+coverage theorem places every complementary pair in F1. The module includes the unrestricted final DR6 inequality with the manuscript
+support premise and no scalar-F2 premise, rank guard, or conditional replacement.
+The inequality is authored source only and remains uncompiled and uncertified.
 -/
 
 namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
@@ -20,11 +20,15 @@ open PvNP.RealizableHardness.BinaryMatrixA1Complex
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Incidence
 open scoped BigOperators
 
 set_option autoImplicit false
 noncomputable section
 attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+private abbrev F := ZMod 2
+private abbrev V (n : Nat) := Fin n -> F
 
 /-- Frequencies in the manuscript's actual F2 obstruction class at X. -/
 def dr6ActualF2Pairs {n d : Nat} (X : BinaryMatrix n d) :=
@@ -158,6 +162,242 @@ theorem dr6_actual_complex_f2_energy_eq_rank_truncated
         (Nat.lt_of_not_ge hX)
     simp [hX, hzero]
 
+/-- Actual subspace pairs other than the manuscript's excluded `(0,whole)`
+endpoint. -/
+def dr6ActualNonzeroABPairs {n d : Nat} :=
+  {p : Submodule F (V d) × Submodule F (V n) //
+    p.1 ≠ ⊥ ∨ p.2 ≠ ⊤}
+
+noncomputable instance dr6F2A5DGradeCarrierFintype {n d D : Nat} :
+    Fintype (dr6F2A5DGradeCarrier (n := n) (d := d) (D := D)) := by
+  classical
+  unfold dr6F2A5DGradeCarrier
+  infer_instance
+
+noncomputable instance dr6ActualNonzeroABPairsFintype {n d : Nat} :
+    Fintype (dr6ActualNonzeroABPairs (n := n) (d := d)) := by
+  classical
+  unfold dr6ActualNonzeroABPairs
+  infer_instance
+
+/-- The manuscript's unrestricted nonzero `(A,B)` ordinary-filter energy. -/
+def dr6ActualWeightedOrdinaryFilterEnergy {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) : Real :=
+  Finset.univ.sum (fun p : dr6ActualNonzeroABPairs (n := n) (d := d) =>
+    (2 : Real)^(7*D*(Module.finrank F p.1.1 +
+        (Module.finrank F (V n) - Module.finrank F p.1.2))) *
+      uniformMean (fun M => Complex.normSq
+        (DR6ComplexOrdinaryFilter p.1.1 p.1.2 f M)^2))
+
+/-- The fixed-degree actual grade carrier energy used internally by the
+incidence theorem. -/
+def dr6ActualWeightedOrdinaryFilterEnergyAtMostD {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) : Real :=
+  Finset.univ.sum (fun p : dr6F2A5DGradeCarrier (n := n) (d := d) (D := D) =>
+    (2 : Real)^(7*D*(p.1.1.1.val+p.1.1.2.val)) *
+      uniformMean (fun M => Complex.normSq
+        (DR6ComplexOrdinaryFilter p.2.1.1 p.2.2.1 f M)^2))
+
+private theorem dr6ActualWeightedOrdinaryFilterEnergyAtMostD_eq_grid
+    {n d D : Nat} (f : BinaryMatrix n d -> Complex) :
+    dr6ActualWeightedOrdinaryFilterEnergyAtMostD (D := D) f =
+      Finset.univ.sum (fun p : dr6F2A5DGradeGrid D =>
+        (2 : Real)^(7*D*(p.1.1.val+p.1.2.val)) *
+          Finset.univ.sum (fun q : dr6F2AmbientGradePair
+              (n := n) (d := d) (i := p.1.1.val) (j := p.1.2.val) =>
+            uniformMean (fun M => Complex.normSq
+              (DR6ComplexOrdinaryFilter q.1.1 q.2.1 f M)^2))) := by
+  classical
+  unfold dr6ActualWeightedOrdinaryFilterEnergyAtMostD
+    dr6F2A5DGradeCarrier
+  rw [Fintype.sum_sigma]
+  simp_rw [← Finset.mul_sum]
+
+/-- Inclusion of an actual fixed-D carrier pair into the unrestricted
+nonzero `(A,B)` indexing used in the manuscript. -/
+private def dr6DGradeCarrierToNonzeroAB {n d D : Nat}
+    (p : dr6F2A5DGradeCarrier (n := n) (d := d) (D := D)) :
+    dr6ActualNonzeroABPairs (n := n) (d := d) := by
+  classical
+  let A := p.2.1.1
+  let B := p.2.2.1
+  have hne : A ≠ ⊥ ∨ B ≠ ⊤ := by
+    by_contra hn
+    push_neg at hn
+    have hAi : p.1.1.1.val = 0 := by
+      have hAzero : Module.finrank F A = 0 := by simp [A, hn.1]
+      calc
+        p.1.1.1.val = Module.finrank F A := p.2.1.2.symm
+        _ = 0 := hAzero
+    have hBj : p.1.1.2.val = 0 := by
+      have hBcodim : Module.finrank F (V n) - Module.finrank F B = 0 := by
+        rw [hn.2]
+        simp [V]
+      calc
+        p.1.1.2.val = Module.finrank F (V n) - Module.finrank F B :=
+          p.2.2.2.symm
+        _ = 0 := hBcodim
+    have hgrid : p.1.1 ≠ ((0 : Fin (D+1)), (0 : Fin (D+1))) := by
+      intro hz
+      have hmem := p.1.2
+      change p.1.1 ∈ Finset.univ.erase
+        ((0 : Fin (D+1)), (0 : Fin (D+1))) at hmem
+      exact (Finset.mem_erase.mp hmem).1 hz
+    apply hgrid
+    apply Prod.ext
+    · apply Fin.ext
+      exact hAi
+    · apply Fin.ext
+      exact hBj
+  exact ⟨(A, B), hne⟩
+
+private theorem dr6DGradeCarrierToNonzeroAB_injective {n d D : Nat} :
+    Function.Injective (@dr6DGradeCarrierToNonzeroAB n d D) := by
+  classical
+  intro p q hpq
+  cases p with
+  | mk pgrade ppayload =>
+    cases q with
+    | mk qgrade qpayload =>
+      have hpair : (ppayload.1.1, ppayload.2.1) =
+          (qpayload.1.1, qpayload.2.1) := congrArg Subtype.val hpq
+      have hi : pgrade.1.1.val = qgrade.1.1.val := by
+        have h := congrArg (fun z : Submodule F (V d) × Submodule F (V n) =>
+          Module.finrank F z.1) hpair
+        calc
+          pgrade.1.1.val = Module.finrank F ppayload.1.1 := ppayload.1.2.symm
+          _ = Module.finrank F qpayload.1.1 := h
+          _ = qgrade.1.1.val := qpayload.1.2
+      have hj : pgrade.1.2.val = qgrade.1.2.val := by
+        have h := congrArg (fun z : Submodule F (V d) × Submodule F (V n) =>
+          Module.finrank F (V n) - Module.finrank F z.2) hpair
+        calc
+          pgrade.1.2.val = Module.finrank F (V n) -
+              Module.finrank F ppayload.2.1 := ppayload.2.2.symm
+          _ = Module.finrank F (V n) - Module.finrank F qpayload.2.1 := h
+          _ = qgrade.1.2.val := qpayload.2.2
+      have hgradeval : pgrade.1 = qgrade.1 := by
+        apply Prod.ext
+        · apply Fin.ext
+          exact hi
+        · apply Fin.ext
+          exact hj
+      have hgrade : pgrade = qgrade := Subtype.ext hgradeval
+      cases hgrade
+      have hpayload : ppayload = qpayload := by
+        apply Prod.ext
+        · apply Subtype.ext
+          exact congrArg Prod.fst hpair
+        · apply Subtype.ext
+          exact congrArg Prod.snd hpair
+      exact congrArg (Sigma.mk pgrade) hpayload
+private theorem dr6_actual_filter_fourth_nonneg {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d -> Complex) :
+    0 <= uniformMean (fun M => Complex.normSq
+      (DR6ComplexOrdinaryFilter A B f M)^2) := by
+  unfold uniformMean
+  apply div_nonneg
+  · apply Finset.sum_nonneg
+    intro M hM
+    exact sq_nonneg _
+  · positivity
+
+/-- The Incidence fixed-D grid sum is bounded by the manuscript's complete
+nonzero-`(A,B)` sum. The injection remembers both actual subspaces; distinct
+grade witnesses cannot duplicate a pair because dimensions recover the grade. -/
+theorem dr6_actual_weighted_filter_energy_atMostD_le_full
+    {n d D : Nat} (f : BinaryMatrix n d -> Complex) :
+    dr6ActualWeightedOrdinaryFilterEnergyAtMostD (D := D) f <=
+      dr6ActualWeightedOrdinaryFilterEnergy (D := D) f := by
+  classical
+  unfold dr6ActualWeightedOrdinaryFilterEnergyAtMostD
+  apply Finset.sum_le_sum_of_injOn dr6DGradeCarrierToNonzeroAB
+  · intro p hp q hq hpq
+    exact dr6DGradeCarrierToNonzeroAB_injective hpq
+  · intro q hq
+    exact Finset.mem_univ q
+  · intro p hp
+    have hi : p.1.1.1.val = Module.finrank F p.2.1.1 :=
+      p.2.1.2.symm
+    have hj : p.1.1.2.val = Module.finrank F (V n) - Module.finrank F p.2.2.1 :=
+      p.2.2.2.symm
+    have hsum :
+        p.1.1.1.val + p.1.1.2.val =
+          Module.finrank F p.2.1.1 +
+            (Module.finrank F (V n) - Module.finrank F p.2.2.1) := by
+      calc
+        p.1.1.1.val + p.1.1.2.val =
+            Module.finrank F p.2.1.1 + p.1.1.2.val :=
+              congrArg (fun t : Nat => t + p.1.1.2.val) hi
+        _ = Module.finrank F p.2.1.1 +
+              (Module.finrank F (V n) - Module.finrank F p.2.2.1) :=
+              congrArg (fun t : Nat => Module.finrank F p.2.1.1 + t) hj
+    have hweight :
+        (2 : Real)^(7*D*(p.1.1.1.val+p.1.1.2.val)) =
+          (2 : Real)^(7*D*(Module.finrank F p.2.1.1 +
+            (Module.finrank F (V n) - Module.finrank F p.2.2.1))) :=
+      congrArg (fun t : Nat => (2 : Real)^(7*D*t)) hsum
+    simp only [dr6ActualWeightedOrdinaryFilterEnergy,
+      dr6DGradeCarrierToNonzeroAB]
+    rw [hweight]
+    exact le_rfl
+  · intro q hq hnot
+    apply mul_nonneg
+    · positivity
+    · exact dr6_actual_filter_fourth_nonneg q.1.1 q.1.2 f
+
+/-- The actual signed A5 coefficient is exactly the Moment F2 subtype sum.
+This is the bridge from the convolution partition to Incidence's global
+signed-coefficient estimate. -/
+theorem dr6_actual_complex_f2_remainder_eq_signedCoefficient
+    {n d D : Nat} (f : BinaryMatrix n d -> Complex)
+    (X : BinaryMatrix n d) :
+    dr6ActualComplexF2Remainder f X =
+      dr6F2A5SignedSquareCoefficient f X := by
+  classical
+  rw [dr6_f2_a5SquareCoefficient_eq_original_obstruction_sum]
+  unfold dr6ActualComplexF2Remainder dr6ActualF2Pairs
+  let P : BinaryMatrix n d -> Prop :=
+    fun Y => DR6F2Obstruction X Y (X + Y)
+  let g : BinaryMatrix n d -> Complex := fun Y =>
+    complexFourierCoeff f Y * complexFourierCoeff f (X + Y)
+  let filtered : BinaryMatrix n d -> Complex := fun Y =>
+    if P Y then g Y else 0
+  have hsplit := (Fintype.sum_subtype_add_sum_subtype P filtered).symm
+  have hcompl : (Finset.univ.sum
+      (fun p : {Y : BinaryMatrix n d // ¬ P Y} => filtered p.val)) = 0 := by
+    apply Finset.sum_eq_zero
+    intro p hp
+    simp [filtered, p.property]
+  have hselected :
+      (Finset.univ.sum (fun p : {Y : BinaryMatrix n d // P Y} => filtered p.val)) =
+        (Finset.univ.sum (fun p : {Y : BinaryMatrix n d // P Y} => g p.val)) := by
+    apply Finset.sum_congr rfl
+    intro p hp
+    simp [filtered, p.property]
+  rw [hcompl, add_zero] at hsplit
+  have hbridge :
+      (Finset.univ.sum (fun p : {Y : BinaryMatrix n d // P Y} => g p.val)) =
+        (Finset.univ.sum (fun Y : BinaryMatrix n d => filtered Y)) := by
+    calc
+      _ = Finset.univ.sum (fun p : {Y : BinaryMatrix n d // P Y} => filtered p.val) :=
+        hselected.symm
+      _ = _ := hsplit.symm
+  simpa [P, g, filtered] using hbridge
+
+/-- Nonnegativity of the full weighted ordinary-filter energy. -/
+theorem dr6_actual_weighted_filter_energy_nonneg {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) :
+    0 <= dr6ActualWeightedOrdinaryFilterEnergy (D := D) f := by
+  classical
+  unfold dr6ActualWeightedOrdinaryFilterEnergy
+  apply Finset.sum_nonneg
+  intro p hp
+  apply mul_nonneg
+  · positivity
+  · exact dr6_actual_filter_fourth_nonneg p.1.1 p.1.2 f
+
 /-- The convolution fiber is exactly the disjoint sum of F2 and its
 complement. Coverage supplies F1 for every pair in the complement. -/
 theorem dr6_actual_complex_convolution_partition {n d : Nat}
@@ -167,12 +407,13 @@ theorem dr6_actual_complex_convolution_partition {n d : Nat}
       dr6ActualComplexF2Remainder f X +
         dr6ActualComplexF1Complement f X := by
   classical
-  have h := Fintype.sum_subtype_add_sum_subtype
-    (fun Y : BinaryMatrix n d => DR6F2Obstruction X Y (X + Y))
-    (fun Y : BinaryMatrix n d =>
-      complexFourierCoeff f Y * complexFourierCoeff f (X + Y))
+  let P : BinaryMatrix n d -> Prop :=
+    fun Y => DR6F2Obstruction X Y (X + Y)
+  let g : BinaryMatrix n d -> Complex := fun Y =>
+    complexFourierCoeff f Y * complexFourierCoeff f (X + Y)
+  have hsplit := Fintype.sum_subtype_add_sum_subtype P g
   simpa [dr6ActualComplexF2Remainder, dr6ActualComplexF1Complement,
-    dr6ActualF2Pairs, dr6ActualF1ComplementPairs] using h.symm
+    dr6ActualF2Pairs, dr6ActualF1ComplementPairs, P, g] using hsplit.symm
 
 private noncomputable def dr6ComplementToF1Pair {n d : Nat}
     {X : BinaryMatrix n d} (p : dr6ActualF1ComplementPairs X) :
@@ -318,6 +559,119 @@ theorem dr6_actual_fourth_moment_le_f1_plus_f2 {n d D : Nat}
           Complex.normSq (dr6ActualComplexF2Remainder f X) := by
           gcongr
           exact dr6_actual_f1_total_energy_le f hsupport
+
+/-- Fourier support zero makes the complex input constant. -/
+private theorem dr6_constant_of_complex_support_zero {n d : Nat}
+    (f : BinaryMatrix n d -> Complex)
+    (hsupport : ComplexFourierSupportedThrough 0 f) :
+    ∃ c : Complex, ∀ M, f M = c := by
+  classical
+  let c := complexFourierCoeff f (0 : BinaryMatrix n d)
+  refine ⟨c, ?_⟩
+  intro M
+  have hinv := ActualFiniteDegreeFourierProduct.complexFourierInversion f M
+  have hsum : (Finset.univ.sum fun Y : BinaryMatrix n d =>
+      complexFourierCoeff f Y * (character Y M : Complex)) = c := by
+    rw [Finset.sum_eq_single 0]
+    · simp [c]
+    · intro Y hY hne
+      have hrank : Y.rank ≠ 0 := by
+        intro hz
+        apply hne
+        exact (rank_eq_zero_iff Y).mp hz
+      have hcoeff : complexFourierCoeff f Y = 0 := by
+        apply hsupport Y
+        omega
+      simp [hcoeff]
+    · simp
+  exact hinv.symm.trans hsum
+
+/-- The exact manuscript DR6 conclusion for arbitrary finite binary-matrix
+dimensions, complex inputs, and every degree cutoff. The weighted right-hand
+side is the unrestricted sum over actual `(A,B) ≠ (0,whole)` pairs. -/
+theorem dr6_actual_complex_fourth_moment_over_162_le
+    {n d D : Nat} (f : BinaryMatrix n d -> Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    uniformMean (fun M => Complex.normSq (f M)^2) / 162 <=
+      (2 : Real)^(6*D*D) *
+          (uniformMean (fun M => Complex.normSq (f M)))^2 +
+        dr6ActualWeightedOrdinaryFilterEnergy (D := D) f := by
+  classical
+  by_cases hD : D = 0
+  · subst D
+    obtain ⟨c, hconst⟩ := dr6_constant_of_complex_support_zero f hsupport
+    have hmean : uniformMean (fun M => Complex.normSq (f M)) =
+        Complex.normSq c := by
+      simp [uniformMean, hconst]
+    have hfourth : uniformMean (fun M => Complex.normSq (f M)^2) =
+        Complex.normSq c ^ 2 := by
+      simp [uniformMean, hconst]
+    have hS := dr6_actual_weighted_filter_energy_nonneg (D := 0) f
+    rw [hmean, hfourth]
+    norm_num
+    nlinarith [sq_nonneg (Complex.normSq c), hS]
+  · have hDpos : 1 <= D := by omega
+    let a : Real := (2 : Real)^(6*D*D) *
+      (uniformMean (fun M => Complex.normSq (f M)))^2
+    let S := dr6ActualWeightedOrdinaryFilterEnergy (D := D) f
+    have ha : 0 <= a := by
+      dsimp [a]
+      positivity
+    have hS : 0 <= S := by
+      exact dr6_actual_weighted_filter_energy_nonneg f
+    have hF2bridge :
+        Finset.univ.sum (fun X : BinaryMatrix n d =>
+          Complex.normSq (dr6ActualComplexF2Remainder f X)) =
+        Finset.univ.sum (fun X : BinaryMatrix n d =>
+          Complex.normSq (dr6F2A5SignedSquareCoefficient f X)) := by
+      apply Finset.sum_congr rfl
+      intro X hX
+      rw [dr6_actual_complex_f2_remainder_eq_signedCoefficient (n := n) (d := d) (D := D) f X]
+    have hIncidence :=
+      dr6_f2_a5_global_fixed_D_ambient_bound f hsupport hDpos
+    have hGridLeFull :=
+      dr6_actual_weighted_filter_energy_atMostD_le_full (n := n) (d := d) (D := D) f
+    have hF2 :
+        Finset.univ.sum (fun X : BinaryMatrix n d =>
+          Complex.normSq (dr6ActualComplexF2Remainder f X)) <=
+          (31/225 : Real) * S := by
+      rw [hF2bridge]
+      calc
+        Finset.univ.sum (fun X : BinaryMatrix n d =>
+            Complex.normSq (dr6F2A5SignedSquareCoefficient f X)) <=
+            (31/225 : Real) *
+              dr6ActualWeightedOrdinaryFilterEnergyAtMostD (D := D) f := by
+          simpa [dr6ActualWeightedOrdinaryFilterEnergyAtMostD_eq_grid] using
+            hIncidence
+        _ <= (31/225 : Real) * S := by
+          exact mul_le_mul_of_nonneg_left hGridLeFull (by norm_num)
+    have hMoment := dr6_actual_fourth_moment_le_f1_plus_f2 f hsupport
+    have hupper :
+        uniformMean (fun M => Complex.normSq (f M)^2) <=
+          2*a + 2*((31/225 : Real) * S) := by
+      calc
+        uniformMean (fun M => Complex.normSq (f M)^2) <=
+            2*a + 2 * Finset.univ.sum (fun X : BinaryMatrix n d =>
+              Complex.normSq (dr6ActualComplexF2Remainder f X)) := by
+          simpa [a] using hMoment
+        _ <= 2*a + 2*((31/225 : Real) * S) := by
+          gcongr
+    have hscaled :
+        uniformMean (fun M => Complex.normSq (f M)^2) / 162 <=
+          (2*a + 2*((31/225 : Real) * S)) / 162 := by
+      apply (div_le_div_iff_of_pos_right (by norm_num : (0 : Real) < 162)).2
+      exact hupper
+    have hnum :
+        (2*a + 2*((31/225 : Real) * S)) / 162 <= a + S := by
+      nlinarith [ha, hS]
+    calc
+      uniformMean (fun M => Complex.normSq (f M)^2) / 162 <=
+          (2*a + 2*((31/225 : Real) * S)) / 162 := hscaled
+      _ <= a + S := hnum
+      _ = (2 : Real)^(6*D*D) *
+            (uniformMean (fun M => Complex.normSq (f M)))^2 +
+          dr6ActualWeightedOrdinaryFilterEnergy (D := D) f := by
+            rfl
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
