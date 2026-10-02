@@ -1,0 +1,43 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes {n d : ℕ}
+  (X Y : BinaryMatrixFourier.BinaryMatrix n d) : Prop
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6PredecessorFilter {n d : ℕ}
+  (X : BinaryMatrixFourier.BinaryMatrix n d) (f : BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M : BinaryMatrixFourier.BinaryMatrix n d) : ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative {n d : ℕ}
+  (X : BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.W✝ n)
+  (f : BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝ d ⧸
+        (Matrix.toLin'
+            (Matrix.transpose X)).range →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      ↥(Matrix.toLin' (Matrix.transpose X)).ker) :
+  ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative_fourier_expansion {n d : ℕ}
+  (X : BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.W✝ n)
+  (f : BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝ d ⧸
+        (Matrix.toLin'
+            (Matrix.transpose X)).range →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      ↥(Matrix.toLin' (Matrix.transpose X)).ker) :
+  actualW6Derivative X T f M =
+    ∑ Y,
+      if w6Precedes X Y then
+        BinaryMatrixA1Complex.complexFourierCoeff f Y *
+          ↑(BinaryMatrixFourier.character Y
+              (LinearMap.toMatrix'
+                (T +
+                  (Matrix.toLin' (Matrix.transpose X)).ker.subtype ∘ₗ
+                    M ∘ₗ (Matrix.toLin' (Matrix.transpose X)).range.mkQ)))
+      else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative_fourier_expansion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
