@@ -1,0 +1,114 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Composition
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+
+/-!
+DR6 is the manuscript ordinary-filter fourth-power inequality, for an
+arbitrary finite binary matrix space and a real-valued function supported
+through Fourier rank D.  This is the ordinary selector
+
+    A <= range(Y.transpose.toLin')  and  ker(Y.transpose.toLin') <= B.
+
+It is deliberately not `BinaryMatrixNestedSelectorA1.Selected`, whose
+second condition is `Y w in A -> w in B` and is the hybrid selector used
+later in A7/A12.
+
+The proof route recorded for the DR6 increment is the complete manuscript
+argument (submission-manuscript.md, 1513-1615), with no DR6/L4 premise:
+
+* Write the fourth moment as the sum over convolution outputs X of
+  `|sum_{Y+Z=X} fhat(Y) fhat(Z)|^2`.  Since each nonzero coefficient has
+  rank at most D, every contributing Y,Z has rank <= D and X has rank
+  <= 2D; no rank-D cutoff on X is valid or used.
+* Partition pairs into F1 and F2.  F1 consists of pairs with direct
+  decompositions Y=A+C, Z=B+C, X=A+B, with the three image summands
+  pairwise disjoint and their kernels spanning the domain.  F2 consists
+  of pairs whose three image ranges have nonzero common intersection or
+  whose three kernels fail to span.  Outside F2, construct A,B,C by
+  prescribing them on ker Z, ker Y, ker X; the zero triple intersection
+  proves the prescriptions are well-defined and the image/kernel
+  conditions prove the direct decompositions.  Thus F1 union F2 covers
+  every convolution pair.
+* For F1, use independent Rademacher signs x_A,y_C on disjoint copies
+  of maps of rank <=D and the degree-two polynomial
+  Phi=sum_{A direct-sum C} |fhat(A+C)| x_A y_C.  A rank-r map has at most
+  2^(r^2) direct decompositions, so ||Phi||_2^2 <= 2^(D^2)||f||_2^2.
+  The elementary real degree-two inequality ||Phi||_4^4 <=81||Phi||_2^4
+  gives the F1 contribution after the A+B decomposition multiplicity
+  (at most 2^(4D^2)); coefficient comparison in Phi^2 handles A!=B,
+  and (A,B)=(0,0) is bounded by the constant coefficient.  This yields
+  sum_X H_X^2 <=81*2^(6D^2)||f||_2^4.
+* For F2, preserve signed/complex convolution coefficients.  Expand the
+  indicator of a nonzero t-dimensional common image/kernel obstruction
+  using alpha_k=(-1)^(k+1)2^(k(k-1)/2) and the binary Gaussian-binomial
+  identity at z=-1.  Inclusion-exclusion produces the exact A5 sum of
+  alpha_{i,j} times Fourier coefficients of `(P_{A,B}f)^2`, where P is
+  the ordinary selector above.  For i,j<=D, the pair count is at most
+  2^(2D(i+j)) because rank(X)<=2D, and |alpha_{i,j}|^2<=2^(D(i+j)).
+  Weighted Cauchy with weight 2^(7D(i+j)) leaves a factor bounded by
+  sum_{i+j>0}2^(-4D(i+j))<1 for D>=1.  Parseval bounds the F2 squared
+  contribution by the nontrivial ordinary-filter sum in DR6.
+* Combining |convolution|<=H_X+|O_X| and (a+b)^2<=2a^2+2b^2,
+  the F1 coefficient 2*81=162 is exactly why DR6 has denominator 162;
+  the F2 coefficient is at most 2.  For D=0, f is constant and all
+  nontrivial ordinary filters vanish, so the stated weakened inequality
+  is immediate.  The ambient dimensions n,d are arbitrary throughout.
+
+The source translation is staged by named DR6 obligations.  This module
+currently establishes the exact ordinary selector/filter interface and
+the convolution-support boundary used by both F1 and F2.  It does not claim
+that DR6 or any later A7/A12 theorem has been proved.
+-/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Composition
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d -> F
+private abbrev W (n : Nat) := Fin n -> F
+
+/-- Manuscript ordinary selector P_{A,B}. -/
+def DR6OrdinarySelected {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d) : Prop :=
+  A <= LinearMap.range Y.transpose.toLin' /\
+    LinearMap.ker Y.transpose.toLin' <= B
+
+/-- The ordinary P_{A,B} Fourier projection.  It is distinct from the
+hybrid `ambientHybridFilter` in A1Composition. -/
+def DR6OrdinaryFilter {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d -> Real) (M : BinaryMatrix n d) : Real :=
+  sum Y : BinaryMatrix n d,
+    if DR6OrdinarySelected A B Y then fourierCoeff f Y * character Y M else 0
+
+/-- The supported pointwise square has cutoff 2D.  This marks the exact
+convolution-output rank ceiling required by the F2 Möbius estimate. -/
+theorem dr6_square_fourier_supported {n d D : Nat}
+    (f : BinaryMatrix n d -> Real)
+    (hsupport : forall Y, D < Y.rank -> fourierCoeff f Y = 0) :
+    ComplexFourierSupportedThrough (2 * D)
+      (fun M => (f M : Complex) * (f M : Complex)) := by
+  let fc : BinaryMatrix n d -> Complex := fun M => (f M : Complex)
+  have hfc : ComplexFourierSupportedThrough D fc := by
+    intro Y hY
+    apply Complex.ext
+    · rw [complexFourierCoeff_re]
+      exact hsupport Y hY
+    · rw [complexFourierCoeff_im]
+      simp [fc]
+  have hprod := complexFourierSupportedThrough_mul fc fc hfc hfc
+  simpa [fc, two_mul, mul_assoc] using hprod
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
