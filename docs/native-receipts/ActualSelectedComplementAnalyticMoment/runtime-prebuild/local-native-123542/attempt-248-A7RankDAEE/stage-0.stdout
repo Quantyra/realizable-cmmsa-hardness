@@ -1,0 +1,121 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:161:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:184:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:189:8: warning: This simp argument is unused:
+  BinaryMatrixA1TypedFourier.carrierMean
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, complexCarrierFourierCoeff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:338:2: error: Type mismatch: After simplification, term
+  hg
+ has type
+  g ∘ₗ f = LinearMap.id
+but is expected to have type
+  (LinearMap.toMatrix' g * j).mulVecLin = Matrix.mulVecLin 1
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:353:2: error: Type mismatch: After simplification, term
+  hg
+ has type
+  f ∘ₗ g = LinearMap.id
+but is expected to have type
+  (p * LinearMap.toMatrix' g).mulVecLin = Matrix.mulVecLin 1
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:398:49: error: unsolved goals
+k m s l : ℕ
+u : Matrix (Fin k) (Fin l) F
+c : Matrix (Fin l) (Fin k) F
+j : Matrix (Fin m) (Fin l) F
+p : Matrix (Fin l) (Fin s) F
+hj : Function.Injective ⇑j.mulVecLin
+hp : Function.Surjective ⇑p.mulVecLin
+sJ : Matrix (Fin l) (Fin m) F
+hsJ : sJ * j = 1
+rP : Matrix (Fin s) (Fin l) F
+hrP : p * rP = 1
+L : Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin m) F := Matrix.fromBlocks 1 (u * sJ) 0 1
+K : Matrix (Fin k ⊕ Fin s) (Fin k ⊕ Fin s) F := Matrix.fromBlocks 1 0 (rP * c) 1
+hLdet : L.det = 1
+hKdet : K.det = 1
+hLunit : IsUnit L.det
+hKunit : IsUnit K.det
+⊢ u * c + u * (sJ * (j * c)) = 0 ∧ u * p + u * (sJ * (j * p)) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:404:43: error: unsolved goals
+k m s l : ℕ
+u : Matrix (Fin k) (Fin l) F
+c : Matrix (Fin l) (Fin k) F
+j : Matrix (Fin m) (Fin l) F
+p : Matrix (Fin l) (Fin s) F
+hj : Function.Injective ⇑j.mulVecLin
+hp : Function.Surjective ⇑p.mulVecLin
+sJ : Matrix (Fin l) (Fin m) F
+hsJ : sJ * j = 1
+rP : Matrix (Fin s) (Fin l) F
+hrP : p * rP = 1
+L : Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin m) F := Matrix.fromBlocks 1 (u * sJ) 0 1
+K : Matrix (Fin k ⊕ Fin s) (Fin k ⊕ Fin s) F := Matrix.fromBlocks 1 0 (rP * c) 1
+hLdet : L.det = 1
+hKdet : K.det = 1
+hLunit : IsUnit L.det
+hKunit : IsUnit K.det
+hLY : L * w6CanonicalBlockCandidate u c j p = Matrix.fromBlocks 1 0 (j * c) (j * p)
+⊢ j * c + j * (p * (rP * c)) = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:400:6: warning: This simp argument is unused:
+  hsJ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [L, w6CanonicalBlockCandidate, Matrix.fromBlocks_multiply, Matrix.mul_assoc, add_assoc,
+    CharTwo.add_self_eq_zero, w6_matrix_add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:400:40: warning: This simp argument is unused:
+  CharTwo.add_self_eq_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [L, w6CanonicalBlockCandidate, Matrix.fromBlocks_multiply, hsJ, Matrix.mul_assoc, add_assoc,
+    w6_matrix_add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:401:6: warning: This simp argument is unused:
+  w6_matrix_add_self_eq_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [L, w6CanonicalBlockCandidate, Matrix.fromBlocks_multiply, hsJ, Matrix.mul_assoc, add_assoc,
+    CharTwo.add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:406:41: warning: This simp argument is unused:
+  hrP
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [K, Matrix.fromBlocks_multiply, Matrix.mul_assoc, add_assoc, CharTwo.add_self_eq_zero,
+    w6_matrix_add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:407:6: warning: This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [K, Matrix.fromBlocks_multiply, hrP, Matrix.mul_assoc, CharTwo.add_self_eq_zero,
+    w6_matrix_add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:407:17: warning: This simp argument is unused:
+  CharTwo.add_self_eq_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [K, Matrix.fromBlocks_multiply, hrP, Matrix.mul_assoc, add_assoc, w6_matrix_add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:407:43: warning: This simp argument is unused:
+  w6_matrix_add_self_eq_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [K, Matrix.fromBlocks_multiply, hrP, Matrix.mul_assoc, add_assoc, CharTwo.add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:437:17: warning: This simp argument is unused:
+  Matrix.mulVecLin_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [B, Matrix.fromBlocks_mulVec]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
