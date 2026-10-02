@@ -1,0 +1,34 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:89:6: error: Type mismatch: After simplification, term
+  Finset.sum_subtype_eq_sum_filter fun Y =>
+    complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+ has type
+  ∑
+      x ∈
+        @Finset.univ { Y // w6Precedes X Y ∧ w6ActualCarrierFrequency X Y = Z }
+          (Subtype.fintype fun a => w6Precedes X a ∧ w6ActualCarrierFrequency X a = Z),
+      complexFourierCoeff f ↑x * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose ↑x)) T) =
+    ∑ x with w6Precedes X x ∧ w6ActualCarrierFrequency X x = Z,
+      complexFourierCoeff f x * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose x)) T)
+but is expected to have type
+  ∑
+      Y ∈
+        @Finset.univ { Y // w6Precedes X Y ∧ w6ActualCarrierFrequency X Y = Z }
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6ActualPredecessorFrequencyFiberFintype✝
+            X Z),
+      complexFourierCoeff f ↑Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose ↑Y)) T) =
+    ∑ x with w6Precedes X x ∧ w6ActualCarrierFrequency X x = Z,
+      complexFourierCoeff f x * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose x)) T)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:83:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, w6ActualCarrierFrequency, eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:84:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
