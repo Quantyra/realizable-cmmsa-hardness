@@ -1,0 +1,1738 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixFourier
+import PvNP.RealizableHardness.BinaryMatrixA1Phase
+import PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+import Mathlib.Data.Matrix.ColumnRowPartitioned
+
+/-! The W6 predecessor derivative is a distinct operator from the A18
+rank-layer projection.  Its frequency filter is the rank-additive predecessor
+relation from the manuscript, and the output is the actual affine restriction
+to the quotient/kernel carrier. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Phase
+open PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- The manuscript predecessor relation: `X` is below `Y` when the rank of
+`Y` is the sum of the ranks of `X` and `Y-X`. -/
+def w6Precedes {n d : Nat} (X Y : BinaryMatrix n d) : Prop :=
+  Y.rank = X.rank + (Y - X).rank
+
+/-- Rank-additivity in the actual predecessor relation forces the image of
+`Yᵀ` to be the sum of the images of `Xᵀ` and `(Y-X)ᵀ`, with trivial
+intersection. This is the first dimension step toward the graph form of the
+fixed-frequency fiber. -/
+theorem w6_precedes_transpose_range_decomposition {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    (LinearMap.range Y.transpose.toLin' =
+        LinearMap.range X.transpose.toLin' ⊔
+          LinearMap.range (Y - X).transpose.toLin') ∧
+      LinearMap.range X.transpose.toLin' ⊓
+        LinearMap.range (Y - X).transpose.toLin' = ⊥ := by
+  classical
+  let f := X.transpose.toLin'
+  let g := (Y - X).transpose.toLin'
+  have hmatrix : Y.transpose = X.transpose + (Y - X).transpose := by
+    ext i j
+    simp
+  have hsum : Y.transpose.toLin' = f + g := by
+    rw [hmatrix]
+    exact map_add (Matrix.toLin') X.transpose (Y - X).transpose
+  have hXR : Module.finrank F (LinearMap.range f) = X.rank := by
+    have h := Matrix.rank_eq_finrank_range_toLin X.transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    exact h.symm.trans (Matrix.rank_transpose X)
+  have hGR : Module.finrank F (LinearMap.range g) = (Y - X).rank := by
+    have h := Matrix.rank_eq_finrank_range_toLin (Y - X).transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    exact h.symm.trans (Matrix.rank_transpose (Y - X))
+  have hYR : Module.finrank F (LinearMap.range Y.transpose.toLin') = Y.rank := by
+    have h := Matrix.rank_eq_finrank_range_toLin Y.transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    exact h.symm.trans (Matrix.rank_transpose Y)
+  have hXY' : Y.rank = X.rank + (Y - X).rank := hXY
+  have hdim : Module.finrank F (LinearMap.range (f + g)) =
+      Module.finrank F (LinearMap.range f) +
+        Module.finrank F (LinearMap.range g) := by
+    rw [← hsum, hYR, hXR, hGR]
+    exact hXY'
+  have hle : LinearMap.range (f + g) ≤
+      LinearMap.range f ⊔ LinearMap.range g := by
+    intro z hz
+    rcases LinearMap.mem_range.mp hz with ⟨v, rfl⟩
+    change f v + g v ∈ LinearMap.range f ⊔ LinearMap.range g
+    exact add_mem
+      (Submodule.mem_sup_left ⟨v, rfl⟩)
+      (Submodule.mem_sup_right ⟨v, rfl⟩)
+  have hsupdim := Submodule.finrank_sup_add_finrank_inf_eq
+    (LinearMap.range f) (LinearMap.range g)
+  have hsup_le : Module.finrank F
+      (LinearMap.range f ⊔ LinearMap.range g : Submodule F (V d)) ≤
+      Module.finrank F (LinearMap.range f) +
+        Module.finrank F (LinearMap.range g) := by
+    omega
+  have hrange_le := Submodule.finrank_mono hle
+  have hsup_eq : Module.finrank F
+      (LinearMap.range f ⊔ LinearMap.range g : Submodule F (V d)) =
+      Module.finrank F (LinearMap.range (f + g)) := by
+    omega
+  have hsum_eq : LinearMap.range (f + g) =
+      LinearMap.range f ⊔ LinearMap.range g :=
+    Submodule.eq_of_le_of_finrank_eq hle hsup_eq.symm
+  have hinf0 : Module.finrank F
+      (LinearMap.range f ⊓ LinearMap.range g : Submodule F (V d)) = 0 := by
+    omega
+  have hinf : LinearMap.range f ⊓ LinearMap.range g = ⊥ :=
+    Submodule.finrank_eq_zero.mp hinf0
+  rw [← hsum] at hsum_eq
+  exact ⟨hsum_eq, hinf⟩
+
+/-- The manuscript predecessor relation is invariant under independent
+invertible changes of coordinates on the output and input spaces.  This is
+the rank-theoretic part of transporting a fixed predecessor fiber from an
+arbitrary rectangular matrix to its canonical block form. -/
+theorem w6Precedes_mul_equiv {n d : Nat}
+    (L : Matrix (Fin n) (Fin n) F) (R : Matrix (Fin d) (Fin d) F)
+    (X Y : BinaryMatrix n d)
+    (hL : IsUnit L.det) (hR : IsUnit R.det) :
+    w6Precedes (L * X * R) (L * Y * R) ↔ w6Precedes X Y := by
+  have hX : (L * X * R).rank = X.rank := by
+    rw [Matrix.rank_mul_eq_left_of_isUnit_det R (L * X) hR,
+      Matrix.rank_mul_eq_right_of_isUnit_det L X hL]
+  have hY : (L * Y * R).rank = Y.rank := by
+    rw [Matrix.rank_mul_eq_left_of_isUnit_det R (L * Y) hR,
+      Matrix.rank_mul_eq_right_of_isUnit_det L Y hL]
+  have hdiff :
+      (L * Y * R - L * X * R).rank = (Y - X).rank := by
+    have hmatrix : L * Y * R - L * X * R = L * (Y - X) * R := by
+      simp only [Matrix.mul_sub, Matrix.sub_mul]
+    rw [hmatrix, Matrix.rank_mul_eq_left_of_isUnit_det R
+      (L * (Y - X)) hR, Matrix.rank_mul_eq_right_of_isUnit_det
+      L (Y - X) hL]
+  constructor
+  · intro h
+    unfold w6Precedes at h ⊢
+    rw [hY, hX, hdiff] at h
+    exact h
+  · intro h
+    unfold w6Precedes at h ⊢
+    rw [hY, hX, hdiff]
+    exact h
+
+/-- `L_X f`: retain exactly the ambient Fourier frequencies above `X` in the
+rank-additive predecessor order. -/
+def w6PredecessorFilter {n d : Nat}
+    (X : BinaryMatrix n d) (f : BinaryMatrix n d → Complex)
+    (M : BinaryMatrix n d) : Complex :=
+  ∑ Y : BinaryMatrix n d,
+    if w6Precedes X Y then
+      complexFourierCoeff f Y * (character Y M : Complex) else 0
+
+/-- The actual W6 derivative `D_{X,T}=R_{range(Xᵀ),ker(Xᵀ),T} L_X f` on
+the canonical affine quotient/kernel carrier. -/
+def actualW6Derivative {n d : Nat}
+    (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range X.transpose.toLin') →ₗ[F]
+      LinearMap.ker X.transpose.toLin') : Complex :=
+  complexAmbientAffineRestrict
+    (LinearMap.range X.transpose.toLin')
+    (LinearMap.ker X.transpose.toLin') T (w6PredecessorFilter X f) M
+
+/-- Pointwise finite Fourier expansion of the actual W6 affine derivative.
+This explicit formula is the entry point for the A3 collision-fiber count. -/
+theorem actualW6Derivative_fourier_expansion {n d : Nat}
+    (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range X.transpose.toLin') →ₗ[F]
+      LinearMap.ker X.transpose.toLin') :
+    actualW6Derivative X T f M =
+      ∑ Y : BinaryMatrix n d,
+        if w6Precedes X Y then
+          complexFourierCoeff f Y *
+            (character Y (LinearMap.toMatrix'
+              (T + (LinearMap.ker X.transpose.toLin').subtype.comp
+                (M.comp (LinearMap.range X.transpose.toLin').mkQ))) : Complex)
+        else 0 := by
+  rfl
+
+/-- The carrier Fourier coefficient of the actual predecessor derivative is
+the sum over all ambient predecessors inducing that carrier frequency.  This
+is the collision identity used before the A3 fiber-cardinality estimate; it
+does not assert orthogonality at a fixed affine base. -/
+theorem actualW6Derivative_carrier_fourierCoeff {n d : Nat}
+    (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin')) :
+    complexCarrierFourierCoeff
+      (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin')
+      (actualW6Derivative X T f) Z =
+      ∑ Y : BinaryMatrix n d,
+        if w6Precedes X Y then
+          if Z = (LinearMap.range X.transpose.toLin').mkQ.comp
+              (Y.transpose.toLin'.comp
+                (LinearMap.ker X.transpose.toLin').subtype) then
+            complexFourierCoeff f Y *
+              (traceCharacter Y.transpose.toLin' T : Complex)
+          else 0
+        else 0 := by
+  classical
+  let A : Submodule F (V d) := LinearMap.range X.transpose.toLin'
+  let B : Submodule F (W n) := LinearMap.ker X.transpose.toLin'
+  let qY := fun Y : BinaryMatrix n d =>
+    A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)
+  let cY := fun Y : BinaryMatrix n d =>
+    complexFourierCoeff f Y * (traceCharacter Y.transpose.toLin' T : Complex)
+  have hchar (Y : BinaryMatrix n d) (N : (V d ⧸ A) →ₗ[F] B) :
+      character Y
+          (LinearMap.toMatrix'
+            (T + B.subtype.comp (N.comp A.mkQ))) =
+        traceCharacter Y.transpose.toLin' T *
+          traceCharacter (qY Y) N := by
+    have hmatrix :
+        character Y
+            (LinearMap.toMatrix'
+              (T + B.subtype.comp (N.comp A.mkQ))) =
+          traceCharacter Y.transpose.toLin'
+            (T + B.subtype.comp (N.comp A.mkQ)) := by
+      simpa only [Matrix.toLin'_toMatrix'] using
+        (traceCharacter_eq_matrix_character Y
+          (LinearMap.toMatrix'
+            (T + B.subtype.comp (N.comp A.mkQ)))).symm
+    rw [hmatrix, traceCharacter_carrier_base]
+  have hsignal (N : (V d ⧸ A) →ₗ[F] B) :
+      actualW6Derivative X T f N =
+        ∑ Y : BinaryMatrix n d,
+          if w6Precedes X Y then
+            cY Y * (traceCharacter (qY Y) N : Complex) else 0 := by
+    unfold actualW6Derivative complexAmbientAffineRestrict
+      w6PredecessorFilter
+    apply Finset.sum_congr rfl
+    intro Y hY
+    by_cases hp : w6Precedes X Y
+    · simp only [hp, if_pos]
+      have hh := hchar Y N
+      rw [hh]
+      simp only [qY, cY, Complex.ofReal_mul]
+      ring
+    · simp [hp]
+  let AA : Submodule F (V d) := LinearMap.range X.transpose.toLin'
+  let BB : Submodule F (W n) := LinearMap.ker X.transpose.toLin'
+  let qY' := fun Y : BinaryMatrix n d =>
+    AA.mkQ.comp (Y.transpose.toLin'.comp BB.subtype)
+  let cY' := fun Y : BinaryMatrix n d =>
+    complexFourierCoeff f Y * (traceCharacter Y.transpose.toLin' T : Complex)
+  change complexCarrierFourierCoeff AA BB
+      (actualW6Derivative X T f) Z = _
+  rw [show actualW6Derivative X T f =
+      fun N : (V d ⧸ AA) →ₗ[F] BB =>
+        ∑ Y : BinaryMatrix n d,
+          if w6Precedes X Y then
+            cY' Y * (traceCharacter (qY' Y) N : Complex) else 0 from ?_]
+  · rw [complexCarrierFourierCoeff_finset_sum]
+    apply Finset.sum_congr rfl
+    intro Y hY
+    by_cases hp : w6Precedes X Y
+    · simp only [hp, if_pos]
+      rw [complexCarrierFourierCoeff_smul,
+        complexCarrierFourierCoeff_character]
+      simp [AA, BB, qY', cY']
+    · simp [hp, complexCarrierFourierCoeff,
+        BinaryMatrixA1TypedFourier.carrierMean]
+  · funext N
+    simpa [AA, BB, qY', cY'] using hsignal N
+
+/-- Over `F₂`, a finite-dimensional space of linear maps has one binary
+coordinate per pair of basis vectors.  This is the cardinality factor needed
+for the two Hom-parameters in the A3 predecessor fiber. -/
+theorem w6_card_linearMap_binary {U V : Type*}
+    [AddCommGroup U] [Module F U] [Module.Free F U] [Module.Finite F U]
+    [Fintype U] [AddCommGroup V] [Module F V]
+    [Module.Free F V] [Module.Finite F V] [Fintype V] :
+    Fintype.card (U →ₗ[F] V) =
+      2 ^ (Module.finrank F U * Module.finrank F V) := by
+  classical
+  rw [Module.card_eq_pow_finrank (K := F) (V := U →ₗ[F] V),
+    Module.finrank_linearMap, ZMod.card]
+
+/-- The pair `(u,C)` in the A3 block parameterization has exactly the stated
+cardinality.  The still-needed fiber equivalence identifies each fixed-Z
+predecessor fiber with this product without adding a counting hypothesis. -/
+theorem w6_card_a3_parameter_pair {U V : Type*}
+    [AddCommGroup U] [Module F U] [Module.Free F U] [Module.Finite F U]
+    [Fintype U] [AddCommGroup V] [Module F V]
+    [Module.Free F V] [Module.Finite F V] [Fintype V] :
+    Fintype.card ((U →ₗ[F] V) × (V →ₗ[F] U)) =
+      2 ^ (2 * Module.finrank F U * Module.finrank F V) := by
+  classical
+  rw [Fintype.card_prod, w6_card_linearMap_binary,
+    w6_card_linearMap_binary, ← pow_add]
+  congr 1
+  ring
+
+/-- The canonical rank-`k` base matrix used in the A3 block calculation. -/
+def w6CanonicalBase (k m s : Nat) :
+    Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin s) F :=
+  Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0 0
+
+/-- The block matrix built from the two A3 parameters and a fixed rank
+factorization `J * P = Z`. -/
+def w6CanonicalBlockCandidate {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F) :
+    Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin s) F :=
+  Matrix.fromBlocks (1 + u * c) (u * p) (j * c) (j * p)
+
+/-- The displacement matrix associated with four blocks and a fixed lower
+right block. -/
+def w6BlockDisplacementMatrix {k m s : Nat}
+    (a : Matrix (Fin k) (Fin k) F)
+    (b : Matrix (Fin k) (Fin s) F)
+    (c : Matrix (Fin m) (Fin k) F)
+    (z : Matrix (Fin m) (Fin s) F) :
+    Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin s) F :=
+  Matrix.fromBlocks (a - 1) b c z
+
+/-- The top and bottom coordinate maps of a block displacement. -/
+def w6BlockTopDisplacementMap {k s : Nat}
+    (a : Matrix (Fin k) (Fin k) F)
+    (b : Matrix (Fin k) (Fin s) F) :
+    (Fin k ⊕ Fin s → F) →ₗ[F] (Fin k → F) :=
+  Matrix.mulVecLin (Matrix.fromCols (a - 1) b)
+
+def w6BlockBottomDisplacementMap {k m s : Nat}
+    (c : Matrix (Fin m) (Fin k) F)
+    (z : Matrix (Fin m) (Fin s) F) :
+    (Fin k ⊕ Fin s → F) →ₗ[F] (Fin m → F) :=
+  Matrix.mulVecLin (Matrix.fromCols c z)
+
+private def w6TopOutput {k m : Nat} :
+    (Fin k ⊕ Fin m → F) →ₗ[F] (Fin k → F) where
+  toFun x := x ∘ Sum.inl
+  map_add' _ _ := rfl
+  map_smul' _ _ := rfl
+
+private def w6BottomOutput {k m : Nat} :
+    (Fin k ⊕ Fin m → F) →ₗ[F] (Fin m → F) where
+  toFun x := x ∘ Sum.inr
+  map_add' _ _ := rfl
+  map_smul' _ _ := rfl
+
+/-- The block displacement map, expressed as its top and bottom coordinate
+maps, has the same image dimension as the full block matrix. -/
+private theorem w6_block_pair_rank
+    {k m s : Nat}
+    (a : Matrix (Fin k) (Fin k) F)
+    (b : Matrix (Fin k) (Fin s) F)
+    (c : Matrix (Fin m) (Fin k) F)
+    (z : Matrix (Fin m) (Fin s) F) :
+    Module.finrank F (LinearMap.range
+      (LinearMap.prod (w6BlockTopDisplacementMap a b)
+        (w6BlockBottomDisplacementMap c z))) =
+      (w6BlockDisplacementMatrix a b c z).rank := by
+  let D := w6BlockDisplacementMatrix a b c z
+  let e := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+  have htop : w6BlockTopDisplacementMap a b =
+      w6TopOutput.comp D.mulVecLin := by
+    apply LinearMap.ext
+    intro v
+    ext i
+    simp [w6BlockTopDisplacementMap, w6TopOutput, D,
+      w6BlockDisplacementMatrix, Matrix.fromBlocks_mulVec,
+      Matrix.fromCols_mulVec]
+  have hbottom : w6BlockBottomDisplacementMap c z =
+      w6BottomOutput.comp D.mulVecLin := by
+    apply LinearMap.ext
+    intro v
+    ext i
+    simp [w6BlockBottomDisplacementMap, w6BottomOutput, D,
+      w6BlockDisplacementMatrix, Matrix.fromBlocks_mulVec,
+      Matrix.fromCols_mulVec]
+  have hp : LinearMap.prod (w6BlockTopDisplacementMap a b)
+      (w6BlockBottomDisplacementMap c z) =
+      e.toLinearMap.comp D.mulVecLin := by
+    apply LinearMap.ext
+    intro v
+    apply Prod.ext
+    · ext i
+      simp [htop, e, w6TopOutput]
+    · ext i
+      simp [hbottom, e, w6BottomOutput]
+  rw [hp, LinearMap.range_comp]
+  rw [LinearEquiv.finrank_map_eq]
+  rfl
+
+/-- The bottom block coordinate has rank at most the full displacement. -/
+private theorem w6_bottom_rank_le_block_rank
+    {k m s : Nat}
+    (a : Matrix (Fin k) (Fin k) F)
+    (b : Matrix (Fin k) (Fin s) F)
+    (c : Matrix (Fin m) (Fin k) F)
+    (z : Matrix (Fin m) (Fin s) F) :
+    Module.finrank F (LinearMap.range
+      (w6BlockBottomDisplacementMap c z)) ≤
+      (w6BlockDisplacementMatrix a b c z).rank := by
+  let D := w6BlockDisplacementMatrix a b c z
+  have hbottom : w6BlockBottomDisplacementMap c z =
+      w6BottomOutput.comp D.mulVecLin := by
+    apply LinearMap.ext
+    intro v
+    ext i
+    simp [w6BlockBottomDisplacementMap, w6BottomOutput, D,
+      w6BlockDisplacementMatrix, Matrix.fromBlocks_mulVec,
+      Matrix.fromCols_mulVec]
+  rw [hbottom, LinearMap.range_comp]
+  change Module.finrank F
+      ((LinearMap.range D.mulVecLin).map w6BottomOutput) ≤
+    Module.finrank F (LinearMap.range D.mulVecLin)
+  exact Submodule.finrank_map_le _ _
+
+/-- The fixed lower-right block supplies a lower bound on the bottom map's
+rank. -/
+private theorem w6_fixed_lower_right_range_le_bottom
+    {k m s l : Nat}
+    (c : Matrix (Fin m) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F) :
+    LinearMap.range (Matrix.mulVecLin (j * p)) ≤
+      LinearMap.range (w6BlockBottomDisplacementMap c (j * p)) := by
+  intro y hy
+  rcases hy with ⟨v, rfl⟩
+  refine ⟨Sum.elim (0 : Fin k → F) v, ?_⟩
+  ext i
+  simp [w6BlockBottomDisplacementMap, Matrix.mulVecLin_apply,
+    Matrix.fromCols_mulVec, Matrix.mulVecLin_mul, Matrix.mulVecLin_apply]
+
+/-- The displacement of the canonical A3 candidate factors through the
+rank-`l` parameter space.  This is the block identity underlying the exact
+rank calculation for the predecessor fiber. -/
+theorem w6CanonicalBlockCandidate_sub_base {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F) :
+    w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s =
+      Matrix.fromRows u j * Matrix.fromCols c p := by
+  change Matrix.fromBlocks (1 + u * c) (u * p) (j * c) (j * p) -
+      Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0 0 = _
+  rw [Matrix.fromRows_mul_fromCols]
+  rw [sub_eq_add_neg, Matrix.fromBlocks_neg, Matrix.fromBlocks_add]
+  apply Matrix.fromBlocks_inj.mpr
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · abel
+  · simp only [add_zero, neg_zero]
+  · simp only [add_zero, neg_zero]
+  · simp only [add_zero, neg_zero]
+
+/-- An injective left factor and surjective right factor preserve the full
+rank of their intermediate space. -/
+theorem w6_matrix_rank_mul_of_injective_surjective
+    {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
+    [DecidableEq α] [DecidableEq β] [DecidableEq γ]
+    (A : Matrix α β F)
+    (B : Matrix β γ F)
+    (hA : Function.Injective (Matrix.mulVecLin A))
+    (hB : Function.Surjective (Matrix.mulVecLin B)) :
+    (A * B).rank = Fintype.card β := by
+  rw [Matrix.rank, Matrix.mulVecLin_mul,
+    LinearMap.range_comp_of_range_eq_top (Matrix.mulVecLin A)
+      (LinearMap.range_eq_top.2 hB),
+    LinearMap.finrank_range_of_inj hA, Module.finrank_pi]
+
+/-- The canonical block candidate has displacement rank `l` when its column
+factor is injective and its row factor is surjective. -/
+theorem w6CanonicalBlockCandidate_sub_base_rank {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hleft : Function.Injective
+      (Matrix.mulVecLin (Matrix.fromRows u j)))
+    (hright : Function.Surjective
+      (Matrix.mulVecLin (Matrix.fromCols c p))) :
+    (w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s).rank = l := by
+  rw [w6CanonicalBlockCandidate_sub_base]
+  simpa using w6_matrix_rank_mul_of_injective_surjective
+    (Matrix.fromRows u j) (Matrix.fromCols c p) hleft hright
+
+/-- The vertical block map is injective when its lower block is injective. -/
+theorem w6_fromRows_injective_of_lower_injective {k m l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (hj : Function.Injective (Matrix.mulVecLin j)) :
+    Function.Injective (Matrix.mulVecLin (Matrix.fromRows u j)) := by
+  intro x y h
+  apply hj
+  ext b
+  have hb := congrArg (fun z : Fin k ⊕ Fin m → F => z (Sum.inr b)) h
+  simpa using hb
+
+/-- The horizontal block map is surjective when its right block is. -/
+theorem w6_fromCols_surjective_of_right_surjective {k l s : Nat}
+    (c : Matrix (Fin l) (Fin k) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hp : Function.Surjective (Matrix.mulVecLin p)) :
+    Function.Surjective (Matrix.mulVecLin (Matrix.fromCols c p)) := by
+  intro y
+  obtain ⟨x, hx⟩ := hp y
+  refine ⟨Sum.elim (0 : Fin k → F) x, ?_⟩
+  simpa using hx
+
+/-- For the canonical A3 candidate, injectivity of J and surjectivity of P
+therefore give the required displacement rank without extra fiber data. -/
+theorem w6CanonicalBlockCandidate_sub_base_rank_of_J_inj_P_surj
+    {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p)) :
+    (w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s).rank = l := by
+  exact w6CanonicalBlockCandidate_sub_base_rank u c j p
+    (w6_fromRows_injective_of_lower_injective u j hj)
+    (w6_fromCols_surjective_of_right_surjective c p hp)
+
+/-- An injective matrix has a matrix left inverse after conversion through its
+linear map. -/
+private theorem w6_exists_matrix_left_inverse {m l : Nat}
+    (j : Matrix (Fin m) (Fin l) F)
+    (hj : Function.Injective (Matrix.mulVecLin j)) :
+    ∃ s : Matrix (Fin l) (Fin m) F, s * j = 1 := by
+  classical
+  let f := Matrix.mulVecLin j
+  have hker : LinearMap.ker f = ⊥ := LinearMap.ker_eq_bot.mpr hj
+  obtain ⟨g, hg⟩ := f.exists_leftInverse_of_injective hker
+  refine ⟨LinearMap.toMatrix' g, ?_⟩
+  apply Matrix.toLin'.injective
+  change (LinearMap.toMatrix' g * j).toLin' = (1 : Matrix (Fin l) (Fin l) F).toLin'
+  rw [Matrix.toLin'_mul, Matrix.toLin'_toMatrix', Matrix.toLin'_one]
+  change g.comp f = LinearMap.id
+  exact hg
+
+/-- A surjective matrix has a matrix right inverse after conversion through
+its linear map. -/
+private theorem w6_exists_matrix_right_inverse {l s : Nat}
+    (p : Matrix (Fin l) (Fin s) F)
+    (hp : Function.Surjective (Matrix.mulVecLin p)) :
+    ∃ r : Matrix (Fin s) (Fin l) F, p * r = 1 := by
+  classical
+  let f := Matrix.mulVecLin p
+  obtain ⟨g, hg⟩ := f.exists_rightInverse_of_surjective
+    (LinearMap.range_eq_top.mpr hp)
+  refine ⟨LinearMap.toMatrix' g, ?_⟩
+  apply Matrix.toLin'.injective
+  change (p * LinearMap.toMatrix' g).toLin' = (1 : Matrix (Fin l) (Fin l) F).toLin'
+  rw [Matrix.toLin'_mul, Matrix.toLin'_toMatrix', Matrix.toLin'_one]
+  change f.comp g = LinearMap.id
+  exact hg
+
+/-- Entrywise characteristic two gives additive cancellation for rectangular
+matrices as well as square endomorphisms. -/
+private theorem w6_matrix_add_self_eq_zero {m n : Nat}
+    (M : Matrix (Fin m) (Fin n) F) : M + M = 0 := by
+  ext i j
+  exact CharTwo.add_self_eq_zero (M i j)
+
+/-- The A3 block candidate has rank `k+l`.  The two hypotheses are exactly
+the factorization conditions on the fixed lower-right block `J*P`: injective
+columns for `J` and surjective rows for `P`. -/
+theorem w6CanonicalBlockCandidate_rank_of_J_inj_P_surj
+    {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p)) :
+    (w6CanonicalBlockCandidate u c j p).rank = k + l := by
+  classical
+  obtain ⟨sJ, hsJ⟩ := w6_exists_matrix_left_inverse j hj
+  obtain ⟨rP, hrP⟩ := w6_exists_matrix_right_inverse p hp
+  let L : Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin m) F :=
+    Matrix.fromBlocks 1 (u * sJ) 0 1
+  let K : Matrix (Fin k ⊕ Fin s) (Fin k ⊕ Fin s) F :=
+    Matrix.fromBlocks 1 0 (rP * c) 1
+  have hLdet : L.det = 1 := by
+    dsimp [L]
+    rw [Matrix.det_fromBlocks_zero₂₁]
+    simp
+  have hKdet : K.det = 1 := by
+    dsimp [K]
+    rw [Matrix.det_fromBlocks_zero₁₂]
+    simp
+  have hLunit : IsUnit L.det := by
+    rw [hLdet]
+    exact isUnit_one
+  have hKunit : IsUnit K.det := by
+    rw [hKdet]
+    exact isUnit_one
+  have hsJc : sJ * (j * c) = c := by
+    rw [← Matrix.mul_assoc sJ j c, hsJ, Matrix.one_mul]
+  have hsJp : sJ * (j * p) = p := by
+    rw [← Matrix.mul_assoc sJ j p, hsJ, Matrix.one_mul]
+  have hrPc : p * (rP * c) = c := by
+    rw [← Matrix.mul_assoc p rP c, hrP, Matrix.one_mul]
+  have hLY :
+      L * w6CanonicalBlockCandidate u c j p =
+        Matrix.fromBlocks 1 0 (j * c) (j * p) := by
+    simp [L, w6CanonicalBlockCandidate, Matrix.fromBlocks_multiply,
+      hsJc, hsJp, Matrix.mul_assoc, add_assoc, CharTwo.add_self_eq_zero,
+      w6_matrix_add_self_eq_zero]
+  have hreduce :
+    L * w6CanonicalBlockCandidate u c j p * K =
+        Matrix.fromBlocks 1 0 0 (j * p) := by
+    rw [hLY]
+    simp [K, Matrix.fromBlocks_multiply, hrPc, Matrix.mul_assoc,
+      add_assoc, CharTwo.add_self_eq_zero, w6_matrix_add_self_eq_zero]
+  let A : Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin l) F :=
+    Matrix.fromBlocks 1 0 0 j
+  let B : Matrix (Fin k ⊕ Fin l) (Fin k ⊕ Fin s) F :=
+    Matrix.fromBlocks 1 0 0 p
+  have hdiag : Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F)
+      0 0 (j * p) = A * B := by
+    simp [A, B, Matrix.fromBlocks_multiply]
+  have hAinj : Function.Injective (Matrix.mulVecLin A) := by
+    intro x y hxy
+    ext q
+    cases q with
+    | inl a =>
+        have h := congrFun hxy (Sum.inl a)
+        simpa [A, Matrix.mulVecLin_apply, Matrix.fromBlocks_mulVec] using h
+    | inr b =>
+        have hbottom :
+            Matrix.mulVecLin j (x ∘ Sum.inr) =
+              Matrix.mulVecLin j (y ∘ Sum.inr) := by
+          ext a
+          have h := congrFun hxy (Sum.inr a)
+          simpa [A, Matrix.mulVecLin_apply, Matrix.fromBlocks_mulVec] using h
+        exact congrFun (hj hbottom) b
+  have hBsurj : Function.Surjective (Matrix.mulVecLin B) := by
+    intro y
+    obtain ⟨z, hz⟩ := hp (y ∘ Sum.inr)
+    refine ⟨Sum.elim (y ∘ Sum.inl) z, ?_⟩
+    ext q
+    cases q with
+    | inl a =>
+        simp [B, Matrix.mulVecLin_apply, Matrix.fromBlocks_mulVec]
+    | inr b =>
+        have hb := congrFun hz b
+        simpa [B, Matrix.mulVecLin_apply, Matrix.fromBlocks_mulVec] using hb
+  have hdiagRank :
+      (Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0
+        (j * p)).rank = k + l := by
+    rw [hdiag]
+    simpa using w6_matrix_rank_mul_of_injective_surjective A B hAinj hBsurj
+  have hreduceRank :
+      (L * w6CanonicalBlockCandidate u c j p * K).rank =
+        (w6CanonicalBlockCandidate u c j p).rank := by
+    rw [Matrix.rank_mul_eq_left_of_isUnit_det K
+        (L * w6CanonicalBlockCandidate u c j p) hKunit,
+      Matrix.rank_mul_eq_right_of_isUnit_det L
+        (w6CanonicalBlockCandidate u c j p) hLunit]
+  calc
+    (w6CanonicalBlockCandidate u c j p).rank =
+        (L * w6CanonicalBlockCandidate u c j p * K).rank := hreduceRank.symm
+    _ = (Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0
+          (j * p)).rank := by rw [hreduce]
+    _ = k + l := hdiagRank
+
+/-- For fixed injective/surjective factors of the lower-right block, the two
+A3 parameters are uniquely determined by the resulting candidate matrix. -/
+theorem w6CanonicalBlockCandidate_injective_parameters
+    {k m s l : Nat}
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p)) :
+    Function.Injective
+      (fun q : Matrix (Fin k) (Fin l) F × Matrix (Fin l) (Fin k) F =>
+        w6CanonicalBlockCandidate q.1 q.2 j p) := by
+  classical
+  intro q₁ q₂ hq
+  change Matrix.fromBlocks (1 + q₁.1 * q₁.2) (q₁.1 * p)
+      (j * q₁.2) (j * p) =
+    Matrix.fromBlocks (1 + q₂.1 * q₂.2) (q₂.1 * p)
+      (j * q₂.2) (j * p) at hq
+  rcases Matrix.fromBlocks_inj.mp hq with ⟨_, htop, hbottom, _⟩
+  have htopMaps := congrArg Matrix.mulVecLin htop
+  rw [Matrix.mulVecLin_mul, Matrix.mulVecLin_mul] at htopMaps
+  have huMaps : Matrix.mulVecLin q₁.1 = Matrix.mulVecLin q₂.1 := by
+    apply LinearMap.ext
+    intro v
+    obtain ⟨z, hz⟩ := hp v
+    have h := congrArg
+      (fun L : (Fin s → F) →ₗ[F] (Fin k → F) => L z) htopMaps
+    simpa [LinearMap.comp_apply, hz] using h
+  have huLinear : q₁.1.toLin' = q₂.1.toLin' := by
+    simpa only [Matrix.toLin'_apply'] using huMaps
+  have hu : q₁.1 = q₂.1 := Matrix.toLin'.injective huLinear
+  have hbottomMaps := congrArg Matrix.mulVecLin hbottom
+  rw [Matrix.mulVecLin_mul, Matrix.mulVecLin_mul] at hbottomMaps
+  have hcMaps : Matrix.mulVecLin q₁.2 = Matrix.mulVecLin q₂.2 := by
+    apply LinearMap.ext
+    intro v
+    apply hj
+    have h := congrArg
+      (fun L : (Fin k → F) →ₗ[F] (Fin m → F) => L v) hbottomMaps
+    simpa [LinearMap.comp_apply] using h
+  have hcLinear : q₁.2.toLin' = q₂.2.toLin' := by
+    simpa only [Matrix.toLin'_apply'] using hcMaps
+  have hc : q₁.2 = q₂.2 := Matrix.toLin'.injective hcLinear
+  exact Prod.ext hu hc
+
+/-- If a paired linear map has the same rank as its surjective second
+coordinate, its first coordinate factors uniquely through the second.  This
+is the graph step used to recover A3 parameters from a fixed-Z displacement. -/
+theorem w6_unique_graph_factor_of_rank_eq
+    {U E T : Type*}
+    [AddCommGroup U] [Module F U] [FiniteDimensional F U]
+    [AddCommGroup E] [Module F E] [FiniteDimensional F E]
+    [AddCommGroup T] [Module F T]
+    (f : U →ₗ[F] T) (g : U →ₗ[F] E)
+    (hg : Function.Surjective g)
+    (hrank : Module.finrank F (LinearMap.range (LinearMap.prod f g)) =
+      Module.finrank F (LinearMap.range g)) :
+    ∃! q : E →ₗ[F] T, q.comp g = f := by
+  classical
+  have hkerle : LinearMap.ker (LinearMap.prod f g) ≤ LinearMap.ker g := by
+    intro x hx
+    apply LinearMap.mem_ker.mpr
+    have h := LinearMap.mem_ker.mp hx
+    change (f x, g x) = (0, 0) at h
+    simpa using congrArg Prod.snd h
+  have hkerdim : Module.finrank F (LinearMap.ker (LinearMap.prod f g)) =
+      Module.finrank F (LinearMap.ker g) := by
+    have hp := LinearMap.finrank_range_add_finrank_ker (LinearMap.prod f g)
+    have hg' := LinearMap.finrank_range_add_finrank_ker g
+    omega
+  have hkereq : LinearMap.ker (LinearMap.prod f g) = LinearMap.ker g :=
+    Submodule.eq_of_le_of_finrank_eq hkerle hkerdim
+  have hker : LinearMap.ker g ≤ LinearMap.ker f := by
+    intro x hx
+    apply LinearMap.mem_ker.mpr
+    have hpair : x ∈ LinearMap.ker (LinearMap.prod f g) := by
+      rw [hkereq]
+      exact hx
+    have h := LinearMap.mem_ker.mp hpair
+    change (f x, g x) = (0, 0) at h
+    simpa using congrArg Prod.fst h
+  let e := g.quotKerEquivOfSurjective hg
+  let qbar := (LinearMap.ker g).liftQ f hker
+  let q := qbar.comp e.symm.toLinearMap
+  have hfactor : q.comp g = f := by
+    apply LinearMap.ext
+    intro x
+    change q (g x) = f x
+    dsimp [q, qbar, e]
+    rw [LinearMap.quotKerEquivOfSurjective_symm_apply]
+    rfl
+  refine ⟨q, hfactor, ?_⟩
+  intro q' hq'
+  apply LinearMap.ext
+  intro y
+  obtain ⟨x, hx⟩ := hg y
+  have h := congrArg (fun L : U →ₗ[F] T => L x) (hq'.trans hfactor.symm)
+  simpa [LinearMap.comp_apply, hx] using h
+
+/-- Replacing a map by its range-restricted version does not change the rank
+of a paired map: both paired maps have the same kernel. -/
+private theorem w6_prod_rangeRestrict_rank_eq
+    {U T E : Type*}
+    [AddCommGroup U] [Module F U] [FiniteDimensional F U]
+    [AddCommGroup T] [Module F T] [FiniteDimensional F T]
+    [AddCommGroup E] [Module F E] [FiniteDimensional F E]
+    (f : U →ₗ[F] T) (g : U →ₗ[F] E) :
+    Module.finrank F (LinearMap.range (LinearMap.prod f (LinearMap.rangeRestrict g))) =
+      Module.finrank F (LinearMap.range (LinearMap.prod f g)) := by
+  have hker : LinearMap.ker (LinearMap.prod f (LinearMap.rangeRestrict g)) =
+      LinearMap.ker (LinearMap.prod f g) := by
+    ext x
+    simp only [LinearMap.mem_ker, LinearMap.prod_apply, Prod.ext_iff]
+    constructor
+    · rintro ⟨hf, hg⟩
+      exact ⟨hf, congrArg Subtype.val hg⟩
+    · rintro ⟨hf, hg⟩
+      exact ⟨hf, Subtype.ext hg⟩
+  have hleft := LinearMap.finrank_range_add_finrank_ker
+    (LinearMap.prod f (LinearMap.rangeRestrict g))
+  have hright := LinearMap.finrank_range_add_finrank_ker (LinearMap.prod f g)
+  rw [hker] at hleft
+  omega
+
+/-- If a fixed lower-right block is `J * P`, with `J` injective and `P`
+surjective, then every displacement of rank `l` with that lower-right block
+has its top map factoring through the bottom map. This is the actual
+fixed-fibre graph converse, before extracting the canonical block parameters. -/
+theorem w6_fixed_block_graph_factor
+    {k m s l : Nat}
+    (a : Matrix (Fin k) (Fin k) F)
+    (b : Matrix (Fin k) (Fin s) F)
+    (c : Matrix (Fin m) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p))
+    (hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l) :
+    ∃ q : LinearMap.range (w6BlockBottomDisplacementMap c (j * p)) →ₗ[F]
+        (Fin k → F),
+      q.comp (LinearMap.rangeRestrict (w6BlockBottomDisplacementMap c (j * p))) =
+        w6BlockTopDisplacementMap a b := by
+  classical
+  let g := w6BlockBottomDisplacementMap c (j * p)
+  let f := w6BlockTopDisplacementMap a b
+  have hjp : (j * p).rank = l := by
+    simpa using w6_matrix_rank_mul_of_injective_surjective j p hj hp
+  have hlower : Module.finrank F (LinearMap.range (Matrix.mulVecLin (j * p))) = l := by
+    simpa [Matrix.rank] using hjp
+  have hrange : LinearMap.range (Matrix.mulVecLin (j * p)) ≤ LinearMap.range g := by
+    simpa [g] using w6_fixed_lower_right_range_le_bottom c j p
+  have hlow : l ≤ Module.finrank F (LinearMap.range g) := by
+    rw [← hlower]
+    exact Submodule.finrank_mono hrange
+  have hhigh : Module.finrank F (LinearMap.range g) ≤ l := by
+    rw [← hD]
+    exact w6_bottom_rank_le_block_rank a b c (j * p)
+  have hgrank : Module.finrank F (LinearMap.range g) = l := by omega
+  have hpairrank : Module.finrank F (LinearMap.range (LinearMap.prod f g)) = l := by
+    rw [w6_block_pair_rank a b c (j * p), hD]
+  have hg : Function.Surjective (LinearMap.rangeRestrict g) := by
+    intro y
+    rcases y.2 with ⟨v, hv⟩
+    exact ⟨v, Subtype.ext hv⟩
+  have hpairrank' : Module.finrank F
+      (LinearMap.range (LinearMap.prod f (LinearMap.rangeRestrict g))) =
+      Module.finrank F (LinearMap.range (LinearMap.rangeRestrict g)) := by
+    rw [w6_prod_rangeRestrict_rank_eq, hpairrank, LinearMap.range_eq_top.mpr hg]
+    simpa only [finrank_top] using hgrank.symm
+  obtain ⟨q, hq, _⟩ := w6_unique_graph_factor_of_rank_eq f
+    (LinearMap.rangeRestrict g) hg hpairrank'
+  exact ⟨q, hq⟩
+
+/-- Under the fixed-rank hypotheses, the bottom block has exactly the image
+of `J`; the lower-right block already fills that image because `P` is onto. -/
+theorem w6_fixed_bottom_range_eq
+    {k m s l : Nat}
+    (a : Matrix (Fin k) (Fin k) F)
+    (b : Matrix (Fin k) (Fin s) F)
+    (c : Matrix (Fin m) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p))
+    (hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l) :
+    LinearMap.range (Matrix.mulVecLin j) =
+      LinearMap.range (w6BlockBottomDisplacementMap c (j * p)) := by
+  classical
+  let g := w6BlockBottomDisplacementMap c (j * p)
+  have hJP : LinearMap.range (Matrix.mulVecLin (j * p)) =
+      LinearMap.range (Matrix.mulVecLin j) := by
+    rw [Matrix.mulVecLin_mul, LinearMap.range_comp,
+      LinearMap.range_eq_top.mpr hp, Submodule.map_top]
+  have hJle : LinearMap.range (Matrix.mulVecLin j) ≤ LinearMap.range g := by
+    rw [← hJP]
+    simpa [g] using w6_fixed_lower_right_range_le_bottom c j p
+  have hJdim : Module.finrank F (LinearMap.range (Matrix.mulVecLin j)) = l := by
+    simpa [Module.finrank_fintype_fun_eq_card] using
+      (Matrix.mulVecLin j).finrank_range_of_inj hj
+  have hGdim : Module.finrank F (LinearMap.range g) = l := by
+    have hlow : l ≤ Module.finrank F (LinearMap.range g) := by
+      rw [← hJdim]
+      exact Submodule.finrank_mono hJle
+    have hhigh : Module.finrank F (LinearMap.range g) ≤ l := by
+      rw [← hD]
+      exact w6_bottom_rank_le_block_rank a b c (j * p)
+    omega
+  exact Submodule.eq_of_le_of_finrank_eq hJle (hJdim.trans hGdim.symm)
+
+/-- The fixed-bottom graph map recovers the two A3 linear parameters.  This
+is the actual converse at the level of coordinate maps: the left block factors
+through `J`, and the top map is the same graph map applied to the two bottom
+coordinates. -/
+theorem w6_fixed_block_parameter_maps
+    {k m s l : Nat}
+    (a : Matrix (Fin k) (Fin k) F)
+    (b : Matrix (Fin k) (Fin s) F)
+    (c : Matrix (Fin m) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p))
+    (hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l) :
+    ∃ u : (Fin l → F) →ₗ[F] (Fin k → F),
+      ∃ c₀ : (Fin k → F) →ₗ[F] (Fin l → F),
+        (Matrix.mulVecLin j).comp c₀ = Matrix.mulVecLin c ∧
+        u.comp c₀ = Matrix.mulVecLin (a - 1) ∧
+        u.comp (Matrix.mulVecLin p) = Matrix.mulVecLin b := by
+  classical
+  let g := w6BlockBottomDisplacementMap c (j * p)
+  let f := w6BlockTopDisplacementMap a b
+  have hRange := w6_fixed_bottom_range_eq a b c j p hj hp hD
+  obtain ⟨q, hq⟩ := w6_fixed_block_graph_factor a b c j p hj hp hD
+  obtain ⟨sJ, hsJ⟩ := w6_exists_matrix_left_inverse j hj
+  let jMap := Matrix.mulVecLin j
+  let cMap := Matrix.mulVecLin c
+  let pMap := Matrix.mulVecLin p
+  let sJMap := Matrix.mulVecLin sJ
+  let c₀ := sJMap.comp cMap
+  have hsJMap : sJMap.comp jMap = LinearMap.id := by
+    change (Matrix.mulVecLin sJ).comp (Matrix.mulVecLin j) = LinearMap.id
+    rw [← Matrix.mulVecLin_mul, hsJ, Matrix.mulVecLin_one]
+  have hjMem (x : Fin l → F) : jMap x ∈ LinearMap.range g := by
+    rw [← hRange]
+    exact ⟨x, rfl⟩
+  let jG : (Fin l → F) →ₗ[F] LinearMap.range g :=
+    LinearMap.codRestrict (LinearMap.range g) jMap hjMem
+  have hcMem (x : Fin k → F) : cMap x ∈ LinearMap.range g := by
+    refine ⟨Sum.elim x 0, ?_⟩
+    simp [g, w6BlockBottomDisplacementMap, Matrix.mulVecLin_apply,
+      Matrix.fromCols_mulVec, Matrix.mulVecLin_mul, cMap]
+  have hcJMem (x : Fin k → F) : cMap x ∈ LinearMap.range jMap := by
+    rw [hRange]
+    exact hcMem x
+  have hcFactor : jMap.comp c₀ = cMap := by
+    apply LinearMap.ext
+    intro x
+    obtain ⟨v, hv⟩ := hcJMem x
+    change jMap (sJMap (cMap x)) = cMap x
+    calc
+      jMap (sJMap (cMap x)) = jMap (sJMap (jMap v)) := by rw [← hv]
+      _ = jMap v := by
+        change (jMap.comp (sJMap.comp jMap)) v = jMap v
+        rw [hsJMap]
+        rfl
+      _ = cMap x := hv
+  have hbotInl (x : Fin k → F) :
+      LinearMap.rangeRestrict g (Sum.elim x 0) = jG (c₀ x) := by
+    apply Subtype.ext
+    have hbot : g (Sum.elim x 0) = cMap x := by
+      simp [g, w6BlockBottomDisplacementMap, Matrix.mulVecLin_apply,
+        Matrix.fromCols_mulVec, cMap]
+    have hcPoint := congrArg (fun L : (Fin k → F) →ₗ[F] (Fin m → F) => L x)
+      hcFactor
+    change g (Sum.elim x 0) = jMap (c₀ x)
+    calc
+      g (Sum.elim x 0) = cMap x := hbot
+      _ = jMap (c₀ x) := by simpa [LinearMap.comp_apply, c₀] using hcPoint.symm
+  have hbotInr (y : Fin s → F) :
+      LinearMap.rangeRestrict g (Sum.elim 0 y) = jG (pMap y) := by
+    apply Subtype.ext
+    have hbot : g (Sum.elim 0 y) = (Matrix.mulVecLin (j * p)) y := by
+      simp [g, w6BlockBottomDisplacementMap, Matrix.mulVecLin_apply,
+        Matrix.fromCols_mulVec]
+    have hjp : (Matrix.mulVecLin (j * p)) y =
+        jMap (pMap y) := by
+      have hjpMap : Matrix.mulVecLin (j * p) =
+          (Matrix.mulVecLin j).comp (Matrix.mulVecLin p) := by
+        rw [Matrix.mulVecLin_mul]
+      simpa [jMap, pMap, LinearMap.comp_apply] using
+        congrArg (fun L : (Fin s → F) →ₗ[F] (Fin m → F) => L y) hjpMap
+    exact hbot.trans hjp
+  let u := q.comp jG
+  have hleft : u.comp c₀ = Matrix.mulVecLin (a - 1) := by
+    apply LinearMap.ext
+    intro x
+    have he := congrArg (fun L : (Fin k ⊕ Fin s → F) →ₗ[F] (Fin k → F) =>
+      L (Sum.elim x 0)) hq
+    change q (LinearMap.rangeRestrict g (Sum.elim x 0)) = f (Sum.elim x 0) at he
+    rw [hbotInl] at he
+    change u (c₀ x) = (Matrix.mulVecLin (a - 1)) x
+    simpa [u, LinearMap.comp_apply, f, w6BlockTopDisplacementMap,
+      Matrix.mulVecLin_apply, Matrix.fromCols_mulVec,
+      Matrix.sub_mulVec, Matrix.one_mulVec] using he
+  have hright : u.comp pMap = Matrix.mulVecLin b := by
+    apply LinearMap.ext
+    intro y
+    have he := congrArg (fun L : (Fin k ⊕ Fin s → F) →ₗ[F] (Fin k → F) =>
+      L (Sum.elim 0 y)) hq
+    change q (LinearMap.rangeRestrict g (Sum.elim 0 y)) = f (Sum.elim 0 y) at he
+    rw [hbotInr] at he
+    change u (pMap y) = (Matrix.mulVecLin b) y
+    simpa [u, LinearMap.comp_apply, f, w6BlockTopDisplacementMap,
+      Matrix.mulVecLin_apply, Matrix.fromCols_mulVec] using he
+  exact ⟨u, c₀, hcFactor, hleft, hright⟩
+
+/-- Every fixed-`J*P` displacement of rank `l` is exactly one of the
+canonical A3 block candidates.  The witnesses are recovered from the graph
+factor, rather than postulated as extra fiber data. -/
+theorem w6_fixed_block_factorization
+    {k m s l : Nat}
+    (a : Matrix (Fin k) (Fin k) F)
+    (b : Matrix (Fin k) (Fin s) F)
+    (c : Matrix (Fin m) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p))
+    (hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l) :
+    ∃ u : Matrix (Fin k) (Fin l) F,
+      ∃ c₀ : Matrix (Fin l) (Fin k) F,
+        w6CanonicalBlockCandidate u c₀ j p =
+          Matrix.fromBlocks a b c (j * p) := by
+  obtain ⟨uMap, cMap, hcMap, hleftMap, hrightMap⟩ :=
+    w6_fixed_block_parameter_maps a b c j p hj hp hD
+  let u := LinearMap.toMatrix' uMap
+  let c₀ := LinearMap.toMatrix' cMap
+  have hc : j * c₀ = c := by
+    apply Matrix.toLin'.injective
+    change (j * LinearMap.toMatrix' cMap).toLin' = c.toLin'
+    rw [Matrix.toLin'_mul, Matrix.toLin'_toMatrix']
+    simpa only [Matrix.toLin'_apply'] using hcMap
+  have hleft : u * c₀ = a - 1 := by
+    apply Matrix.toLin'.injective
+    change (LinearMap.toMatrix' uMap * LinearMap.toMatrix' cMap).toLin' =
+      (a - 1).toLin'
+    rw [Matrix.toLin'_mul, Matrix.toLin'_toMatrix', Matrix.toLin'_toMatrix']
+    simpa only [Matrix.toLin'_apply', Matrix.sub_mulVec, Matrix.one_mulVec] using hleftMap
+  have hright : u * p = b := by
+    apply Matrix.toLin'.injective
+    change (LinearMap.toMatrix' uMap * p).toLin' = b.toLin'
+    rw [Matrix.toLin'_mul, Matrix.toLin'_toMatrix']
+    simpa only [Matrix.toLin'_apply'] using hrightMap
+  have ha : a = 1 + u * c₀ := by
+    calc
+      a = (a - 1) + 1 := by simp
+      _ = u * c₀ + 1 := by rw [hleft]
+      _ = 1 + u * c₀ := by abel
+  refine ⟨u, c₀, ?_⟩
+  change Matrix.fromBlocks (1 + u * c₀) (u * p) (j * c₀) (j * p) =
+    Matrix.fromBlocks a b c (j * p)
+  exact Matrix.fromBlocks_inj.mpr ⟨ha.symm, hright, hc, rfl⟩
+
+/-- The block triples with fixed lower-right block `J*P` and displacement
+rank `l` form the actual fixed-`Z` predecessor fiber. -/
+abbrev W6FixedBottomBlockTriple (k m s : Nat) :=
+  Matrix (Fin k) (Fin k) F ×
+    (Matrix (Fin k) (Fin s) F × Matrix (Fin m) (Fin k) F)
+
+def w6FixedBottomBlockFiber {k m s l : Nat}
+    (j : Matrix (Fin m) (Fin l) F) (p : Matrix (Fin l) (Fin s) F) :=
+  { t : W6FixedBottomBlockTriple k m s //
+    (w6BlockDisplacementMatrix t.1 t.2.1 t.2.2 (j * p)).rank = l }
+
+private noncomputable instance w6FixedBottomBlockFiberFintype
+    {k m s l : Nat}
+    (j : Matrix (Fin m) (Fin l) F) (p : Matrix (Fin l) (Fin s) F) :
+    Fintype (w6FixedBottomBlockFiber (k := k) j p) := by
+  classical
+  unfold w6FixedBottomBlockFiber
+  exact Fintype.ofFinite _
+
+/-- A fixed lower-right block, without choosing a rank factorization. -/
+def w6FixedZBlockFiber {k m s l : Nat}
+    (z : Matrix (Fin m) (Fin s) F) :=
+  { t : W6FixedBottomBlockTriple k m s //
+    (w6BlockDisplacementMatrix t.1 t.2.1 t.2.2 z).rank = l }
+
+private noncomputable instance w6FixedZBlockFiberFintype
+    {k m s l : Nat} (z : Matrix (Fin m) (Fin s) F) :
+    Fintype (w6FixedZBlockFiber (k := k) (l := l) z) := by
+  classical
+  unfold w6FixedZBlockFiber
+  exact Fintype.ofFinite _
+
+/-- Every finite binary matrix factors through a coordinate space of its rank,
+with an injective left map and a surjective right map. -/
+theorem w6_matrix_rank_factorization
+    {m s l : Nat} (z : Matrix (Fin m) (Fin s) F)
+    (hz : z.rank = l) :
+    ∃ j : Matrix (Fin m) (Fin l) F, ∃ p : Matrix (Fin l) (Fin s) F,
+      Function.Injective (Matrix.mulVecLin j) ∧
+      Function.Surjective (Matrix.mulVecLin p) ∧ z = j * p := by
+  classical
+  have hdim : Module.finrank F (LinearMap.range z.toLin') = l := by
+    have h := Matrix.rank_eq_finrank_range_toLin z
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    exact h.symm.trans hz
+  let e : (Fin l → F) ≃ₗ[F] LinearMap.range z.toLin' :=
+    LinearEquiv.ofFinrankEq _ _ (by simpa using hdim.symm)
+  let J : (Fin l → F) →ₗ[F] (Fin m → F) :=
+    (LinearMap.range z.toLin').subtype.comp e.toLinearMap
+  let P : (Fin s → F) →ₗ[F] (Fin l → F) :=
+    e.symm.toLinearMap.comp z.toLin'.rangeRestrict
+  let j := LinearMap.toMatrix' J
+  let p := LinearMap.toMatrix' P
+  have hJ : Function.Injective J := by
+    exact (LinearMap.range z.toLin').injective_subtype.comp e.injective
+  have hP : Function.Surjective P := by
+    intro q
+    rcases (e q).property with ⟨v, hv⟩
+    refine ⟨v, ?_⟩
+    change e.symm (z.toLin'.rangeRestrict v) = q
+    have hv' : z.toLin'.rangeRestrict v = e q := Subtype.ext hv
+    rw [hv']
+    exact e.symm_apply_apply q
+  have hj : Matrix.mulVecLin j = J := by
+    change (LinearMap.toMatrix' J).mulVecLin = J
+    rw [← Matrix.toLin'_apply', Matrix.toLin'_toMatrix']
+  have hp : Matrix.mulVecLin p = P := by
+    change (LinearMap.toMatrix' P).mulVecLin = P
+    rw [← Matrix.toLin'_apply', Matrix.toLin'_toMatrix']
+  have hzfactor : z = j * p := by
+    apply Matrix.toLin'.injective
+    change z.toLin' =
+      (LinearMap.toMatrix' J * LinearMap.toMatrix' P).toLin'
+    rw [Matrix.toLin'_mul, Matrix.toLin'_toMatrix', Matrix.toLin'_toMatrix']
+    change z.toLin' = J.comp P
+    apply LinearMap.ext
+    intro v
+    simp [J, P, e, LinearMap.comp_apply]
+  exact ⟨j, p, by simpa [hj] using hJ, by simpa [hp] using hP, hzfactor⟩
+
+def w6A3BlockTriple {k m s l : Nat}
+    (j : Matrix (Fin m) (Fin l) F) (p : Matrix (Fin l) (Fin s) F)
+    (q : ((Fin l → F) →ₗ[F] (Fin k → F)) ×
+      ((Fin k → F) →ₗ[F] (Fin l → F))) : W6FixedBottomBlockTriple k m s :=
+  let u := LinearMap.toMatrix' q.1
+  let c := LinearMap.toMatrix' q.2
+  (1 + u * c, (u * p, j * c))
+
+/-- The canonical A3 parameter map is a genuine map into the fixed-`Z` rank
+fiber. -/
+theorem w6A3BlockTriple_mem_fiber
+    {k m s l : Nat}
+    (j : Matrix (Fin m) (Fin l) F) (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p))
+    (q : ((Fin l → F) →ₗ[F] (Fin k → F)) ×
+      ((Fin k → F) →ₗ[F] (Fin l → F))) :
+    (w6BlockDisplacementMatrix
+      (1 + LinearMap.toMatrix' q.1 * LinearMap.toMatrix' q.2)
+      (LinearMap.toMatrix' q.1 * p)
+      (j * LinearMap.toMatrix' q.2) (j * p)).rank = l := by
+  let u := LinearMap.toMatrix' q.1
+  let c := LinearMap.toMatrix' q.2
+  change (w6BlockDisplacementMatrix (1 + u * c) (u * p) (j * c) (j * p)).rank = l
+  have hdisp : w6BlockDisplacementMatrix (1 + u * c) (u * p) (j * c) (j * p) =
+      w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s := by
+    change Matrix.fromBlocks ((1 + u * c) - 1) (u * p) (j * c) (j * p) =
+      Matrix.fromBlocks (1 + u * c) (u * p) (j * c) (j * p) -
+        Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0 0
+    simp only [sub_eq_add_neg, Matrix.fromBlocks_neg, Matrix.fromBlocks_add]
+    apply Matrix.fromBlocks_inj.mpr
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · abel
+    · simp
+    · simp
+    · simp
+  rw [hdisp]
+  exact w6CanonicalBlockCandidate_sub_base_rank_of_J_inj_P_surj u c j p hj hp
+
+/-- The A3 parametrization is bijective onto the actual fixed-`Z` block
+fiber. Thus the exact fiber cardinality is `2^(2*k*l)`, including zero
+dimensions. -/
+theorem w6_fixed_bottom_block_fiber_card
+    {k m s l : Nat}
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p)) :
+    Fintype.card (w6FixedBottomBlockFiber (k := k) j p) = 2 ^ (2 * k * l) := by
+  classical
+  let params := ((Fin l → F) →ₗ[F] (Fin k → F)) ×
+    ((Fin k → F) →ₗ[F] (Fin l → F))
+  let toFiber : params → w6FixedBottomBlockFiber (k := k) j p := fun q =>
+    ⟨w6A3BlockTriple j p q, w6A3BlockTriple_mem_fiber j p hj hp q⟩
+  have hinj : Function.Injective toFiber := by
+    intro q₁ q₂ hq
+    have hval := congrArg Subtype.val hq
+    have htop := congrArg Prod.fst hval
+    have hrest := congrArg Prod.snd hval
+    have hright := congrArg Prod.fst hrest
+    have hleft := congrArg Prod.snd hrest
+    have hcand : w6CanonicalBlockCandidate
+        (LinearMap.toMatrix' q₁.1) (LinearMap.toMatrix' q₁.2) j p =
+      w6CanonicalBlockCandidate
+        (LinearMap.toMatrix' q₂.1) (LinearMap.toMatrix' q₂.2) j p := by
+      change Matrix.fromBlocks _ _ _ _ = Matrix.fromBlocks _ _ _ _
+      exact Matrix.fromBlocks_inj.mpr ⟨htop, hright, hleft, rfl⟩
+    have hparams :=
+      (@w6CanonicalBlockCandidate_injective_parameters k m s l j p hj hp
+        (LinearMap.toMatrix' q₁.1, LinearMap.toMatrix' q₁.2)
+        (LinearMap.toMatrix' q₂.1, LinearMap.toMatrix' q₂.2) hcand)
+    apply Prod.ext
+    · exact LinearMap.toMatrix'.injective (congrArg Prod.fst hparams)
+    · exact LinearMap.toMatrix'.injective (congrArg Prod.snd hparams)
+  have hsurj : Function.Surjective toFiber := by
+    intro x
+    rcases x with ⟨⟨a, ⟨b, c⟩⟩, hD⟩
+    obtain ⟨u, c₀, hfact⟩ := w6_fixed_block_factorization a b c j p hj hp hD
+    refine ⟨(Matrix.toLin' u, Matrix.toLin' c₀), ?_⟩
+    apply Subtype.ext
+    have hblocks := Matrix.fromBlocks_inj.mp hfact
+    rcases hblocks with ⟨ha, hb, hc, _⟩
+    change (1 + LinearMap.toMatrix' (Matrix.toLin' u) *
+        LinearMap.toMatrix' (Matrix.toLin' c₀),
+      (LinearMap.toMatrix' (Matrix.toLin' u) * p,
+        j * LinearMap.toMatrix' (Matrix.toLin' c₀))) = (a, (b, c))
+    simp only [LinearMap.toMatrix'_toLin']
+    exact Prod.ext ha (Prod.ext hb hc)
+  let e : params ≃ w6FixedBottomBlockFiber (k := k) j p :=
+    Equiv.ofBijective toFiber ⟨hinj, hsurj⟩
+  calc
+    Fintype.card (w6FixedBottomBlockFiber (k := k) j p) = Fintype.card params :=
+      Fintype.card_congr e.symm
+    _ = 2 ^ (2 * k * l) := by
+      have hcard : Fintype.card params =
+          2 ^ (2 * Module.finrank F (Fin l → F) *
+            Module.finrank F (Fin k → F)) := by
+        change Fintype.card
+            (((Fin l → F) →ₗ[F] (Fin k → F)) ×
+              ((Fin k → F) →ₗ[F] (Fin l → F))) = _
+        simpa only [← Nat.card_eq_fintype_card] using
+          (w6_card_a3_parameter_pair (U := Fin l → F) (V := Fin k → F))
+      have hdimL : Module.finrank F (Fin l → F) = l := by simp
+      have hdimK : Module.finrank F (Fin k → F) = k := by simp
+      rw [hdimL, hdimK] at hcard
+      simpa only [Nat.mul_assoc, Nat.mul_comm l k] using hcard
+
+/-- The exact A3 block-fiber cardinality depends only on the fixed lower-right
+block's rank, not on a caller-supplied rank factorization. -/
+theorem w6_fixed_z_block_fiber_card
+    {k m s l : Nat} (z : Matrix (Fin m) (Fin s) F)
+    (hz : z.rank = l) :
+    Fintype.card (w6FixedZBlockFiber (k := k) (l := l) z) = 2 ^ (2 * k * l) := by
+  obtain ⟨j, p, hj, hp, hzfactor⟩ := w6_matrix_rank_factorization z hz
+  let e : w6FixedZBlockFiber (k := k) (l := l) z ≃
+      w6FixedBottomBlockFiber (k := k) j p :=
+    Equiv.subtypeEquivRight (fun t => by
+      simp [w6FixedZBlockFiber, w6FixedBottomBlockFiber, hzfactor])
+  rw [Fintype.card_congr e]
+  exact w6_fixed_bottom_block_fiber_card (k := k) j p hj hp
+
+/-- The actual carrier frequency induced by an ambient matrix `Y` over the
+carrier selected by `X`. -/
+def w6ActualCarrierFrequency {n d : Nat}
+    (X Y : BinaryMatrix n d) :
+    LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin') :=
+  (LinearMap.range X.transpose.toLin').mkQ.comp
+    (Y.transpose.toLin'.comp (LinearMap.ker X.transpose.toLin').subtype)
+
+/-- The original ambient predecessor fiber at a specified actual carrier
+frequency.  No ambient rank condition on `Y` is added to the fiber. -/
+def w6ActualPredecessorFrequencyFiber {n d : Nat}
+    (X : BinaryMatrix n d)
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin')) :=
+  {Y : BinaryMatrix n d // w6Precedes X Y ∧
+    w6ActualCarrierFrequency X Y = Z}
+
+private noncomputable instance w6ActualPredecessorFrequencyFiberFintype
+    {n d : Nat} (X : BinaryMatrix n d)
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin')) :
+    Fintype (w6ActualPredecessorFrequencyFiber X Z) := by
+  classical
+  unfold w6ActualPredecessorFrequencyFiber
+  exact Fintype.ofFinite _
+
+/-- Split the actual domain of `Xᵀ` into its image coordinates and its kernel.
+This is the domain half of the ambient carrier-frequency coordinate change. -/
+theorem w6_actual_transpose_domain_image_kernel_equiv {n d : Nat}
+    (X : BinaryMatrix n d) :
+    ∃ (C : Submodule F (W n))
+      (hBC : IsCompl (LinearMap.ker X.transpose.toLin') C)
+      (e : W n ≃ₗ[F]
+        (LinearMap.range X.transpose.toLin') ×
+          LinearMap.ker X.transpose.toLin'),
+      ∀ w, e w =
+        (X.transpose.toLin'.rangeRestrict w,
+          (LinearMap.ker X.transpose.toLin').projectionOnto C hBC w) := by
+  classical
+  let B : Submodule F (W n) := LinearMap.ker X.transpose.toLin'
+  obtain ⟨C, hBC⟩ := B.exists_isCompl
+  let f : W n →ₗ[F] LinearMap.range X.transpose.toLin' :=
+    X.transpose.toLin'.rangeRestrict
+  let g : W n →ₗ[F] B := B.projectionOnto C hBC
+  have hf : LinearMap.range f = ⊤ := by
+    dsimp [f]
+    exact LinearMap.range_rangeRestrict _
+  have hg : LinearMap.range g = ⊤ := by
+    exact Submodule.range_projectionOnto hBC
+  have hkerf : LinearMap.ker f = B := by
+    simp [f, B]
+  have hkerg : LinearMap.ker g = C := by
+    exact Submodule.ker_projectionOnto hBC
+  have hfg : IsCompl (LinearMap.ker f) (LinearMap.ker g) := by
+    rw [hkerf, hkerg]
+    exact hBC
+  let e := LinearMap.equivProdOfSurjectiveOfIsCompl f g hf hg hfg
+  refine ⟨C, hBC, e, ?_⟩
+  intro w
+  simp [e, f, g, B]
+
+/-- Split the actual codomain of `Xᵀ` into its image and quotient.  This is
+the codomain half needed to identify a transformed matrix's lower-right
+block with the carrier frequency. -/
+theorem w6_actual_transpose_codomain_image_quotient_equiv {n d : Nat}
+    (X : BinaryMatrix n d) :
+    ∃ (D : Submodule F (V d))
+      (hAD : IsCompl (LinearMap.range X.transpose.toLin') D)
+      (e : V d ≃ₗ[F]
+        (LinearMap.range X.transpose.toLin') ×
+          (V d ⧸ LinearMap.range X.transpose.toLin')),
+      ∀ v, e v =
+        ((LinearMap.range X.transpose.toLin').projectionOnto D hAD v,
+          (LinearMap.range X.transpose.toLin').mkQ v) := by
+  classical
+  let A : Submodule F (V d) := LinearMap.range X.transpose.toLin'
+  obtain ⟨D, hAD⟩ := A.exists_isCompl
+  let f : V d →ₗ[F] A := A.projectionOnto D hAD
+  let g : V d →ₗ[F] (V d ⧸ A) := A.mkQ
+  have hf : LinearMap.range f = ⊤ := by
+    exact Submodule.range_projectionOnto hAD
+  have hg : LinearMap.range g = ⊤ := by
+    exact Submodule.range_mkQ A
+  have hkerf : LinearMap.ker f = D := by
+    exact Submodule.ker_projectionOnto hAD
+  have hkerg : LinearMap.ker g = A := by
+    exact Submodule.ker_mkQ A
+  have hfg : IsCompl (LinearMap.ker f) (LinearMap.ker g) := by
+    rw [hkerf, hkerg]
+    exact hAD.symm
+  let e := LinearMap.equivProdOfSurjectiveOfIsCompl f g hf hg hfg
+  refine ⟨D, hAD, e, ?_⟩
+  intro v
+  simp [e, f, g, A]
+
+/-- In the actual split coordinates on the domain and codomain of `Xᵀ`, the
+lower-right block of `Yᵀ` is exactly its original carrier frequency.  In
+particular this equality is derived from the actual range/kernel/quotient
+maps, rather than supplied as a compatibility hypothesis. -/
+theorem w6_actual_transpose_lower_right_is_carrier_frequency {n d : Nat}
+    (X Y : BinaryMatrix n d) :
+    ∃ (C : Submodule F (W n))
+      (hBC : IsCompl (LinearMap.ker X.transpose.toLin') C)
+      (eW : W n ≃ₗ[F]
+        (LinearMap.range X.transpose.toLin') ×
+          LinearMap.ker X.transpose.toLin')
+      (D : Submodule F (V d))
+      (hAD : IsCompl (LinearMap.range X.transpose.toLin') D)
+      (eV : V d ≃ₗ[F]
+        (LinearMap.range X.transpose.toLin') ×
+          (V d ⧸ LinearMap.range X.transpose.toLin')),
+      ∀ b : LinearMap.ker X.transpose.toLin',
+        (eV (Y.transpose.toLin' (eW.symm (0, b)))).2 =
+          w6ActualCarrierFrequency X Y b := by
+  classical
+  obtain ⟨C, hBC, eW, hW⟩ :=
+    w6_actual_transpose_domain_image_kernel_equiv X
+  obtain ⟨D, hAD, eV, hV⟩ :=
+    w6_actual_transpose_codomain_image_quotient_equiv X
+  refine ⟨C, hBC, eW, D, hAD, eV, ?_⟩
+  intro b
+  have hfirst : X.transpose.toLin'.rangeRestrict (b : W n) = 0 := by
+    apply Subtype.ext
+    exact b.property
+  have hsecond :
+      (LinearMap.ker X.transpose.toLin').projectionOnto C hBC b = b :=
+    Submodule.projectionOnto_apply_left hBC b
+  have hbsymm : eW.symm (0, b) = b := by
+    apply eW.injective
+    rw [eW.apply_symm_apply, hW]
+    simp [hfirst, hsecond]
+  rw [hbsymm]
+  have hpair := congrArg Prod.snd (hV (Y.transpose.toLin' b))
+  simpa [w6ActualCarrierFrequency, LinearMap.comp_apply] using hpair
+
+/-- The three actual carrier dimensions are determined by the ambient matrix
+rank and the two ambient dimensions. -/
+theorem w6_actual_transpose_carrier_dimensions {n d : Nat}
+    (X : BinaryMatrix n d) :
+    Module.finrank F (LinearMap.range X.transpose.toLin') = X.rank ∧
+    Module.finrank F (LinearMap.ker X.transpose.toLin') = n - X.rank ∧
+    Module.finrank F (V d ⧸ LinearMap.range X.transpose.toLin') = d - X.rank := by
+  have hA :
+      Module.finrank F (LinearMap.range X.transpose.toLin') = X.rank := by
+    have h := Matrix.rank_eq_finrank_range_toLin X.transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    exact h.symm.trans (Matrix.rank_transpose X)
+  have hW : Module.finrank F (W n) = n := by simp
+  have hV : Module.finrank F (V d) = d := by simp
+  have hnull := X.transpose.toLin'.finrank_range_add_finrank_ker
+  have hnull' : X.rank +
+      Module.finrank F (LinearMap.ker X.transpose.toLin') = n := by
+    simpa only [hA, hW] using hnull
+  have hB :
+      Module.finrank F (LinearMap.ker X.transpose.toLin') = n - X.rank := by
+    omega
+  have hquot :=
+    (LinearMap.range X.transpose.toLin').finrank_quotient_add_finrank
+  change Module.finrank F
+      (V d ⧸ LinearMap.range X.transpose.toLin') +
+      Module.finrank F (LinearMap.range X.transpose.toLin') =
+      Module.finrank F (V d) at hquot
+  have hquot' :
+      Module.finrank F (V d ⧸ LinearMap.range X.transpose.toLin') + X.rank = d := by
+    simpa only [hA, hV] using hquot
+  have hQ :
+      Module.finrank F (V d ⧸ LinearMap.range X.transpose.toLin') = d - X.rank := by
+    omega
+  exact ⟨hA, hB, hQ⟩
+
+/-- Choose, once for a fixed `X`, compatible finite coordinates on the two
+actual split maps.  The same basis on `range Xᵀ` is used on both sides, so the
+coordinate form of `Xᵀ` is the identity in the first block. -/
+theorem w6_actual_transpose_finite_split_coordinates {n d : Nat}
+    (X : BinaryMatrix n d) :
+    ∃ (C : Submodule F (W n))
+      (hBC : IsCompl (LinearMap.ker X.transpose.toLin') C)
+      (D : Submodule F (V d))
+      (hAD : IsCompl (LinearMap.range X.transpose.toLin') D)
+      (bA : Module.Basis (Fin X.rank) F (LinearMap.range X.transpose.toLin'))
+      (bB : Module.Basis (Fin (n - X.rank)) F (LinearMap.ker X.transpose.toLin'))
+      (bQ : Module.Basis (Fin (d - X.rank)) F
+        (V d ⧸ LinearMap.range X.transpose.toLin'))
+      (eW : W n ≃ₗ[F]
+        ((Fin X.rank → F) × (Fin (n - X.rank) → F)))
+      (eV : V d ≃ₗ[F]
+        ((Fin X.rank → F) × (Fin (d - X.rank) → F))),
+      (∀ w, eW w =
+        (bA.equivFun (X.transpose.toLin'.rangeRestrict w),
+          bB.equivFun ((LinearMap.ker X.transpose.toLin').projectionOnto C hBC w))) ∧
+      (∀ v, eV v =
+        (bA.equivFun ((LinearMap.range X.transpose.toLin').projectionOnto D hAD v),
+          bQ.equivFun ((LinearMap.range X.transpose.toLin').mkQ v))) := by
+  classical
+  obtain ⟨hA, hB, hQ⟩ := w6_actual_transpose_carrier_dimensions X
+  obtain ⟨C, hBC, eW0, hW⟩ :=
+    w6_actual_transpose_domain_image_kernel_equiv X
+  obtain ⟨D, hAD, eV0, hV⟩ :=
+    w6_actual_transpose_codomain_image_quotient_equiv X
+  let bA := Module.finBasisOfFinrankEq F
+    (LinearMap.range X.transpose.toLin') hA
+  let bB := Module.finBasisOfFinrankEq F
+    (LinearMap.ker X.transpose.toLin') hB
+  let bQ := Module.finBasisOfFinrankEq F
+    (V d ⧸ LinearMap.range X.transpose.toLin') hQ
+  let eW := eW0.trans (LinearEquiv.prodCongr bA.equivFun bB.equivFun)
+  let eV := eV0.trans (LinearEquiv.prodCongr bA.equivFun bQ.equivFun)
+  refine ⟨C, hBC, D, hAD, bA, bB, bQ, eW, eV, ?_, ?_⟩
+  · intro w
+    change (LinearEquiv.prodCongr bA.equivFun bB.equivFun) (eW0 w) = _
+    rw [hW w]
+    rw [LinearEquiv.prodCongr_apply]
+  · intro v
+    change (LinearEquiv.prodCongr bA.equivFun bQ.equivFun) (eV0 v) = _
+    rw [hV v]
+    rw [LinearEquiv.prodCongr_apply]
+
+/-- One fixed coordinate package, chosen from `X`, simultaneously puts `Xᵀ`
+in identity-plus-zero form and identifies every `Yᵀ` lower-right block with
+the actual carrier frequency induced by `Y`. -/
+theorem w6_actual_fixed_x_finite_block_identities {n d : Nat}
+    (X : BinaryMatrix n d) :
+    ∃ (C : Submodule F (W n))
+      (hBC : IsCompl (LinearMap.ker X.transpose.toLin') C)
+      (D : Submodule F (V d))
+      (hAD : IsCompl (LinearMap.range X.transpose.toLin') D)
+      (bA : Module.Basis (Fin X.rank) F (LinearMap.range X.transpose.toLin'))
+      (bB : Module.Basis (Fin (n - X.rank)) F (LinearMap.ker X.transpose.toLin'))
+      (bQ : Module.Basis (Fin (d - X.rank)) F
+        (V d ⧸ LinearMap.range X.transpose.toLin'))
+      (eW : W n ≃ₗ[F]
+        ((Fin X.rank → F) × (Fin (n - X.rank) → F)))
+      (eV : V d ≃ₗ[F]
+        ((Fin X.rank → F) × (Fin (d - X.rank) → F))),
+      (∀ a b, eV (X.transpose.toLin' (eW.symm (a, b))) = (a, 0)) ∧
+      (∀ (Y : BinaryMatrix n d) (b : Fin (n - X.rank) → F),
+        (eV (Y.transpose.toLin' (eW.symm (0, b)))).2 =
+          bQ.equivFun
+            (w6ActualCarrierFrequency X Y (bB.equivFun.symm b)) ) := by
+  classical
+  obtain ⟨C, hBC, D, hAD, bA, bB, bQ, eW, eV, hW, hV⟩ :=
+    w6_actual_transpose_finite_split_coordinates X
+  refine ⟨C, hBC, D, hAD, bA, bB, bQ, eW, eV, ?_, ?_⟩
+  · intro a b
+    let w := eW.symm (a, b)
+    have hcoord := hW w
+    have hfirst : bA.equivFun (X.transpose.toLin'.rangeRestrict w) = a := by
+      simpa [w] using (congrArg Prod.fst hcoord).symm
+    have hmem : X.transpose.toLin' w ∈ LinearMap.range X.transpose.toLin' :=
+      LinearMap.mem_range_self _ w
+    have hproj :
+        (LinearMap.range X.transpose.toLin').projectionOnto D hAD
+          (X.transpose.toLin' w) = X.transpose.toLin'.rangeRestrict w := by
+      calc
+        (LinearMap.range X.transpose.toLin').projectionOnto D hAD
+            (X.transpose.toLin' w) = ⟨X.transpose.toLin' w, hmem⟩ :=
+          Submodule.projectionOnto_apply_of_mem_left hAD hmem
+        _ = X.transpose.toLin'.rangeRestrict w := rfl
+    have hquot :
+        (LinearMap.range X.transpose.toLin').mkQ
+          (X.transpose.toLin' w) = 0 := by
+      apply LinearMap.mem_ker.mp
+      rw [Submodule.ker_mkQ]
+      exact hmem
+    rw [hV (X.transpose.toLin' w)]
+    apply Prod.ext
+    · rw [hproj]
+      exact hfirst
+    · simp [hquot]
+  · intro Y b
+    let q : LinearMap.ker X.transpose.toLin' := bB.equivFun.symm b
+    have hfirst : X.transpose.toLin'.rangeRestrict (q : W n) = 0 := by
+      apply Subtype.ext
+      exact q.property
+    have hsecond :
+        (LinearMap.ker X.transpose.toLin').projectionOnto C hBC q = q :=
+      Submodule.projectionOnto_apply_left hBC q
+    have hcoord := hW q
+    have hq : eW.symm (0, b) = q := by
+      apply eW.injective
+      rw [eW.apply_symm_apply, hW q]
+      simp only [hfirst, hsecond, q, LinearEquiv.apply_symm_apply, map_zero]
+    rw [hq]
+    have hpair := congrArg Prod.snd (hV (Y.transpose.toLin' q))
+    simpa only [q, w6ActualCarrierFrequency, LinearMap.comp_apply,
+      Submodule.subtype_apply] using hpair
+
+/-- Express `Yᵀ` in the one fixed finite coordinate package chosen from `X`.
+The row/column indices are sums, so its four blocks have exactly the types
+used by the fixed-`Z` predecessor fiber. -/
+def w6ActualFiniteCoordinateMatrix {n d k m s : Nat}
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (Y : BinaryMatrix n d) : Matrix (Fin k ⊕ Fin s) (Fin k ⊕ Fin m) F := by
+  let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+  let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+  let eWsum := eW.trans eIn.symm
+  let eVsum := eV.trans eOut.symm
+  exact LinearMap.toMatrix'
+    (eVsum.toLinearMap.comp
+      (Y.transpose.toLin'.comp eWsum.symm.toLinearMap))
+
+/-- The linear equivalence on matrix spaces induced by the fixed domain and
+codomain coordinate equivalences. -/
+private def w6ActualFiniteCoordinateLinearEquiv {n d k m s : Nat}
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F))) :
+    Matrix (Fin d) (Fin n) F ≃ₗ[F]
+      Matrix (Fin k ⊕ Fin s) (Fin k ⊕ Fin m) F := by
+  let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+  let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+  let eWsum := eW.trans eIn.symm
+  let eVsum := eV.trans eOut.symm
+  exact (Matrix.toLin').trans
+    ((LinearEquiv.arrowCongr eWsum eVsum).trans Matrix.toLin'.symm)
+
+/-- The explicitly defined coordinate matrix agrees with the induced matrix
+space equivalence. -/
+theorem w6_actual_finite_coordinate_matrix_eq_equiv
+    {n d k m s : Nat}
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (Y : BinaryMatrix n d) :
+    w6ActualFiniteCoordinateMatrix eW eV Y =
+      w6ActualFiniteCoordinateLinearEquiv eW eV Y.transpose := by
+  classical
+  let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+  let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+  let eWsum := eW.trans eIn.symm
+  let eVsum := eV.trans eOut.symm
+  change LinearMap.toMatrix'
+      (eVsum.toLinearMap.comp
+        (Y.transpose.toLin'.comp eWsum.symm.toLinearMap)) =
+    LinearMap.toMatrix'
+      ((LinearEquiv.arrowCongr eWsum eVsum) (Matrix.toLin' Y.transpose))
+  congr 1
+
+/-- The shared-coordinate matrix equivalence preserves rank. -/
+theorem w6_actual_finite_coordinate_matrix_rank
+    {n d k m s : Nat}
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (Y : BinaryMatrix n d) :
+    (w6ActualFiniteCoordinateMatrix eW eV Y).rank = Y.rank := by
+  classical
+  let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+  let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+  let eWsum := eW.trans eIn.symm
+  let eVsum := eV.trans eOut.symm
+  let L := Matrix.toLin' Y.transpose
+  let C := eVsum.toLinearMap.comp (L.comp eWsum.symm.toLinearMap)
+  have hrange : LinearMap.range C = (LinearMap.range L).map eVsum.toLinearMap := by
+    ext y
+    constructor
+    · rintro ⟨x, rfl⟩
+      apply Submodule.mem_map.mpr
+      refine ⟨L (eWsum.symm x), ?_, rfl⟩
+      exact ⟨eWsum.symm x, rfl⟩
+    · intro hy
+      rcases Submodule.mem_map.mp hy with ⟨z, hz, hzy⟩
+      rcases hz with ⟨x, rfl⟩
+      refine ⟨eWsum x, ?_⟩
+      change eVsum (L (eWsum.symm (eWsum x))) = y
+      rw [eWsum.symm_apply_apply]
+      exact hzy
+  have hdim : Module.finrank F (LinearMap.range C) =
+      Module.finrank F (LinearMap.range L) := by
+    rw [hrange]
+    exact eVsum.finrank_map_eq (LinearMap.range L)
+  have hsrc : Module.finrank F (LinearMap.range L) = Y.rank := by
+    have h := Matrix.rank_eq_finrank_range_toLin Y.transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    exact h.symm.trans (Matrix.rank_transpose Y)
+  have hcoord : Module.finrank F (LinearMap.range C) =
+      (w6ActualFiniteCoordinateMatrix eW eV Y).rank := by
+    have h := Matrix.rank_eq_finrank_range_toLin
+      (w6ActualFiniteCoordinateMatrix eW eV Y)
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    simp only [w6ActualFiniteCoordinateMatrix, Matrix.toLin'_toMatrix'] at h
+    simpa [C, L, eIn, eOut, eWsum, eVsum, LinearMap.comp_apply] using h
+  calc
+    (w6ActualFiniteCoordinateMatrix eW eV Y).rank =
+        Module.finrank F (LinearMap.range C) := hcoord.symm
+    _ = Module.finrank F (LinearMap.range L) := hdim
+    _ = Y.rank := hsrc
+
+/-- A single fixed pair of actual coordinates gives a bijection from ambient
+matrices to the full four-block coordinate matrices. -/
+def w6ActualFiniteCoordinateEquiv {n d k m s : Nat}
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F))) :
+    BinaryMatrix n d ≃ Matrix (Fin k ⊕ Fin s) (Fin k ⊕ Fin m) F where
+  toFun := w6ActualFiniteCoordinateMatrix eW eV
+  invFun M := (w6ActualFiniteCoordinateLinearEquiv eW eV).symm M |>.transpose
+  left_inv Y := by
+    change ((w6ActualFiniteCoordinateLinearEquiv eW eV).symm
+      (w6ActualFiniteCoordinateMatrix eW eV Y)).transpose = Y
+    rw [w6_actual_finite_coordinate_matrix_eq_equiv]
+    simp [Matrix.transpose_transpose]
+  right_inv M := by
+    change w6ActualFiniteCoordinateMatrix eW eV
+      ((w6ActualFiniteCoordinateLinearEquiv eW eV).symm M).transpose = M
+    rw [w6_actual_finite_coordinate_matrix_eq_equiv]
+    simp [Matrix.transpose_transpose]
+
+/-- The coordinate matrix is the actual transpose map conjugated by the fixed
+`X`-coordinates. -/
+theorem w6_actual_finite_coordinate_matrix_toLin'
+    {n d k m s : Nat}
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (Y : BinaryMatrix n d) :
+    Matrix.toLin' (w6ActualFiniteCoordinateMatrix eW eV Y) =
+      let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+      let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+      let eWsum := eW.trans eIn.symm
+      let eVsum := eV.trans eOut.symm
+      eVsum.toLinearMap.comp
+        (Y.transpose.toLin'.comp eWsum.symm.toLinearMap) := by
+  simp [w6ActualFiniteCoordinateMatrix, Matrix.toLin'_toMatrix']
+
+/-- Evaluation of the conjugated matrix is exactly evaluation in the chosen
+actual image/kernel coordinates. -/
+theorem w6_actual_finite_coordinate_matrix_apply
+    {n d k m s : Nat}
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (Y : BinaryMatrix n d) (a : Fin k → F) (b : Fin m → F) :
+    let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+    let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+    eOut ((w6ActualFiniteCoordinateMatrix eW eV Y).mulVecLin (eIn.symm (a, b))) =
+      eV (Y.transpose.toLin' (eW.symm (a, b))) := by
+  dsimp only
+  simp [w6ActualFiniteCoordinateMatrix, Matrix.mulVecLin_apply,
+    Matrix.toLin'_toMatrix', LinearEquiv.trans_apply,
+    LinearEquiv.trans_symm, LinearMap.comp_apply]
+
+/-- The fixed `X` matrix becomes the identity on the image block and zero on
+the quotient block in the same conjugated matrix coordinates. -/
+theorem w6_actual_finite_coordinate_matrix_X
+    {n d k m s : Nat}
+    (X : BinaryMatrix n d)
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (hX : ∀ (a : Fin k → F) (b : Fin m → F),
+      eV (X.transpose.toLin' (eW.symm (a, b))) = (a, 0)) :
+    w6ActualFiniteCoordinateMatrix eW eV X =
+      Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0 0 := by
+  classical
+  let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+  let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+  apply Matrix.toLin'.injective
+  apply LinearMap.ext
+  intro v
+  have hv : v = eIn.symm (eIn v) := (eIn.symm_apply_apply v).symm
+  rw [hv]
+  apply eOut.injective
+  change eOut ((w6ActualFiniteCoordinateMatrix eW eV X).mulVecLin
+      (eIn.symm (eIn v))) =
+    eOut ((Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0 0).mulVecLin
+      (eIn.symm (eIn v)))
+  rw [w6_actual_finite_coordinate_matrix_apply]
+  apply Prod.ext
+  · funext a
+    rw [LinearEquiv.sumArrowLequivProdArrow_apply_fst]
+    have hx := congrArg Prod.fst (hX (eIn v).1 (eIn v).2)
+    simpa [eIn, Matrix.fromBlocks_mulVec,
+      LinearEquiv.sumArrowLequivProdArrow_symm_apply_inl,
+      LinearEquiv.sumArrowLequivProdArrow_symm_apply_inr] using congrFun hx a
+  · funext b
+    rw [LinearEquiv.sumArrowLequivProdArrow_apply_snd]
+    have hx := congrArg Prod.snd (hX (eIn v).1 (eIn v).2)
+    simpa [eIn, Matrix.fromBlocks_mulVec,
+      LinearEquiv.sumArrowLequivProdArrow_symm_apply_inl,
+      LinearEquiv.sumArrowLequivProdArrow_symm_apply_inr] using congrFun hx b
+
+/-- With the same fixed coordinates, the lower-right action of every ambient
+transpose matrix is its actual carrier-frequency map. -/
+theorem w6_actual_fixed_x_bottom_coordinate_identity {n d : Nat}
+    (X : BinaryMatrix n d) :
+    ∃ (C : Submodule F (W n))
+      (hBC : IsCompl (LinearMap.ker X.transpose.toLin') C)
+      (D : Submodule F (V d))
+      (hAD : IsCompl (LinearMap.range X.transpose.toLin') D)
+      (bA : Module.Basis (Fin X.rank) F (LinearMap.range X.transpose.toLin'))
+      (bB : Module.Basis (Fin (n - X.rank)) F (LinearMap.ker X.transpose.toLin'))
+      (bQ : Module.Basis (Fin (d - X.rank)) F
+        (V d ⧸ LinearMap.range X.transpose.toLin'))
+      (eW : W n ≃ₗ[F] ((Fin X.rank → F) × (Fin (n - X.rank) → F)))
+      (eV : V d ≃ₗ[F] ((Fin X.rank → F) × (Fin (d - X.rank) → F))),
+      ∀ (Y : BinaryMatrix n d) (b : Fin (n - X.rank) → F),
+        let eIn := LinearEquiv.sumArrowLequivProdArrow
+          (Fin X.rank) (Fin (n - X.rank)) F F
+        let eOut := LinearEquiv.sumArrowLequivProdArrow
+          (Fin X.rank) (Fin (d - X.rank)) F F
+        (eOut ((w6ActualFiniteCoordinateMatrix eW eV Y).mulVecLin
+          (eIn.symm (0, b)))).2 =
+          bQ.equivFun
+            (w6ActualCarrierFrequency X Y (bB.equivFun.symm b)) := by
+  obtain ⟨C, hBC, D, hAD, bA, bB, bQ, eW, eV, hX, hY⟩ :=
+    w6_actual_fixed_x_finite_block_identities X
+  refine ⟨C, hBC, D, hAD, bA, bB, bQ, eW, eV, ?_⟩
+  intro Y b
+  have happ := w6_actual_finite_coordinate_matrix_apply eW eV Y 0 b
+  exact (congrArg Prod.snd happ).trans (hY Y b)
+
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
