@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+
+#check w6Precedes
+#check w6PredecessorFilter
+#check actualW6Derivative
+#check actualW6Derivative_fourier_expansion
+#print axioms actualW6Derivative_fourier_expansion
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
