@@ -1,0 +1,109 @@
+**Verdict: GO-WITH-NOTES for the original F1/A4 bounded increment, within the declared `development_only` cached-object kernel scope.** I found no mathematical blocker in the finite counting, exponent arithmetic, global aggregation, or manuscript alignment. HIGH full-source reproducibility and transitive-provenance debt remains.
+
+This is my independent complexity-theory review. I ran no compiler, changed no files or Git state, and delegated no work.
+
+I read the complete 735-line [source snapshot](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/stage-0.lean.snapshot), Checks snapshot, both stdout files, terminal/stage records, and both custody manifests. I independently verified:
+
+- Source SHA256: `DAFA4306F2A826558D3C9E7037719FF0A0BC7F6DB9761A04068C3273133DF1FC`.
+- Checks SHA256: `3B0504AC35CFC511211B9DD85675460AD962FC4C4E84C8B5187B120F94E7EBBE`.
+- Exact archive SHA256: `85F757238A0C7382FFBC01786654303DD59DC406927767A12E3F534D24A88AA3`.
+- All eleven archive members match the supplied receipt-directory files byte for byte.
+- All **214 listed source files and 1,179 listed cached objects** match their recorded hashes.
+- The receipts record Source0/Checks0, **245.63/22.87 seconds**, aggregate exit 0, and empty stderr files. Source stdout contains warnings.
+- All six printed theorem axiom profiles contain exactly `propext`, `Classical.choice`, and `Quot.sound`; none reports `sorryAx` or an additional mathematical axiom.
+
+These are independently checked receipt and byte-identity facts, not a fresh compilation. The archived bytes are the authority for this review.
+
+The mathematical statement accepted is precisely this: for every `n d D : Nat`, every complex-valued function on `BinaryMatrix n d`, and the sole hypothesis
+\[
+\forall Y,\quad D<\operatorname{rank}Y\Longrightarrow\widehat f(Y)=0,
+\]
+writing \(E=\mathbb E_M|f(M)|^2\),
+\[
+\sum_X\left(\sum_{(Y,Z)\in\mathcal F_1(X)}
+|\widehat f(Y)|\,|\widehat f(Z)|\right)^2
+\le 2^{6D^2}E^2.
+\]
+The final [printed type](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/stage-1.stdout:33) has no positivity assumption on \(D\), no relation between \(D\) and ambient dimensions, and no reality, Booleanity, normalization, assumed counting bound, or assumed energy inequality.
+
+My mathematical findings are:
+
+1. **PASS — Original F1, with all three rank equations.**  
+   The exact own348 `DR6F1Witness` requires
+   \[
+   Y=A+C,\quad Z=B+C,\quad X=A+B
+   \]
+   and
+   \[
+   \operatorname{rank}Y=\operatorname{rank}A+\operatorname{rank}C,\quad
+   \operatorname{rank}Z=\operatorname{rank}B+\operatorname{rank}C,\quad
+   \operatorname{rank}X=\operatorname{rank}A+\operatorname{rank}B.
+   \]
+   This matches the manuscript’s definition of \(\oplus\). Its additional pairwise image-disjointness clauses do not narrow the class: rank additivity forces them by the dimension formula and containment of the sum-map image in the sum of the two images. That implication is also present in the reused predecessor source. The final F1 pair type retains the actual additive condition \(Y+Z=X\). See [own348 witness](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own348/attempt-348-DR6Convolution/stage-0.lean.snapshot:111) and [manuscript definition](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/paper/submission-manuscript.md:1520).
+
+2. **PASS — Actual direct-decomposition count.**  
+   The bound is proved, not supplied as a hypothesis. For fixed \(Y\), a direct decomposition injects into its predecessor family by its first component; the second component is recovered from \(Y\). A predecessor then injects into the descended endomorphism of \(\operatorname{im}(Y^\mathsf T)\). Equality of those endomorphisms implies equality of the restricted maps and hence of the original matrices. Finally, a finite basis identifies all endomorphisms of the rank-\(r\) image with binary \(r\times r\) matrices:
+   \[
+   |\mathrm{Direct}(Y)|\le|\operatorname{End}(\operatorname{im}Y^\mathsf T)|=2^{r^2}.
+   \]
+   This deliberately overcounts idempotents and introduces no Gaussian-binomial or ambient-dimension factor. See [own348 counting proof](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own348/attempt-348-DR6Convolution/stage-0.lean.snapshot:794), through line 887.
+
+3. **PASS — Witness multiplicity and the common summand.**  
+   The proof chooses one witness \((A,B,C)\) for each actual F1 pair. This choice is injective because the triple recovers \(Y=A+C\) and \(Z=B+C\). The subsequent map into \(\mathrm{Direct}(X)\times\mathrm{BinaryMatrix}\) retains \(C\), so distinct pairs sharing an outer split are not collapsed. Nonnegative summation then groups \(C\) inside
+   \[
+   G_{AB}=\sum_C c_{AC}c_{BC}.
+   \]
+   The global argument uses this injection; it does not incorrectly sum the standalone single-pair bound. See [source lines 307–511](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/stage-0.lean.snapshot:307).
+
+4. **PASS — Coefficient mass and Gram bound have the required normalization.**  
+   Here \(c_{AC}=|\widehat f(A+C)|\) on supported, rank-additive direct pairs, and zero otherwise. The mass
+   \[
+   M=\sum_{A,C}c_{AC}^2
+   \]
+   is charged to actual direct-decomposition fibers. For rank at most \(D\), their size is at most \(2^{D^2}\); above \(D\), Fourier support makes the coefficient vanish. Normalized complex Parseval therefore gives \(M\le2^{D^2}E\). Entrywise finite Cauchy–Schwarz gives
+   \[
+   \sum_{A,B}G_{AB}^2
+   \le\sum_{A,B}\left(\sum_Cc_{AC}^2\right)
+                     \left(\sum_Cc_{BC}^2\right)=M^2.
+   \]
+   Both are proved from the actual coefficients. See [mass and Frobenius proofs](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/stage-0.lean.snapshot:104).
+
+5. **PASS — All-output aggregation and exponent \(6D^2\).**  
+   For supported outputs, the outer count is at most \(2^{\operatorname{rank}(X)^2}\le2^{4D^2}\). Outputs above rank \(2D\) have zero F1 mass: otherwise both input frequencies would have rank at most \(D\), contradicting rank subadditivity. Across all outputs, the map
+   \[
+   (X,(A,B))\longmapsto(A,B)
+   \]
+   is injective because \(X=A+B\). Consequently the Gram Frobenius sum is used once globally, giving
+   \[
+   \sum_XH_X^2
+   \le2^{4D^2}\sum_{A,B}G_{AB}^2
+   \le2^{4D^2}(2^{D^2}E)^2
+   =2^{6D^2}E^2.
+   \]
+   There is **no extra frequency-count loss**. All unsupported-rank cases are discharged internally. At \(D=0\), only the zero frequency contributes, and the estimate reduces to \(E^2\le E^2\); zero ambient dimensions are also permitted. See [global proof](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/stage-0.lean.snapshot:575).
+
+The Gram argument replaces the manuscript’s auxiliary Boolean fourth-moment argument while proving the same F1 target with the stronger coefficient **1**. Since \(E^2\ge0\), it implies [A4’s coefficient 81](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/paper/submission-manuscript.md:1570). It does not add a hypercontractivity premise. The finite counting is a mathematical cardinality argument; it supplies no polynomial-time enumeration or reduction-runtime certification.
+
+The dependency trace is consistent with the bounded claim. The new source directly imports `Mathlib.Tactic`, `ActualBinaryMatrixHC46DR6Convolution`, and `ActualBinaryMatrixHC46A12FourthMoment`. Convolution imports `BinaryMatrixA1Composition`, `ActualFiniteDegreeFourierProduct`, and `ActualBinaryMatrixHC46A7PredecessorCount`. The latter supplies the descended-endomorphism construction and imports `A7WeightedPredecessor`.
+
+The following are SHA256 prefixes; I compared the full hashes:
+
+| Dependency / receipt | Source / Checks | Main cached object |
+|---|---|---|
+| greenConvolution own348 | `CDDF6433035E` / `3DCA810830D9` | `076FA3626040` |
+| PredecessorCount attempt275 | `8D8AF4E55917` / `68201CBB9589` | `8D3EFE0F8CC2` |
+| Original A3 own327 | `775FFB87764C` / `BF8D33BF2616` | `1AB497FE9C0E` |
+| Degree-energy/W6 own333 | `F5A0AB8CC309` / `BEDA260A86C5` | `F3E3B7DAE67B` |
+| Complex Parseval/A2 attempt223 | `5097100998B4` / `CEAF913DF7B6` | `67787C4B943C` |
+
+The own348 Convolution source/Checks match the custody snapshots, and its main/Checks objects match the own357 cache listed by own358. The relevant A3, predecessor-count, Parseval, and energy objects likewise match their reused copies. The earlier A3/energy review tables record bounded GO-WITH-NOTES acceptance. **EnergyConsumer is present in the custody roster but is not an import dependency of this F1 proof**; its W6 conclusion is not being assumed here.
+
+Two provenance findings remain:
+
+- **HIGH — CanonicalFlag full-source reproducibility/transitive provenance remains open.** An explicit source import path is  
+  `SignMoments → A12FourthMoment → A18DerivativeRankProjection → CanonicalDCollapse → CanonicalProjection → CanonicalFlag`.  
+  The listed CanonicalFlag source is `E4FCF16BC106…`; its reused object is `C58F6BB9C7C2…`. Matching those separately does not establish their source-to-object correspondence or rebuild the transitive environment. The [cached-object manifest](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/cached-import-identities.json) explicitly retains both `development_only` and `CanonicalFlag_source_reproducibility_debt`.
+
+- **MEDIUM — The custody roster is not an import closure.** In particular, Convolution’s direct imports `A7PredecessorCount` and `BinaryMatrixA1Composition` are absent from the 214-source roster. I recovered the relevant predecessor source from attempt275 and verified its exact identity and reused object continuity. This supports the bounded audit but does not repair the roster or provide fresh transitive compilation evidence.
+
+This report supplies the **complexity-theory lens only**. The new F1 three-lens gate remains pending until the required actual reports are available and assessed. Full weighted F2, `globalambientParseval`, DR6, A7/A12, HC46, outward certification, and the final ClaudeOpus5.5/Gemini3.1ProHigh gates remain **OPEN**. No roadmap or broader hardness certification follows from this verdict.
