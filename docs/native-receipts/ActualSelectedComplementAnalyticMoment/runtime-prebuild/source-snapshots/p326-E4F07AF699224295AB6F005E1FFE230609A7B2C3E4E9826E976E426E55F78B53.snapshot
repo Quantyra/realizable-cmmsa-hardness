@@ -1,0 +1,235 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixFourier
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+
+/-! The A7/A12 fourth-moment argument starts from finite Fourier-energy
+identities.  This file records the complex Parseval base identity explicitly
+so later affine-selector averages can use the same normalization. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment
+
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open PvNP.RealizableHardness.BinaryMatrixA1Phase
+open PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Complex Parseval for the normalized uniform mean on binary matrix space.
+This is the base Fourier-energy identity used before averaging actual affine
+derivatives over their translation parameter. -/
+theorem complex_fourier_parseval {n d : Nat}
+    (f : BinaryMatrix n d → Complex) :
+    uniformMean (fun M => Complex.normSq (f M)) =
+      ∑ Y : BinaryMatrix n d, Complex.normSq (complexFourierCoeff f Y) := by
+  have hre := fourier_parseval (fun M => (f M).re)
+  have him := fourier_parseval (fun M => (f M).im)
+  have hleft :
+      uniformMean (fun M => Complex.normSq (f M)) =
+        uniformMean (fun M => (f M).re ^ 2) +
+          uniformMean (fun M => (f M).im ^ 2) := by
+    unfold uniformMean
+    rw [← add_div, ← Finset.sum_add_distrib]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro M hM
+    simp only [Complex.normSq_apply]
+    ring
+  rw [hleft, hre, him]
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  rw [Complex.normSq_apply, complexFourierCoeff_re,
+    complexFourierCoeff_im]
+  ring
+
+private def affineBaseFourierTerm {n d : Nat}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2))
+    (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (f : BinaryMatrix n d → Complex)
+    (M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B)
+    (Y T : BinaryMatrix n d) : Complex :=
+  if Selected A B Y.transpose.toLin' then
+    complexFourierCoeff f Y *
+      ((traceCharacter (A.mkQ.comp
+        (Y.transpose.toLin'.comp B.subtype)) M : Real) : Complex) *
+      (character Y T : Complex)
+  else 0
+
+private theorem filteredCarrierFunction_base_expansion {n d : Nat}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2))
+    (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (f : BinaryMatrix n d → Complex)
+    (M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B)
+    (T : BinaryMatrix n d) :
+    filteredCarrierFunction A B T.toLin' f M =
+      ∑ Y : BinaryMatrix n d, affineBaseFourierTerm A B f M Y T := by
+  rw [filteredCarrierFunction_fourier_expansion]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  by_cases hs : Selected A B Y.transpose.toLin'
+  · simp only [affineBaseFourierTerm, hs, if_pos]
+    rw [traceCharacter_eq_matrix_character]
+    rw [Complex.ofReal_mul]
+    ring
+  · simp [affineBaseFourierTerm, hs, complexFourierCoeff]
+
+private theorem complexFourierCoeff_affineBaseTerm {n d : Nat}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2))
+    (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (f : BinaryMatrix n d → Complex)
+    (M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B)
+    (Y Z : BinaryMatrix n d) :
+    complexFourierCoeff
+      (fun T => affineBaseFourierTerm A B f M Z T) Y =
+      if Selected A B Z.transpose.toLin' then
+        if Y = Z then
+          complexFourierCoeff f Z *
+            ((traceCharacter (A.mkQ.comp
+              (Z.transpose.toLin'.comp B.subtype)) M : Real) : Complex)
+        else 0
+      else 0 := by
+  by_cases hs : Selected A B Z.transpose.toLin'
+  · simp only [affineBaseFourierTerm, hs, if_pos]
+    rw [complexFourierCoeff_smul, complexFourierCoeff_character]
+    by_cases hyz : Y = Z <;> simp [hyz]
+  · simp [affineBaseFourierTerm, hs, complexFourierCoeff]
+
+private theorem affineBase_fourierCoeff {n d : Nat}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2))
+    (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (f : BinaryMatrix n d → Complex)
+    (M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B)
+    (Y : BinaryMatrix n d) :
+    complexFourierCoeff
+      (fun T => filteredCarrierFunction A B T.toLin' f M) Y =
+      if Selected A B Y.transpose.toLin' then
+        complexFourierCoeff f Y *
+          ((traceCharacter (A.mkQ.comp
+            (Y.transpose.toLin'.comp B.subtype)) M : Real) : Complex)
+      else 0 := by
+  have hfun :
+      (fun T : BinaryMatrix n d => filteredCarrierFunction A B T.toLin' f M) =
+        fun T => ∑ Z : BinaryMatrix n d,
+          affineBaseFourierTerm A B f M Z T := by
+    funext T
+    exact filteredCarrierFunction_base_expansion A B f M T
+  rw [hfun, complexFourierCoeff_finset_sum]
+  simp_rw [complexFourierCoeff_affineBaseTerm]
+  have hsum :
+      (∑ Z : BinaryMatrix n d,
+        if Selected A B Z.transpose.toLin' then
+          if Y = Z then
+            complexFourierCoeff f Z *
+              ((traceCharacter (A.mkQ.comp
+                (Z.transpose.toLin'.comp B.subtype)) M : Real) : Complex)
+          else 0
+        else 0) =
+      if Selected A B Y.transpose.toLin' then
+        complexFourierCoeff f Y *
+          ((traceCharacter (A.mkQ.comp
+            (Y.transpose.toLin'.comp B.subtype)) M : Real) : Complex)
+      else 0 := by
+    rw [Finset.sum_eq_single Y]
+    · simp
+    · intro Z hZ hZY
+      have hyz : Y ≠ Z := fun heq => hZY heq.symm
+      simp [hyz]
+    · simp
+  exact hsum
+
+/-- At each carrier point, averaging the actual affine derivative over its
+ambient base removes all cross terms between distinct ambient frequencies.
+The right side is independent of the carrier point, so this is the A2
+Parseval step before the final carrier average. -/
+theorem actual_affine_base_energy_eq_selected_fourier_mass
+    {n d : Nat}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2))
+    (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (f : BinaryMatrix n d → Complex)
+    (M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B) :
+    uniformMean (fun T : BinaryMatrix n d =>
+      Complex.normSq (filteredCarrierFunction A B T.toLin' f M)) =
+      ∑ Y : BinaryMatrix n d,
+        if Selected A B Y.transpose.toLin' then
+          Complex.normSq (complexFourierCoeff f Y) else 0 := by
+  rw [complex_fourier_parseval]
+  simp_rw [affineBase_fourierCoeff]
+  have hphase (Y : BinaryMatrix n d) :
+      Complex.normSq
+        (((traceCharacter (A.mkQ.comp
+          (Y.transpose.toLin'.comp B.subtype)) M : Real) : Complex)) = 1 := by
+    by_cases h : tracePair (A.mkQ.comp
+        (Y.transpose.toLin'.comp B.subtype)) M = 0 <;>
+      simp [Complex.normSq_apply, traceCharacter, h]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  by_cases hs : Selected A B Y.transpose.toLin'
+  · simp only [hs, if_pos]
+    rw [Complex.normSq_mul, hphase]
+    simp
+  · simp [hs]
+
+/-! The carrier average of the pointwise base Parseval identity is the full
+normalized A2 identity. -/
+theorem actual_affine_derivative_energy_eq_selected_fourier_mass
+    {n d : Nat}
+    (A : Submodule (ZMod 2) (Fin d → ZMod 2))
+    (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+    (f : BinaryMatrix n d → Complex) :
+    uniformMean (fun T : BinaryMatrix n d =>
+      carrierMean A B (fun M => Complex.normSq
+        (filteredCarrierFunction A B T.toLin' f M))) =
+      ∑ Y : BinaryMatrix n d,
+        if Selected A B Y.transpose.toLin' then
+          Complex.normSq (complexFourierCoeff f Y) else 0 := by
+  classical
+  let S : Real :=
+    ∑ Y : BinaryMatrix n d,
+      if Selected A B Y.transpose.toLin' then
+        Complex.normSq (complexFourierCoeff f Y) else 0
+  let NT : Real := Fintype.card (BinaryMatrix n d)
+  let NM : Real := Fintype.card (((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B)
+  have hNT : NT ≠ 0 := by
+    dsimp [NT]
+    exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (BinaryMatrix n d)).ne'
+  have hNM : NM ≠ 0 := by
+    dsimp [NM]
+    exact_mod_cast (Fintype.card_pos :
+      0 < Fintype.card (((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B)).ne'
+  have hpoint (M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B) :
+      (∑ T : BinaryMatrix n d,
+        Complex.normSq (filteredCarrierFunction A B T.toLin' f M)) = NT * S := by
+    have h := actual_affine_base_energy_eq_selected_fourier_mass A B f M
+    change (∑ T : BinaryMatrix n d,
+        Complex.normSq (filteredCarrierFunction A B T.toLin' f M)) / NT = S at h
+    dsimp [S] at h
+    exact (div_eq_iff hNT).mp h
+  have hdouble :
+      (∑ T : BinaryMatrix n d,
+        ∑ M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B,
+          Complex.normSq (filteredCarrierFunction A B T.toLin' f M)) =
+        NT * (∑ M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B, S) := by
+    rw [Finset.sum_comm]
+    simp_rw [hpoint]
+    rw [Finset.mul_sum]
+  have hconst :
+      (∑ M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B, S) = NM * S := by
+    dsimp [NM]
+    simp
+  change (∑ T : BinaryMatrix n d,
+      (∑ M : ((Fin d → ZMod 2) ⧸ A) →ₗ[ZMod 2] B,
+        Complex.normSq (filteredCarrierFunction A B T.toLin' f M)) / NM) / NT = S
+  rw [Finset.sum_div, Finset.sum_comm, hdouble, hconst]
+  field_simp [hNT, hNM]
+  ring
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment
