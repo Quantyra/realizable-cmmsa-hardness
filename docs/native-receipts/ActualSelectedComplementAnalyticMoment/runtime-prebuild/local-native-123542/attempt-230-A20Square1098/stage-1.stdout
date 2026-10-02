@@ -1,0 +1,233 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.carrierComplexFourierSupportedThrough_mul {n d D₁ D₂ : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (f g :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+        ↥B) →
+      ℂ)
+  (hf :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B D₁ f)
+  (hg :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B D₂
+      g) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B
+    (D₁ + D₂) fun M => f M * g M
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.carrierComplexFourierSupportedThrough_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.carrierComplexFourierSupportedThrough_square {n d D : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (f :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+        ↥B) →
+      ℂ)
+  (hf :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B D f) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B (2 * D)
+    fun M => f M * f M
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.carrierComplexFourierSupportedThrough_square' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.filteredCarrierFunction_supportedThrough {n d D : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B D
+    (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.filteredCarrierFunction_supportedThrough' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_fourier_expansion {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      ↥B) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A B T f M =
+    ∑ Y,
+      PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y *
+          ↑(PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T) *
+        ↑(PvNP.RealizableHardness.BinaryMatrixA1Phase.traceCharacter
+            (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_fourier_expansion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_supportedThrough {n d D : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B D
+    (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A B T f)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_supportedThrough' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_square {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      ↥B) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A B T (fun X => f X * f X) M =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A B T f M *
+      PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A B T f M
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_square' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.filteredCarrierFunction_square_supportedThrough
+  {n d D : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B (2 * D)
+    fun M =>
+    PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f M *
+      PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B T f M
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.filteredCarrierFunction_square_supportedThrough' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_square_supportedThrough
+  {n d D : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.CarrierComplexFourierSupportedThrough A B (2 * D)
+    fun M =>
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A B T f M *
+      PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A B T f M
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_square_supportedThrough' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.rawRestriction_composition_energy {n d D : ℕ} {ε : ℝ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hglobal : PvNP.RealizableHardness.BinaryMatrixComplexA15.UpToActualNormSqGlobal (3 * D) ε f)
+  (Q P : PvNP.RealizableHardness.BinaryMatrixActualAffine.ActualAffineRestriction n d) (hbase : Q.base = P.base)
+  (hQ : Q.order ≤ 2 * D) (hP : P.order ≤ D) :
+  PvNP.RealizableHardness.BinaryMatrixComplexA15.fibreEnergy (Q.fibre ∩ P.fibre) f ≤ ε
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.rawRestriction_composition_energy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_nested {n d : ℕ}
+  (A₂ A₁ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B₁ B₂ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n)
+  (S :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d ⧸
+        A₂ →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      ↥B₂)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (N :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d ⧸ A₂) ⧸
+        Submodule.map A₂.mkQ A₁ →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      ↥(Submodule.comap B₂.subtype B₁)) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierAffineRestrict A₂ B₂ (Submodule.map A₂.mkQ A₁)
+      (Submodule.comap B₂.subtype B₁) S
+      (fun M => PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A₂ B₂ T f M) N =
+    PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A₁ B₁ (T + B₂.subtype ∘ₗ S ∘ₗ A₂.mkQ) f
+      ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB) N)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_nested' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_nested_squareMean {n d : ℕ}
+  (A₂ A₁ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d))
+  (B₁ B₂ :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n))
+  (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.W✝ n)
+  (S :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.V✝ d ⧸
+        A₂ →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.F✝]
+      ↥B₂)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.finiteUniformMean✝ fun N =>
+      Complex.normSq
+        (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierAffineRestrict A₂ B₂ (Submodule.map A₂.mkQ A₁)
+          (Submodule.comap B₂.subtype B₁) S
+          (fun M => PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A₂ B₂ T f M) N)) =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.finiteUniformMean✝ fun M =>
+      Complex.normSq
+        (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexAmbientAffineRestrict A₁ B₁
+          (T + B₂.subtype ∘ₗ S ∘ₗ A₂.mkQ) f M)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.complexAmbientAffineRestrict_nested_squareMean' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
