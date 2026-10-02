@@ -1,0 +1,769 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:100:4: error: Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`
+  ?a1 = ?a2
+with the goal
+  ↑((fun A =>
+          let U := Submodule.comap I.subtype ↑↑A;
+          have hdim := ⋯;
+          ⟨U, ⋯⟩)
+        ((fun U =>
+            have hdim := ⋯;
+            ⟨⟨Submodule.map I.subtype ↑U, hdim⟩, ⋯⟩)
+          U)) =
+    ↑U
+
+Note: The full type of `@Subtype.ext` is
+  ∀ {α : Sort ?u.107} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2
+
+E : Type u_1
+inst✝² : AddCommGroup E
+inst✝¹ : Module F E
+inst✝ : Fintype E
+I : Submodule F E
+k : ℕ
+U : W6Grass (↥I) k
+⊢ ↑((fun A =>
+          let U := Submodule.comap I.subtype ↑↑A;
+          have hdim := ⋯;
+          ⟨U, ⋯⟩)
+        ((fun U =>
+            have hdim := ⋯;
+            ⟨⟨Submodule.map I.subtype ↑U, hdim⟩, ⋯⟩)
+          U)) =
+    ↑U
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:108:6: warning: Variable name `A` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _A
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:171:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  Module.finrank F { x : Fin n → F // x ∈ B } + Module.finrank F ↥B.dualAnnihilator = n
+but is expected to have type
+  Module.finrank F { x : Module.Dual F (Fin n → F) // x ∈ B.dualAnnihilator } + Module.finrank F ↥B = n
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:193:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 1
+  a ≥ 0
+where
+ a := ↑(Module.finrank F ↥⊤)
+ b := ↑(Module.finrank F ↥(dr6CoordinateDualAnnihilator K))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:228:24: error: Application type mismatch: The argument
+  h
+has type
+  K ≠ ⊤
+but is expected to have type
+  0 < Module.finrank F ↥(dr6CoordinateDualAnnihilator K)
+in the application
+  hpos.mpr h
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:232:36: error: unsolved goals
+n d : ℕ
+X Y Z : BinaryMatrix n d
+I : Submodule F (V n) := dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y Z)
+K : Submodule F (V n) := dr6F2KernelSum X Y Z
+hsum : dr6ActualIntersectionMobiusSum I = if 0 < Module.finrank F ↥I then 1 else 0
+hpos : K ≠ ⊤ ↔ 0 < Module.finrank F ↥(dr6CoordinateDualAnnihilator K)
+h hp : K ≠ ⊤
+⊢ ¬I = ⊥
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:233:63: error: Application type mismatch: The argument
+  hp
+has type
+  0 < Module.finrank F ↥I
+but is expected to have type
+  K ≠ ⊤
+in the application
+  hpos.mp hp
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:232:49: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:278:2: error: unsolved goals
+case neg
+i j : ℕ
+ci cj : ℚ
+hi0 : i = 0 → ci = 1
+hj0 : j = 0 → cj = 1
+hi : ¬i = 0
+hj : ¬j = 0
+⊢ dr6QBinomialWeight i * dr6QBinomialWeight j * ci * cj = dr6QBinomialWeight i * ci * (dr6QBinomialWeight j * cj)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:299:49: error: Application type mismatch: The argument
+  a
+has type
+  ℚ
+but is expected to have type
+  Prop
+in the application
+  ite (i = 0) a
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:299:26: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  AddCommMonoid Prop
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:299:65: error: unsolved goals
+m l : ℕ
+ci cj : ℕ → ℚ
+hci0 : ci 0 = 1
+hcj0 : cj 0 = 1
+I : Finset ℕ := Finset.range (m + 1)
+J : Finset ℕ := Finset.range (l + 1)
+a : ℚ
+⊢ sorry ()
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:301:49: error: Application type mismatch: The argument
+  a
+has type
+  ℚ
+but is expected to have type
+  Prop
+in the application
+  ite (j = 0) a
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:301:26: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  AddCommMonoid Prop
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:301:65: error: unsolved goals
+m l : ℕ
+ci cj : ℕ → ℚ
+hci0 : ci 0 = 1
+hcj0 : cj 0 = 1
+I : Finset ℕ := Finset.range (m + 1)
+J : Finset ℕ := Finset.range (l + 1)
+hzeroI : ∀ (a : ℚ), sorry
+a : ℚ
+⊢ sorry ()
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:330:72: error: unsolved goals
+m l : ℕ
+ci cj : ℕ → ℚ
+hci0 : ci 0 = 1
+hcj0 : cj 0 = 1
+I : Finset ℕ := Finset.range (m + 1)
+J : Finset ℕ := Finset.range (l + 1)
+hzeroI : ∀ (a : ℚ), sorry
+hzeroJ : ∀ (a : ℚ), sorry
+hsplit :
+  ∀ (i j : ℕ),
+    dr6F2SignedIncidenceWeight i j * ci i * cj j =
+      ((if j = 0 then dr6MobiusAlphaRat i * ci i else 0) + if i = 0 then dr6MobiusAlphaRat j * cj j else 0) -
+        (if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) * if j = 0 then 0 else dr6MobiusAlphaRat j * cj j
+⊢ ((∑ x ∈ Finset.range (m + 1), if x = 0 then 0 else -(dr6QBinomialWeight x * ci x)) +
+      ∑ x ∈ Finset.range (l + 1), if x = 0 then 0 else -(dr6QBinomialWeight x * cj x)) =
+    (∑ x ∈ Finset.range (m + 1), if x = 0 then 0 else if x = 0 then 0 else -(dr6QBinomialWeight x * ci x)) +
+      ∑ x ∈ Finset.range (l + 1), if x = 0 then 0 else if x = 0 then 0 else -(dr6QBinomialWeight x * cj x)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:300:10: warning: This simp argument is unused:
+  I
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:302:10: warning: This simp argument is unused:
+  J
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:334:18: warning: This simp argument is unused:
+  hzeroI
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [I, J, hzeroJ, dr6MobiusAlphaRat, Finset.sum_mul_sum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:334:26: warning: This simp argument is unused:
+  hzeroJ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [I, J, hzeroI, dr6MobiusAlphaRat, Finset.sum_mul_sum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:334:53: warning: This simp argument is unused:
+  Finset.sum_mul_sum
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [I, J, hzeroI, hzeroJ, dr6MobiusAlphaRat]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:352:12: error: private declaration `PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Incidence.dr6DualCoordinateEquiv` has already been declared
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:424:31: warning: Variable name `hKB` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hKB
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:448:4: warning: Try this: intro hKB x hx
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:472:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ 0
+  a - b + c ≥ 1
+where
+ a := ↑(Module.finrank F ↥↑B)
+ b := ↑n
+ c := ↑j
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:482:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Module.finrank F ↥(Submodule.map ↑e ?p)
+in the target expression
+  Module.finrank F ↥(Submodule.map ↑e.symm ↑↑C) = j
+
+n j : ℕ
+K : Submodule F (V n)
+e : Module.Dual F (V n) ≃ₗ[F] V n := dr6DualCoordinateEquiv n
+C : dr6KernelAnnihilatorSubspaces K
+H : Submodule F (Module.Dual F (V n)) := Submodule.map ↑e.symm ↑↑C
+B : Submodule F (V n) := H.dualCoannihilator
+⊢ Module.finrank F ↥(Submodule.map ↑e.symm ↑↑C) = j
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    C
+  has type
+    W6Grass (V n) j
+  but is expected to have type
+    { U // Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U = j }
+  in the application
+    ↑C
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:486:12: error: Function expected at
+  Subspace.dualCoannihilator_dualAnnihilator_eq
+but this term has type
+  (Submodule.dualCoannihilator ?m.300).dualAnnihilator = ?m.300
+
+Note: Expected a function because this term is being applied to the argument
+  H
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:493:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑j
+ b := ↑n
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:504:72: error: Application type mismatch: The argument
+  hH
+has type
+  H ≤ K.dualAnnihilator
+but is expected to have type
+  ?m.485 ≤ Submodule.dualCoannihilator ?m.484
+in the application
+  Submodule.le_dualAnnihilator_iff_le_dualCoannihilator.mpr hH
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:505:18: error: Application type mismatch: The argument
+  hcod
+has type
+  n - Module.finrank F ↥B = j
+but is expected to have type
+  Module.finrank F (V n) - Module.finrank F ↥B = j
+in the application
+  ⟨hK, hcod⟩
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:510:8: error(lean.unknownIdentifier): Unknown constant `Submodule.map_map`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:518:8: error(lean.unknownIdentifier): Unknown constant `Submodule.map_map`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:538:4: warning: Try this: intro hKB x hx
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:589:26: error: unsolved goals
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (V n)
+X Y Z : BinaryMatrix n d
+hX : X = Y + Z
+i : Fin n
+j : Fin d
+⊢ Y i j * 2 + Z i j = Z i j
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:609:32: error: Type mismatch
+  (↑B).toAddSubmonoid
+has type
+  AddSubmonoid (V n)
+but is expected to have type
+  Submodule F (V n)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:607:39: error: Application type mismatch: The argument
+  (↑B).toAddSubmonoid
+has type
+  AddSubmonoid (V n)
+but is expected to have type
+  Submodule F (V n)
+in the application
+  DR6ComplexOrdinarySelected (↑↑A) (↑B).toAddSubmonoid
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:625:28: error: Type mismatch
+  (↑B).toAddSubmonoid
+has type
+  AddSubmonoid (V n)
+but is expected to have type
+  Submodule F (V n)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:646:31: error: Application type mismatch: The argument
+  e.left_inv ⟨↑↑A, A.property⟩
+has type
+  e.invFun (e.toFun ⟨↑↑A, ⋯⟩) = ⟨↑↑A, ⋯⟩
+but is expected to have type
+  ↑((fun U => ⟨⟨↑(e.symm U), ⋯⟩, ⋯⟩) ((fun A => e ⟨↑↑A, ⋯⟩) A)) = ↑A
+in the application
+  congrArg Subtype.val (e.left_inv ⟨↑↑A, A.property⟩)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:652:18: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:676:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2ImageIncidenceCarrier X Y Z)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:678:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2ImageIncidenceCarrier X Y Z)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:682:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2KernelIncidenceCarrier X Y Z)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:685:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2KernelIncidenceCarrier X Y Z)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:689:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2ImageIncidenceCarrier X Y Z)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:690:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2KernelIncidenceCarrier X Y Z)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:709:12: warning: This simp argument is unused:
+  w6FrameProduct
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [← pow_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:761:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e + f ≥ 0
+  c ≥ 0
+  c - e - f ≤ 0
+  c - e - f + g ≤ -1
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ 0
+where
+ a := ↑(Module.finrank (ZMod 2) ↥(Matrix.transpose X).mulVecLin.ker)
+ b := ↑(Module.finrank (ZMod 2) (Fin n → ZMod 2))
+ c := ↑(Module.finrank F ↥(Matrix.transpose X).mulVecLin.ker)
+ e := ↑(Module.finrank F ↥(dr6CoordinateDualAnnihilator (Matrix.transpose X).mulVecLin.ker))
+ f := ↑(Module.finrank F ↥(Matrix.transpose X).mulVecLin.ker)
+ g := ↑(Module.finrank F ↥(dr6CoordinateDualAnnihilator (Matrix.transpose X).mulVecLin.ker))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:768:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X × dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:778:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:779:15: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:790:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:794:15: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:796:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6KernelSuperspaces K)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:806:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:807:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:913:12: warning: This simp argument is unused:
+  Fintype.sum_prod_type
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Fintype.card_prod, mul_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:921:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X × dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:923:45: error: Application type mismatch: The argument
+  (↑p.2).toAddSubmonoid
+has type
+  AddSubmonoid (V n)
+but is expected to have type
+  Submodule F (V n)
+in the application
+  DR6ComplexOrdinarySelected (↑↑p.1) (↑p.2).toAddSubmonoid
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:974:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Matrix.toLin' ?Y
+in the target expression
+  A ≤ (Matrix.transpose Y).mulVecLin.range ∧ dr6CoordinateDualAnnihilator B ≤ (Matrix.mulVecLin Y).range ↔
+    A ≤ (Matrix.transpose Y).mulVecLin.range ∧ (Matrix.transpose Y).mulVecLin.ker ≤ B
+
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (V n)
+Y : BinaryMatrix n d
+⊢ A ≤ (Matrix.transpose Y).mulVecLin.range ∧ dr6CoordinateDualAnnihilator B ≤ (Matrix.mulVecLin Y).range ↔
+    A ≤ (Matrix.transpose Y).mulVecLin.range ∧ (Matrix.transpose Y).mulVecLin.ker ≤ B
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:990:11: error: `simp` made no progress
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1008:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun M => DR6ComplexOrdinaryFilter A B f M ^ 2
+in the target expression
+  complexFourierCoeff (fun M => DR6ComplexOrdinaryFilter A B f M * DR6ComplexOrdinaryFilter A B f M) X =
+    ∑ X_1,
+      complexFourierCoeff (DR6ComplexOrdinaryFilter A B f) X_1 *
+        complexFourierCoeff (DR6ComplexOrdinaryFilter A B f) (X + X_1)
+
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (V n)
+f : BinaryMatrix n d → ℂ
+X : BinaryMatrix n d
+h :
+  complexFourierCoeff (fun M => DR6ComplexOrdinaryFilter A B f M * DR6ComplexOrdinaryFilter A B f M) X =
+    ∑ X_1,
+      complexFourierCoeff (DR6ComplexOrdinaryFilter A B f) X_1 *
+        complexFourierCoeff (DR6ComplexOrdinaryFilter A B f) (X + X_1)
+⊢ complexFourierCoeff (fun M => DR6ComplexOrdinaryFilter A B f M ^ 2) X =
+    ∑ Y,
+      if DR6ComplexOrdinarySelected A B Y ∧ DR6ComplexOrdinarySelected A B (X + Y) then
+        complexFourierCoeff f Y * complexFourierCoeff f (X + Y)
+      else 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1034:2: error: Type mismatch
+  (↑p.snd.snd.2).toAddSubmonoid
+has type
+  AddSubmonoid (V n)
+but is expected to have type
+  Submodule F (V n)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1044:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1104:8: error: typeclass instance problem is stuck
+  AddCommMonoid ?m.408
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `AddCommMonoid` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1166:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1177:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X × dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1180:42: error: Application type mismatch: The argument
+  (↑p.2).toAddSubmonoid
+has type
+  AddSubmonoid (V n)
+but is expected to have type
+  Submodule F (V n)
+in the application
+  DR6ComplexOrdinaryFilter (↑↑p.1) (↑p.2).toAddSubmonoid
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1184:8: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1197:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1196:2: warning: Unused tactic linter: `rw [Fintype.sum_sigma, Fintype.sum_sigma]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1197:2: warning: Unused tactic linter: `calc
+  _ =
+      Finset.univ.sum
+        (fun i : Fin (Module.finrank F (LinearMap.range X.transpose.mulVecLin) + 1) =>
+          Finset.univ.sum
+            (fun j : Fin (Module.finrank F (dr6CoordinateDualAnnihilator (LinearMap.ker X.transpose.mulVecLin)) + 1) =>
+              (dr6F2SignedIncidenceWeight i.val j.val : Complex) * dr6F2A5GradeSquareCoefficient f X i.val j.val)) :=
+    by
+    apply Finset.sum_congr rfl
+    intro i hi
+    apply Finset.sum_congr rfl
+    intro j hj
+    simp [dr6F2A5GradeSquareCoefficient, dr6F2A5OuterWeight, Finset.mul_sum]
+  _ = _ :=
+    by
+    rw [Fin.sum_univ_eq_sum_range
+        (fun i : Nat =>
+          Finset.univ.sum
+            (fun j : Fin (Module.finrank F (dr6CoordinateDualAnnihilator (LinearMap.ker X.transpose.mulVecLin)) + 1) =>
+              (dr6F2SignedIncidenceWeight i j.val : Complex) * dr6F2A5GradeSquareCoefficient f X i j.val))]
+    apply Finset.sum_congr rfl
+    intro i hi
+    rw [Fin.sum_univ_eq_sum_range
+        (fun j : Nat =>
+          (dr6F2SignedIncidenceWeight i j : Complex) * dr6F2A5GradeSquareCoefficient f X i j)]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1230:16: error(lean.unknownIdentifier): Unknown identifier `ComplexFourierSupportedThrough`
+
+Note: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1254:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1265:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1271:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1283:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1305:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1345:9: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1359:9: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1364:9: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1367:11: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2A5OuterCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1332:74: error: unsolved goals
+n d : ℕ
+f : BinaryMatrix n d → ℂ
+X Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+cond : dr6F2A5OuterCarrier X → Prop :=
+  fun p =>
+    DR6ComplexOrdinarySelected (dr6F2A5OuterImage p) (dr6F2A5OuterKernel p) Y ∧
+      DR6ComplexOrdinarySelected (dr6F2A5OuterImage p) (dr6F2A5OuterKernel p) (X + Y)
+a : ℂ := complexFourierCoeff f Y
+b : ℂ := complexFourierCoeff f (X + Y)
+hcast : (∑ p ∈ sorry, if cond p then ↑(dr6F2A5OuterWeight X p) else 0) = ↑(dr6F2A5ActualSelectedWeightSum X Y)
+hobs : dr6F2CommonImage X Y (X + Y) ≠ ⊥ ∨ dr6F2KernelSum X Y (X + Y) ≠ ⊤ ↔ DR6F2Obstruction X Y (X + Y)
+hpoint :
+  (∑ p ∈ sorry, if cond p then ↑(dr6F2A5OuterWeight X p) * a * b else 0) =
+    if DR6F2Obstruction X Y (X + Y) then a * b else 0
+⊢ (∑ p ∈ sorry,
+      if
+          DR6ComplexOrdinarySelected (dr6F2A5OuterImage p) (dr6F2A5OuterKernel p) Y ∧
+            DR6ComplexOrdinarySelected (dr6F2A5OuterImage p) (dr6F2A5OuterKernel p) (X + Y) then
+        ↑(dr6F2A5OuterWeight X p) * complexFourierCoeff f Y * complexFourierCoeff f (X + Y)
+      else 0) =
+    if DR6F2Obstruction X Y (X + Y) then complexFourierCoeff f Y * complexFourierCoeff f (X + Y) else 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1381:56: error: unexpected token ':='; expected command
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1405:10: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1452:16: error(lean.unknownIdentifier): Unknown identifier `ComplexFourierSupportedThrough`
+
+Note: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1462:2: error: unsolved goals
+case pos
+n d D : ℕ
+A : Submodule F (V d)
+B : Submodule F (V n)
+f : BinaryMatrix n d → ℂ
+hsupport : sorry
+hA : D < Module.finrank F ↥A ∨ D < Module.finrank F (V n ⧸ B)
+M Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+hsel : DR6ComplexOrdinarySelected A B Y
+hgrades : Module.finrank F ↥A ≤ Matrix.rank Y ∧ Module.finrank F (V n ⧸ B) ≤ Matrix.rank Y
+hrank : D < Matrix.rank Y
+⊢ complexFourierCoeff f Y = 0 ∨ character Y M = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1479:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(dr6MobiusAlphaRat k)
+in the target expression
+  ↑↑(dr6MobiusAlpha k) ^ 2 ≤ 2 ^ (D * k)
+
+D k : ℕ
+hk : 1 ≤ k
+hkD : k ≤ D
+hkpos : 0 < k
+hcast : ↑(dr6MobiusAlphaRat k) = (-1) ^ (k + 1) * 2 ^ (k * (k - 1) / 2)
+⊢ ↑↑(dr6MobiusAlpha k) ^ 2 ≤ 2 ^ (D * k)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1558:8: error: invalid 'calc' step, left-hand side is
+  q ^ 0 + ∑ i ∈ Finset.range N, q ^ (i + 1) : ℝ
+but is expected to be
+  ∑ k ∈ Finset.range N, q ^ (k + 1) + q ^ 0 : ℝ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1562:12: error: Application type mismatch: The argument
+  ?m.233
+has type
+  0 ≤ 16 / 15
+but is expected to have type
+  0 ≤ 1 / 16
+in the application
+  mul_le_mul hq ih hsum0 ?m.233
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1573:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X × dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1575:9: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X × dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1579:48: error: Application type mismatch: The argument
+  (↑p.2).toAddSubmonoid
+has type
+  AddSubmonoid (V n)
+but is expected to have type
+  Submodule F (V n)
+in the application
+  DR6ComplexOrdinaryFilter (↑↑p.1) (↑p.2).toAddSubmonoid
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1597:2: error: too many variable names provided
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1600:4: error: too many variable names provided
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1603:4: error: too many variable names provided
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1606:6: error: Type mismatch: After simplification, term
+  h
+ has type
+  ↑(dr6MobiusAlphaRat j) ^ 2 ≤ 2 ^ (D * j)
+but is expected to have type
+  ↑(dr6MobiusAlphaRat j) * ↑(dr6MobiusAlphaRat j) ≤ 2 ^ (D * j)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1607:2: error: too many variable names provided
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1609:4: error: too many variable names provided
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1613:6: error: Type mismatch: After simplification, term
+  h
+ has type
+  ↑(dr6MobiusAlphaRat i) ^ 2 ≤ 2 ^ (D * i)
+but is expected to have type
+  ↑(dr6MobiusAlphaRat i) * ↑(dr6MobiusAlphaRat i) ≤ 2 ^ (D * i)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1614:4: error: too many variable names provided
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1619:45: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1619:57: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1620:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Complex.normSq (-?z)
+in the target expression
+  Complex.normSq ↑(-(dr6MobiusAlphaRat i * dr6MobiusAlphaRat j)) ≤ 2 ^ (D * (i + j))
+
+D i j : ℕ
+hi : i ≤ D
+hj : j ≤ D
+hi0 : ¬i = 0
+hj0 : ¬j = 0
+hipos : 1 ≤ i
+hjpos : 1 ≤ j
+hI : ↑(dr6MobiusAlphaRat i) ^ 2 ≤ 2 ^ (D * i)
+hJ : ↑(dr6MobiusAlphaRat j) ^ 2 ≤ 2 ^ (D * j)
+⊢ Complex.normSq ↑(-(dr6MobiusAlphaRat i * dr6MobiusAlphaRat j)) ≤ 2 ^ (D * (i + j))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1691:70: error: unexpected token ':='; expected ')', ',' or ':'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1652:9: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2OuterImageCarrier X × dr6F2OuterKernelCarrier X)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1720:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2NonzeroGradeGrid D)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1729:22: error: unsolved goals
+case ha
+D : ℕ
+hD : 1 ≤ D
+q : ℝ := ⋯
+hexp : 4 ≤ 4 * D
+⊢ 1 ≤ 2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1744:60: error: unsolved goals
+D : ℕ
+hD : 1 ≤ D
+q : ℝ := 1 / 2 ^ (4 * D)
+hden : 16 ≤ 2 ^ (4 * D)
+hq0 : 0 ≤ q
+hq : q ≤ 1 / 16
+hgeom : ∑ i, q ^ ↑i ≤ 16 / 15
+hgeom0 : 0 ≤ ∑ i, q ^ ↑i
+zero : Fin (D + 1) × Fin (D + 1) := (0, 0)
+w : Fin (D + 1) × Fin (D + 1) → ℝ := fun p => q ^ ↑p.1 * q ^ ↑p.2
+⊢ ∑ x, ∑ x_1, q ^ ↑x * q ^ ↑x_1 = (∑ i, q ^ ↑i) ^ 2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1747:36: error: Application type mismatch: The argument
+  w
+has type
+  Fin (D + 1) × Fin (D + 1) → ℝ
+but is expected to have type
+  Fin (D + 1) × Fin (D + 1) → Prop
+in the application
+  (Finset.univ.erase zero).sum w
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1747:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  AddCommMonoid (Sort ?u.285)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1722:18: error: unsolved goals
+case herase
+D : ℕ
+hD : 1 ≤ D
+q : ℝ := 1 / 2 ^ (4 * D)
+hden : 16 ≤ 2 ^ (4 * D)
+hq0 : 0 ≤ q
+hq : q ≤ 1 / 16
+hgeom : ∑ i, q ^ ↑i ≤ 16 / 15
+hgeom0 : 0 ≤ ∑ i, q ^ ↑i
+zero : Fin (D + 1) × Fin (D + 1) := (0, 0)
+w : Fin (D + 1) × Fin (D + 1) → ℝ := fun p => q ^ ↑p.1 * q ^ ↑p.2
+hfactor : Finset.univ.sum w = (∑ i, q ^ ↑i) ^ 2
+⊢ sorry
+
+D : ℕ
+hD : 1 ≤ D
+q : ℝ := 1 / 2 ^ (4 * D)
+hden : 16 ≤ 2 ^ (4 * D)
+hq0 : 0 ≤ q
+hq : q ≤ 1 / 16
+hgeom : ∑ i, q ^ ↑i ≤ 16 / 15
+hgeom0 : 0 ≤ ∑ i, q ^ ↑i
+zero : Fin (D + 1) × Fin (D + 1) := (0, 0)
+w : Fin (D + 1) × Fin (D + 1) → ℝ := fun p => q ^ ↑p.1 * q ^ ↑p.2
+hfactor : Finset.univ.sum w = (∑ i, q ^ ↑i) ^ 2
+herase : sorry
+⊢ ∑ p, (1 / 2 ^ (2 * D * (↑(↑p).1 + ↑(↑p).2))) ^ 2 ≤ 31 / 225
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1745:36: warning: This simp argument is unused:
+  Fintype.sum_mul_sum
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [w, Fintype.sum_prod_type]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1747:38: error: unexpected token '+'; expected command
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1810:20: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2NonzeroGradeGrid D)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1812:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2NonzeroGradeGrid D)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1819:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (dr6F2NonzeroGradeGrid D)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1820:17: error(lean.unknownIdentifier): Unknown identifier `dr6_f2_grade_grid_first_factor_le`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1814:37: error: unsolved goals
+case refine_2
+D : ℕ
+hD : 1 ≤ D
+z : dr6F2NonzeroGradeGrid D → ℂ
+c : dr6F2NonzeroGradeGrid D → ℝ := fun p => 2 ^ (2 * D * (↑(↑p).1 + ↑(↑p).2))
+hc : ∀ (p : dr6F2NonzeroGradeGrid D), 0 < c p
+hcs : Complex.normSq (Finset.univ.sum z) ≤ (∑ i, (1 / c i) ^ 2) * ∑ i, c i ^ 2 * Complex.normSq (z i)
+⊢ Complex.normSq (Finset.univ.sum z) ≤ 31 / 225 * ∑ p, 2 ^ (4 * D * (↑(↑p).1 + ↑(↑p).2)) * Complex.normSq (z p)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1846:16: error(lean.unknownIdentifier): Unknown identifier `ComplexFourierSupportedThrough`
+
+Note: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1856:2: error: too many variable names provided
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own356\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Incidence.lean:1870:33: error: maximum number of errors (100; from option `maxErrors`) reached, exiting
