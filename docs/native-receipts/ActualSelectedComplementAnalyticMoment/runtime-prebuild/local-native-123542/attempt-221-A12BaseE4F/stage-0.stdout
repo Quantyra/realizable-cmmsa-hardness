@@ -1,0 +1,56 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:78:42: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:82:37: warning: This simp argument is unused:
+  complexFourierCoeff
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [affineBaseFourierTerm, hs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:100:42: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:175:19: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:214:4: error: Type mismatch
+  (div_eq_iff hNT).mp h
+has type
+  ∑ T, Complex.normSq (filteredCarrierFunction A B (Matrix.toLin' T) f M) =
+    (∑ Y, if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then Complex.normSq (complexFourierCoeff f Y) else 0) *
+      NT
+but is expected to have type
+  ∑ T, Complex.normSq (filteredCarrierFunction A B (Matrix.toLin' T) f M) = NT * S
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:219:63: error: unsolved goals
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+S : ℝ := ∑ Y, if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then Complex.normSq (complexFourierCoeff f Y) else 0
+NT : ℝ := ↑(Fintype.card (BinaryMatrix n d))
+NM : ℝ := ↑(Fintype.card ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B))
+hNT : NT ≠ 0
+hNM : NM ≠ 0
+hpoint :
+  ∀ (M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B),
+    ∑ T, Complex.normSq (filteredCarrierFunction A B (Matrix.toLin' T) f M) = NT * S
+⊢ (∑ x,
+      ∑ i,
+        NT *
+          if Selected A B (Matrix.toLin' (Matrix.transpose i)) then Complex.normSq (complexFourierCoeff f i) else 0) =
+    NT * ∑ M, S
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:230:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ ?m.421, ∑ y ∈ ?m.422, ?m.423 x y
+in the target expression
+  ∑ i, (∑ M, Complex.normSq (filteredCarrierFunction A B (Matrix.toLin' i) f M)) / NM / NT = S
+
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+S : ℝ := ∑ Y, if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then Complex.normSq (complexFourierCoeff f Y) else 0
+NT : ℝ := ↑(Fintype.card (BinaryMatrix n d))
+NM : ℝ := ↑(Fintype.card ((Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B))
+hNT : NT ≠ 0
+hNM : NM ≠ 0
+hpoint :
+  ∀ (M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B),
+    ∑ T, Complex.normSq (filteredCarrierFunction A B (Matrix.toLin' T) f M) = NT * S
+hdouble : ∑ T, ∑ M, Complex.normSq (filteredCarrierFunction A B (Matrix.toLin' T) f M) = NT * ∑ M, S
+hconst : ∑ M, S = NM * S
+⊢ ∑ i, (∑ M, Complex.normSq (filteredCarrierFunction A B (Matrix.toLin' i) f M)) / NM / NT = S
