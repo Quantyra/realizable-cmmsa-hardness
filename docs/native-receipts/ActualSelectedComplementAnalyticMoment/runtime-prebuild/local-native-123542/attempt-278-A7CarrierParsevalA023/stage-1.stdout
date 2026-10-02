@@ -1,0 +1,35 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.complex_carrier_parseval {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.W✝ n))
+  (g :
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.F✝]
+        ↥B) →
+      ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M => Complex.normSq (g M)) =
+    ∑ Z, Complex.normSq (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierFourierCoeff A B g Z)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.actualW6Derivative_energy_parseval {n d : ℕ}
+  (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.W✝ n)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean (Matrix.toLin' (Matrix.transpose X)).range
+      (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+      Complex.normSq (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative X T f M)) =
+    ∑ Z,
+      Complex.normSq
+        (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierFourierCoeff
+          (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative X T f) Z)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.complex_carrier_parseval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.actualW6Derivative_energy_parseval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
