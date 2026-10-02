@@ -1,0 +1,115 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:58:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Selected A B (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:77:42: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:77:2: error: unsolved goals
+case pos
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+T Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+hs : Selected A B (Matrix.toLin' (Matrix.transpose Y))
+⊢ complexFourierCoeff f Y *
+      (↑(character Y T) * ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M)) =
+    sorry ()
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:80:2: error: unsolved goals
+case neg
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+T Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+hs : ¬Selected A B (Matrix.toLin' (Matrix.transpose Y))
+⊢ 0 = sorry ()
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:77:15: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:79:30: warning: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Complex.ofReal_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:90:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Selected A B (Matrix.toLin' (Matrix.transpose Z)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:98:42: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:101:2: error: unsolved goals
+case neg
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+Y Z : BinaryMatrix n d
+hs : ¬Selected A B (Matrix.toLin' (Matrix.transpose Z))
+⊢ complexFourierCoeff (fun T => sorry ()) Y = sorry ()
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:98:15: warning: declaration uses `sorry`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:98:38: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [affineBaseFourierTerm, if_pos]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:98:42: warning: This simp argument is unused:
+  if_pos
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [affineBaseFourierTerm, hs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:101:33: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [affineBaseFourierTerm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:111:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Selected A B (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:135:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Selected A B (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:142:76: error: unsolved goals
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+Y : BinaryMatrix n d
+⊢ (if tracePair (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M = 0 then
+      if tracePair (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M = 0 then 1 else -1
+    else -if tracePair (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M = 0 then 1 else -1) =
+    1
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:147:19: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:150:2: error: unsolved goals
+case neg
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+hphase :
+  ∀ (Y : BinaryMatrix n d),
+    Complex.normSq ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M) = 1
+Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+hs : ¬Selected A B (Matrix.toLin' (Matrix.transpose Y))
+⊢ Complex.normSq (sorry ()) = sorry ()
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:150:10: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
