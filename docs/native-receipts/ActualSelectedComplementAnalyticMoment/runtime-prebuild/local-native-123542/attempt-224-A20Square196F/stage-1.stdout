@@ -1,0 +1,68 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:29:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:49:8: error: (kernel) unknown constant 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport.carrierComplexFourierSupportedThrough_mul'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:80:16: error(lean.unknownIdentifier): Unknown identifier `complexRankProjection`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:86:45: error(lean.unknownIdentifier): Unknown identifier `complexRankProjection`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:88:51: error(lean.unknownIdentifier): Unknown identifier `complexRankProjection`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:87:16: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:98:4: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:88:37: error: (deterministic) timeout at `«synthesize pending MVars»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:210:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  c ≥ 0
+  c - e ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥qY.range)
+ b := ↑D
+ c := ↑(Matrix.rank Y)
+ e := ↑(Module.finrank F ↥(A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype).range)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:212:2: error: unsolved goals
+case neg
+n d D : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+Z :
+  ↥B →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ A
+hZ : D < Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥Z.range
+hsignal :
+  complexAmbientAffineRestrict A B T f = fun M =>
+    ∑ Y,
+      complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T) *
+        ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M)
+Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+qY : ↥B →ₗ[F] V d ⧸ A := A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype
+hZY : ¬Z = qY
+⊢ Z = A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype →
+    complexFourierCoeff f Y = 0 ∨ traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:212:10: warning: This simp argument is unused:
+  hZY
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
