@@ -1,0 +1,103 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:94:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, w6ActualCarrierFrequency, eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:95:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:103:19: warning: This simp argument is unused:
+  w6ActualPredecessorFrequencyFiber
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [p]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:135:8: warning: Unused tactic linter: `change
+  (∑ Y ∈ (Finset.univ : Finset filteredSubtype),
+      complexFourierCoeff f Y.1 * (traceCharacter Y.1.transpose.toLin' T : Complex)) =
+    _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:306:12: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:307:12: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, Complex.normSq_nonneg]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:287:4: warning: Unused tactic linter: `change
+  (∑ Y ∈ (Finset.univ : Finset Pred), Complex.normSq (complexFourierCoeff f Y.1)) = _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:578:8: error: Dependent elimination failed: Failed to solve equation
+  k.1 =
+    match (MonoidWithZeroHom.ofClass Cardinal.toENat) (Module.rank (ZMod 2) ↥(Matrix.mulVecLin ↑X).range) with
+    | none => 0
+    | some a => id a
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:605:24: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Finite R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:605:4: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:625:8: error: Type mismatch: After simplification, term
+  Eq.symm
+    (Finset.sum_subtype (Finset.range (Matrix.rank Y + 1))
+      (fun k =>
+        Eq.mpr (id (congrFun' (congrArg Iff w6_predecessor_rank_weight_sum._simp_1_2) (k ≤ Matrix.rank Y)))
+          (Decidable.byContradiction fun a => w6_predecessor_rank_weight_sum._proof_1_6 Y k a))
+      fun k => ↑(Fintype.card (W6RankKPredecessor Y k)) * (2 ^ (4 * k * (D - k)) / 2 ^ (6 * D * k)))
+ has type
+  ∑ a ∈ @Finset.univ { k // k ≤ Matrix.rank Y } ?m.565,
+      ↑(Fintype.card (W6RankKPredecessor Y ↑a)) * (2 ^ (4 * ↑a * (D - ↑a)) / 2 ^ (6 * D * ↑a)) =
+    ∑ a ∈ Finset.range (Matrix.rank Y + 1),
+      ↑(Fintype.card (W6RankKPredecessor Y a)) * (2 ^ (4 * a * (D - a)) / 2 ^ (6 * D * a))
+but is expected to have type
+  ∑ k ∈ @Finset.univ R this, ↑(Fintype.card (W6RankKPredecessor Y ↑k)) * (2 ^ (4 * ↑k * (D - ↑k)) / 2 ^ (6 * D * ↑k)) =
+    ∑ k ∈ Finset.range (Matrix.rank Y + 1),
+      ↑(Fintype.card (W6RankKPredecessor Y k)) * 2 ^ (4 * k * (D - k)) / 2 ^ (6 * D * k)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:747:39: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:747:39: warning: Unused tactic linter: `ring` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:864:65: error: unexpected token ','; expected '↦', '=>'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:860:6: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own331\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:815:57: error: unsolved goals
+n d : ℕ
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough 0 f
+hconstant : ∀ (M : BinaryMatrix n d), f M = f 0
+hfilter : w6PredecessorFilter 0 f = fun x => f 0
+hzeroEnergy :
+  (carrierMean (Matrix.toLin' (Matrix.transpose 0)).range (Matrix.toLin' (Matrix.transpose 0)).ker fun M =>
+      Complex.normSq (actualW6Derivative 0 T f M)) =
+    Complex.normSq (f 0)
+⊢ ∑ X,
+      (carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+            Complex.normSq (actualW6Derivative X T f M)) ^
+          2 /
+        2 ^ (6 * 0 * Matrix.rank X) =
+    (uniformMean fun M => Complex.normSq (f M)) ^ 2
