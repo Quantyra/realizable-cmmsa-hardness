@@ -41,6 +41,8 @@ def main():
     ap.add_argument('--expected-sha', required=True)
     ap.add_argument('--execute', action='store_true')
     ap.add_argument('--independent-batch', action='store_true')
+    ap.add_argument('--direct-development', action='store_true')
+    ap.add_argument('--required-object-pin', action='append', default=[])
     ap.add_argument('--cslib-cache')
     ap.add_argument('--cslib-sha')
     ap.add_argument('--reuse-tag')
@@ -201,6 +203,21 @@ sha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256
         steps.append('printf "%s\\n" "$aggregate" >/tmp/TAG-evidence/aggregate.native-exit\nexit "$aggregate"')
         prebuild_steps = steps
         remote = remote.replace('timeout --signal=TERM --kill-after=20s 900s lake build MODULE >/tmp/TAG-evidence/build.stdout 2>/tmp/TAG-evidence/build.stderr\nsha256sum OVERLAYPATHS OVERLAYOBJECTS >/tmp/TAG-evidence/pins.sha256', '')
+    if a.direct_development:
+        assert not a.independent_batch
+        checks = []
+        for pin in a.required_object_pin:
+            name, sha = pin.split('=', 1)
+            assert name.startswith('.lake/build/lib/lean/') and '..' not in pathlib.PurePosixPath(name).parts
+            assert len(sha) == 64 and all(c in '0123456789abcdefABCDEF' for c in sha)
+            checks.append("echo '" + sha + '  ' + name + "' | sha256sum -c -")
+        capture = 'find .lake/build/lib/lean/PvNP/RealizableHardness -name "*.olean" -type f -print0 | sort -z | xargs -0 sha256sum >/tmp/TAG-evidence/cached-import-objects-before.sha256\n'
+        prebuild_steps.insert(0, '\n'.join(checks) + '\n' + capture)
+        for index, pre in enumerate(a.prebuild_source):
+            mod = pre.removeprefix('lean/').removesuffix('.lean').replace('/', '.')
+            obj = '.lake/build/lib/lean/' + pre.removeprefix('lean/').removesuffix('.lean') + '.olean'
+            prebuild_steps = [step.replace('lake build ' + mod, 'lake env lean -o ' + obj + ' ' + pre) for step in prebuild_steps]
+        remote = remote.replace('lake build MODULE', 'lake env lean -o .lake/build/lib/lean/' + a.source.removeprefix('lean/').removesuffix('.lean') + '.olean ' + a.source)
     remote = remote.replace('PREBUILDSTEPS', '\n'.join(prebuild_steps))
     # Source-only overlays need not be compiled; pin objects only for explicit build stages.
     built_sources = list(dict.fromkeys([*a.prebuild_source, a.source]))
