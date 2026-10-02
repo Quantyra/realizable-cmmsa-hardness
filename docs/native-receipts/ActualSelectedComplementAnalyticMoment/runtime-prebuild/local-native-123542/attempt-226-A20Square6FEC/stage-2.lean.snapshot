@@ -1,0 +1,272 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+import PvNP.RealizableHardness.ActualAffineRestrictionComposition
+
+/-! Support lemmas needed for the square-globalness step of A20.  The square
+bound is proved on the actual quotient/subspace carrier by transporting its
+Fourier support through the canonical carrier-matrix equivalence. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+open PvNP.RealizableHardness.BinaryMatrixA1Phase
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixComplexA14
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualTypedABFullA16Assembly
+open PvNP.RealizableHardness.ActualAffineRestrictionComposition
+open PvNP.RealizableHardness.BinaryMatrixActualAffine
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+
+set_option autoImplicit false
+set_option maxHeartbeats 1200000
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Pointwise products on an actual quotient/subspace carrier add Fourier
+degree.  The proof uses the carrier-coordinate equivalence, then the actual
+matrix convolution theorem. -/
+theorem carrierComplexFourierSupportedThrough_mul {n d D₁ D₂ : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f g : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (hf : CarrierComplexFourierSupportedThrough A B D₁ f)
+    (hg : CarrierComplexFourierSupportedThrough A B D₂ g) :
+    CarrierComplexFourierSupportedThrough A B (D₁ + D₂)
+      (fun M => f M * g M) := by
+  apply (carrierFourier_support_iff_coordinate A B (D₁ + D₂)
+    (fun M => f M * g M)).2
+  have hfc := (carrierFourier_support_iff_coordinate A B D₁ f).1 hf
+  have hgc := (carrierFourier_support_iff_coordinate A B D₂ g).1 hg
+  simpa only [Function.comp_apply] using
+    complexFourierSupportedThrough_mul
+      (fun X => f ((carrierMatrixEquiv A B).symm X))
+      (fun X => g ((carrierMatrixEquiv A B).symm X)) hfc hgc
+
+/-- Squaring a carrier signal doubles its Fourier degree. -/
+theorem carrierComplexFourierSupportedThrough_square {n d D : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (hf : CarrierComplexFourierSupportedThrough A B D f) :
+    CarrierComplexFourierSupportedThrough A B (2 * D)
+      (fun M => f M * f M) := by
+  have h := carrierComplexFourierSupportedThrough_mul A B f f hf hf
+  simpa [two_mul] using h
+
+/-- The filtered affine carrier associated with a degree-D ambient function
+has degree at most D. If the carrier's fixed rank cost exceeds D, every
+retained rank layer vanishes; otherwise selected-frequency support drop gives
+the stronger residual-degree bound. -/
+theorem filteredCarrierFunction_supportedThrough {n d D : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    CarrierComplexFourierSupportedThrough A B D
+      (filteredCarrierFunction A B T f) := by
+  let c := Module.finrank F A + Module.finrank F (W n ⧸ B)
+  by_cases hc : c ≤ D
+  · have hdrop := filteredCarrierFunction_support_drop A B T f hsupport
+      (by simpa [c] using hc)
+    intro Z hZ
+    exact hdrop Z (by omega)
+  · have hzero : filteredCarrierFunction A B T f = 0 := by
+      funext M
+      calc
+        filteredCarrierFunction A B T f M =
+            filteredCarrierFunction A B T
+              (fun X => ∑ i ∈ Finset.range (D + 1),
+                complexRankProjection i f X) M := by
+                  congr 1
+                  funext X
+                  exact (complexRankProjection_reconstruct_range_of_support
+                    f hsupport X).symm
+        _ = ∑ i ∈ Finset.range (D + 1),
+              filteredCarrierFunction A B T (complexRankProjection i f) M :=
+                filteredCarrierFunction_finset_sum A B T
+                  (Finset.range (D + 1)) (fun i => complexRankProjection i f) M
+        _ = 0 := by
+          apply Finset.sum_eq_zero
+          intro i hi
+          have hiD : i ≤ D := Nat.lt_succ_iff.mp (Finset.mem_range.mp hi)
+          have hic : i < c := by omega
+          rw [filteredCarrierFunction_rankProjection_zero_of_below_carrier
+            A B T f (by simpa [c] using hic)]
+          simp
+    intro Z hZ
+    rw [hzero]
+    simp [complexCarrierFourierCoeff]
+
+/-- Fourier expansion of the unfiltered raw affine restriction. Every ambient
+frequency induces a carrier character; no selected-frequency hypothesis is
+used. -/
+theorem complexAmbientAffineRestrict_fourier_expansion {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    complexAmbientAffineRestrict A B T f M =
+      ∑ Y : BinaryMatrix n d,
+        (complexFourierCoeff f Y *
+          (traceCharacter Y.transpose.toLin' T : Complex)) *
+            (traceCharacter
+              (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : Complex) := by
+  classical
+  unfold complexAmbientAffineRestrict
+  rw [← complexFourierInversion f
+    (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ)))]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  have hchar : character Y
+      (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) =
+      traceCharacter Y.transpose.toLin' T *
+        traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M := by
+    calc
+      character Y (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))) =
+          traceCharacter Y.transpose.toLin'
+            ((LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))).toLin') :=
+        (traceCharacter_eq_matrix_character Y
+          (LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ)))).symm
+      _ = traceCharacter Y.transpose.toLin'
+            (T + B.subtype.comp (M.comp A.mkQ)) := by
+        rw [Matrix.toLin'_toMatrix']
+      _ = traceCharacter Y.transpose.toLin' T *
+            traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M :=
+        traceCharacter_carrier_base A B Y.transpose.toLin' T M
+  rw [hchar]
+  push_cast
+  ring
+
+/-- The induced carrier frequency of an ambient matrix has rank at most the
+ambient matrix rank, with no Selected predicate required. -/
+private theorem rawCarrierFrequency_rank_le {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d) :
+    Module.finrank F (LinearMap.range
+      (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype))) ≤ Y.rank := by
+  let L : W n →ₗ[F] V d := Y.transpose.toLin'
+  let R : Submodule F (V d) := LinearMap.range L
+  let qR : R →ₗ[F] (V d ⧸ A) := A.mkQ.comp R.subtype
+  have hfactor : A.mkQ.comp (L.comp B.subtype) =
+      qR.comp (L.rangeRestrict.comp B.subtype) := by
+    ext x
+    rfl
+  have hrange : LinearMap.range (A.mkQ.comp (L.comp B.subtype)) ≤
+      LinearMap.range qR := by
+    rw [hfactor]
+    exact LinearMap.range_comp_le_range _ _
+  have hq : Module.finrank F
+      (LinearMap.range (A.mkQ.comp (L.comp B.subtype))) ≤
+        Module.finrank F (LinearMap.range qR) :=
+    Submodule.finrank_mono hrange
+  have hqR := qR.finrank_range_le
+  have hmatrixRank : Y.rank = Module.finrank F R := by
+    change Matrix.rank Y = Module.finrank F (LinearMap.range L)
+    rw [← Matrix.rank_transpose Y]
+    rw [Matrix.rank_eq_finrank_range_toLin Y.transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)]
+    rw [Matrix.toLin_eq_toLin']
+  calc
+    Module.finrank F (LinearMap.range (A.mkQ.comp (L.comp B.subtype))) ≤
+        Module.finrank F (LinearMap.range qR) := hq
+    _ ≤ Module.finrank F R := hqR
+    _ = Y.rank := hmatrixRank.symm
+
+/-- An unfiltered raw affine restriction preserves Fourier degree. The proof
+expands into all induced carrier characters, then uses rank nonincrease under
+quotient and subspace restriction. -/
+theorem complexAmbientAffineRestrict_supportedThrough {n d D : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    CarrierComplexFourierSupportedThrough A B D
+      (complexAmbientAffineRestrict A B T f) := by
+  intro Z hZ
+  have hsignal : complexAmbientAffineRestrict A B T f =
+      fun M => ∑ Y : BinaryMatrix n d,
+        (complexFourierCoeff f Y *
+          (traceCharacter Y.transpose.toLin' T : Complex)) *
+            (traceCharacter
+              (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : Complex) := by
+    funext M
+    exact complexAmbientAffineRestrict_fourier_expansion A B T f M
+  rw [hsignal]
+  rw [complexCarrierFourierCoeff_finset_sum A B Finset.univ
+    (fun Y M =>
+      (complexFourierCoeff f Y * (traceCharacter Y.transpose.toLin' T : Complex)) *
+        (traceCharacter
+          (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : Complex)) Z]
+  apply Finset.sum_eq_zero
+  intro Y hY
+  let qY := A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)
+  rw [complexCarrierFourierCoeff_smul,
+    complexCarrierFourierCoeff_character]
+  by_cases hZY : Z = qY
+  · subst Z
+    have hZ' : D < Module.finrank F (LinearMap.range qY) := by
+      simpa [qY] using hZ
+    have hYrank : D < Y.rank :=
+      lt_of_lt_of_le hZ' (rawCarrierFrequency_rank_le A B Y)
+    simp [hsupport Y hYrank]
+  · have hne : Z ≠
+        A.mkQ.comp (Y.transpose.toLin'.comp B.subtype) := by
+      simpa only [qY] using hZY
+    simp [hne]
+
+/-- Raw affine restriction commutes pointwise with squaring. -/
+theorem complexAmbientAffineRestrict_square {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    complexAmbientAffineRestrict A B T (fun X => f X * f X) M =
+      complexAmbientAffineRestrict A B T f M *
+        complexAmbientAffineRestrict A B T f M := by
+  rfl
+
+/-- Squaring the filtered affine carrier doubles its degree bound in actual
+quotient/subspace Fourier coordinates. -/
+theorem filteredCarrierFunction_square_supportedThrough {n d D : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    CarrierComplexFourierSupportedThrough A B (2 * D)
+      (fun M => filteredCarrierFunction A B T f M *
+        filteredCarrierFunction A B T f M) := by
+  exact carrierComplexFourierSupportedThrough_square A B
+    (filteredCarrierFunction A B T f)
+    (filteredCarrierFunction_supportedThrough A B T f hsupport)
+
+/-- Squaring the unfiltered raw affine restriction doubles its degree bound.
+This is the A20 support statement for the raw restriction itself. -/
+theorem complexAmbientAffineRestrict_square_supportedThrough {n d D : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    CarrierComplexFourierSupportedThrough A B (2 * D)
+      (fun M => complexAmbientAffineRestrict A B T f M *
+        complexAmbientAffineRestrict A B T f M) := by
+  exact carrierComplexFourierSupportedThrough_square A B
+    (complexAmbientAffineRestrict A B T f)
+    (complexAmbientAffineRestrict_supportedThrough A B T f hsupport)
+
+/-- Two same-centre actual restrictions of orders at most `2*D` and `D`
+compose into an actual restriction of order at most `3*D`. This gives the
+intersected-fibre energy bound; a coordinate-carrier naturality map is a
+separate bridge for applications to quotient-coordinate raw restrictions. -/
+theorem rawRestriction_composition_energy {n d D : Nat} {ε : Real}
+    (f : BinaryMatrix n d → Complex)
+    (hglobal : UpToActualNormSqGlobal (3 * D) ε f)
+    (Q P : ActualAffineRestriction n d) (hbase : Q.base = P.base)
+    (hQ : Q.order ≤ 2 * D) (hP : P.order ≤ D) :
+    fibreEnergy (Q.fibre ∩ P.fibre) f ≤ ε := by
+  apply actualGlobal_compose f hglobal Q P hbase
+  omega
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareSupport
