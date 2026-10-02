@@ -1,0 +1,3 @@
+# Dated byte-representation addendum
+
+Root5cf1fc independently verified live physical Moment source SHA500BF0B26B310EF16B799EB2ECD96D7CCE0E47B279B9310D19C2B09BA79C7F4B and Checks3C1055736AB36A53BBD325F72F2570ED5ED4CF30DC9E6CF3B8768B8032E4B737 equal compiled bytes. The immutable packet index records canonical Git LF-normalized identities E96D5AADAD57D7BBAFDADDC4EAE9E20E2F82258EC6334035A00119BBB7FDB00F and0D88FB3493B86E44341CCE6B77991E8BCF92A456E3FBC9F5B96C5834602CEB8B. Normalized bytes match. Physical worktree and Git blob representations differ only by newlines; no proof change or rebuild. This dated companion preserves the historical index without overwriting it.
