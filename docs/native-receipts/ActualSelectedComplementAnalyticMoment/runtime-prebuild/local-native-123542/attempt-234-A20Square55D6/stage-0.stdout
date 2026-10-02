@@ -1,0 +1,60 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:397:35: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:372:10: warning: This simp argument is unused:
+  R
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Nat.add_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:372:13: warning: This simp argument is unused:
+  Nat.add_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [R]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:556:37: error(lean.invalidField): Invalid field `toEquiv`: The environment does not contain `Equiv.toEquiv`, so it is not possible to project the field `toEquiv` from an expression
+  e.symm
+of type
+  ((PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d ⧸ A) ⧸
+        Q.domainFixed →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      ↥Q.codomainVariation) ≃
+    ↥Q.fibre
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:559:42: error(lean.invalidField): Invalid field `toEquiv`: The environment does not contain `Equiv.toEquiv`, so it is not possible to project the field `toEquiv` from an expression
+  e.symm
+of type
+  ((PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d ⧸ A) ⧸
+        Q.domainFixed →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+      ↥Q.codomainVariation) ≃
+    ↥Q.fibre
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:526:59: error: unsolved goals
+n d D : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hglobal : UpToActualNormSqGlobal (3 * D) eps f
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+hparent : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ 2 * D
+Q : CarrierRestriction A B
+hQ : Q.order ≤ D
+g : (V d ⧸ A →ₗ[F] ↥B) → ℂ := fun M => complexAmbientAffineRestrict A B T f M
+horder : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) + Q.order ≤ 3 * D
+hmean :
+  (finiteUniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict A B Q.domainFixed Q.codomainVariation Q.base
+          (fun M => complexAmbientAffineRestrict A B T f M) N)) ≤
+    eps
+e : ↥Q.fibre ≃
+  ((PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.V✝ d ⧸ A) ⧸
+      Q.domainFixed →ₗ[PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝]
+    ↥Q.codomainVariation) :=
+  carrierFibreQuotientHomEquiv Q
+hpoint :
+  ∀ (N : (V d ⧸ A) ⧸ Q.domainFixed →ₗ[F] ↥Q.codomainVariation),
+    complexCarrierAffineRestrict A B Q.domainFixed Q.codomainVariation Q.base g N = g ↑(e.symm N)
+hsum :
+  ∑ N, Complex.normSq (complexCarrierAffineRestrict A B Q.domainFixed Q.codomainVariation Q.base g N) =
+    ∑ x, Complex.normSq (g ↑x)
+⊢ (∑ M ∈ Q.fibre, Complex.normSq ((fun M => complexAmbientAffineRestrict A B T f M) M)) / ↑Q.fibre.card ≤ eps
