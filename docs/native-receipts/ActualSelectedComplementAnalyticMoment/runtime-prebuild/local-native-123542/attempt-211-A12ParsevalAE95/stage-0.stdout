@@ -1,0 +1,34 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:31:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ ?m.87, ?m.89 x + ∑ x ∈ ?m.87, ?m.90 x
+in the target expression
+  (∑ M, (fun M => Complex.normSq (f M)) M) / ↑(Fintype.card (BinaryMatrix n d)) =
+    (∑ M, (fun M => (f M).re ^ 2) M) / ↑(Fintype.card (BinaryMatrix n d)) +
+      (∑ M, (fun M => (f M).im ^ 2) M) / ↑(Fintype.card (BinaryMatrix n d))
+
+n d : ℕ
+f : BinaryMatrix n d → ℂ
+hre : (uniformMean fun M => (f M).re ^ 2) = ∑ Y, fourierCoeff (fun M => (f M).re) Y ^ 2
+him : (uniformMean fun M => (f M).im ^ 2) = ∑ Y, fourierCoeff (fun M => (f M).im) Y ^ 2
+⊢ (∑ M, (fun M => Complex.normSq (f M)) M) / ↑(Fintype.card (BinaryMatrix n d)) =
+    (∑ M, (fun M => (f M).re ^ 2) M) / ↑(Fintype.card (BinaryMatrix n d)) +
+      (∑ M, (fun M => (f M).im ^ 2) M) / ↑(Fintype.card (BinaryMatrix n d))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:41:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (complexFourierCoeff ?f ?Y).re
+in the target expression
+  fourierCoeff (fun M => (f M).re) Y ^ 2 + fourierCoeff (fun M => (f M).im) Y ^ 2 =
+    Complex.normSq (complexFourierCoeff f Y)
+
+n d : ℕ
+f : BinaryMatrix n d → ℂ
+hre : (uniformMean fun M => (f M).re ^ 2) = ∑ Y, fourierCoeff (fun M => (f M).re) Y ^ 2
+him : (uniformMean fun M => (f M).im ^ 2) = ∑ Y, fourierCoeff (fun M => (f M).im) Y ^ 2
+hleft :
+  (uniformMean fun M => Complex.normSq (f M)) = (uniformMean fun M => (f M).re ^ 2) + uniformMean fun M => (f M).im ^ 2
+Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+⊢ fourierCoeff (fun M => (f M).re) Y ^ 2 + fourierCoeff (fun M => (f M).im) Y ^ 2 =
+    Complex.normSq (complexFourierCoeff f Y)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:45:0: error: Unexpected name `PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment` after `end`: The current section is unnamed
+
+Hint: Delete the name `PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment` to end the current unnamed scope; outer named scopes can then be closed using additional `end` command(s):
+  end ̵P̵v̵N̵P̵.̵R̵e̵a̵l̵i̵z̵a̵b̵l̵e̵H̵a̵r̵d̵n̵e̵s̵s̵.̵A̵c̵t̵u̵a̵l̵B̵i̵n̵a̵r̵y̵M̵a̵t̵r̵i̵x̵H̵C̵4̵6̵A̵1̵2̵F̵o̵u̵r̵t̵h̵M̵o̵m̵e̵n̵t̵

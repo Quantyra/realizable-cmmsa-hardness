@@ -1,0 +1,45 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixFourier
+
+/-! The A7/A12 fourth-moment argument starts from finite Fourier-energy
+identities.  This file records the complex Parseval base identity explicitly
+so later affine-selector averages can use the same normalization. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment
+
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+
+/-- Complex Parseval for the normalized uniform mean on binary matrix space.
+This is the base Fourier-energy identity used before averaging actual affine
+derivatives over their translation parameter. -/
+theorem complex_fourier_parseval {n d : Nat}
+    (f : BinaryMatrix n d → Complex) :
+    uniformMean (fun M => Complex.normSq (f M)) =
+      ∑ Y : BinaryMatrix n d, Complex.normSq (complexFourierCoeff f Y) := by
+  have hre := fourier_parseval (fun M => (f M).re)
+  have him := fourier_parseval (fun M => (f M).im)
+  have hleft :
+      uniformMean (fun M => Complex.normSq (f M)) =
+        uniformMean (fun M => (f M).re ^ 2) +
+          uniformMean (fun M => (f M).im ^ 2) := by
+    unfold uniformMean
+    rw [← Finset.sum_add_distrib]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro M hM
+    simp only [Complex.normSq_apply]
+    ring
+  rw [hleft, hre, him]
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  rw [complexFourierCoeff_re, complexFourierCoeff_im,
+    Complex.normSq_apply]
+  ring
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment
