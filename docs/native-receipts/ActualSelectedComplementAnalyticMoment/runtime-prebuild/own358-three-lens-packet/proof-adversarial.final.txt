@@ -1,0 +1,88 @@
+**GO-WITH-NOTES — original F1/A4 bounded kernel increment, within `development_only` cached-object scope.**
+
+I found no proof-blocking mathematical or Lean sufficiency defect in the reviewed increment. The final theorem proves, for every \(n,d,D\in\mathbb N\), including zero dimensions and \(D=0\), and every complex-valued \(f\) satisfying only `ComplexFourierSupportedThrough D f`,
+\[
+\sum_X\left(\sum_{(Y,Z)\in\mathcal F_1(X)}
+|\widehat f(Y)|\,|\widehat f(Z)|\right)^2
+\le 2^{6D^2}E^2,
+\qquad E=\mathbb E_M|f(M)|^2.
+\]
+This coefficient \(1\) bound implies manuscript A4’s coefficient \(81\) bound. The verdict does not certify the wider roadmap.
+
+The review was read-only: no compiler invocation, Git mutation, delegation, or file changes.
+
+**Evidence and findings**
+
+- **HIGH — full-source reproducibility and transitive provenance remain open.** Both custody flags explicitly retain this restriction. The 214-source roster is not an import closure: `ActualBinaryMatrixHC46A7PredecessorCount`, directly imported by the reused Convolution module, is absent. I traced its source and object separately to the earlier receipt. The source import path also reaches `CanonicalFlag` through `A12FourthMoment → A18DerivativeRankProjection → CanonicalDCollapse → CanonicalProjection → CanonicalFlag`. Matching cached bytes and standard axiom profiles do not establish a fresh build of that closure. [Custody flags and object identities](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/cached-import-identities.json)
+
+- **No new mathematical blocker found.** The witness definition, aggregation injections, actual decomposition counts, support branches, Gram inequality, and complex Parseval normalization suffice for the displayed all-\(X\) estimate.
+
+- **LOW — canonical Git bytes differ by newline normalization.** The main blob at `1a418d86` is not byte-identical to the compiled snapshot, but becomes identical after CRLF-to-LF normalization. Checks is byte-identical. I used the archived compiled bytes as authoritative.
+
+- **Open review status.** This is one completed proof-adversarial report. It does not establish completion of the new F1 three-lens review or the final external gates.
+
+I read the complete 735-line main snapshot, complete Checks snapshot, complete Checks stdout, both stage records, terminal record, and both custody manifests. Independently computed SHA-256 values match:
+
+| Artifact | SHA-256 |
+|---|---|
+| Compiled main snapshot | `DAFA4306F2A826558D3C9E7037719FF0A0BC7F6DB9761A04068C3273133DF1FC` |
+| Compiled Checks snapshot | `3B0504AC35CFC511211B9DD85675460AD962FC4C4E84C8B5187B120F94E7EBBE` |
+| Complete diagnostic archive | `85F757238A0C7382FFBC01786654303DD59DC406927767A12E3F534D24A88AA3` |
+
+All 11 archive members equal their receipt-directory counterparts. I independently rehashed **214 custody sources and 1,179 cached `.olean` objects, with zero mismatches**. Recorded Source/Checks exits are both zero, timings are **245.63/22.87 seconds**, both stderr files are empty, and aggregate exit is zero. These are verified recorded diagnostics, not a fresh compilation. [Terminal receipt](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/terminal.json)
+
+**Mathematical and Lean audit**
+
+1. **The actual F1 witness has all three required rank equations.**  
+   The reused definition contains \(Y=A+C,\ Z=B+C,\ X=A+B\), all three pairwise transposed-image intersections equal to bottom, and
+   \[
+   \operatorname{rank}Y=\operatorname{rank}A+\operatorname{rank}C,\quad
+   \operatorname{rank}Z=\operatorname{rank}B+\operatorname{rank}C,\quad
+   \operatorname{rank}X=\operatorname{rank}A+\operatorname{rank}B.
+   \]
+   Image disjointness is not substituted for rank additivity. Conversely, the manuscript’s rank-additive decompositions imply those image-disjointness fields by the predecessor range-decomposition lemma, so the Lean class does not silently exclude manuscript witnesses. Characteristic two gives \(Y+Z=X\). The earlier coverage construction genuinely derives the three rank equations from range equalities and disjointness. It does not require F1 and F2 to be disjoint. [Convolution snapshot, definition at line 111](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own348/attempt-348-DR6Convolution/stage-0.lean.snapshot:111)
+
+2. **The chosen-witness injection has the correct direction.**  
+   Each F1 pair chooses one triple \((A,B,C)\). Equality of chosen triples recovers **both** \(Y=A+C\) and \(Z=B+C\), proving pair equality. This yields an injection into `DR6DirectYDecomposition X × BinaryMatrix n d`. Uniqueness of witnesses is unnecessary; surjectivity is unnecessary. The proof sums over \(C\) inside \(H(A,B)\), retaining its multiplicity correctly. It does not sum the weaker single-pair bound once per pair and introduce an uncontrolled factor. [F1 snapshot, line 307](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/stage-0.lean.snapshot:307)
+
+3. **The direct-\(Y\) count is derived, not assumed.**  
+   A decomposition \((A,C)\) injects into rank-additive predecessors via \(A\), because \(C=Y-A\). The predecessor then injects into its descended endomorphism on \(\operatorname{range}(Y^\top)\): equality of endomorphisms gives equality of their compositions with the range restriction, hence equality of the original matrices. A finite basis identifies all endomorphisms with \(r\times r\) binary matrices, giving exactly \(2^{r^2}\) possibilities. The argument requires neither a cardinality hypothesis nor an ambient-dimension factor. [Count proof, line 794](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own348/attempt-348-DR6Convolution/stage-0.lean.snapshot:794)
+
+4. **The global injection prevents an extra output-frequency loss.**  
+   The map \((X,(A,B))\mapsto(A,B)\) on the dependent direct-decomposition family is injective because \(X=A+B\). Thus the sum over all outputs is bounded by the single global Gram Frobenius sum. No factor counting possible \(X\), \(Y\), or \(C\) is introduced. [Global aggregation, line 636](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/stage-0.lean.snapshot:636)
+
+5. **The exponent accounting is sufficient.**  
+   Writing \(c(A,C)\) for the supported direct coefficient weight and \(M=\sum_{A,C}c(A,C)^2\), finite Cauchy–Schwarz gives
+   \[
+   \sum_{A,B}H(A,B)^2\le M^2.
+   \]
+   The outer split count contributes \(2^{4D^2}\), while direct-frequency counting and Parseval give \(M\le2^{D^2}E\). Consequently the total factor is
+   \[
+   2^{4D^2}(2^{D^2})^2=2^{6D^2}.
+   \]
+   This valid Gram argument establishes A4’s conclusion without needing the manuscript’s intermediate Boolean fourth-moment estimate.
+
+6. **Unsupported ranks and zero cases are internal.**  
+   Above-rank-\(D\) coefficients vanish in both the chosen-charge argument and coefficient-mass regrouping. For \(\operatorname{rank}X>2D\), rank subadditivity forces at least one contributing frequency above \(D\), so its weight vanishes. There is no external `rank X ≤ 2D` premise on the final theorem. No positivity assumption on \(D,n,d\) appears. At \(D=0\), only the zero frequency contributes and the bound is consistent with equality.
+
+7. **Complex normalization is correct.**  
+   Fourier coefficients divide by the full matrix-space cardinality; `uniformMean` uses the same normalized average. The mass uses `Complex.normSq`, identified with squared complex norm. The reused complex Parseval theorem follows by applying real Parseval separately to real and imaginary parts. There is no reality, Booleanity, indicator, mean-zero, or norm-normalization premise. The real-valued convolution exports elsewhere in Convolution do not narrow this final complex-valued theorem.
+
+8. **The audited axiom boundary is standard.**  
+   All **six audited theorem profiles** report exactly `propext`, `Classical.choice`, and `Quot.sound`. They report no `sorryAx`, custom analytic axiom, or additional oracle axiom. The final type exposes only \(f\) and Fourier support; cardinality, Gram, Parseval, and rank bounds are proved dependencies. The pretty-printed sums omit their subtype domains, but the complete snapshot supplies the intended domains explicitly. [Complete Checks output](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own358/attempt-358-DR6SignMoments/stage-1.stdout)
+
+**Dependency trace**
+
+The main directly imports `Mathlib.Tactic`, `ActualBinaryMatrixHC46DR6Convolution`, and `ActualBinaryMatrixHC46A12FourthMoment`.
+
+- **greenConvolution / own348:** source `CDDF6433035E4634EBF1E6D74B981CA6ADAA9A990AE156A03485C89FE60EE5D7`, Checks `3DCA810830D9956DADF8E53F127D92D8C40560D33769C8FA0AE2567124C3A980`. Recorded exits are zero, with seven standard axiom profiles. Its source object is `076fa3626040ca7181c612dc88ef05a6a2e71d0d9b664bf7ad6a88b7052cc8c0`, identical in own348, own357, and own358.
+
+- **Descended-end counting dependency:** attempt275 source `8D8AF4E559179D081E58330ACA37DED52430CEE717294C5DEAF444348B982F64`, Checks `68201CBB9589671FB043AECD0948B3FE607FB58F9F1679E0C5C7F1AA271499A1`. Its reused object `8d3efe0f8cc2862141475f2fff7c6fbc1c8d7dfc436c481de3006857af725827` matches the earlier library and own348/357/358.
+
+- **Actual A3 predecessor lineage / own327:** source `775FFB87764C2E208ACED9B21FE4F5D0F2063A1ED756547FC89E2508F38FDEE2`, Checks `BF8D33BF2616AB0A626BF51C138EE37CA38430F120729A738BC7A894787EBD64`; 46 standard axiom profiles. Reused object `1ab497fe9c0eeb4ddd7c615d3fff7b666e19d4b0d4ab940d4e21150bd31e6dbc` matches own327 and own348/357/358.
+
+- **Complex Parseval / attempt223:** source `5097100998B4FD3581985E4D9A09117982CF013CEA5230A301F0EBDFCE6DD75A`, Checks `CEAF913DF7B6E46765F896F6F638598B31389DDA4D1A65B917EB499A36575F7A`. Reused object `67787c4b943c899fb1d52e162b431878b70f85985695ffaa23f35999eb484382` matches the earlier library and own348/357/358.
+
+- **Prior energy / own333:** source `F5A0AB8CC30955BB592C086D54945BFA2743029CBB3A72511B6757BEC596142D`, Checks `BEDA260A86C5EA6417274FFE949C558668E716FFAD652EDAE09DF77AEDDF9D5E`; 19 standard profiles. Object `f3e3b7dae67b4c97059ae223e666130a9b3bf0c86c30a67751c124720ddd7894` matches own333, own348, and own358. This establishes retained cache identity; the F1 proof does not invoke the weighted W6 energy theorem as an analytic premise.
+
+Full weighted F2, global ambient Parseval assembly, DR6, A7, A12, HC46, outward certification, and final **ClaudeOpus5.5/Gemini3.1ProHigh** gates remain **OPEN**. The new F1 three-lens gate remains pending the complete set of actual reports. No OpenCode or Grok was used.
