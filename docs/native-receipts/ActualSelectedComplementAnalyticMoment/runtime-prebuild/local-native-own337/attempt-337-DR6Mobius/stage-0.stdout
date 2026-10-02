@@ -1,0 +1,113 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:38:8: error: typeclass instance problem is stuck
+  Fintype ?m.3
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Fintype` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:55:33: error: unsolved goals
+n : ℕ
+⊢ (∏ i, (2 ^ n - 2 ^ ↑i)) / ∏ i, (2 ^ n - 2 ^ ↑i) = 1
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:82:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n * ?m - ?n * ?k
+in the target expression
+  2 ^ i * 2 ^ (n - i) - 2 ^ i = 2 ^ i * (2 ^ (n - i) - 1)
+
+n k : ℕ
+hkn : k ≤ n
+i : ℕ
+hi : i < k
+hin : i ≤ n
+hpow : 2 ^ n = 2 ^ i * 2 ^ (n - i)
+⊢ 2 ^ i * 2 ^ (n - i) - 2 ^ i = 2 ^ i * (2 ^ (n - i) - 1)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:89:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ i, ?f ↑i
+in the target expression
+  ∏ i, (2 ^ n - 2 ^ ↑i) = 2 ^ (k * (k - 1) / 2) * ∏ i ∈ Finset.range k, (2 ^ (n - i) - 1)
+
+n k : ℕ
+hkn : k ≤ n
+⊢ ∏ i, (2 ^ n - 2 ^ ↑i) = 2 ^ (k * (k - 1) / 2) * ∏ i ∈ Finset.range k, (2 ^ (n - i) - 1)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:115:2: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:130:8: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:147:48: error: Application type mismatch: The argument
+  hkn
+has type
+  k ≤ n
+but is expected to have type
+  k ≤ Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ (V n)
+in the application
+  w6_card_grass_mul k hkn
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:148:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  w6Gaussian ?n ?k
+in the target expression
+  Fintype.card (W6Grass (V n) k) * w6FrameProduct k k =
+    w6FrameProduct (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ (V n)) k
+
+n k : ℕ
+hkn : k ≤ n
+hgrass :
+  Fintype.card (W6Grass (V n) k) * w6FrameProduct k k =
+    w6FrameProduct (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ (V n)) k
+⊢ dr6ActualGaussian n k * dr6QFactorial k = dr6FrameTail n k
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:176:4: error: failed to prove nonzeroness, but it would be possible to prove nonnegativity if desired
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:177:2: error: Tactic `apply` failed: could not unify the conclusion of `(div_eq_iff hden).mpr`
+  ?m.88 / (↑(dr6QFactorial k) * ↑(dr6QFactorial (n - k))) = ?m.90
+with the goal
+  ↑(dr6ActualGaussian n k) = ↑(dr6QFactorial n) / (↑(dr6QFactorial k) * ↑(dr6QFactorial (n - k)))
+
+Note: The full type of `(div_eq_iff hden).mpr` is
+  ?m.88 = ?m.90 * (↑(dr6QFactorial k) * ↑(dr6QFactorial (n - k))) →
+    ?m.88 / (↑(dr6QFactorial k) * ↑(dr6QFactorial (n - k))) = ?m.90
+
+n k : ℕ
+hkn : k ≤ n
+htail : dr6QFactorial n = dr6QFactorial (n - k) * dr6FrameTail n k
+hcount : dr6ActualGaussian n k * dr6QFactorial k = dr6FrameTail n k
+hnum : dr6QFactorial n = dr6QFactorial k * dr6QFactorial (n - k) * dr6ActualGaussian n k
+hden : ↑(dr6QFactorial k) * ↑(dr6QFactorial (n - k)) ≠ 0
+⊢ ↑(dr6ActualGaussian n k) = ↑(dr6QFactorial n) / (↑(dr6QFactorial k) * ↑(dr6QFactorial (n - k)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:191:72: error: unsolved goals
+n : ℕ
+⊢ ¬dr6QFactorial n = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:194:66: error: unsolved goals
+n : ℕ
+⊢ ¬dr6QFactorial n = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:208:61: error: unsolved goals
+n k : ℕ
+hk : 0 < k
+hkn : k < n
+hn : 0 < n
+hm : 0 < n - k
+hklt : k - 1 < n - 1
+hnk : n = n - k + k
+⊢ 2 ^ (k + (n - k + k - k)) = 2 ^ (n - k + k)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:228:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  2 ^ (n - k) * 2 ^ k
+in the target expression
+  ↑(dr6QFactorial (n - 1)) * ↑(2 ^ n - 1) / (↑(2 ^ k - 1) * ↑(2 ^ (n - k) - 1)) =
+    ↑(dr6QFactorial (n - 1)) * ↑(dr6QFactorial (n - k - 1)) *
+      (1 / (↑(2 ^ k - 1) * ↑(dr6QFactorial (n - 1 - k))) + 2 ^ (n - k) / ↑(dr6QFactorial (n - 1 - (k - 1))))
+
+n k : ℕ
+hk : 0 < k
+hkn : k < n
+hn : 0 < n
+hm : 0 < n - k
+hklt : k - 1 < n - 1
+hnk : n = n - k + k
+hpow : 2 ^ (n - k) * 2 ^ k = 2 ^ n
+hqfactN : dr6QFactorial n = dr6QFactorial (n - 1) * (2 ^ n - 1)
+hqfactM : dr6QFactorial (n - k) = dr6QFactorial (n - k - 1) * (2 ^ (n - k) - 1)
+hqfactK : dr6QFactorial k = dr6QFactorial (k - 1) * (2 ^ k - 1)
+hNpos : 0 < dr6QFactorial n
+hMpos : 0 < dr6QFactorial (n - k)
+hKpos : 0 < dr6QFactorial k
+hM1pos : 0 < dr6QFactorial (n - k - 1)
+hK1pos : 0 < dr6QFactorial (k - 1)
+⊢ ↑(dr6QFactorial (n - 1)) * ↑(2 ^ n - 1) / (↑(2 ^ k - 1) * ↑(2 ^ (n - k) - 1)) =
+    ↑(dr6QFactorial (n - 1)) * ↑(dr6QFactorial (n - k - 1)) *
+      (1 / (↑(2 ^ k - 1) * ↑(dr6QFactorial (n - 1 - k))) + 2 ^ (n - k) / ↑(dr6QFactorial (n - 1 - (k - 1))))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own337\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:242:0: error: Unexpected name `PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius` after `end`: The current section is unnamed
+
+Hint: Delete the name `PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius` to end the current unnamed scope; outer named scopes can then be closed using additional `end` command(s):
+  end ̵P̵v̵N̵P̵.̵R̵e̵a̵l̵i̵z̵a̵b̵l̵e̵H̵a̵r̵d̵n̵e̵s̵s̵.̵A̵c̵t̵u̵a̵l̵B̵i̵n̵a̵r̵y̵M̵a̵t̵r̵i̵x̵H̵C̵4̵6̵D̵R̵6̵M̵o̵b̵i̵u̵s̵
