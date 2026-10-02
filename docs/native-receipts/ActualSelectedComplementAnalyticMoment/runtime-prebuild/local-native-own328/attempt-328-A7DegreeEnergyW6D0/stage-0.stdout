@@ -1,0 +1,273 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:89:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, w6ActualCarrierFrequency, eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:90:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:98:19: warning: This simp argument is unused:
+  w6ActualPredecessorFrequencyFiber
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [p]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:130:8: warning: Unused tactic linter: `change
+  (∑ Y ∈ (Finset.univ : Finset filteredSubtype),
+      complexFourierCoeff f Y.1 * (traceCharacter Y.1.transpose.toLin' T : Complex)) =
+    _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:301:12: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:302:12: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, Complex.normSq_nonneg]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:282:4: warning: Unused tactic linter: `change
+  (∑ Y ∈ (Finset.univ : Finset Pred), Complex.normSq (complexFourierCoeff f Y.1)) = _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:451:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ Y, Complex.normSq (complexFourierCoeff f ↑Y)
+in the target expression
+  ∑ Z, ↑(Fintype.card (w6ActualPredecessorFrequencyFiber X Z)) * fiberEnergy Z ≤ cap * w6PredecessorFourierEnergy X f
+
+n d D : ℕ
+X : BinaryMatrix n d
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hXD : Matrix.rank X ≤ D
+cap : ℝ := 2 ^ (2 * Matrix.rank X * (D - Matrix.rank X))
+fiberEnergy : (↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[F] V d ⧸ (Matrix.toLin' (Matrix.transpose X)).range) → ℝ :=
+  fun Z => ∑ Y, Complex.normSq (complexFourierCoeff f ↑Y)
+hterm :
+  ∀
+    (Z :
+      ↥(Matrix.toLin'
+              (Matrix.transpose X)).ker →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+        PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝ d ⧸
+          (Matrix.toLin' (Matrix.transpose X)).range),
+    ↑(Fintype.card (w6ActualPredecessorFrequencyFiber X Z)) * fiberEnergy Z ≤ cap * fiberEnergy Z
+hweighted : ∑ Z, ↑(Fintype.card (w6ActualPredecessorFrequencyFiber X Z)) * fiberEnergy Z ≤ cap * ∑ Z, fiberEnergy Z
+⊢ ∑ Z, ↑(Fintype.card (w6ActualPredecessorFrequencyFiber X Z)) * fiberEnergy Z ≤ cap * w6PredecessorFourierEnergy X f
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:486:10: error(lean.unknownIdentifier): Unknown identifier `actualW6Derivative_energy_nonneg`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:488:23: error(lean.unknownIdentifier): Unknown identifier `w6PredecessorFourierEnergy_sq_le_total_mul`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:492:41: error: Type mismatch
+  c * a - e
+has type
+  ℝ
+of sort `Type` but is expected to have type
+  0 ≤ ?m.414
+of sort `Prop`
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:502:59: error: unsolved goals
+case e_a
+n d D : ℕ
+X : BinaryMatrix n d
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+e : ℝ :=
+  carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+    Complex.normSq (actualW6Derivative X T f M)
+a : ℝ := w6PredecessorFourierEnergy X f
+E : ℝ := uniformMean fun M => Complex.normSq (f M)
+c : ℝ := 2 ^ (2 * Matrix.rank X * (D - Matrix.rank X))
+he : e ≤ c * a
+heNonneg : 0 ≤ e
+ha2 : a ^ 2 ≤ E * a
+hcNonneg : 0 ≤ c
+⊢ 2 ^ (Matrix.rank X * (D - Matrix.rank X) * 4) = E * 2 ^ (Matrix.rank X * (D - Matrix.rank X) * 4)
+
+case e_a
+n d D : ℕ
+X : BinaryMatrix n d
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+e : ℝ :=
+  carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+    Complex.normSq (actualW6Derivative X T f M)
+a : ℝ := w6PredecessorFourierEnergy X f
+E : ℝ := uniformMean fun M => Complex.normSq (f M)
+c : ℝ := 2 ^ (2 * Matrix.rank X * (D - Matrix.rank X))
+he : e ≤ c * a
+heNonneg : 0 ≤ e
+ha2 : a ^ 2 ≤ E * a
+hcNonneg : 0 ≤ c
+⊢ E * a = a
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:544:27: error(lean.unknownIdentifier): Unknown identifier `W6RankKPredecessor`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:565:32: error(lean.unknownIdentifier): Unknown identifier `W6RankKPredecessor`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:568:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:572:25: error(lean.unknownIdentifier): Unknown identifier `W6RankKPredecessor`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:569:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype S
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:570:14: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:575:15: error: unsolved goals
+n d D : ℕ
+Y : BinaryMatrix n d
+hYD : Matrix.rank Y ≤ D
+P : Type := { X // w6Precedes X Y }
+K : Type := { k // k ≤ Matrix.rank Y }
+S : Type := (_ : K) × sorry
+e : P ≃ S :=
+  { toFun := fun X => ⟨⟨Matrix.rank ↑X, ⋯⟩, sorry⟩, invFun := fun z => ⟨sorry, ⋯⟩, left_inv := ⋯, right_inv := ⋯ }
+k : K
+hk : k ∈ Finset.univ
+⊢ ↑(sorry ()).card = sorry () ∨ w6EnergyRankWeight D ↑k = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:580:31: error(lean.unknownIdentifier): Unknown identifier `W6RankKPredecessor`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:583:24: error(lean.unknownIdentifier): Unknown identifier `W6RankKPredecessor`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:592:8: error(lean.unknownIdentifier): Unknown identifier `w6_weighted_rank_k_predecessor_sum_le`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:638:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x, ∑ y, ?f ⟨x, y⟩
+in the target expression
+  ∑ X, ∑ Y, w6EnergyRankWeight D (Matrix.rank X) * Coeff ↑Y =
+    ∑ p, w6EnergyRankWeight D (Matrix.rank p.fst) * Coeff ↑p.snd
+
+n d D : ℕ
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+E : ℝ := uniformMean fun M => Complex.normSq (f M)
+Coeff : BinaryMatrix n d → ℝ := fun Y => Complex.normSq (complexFourierCoeff f Y)
+PredOfX : BinaryMatrix n d → Type := fun X => { Y // w6Precedes X Y }
+PredOfY : BinaryMatrix n d → Type := fun Y => { X // w6Precedes X Y }
+PairX : Type := (X : BinaryMatrix n d) × PredOfX X
+PairY : Type := (Y : BinaryMatrix n d) × PredOfY Y
+swap : PairX ≃ PairY :=
+  { toFun := fun p => ⟨↑p.snd, ⟨p.fst, ⋯⟩⟩, invFun := fun p => ⟨↑p.snd, ⟨p.fst, ⋯⟩⟩, left_inv := ⋯, right_inv := ⋯ }
+⊢ ∑ X, ∑ Y, w6EnergyRankWeight D (Matrix.rank X) * Coeff ↑Y =
+    ∑ p, w6EnergyRankWeight D (Matrix.rank p.fst) * Coeff ↑p.snd
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:665:46: error: Application type mismatch: The argument
+  D
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Matrix.rank Y ≤ ?m.617
+of sort `Prop` in the application
+  w6_predecessor_rank_weight_sum Y D
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:706:8: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:688:45: error: unsolved goals
+case calc.step
+n d D : ℕ
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+E : ℝ := uniformMean fun M => Complex.normSq (f M)
+Coeff : BinaryMatrix n d → ℝ := fun Y => Complex.normSq (complexFourierCoeff f Y)
+PredOfX : BinaryMatrix n d → Type := fun X => { Y // w6Precedes X Y }
+PredOfY : BinaryMatrix n d → Type := fun Y => { X // w6Precedes X Y }
+PairX : Type := (X : BinaryMatrix n d) × PredOfX X
+PairY : Type := (Y : BinaryMatrix n d) × PredOfY Y
+swap : PairX ≃ PairY :=
+  { toFun := fun p => ⟨↑p.snd, ⟨p.fst, ⋯⟩⟩, invFun := fun p => ⟨↑p.snd, ⟨p.fst, ⋯⟩⟩, left_inv := ⋯, right_inv := ⋯ }
+hdouble :
+  ∑ X, w6EnergyRankWeight D (Matrix.rank X) * w6PredecessorFourierEnergy X f =
+    ∑ Y, Coeff Y * ∑ X, w6EnergyRankWeight D (Matrix.rank ↑X)
+hpredBound : ∀ (Y : BinaryMatrix n d), Coeff Y * ∑ X, w6EnergyRankWeight D (Matrix.rank ↑X) ≤ 67 / 63 * Coeff Y
+hpredWeighted : ∑ X, w6EnergyRankWeight D (Matrix.rank X) * w6PredecessorFourierEnergy X f ≤ 67 / 63 * E
+X : BinaryMatrix n d
+e : ℝ :=
+  carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+    Complex.normSq (actualW6Derivative X T f M)
+a : ℝ := w6PredecessorFourierEnergy X f
+hsq :
+  (carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+        Complex.normSq (actualW6Derivative X T f M)) ^
+      2 ≤
+    (2 ^ (4 * Matrix.rank X * (D - Matrix.rank X)) * uniformMean fun M => Complex.normSq (f M)) *
+      w6PredecessorFourierEnergy X f
+hden : 0 < 2 ^ (6 * D * Matrix.rank X)
+⊢ E * (2 ^ (4 * Matrix.rank X * (D - Matrix.rank X)) / 2 ^ (6 * D * Matrix.rank X)) * a * 2 ^ (6 * D * Matrix.rank X) ≤
+    E * (2 ^ (4 * Matrix.rank X * (D - Matrix.rank X)) / 2 ^ (6 * D * Matrix.rank X) * w6PredecessorFourierEnergy X f) *
+      2 ^ (6 * D * Matrix.rank X)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:773:8: error(lean.unknownIdentifier): Unknown identifier `complexRankProjection`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:777:8: error(lean.unknownIdentifier): Unknown identifier `complexRankProjection`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:777:38: error(lean.unknownIdentifier): Unknown identifier `complexRankProjection`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:795:16: error(lean.unknownIdentifier): Unknown identifier `complexFourierInversion`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:805:32: error: unsolved goals
+n d : ℕ
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough 0 f
+hconstant : ∀ (M : BinaryMatrix n d), f M = f 0
+hfilter : w6PredecessorFilter 0 f = fun x => f 0
+⊢ ↑Finset.univ.card * Complex.normSq (f 0) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.V✝ d ⧸
+              (Matrix.toLin' 0).range →ₗ[PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.F✝]
+            ↥(Matrix.toLin' 0).ker)) =
+    Complex.normSq (f 0)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own328\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:834:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ Finset.univ.erase 0, ?m.583 x + ?m.583 0
+in the target expression
+  ∑ X,
+      (carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+            Complex.normSq (actualW6Derivative X T f M)) ^
+          2 /
+        2 ^ (6 * 0 * Matrix.rank X) =
+    (uniformMean fun M => Complex.normSq (f M)) ^ 2
+
+n d : ℕ
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough 0 f
+hconstant : ∀ (M : BinaryMatrix n d), f M = f 0
+hfilter : w6PredecessorFilter 0 f = fun x => f 0
+hzeroEnergy :
+  (carrierMean (Matrix.toLin' (Matrix.transpose 0)).range (Matrix.toLin' (Matrix.transpose 0)).ker fun M =>
+      Complex.normSq (actualW6Derivative 0 T f M)) =
+    Complex.normSq (f 0)
+hinputEnergy : (uniformMean fun M => Complex.normSq (f M)) = Complex.normSq (f 0)
+hpositive :
+  ∀ (X : BinaryMatrix n d),
+    X ≠ 0 →
+      (carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+          Complex.normSq (actualW6Derivative X T f M)) =
+        0
+herase :
+  ∑ X ∈ Finset.univ.erase 0,
+      (carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+            Complex.normSq (actualW6Derivative X T f M)) ^
+          2 /
+        2 ^ (6 * 0 * Matrix.rank X) =
+    0
+⊢ ∑ X,
+      (carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+            Complex.normSq (actualW6Derivative X T f M)) ^
+          2 /
+        2 ^ (6 * 0 * Matrix.rank X) =
+    (uniformMean fun M => Complex.normSq (f M)) ^ 2
