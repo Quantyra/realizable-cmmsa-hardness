@@ -1,0 +1,127 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:55:28: warning: This simp argument is unused:
+  Matrix.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [LY, LX, LZ, transposeMap, Matrix.toLin'_apply, Matrix.transpose_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:107:6: warning: This simp argument is unused:
+  Matrix.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [transposeMap, Matrix.toLin'_apply, Matrix.transpose_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:166:28: warning: This simp argument is unused:
+  Matrix.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [LY, LX, LZ, transposeMap, Matrix.toLin'_apply, Matrix.transpose_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:349:10: error(lean.unknownIdentifier): Unknown constant `Submodule.eq_bot_iff.mpr`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:350:10: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:368:46: error: unsolved goals
+n d : ℕ
+Y : BinaryMatrix n d
+q : Module.End F ↥(transposeMap Y).range
+hq : IsIdempotentElem q
+LY : W n →ₗ[F] V d := transposeMap Y
+E : Submodule F (V d) := LY.range
+g : W n →ₗ[F] ↥E := LY.rangeRestrict
+p : Module.End F ↥E := LinearMap.id - q
+X : BinaryMatrix n d := w6IdempotentPredecessorMatrix Y q
+LX : W n →ₗ[F] V d := transposeMap X
+LZ : W n →ₗ[F] V d := transposeMap (Y - X)
+hsurj : Function.Surjective ⇑g
+hqfun : ∀ (z : ↥E), q (q z) = q z
+hqp : q ∘ₗ p = 0
+hpq : q + p = LinearMap.id
+hsup : LinearMap.range q ⊔ LinearMap.range p = ⊤
+hinf : LinearMap.range q ⊓ LinearMap.range p = ⊥
+hdim : Module.finrank F ↥E = Module.finrank F ↥(LinearMap.range q) + Module.finrank F ↥(LinearMap.range p)
+⊢ (Matrix.toLin' (Matrix.transpose Y)).range.subtype ∘ₗ q ∘ₗ (Matrix.toLin' (Matrix.transpose Y)).rangeRestrict =
+    (Matrix.toLin' (Matrix.transpose Y)).range.subtype ∘ₗ q ∘ₗ (Matrix.toLin' (Matrix.transpose Y)).rangeRestrict
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:399:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g v
+in the target expression
+  (q ∘ₗ g) v = q u
+
+n d : ℕ
+Y : BinaryMatrix n d
+q : Module.End F ↥(transposeMap Y).range
+hq : IsIdempotentElem q
+LY : W n →ₗ[F] V d := transposeMap Y
+E : Submodule F (V d) := LY.range
+g : W n →ₗ[F] ↥E := LY.rangeRestrict
+p : Module.End F ↥E := LinearMap.id - q
+X : BinaryMatrix n d := w6IdempotentPredecessorMatrix Y q
+LX : W n →ₗ[F] V d := transposeMap X
+LZ : W n →ₗ[F] V d := transposeMap (Y - X)
+hsurj : Function.Surjective ⇑g
+hqfun : ∀ (z : ↥E), q (q z) = q z
+hqp : q ∘ₗ p = 0
+hpq : q + p = LinearMap.id
+hsup : LinearMap.range q ⊔ LinearMap.range p = ⊤
+hinf : LinearMap.range q ⊓ LinearMap.range p = ⊥
+hdim : Module.finrank F ↥E = Module.finrank F ↥(LinearMap.range q) + Module.finrank F ↥(LinearMap.range p)
+hX : LX = E.subtype ∘ₗ q ∘ₗ g
+hY : LY = E.subtype ∘ₗ g
+hLZ : LZ = E.subtype ∘ₗ p ∘ₗ g
+u : ↥(transposeMap Y).range
+v : W n
+hv : g v = u
+⊢ (q ∘ₗ g) v = q u
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:406:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g v
+in the target expression
+  (p ∘ₗ g) v = p u
+
+n d : ℕ
+Y : BinaryMatrix n d
+q : Module.End F ↥(transposeMap Y).range
+hq : IsIdempotentElem q
+LY : W n →ₗ[F] V d := transposeMap Y
+E : Submodule F (V d) := LY.range
+g : W n →ₗ[F] ↥E := LY.rangeRestrict
+p : Module.End F ↥E := LinearMap.id - q
+X : BinaryMatrix n d := w6IdempotentPredecessorMatrix Y q
+LX : W n →ₗ[F] V d := transposeMap X
+LZ : W n →ₗ[F] V d := transposeMap (Y - X)
+hsurj : Function.Surjective ⇑g
+hqfun : ∀ (z : ↥E), q (q z) = q z
+hqp : q ∘ₗ p = 0
+hpq : q + p = LinearMap.id
+hsup : LinearMap.range q ⊔ LinearMap.range p = ⊤
+hinf : LinearMap.range q ⊓ LinearMap.range p = ⊥
+hdim : Module.finrank F ↥E = Module.finrank F ↥(LinearMap.range q) + Module.finrank F ↥(LinearMap.range p)
+hX : LX = E.subtype ∘ₗ q ∘ₗ g
+hY : LY = E.subtype ∘ₗ g
+hLZ : LZ = E.subtype ∘ₗ p ∘ₗ g
+hqg : (q ∘ₗ g).range = LinearMap.range q
+u : ↥E
+v : W n
+hv : g v = u
+⊢ (p ∘ₗ g) v = p u
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:420:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:331:13: warning: This simp argument is unused:
+  LinearMap.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [p, LinearMap.add_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:331:34: warning: This simp argument is unused:
+  LinearMap.add_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [p, LinearMap.sub_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7PredecessorCount.lean:383:30: warning: This simp argument is unused:
+  Matrix.sub_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [LY, LX, LZ, transposeMap, Matrix.toLin'_apply, Matrix.transpose_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
