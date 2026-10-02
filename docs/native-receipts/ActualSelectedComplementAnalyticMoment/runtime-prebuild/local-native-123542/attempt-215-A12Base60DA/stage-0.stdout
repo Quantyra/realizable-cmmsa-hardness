@@ -1,0 +1,44 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:78:42: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:78:2: error: unsolved goals
+case pos
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+T Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+hs : Selected A B (Matrix.toLin' (Matrix.transpose Y))
+⊢ ↑(character Y T) * ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M) =
+      ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M) * ↑(character Y T) ∨
+    complexFourierCoeff f Y = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:99:42: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:102:2: error: unsolved goals
+case neg
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+Y Z : BinaryMatrix n d
+hs : ¬Selected A B (Matrix.toLin' (Matrix.transpose Z))
+⊢ complexFourierCoeff (fun T => 0) Y = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:117:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  filteredCarrierFunction ?A ?B (Matrix.toLin' ?T) ?f ?M
+in the target expression
+  complexFourierCoeff (fun T => filteredCarrierFunction A B (Matrix.toLin' T) f M) Y =
+    if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then
+      complexFourierCoeff f Y * ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M)
+    else 0
+
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+Y : BinaryMatrix n d
+⊢ complexFourierCoeff (fun T => filteredCarrierFunction A B (Matrix.toLin' T) f M) Y =
+    if Selected A B (Matrix.toLin' (Matrix.transpose Y)) then
+      complexFourierCoeff f Y * ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M)
+    else 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:150:19: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
