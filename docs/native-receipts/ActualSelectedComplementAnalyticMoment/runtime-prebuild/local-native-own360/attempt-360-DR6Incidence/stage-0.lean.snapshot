@@ -1,0 +1,2365 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment
+import Mathlib.LinearAlgebra.Dual.Lemmas
+import Mathlib.Algebra.Module.Submodule.Map
+
+/-!
+Complex-valued signed incidence stage for the DR6 F2 argument.
+
+The source theorem (submission-manuscript.md, especially lines 1385--1386
+and 1584--1613) permits complex-valued functions except for the final
+indicator. Accordingly every Fourier coefficient and every incidence sum
+below remains in `Complex`; cancellation is performed before absolute values
+or norms are introduced. No reality, Booleanity, idempotence, Gaussian-count,
+L4, or DR6 premise is assumed.
+
+For X=Y+Z, let I be the common intersection of the three actual transpose
+images in F_2^d. Actual k-subspaces of I contribute
+  sum_{k>0} alpha_k * 1_{A <= im(X^T), im(Y^T), im(Z^T)},
+which is exactly 1_{I != 0} by the actual W6Grass Möbius indicator. Let
+K=ker(X^T)+ker(Y^T)+ker(Z^T) in F_2^n. The coordinate realization of
+K.dualAnnihilator is the common intersection of im(X), im(Y), im(Z), so
+the same actual-subspace indicator is exactly 1_{K != F_2^n}. The map
+B |-> B.dualAnnihilator is order reversing and dimension complementary;
+the coordinate dual equivalence transports it to an actual Grassmannian
+bijection. Thus the latter sum is a count of actual codimension-j
+superspaces B of K, not an assumed Gaussian symmetry or proxy count.
+
+The union indicator is Iind + Kind - Iind*Kind. Expanding the product and
+reindexing finite sums over actual subspaces gives coefficients
+alpha_i, alpha_j, and -alpha_i*alpha_j. The i=0 and j=0 terms are excluded
+by the Mobius alpha convention; when an ambient dimension is zero the
+corresponding positive-dimensional Grassmannians are empty, and the common
+image/kernel indicators are zero. A=0 and B=F_2^n remain included in each
+one-sided sum and are removed only by the explicit exclusion of (i,j)=(0,0).
+
+For fixed A <= F_2^d and B <= F_2^n, a frequency Y is selected precisely
+when A <= range(Y^T) and ker(Y^T) <= B. Under coordinate duality the latter
+condition is equivalent to B.dualAnnihilator <= range(Y). The two incidence
+conditions on Y and Z therefore are exactly the ordinary P_{A,B} filter
+conditions. The signed sum over Y+Z=X is the Xth complex Fourier coefficient
+of the pointwise square of that complex ordinary filter, by the exact complex
+convolution identity. Parseval later applies to this complex square as
+sum_X |hat g(X)|^2 = E |P_{A,B}f|^4.
+
+This module contains actual-subspace incidence, signed A5 reindexing, and
+per-X weighted energy estimates. The global X-carrier enlargement and final
+F2 combination remain open; this source does not certify the complete DR6
+theorem.
+-/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Incidence
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (n : Nat) := Fin n -> F
+
+/-- Actual ambient k-subspaces contained in I are equivalent to actual
+k-subspaces of the subspace I. This is the map/comap-subtype equivalence;
+rank is preserved by `finrank_map_subtype_eq`. -/
+noncomputable def dr6GrassBelowEquiv {E : Type*} [AddCommGroup E]
+    [Module F E] [Fintype E] (I : Submodule F E) (k : Nat) :
+    {A : W6Grass E k // A.1 <= I} ≃ W6Grass I k where
+  toFun A := by
+    let U : Submodule F I := A.1.1.comap I.subtype
+    have hdim : Module.finrank F U = Module.finrank F A.1.1 := by
+      rw [← Submodule.finrank_map_subtype_eq I U,
+        Submodule.map_comap_subtype, inf_of_le_right A.2]
+    exact ⟨U, hdim.trans A.1.2⟩
+  invFun U := by
+    have hdim : Module.finrank F (U.1.map I.subtype) = k := by
+      rw [Submodule.finrank_map_subtype_eq]
+      exact U.2
+    exact ⟨⟨U.1.map I.subtype, hdim⟩, Submodule.map_subtype_le I U.1⟩
+  left_inv A := by
+    apply Subtype.ext
+    apply Subtype.ext
+    change (A.1.1.comap I.subtype).map I.subtype = A.1.1
+    rw [Submodule.map_comap_subtype, inf_of_le_right A.2]
+  right_inv U := by
+    apply Subtype.ext
+    change (U.1.map I.subtype).comap I.subtype = U.1
+    exact Submodule.comap_map_eq_of_injective
+      (show Function.Injective I.subtype from Subtype.val_injective) U.1
+
+/-- Actual weighted count of subspaces of the concrete intersection I. -/
+def dr6ActualIntersectionMobiusSum {d : Nat} (I : Submodule F (V d)) : Rat :=
+  ∑ k ∈ Finset.range (Module.finrank F I + 1),
+    ∑ A : {A : W6Grass (V d) k // A.1 <= I}, dr6MobiusAlphaRat k
+
+/-- Reindexing the actual ambient subspaces below I by the actual Grassmannian
+of I gives the already-proved actual Mobius indicator at dim(I). -/
+theorem dr6_actual_intersection_mobius_indicator {d : Nat}
+    (I : Submodule F (V d)) :
+    dr6ActualIntersectionMobiusSum I =
+      if 0 < Module.finrank F I then 1 else 0 := by
+  classical
+  have hsum : dr6ActualIntersectionMobiusSum I =
+      dr6ActualMobiusIndicatorSum (Module.finrank F I) := by
+    unfold dr6ActualIntersectionMobiusSum dr6ActualMobiusIndicatorSum
+    apply Finset.sum_congr rfl
+    intro k hk
+    have hinner :
+        (∑ A : {A : W6Grass (V d) k // A.1 <= I}, dr6MobiusAlphaRat k) =
+          (Fintype.card (W6Grass I k) : Rat) * dr6MobiusAlphaRat k := by
+      calc
+        _ = ∑ U : W6Grass I k, dr6MobiusAlphaRat k := by
+          apply Fintype.sum_equiv (dr6GrassBelowEquiv I k)
+          intro A
+          rfl
+        _ = _ := by simp
+    have hcard : Fintype.card (W6Grass I k) =
+        dr6ActualGaussian (Module.finrank F I) k := by
+      rw [dr6_actual_gaussian_eq_w6]
+      exact w6_card_grass (E := I) k
+    rw [hinner, hcard]
+  rw [hsum]
+  exact dr6_actual_mobius_indicator (Module.finrank F I)
+
+/-- The actual common transpose-image intersection in the codomain. -/
+def dr6F2CommonImage {n d : Nat} (X Y Z : BinaryMatrix n d) :
+    Submodule F (V d) :=
+  LinearMap.range X.transpose.mulVecLin ⊓
+    LinearMap.range Y.transpose.mulVecLin ⊓
+      LinearMap.range Z.transpose.mulVecLin
+
+/-- The actual sum of the three transposed kernels in the domain. -/
+def dr6F2KernelSum {n d : Nat} (X Y Z : BinaryMatrix n d) :
+    Submodule F (V n) :=
+  LinearMap.ker X.transpose.mulVecLin ⊔
+    LinearMap.ker Y.transpose.mulVecLin ⊔
+      LinearMap.ker Z.transpose.mulVecLin
+
+def dr6F2ImageMobiusSum {n d : Nat} (X Y Z : BinaryMatrix n d) : Rat :=
+  dr6ActualIntersectionMobiusSum (dr6F2CommonImage X Y Z)
+
+private def dr6DualCoordinateEquiv (n : Nat) :
+    Module.Dual F (V n) ≃ₗ[F] V n :=
+  (Pi.basisFun F (Fin n)).dualBasis.equivFun
+
+/-- Coordinate realization of linear-functional annihilation. -/
+def dr6CoordinateDualAnnihilator {n : Nat} (B : Submodule F (V n)) :
+    Submodule F (V n) :=
+  B.dualAnnihilator.map (dr6DualCoordinateEquiv n).toLinearMap
+
+theorem dr6_coordinateDualAnnihilator_finrank {n : Nat}
+    (B : Submodule F (V n)) :
+    Module.finrank F (dr6CoordinateDualAnnihilator B) +
+      Module.finrank F B = n := by
+  rw [dr6CoordinateDualAnnihilator, (dr6DualCoordinateEquiv n).finrank_map_eq]
+  have h := Subspace.finrank_add_finrank_dualAnnihilator_eq B
+  simpa [V, add_comm] using h
+
+def dr6F2KernelMobiusSum {n d : Nat} (X Y Z : BinaryMatrix n d) : Rat :=
+  dr6ActualIntersectionMobiusSum
+    (dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y Z))
+
+/-- The kernel-sum obstruction is detected by positive dimension of its
+actual coordinate annihilator. -/
+theorem dr6_kernelSum_proper_iff_annihilator_positive {n : Nat}
+    (K : Submodule F (V n)) :
+    K ≠ ⊤ <-> 0 < Module.finrank F (dr6CoordinateDualAnnihilator K) := by
+  have hdim := dr6_coordinateDualAnnihilator_finrank K
+  have htop : Module.finrank F (⊤ : Submodule F (V n)) = n := by
+    simp [V]
+  constructor
+  · intro hK
+    have hlt : K < (⊤ : Submodule F (V n)) := lt_of_le_of_ne le_top hK
+    have hrank := Submodule.finrank_lt_finrank_of_lt hlt
+    rw [htop] at hrank
+    omega
+  · intro hpos heq
+    simp [heq, dr6CoordinateDualAnnihilator, dr6DualCoordinateEquiv] at hdim
+    rw [htop] at hdim
+    omega
+
+/-- Exact actual Mobius indicator for the F2 common-image obstruction. -/
+theorem dr6_f2_imageMobius_indicator {n d : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    dr6F2ImageMobiusSum X Y Z =
+      if dr6F2CommonImage X Y Z ≠ ⊥ then 1 else 0 := by
+  unfold dr6F2ImageMobiusSum
+  let I := dr6F2CommonImage X Y Z
+  have hpos : 0 < Module.finrank F I <-> I ≠ ⊥ := by
+    rw [Module.finrank_pos_iff, Submodule.nontrivial_iff_ne_bot]
+  have hsum := dr6_actual_intersection_mobius_indicator I
+  by_cases h : I ≠ ⊥
+  · have hp := hpos.mpr h
+    change dr6ActualIntersectionMobiusSum I = _
+    calc
+      dr6ActualIntersectionMobiusSum I = (if 0 < Module.finrank F I then 1 else 0) := hsum
+      _ = if I ≠ ⊥ then 1 else 0 := by simp [hp, h]
+  · have hn : ¬ 0 < Module.finrank F I := fun hp => h (hpos.mp hp)
+    change dr6ActualIntersectionMobiusSum I = _
+    calc
+      dr6ActualIntersectionMobiusSum I = (if 0 < Module.finrank F I then 1 else 0) := hsum
+      _ = if I ≠ ⊥ then 1 else 0 := by simp [hn, h]
+
+/-- Exact actual Mobius indicator for failure of the three kernels to span. -/
+theorem dr6_f2_kernelMobius_indicator {n d : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    dr6F2KernelMobiusSum X Y Z =
+      if dr6F2KernelSum X Y Z ≠ ⊤ then 1 else 0 := by
+  unfold dr6F2KernelMobiusSum
+  let I := dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y Z)
+  let K := dr6F2KernelSum X Y Z
+  have hsum := dr6_actual_intersection_mobius_indicator I
+  have hpos := dr6_kernelSum_proper_iff_annihilator_positive K
+  by_cases h : K ≠ ⊤
+  · have hp := hpos.mp h
+    change dr6ActualIntersectionMobiusSum I = _
+    calc
+      dr6ActualIntersectionMobiusSum I = (if 0 < Module.finrank F I then 1 else 0) := hsum
+      _ = if K ≠ ⊤ then 1 else 0 := by simp [hp, h]
+  · have hn : ¬ 0 < Module.finrank F I := fun hp => h (hpos.mpr hp)
+    change dr6ActualIntersectionMobiusSum I = _
+    calc
+      dr6ActualIntersectionMobiusSum I = (if 0 < Module.finrank F I then 1 else 0) := hsum
+      _ = if K ≠ ⊤ then 1 else 0 := by simp [hn, h]
+
+/-- The signed union indicator uses exactly alpha_i, alpha_j, and
+`-alpha_i*alpha_j`, with the overlap subtracted once. -/
+def dr6F2SignedIncidenceWeight (i j : Nat) : Rat :=
+  if i = 0 then
+    if j = 0 then 0 else dr6MobiusAlphaRat j
+  else if j = 0 then dr6MobiusAlphaRat i
+  else -(dr6MobiusAlphaRat i * dr6MobiusAlphaRat j)
+
+theorem dr6_f2_signed_weight_endpoints (i j : Nat) :
+    dr6F2SignedIncidenceWeight i j =
+      if i = 0 then
+        if j = 0 then 0 else dr6MobiusAlphaRat j
+      else if j = 0 then dr6MobiusAlphaRat i
+      else -(dr6MobiusAlphaRat i * dr6MobiusAlphaRat j) := by
+  rfl
+
+/-- After multiplying by the actual grade cardinalities, the three signed
+terms split into image-only (`j=0`), kernel-only (`i=0`), and mixed
+(`i,j>0`) contributions. The zero-dimensional Grassmannians have cardinal
+one; the hypotheses make these endpoint conventions explicit. -/
+theorem dr6_f2_signed_weight_card_split (i j : Nat) (ci cj : Rat)
+    (hi0 : i = 0 -> ci = 1) (hj0 : j = 0 -> cj = 1) :
+    dr6F2SignedIncidenceWeight i j * ci * cj =
+      (if j = 0 then dr6MobiusAlphaRat i * ci else 0) +
+        (if i = 0 then dr6MobiusAlphaRat j * cj else 0) -
+          ((if i = 0 then 0 else dr6MobiusAlphaRat i * ci) *
+            (if j = 0 then 0 else dr6MobiusAlphaRat j * cj)) := by
+  by_cases hi : i = 0 <;> by_cases hj : j = 0
+  · subst i
+    subst j
+    have hci : ci = 1 := hi0 rfl
+    have hcj : cj = 1 := hj0 rfl
+    simp [dr6F2SignedIncidenceWeight, dr6MobiusAlphaRat, hci, hcj]
+  · subst i
+    have hci : ci = 1 := hi0 rfl
+    simp [dr6F2SignedIncidenceWeight, dr6MobiusAlphaRat, hci, hj]
+  · subst j
+    have hcj : cj = 1 := hj0 rfl
+    simp [dr6F2SignedIncidenceWeight, dr6MobiusAlphaRat, hcj, hi]
+  · simp [dr6F2SignedIncidenceWeight, dr6MobiusAlphaRat, hi, hj]
+
+/-- The endpoint-weighted finite grid is the inclusion-exclusion polynomial
+of its two actual one-lattice Mobius sums. This is the exact algebraic step
+that combines image-only, kernel-only, and mixed incidence terms. -/
+theorem dr6_f2_signed_grid_factor (m l : Nat)
+    (ci cj : Nat → Rat) (hci0 : ci 0 = 1) (hcj0 : cj 0 = 1) :
+    (∑ i ∈ Finset.range (m+1),
+      ∑ j ∈ Finset.range (l+1),
+        dr6F2SignedIncidenceWeight i j * ci i * cj j) =
+      (∑ i ∈ Finset.range (m+1),
+        if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) +
+      (∑ j ∈ Finset.range (l+1),
+        if j = 0 then 0 else dr6MobiusAlphaRat j * cj j) -
+      (∑ i ∈ Finset.range (m+1),
+        if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) *
+      (∑ j ∈ Finset.range (l+1),
+        if j = 0 then 0 else dr6MobiusAlphaRat j * cj j) := by
+  classical
+  let I := Finset.range (m+1)
+  let J := Finset.range (l+1)
+  have hzeroI (a : Rat) : ∑ i ∈ I, if i = 0 then a else 0 = a := by
+    simp [I]
+  have hzeroJ (a : Rat) : ∑ j ∈ J, if j = 0 then a else 0 = a := by
+    simp [J]
+  have hsplit (i j : Nat) :
+      dr6F2SignedIncidenceWeight i j * ci i * cj j =
+        (if j = 0 then dr6MobiusAlphaRat i * ci i else 0) +
+          (if i = 0 then dr6MobiusAlphaRat j * cj j else 0) -
+            ((if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) *
+              (if j = 0 then 0 else dr6MobiusAlphaRat j * cj j)) := by
+    apply dr6_f2_signed_weight_card_split
+    · intro hi
+      subst i
+      exact hci0
+    · intro hj
+      subst j
+      exact hcj0
+  calc
+    _ = ∑ i ∈ I, ∑ j ∈ J,
+          ((if j = 0 then dr6MobiusAlphaRat i * ci i else 0) +
+            (if i = 0 then dr6MobiusAlphaRat j * cj j else 0) -
+              ((if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) *
+                (if j = 0 then 0 else dr6MobiusAlphaRat j * cj j))) := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      apply Finset.sum_congr rfl
+      intro j hj
+      exact hsplit i j
+    _ = (∑ i ∈ I, if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) +
+          (∑ j ∈ J, if j = 0 then 0 else dr6MobiusAlphaRat j * cj j) -
+          (∑ i ∈ I, if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) *
+          (∑ j ∈ J, if j = 0 then 0 else dr6MobiusAlphaRat j * cj j) := by
+      simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+      simp_rw [Finset.sum_mul]
+      simp_rw [Finset.mul_sum]
+      simp [I, J, hzeroI, hzeroJ, dr6MobiusAlphaRat, Finset.sum_mul_sum]
+
+def dr6F2UnionSignedMobiusSum {n d : Nat}
+    (X Y Z : BinaryMatrix n d) : Rat :=
+  dr6F2ImageMobiusSum X Y Z + dr6F2KernelMobiusSum X Y Z -
+    dr6F2ImageMobiusSum X Y Z * dr6F2KernelMobiusSum X Y Z
+
+theorem dr6_f2_union_signed_indicator {n d : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    dr6F2UnionSignedMobiusSum X Y Z =
+      if dr6F2CommonImage X Y Z ≠ ⊥ ∨
+          dr6F2KernelSum X Y Z ≠ ⊤ then 1 else 0 := by
+  rw [dr6F2UnionSignedMobiusSum, dr6_f2_imageMobius_indicator,
+    dr6_f2_kernelMobius_indicator]
+  by_cases hi : dr6F2CommonImage X Y Z ≠ ⊥ <;>
+    by_cases hk : dr6F2KernelSum X Y Z ≠ ⊤ <;>
+    simp [hi, hk]
+
+
+/-- Actual j-dimensional annihilator subspaces corresponding to actual
+codimension-j superspaces of K. The subtype retains the actual containment
+proof; it is not a Gaussian-count placeholder. -/
+def dr6KernelSuperspaces {n j : Nat} (K : Submodule F (V n)) :=
+  {B : Submodule F (V n) // K <= B ∧
+    Module.finrank F (V n) - Module.finrank F B = j}
+
+def dr6KernelAnnihilatorSubspaces {n j : Nat} (K : Submodule F (V n)) :=
+  {C : W6Grass (V n) j // C.1 <= dr6CoordinateDualAnnihilator K}
+
+/-- The manuscript A5 outer carriers are actual dimension-i subspaces of
+range(Xᵀ) and actual codimension-j superspaces of ker(Xᵀ). -/
+def dr6F2OuterImageCarrier {n d i : Nat} (X : BinaryMatrix n d) :=
+  {A : W6Grass (V d) i // A.1 <= LinearMap.range X.transpose.mulVecLin}
+
+def dr6F2OuterKernelCarrier {n d j : Nat} (X : BinaryMatrix n d) :=
+  dr6KernelSuperspaces (j := j) (LinearMap.ker X.transpose.mulVecLin)
+
+/-- Coordinate dual annihilation sends a subspace to a complementary-dimension
+subspace. -/
+private theorem dr6_dualMap_coordinates {r c : Nat}
+    (M : BinaryMatrix r c) (φ : Module.Dual F (V r)) :
+    dr6DualCoordinateEquiv c (M.mulVecLin.dualMap φ) =
+      M.transpose.mulVec (dr6DualCoordinateEquiv r φ) := by
+  funext i
+  simp only [dr6DualCoordinateEquiv, Module.Basis.dualBasis_equivFun,
+    Pi.basisFun_apply]
+  simp only [LinearMap.dualMap_apply, Matrix.mulVec, dotProduct,
+    Matrix.mulVecLin_apply]
+  rw [Matrix.mulVec_single_one]
+  conv_lhs => rw [← (Pi.basisFun F (Fin r)).sum_repr (Matrix.col M i)]
+  simp [map_sum, map_smul, Pi.basisFun_repr]
+
+private theorem dr6_range_eq_dualAnnihilator_ker {n d : Nat}
+    (Y : BinaryMatrix n d) :
+    LinearMap.range Y.mulVecLin =
+      (LinearMap.ker Y.transpose.mulVecLin).dualAnnihilator.map
+        (dr6DualCoordinateEquiv n).toLinearMap := by
+  classical
+  let eN := dr6DualCoordinateEquiv n
+  let eD := dr6DualCoordinateEquiv d
+  let f := Y.transpose.mulVecLin
+  have hcoord (φ : Module.Dual F (V d)) :
+      eN (f.dualMap φ) = Y.mulVecLin (eD φ) := by
+    change eN (Y.transpose.mulVecLin.dualMap φ) = Y.mulVec (eD φ)
+    exact dr6_dualMap_coordinates Y.transpose φ
+  ext x
+  constructor
+  · rintro ⟨v, rfl⟩
+    have hphi : f.dualMap (eD.symm v) ∈ (LinearMap.ker f).dualAnnihilator := by
+      rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
+      exact ⟨eD.symm v, rfl⟩
+    refine ⟨f.dualMap (eD.symm v), hphi, ?_⟩
+    change eN (f.dualMap (eD.symm v)) = Y.mulVecLin v
+    simpa only [LinearEquiv.apply_symm_apply] using hcoord (eD.symm v)
+  · rintro ⟨φ, hφ, hx⟩
+    have hphirange : φ ∈ LinearMap.range f.dualMap := by
+      rw [LinearMap.range_dualMap_eq_dualAnnihilator_ker]
+      exact hφ
+    rcases hphirange with ⟨ψ, hψ⟩
+    have hval : Y.mulVecLin (eD ψ) = x := by
+      rw [← hcoord ψ, hψ]
+      change eN φ = x
+      exact hx
+    exact ⟨eD ψ, hval⟩
+
+/-- A superspace of K of codimension j has an annihilator of dimension j. -/
+theorem dr6_kernelSuperspace_annihilator_dim {n j : Nat}
+    (K B : Submodule F (V n)) (hKB : K <= B)
+    (hBj : n - Module.finrank F B = j) :
+    Module.finrank F (dr6CoordinateDualAnnihilator B) = j := by
+  have h := dr6_coordinateDualAnnihilator_finrank B
+  omega
+
+/-- Conversely, actual j-subspaces of the coordinate annihilator correspond
+to actual superspaces of codimension j; this implication records the order
+reversal explicitly. -/
+theorem dr6_annihilator_le_iff_superspace {n : Nat}
+    (K B : Submodule F (V n)) :
+    dr6CoordinateDualAnnihilator B <= dr6CoordinateDualAnnihilator K <-> K <= B := by
+  constructor
+  · intro hCB
+    have hdual : B.dualAnnihilator <= K.dualAnnihilator := by
+      intro phi hphi
+      have hmap : dr6DualCoordinateEquiv n phi ∈
+          dr6CoordinateDualAnnihilator B := by
+        exact ⟨phi, hphi, rfl⟩
+      have hmapK := hCB hmap
+      rcases hmapK with ⟨psi, hpsi, heq⟩
+      have he : phi = psi := (dr6DualCoordinateEquiv n).injective heq.symm
+      simpa [he] using hpsi
+    exact (Subspace.dualAnnihilator_le_dualAnnihilator_iff.mp hdual)
+  · intro hKB
+    intro x hx
+    rcases hx with ⟨phi, hphi, rfl⟩
+    exact ⟨phi, Submodule.dualAnnihilator_anti hKB hphi, rfl⟩
+/-- Actual codimension-j superspaces and actual j-subspaces of the
+coordinate annihilator are equivalent. The inverse takes the dual
+coannihilator, so both the containment and codimension assertions are
+derived from annihilator duality. -/
+noncomputable def dr6KernelSuperspacesEquiv {n j : Nat}
+    (K : Submodule F (V n)) :
+    dr6KernelSuperspaces (j := j) K ≃
+      dr6KernelAnnihilatorSubspaces (j := j) K := by
+  classical
+  let e := dr6DualCoordinateEquiv n
+  refine {
+    toFun := fun B => ?_
+    invFun := fun C => ?_
+    left_inv := ?_
+    right_inv := ?_ }
+  · let C : Submodule F (V n) :=
+      B.1.dualAnnihilator.map e.toLinearMap
+    have hdim : Module.finrank F C = j := by
+      have hc := dr6_coordinateDualAnnihilator_finrank B.1
+      have hcod := B.2.2
+      change Module.finrank F C + Module.finrank F B.1 = n at hc
+      omega
+    refine ⟨⟨C, hdim⟩, ?_⟩
+    change C <= dr6CoordinateDualAnnihilator K
+    intro x hx
+    rcases hx with ⟨phi, hphi, rfl⟩
+    exact ⟨phi, Submodule.dualAnnihilator_anti B.2.1 hphi, rfl⟩
+  · let H : Submodule F (Module.Dual F (V n)) := C.1.1.map e.symm.toLinearMap
+    let B : Submodule F (V n) := H.dualCoannihilator
+    have hdimH : Module.finrank F H = j := by
+      change Module.finrank F (C.1.1.map e.symm.toLinearMap) = j
+      rw [e.symm.finrank_map_eq]
+      exact C.1.2
+    have hdouble : B.dualAnnihilator = H := by
+      change H.dualCoannihilator.dualAnnihilator = H
+      exact Subspace.dualCoannihilator_dualAnnihilator_eq
+    have hcomp := Subspace.finrank_add_finrank_dualAnnihilator_eq B
+    rw [hdouble, hdimH] at hcomp
+    have hV : Module.finrank F (V n) = n := by simp [V]
+    rw [hV] at hcomp
+    have hjn : j <= n := by omega
+    have hdimB : Module.finrank F B = n-j := by omega
+    have hcod : n - Module.finrank F B = j := by omega
+    have hH : H <= K.dualAnnihilator := by
+      intro phi hphi
+      rcases hphi with ⟨v, hv, hev⟩
+      have hvK : v ∈ dr6CoordinateDualAnnihilator K := C.2 hv
+      rcases hvK with ⟨psi, hpsi, hpsiEq⟩
+      have hvEq : v = e phi := by
+        simpa [e] using congrArg e hev
+      have heq : psi = phi := e.injective (hpsiEq.trans hvEq)
+      simpa [heq] using hpsi
+    have hK : K <= B := by
+      exact (Submodule.le_dualAnnihilator_iff_le_dualCoannihilator).mp hH
+    exact ⟨B, hK, hcod⟩
+  · intro B
+    apply Subtype.ext
+    change ((B.1.dualAnnihilator.map e.toLinearMap).map
+      e.symm.toLinearMap).dualCoannihilator = B.1
+    rw [(Submodule.map_comp e.toLinearMap e.symm.toLinearMap _).symm]
+    simp [e, Subspace.dualAnnihilator_dualCoannihilator_eq]
+  · intro C
+    apply Subtype.ext
+    apply Subtype.ext
+    change ((C.1.1.map e.symm.toLinearMap).dualCoannihilator).dualAnnihilator.map
+      e.toLinearMap = C.1.1
+    rw [Subspace.dualCoannihilator_dualAnnihilator_eq]
+    rw [(Submodule.map_comp e.symm.toLinearMap e.toLinearMap _).symm]
+    simp [e]
+
+noncomputable instance dr6KernelSuperspacesFintype {n j : Nat}
+    (K : Submodule F (V n)) : Fintype (dr6KernelSuperspaces (j := j) K) :=
+  Fintype.ofEquiv (W6Grass (dr6CoordinateDualAnnihilator K) j)
+    (dr6KernelSuperspacesEquiv (j := j) K).symm
+
+/-- The actual range/annihilator identity used to transport the kernel
+incidence. -/
+theorem dr6_range_eq_coordinateDualAnnihilator_ker {n d : Nat}
+    (Y : BinaryMatrix n d) :
+    LinearMap.range Y.mulVecLin =
+      dr6CoordinateDualAnnihilator (LinearMap.ker Y.transpose.mulVecLin) := by
+  simpa [dr6CoordinateDualAnnihilator, dr6DualCoordinateEquiv] using
+    dr6_range_eq_dualAnnihilator_ker Y
+
+/-- Kernel containment is equivalent to incidence of the actual coordinate
+annihilator in the matrix image. -/
+theorem dr6_kernel_le_iff_annihilator_le_range {n d : Nat}
+    (Y : BinaryMatrix n d) (B : Submodule F (V n)) :
+    LinearMap.ker Y.transpose.mulVecLin <= B <->
+      dr6CoordinateDualAnnihilator B <= LinearMap.range Y.mulVecLin := by
+  rw [dr6_range_eq_coordinateDualAnnihilator_ker Y]
+  constructor
+  · intro hKB
+    intro x hx
+    rcases hx with ⟨phi, hphi, rfl⟩
+    exact ⟨phi, Submodule.dualAnnihilator_anti hKB hphi, rfl⟩
+  · intro hmap
+    have hdual : B.dualAnnihilator <=
+        (LinearMap.ker Y.transpose.mulVecLin).dualAnnihilator := by
+      intro phi hphi
+      have hmem : dr6DualCoordinateEquiv n phi ∈
+          (LinearMap.ker Y.transpose.mulVecLin).dualAnnihilator.map
+            (dr6DualCoordinateEquiv n).toLinearMap := hmap
+              ⟨phi, hphi, rfl⟩
+      rcases hmem with ⟨psi, hpsi, heq⟩
+      have he : phi = psi := (dr6DualCoordinateEquiv n).injective heq.symm
+      simpa [he] using hpsi
+    exact (Subspace.dualAnnihilator_le_dualAnnihilator_iff.mp hdual)
+/-- The complex ordinary selector, with the exact two incidences exposed. -/
+def DR6ComplexOrdinarySelected {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (Y : BinaryMatrix n d) : Prop :=
+  A <= LinearMap.range Y.transpose.mulVecLin ∧
+    dr6CoordinateDualAnnihilator B <= LinearMap.range Y.mulVecLin
+
+/-- For a fixed outer matrix X, the actual triple incidences split into
+the outer X constraints and the two ordinary selectors for Y and Z. -/
+theorem dr6_f2_triple_incidence_iff_outer_and_filters {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (X Y Z : BinaryMatrix n d) :
+    (A <= dr6F2CommonImage X Y Z ∧
+      dr6F2KernelSum X Y Z <= B) <->
+      (A <= LinearMap.range X.transpose.mulVecLin ∧
+        LinearMap.ker X.transpose.mulVecLin <= B) ∧
+      DR6ComplexOrdinarySelected A B Y ∧
+      DR6ComplexOrdinarySelected A B Z := by
+  simp only [dr6F2CommonImage, dr6F2KernelSum, le_inf_iff, sup_le_iff,
+    DR6ComplexOrdinarySelected,
+    ← dr6_kernel_le_iff_annihilator_le_range]
+  tauto
+
+/-- When X=Y+Z over F2, the outer X incidences remain explicit and the
+inner pair is exactly the Y and X+Y selector pair in the square coefficient. -/
+theorem dr6_f2_triple_incidence_iff_outer_and_fourier_pair {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (X Y Z : BinaryMatrix n d) (hX : X = Y + Z) :
+    (A <= dr6F2CommonImage X Y Z ∧
+      dr6F2KernelSum X Y Z <= B) <->
+      (A <= LinearMap.range X.transpose.mulVecLin ∧
+        LinearMap.ker X.transpose.mulVecLin <= B) ∧
+      DR6ComplexOrdinarySelected A B Y ∧
+      DR6ComplexOrdinarySelected A B (X + Y) := by
+  rw [dr6_f2_triple_incidence_iff_outer_and_filters]
+  have hxy : X + Y = Z := by
+    rw [hX]
+    ext i j
+    norm_num [Matrix.add_apply]
+  constructor
+  · rintro ⟨houter, hY, hZ⟩
+    exact ⟨houter, hY, by simpa [hxy] using hZ⟩
+  · rintro ⟨houter, hY, hxySelected⟩
+    exact ⟨houter, hY, by simpa [hxy] using hxySelected⟩
+
+/-- On the A5 outer carriers, the remaining incidence condition is exactly
+the product of the Y and Z ordinary selectors. -/
+theorem dr6_f2_outerCarrier_pair_iff_selector_pair {n d i j : Nat}
+    (X Y Z : BinaryMatrix n d)
+    (A : dr6F2OuterImageCarrier (i := i) X)
+    (B : dr6F2OuterKernelCarrier (j := j) X) :
+    (DR6ComplexOrdinarySelected A.1.1 B.1 Y ∧
+      DR6ComplexOrdinarySelected A.1.1 B.1 Z) <->
+      (A.1.1 <= dr6F2CommonImage X Y Z ∧
+        dr6F2KernelSum X Y Z <= B.1) := by
+  rw [dr6_f2_triple_incidence_iff_outer_and_filters]
+  constructor
+  · rintro ⟨hY, hZ⟩
+    exact ⟨⟨A.2, B.1.2.1⟩, hY, hZ⟩
+  · rintro ⟨_, hY, hZ⟩
+    exact ⟨hY, hZ⟩
+
+def dr6F2ImageIncidenceCarrier {n d i : Nat}
+    (X Y Z : BinaryMatrix n d) :=
+  {A : dr6F2OuterImageCarrier (i := i) X //
+    A.1.1 <= dr6F2CommonImage X Y Z}
+
+def dr6F2KernelIncidenceCarrier {n d j : Nat}
+    (X Y Z : BinaryMatrix n d) :=
+  {B : dr6F2OuterKernelCarrier (j := j) X //
+    dr6F2KernelSum X Y Z <= B.1.1}
+
+/-- Actual image-incidence pairs are exactly the actual Grassmannian of the
+common image, preserving dimension and without a count theorem premise. -/
+noncomputable def dr6F2ImageIncidenceCarrierEquiv {n d i : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    dr6F2ImageIncidenceCarrier X Y Z (i := i) ≃
+      W6Grass (dr6F2CommonImage X Y Z) i := by
+  let I := dr6F2CommonImage X Y Z
+  let e := dr6GrassBelowEquiv I i
+  have hIX : I <= LinearMap.range X.transpose.mulVecLin := by
+    exact le_trans inf_le_left inf_le_left
+  refine {
+    toFun := fun A => e ⟨A.1.1, A.2⟩
+    invFun := fun U =>
+      ⟨⟨(e.symm U).1, le_trans (e.symm U).2 hIX⟩, (e.symm U).2⟩
+    left_inv := ?_
+    right_inv := ?_ }
+  · intro A
+    apply Subtype.ext
+    apply Subtype.ext
+    exact congrArg Subtype.val (e.left_inv ⟨A.1.1, A.2⟩)
+  · intro U
+    exact e.right_inv U
+
+/-- Actual kernel-incidence superspaces are exactly the actual Grassmannian
+of the annihilator of the kernel sum, via dual annihilation and map/comap. -/
+noncomputable def dr6F2KernelIncidenceCarrierEquiv {n d j : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    dr6F2KernelIncidenceCarrier X Y Z (j := j) ≃
+      W6Grass
+        (dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y Z)) j := by
+  let KX := LinearMap.ker X.transpose.mulVecLin
+  let KS := dr6F2KernelSum X Y Z
+  have hKX : KX <= KS := by
+    dsimp [KS, dr6F2KernelSum]
+    exact le_trans le_sup_left le_sup_left
+  let eOuter : dr6KernelSuperspaces (j := j) KS ≃
+      dr6F2KernelIncidenceCarrier X Y Z (j := j) := {
+    toFun := fun B =>
+      ⟨⟨B.1, ⟨le_trans hKX B.2.1, B.2.2⟩⟩, B.2.1⟩
+    invFun := fun B => ⟨B.1.1, ⟨B.2, B.1.2.2⟩⟩
+    left_inv := by intro B; rfl
+    right_inv := by intro B; rfl }
+  let eAnn := dr6KernelSuperspacesEquiv (j := j) KS
+  let eBelow := dr6GrassBelowEquiv
+      (dr6CoordinateDualAnnihilator KS) j
+  exact eOuter.symm.trans (eAnn.trans eBelow)
+
+theorem dr6_f2_imageIncidence_card_eq_actual {n d i : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    Fintype.card (dr6F2ImageIncidenceCarrier X Y Z (i := i)) =
+      Fintype.card (W6Grass (dr6F2CommonImage X Y Z) i) :=
+  Fintype.card_congr (dr6F2ImageIncidenceCarrierEquiv X Y Z)
+
+theorem dr6_f2_kernelIncidence_card_eq_actual {n d j : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    Fintype.card (dr6F2KernelIncidenceCarrier X Y Z (j := j)) =
+      Fintype.card (W6Grass
+        (dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y Z)) j) :=
+  Fintype.card_congr (dr6F2KernelIncidenceCarrierEquiv X Y Z)
+
+theorem dr6_f2_selectedPair_card_eq_actualProduct {n d i j : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    Fintype.card (dr6F2ImageIncidenceCarrier X Y Z (i := i)) *
+        Fintype.card (dr6F2KernelIncidenceCarrier X Y Z (j := j)) =
+      Fintype.card (W6Grass (dr6F2CommonImage X Y Z) i) *
+        Fintype.card (W6Grass
+          (dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y Z)) j) := by
+  rw [dr6_f2_imageIncidence_card_eq_actual,
+    dr6_f2_kernelIncidence_card_eq_actual]
+
+/-- The actual binary frame product is bounded by the number of all ordered
+tuples, with no Gaussian coefficient estimate or proxy count. -/
+private theorem dr6_frame_product_le_pow (N k : Nat) :
+    w6FrameProduct N k <= 2^(N*k) := by
+  calc
+    w6FrameProduct N k <= ∏ _i : Fin k, 2^N := by
+      apply Finset.prod_le_prod
+      · intro i hi
+        exact Nat.zero_le _
+      · intro i hi
+        exact Nat.sub_le _ _
+    _ = 2^(N*k) := by
+      simp [w6FrameProduct, ← pow_mul]
+
+/-- Actual W6Grass cardinalities are bounded by all ordered ambient tuples.
+The proof uses the exact actual subspace/frame double count. -/
+theorem dr6_actual_grass_card_le_pow {E : Type*}
+    [AddCommGroup E] [Module F E] [Module.Free F E] [Module.Finite F E]
+    [Fintype E] (k : Nat) (hk : k <= Module.finrank F E) :
+    Fintype.card (W6Grass E k) <=
+      2^(Module.finrank F E * k) := by
+  have hmul := w6_card_grass_mul (E := E) k hk
+  have hden : 1 <= w6FrameProduct k k := by
+    have hpos : 0 < w6FrameProduct k k := by
+      unfold w6FrameProduct
+      apply Finset.prod_pos
+      intro i hi
+      exact Nat.sub_pos_of_lt
+        (Nat.pow_lt_pow_right (by decide : 1 < 2) i.isLt)
+    exact hpos
+  calc
+    Fintype.card (W6Grass E k) <=
+        Fintype.card (W6Grass E k) * w6FrameProduct k k := by
+      calc
+        _ = Fintype.card (W6Grass E k) * 1 := by simp
+        _ <= _ := Nat.mul_le_mul_left _ hden
+    _ = w6FrameProduct (Module.finrank F E) k := hmul
+    _ <= 2^(Module.finrank F E * k) := dr6_frame_product_le_pow _ _
+
+
+private theorem dr6_transpose_range_finrank {n d : Nat}
+    (X : BinaryMatrix n d) :
+    Module.finrank F (LinearMap.range X.transpose.mulVecLin) = X.rank := by
+  change Module.finrank F (LinearMap.range X.transpose.toLin') = X.rank
+  rw [← Matrix.rank_transpose X]
+  rw [Matrix.rank_eq_finrank_range_toLin X.transpose
+    (Pi.basisFun F _) (Pi.basisFun F _)]
+  rw [Matrix.toLin_eq_toLin']
+
+/-- The actual coordinate annihilator of ker(Xᵀ) has dimension rank(X). -/
+private theorem dr6_transpose_kernel_annihilator_finrank {n d : Nat}
+    (X : BinaryMatrix n d) :
+    Module.finrank F
+        (dr6CoordinateDualAnnihilator
+          (LinearMap.ker X.transpose.mulVecLin)) = X.rank := by
+  have hnull := X.transpose.mulVecLin.finrank_range_add_finrank_ker
+  have hnull' :
+      Module.finrank F (LinearMap.range X.transpose.mulVecLin) +
+        Module.finrank F (LinearMap.ker X.transpose.mulVecLin) = n := by
+    simpa [V] using hnull
+  rw [dr6_transpose_range_finrank X] at hnull'
+  have hann := dr6_coordinateDualAnnihilator_finrank
+    (LinearMap.ker X.transpose.mulVecLin)
+  dsimp [F, V] at hann
+  omega
+
+/-- Actual (i,j) outer carriers have at most 2^(rank(X)(i+j)) elements.
+The image and superspace counts are transported to actual W6Grass types;
+the cardinal bound follows from their actual frame-product double counts. -/
+theorem dr6_f2_outerCarrier_pair_card_le {n d i j : Nat}
+    (X : BinaryMatrix n d) :
+    Fintype.card
+        (dr6F2OuterImageCarrier (i := i) X × dr6F2OuterKernelCarrier (j := j) X) <=
+      2^(X.rank * (i+j)) := by
+  classical
+  let R := LinearMap.range X.transpose.mulVecLin
+  let K := LinearMap.ker X.transpose.mulVecLin
+  let J := dr6CoordinateDualAnnihilator K
+  have hdimR : Module.finrank F R = X.rank := dr6_transpose_range_finrank X
+  have hdimJ : Module.finrank F J = X.rank :=
+    dr6_transpose_kernel_annihilator_finrank X
+  have hA : Fintype.card (dr6F2OuterImageCarrier (i := i) X) <= 2^(X.rank*i) := by
+    have hEq : Fintype.card (dr6F2OuterImageCarrier (i := i) X) =
+        Fintype.card (W6Grass R i) :=
+      Fintype.card_congr (dr6GrassBelowEquiv R i)
+    rw [hEq]
+    by_cases hi : i <= Module.finrank F R
+    · have h := dr6_actual_grass_card_le_pow (E := R) i hi
+      rw [hdimR] at h
+      exact h
+    · have h := w6_card_grass_of_lt (E := R) (Nat.lt_of_not_ge hi)
+      rw [h]
+      exact Nat.zero_le _
+  have hB : Fintype.card (dr6F2OuterKernelCarrier (j := j) X) <= 2^(X.rank*j) := by
+    have eAnn := dr6KernelSuperspacesEquiv
+      (j := j) K
+    have eBelow := dr6GrassBelowEquiv J j
+    have hEq : Fintype.card (dr6F2OuterKernelCarrier (j := j) X) =
+        Fintype.card (W6Grass J j) := by
+      exact Fintype.card_congr (eAnn.trans eBelow)
+    rw [hEq]
+    by_cases hj : j <= Module.finrank F J
+    · have h := dr6_actual_grass_card_le_pow (E := J) j hj
+      rw [hdimJ] at h
+      exact h
+    · have h := w6_card_grass_of_lt (E := J) (Nat.lt_of_not_ge hj)
+      rw [h]
+      exact Nat.zero_le _
+  calc
+    _ = Fintype.card (dr6F2OuterImageCarrier (i := i) X) *
+          Fintype.card (dr6F2OuterKernelCarrier (j := j) X) := Fintype.card_prod
+    _ <= 2^(X.rank*i) * 2^(X.rank*j) := Nat.mul_le_mul hA hB
+    _ = 2^(X.rank*(i+j)) := by rw [← pow_add]; congr 1 <;> ring
+
+/-- Summing the actual Grassmannian grade cardinalities with the Mobius
+coefficient is the actual intersection-subspace Mobius sum. -/
+theorem dr6_actual_grass_alpha_sum_eq_mobius {d : Nat}
+    (I : Submodule F (V d)) :
+    (∑ k ∈ Finset.range (Module.finrank F I + 1),
+      (Fintype.card (W6Grass I k) : Rat) * dr6MobiusAlphaRat k) =
+        dr6ActualIntersectionMobiusSum I := by
+  classical
+  unfold dr6ActualIntersectionMobiusSum
+  apply Finset.sum_congr rfl
+  intro k hk
+  have hinner :
+      (∑ A : {A : W6Grass (V d) k // A.1 <= I}, dr6MobiusAlphaRat k) =
+        (Fintype.card (W6Grass I k) : Rat) * dr6MobiusAlphaRat k := by
+    calc
+      _ = ∑ U : W6Grass I k, dr6MobiusAlphaRat k := by
+        apply Fintype.sum_equiv (dr6GrassBelowEquiv I k)
+        intro A
+        rfl
+      _ = _ := by simp
+  exact hinner.symm
+
+/-- The actual Grassmannian grade sum is the exact zero/positive-dimension
+indicator; this packages the Möbius result for use with the X-fixed carrier. -/
+theorem dr6_actual_grass_alpha_indicator {d : Nat}
+    (I : Submodule F (V d)) :
+    (∑ k ∈ Finset.range (Module.finrank F I + 1),
+      (Fintype.card (W6Grass I k) : Rat) * dr6MobiusAlphaRat k) =
+        if 0 < Module.finrank F I then 1 else 0 := by
+  rw [dr6_actual_grass_alpha_sum_eq_mobius]
+  exact dr6_actual_intersection_mobius_indicator I
+
+/-- Extending the actual grade sum to any larger fixed ambient bound adds
+only zero terms, because the actual W6Grass carrier is empty above dim(I). -/
+theorem dr6_actual_grass_alpha_sum_extend {d : Nat}
+    (I : Submodule F (V d)) (N : Nat)
+    (hdim : Module.finrank F I <= N) :
+    (∑ k ∈ Finset.range (N+1),
+      (Fintype.card (W6Grass I k) : Rat) * dr6MobiusAlphaRat k) =
+        dr6ActualIntersectionMobiusSum I := by
+  classical
+  let m := Module.finrank F I
+  have hlen : N + 1 = (m+1) + (N-m) := by
+    dsimp [m]
+    omega
+  rw [show N+1 = (m+1)+(N-m) by exact hlen, Finset.sum_range_add]
+  have htail :
+      (∑ k ∈ Finset.range (N-m),
+        ((Fintype.card (W6Grass I (m+1+k)) : Rat) *
+          dr6MobiusAlphaRat (m+1+k))) = 0 := by
+    apply Finset.sum_eq_zero
+    intro k hk
+    have hlarge : m < m+1+k := by omega
+    have hcard : Fintype.card (W6Grass I (m+1+k)) = 0 := by
+      calc
+        _ = dr6ActualGaussian m (m+1+k) := by
+          rw [dr6_actual_gaussian_eq_w6]
+          exact w6_card_grass (E := I) (m+1+k)
+        _ = 0 := dr6_actual_gaussian_out_of_range hlarge
+    simp [hcard]
+  rw [htail, add_zero, dr6_actual_grass_alpha_sum_eq_mobius]
+
+private def dr6ProductSubtypeEquiv {α β : Type*}
+    (P : α → Prop) (Q : β → Prop) [DecidablePred P] [DecidablePred Q] :
+    {x : α × β // P x.1 ∧ Q x.2} ≃ {a : α // P a} × {b : β // Q b} where
+  toFun x := ⟨⟨x.1.1, x.2.1⟩, ⟨x.1.2, x.2.2⟩⟩
+  invFun x := ⟨(x.1.1, x.2.1), ⟨x.1.2, x.2.2⟩⟩
+  left_inv := by intro x; cases x; rfl
+  right_inv := by intro x; cases x; rfl
+
+/-- The selected product carrier has exactly the product of the two actual
+subtype cardinalities. This is a finite reindexing identity, not a Gaussian
+count assumption, and lets the weighted incidence sum factor by its two
+independent selector conditions. -/
+private theorem dr6_sum_pair_selector_weight {α β : Type*}
+    [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
+    (P : α → Prop) (Q : β → Prop) [DecidablePred P] [DecidablePred Q]
+    (w : Rat) :
+    (∑ x : α × β, if P x.1 ∧ Q x.2 then w else 0) =
+      (Fintype.card {a : α // P a} : Rat) *
+        (Fintype.card {b : β // Q b} : Rat) * w := by
+  classical
+  let R : α × β → Prop := fun x => P x.1 ∧ Q x.2
+  have hsub :
+      (∑ x : α × β, if R x then w else 0) =
+        ∑ x : {x : α × β // R x}, w := by
+    calc
+      _ = ∑ x ∈ (Finset.univ : Finset (α × β)).filter R, w := by
+        rw [Finset.sum_filter]
+      _ = ∑ x : {x : α × β // R x}, w := by
+        simpa only [Finset.subtype_univ] using
+          (Finset.sum_subtype_eq_sum_filter
+            (s := (Finset.univ : Finset (α × β))) (p := R)
+            (f := fun _ => w)).symm
+  calc
+    _ = ∑ x : {x : α × β // R x}, w := by simpa [R] using hsub
+    _ = ∑ x : ({a : α // P a} × {b : β // Q b}), w := by
+      apply Fintype.sum_equiv (dr6ProductSubtypeEquiv P Q)
+      intro x
+      rfl
+    _ = (Fintype.card {a : α // P a} : Rat) *
+          (Fintype.card {b : β // Q b} : Rat) * w := by
+      simp [Fintype.sum_prod_type, Fintype.card_prod, mul_assoc]
+
+/-- In each fixed actual (i,j)-grade, the surviving Y,Z carrier is the
+product of the actual common-image Grassmannian and actual kernel-sum
+annihilator Grassmannian. The X-carrier is retained in the equivalence, and
+all signed coefficients remain outside these finite counts. -/
+theorem dr6_f2_grade_selected_weighted_count {n d i j : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    (∑ p : dr6F2OuterImageCarrier (i := i) X × dr6F2OuterKernelCarrier (j := j) X,
+      if DR6ComplexOrdinarySelected p.1.1.1 p.2.1 Y ∧
+          DR6ComplexOrdinarySelected p.1.1.1 p.2.1 Z then
+        (dr6F2SignedIncidenceWeight i j : Rat) else 0) =
+      (Fintype.card (W6Grass (dr6F2CommonImage X Y Z) i) : Rat) *
+        (Fintype.card (W6Grass
+          (dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y Z)) j) : Rat) *
+        dr6F2SignedIncidenceWeight i j := by
+  classical
+  let P : dr6F2OuterImageCarrier (i := i) X → Prop :=
+    fun A => A.1.1 <= dr6F2CommonImage X Y Z
+  let Q : dr6F2OuterKernelCarrier (j := j) X → Prop :=
+    fun B => dr6F2KernelSum X Y Z <= B.1
+  have hsel (p : dr6F2OuterImageCarrier (i := i) X ×
+      dr6F2OuterKernelCarrier (j := j) X) :
+      (DR6ComplexOrdinarySelected p.1.1.1 p.2.1 Y ∧
+        DR6ComplexOrdinarySelected p.1.1.1 p.2.1 Z) <->
+        (P p.1 ∧ Q p.2) := by
+    simpa [P, Q] using
+      (dr6_f2_outerCarrier_pair_iff_selector_pair X Y Z p.1 p.2)
+  rw [show (∑ p : dr6F2OuterImageCarrier (i := i) X ×
+      dr6F2OuterKernelCarrier (j := j) X,
+      if DR6ComplexOrdinarySelected p.1.1.1 p.2.1 Y ∧
+          DR6ComplexOrdinarySelected p.1.1.1 p.2.1 Z then
+        (dr6F2SignedIncidenceWeight i j : Rat) else 0) =
+      ∑ p : dr6F2OuterImageCarrier (i := i) X × dr6F2OuterKernelCarrier (j := j) X,
+        if P p.1 ∧ Q p.2 then
+          (dr6F2SignedIncidenceWeight i j : Rat) else 0 by
+        apply Finset.sum_congr rfl
+        intro p hp
+        rw [hsel p]]
+  rw [dr6_sum_pair_selector_weight P Q (dr6F2SignedIncidenceWeight i j)]
+  rw [dr6_f2_imageIncidence_card_eq_actual,
+    dr6_f2_kernelIncidence_card_eq_actual]
+
+def DR6ComplexOrdinaryFilter {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d -> Complex) (M : BinaryMatrix n d) : Complex :=
+    ∑ Y : BinaryMatrix n d,
+    if DR6ComplexOrdinarySelected A B Y then
+      complexFourierCoeff f Y * (character Y M : Complex) else 0
+
+private theorem dr6_toLin'_eq_mulVecLin {n d : Nat}
+    (Y : BinaryMatrix n d) : Y.toLin' = Y.mulVecLin := by
+  ext x
+  rfl
+
+/-- The complex selector is exactly the manuscript ordinary selector. -/
+theorem dr6_complexSelector_iff_actualOrdinary {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (Y : BinaryMatrix n d) :
+    DR6ComplexOrdinarySelected A B Y <-> DR6OrdinarySelected A B Y := by
+  unfold DR6ComplexOrdinarySelected DR6OrdinarySelected
+  constructor
+  · rintro ⟨hA, hB⟩
+    exact ⟨hA, (dr6_kernel_le_iff_annihilator_le_range Y B).2 hB⟩
+  · rintro ⟨hA, hB⟩
+    exact ⟨hA, (dr6_kernel_le_iff_annihilator_le_range Y B).1 hB⟩
+
+/-- A complex ordinary filter retains exactly its selected coefficients. -/
+theorem dr6_complexFilter_fourierCoeff {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d -> Complex) (Y : BinaryMatrix n d) :
+    complexFourierCoeff (DR6ComplexOrdinaryFilter A B f) Y =
+      if DR6ComplexOrdinarySelected A B Y then complexFourierCoeff f Y else 0 := by
+  classical
+  unfold DR6ComplexOrdinaryFilter
+  rw [complexFourierCoeff_finset_sum]
+  simp_rw [complexFourierCoeff_smul, complexFourierCoeff_character]
+  rw [Finset.sum_eq_single Y]
+  · simp
+  · intro Y' hY' hneq
+    simp [hneq, ne_comm]
+  · simp
+
+/-- Exact signed complex convolution identity for the filtered square. -/
+theorem dr6_complexFilter_square_fourierCoeff {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => (DR6ComplexOrdinaryFilter A B f M)^2) X =
+      Finset.univ.sum (fun Y : BinaryMatrix n d =>
+        if DR6ComplexOrdinarySelected A B Y ∧
+            DR6ComplexOrdinarySelected A B (X + Y) then
+          complexFourierCoeff f Y * complexFourierCoeff f (X + Y) else 0) := by
+  have h := complexFourierCoeff_mul_eq_convolution
+    (DR6ComplexOrdinaryFilter A B f) (DR6ComplexOrdinaryFilter A B f) X
+  have hpow : (fun M => (DR6ComplexOrdinaryFilter A B f M)^2) =
+      fun M => DR6ComplexOrdinaryFilter A B f M *
+        DR6ComplexOrdinaryFilter A B f M := by
+    funext M
+    exact pow_two _
+  rw [hpow, h]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  rw [dr6_complexFilter_fourierCoeff, dr6_complexFilter_fourierCoeff]
+  by_cases h1 : DR6ComplexOrdinarySelected A B Y <;>
+    by_cases h2 : DR6ComplexOrdinarySelected A B (X + Y) <;>
+    simp [h1, h2]
+
+/-- The X-fixed, actual A5 carrier. Its grading bounds depend only on the
+outer matrix X, so it can be interchanged with the convolution index. -/
+def dr6F2A5OuterCarrier {n d : Nat} (X : BinaryMatrix n d) :=
+  Σ i : Fin (Module.finrank F (LinearMap.range X.transpose.mulVecLin) + 1),
+    Σ j : Fin (Module.finrank F
+        (dr6CoordinateDualAnnihilator (LinearMap.ker X.transpose.mulVecLin)) + 1),
+      dr6F2OuterImageCarrier (i := i.val) X × dr6F2OuterKernelCarrier (j := j.val) X
+
+def dr6F2A5OuterImage {n d : Nat} {X : BinaryMatrix n d}
+    (p : dr6F2A5OuterCarrier X) : Submodule F (V d) :=
+  p.2.2.1.1.1
+
+def dr6F2A5OuterKernel {n d : Nat} {X : BinaryMatrix n d}
+    (p : dr6F2A5OuterCarrier X) : Submodule F (V n) :=
+  p.2.2.2.1
+
+def dr6F2A5OuterWeight {n d : Nat} (X : BinaryMatrix n d)
+    (p : dr6F2A5OuterCarrier X) : Rat :=
+  dr6F2SignedIncidenceWeight p.1.val p.2.1.val
+
+/-- The pointwise signed outer-carrier incidence sum for the selector pair
+at Y and X+Y. -/
+def dr6F2A5ActualSelectedWeightSum {n d : Nat}
+    (X Y : BinaryMatrix n d) : Rat :=
+  ∑ p : dr6F2A5OuterCarrier X,
+    if DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+          (dr6F2A5OuterKernel p) Y ∧
+        DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+          (dr6F2A5OuterKernel p) (X + Y) then
+      dr6F2A5OuterWeight X p else 0
+
+/-- The complete actual-carrier signed incidence sum is exactly the union
+indicator. The grading ranges are fixed by X; dimensions beyond either
+Y-specific actual intersection contribute zero by the W6Grass count. -/
+theorem dr6_f2_a5_actual_selected_weight_eq_union_indicator {n d : Nat}
+    (X Y : BinaryMatrix n d) :
+    dr6F2A5ActualSelectedWeightSum X Y =
+      if dr6F2CommonImage X Y (X+Y) ≠ ⊥ ∨
+          dr6F2KernelSum X Y (X+Y) ≠ ⊤ then 1 else 0 := by
+  classical
+  let I := dr6F2CommonImage X Y (X+Y)
+  let J := dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y (X+Y))
+  let r := Module.finrank F (LinearMap.range X.transpose.mulVecLin)
+  let s := Module.finrank F
+    (dr6CoordinateDualAnnihilator (LinearMap.ker X.transpose.mulVecLin))
+  let ci : Nat → Rat := fun i => (Fintype.card (W6Grass I i) : Rat)
+  let cj : Nat → Rat := fun j => (Fintype.card (W6Grass J j) : Rat)
+  have hIX : I <= LinearMap.range X.transpose.mulVecLin := by
+    exact le_trans inf_le_left inf_le_left
+  have hKX : LinearMap.ker X.transpose.mulVecLin <=
+      dr6F2KernelSum X Y (X+Y) := by
+    dsimp [dr6F2KernelSum]
+    exact le_trans le_sup_left le_sup_left
+  have hJX : J <= dr6CoordinateDualAnnihilator
+      (LinearMap.ker X.transpose.mulVecLin) := by
+    dsimp [J, dr6CoordinateDualAnnihilator]
+    intro x hx
+    rcases hx with ⟨phi, hphi, rfl⟩
+    exact ⟨phi, Submodule.dualAnnihilator_anti hKX hphi, rfl⟩
+  have hr : Module.finrank F I <= r := by
+    exact Submodule.finrank_mono hIX
+  have hs : Module.finrank F J <= s := by
+    exact Submodule.finrank_mono hJX
+  have hci0 : ci 0 = 1 := by
+    dsimp [ci]
+    have hcard : Fintype.card (W6Grass I 0) =
+        dr6ActualGaussian (Module.finrank F I) 0 := by
+      rw [dr6_actual_gaussian_eq_w6]
+      exact w6_card_grass (E := I) 0
+    rw [hcard, dr6_actual_gaussian_zero_rank]
+    norm_num
+  have hcj0 : cj 0 = 1 := by
+    dsimp [cj]
+    have hcard : Fintype.card (W6Grass J 0) =
+        dr6ActualGaussian (Module.finrank F J) 0 := by
+      rw [dr6_actual_gaussian_eq_w6]
+      exact w6_card_grass (E := J) 0
+    rw [hcard, dr6_actual_gaussian_zero_rank]
+    norm_num
+  have hgrades : dr6F2A5ActualSelectedWeightSum X Y =
+      (∑ i ∈ Finset.range (r+1),
+        ∑ j ∈ Finset.range (s+1),
+          dr6F2SignedIncidenceWeight i j * ci i * cj j) := by
+    unfold dr6F2A5ActualSelectedWeightSum dr6F2A5OuterCarrier
+    rw [Fintype.sum_sigma, Fintype.sum_sigma]
+    calc
+      _ = ∑ i : Fin (r+1), ∑ j : Fin (s+1),
+          dr6F2SignedIncidenceWeight i.val j.val * ci i.val * cj j.val := by
+        apply Finset.sum_congr rfl
+        intro i hi
+        apply Finset.sum_congr rfl
+        intro j hj
+        have hgrade := dr6_f2_grade_selected_weighted_count
+          (X := X) (Y := Y) (Z := X+Y)
+        simpa [dr6F2A5OuterImage, dr6F2A5OuterKernel,
+          dr6F2A5OuterWeight, ci, cj, mul_comm, mul_left_comm, mul_assoc] using hgrade
+      _ = ∑ i ∈ Finset.range (r+1),
+          ∑ j : Fin (s+1),
+            dr6F2SignedIncidenceWeight i j.val * ci i * cj j.val := by
+        rw [Fin.sum_univ_eq_sum_range
+          (fun i : Nat => ∑ j : Fin (s+1),
+            dr6F2SignedIncidenceWeight i j.val * ci i * cj j.val) (r+1)]
+      _ = ∑ i ∈ Finset.range (r+1),
+          ∑ j ∈ Finset.range (s+1),
+            dr6F2SignedIncidenceWeight i j * ci i * cj j := by
+        apply Finset.sum_congr rfl
+        intro i hi
+        rw [Fin.sum_univ_eq_sum_range
+          (fun j : Nat => dr6F2SignedIncidenceWeight i j * ci i * cj j) (s+1)]
+  have hA :
+      (∑ i ∈ Finset.range (r+1),
+        if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) =
+          dr6F2ImageMobiusSum X Y (X+Y) := by
+    rw [show (∑ i ∈ Finset.range (r+1),
+        if i = 0 then 0 else dr6MobiusAlphaRat i * ci i) =
+          ∑ i ∈ Finset.range (r+1), ci i * dr6MobiusAlphaRat i by
+        apply Finset.sum_congr rfl
+        intro i hi
+        by_cases hiz : i = 0
+        · subst i
+          simp [ci, dr6MobiusAlphaRat]
+        · simp [hiz, ci, mul_comm]]
+    rw [dr6_actual_grass_alpha_sum_extend I r hr]
+    rfl
+  have hB :
+      (∑ j ∈ Finset.range (s+1),
+        if j = 0 then 0 else dr6MobiusAlphaRat j * cj j) =
+          dr6F2KernelMobiusSum X Y (X+Y) := by
+    rw [show (∑ j ∈ Finset.range (s+1),
+        if j = 0 then 0 else dr6MobiusAlphaRat j * cj j) =
+          ∑ j ∈ Finset.range (s+1), cj j * dr6MobiusAlphaRat j by
+        apply Finset.sum_congr rfl
+        intro j hj
+        by_cases hjz : j = 0
+        · subst j
+          simp [cj, dr6MobiusAlphaRat]
+        · simp [hjz, cj, mul_comm]]
+    rw [dr6_actual_grass_alpha_sum_extend J s hs]
+    rfl
+  rw [hgrades, dr6_f2_signed_grid_factor r s ci cj hci0 hcj0, hA, hB]
+  exact dr6_f2_union_signed_indicator X Y (X+Y)
+
+/-- The exact signed complex A5 sum of ordinary-filter square coefficients.
+No absolute values are taken before the incidence terms are combined. -/
+def dr6F2A5SignedSquareCoefficient {n d : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) : Complex :=
+  ∑ p : dr6F2A5OuterCarrier X,
+    (dr6F2A5OuterWeight X p : Complex) *
+      complexFourierCoeff
+        (fun M =>
+          (DR6ComplexOrdinaryFilter (dr6F2A5OuterImage p)
+            (dr6F2A5OuterKernel p) f M)^2) X
+
+/-- The unweighted coefficient sum on one actual X-fixed grade pair. -/
+def dr6F2A5GradeSquareCoefficient {n d : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d)
+    (i j : Nat) : Complex :=
+  Finset.univ.sum (fun p : Prod (dr6F2OuterImageCarrier (i := i) X) (dr6F2OuterKernelCarrier (j := j) X) =>
+    complexFourierCoeff
+      (fun M =>
+        (DR6ComplexOrdinaryFilter p.1.1.1 p.2.1 f M)^2) X)
+
+/-- The complete actual signed coefficient is the finite sum of its fixed
+actual grade pairs. The grading ranges depend only on X. -/
+theorem dr6_f2_a5SquareCoefficient_eq_grade_sum {n d : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    dr6F2A5SignedSquareCoefficient f X =
+      (Finset.range (Module.finrank F
+        (LinearMap.range X.transpose.mulVecLin) + 1)).sum (fun i =>
+        (Finset.range (Module.finrank F
+          (dr6CoordinateDualAnnihilator
+            (LinearMap.ker X.transpose.mulVecLin)) + 1)).sum (fun j =>
+          (dr6F2SignedIncidenceWeight i j : Complex) *
+            dr6F2A5GradeSquareCoefficient f X i j)) := by
+  classical
+  unfold dr6F2A5SignedSquareCoefficient dr6F2A5OuterCarrier
+  rw [Fintype.sum_sigma, Fintype.sum_sigma]
+  calc
+    _ = Finset.univ.sum (fun i : Fin
+          (Module.finrank F (LinearMap.range X.transpose.mulVecLin) + 1) =>
+        Finset.univ.sum (fun j : Fin
+          (Module.finrank F
+            (dr6CoordinateDualAnnihilator
+              (LinearMap.ker X.transpose.mulVecLin)) + 1) =>
+          (dr6F2SignedIncidenceWeight i.val j.val : Complex) *
+            dr6F2A5GradeSquareCoefficient f X i.val j.val)) := by
+      apply Finset.sum_congr rfl
+      intro i hi
+      apply Finset.sum_congr rfl
+      intro j hj
+      simp [dr6F2A5GradeSquareCoefficient, dr6F2A5OuterWeight,
+        Finset.mul_sum]
+    _ = _ := by
+      rw [Fin.sum_univ_eq_sum_range
+        (fun i : Nat => Finset.univ.sum (fun j : Fin
+          (Module.finrank F
+            (dr6CoordinateDualAnnihilator
+              (LinearMap.ker X.transpose.mulVecLin)) + 1) =>
+          (dr6F2SignedIncidenceWeight i j.val : Complex) *
+            dr6F2A5GradeSquareCoefficient f X i j.val))]
+      apply Finset.sum_congr rfl
+      intro i hi
+      rw [Fin.sum_univ_eq_sum_range
+        (fun j : Nat => (dr6F2SignedIncidenceWeight i j : Complex) *
+          dr6F2A5GradeSquareCoefficient f X i j)]
+
+/-- Actual input support kills every ordinary-filter coefficient whose
+image dimension or kernel codimension exceeds D. -/
+theorem dr6_f2_a5_gradeCoefficient_zero_of_large_grade {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (i j : Nat) (hi : D < i ∨ D < j) :
+    dr6F2A5GradeSquareCoefficient f X i j = 0 := by
+  classical
+  unfold dr6F2A5GradeSquareCoefficient
+  apply Finset.sum_eq_zero
+  intro p hp
+  have hAi : Module.finrank F p.1.1.1 = i := p.1.1.2
+  have hBj : Module.finrank F (V n ⧸ p.2.1) = j := by
+    have hcod := p.2.1.2.2
+    have hquot := Submodule.finrank_quotient_add_finrank p.2.1
+    have hn : Module.finrank F (V n) = n := by simp [V]
+    omega
+  have hzero := dr6_complexFilter_eq_zero_of_grade_gt_support
+      p.1.1.1 p.2.1 f hsupport (by rw [hAi, hBj]; exact hi)
+  rw [hzero]
+  simp
+
+/-- Reindexing the exact square coefficient gives the Y and X+Y ordinary
+selector pair, while retaining the fixed-X outer carrier and signed weight. -/
+theorem dr6_f2_a5SquareCoefficient_reindex {n d : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    dr6F2A5SignedSquareCoefficient f X =
+      ∑ Y : BinaryMatrix n d,
+        ∑ p : dr6F2A5OuterCarrier X,
+          if DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                (dr6F2A5OuterKernel p) Y ∧
+              DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                (dr6F2A5OuterKernel p) (X + Y) then
+            (dr6F2A5OuterWeight X p : Complex) *
+              complexFourierCoeff f Y * complexFourierCoeff f (X + Y)
+          else 0 := by
+  classical
+  unfold dr6F2A5SignedSquareCoefficient
+  calc
+    (∑ p : dr6F2A5OuterCarrier X,
+        (dr6F2A5OuterWeight X p : Complex) *
+          complexFourierCoeff
+            (fun M =>
+              (DR6ComplexOrdinaryFilter (dr6F2A5OuterImage p)
+                (dr6F2A5OuterKernel p) f M)^2) X) =
+      ∑ p : dr6F2A5OuterCarrier X,
+        (dr6F2A5OuterWeight X p : Complex) *
+          ∑ Y : BinaryMatrix n d,
+            if DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                  (dr6F2A5OuterKernel p) Y ∧
+                DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                  (dr6F2A5OuterKernel p) (X + Y) then
+              complexFourierCoeff f Y * complexFourierCoeff f (X + Y)
+            else 0 := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        rw [dr6_complexFilter_square_fourierCoeff]
+    _ = ∑ p : dr6F2A5OuterCarrier X,
+          ∑ Y : BinaryMatrix n d,
+            if DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                  (dr6F2A5OuterKernel p) Y ∧
+                DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                  (dr6F2A5OuterKernel p) (X + Y) then
+              (dr6F2A5OuterWeight X p : Complex) *
+                complexFourierCoeff f Y * complexFourierCoeff f (X + Y)
+            else 0 := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro Y hY
+        by_cases hsel :
+            DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                (dr6F2A5OuterKernel p) Y ∧
+              DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                (dr6F2A5OuterKernel p) (X + Y)
+        · simp [hsel, mul_assoc]
+        · simp [hsel]
+    _ = ∑ Y : BinaryMatrix n d,
+          ∑ p : dr6F2A5OuterCarrier X,
+            if DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                  (dr6F2A5OuterKernel p) Y ∧
+                DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+                  (dr6F2A5OuterKernel p) (X + Y) then
+              (dr6F2A5OuterWeight X p : Complex) *
+                complexFourierCoeff f Y * complexFourierCoeff f (X + Y)
+            else 0 := by
+        rw [Finset.sum_comm]
+
+/-- The coordinate presentation of the common-image/kernel-sum union is
+exactly the manuscript's F2 obstruction predicate. -/
+theorem dr6_f2_actual_union_iff_manuscript_obstruction {n d : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    (dr6F2CommonImage X Y Z ≠ ⊥ ∨ dr6F2KernelSum X Y Z ≠ ⊤) <->
+      DR6F2Obstruction X Y Z := by
+  unfold dr6F2CommonImage dr6F2KernelSum DR6F2Obstruction
+  simp only [dr6_toLin'_eq_mulVecLin]
+
+/-- The actual complex A5 incidence sum equals the original O_X sum with
+ the manuscript obstruction selector. This is an exact signed identity for
+ arbitrary complex f; no absolute value or reality assumption is used. -/
+theorem dr6_f2_a5SquareCoefficient_eq_original_obstruction_sum
+    {n d : Nat} (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    dr6F2A5SignedSquareCoefficient f X =
+      ∑ Y : BinaryMatrix n d,
+        if DR6F2Obstruction X Y (X+Y) then
+          complexFourierCoeff f Y * complexFourierCoeff f (X+Y) else 0 := by
+  classical
+  rw [dr6_f2_a5SquareCoefficient_reindex]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  let cond (p : dr6F2A5OuterCarrier X) :=
+    DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+        (dr6F2A5OuterKernel p) Y ∧
+      DR6ComplexOrdinarySelected (dr6F2A5OuterImage p)
+        (dr6F2A5OuterKernel p) (X+Y)
+  let a := complexFourierCoeff f Y
+  let b := complexFourierCoeff f (X+Y)
+  have hcast :
+      (∑ p : dr6F2A5OuterCarrier X,
+        if cond p then (dr6F2A5OuterWeight X p : Complex) else 0) =
+        (dr6F2A5ActualSelectedWeightSum X Y : Complex) := by
+    unfold dr6F2A5ActualSelectedWeightSum
+    rw [← map_sum]
+    apply Finset.sum_congr rfl
+    intro p hp
+    by_cases hsel : cond p <;> simp [cond, hsel]
+  have hobs :
+      (dr6F2CommonImage X Y (X+Y) ≠ ⊥ ∨
+        dr6F2KernelSum X Y (X+Y) ≠ ⊤) <->
+        DR6F2Obstruction X Y (X+Y) :=
+    dr6_f2_actual_union_iff_manuscript_obstruction X Y (X+Y)
+  have hpoint :
+      (∑ p : dr6F2A5OuterCarrier X,
+        if cond p then
+          (dr6F2A5OuterWeight X p : Complex) * a * b else 0) =
+        if DR6F2Obstruction X Y (X+Y) then a * b else 0 := by
+    calc
+      (∑ p : dr6F2A5OuterCarrier X,
+          if cond p then
+            (dr6F2A5OuterWeight X p : Complex) * a * b else 0) =
+        (∑ p : dr6F2A5OuterCarrier X,
+          if cond p then (dr6F2A5OuterWeight X p : Complex) else 0) * a * b := by
+        calc
+          _ = ∑ p : dr6F2A5OuterCarrier X,
+              (if cond p then (dr6F2A5OuterWeight X p : Complex) else 0) * a * b := by
+            apply Finset.sum_congr rfl
+            intro p hp
+            by_cases hsel : cond p <;> simp [hsel]
+          _ = _ := by rw [Finset.sum_mul, Finset.sum_mul]
+      _ = (dr6F2A5ActualSelectedWeightSum X Y : Complex) * a * b := by
+        rw [hcast]
+      _ = (if DR6F2Obstruction X Y (X+Y) then (1 : Complex) else 0) * a * b := by
+        rw [dr6_f2_a5_actual_selected_weight_eq_union_indicator, hobs]
+        norm_num
+      _ = if DR6F2Obstruction X Y (X+Y) then a * b else 0 := by
+        by_cases h : DR6F2Obstruction X Y (X+Y) <;> simp [h]
+  simpa [a, b] using hpoint
+
+/-- Parseval for the square of an actual complex ordinary filter. The right
+side is the exact sum of the squared Fourier coefficients used by the A5
+weighted estimate, and the left side is its fourth moment. -/
+theorem dr6_complex_filter_square_parseval {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d → Complex) :
+    (∑ X : BinaryMatrix n d,
+      Complex.normSq (complexFourierCoeff
+        (fun M => (DR6ComplexOrdinaryFilter A B f M)^2) X)) =
+      uniformMean (fun M =>
+        Complex.normSq (DR6ComplexOrdinaryFilter A B f M)^2) := by
+  symm
+  calc
+    uniformMean (fun M =>
+        Complex.normSq (DR6ComplexOrdinaryFilter A B f M)^2) =
+      uniformMean (fun M => Complex.normSq
+        ((DR6ComplexOrdinaryFilter A B f M)^2)) := by
+          apply congrArg uniformMean
+          funext M
+          simp only [pow_two, Complex.normSq_mul]
+    _ = ∑ X : BinaryMatrix n d,
+        Complex.normSq (complexFourierCoeff
+          (fun M => (DR6ComplexOrdinaryFilter A B f M)^2) X) :=
+      ActualBinaryMatrixHC46A12FourthMoment.complex_fourier_parseval _
+
+/-- Either selector forces its actual grade below the selected matrix rank.
+The kernel side is proved through the coordinate annihilator and actual
+rank-nullity, so the codimension is not replaced by a Gaussian proxy. -/
+theorem dr6_complexSelector_grades_le_rank {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (Y : BinaryMatrix n d)
+    (hsel : DR6ComplexOrdinarySelected A B Y) :
+    Module.finrank F A ≤ Y.rank ∧
+      Module.finrank F (V n ⧸ B) ≤ Y.rank := by
+  rcases hsel with ⟨hA, hB⟩
+  have hA' : Module.finrank F A ≤
+      Module.finrank F (LinearMap.range Y.transpose.mulVecLin) :=
+    Submodule.finrank_mono hA
+  rw [dr6_transpose_range_finrank Y] at hA'
+  let annB := dr6CoordinateDualAnnihilator B
+  let annK := dr6CoordinateDualAnnihilator
+    (LinearMap.ker Y.transpose.mulVecLin)
+  have hKB : LinearMap.ker Y.transpose.mulVecLin <= B :=
+    (dr6_kernel_le_iff_annihilator_le_range Y B).2 hB
+  have hAnn : annB <= annK :=
+    (dr6_annihilator_le_iff_superspace
+      (LinearMap.ker Y.transpose.mulVecLin) B).2 hKB
+  have hdimAnn : Module.finrank F annB + Module.finrank F B = n := by
+    simpa [annB, V] using dr6_coordinateDualAnnihilator_finrank B
+  have hdimQuot : Module.finrank F (V n ⧸ B) +
+      Module.finrank F B = n := by
+    simpa [V] using Submodule.finrank_quotient_add_finrank B
+  have hquot : Module.finrank F (V n ⧸ B) =
+      Module.finrank F annB := by omega
+  have hAnnMono : Module.finrank F annB ≤ Module.finrank F annK :=
+    Submodule.finrank_mono hAnn
+  have hdimK : Module.finrank F annK = Y.rank :=
+    dr6_transpose_kernel_annihilator_finrank Y
+  rw [← hquot, hdimK] at hAnnMono
+  exact ⟨hA', hAnnMono⟩
+
+/-- An ordinary filter vanishes when either actual grade exceeds the input
+Fourier support. This keeps the eventual weighted grade truncation exact. -/
+theorem dr6_complexFilter_eq_zero_of_grade_gt_support {n d D : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (hA : D < Module.finrank F A ∨
+      D < Module.finrank F (V n ⧸ B)) :
+    DR6ComplexOrdinaryFilter A B f = 0 := by
+  classical
+  funext M
+  unfold DR6ComplexOrdinaryFilter
+  apply Finset.sum_eq_zero
+  intro Y hY
+  by_cases hsel : DR6ComplexOrdinarySelected A B Y
+  · have hgrades := dr6_complexSelector_grades_le_rank A B Y hsel
+    have hrank : D < Y.rank := by omega
+    simp [hsel, hsupport Y hrank]
+  · simp [hsel]
+
+/-- Mobius weights obey the manuscript exponent bound on the only grades
+that can survive finite-degree Fourier support. -/
+theorem dr6_mobiusAlpha_sq_le_pow {D k : Nat}
+    (hk : 1 <= k) (hkD : k <= D) :
+    (dr6MobiusAlphaRat k : Real)^2 <= 2^(D*k) := by
+  have hkpos : 0 < k := by omega
+  rw [dr6MobiusAlphaRat_eq_alpha hkpos]
+  have hcast : ((dr6MobiusAlphaRat k : Rat) : Real) =
+      (-1 : Real)^(k+1) * 2^(k*(k-1)/2) := by
+    rw [dr6MobiusAlphaRat_eq_alpha hkpos]
+    norm_cast
+    simp [dr6MobiusAlpha, Nat.ne_of_gt hkpos]
+  have hcast' : ((dr6MobiusAlpha k : Rat) : Real) =
+      (-1 : Real)^(k+1) * 2^(k*(k-1)/2) := by
+    simpa [dr6MobiusAlphaRat_eq_alpha hkpos] using hcast
+  rw [hcast']
+  have htri : 2 * (k*(k-1)/2) <= k*(k-1) := by omega
+  have hprod : k*(k-1) <= D*k := by nlinarith
+  have hexp : 2 * (k*(k-1)/2) <= D*k := le_trans htri hprod
+  have hsign : ((-1 : Real)^(k+1))^2 = 1 := by
+    calc
+      ((-1 : Real)^(k+1))^2 = (-1 : Real)^((k+1)*2) := by rw [pow_mul]
+      _ = 1 := by norm_num
+  have hpow : ((2 : Real)^(k*(k-1)/2))^2 =
+      (2 : Real)^(2*(k*(k-1)/2)) := by
+    rw [pow_mul]
+    congr 1
+    omega
+  calc
+    ((-1 : Real)^(k+1) * (2 : Real)^(k*(k-1)/2))^2 =
+        (2 : Real)^(2*(k*(k-1)/2)) := by
+          rw [mul_pow, hsign, one_mul, hpow]
+    _ <= (2 : Real)^(D*k) := by gcongr
+
+
+
+/-- Weighted finite Cauchy for an arbitrary complex sum. Positive weights are
+kept explicit so the later grade proof can select its manuscript exponents. -/
+theorem dr6_complex_normSq_weighted_sum_le {I : Type*} [Fintype I]
+    (z : I -> Complex) (c : I -> Real) (hc : forall i, 0 < c i) :
+    Complex.normSq (Finset.univ.sum z) <=
+      (Finset.univ.sum (fun i => ((1 : Real) / c i)^2)) *
+        (Finset.univ.sum (fun i => c i^2 * Complex.normSq (z i))) := by
+  classical
+  have hcs := Finset.sum_mul_sq_le_sq_mul_sq (Finset.univ : Finset I)
+    (fun i => (1 : Real) / c i) (fun i => c i * norm (z i))
+  have hprod : Finset.univ.sum
+      (fun i => ((1 : Real) / c i) * (c i * norm (z i))) =
+      Finset.univ.sum (fun i => norm (z i)) := by
+    apply Finset.sum_congr rfl
+    intro i hi
+    have hne : Not (c i = 0) := ne_of_gt (hc i)
+    field_simp [hne]
+  have hright : Finset.univ.sum (fun i => (c i * norm (z i))^2) =
+      Finset.univ.sum (fun i => c i^2 * Complex.normSq (z i)) := by
+    apply Finset.sum_congr rfl
+    intro i hi
+    rw [Complex.normSq_eq_norm_sq]
+    ring
+  have hsum0 : 0 <= Finset.univ.sum (fun i => norm (z i)) :=
+    Finset.sum_nonneg fun i hi => norm_nonneg (z i)
+  have hnorm : norm (Finset.univ.sum z) <=
+      Finset.univ.sum (fun i => norm (z i)) := norm_sum_le _ _
+  rw [Complex.normSq_eq_norm_sq]
+  calc
+    norm (Finset.univ.sum z)^2 <=
+        (Finset.univ.sum (fun i => norm (z i)))^2 := by
+          nlinarith [norm_nonneg (Finset.univ.sum z)]
+    _ <= (Finset.univ.sum (fun i => ((1 : Real) / c i)^2)) *
+          (Finset.univ.sum (fun i => (c i * norm (z i))^2)) := by
+          rw [hprod.symm]
+          exact hcs
+    _ = _ := by rw [hright]
+
+
+/-- A finite geometric series with ratio at most 1/16 is bounded by 16/15.
+This is the one-dimensional estimate behind the 31/225 two-grade factor. -/
+private theorem dr6_geom_range_le_16_15 {N : Nat} {q : Real}
+    (hq0 : 0 <= q) (hq : q <= 1/16) :
+    (Finset.range N).sum (fun i => q^i) <= 16/15 := by
+  induction N with
+  | zero => norm_num
+  | succ N ih =>
+      rw [Finset.sum_range_succ']
+      have htail :
+          (Finset.range N).sum (fun i => q^(i+1)) =
+            q * (Finset.range N).sum (fun i => q^i) := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro i hi
+        rw [pow_succ']
+      have hsum0 : 0 <= (Finset.range N).sum (fun i => q^i) :=
+        Finset.sum_nonneg fun i hi => pow_nonneg hq0 i
+      calc
+        (Finset.range N).sum (fun i => q^(i+1)) + q^0 <=
+            (1/16 : Real) * (16/15) + 1 := by
+          rw [pow_zero, htail]
+          have hmul := mul_le_mul hq ih
+            (by norm_num : (0:Real) <= 16/15) hq0
+          nlinarith
+        _ = 16/15 := by norm_num
+
+
+
+/-- Actual grade coefficient sums satisfy finite complex Cauchy--Schwarz. -/
+theorem dr6_f2_a5_gradeCoefficient_normSq_le {n d : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d)
+    (i j : Nat) :
+    Complex.normSq (dr6F2A5GradeSquareCoefficient f X i j) <=
+      (Fintype.card (Prod (dr6F2OuterImageCarrier (i := i) X)
+        (dr6F2OuterKernelCarrier (j := j) X)) : Real) *
+        (Finset.univ.sum (fun p : Prod
+          (dr6F2OuterImageCarrier (i := i) X) (dr6F2OuterKernelCarrier (j := j) X) =>
+          Complex.normSq (complexFourierCoeff
+            (fun M =>
+              (DR6ComplexOrdinaryFilter p.1.1.1 p.2.1 f M)^2) X))) := by
+  classical
+  unfold dr6F2A5GradeSquareCoefficient
+  have h := dr6_complex_normSq_weighted_sum_le
+    (z := fun p : Prod (dr6F2OuterImageCarrier (i := i) X)
+      (dr6F2OuterKernelCarrier (j := j) X) =>
+      complexFourierCoeff (fun M =>
+        (DR6ComplexOrdinaryFilter p.1.1.1 p.2.1 f M)^2) X)
+    (c := fun _ => (1 : Real)) (by intro p; norm_num)
+  simpa using h
+
+/-- The signed grade weight has squared magnitude at most 2^(D(i+j)); all
+zero-grade endpoint conventions are retained explicitly. -/
+theorem dr6_f2_signedWeight_normSq_le {D i j : Nat}
+    (hi : i <= D) (hj : j <= D) :
+    Complex.normSq (dr6F2SignedIncidenceWeight i j : Complex) <=
+      (2 : Real)^(D*(i+j)) := by
+  by_cases hi0 : i = 0
+  case pos =>
+    subst i
+    by_cases hj0 : j = 0
+    case pos =>
+      subst j
+      simp [dr6F2SignedIncidenceWeight]
+    case neg =>
+      have hjpos : 1 <= j := by omega
+      have h := dr6_mobiusAlpha_sq_le_pow hjpos hj
+      simpa [dr6F2SignedIncidenceWeight, hj0, Complex.normSq_apply] using h
+  case neg =>
+    by_cases hj0 : j = 0
+    case pos =>
+      subst j
+      have hipos : 1 <= i := by omega
+      have h := dr6_mobiusAlpha_sq_le_pow hipos hi
+      simpa [dr6F2SignedIncidenceWeight, hi0, Complex.normSq_apply] using h
+    case neg =>
+      have hipos : 1 <= i := by omega
+      have hjpos : 1 <= j := by omega
+      have hI := dr6_mobiusAlpha_sq_le_pow hipos hi
+      have hJ := dr6_mobiusAlpha_sq_le_pow hjpos hj
+      simp only [dr6F2SignedIncidenceWeight, if_neg hi0, if_neg hj0]
+      push_cast
+      rw [Complex.normSq_neg, Complex.normSq_mul]
+      have hcastI : Complex.normSq (dr6MobiusAlphaRat i : Complex) =
+          (dr6MobiusAlphaRat i : Real)^2 := by
+        simp [Complex.normSq_apply]
+      have hcastJ : Complex.normSq (dr6MobiusAlphaRat j : Complex) =
+          (dr6MobiusAlphaRat j : Real)^2 := by
+        simp [Complex.normSq_apply]
+      rw [hcastI, hcastJ]
+      have hpow : (2 : Real)^(D*i) * 2^(D*j) =
+          (2 : Real)^(D*(i+j)) := by
+        calc
+          _ = (2 : Real)^(D*i + D*j) :=
+            (pow_add (2 : Real) (D*i) (D*j)).symm
+          _ = _ := by congr 1 <;> ring
+      calc
+        (dr6MobiusAlphaRat i : Real)^2 *
+            (dr6MobiusAlphaRat j : Real)^2 <=
+          (2 : Real)^(D*i) * (2 : Real)^(D*j) :=
+            mul_le_mul hI hJ (sq_nonneg _) (by positivity)
+        _ = (2 : Real)^(D*(i+j)) := hpow
+
+
+
+/-- One actual (i,j) grade contributes at most 2^(3D(i+j)) times its
+ordinary-filter fourth-moment Fourier energy when rank(X) <= 2D. -/
+theorem dr6_f2_a5_weightedGrade_normSq_le {n d D i j : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d)
+    (hX : X.rank <= 2*D) (hi : i <= D) (hj : j <= D) :
+    Complex.normSq
+        ((dr6F2SignedIncidenceWeight i j : Complex) *
+          dr6F2A5GradeSquareCoefficient f X i j) <=
+      (2 : Real)^(3*D*(i+j)) *
+        (Finset.univ.sum (fun p : Prod
+          (dr6F2OuterImageCarrier (i := i) X) (dr6F2OuterKernelCarrier (j := j) X) =>
+          Complex.normSq (complexFourierCoeff
+            (fun M =>
+              (DR6ComplexOrdinaryFilter p.1.1.1 p.2.1 f M)^2) X))) := by
+  have hweight := dr6_f2_signedWeight_normSq_le hi hj
+  have hgrade := dr6_f2_a5_gradeCoefficient_normSq_le f X i j
+  have hcardNat := dr6_f2_outerCarrier_pair_card_le X i j
+  have hrankExp : X.rank*(i+j) <= 2*D*(i+j) := Nat.mul_le_mul_right (i+j) hX
+  have hcardReal :
+      (Fintype.card (Prod (dr6F2OuterImageCarrier (i := i) X)
+        (dr6F2OuterKernelCarrier (j := j) X)) : Real) <=
+        (2 : Real)^(2*D*(i+j)) := by
+    have hcast :
+        (Fintype.card (Prod (dr6F2OuterImageCarrier (i := i) X)
+          (dr6F2OuterKernelCarrier (j := j) X)) : Real) <=
+          (2 : Real)^(X.rank*(i+j)) := by exact_mod_cast hcardNat
+    calc
+      _ <= (2 : Real)^(X.rank*(i+j)) := hcast
+      _ <= (2 : Real)^(2*D*(i+j)) := by gcongr
+  rw [Complex.normSq_mul]
+  calc
+    Complex.normSq (dr6F2SignedIncidenceWeight i j : Complex) *
+        Complex.normSq (dr6F2A5GradeSquareCoefficient f X i j) <=
+      (2 : Real)^(D*(i+j)) *
+        ((Fintype.card (Prod (dr6F2OuterImageCarrier (i := i) X)
+          (dr6F2OuterKernelCarrier (j := j) X)) : Real) *
+          (Finset.univ.sum (fun p : Prod
+            (dr6F2OuterImageCarrier (i := i) X) (dr6F2OuterKernelCarrier (j := j) X) =>
+            Complex.normSq (complexFourierCoeff
+              (fun M =>
+                (DR6ComplexOrdinaryFilter p.1.1.1 p.2.1 f M)^2) X)))) :=
+      mul_le_mul hweight hgrade (Complex.normSq_nonneg _) (by positivity)
+    _ <= (2 : Real)^(D*(i+j)) *
+        ((2 : Real)^(2*D*(i+j)) *
+          (Finset.univ.sum (fun p : Prod
+            (dr6F2OuterImageCarrier (i := i) X) (dr6F2OuterKernelCarrier (j := j) X) =>
+            Complex.normSq (complexFourierCoeff
+              (fun M =>
+                (DR6ComplexOrdinaryFilter p.1.1.1 p.2.1 f M)^2) X))) := by
+      gcongr
+    _ = (2 : Real)^(3*D*(i+j)) *
+          (Finset.univ.sum (fun p : Prod
+            (dr6F2OuterImageCarrier (i := i) X) (dr6F2OuterKernelCarrier (j := j) X) =>
+            Complex.normSq (complexFourierCoeff
+              (fun M =>
+                (DR6ComplexOrdinaryFilter p.1.1.1 p.2.1 f M)^2) X))) := by
+      calc
+        _ = ((2 : Real)^(D*(i+j)) * (2 : Real)^(2*D*(i+j))) *
+              (Finset.univ.sum (fun p : Prod
+                (dr6F2OuterImageCarrier (i := i) X) (dr6F2OuterKernelCarrier (j := j) X) =>
+                Complex.normSq (complexFourierCoeff
+                  (fun M =>
+                    (DR6ComplexOrdinaryFilter p.1.1.1 p.2.1 f M)^2) X))) := by ring
+        _ = _ := by
+          rw [(pow_add (2 : Real) (D*(i+j)) (2*D*(i+j))).symm]
+          congr 2
+          ring
+
+
+
+/-- The finite D-by-D grade grid with the zero-zero term removed. -/
+def dr6F2NonzeroGradeGrid (D : Nat) :=
+  {p : Prod (Fin (D+1)) (Fin (D+1)) //
+    p ∈ (Finset.univ.erase ((0 : Fin (D+1)), (0 : Fin (D+1))))}
+
+private theorem dr6_f2_grade_grid_first_factor_le {D : Nat}
+    (hD : 1 <= D) :
+    Finset.univ.sum (fun p : dr6F2NonzeroGradeGrid D =>
+      ((1 : Real) / (2 : Real)^(2*D*(p.1.1.val+p.1.2.val)))^2) <=
+        31/225 := by
+  classical
+  let q : Real := 1 / (2 : Real)^(4*D)
+  have hden : (16 : Real) <= (2 : Real)^(4*D) := by
+    have hexp : 4 <= 4*D := by omega
+    calc
+      (16 : Real) = 2^4 := by norm_num
+      _ <= 2^(4*D) := by
+        exact_mod_cast (Nat.pow_le_pow_right (by decide : 1 < 2) hexp)
+  have hq0 : 0 <= q := by dsimp [q]; positivity
+  have hq : q <= 1/16 := by
+    dsimp [q]
+    have hp : 0 < (2 : Real)^(4*D) := by positivity
+    field_simp [ne_of_gt hp]
+    nlinarith [hden]
+  have hgeom : Finset.univ.sum (fun i : Fin (D+1) => q^i.val) <= 16/15 := by
+    rw [Fin.sum_univ_eq_sum_range (fun i : Nat => q^i) (D+1)]
+    exact dr6_geom_range_le_16_15 hq0 hq
+  have hgeom0 : 0 <= Finset.univ.sum (fun i : Fin (D+1) => q^i.val) :=
+    Finset.sum_nonneg fun i hi => pow_nonneg hq0 i.val
+  let zero : Prod (Fin (D+1)) (Fin (D+1)) := (0, 0)
+  let w : Prod (Fin (D+1)) (Fin (D+1)) -> Real := fun p => q^p.1.val * q^p.2.val
+  have hfactor : Finset.univ.sum w =
+      (Finset.univ.sum (fun i : Fin (D+1) => q^i.val))^2 := by
+    calc
+      Finset.univ.sum w =
+          Finset.univ.sum (fun i : Fin (D+1) =>
+            Finset.univ.sum (fun j : Fin (D+1) => q^i.val * q^j.val)) := by
+        simp only [Fintype.sum_prod_type, w]
+      _ = (Finset.univ.sum (fun i : Fin (D+1) => q^i.val)) *
+            (Finset.univ.sum (fun j : Fin (D+1) => q^j.val)) :=
+        (Fintype.sum_mul_sum _ _).symm
+      _ = _ := by ring
+  have herase :
+      (Finset.univ.erase zero).sum w + w zero = Finset.univ.sum w := by
+    exact Finset.sum_erase_add _ _ (Finset.mem_univ zero)
+  have hsub : Finset.univ.sum (fun p : dr6F2NonzeroGradeGrid D =>
+      q^p.1.1.val * q^p.1.2.val) = Finset.univ.erase zero |>.sum w := by
+    let P : (Prod (Fin (D+1)) (Fin (D+1))) -> Prop := fun p => p ∈
+      (Finset.univ.erase zero)
+    simpa [dr6F2NonzeroGradeGrid, P, w, Finset.subtype_univ] using
+      (Finset.sum_subtype_eq_sum_filter
+        (s := (Finset.univ : Finset (Prod (Fin (D+1)) (Fin (D+1)))))
+        (p := P) (f := fun p => w p)).symm
+  have hqpow (k : Nat) : q^k = 1 / (2 : Real)^(4*D*k) := by
+    dsimp [q]
+    calc
+      (1 / (2 : Real)^(4*D))^k =
+          (1 : Real)^k / ((2 : Real)^(4*D))^k := by rw [div_pow]
+      _ = 1 / (2 : Real)^(4*D*k) := by simp [pow_mul]
+  have hweight (p : dr6F2NonzeroGradeGrid D) :
+      ((1 : Real) / (2 : Real)^(2*D*(p.1.1.val+p.1.2.val)))^2 =
+        q^p.1.1.val * q^p.1.2.val := by
+    have hqpow1 := hqpow p.1.1.val
+    have hqpow2 := hqpow p.1.2.val
+    have hdenpow : ((2 : Real)^(2*D*(p.1.1.val+p.1.2.val)))^2 =
+        (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) := by
+      rw [pow_mul]
+      congr 1
+      ring
+    have hproduct : (2 : Real)^(4*D*p.1.1.val) *
+        (2 : Real)^(4*D*p.1.2.val) =
+        (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) := by
+      calc
+        _ = (2 : Real)^(4*D*p.1.val + 4*D*p.2.val) :=
+          (pow_add (2 : Real) (4*D*p.1.val) (4*D*p.2.val)).symm
+        _ = _ := by congr 1 <;> ring
+    calc
+      _ = 1 / (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) := by
+        have hne : Not ((2 : Real)^(2*D*(p.1.1.val+p.1.2.val)) = 0) := by positivity
+        field_simp [hne]
+        rw [hdenpow]
+      _ = q^p.1.1.val * q^p.1.2.val := by
+        rw [hqpow1, hqpow2]
+        field_simp
+        exact hproduct
+  have hconvert : Finset.univ.sum (fun p : dr6F2NonzeroGradeGrid D =>
+      ((1 : Real) / (2 : Real)^(2*D*(p.1.1.val+p.1.2.val)))^2) =
+        Finset.univ.erase zero |>.sum w := by
+    calc
+      _ = Finset.univ.sum (fun p : dr6F2NonzeroGradeGrid D =>
+          q^p.1.1.val * q^p.1.2.val) := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        exact hweight p
+      _ = Finset.univ.erase zero |>.sum w := hsub
+  rw [hconvert]
+  have hfull : Finset.univ.sum w <= (16/15 : Real)^2 := by
+    rw [hfactor]
+    exact mul_le_mul hgeom hgeom hgeom0 (by norm_num)
+  have hz : w zero = 1 := by simp [w, q]
+  rw [hz] at herase
+  linarith [herase, hfull]
+
+/-- The 31/225 weighted Cauchy step on the actual nonzero grades. -/
+theorem dr6_f2_gradeGrid_weighted_cauchy {D : Nat}
+    (hD : 1 <= D) (z : dr6F2NonzeroGradeGrid D -> Complex) :
+    Complex.normSq (Finset.univ.sum z) <=
+      (31/225 : Real) *
+        Finset.univ.sum (fun p =>
+          (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) *
+            Complex.normSq (z p)) := by
+  classical
+  let c : dr6F2NonzeroGradeGrid D -> Real := fun p =>
+    (2 : Real)^(2*D*(p.1.1.val+p.1.2.val))
+  have hc : forall p, 0 < c p := by intro p; positivity
+  have hcs := dr6_complex_normSq_weighted_sum_le z c hc
+  have hfirst := dr6_f2_grade_grid_first_factor_le hD
+  have hsecond : Finset.univ.sum (fun p => c p^2 * Complex.normSq (z p)) =
+      Finset.univ.sum (fun p =>
+        (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) * Complex.normSq (z p)) := by
+    apply Finset.sum_congr rfl
+    intro p hp
+    simp only [c]
+    rw [pow_mul]
+    congr 2
+    ring
+  calc
+    Complex.normSq (Finset.univ.sum z) <=
+        (Finset.univ.sum (fun p => ((1 : Real) / c p)^2)) *
+          (Finset.univ.sum (fun p => c p^2 * Complex.normSq (z p))) := hcs
+    _ <= (31/225 : Real) *
+          (Finset.univ.sum (fun p => c p^2 * Complex.normSq (z p))) :=
+      mul_le_mul_of_nonneg_right hfirst (Finset.sum_nonneg fun p hp =>
+        mul_nonneg (sq_nonneg _) (Complex.normSq_nonneg _))
+    _ = _ := by rw [hsecond]
+
+
+
+/-- The original obstruction coefficient vanishes above rank 2D. A nonzero
+summand has both Fourier frequencies in the support, and X is their sum. -/
+theorem dr6_f2_a5_originalCoefficient_zero_of_rank_gt {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (hX : 2*D < X.rank) :
+    (Finset.univ.sum (fun Y : BinaryMatrix n d =>
+      if DR6F2Obstruction X Y (X+Y) then
+        complexFourierCoeff f Y * complexFourierCoeff f (X+Y) else 0)) = 0 := by
+  classical
+  apply Finset.sum_eq_zero
+  intro Y hY
+  by_cases hprod : complexFourierCoeff f Y * complexFourierCoeff f (X+Y) = 0
+  case pos => simp [hprod]
+  case neg =>
+    have hfy : Not (complexFourierCoeff f Y = 0) := by
+      intro h
+      exact hprod (by simp [h])
+    have hfxdy : Not (complexFourierCoeff f (X+Y) = 0) := by
+      intro h
+      exact hprod (by simp [h])
+    have hy : Y.rank <= D := by
+      by_contra hn
+      exact hfy (hsupport Y (Nat.lt_of_not_ge hn))
+    have hz : (X+Y).rank <= D := by
+      by_contra hn
+      exact hfxdy (hsupport (X+Y) (Nat.lt_of_not_ge hn))
+    have hsum := ActualFiniteDegreeFourierProduct.binaryMatrix_rank_add_le Y (X+Y)
+    have hadd : Y + (X+Y) = X := by
+      ext a b
+      simp [Matrix.add_apply, add_assoc]
+    rw [hadd] at hsum
+    omega
+
+/-- Consequently the exact A5 signed coefficient has rank support at most
+2D, with the arbitrary complex-valued input support hypothesis unchanged. -/
+theorem dr6_f2_a5_signedCoefficient_zero_of_rank_gt {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (hX : 2*D < X.rank) :
+    dr6F2A5SignedSquareCoefficient f X = 0 := by
+  rw [dr6_f2_a5SquareCoefficient_eq_original_obstruction_sum]
+  exact dr6_f2_a5_originalCoefficient_zero_of_rank_gt f X hsupport hX
+
+
+/-- The actual grade rectangle for the two X-fixed outer-carrier bounds,
+with only its zero-zero coefficient removed. -/
+def dr6F2ActualGradeGrid (r s : Nat) :=
+  {p : Prod (Fin (r+1)) (Fin (s+1)) //
+    p ∈ (Finset.univ.erase ((0 : Fin (r+1)), (0 : Fin (s+1))))}
+
+/-- The finite actual-grade rectangle has the same 31/225 reciprocal-square
+bound for every pair of ambient cutoffs: only the decay parameter D matters. -/
+theorem dr6_f2_actual_grade_grid_first_factor_le {D r s : Nat}
+    (hD : 1 <= D) :
+    Finset.univ.sum (fun p : dr6F2ActualGradeGrid r s =>
+      ((1 : Real) / (2 : Real)^(2*D*(p.1.1.val+p.1.2.val)))^2) <=
+        31/225 := by
+  classical
+  let q : Real := 1 / (2 : Real)^(4*D)
+  have hden : (16 : Real) <= (2 : Real)^(4*D) := by
+    have hexp : 4 <= 4*D := by omega
+    calc
+      (16 : Real) = 2^4 := by norm_num
+      _ <= 2^(4*D) := by gcongr
+  have hq0 : 0 <= q := by dsimp [q]; positivity
+  have hq : q <= 1/16 := by
+    dsimp [q]
+    have hp : 0 < (2 : Real)^(4*D) := by positivity
+    field_simp [ne_of_gt hp]
+    nlinarith [hden]
+  have hgR : Finset.univ.sum (fun i : Fin (r+1) => q^i.val) <= 16/15 := by
+    rw [Fin.sum_univ_eq_sum_range (fun i : Nat => q^i) (r+1)]
+    exact dr6_geom_range_le_16_15 hq0 hq
+  have hgS : Finset.univ.sum (fun j : Fin (s+1) => q^j.val) <= 16/15 := by
+    rw [Fin.sum_univ_eq_sum_range (fun j : Nat => q^j) (s+1)]
+    exact dr6_geom_range_le_16_15 hq0 hq
+  have hgR0 : 0 <= Finset.univ.sum (fun i : Fin (r+1) => q^i.val) :=
+    Finset.sum_nonneg fun i hi => pow_nonneg hq0 i.val
+  have hgS0 : 0 <= Finset.univ.sum (fun j : Fin (s+1) => q^j.val) :=
+    Finset.sum_nonneg fun j hj => pow_nonneg hq0 j.val
+  let zero : Prod (Fin (r+1)) (Fin (s+1)) := (0, 0)
+  let w : Prod (Fin (r+1)) (Fin (s+1)) -> Real := fun p => q^p.1.val * q^p.2.val
+  have hfactor : Finset.univ.sum w =
+      (Finset.univ.sum (fun i : Fin (r+1) => q^i.val)) *
+        (Finset.univ.sum (fun j : Fin (s+1) => q^j.val)) := by
+    simp [w, Fintype.sum_prod_type, Fintype.sum_mul_sum]
+  have herase : Finset.univ.erase zero |>.sum w + w zero = Finset.univ.sum w :=
+    Finset.sum_erase_add _ _ (Finset.mem_univ zero)
+  have hsub : Finset.univ.sum (fun p : dr6F2ActualGradeGrid r s =>
+      q^p.1.1.val * q^p.1.2.val) = Finset.univ.erase zero |>.sum w := by
+    let P : Prod (Fin (r+1)) (Fin (s+1)) -> Prop := fun p => p ∈ Finset.univ.erase zero
+    simpa [dr6F2ActualGradeGrid, P, w, Finset.subtype_univ] using
+      (Finset.sum_subtype_eq_sum_filter
+        (s := (Finset.univ : Finset (Prod (Fin (r+1)) (Fin (s+1)))))
+        (p := P) (f := fun p => w p)).symm
+  have hqpow (k : Nat) : q^k = 1 / (2 : Real)^(4*D*k) := by
+    dsimp [q]
+    calc
+      (1 / (2 : Real)^(4*D))^k =
+          (1 : Real)^k / ((2 : Real)^(4*D))^k := by rw [div_pow]
+      _ = 1 / (2 : Real)^(4*D*k) := by simp [pow_mul]
+  have hweight (p : dr6F2ActualGradeGrid r s) :
+      ((1 : Real) / (2 : Real)^(2*D*(p.1.1.val+p.1.2.val)))^2 =
+        q^p.1.1.val * q^p.1.2.val := by
+    have hqpow1 := hqpow p.1.1.val
+    have hqpow2 := hqpow p.1.2.val
+    have hdenpow : ((2 : Real)^(2*D*(p.1.1.val+p.1.2.val)))^2 =
+        (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) := by
+      rw [pow_mul]
+      congr 1
+      ring
+    have hproduct : (2 : Real)^(4*D*p.1.1.val) *
+        (2 : Real)^(4*D*p.1.2.val) =
+        (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) := by
+      calc
+        _ = (2 : Real)^(4*D*p.1.val + 4*D*p.2.val) :=
+          (pow_add (2 : Real) (4*D*p.1.val) (4*D*p.2.val)).symm
+        _ = _ := by congr 1 <;> ring
+    calc
+      _ = 1 / (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) := by
+        have hne : Not ((2 : Real)^(2*D*(p.1.1.val+p.1.2.val)) = 0) := by positivity
+        field_simp [hne]
+        rw [hdenpow]
+      _ = q^p.1.1.val * q^p.1.2.val := by
+        rw [hqpow1, hqpow2]
+        field_simp
+        exact hproduct
+  have hconvert : Finset.univ.sum (fun p : dr6F2ActualGradeGrid r s =>
+      ((1 : Real) / (2 : Real)^(2*D*(p.1.1.val+p.1.2.val)))^2) =
+        Finset.univ.erase zero |>.sum w := by
+    calc
+      _ = Finset.univ.sum (fun p : dr6F2ActualGradeGrid r s =>
+          q^p.1.1.val * q^p.1.2.val) := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        exact hweight p
+      _ = Finset.univ.erase zero |>.sum w := hsub
+  rw [hconvert]
+  have hfull : Finset.univ.sum w <= (16/15 : Real)^2 := by
+    rw [hfactor]
+    exact mul_le_mul hgR hgS hgR0 (by norm_num)
+  have hz : w zero = 1 := by simp [w, q]
+  rw [hz] at herase
+  linarith [herase, hfull]
+
+/-- Weighted complex Cauchy on the complete actual grade rectangle. -/
+theorem dr6_f2_actual_grade_grid_weighted_cauchy {D r s : Nat}
+    (hD : 1 <= D) (z : dr6F2ActualGradeGrid r s -> Complex) :
+    Complex.normSq (Finset.univ.sum z) <=
+      (31/225 : Real) * Finset.univ.sum (fun p =>
+        (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) * Complex.normSq (z p)) := by
+  classical
+  let c : dr6F2ActualGradeGrid r s -> Real := fun p =>
+    (2 : Real)^(2*D*(p.1.1.val+p.1.2.val))
+  have hc : forall p, 0 < c p := by intro p; positivity
+  have hcs := dr6_complex_normSq_weighted_sum_le z c hc
+  have hfirst := dr6_f2_actual_grade_grid_first_factor_le hD
+  have hsecond : Finset.univ.sum (fun p => c p^2 * Complex.normSq (z p)) =
+      Finset.univ.sum (fun p =>
+        (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) * Complex.normSq (z p)) := by
+    apply Finset.sum_congr rfl
+    intro p hp
+    simp only [c]
+    rw [pow_mul]
+    congr 2
+    ring
+  calc
+    Complex.normSq (Finset.univ.sum z) <=
+        (Finset.univ.sum (fun p => ((1 : Real) / c p)^2)) *
+          (Finset.univ.sum (fun p => c p^2 * Complex.normSq (z p))) := hcs
+    _ <= (31/225 : Real) *
+          (Finset.univ.sum (fun p => c p^2 * Complex.normSq (z p))) :=
+      mul_le_mul_of_nonneg_right hfirst (Finset.sum_nonneg fun p hp =>
+        mul_nonneg (sq_nonneg _) (Complex.normSq_nonneg _))
+    _ = _ := by rw [hsecond]
+
+
+/-- The exact signed A5 coefficient is the sum over its actual X-fixed
+nonzero grade rectangle. The (0,0) term is zero by the signed endpoint rule. -/
+theorem dr6_f2_a5SquareCoefficient_eq_actual_grade_grid {n d : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    dr6F2A5SignedSquareCoefficient f X =
+      Finset.univ.sum (fun p : dr6F2ActualGradeGrid
+          (Module.finrank F (LinearMap.range X.transpose.mulVecLin))
+          (Module.finrank F (dr6CoordinateDualAnnihilator
+            (LinearMap.ker X.transpose.mulVecLin))) =>
+        (dr6F2SignedIncidenceWeight p.1.1.val p.1.2.val : Complex) *
+          dr6F2A5GradeSquareCoefficient f X p.1.1.val p.1.2.val) := by
+  classical
+  let r := Module.finrank F (LinearMap.range X.transpose.mulVecLin)
+  let s := Module.finrank F (dr6CoordinateDualAnnihilator
+    (LinearMap.ker X.transpose.mulVecLin))
+  let zero : Prod (Fin (r+1)) (Fin (s+1)) := (0, 0)
+  let w : Prod (Fin (r+1)) (Fin (s+1)) -> Complex := fun p =>
+    (dr6F2SignedIncidenceWeight p.1.val p.2.val : Complex) *
+      dr6F2A5GradeSquareCoefficient f X p.1.val p.2.val
+  have hz : w zero = 0 := by
+    simp [w, zero, dr6F2SignedIncidenceWeight]
+  have hsub : Finset.univ.sum (fun p : dr6F2ActualGradeGrid r s => w p.1) =
+      Finset.univ.erase zero |>.sum w := by
+    let P : Prod (Fin (r+1)) (Fin (s+1)) -> Prop := fun p =>
+      p ∈ Finset.univ.erase zero
+    simpa [dr6F2ActualGradeGrid, P, w, Finset.subtype_univ] using
+      (Finset.sum_subtype_eq_sum_filter
+        (s := (Finset.univ : Finset (Prod (Fin (r+1)) (Fin (s+1)))))
+        (p := P) (f := fun p => w p)).symm
+  have hfull : Finset.univ.sum w =
+      (Finset.range (r+1)).sum (fun i =>
+        (Finset.range (s+1)).sum (fun j =>
+          (dr6F2SignedIncidenceWeight i j : Complex) *
+            dr6F2A5GradeSquareCoefficient f X i j)) := by
+    simp only [Fintype.sum_prod_type]
+    rw [Fin.sum_univ_eq_sum_range]
+    apply Finset.sum_congr rfl
+    intro i hi
+    rw [Fin.sum_univ_eq_sum_range]
+  have hremove : Finset.univ.sum w = Finset.univ.erase zero |>.sum w := by
+    rw [Finset.sum_erase_add _ _ (Finset.mem_univ zero), hz, add_zero]
+  rw [dr6_f2_a5SquareCoefficient_eq_grade_sum]
+  change _ = Finset.univ.sum (fun p : dr6F2ActualGradeGrid r s => w p.1)
+  rw [hsub.symm, hremove.symm, hfull]
+
+/-- Per-X A5 energy estimate on the actual grade rectangle. Above-D grades
+vanish by ordinary-filter Fourier support before the weighted truncation. -/
+theorem dr6_f2_a5_signedCoefficient_normSq_le_grade_energy {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d)
+    (hsupport : ComplexFourierSupportedThrough D f) (hD : 1 <= D)
+    (hX : X.rank <= 2*D) :
+    Complex.normSq (dr6F2A5SignedSquareCoefficient f X) <=
+      (31/225 : Real) * Finset.univ.sum (fun p : dr6F2ActualGradeGrid
+          (Module.finrank F (LinearMap.range X.transpose.mulVecLin))
+          (Module.finrank F (dr6CoordinateDualAnnihilator
+            (LinearMap.ker X.transpose.mulVecLin))) =>
+        (2 : Real)^(7*D*(p.1.1.val+p.1.2.val)) *
+          Finset.univ.sum (fun q : Prod
+            (dr6F2OuterImageCarrier (i := p.1.1.val) X)
+            (dr6F2OuterKernelCarrier (j := p.1.2.val) X) =>
+            Complex.normSq (complexFourierCoeff
+              (fun M =>
+                (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1.1 f M)^2) X))) := by
+  classical
+  let z : dr6F2ActualGradeGrid
+      (Module.finrank F (LinearMap.range X.transpose.mulVecLin))
+      (Module.finrank F (dr6CoordinateDualAnnihilator
+        (LinearMap.ker X.transpose.mulVecLin))) -> Complex := fun p =>
+    (dr6F2SignedIncidenceWeight p.1.1.val p.1.2.val : Complex) *
+      dr6F2A5GradeSquareCoefficient f X p.1.1.val p.1.2.val
+  rw [dr6_f2_a5SquareCoefficient_eq_actual_grade_grid]
+  have hgrid := dr6_f2_actual_grade_grid_weighted_cauchy hD z
+  have hterms : Finset.univ.sum (fun p : dr6F2ActualGradeGrid
+        (Module.finrank F (LinearMap.range X.transpose.mulVecLin))
+        (Module.finrank F (dr6CoordinateDualAnnihilator
+          (LinearMap.ker X.transpose.mulVecLin))) =>
+      (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) * Complex.normSq (z p)) <=
+      Finset.univ.sum (fun p : dr6F2ActualGradeGrid
+        (Module.finrank F (LinearMap.range X.transpose.mulVecLin))
+        (Module.finrank F (dr6CoordinateDualAnnihilator
+          (LinearMap.ker X.transpose.mulVecLin))) =>
+      (2 : Real)^(7*D*(p.1.1.val+p.1.2.val)) *
+        Finset.univ.sum (fun q : Prod
+          (dr6F2OuterImageCarrier (i := p.1.1.val) X)
+          (dr6F2OuterKernelCarrier (j := p.1.2.val) X) =>
+          Complex.normSq (complexFourierCoeff
+            (fun M =>
+              (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1.1 f M)^2) X))) := by
+    apply Finset.sum_le_sum
+    intro p hp
+    by_cases hlarge : D < p.1.1.val ∨ D < p.1.2.val
+    · have hzero := dr6_f2_a5_gradeCoefficient_zero_of_large_grade
+        f X hsupport p.1.1.val p.1.2.val hlarge
+      simp [z, hzero]
+      positivity
+    · have hi : p.1.1.val <= D := by omega
+      have hj : p.1.2.val <= D := by omega
+      have hgrade := dr6_f2_a5_weightedGrade_normSq_le
+        f X hX hi hj
+      have hpow : (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) *
+          (2 : Real)^(3*D*(p.1.1.val+p.1.2.val)) =
+            (2 : Real)^(7*D*(p.1.1.val+p.1.2.val)) := by
+        calc
+          _ = (2 : Real)^(4*D*(p.1.1.val+p.1.2.val) +
+                3*D*(p.1.1.val+p.1.2.val)) :=
+            (pow_add (2 : Real) (4*D*(p.1.1.val+p.1.2.val))
+              (3*D*(p.1.1.val+p.1.2.val))).symm
+          _ = _ := by congr 1 <;> ring
+      rw [z, Complex.normSq_mul]
+      calc
+        (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) *
+            (Complex.normSq (dr6F2SignedIncidenceWeight
+              p.1.1.val p.1.2.val : Complex) *
+              Complex.normSq (dr6F2A5GradeSquareCoefficient
+                f X p.1.1.val p.1.2.val)) <=
+          (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) *
+            ((2 : Real)^(3*D*(p.1.1.val+p.1.2.val)) *
+              Finset.univ.sum (fun q : Prod
+                (dr6F2OuterImageCarrier (i := p.1.1.val) X)
+                (dr6F2OuterKernelCarrier (j := p.1.2.val) X) =>
+                Complex.normSq (complexFourierCoeff
+                  (fun M =>
+                    (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1.1 f M)^2) X))) := by
+                gcongr
+                exact hgrade
+        _ = _ := by rw [hpow]
+  calc
+    Complex.normSq (dr6F2A5SignedSquareCoefficient f X) <=
+        (31/225 : Real) * Finset.univ.sum (fun p =>
+          (2 : Real)^(4*D*(p.1.1.val+p.1.2.val)) * Complex.normSq (z p)) := hgrid
+    _ <= (31/225 : Real) * _ := by
+      exact mul_le_mul_of_nonneg_left hterms (by norm_num)
+
+/-- The actual per-X weighted Fourier energy on its X-fixed grade carrier.
+Every carrier is built from actual subspaces, and the summands are
+nonnegative squared complex Fourier coefficients. -/
+def dr6F2A5XGradeEnergy {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) : Real :=
+  Finset.univ.sum (fun p : dr6F2ActualGradeGrid
+      (Module.finrank F (LinearMap.range X.transpose.mulVecLin))
+      (Module.finrank F (dr6CoordinateDualAnnihilator
+        (LinearMap.ker X.transpose.mulVecLin))) =>
+    (2 : Real)^(7*D*(p.1.1.val+p.1.2.val)) *
+      Finset.univ.sum (fun q : Prod
+        (dr6F2OuterImageCarrier (i := p.1.1.val) X)
+        (dr6F2OuterKernelCarrier (j := p.1.2.val) X) =>
+        Complex.normSq (complexFourierCoeff
+          (fun M => (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1.1 f M)^2) X)))
+
+theorem dr6_f2_a5_XGradeEnergy_nonneg {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    0 <= dr6F2A5XGradeEnergy f X := by
+  unfold dr6F2A5XGradeEnergy
+  apply Finset.sum_nonneg
+  intro p hp
+  apply mul_nonneg
+  · positivity
+  · apply Finset.sum_nonneg
+    intro q hq
+    exact Complex.normSq_nonneg _
+
+/-- Ambient actual codimension-j kernel grades for the fixed-carrier
+Parseval reindex. -/
+def dr6F2AmbientKernelGradeCarrier {n j : Nat} :=
+  {B : Submodule F (V n) // Module.finrank F (V n) - Module.finrank F B = j}
+
+def dr6F2AmbientGradePair {n d i j : Nat} :=
+  Prod (W6Grass (V d) i) (dr6F2AmbientKernelGradeCarrier (n := n) j)
+
+def dr6F2OuterGradePairPredicate {n d i j : Nat}
+    (X : BinaryMatrix n d) (q : dr6F2AmbientGradePair (n := n) (d := d) i j) : Prop :=
+  q.1.1 <= LinearMap.range X.transpose.mulVecLin /\
+    LinearMap.ker X.transpose.mulVecLin <= q.2.1
+
+/-- Each actual X-fixed product carrier is a subtype of the ambient pair
+with both X incidences retained. -/
+noncomputable def dr6F2OuterGradePairEquiv {n d i j : Nat}
+    (X : BinaryMatrix n d) :
+    Prod (dr6F2OuterImageCarrier (i := i) X)
+      (dr6F2OuterKernelCarrier (j := j) X) ≃
+    {q : dr6F2AmbientGradePair (n := n) (d := d) i j //
+      dr6F2OuterGradePairPredicate X q} := by
+  classical
+  refine {
+    toFun := fun q => ?_
+    invFun := fun q => ?_
+    left_inv := ?_
+    right_inv := ?_ }
+  · refine ⟨ (q.1.1, ?_), ?_ ⟩
+    · refine ⟨ q.2.1, ?_ ⟩
+      simpa [V] using q.2.2.2
+    · exact ⟨q.1.2, q.2.2.1⟩
+  · exact ⟨⟨q.1.1, q.2.1.1⟩, ⟨q.2.2.1, by simpa [V] using q.1.2.2⟩⟩
+  · intro q
+    apply Prod.ext
+    · apply Subtype.ext
+      rfl
+    · apply Subtype.ext
+      rfl
+  · intro q
+    apply Subtype.ext
+    apply Prod.ext <;> rfl
+
+/-- Enlarging an actual X-fixed carrier adds only nonnegative complex energy. -/
+theorem dr6_f2_a5_grade_energy_le_ambient {n d i j : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    (Finset.univ.sum (fun q : Prod
+      (dr6F2OuterImageCarrier (i := i) X)
+      (dr6F2OuterKernelCarrier (j := j) X) =>
+      Complex.normSq (complexFourierCoeff
+        (fun M => (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1.1 f M)^2) X))) <=
+    (Finset.univ.sum (fun q : dr6F2AmbientGradePair (n := n) (d := d) i j =>
+      Complex.normSq (complexFourierCoeff
+        (fun M => (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1 f M)^2) X))) := by
+  classical
+  let P := dr6F2OuterGradePairPredicate X
+  let e := dr6F2OuterGradePairEquiv X (i := i) (j := j)
+  let energy : dr6F2AmbientGradePair (n := n) (d := d) i j -> Real := fun q =>
+    Complex.normSq (complexFourierCoeff
+      (fun M => (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1 f M)^2) X)
+  have heq : (Finset.univ.sum (fun q : Prod
+      (dr6F2OuterImageCarrier (i := i) X)
+      (dr6F2OuterKernelCarrier (j := j) X) => energy (e q).1)) =
+      (Finset.univ.sum (fun q : {q : dr6F2AmbientGradePair
+        (n := n) (d := d) i j // P q} => energy q.1)) := by
+    apply Fintype.sum_equiv e
+    intro q
+    rfl
+  have hpart := Fintype.sum_subtype_add_sum_subtype P energy
+  have hnonneg : 0 <= Finset.univ.sum (fun q :
+      {q : dr6F2AmbientGradePair (n := n) (d := d) i j // ¬ P q} =>
+      energy q.1) := by
+    apply Finset.sum_nonneg
+    intro q hq
+    exact Complex.normSq_nonneg _
+  calc
+    _ = Finset.univ.sum (fun q : {q : dr6F2AmbientGradePair
+        (n := n) (d := d) i j // P q} => energy q.1) := by
+      simpa [energy, e, P, dr6F2OuterGradePairEquiv] using heq
+    _ <= (Finset.univ.sum (fun q : {q : dr6F2AmbientGradePair
+          (n := n) (d := d) i j // P q} => energy q.1)) +
+        Finset.univ.sum (fun q : {q : dr6F2AmbientGradePair
+          (n := n) (d := d) i j // ¬ P q} => energy q.1) := by linarith [hnonneg]
+    _ = Finset.univ.sum energy := by linarith [hpart]
+
+/-- Fixed ambient grade energy summed over all X is exactly the ordinary
+complex-filter fourth-moment sum, by finite Fubini and complex Parseval. -/
+theorem dr6_f2_a5_ambient_grade_energy_parseval {n d i j : Nat}
+    (f : BinaryMatrix n d -> Complex) :
+    (Finset.univ.sum (fun X : BinaryMatrix n d =>
+      Finset.univ.sum (fun q : dr6F2AmbientGradePair (n := n) (d := d) i j =>
+        Complex.normSq (complexFourierCoeff
+          (fun M => (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1 f M)^2) X)))) =
+      (Finset.univ.sum (fun q : dr6F2AmbientGradePair (n := n) (d := d) i j =>
+        uniformMean (fun M => Complex.normSq
+          (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1 f M)^2))) := by
+  classical
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro q hq
+  exact dr6_complex_filter_square_parseval q.1.1.1 q.2.1 f
+
+def dr6F2AmbientGradeSquareEnergy {n d i j : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) : Real :=
+  Finset.univ.sum (fun q : dr6F2AmbientGradePair (n := n) (d := d) i j =>
+    Complex.normSq (complexFourierCoeff
+      (fun M => (DR6ComplexOrdinaryFilter q.1.1.1 q.2.1 f M)^2) X))
+
+theorem dr6_f2_ambient_grade_square_energy_zero_of_large_grade
+    {n d D i j : Nat} (f : BinaryMatrix n d -> Complex)
+    (X : BinaryMatrix n d)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (hlarge : D < i \/ D < j) :
+    dr6F2AmbientGradeSquareEnergy f X = 0 := by
+  classical
+  unfold dr6F2AmbientGradeSquareEnergy
+  apply Finset.sum_eq_zero
+  intro q hq
+  have hAi : Module.finrank F q.1.1.1 = i := q.1.2
+  have hBj : Module.finrank F (V n ⧸ q.2.1) = j := by
+    have hcod := q.2.2
+    have hquot := Submodule.finrank_quotient_add_finrank q.2.1
+    have hV : Module.finrank F (V n) = n := by simp [V]
+    rw [hV] at hquot
+    omega
+  have hfilter := dr6_complexFilter_eq_zero_of_grade_gt_support
+      q.1.1.1 q.2.1 f hsupport (by rw [hAi, hBj]; exact hlarge)
+  rw [hfilter]
+  simp
+
+theorem dr6_f2_ambient_grade_square_energy_nonneg {n d i j : Nat}
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    0 <= dr6F2AmbientGradeSquareEnergy f X := by
+  unfold dr6F2AmbientGradeSquareEnergy
+  apply Finset.sum_nonneg
+  intro q hq
+  exact Complex.normSq_nonneg _
+
+/-- Global-in-X aggregation of the reviewed per-X actual-carrier energy step.
+The ambient-carrier enlargement and fixed-(A,B) Parseval reindex are the
+remaining step before this becomes the manuscript's global F2 estimate. -/
+theorem dr6_f2_a5_global_XGradeEnergy_bound {n d D : Nat}
+    (f : BinaryMatrix n d -> Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) (hD : 1 <= D) :
+    (Finset.univ.sum (fun X : BinaryMatrix n d =>
+      Complex.normSq (dr6F2A5SignedSquareCoefficient f X))) <=
+      (31/225 : Real) * Finset.univ.sum (fun X : BinaryMatrix n d =>
+        dr6F2A5XGradeEnergy f X) := by
+  classical
+  have hpoint (X : BinaryMatrix n d) :
+      Complex.normSq (dr6F2A5SignedSquareCoefficient f X) <=
+        (31/225 : Real) * dr6F2A5XGradeEnergy f X := by
+    by_cases hX : X.rank <= 2*D
+    · exact dr6_f2_a5_signedCoefficient_normSq_le_grade_energy
+        f X hsupport hD hX
+    · have hzero := dr6_f2_a5_signedCoefficient_zero_of_rank_gt
+        f X hsupport (by omega)
+      rw [hzero]
+      exact mul_nonneg (by norm_num)
+        (dr6_f2_a5_XGradeEnergy_nonneg f X)
+  calc
+    _ <= Finset.univ.sum (fun X : BinaryMatrix n d =>
+          (31/225 : Real) * dr6F2A5XGradeEnergy f X) := by
+      apply Finset.sum_le_sum
+      intro X hX
+      exact hpoint X
+    _ = (31/225 : Real) * Finset.univ.sum (fun X : BinaryMatrix n d =>
+          dr6F2A5XGradeEnergy f X) := by
+      rw [Finset.mul_sum]
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Incidence
