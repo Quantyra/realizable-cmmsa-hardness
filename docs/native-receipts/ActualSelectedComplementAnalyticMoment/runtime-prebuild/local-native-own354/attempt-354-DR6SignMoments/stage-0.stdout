@@ -1,0 +1,321 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:90:5: warning: Variable name `f` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _f
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:142:65: error: unsolved goals
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+P : Type := dr6ActualSupportedDirectPair f
+pred : BinaryMatrix n d × BinaryMatrix n d → Prop :=
+  fun z =>
+    (Matrix.toLin' (Matrix.transpose z.1)).range ⊓ (Matrix.toLin' (Matrix.transpose z.2)).range = ⊥ ∧
+      Matrix.rank (z.1 + z.2) = Matrix.rank z.1 + Matrix.rank z.2 ∧ Matrix.rank (z.1 + z.2) ≤ D
+weight : BinaryMatrix n d × BinaryMatrix n d → ℝ :=
+  fun z => if pred z then Complex.normSq (complexFourierCoeff f (z.1 + z.2)) else 0
+Q : Type := (Y : BinaryMatrix n d) × DR6DirectYDecomposition Y
+e : P → Q := fun p => ⟨(↑p).1 + (↑p).2, ⟨↑p, ⋯⟩⟩
+he : Function.Injective e
+hcompl : ∑ z, weight ↑z = 0
+hpartition : ∑ i, weight i = ∑ i, weight ↑i
+⊢ (∑ A,
+      ∑ C,
+        if
+            (Matrix.toLin' (Matrix.transpose A)).range ⊓ (Matrix.toLin' (Matrix.transpose C)).range = ⊥ ∧
+              Matrix.rank (A + C) = Matrix.rank A + Matrix.rank C ∧ Matrix.rank (A + C) ≤ D then
+          ‖complexFourierCoeff f (A + C)‖ ^ 2
+        else 0) =
+    ∑ x,
+      ∑ x_1,
+        if
+            (Matrix.toLin' (Matrix.transpose x)).range ⊓ (Matrix.toLin' (Matrix.transpose x_1)).range = ⊥ ∧
+              Matrix.rank (x + x_1) = Matrix.rank x + Matrix.rank x_1 ∧ Matrix.rank (x + x_1) ≤ D then
+          (complexFourierCoeff f (x + x_1)).re * (complexFourierCoeff f (x + x_1)).re +
+            (complexFourierCoeff f (x + x_1)).im * (complexFourierCoeff f (x + x_1)).im
+        else 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:149:8: error: Type mismatch: After simplification, term
+  hpartition
+ has type
+  (∑ z,
+      if
+          (Matrix.toLin' (Matrix.transpose z.1)).range ⊓ (Matrix.toLin' (Matrix.transpose z.2)).range = ⊥ ∧
+            Matrix.rank (z.1 + z.2) = Matrix.rank z.1 + Matrix.rank z.2 ∧ Matrix.rank (z.1 + z.2) ≤ D then
+        Complex.normSq (complexFourierCoeff f (z.1 + z.2))
+      else 0) =
+    ∑ x,
+      if
+          (Matrix.toLin' (Matrix.transpose (↑x).1)).range ⊓ (Matrix.toLin' (Matrix.transpose (↑x).2)).range = ⊥ ∧
+            Matrix.rank ((↑x).1 + (↑x).2) = Matrix.rank (↑x).1 + Matrix.rank (↑x).2 ∧
+              Matrix.rank ((↑x).1 + (↑x).2) ≤ D then
+        Complex.normSq (complexFourierCoeff f ((↑x).1 + (↑x).2))
+      else 0
+but is expected to have type
+  (∑ z,
+      if
+          (Matrix.toLin' (Matrix.transpose z.1)).range ⊓ (Matrix.toLin' (Matrix.transpose z.2)).range = ⊥ ∧
+            Matrix.rank (z.1 + z.2) = Matrix.rank z.1 + Matrix.rank z.2 ∧ Matrix.rank (z.1 + z.2) ≤ D then
+        Complex.normSq (complexFourierCoeff f (z.1 + z.2))
+      else 0) =
+    ∑ p, Complex.normSq (complexFourierCoeff f ((↑p).1 + (↑p).2))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:180:16: error: Tactic `apply` failed: could not unify the conclusion of `Nat.cast_le.mpr`
+  ↑?m.597 ≤ ↑?m.598
+with the goal
+  2 ^ (Matrix.rank Y * Matrix.rank Y) ≤ 2 ^ (D * D)
+
+Note: The full type of `Nat.cast_le.mpr` is
+  ?m.597 ≤ ?m.598 → ↑?m.597 ≤ ↑?m.598
+
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+P : Type := dr6ActualSupportedDirectPair f
+pred : BinaryMatrix n d × BinaryMatrix n d → Prop :=
+  fun z =>
+    (Matrix.toLin' (Matrix.transpose z.1)).range ⊓ (Matrix.toLin' (Matrix.transpose z.2)).range = ⊥ ∧
+      Matrix.rank (z.1 + z.2) = Matrix.rank z.1 + Matrix.rank z.2 ∧ Matrix.rank (z.1 + z.2) ≤ D
+weight : BinaryMatrix n d × BinaryMatrix n d → ℝ :=
+  fun z => if pred z then Complex.normSq (complexFourierCoeff f (z.1 + z.2)) else 0
+Q : Type := (Y : BinaryMatrix n d) × DR6DirectYDecomposition Y
+e : P → Q := fun p => ⟨(↑p).1 + (↑p).2, ⟨↑p, ⋯⟩⟩
+he : Function.Injective e
+hcompl : ∑ z, weight ↑z = 0
+hpartition : ∑ i, weight i = ∑ i, weight ↑i
+hmass : dr6ActualPhiCoefficientMass f = ∑ p, Complex.normSq (complexFourierCoeff f ((↑p).1 + (↑p).2))
+hembed :
+  ∑ p, Complex.normSq (complexFourierCoeff f ((↑p).1 + (↑p).2)) ≤ ∑ q, Complex.normSq (complexFourierCoeff f q.fst)
+Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+hYr : Matrix.rank Y ≤ D
+⊢ 2 ^ (Matrix.rank Y * Matrix.rank Y) ≤ 2 ^ (D * D)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:189:6: error: not a positivity goal
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:144:35: warning: This simp argument is unused:
+  dr6ActualSupportedDirectPair
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [dr6ActualPhiCoefficientMass, dr6ActualPhiRowEnergy, dr6ActualPhiCoefficient, pred, weight,
+    Fintype.sum_prod_type, Complex.normSq_apply, Complex.normSq_eq_norm_sq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:146:10: warning: This simp argument is unused:
+  Complex.normSq_eq_norm_sq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [dr6ActualPhiCoefficientMass, dr6ActualPhiRowEnergy, dr6ActualPhiCoefficient,
+    dr6ActualSupportedDirectPair, pred, weight, Fintype.sum_prod_type, Complex.normSq_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:226:8: warning: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [dr6ActualPhiCoefficientMass, pow_two, Fintype.sum_mul_sum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:252:8: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:256:8: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:378:4: error: Type mismatch
+  hYr
+has type
+  Matrix.rank (dr6ChooseF1ABC p).1 + Matrix.rank (dr6ChooseF1ABC p).2.2 = Matrix.rank (↑p).1
+but is expected to have type
+  Matrix.rank (↑p).1 = Matrix.rank (dr6ChooseF1ABC p).1 + Matrix.rank (dr6ChooseF1ABC p).2.2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:382:4: error: Type mismatch
+  hZr
+has type
+  Matrix.rank (dr6ChooseF1ABC p).2.1 + Matrix.rank (dr6ChooseF1ABC p).2.2 = Matrix.rank (↑p).2
+but is expected to have type
+  Matrix.rank (↑p).2 = Matrix.rank (dr6ChooseF1ABC p).2.1 + Matrix.rank (dr6ChooseF1ABC p).2.2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:393:12: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:398:12: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:406:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:371:59: error: unsolved goals
+case neg
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+X : BinaryMatrix n d
+hsupport : ComplexFourierSupportedThrough D f
+p : dr6ActualF1Pairs X
+hY : (↑p).1 = (dr6ChooseF1ABC p).1 + (dr6ChooseF1ABC p).2.2
+hZ : (↑p).2 = (dr6ChooseF1ABC p).2.1 + (dr6ChooseF1ABC p).2.2
+hX : X = (dr6ChooseF1ABC p).1 + (dr6ChooseF1ABC p).2.1
+hAB :
+  (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).1)).range ⊓
+      (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).2.1)).range =
+    ⊥
+hAC :
+  (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).1)).range ⊓
+      (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).2.2)).range =
+    ⊥
+hBC :
+  (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).2.1)).range ⊓
+      (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).2.2)).range =
+    ⊥
+hYr : Matrix.rank (dr6ChooseF1ABC p).1 + Matrix.rank (dr6ChooseF1ABC p).2.2 = Matrix.rank (↑p).1
+hZr : Matrix.rank (dr6ChooseF1ABC p).2.1 + Matrix.rank (dr6ChooseF1ABC p).2.2 = Matrix.rank (↑p).2
+hXr : Matrix.rank X = Matrix.rank (dr6ChooseF1ABC p).1 + Matrix.rank (dr6ChooseF1ABC p).2.1
+hYr' :
+  Matrix.rank ((dr6ChooseF1ABC p).1 + (dr6ChooseF1ABC p).2.2) =
+    Matrix.rank (dr6ChooseF1ABC p).1 + Matrix.rank (dr6ChooseF1ABC p).2.2
+hZr' :
+  Matrix.rank ((dr6ChooseF1ABC p).2.1 + (dr6ChooseF1ABC p).2.2) =
+    Matrix.rank (dr6ChooseF1ABC p).2.1 + Matrix.rank (dr6ChooseF1ABC p).2.2
+hYcut : ¬Matrix.rank (↑p).1 ≤ D
+⊢ ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖ ≤
+    dr6ActualPhiCoefficient f (dr6ChooseF1ABC p).1 (dr6ChooseF1ABC p).2.2 *
+      dr6ActualPhiCoefficient f (dr6ChooseF1ABC p).2.1 (dr6ChooseF1ABC p).2.2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:429:2: error: Tactic `rfl` failed: The left-hand side
+  ↑(And.rec
+        (fun left right =>
+          And.rec
+            (fun left right =>
+              And.rec
+                (fun left right =>
+                  And.rec
+                    (fun left_1 right =>
+                      And.rec
+                        (fun left_2 right =>
+                          And.rec
+                            (fun left_3 right =>
+                              And.rec
+                                (fun left_4 right =>
+                                  And.rec
+                                    (fun left_5 right =>
+                                      (⟨((dr6ChooseF1ABC p).1, (dr6ChooseF1ABC p).2.1), ⋯⟩, (dr6ChooseF1ABC p).2.2))
+                                    right)
+                                right)
+                            right)
+                        right)
+                    right)
+                right)
+            right)
+        ⋯).1
+is not definitionally equal to the right-hand side
+  ((dr6ChooseF1ABC p).1, (dr6ChooseF1ABC p).2.1)
+
+n d : ℕ
+X : BinaryMatrix n d
+p : dr6ActualF1Pairs X
+⊢ ↑(And.rec
+          (fun left right =>
+            And.rec
+              (fun left right =>
+                And.rec
+                  (fun left right =>
+                    And.rec
+                      (fun left_1 right =>
+                        And.rec
+                          (fun left_2 right =>
+                            And.rec
+                              (fun left_3 right =>
+                                And.rec
+                                  (fun left_4 right =>
+                                    And.rec
+                                      (fun left_5 right =>
+                                        (⟨((dr6ChooseF1ABC p).1, (dr6ChooseF1ABC p).2.1), ⋯⟩, (dr6ChooseF1ABC p).2.2))
+                                      right)
+                                  right)
+                              right)
+                          right)
+                      right)
+                  right)
+              right)
+          ⋯).1 =
+    ((dr6ChooseF1ABC p).1, (dr6ChooseF1ABC p).2.1)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:436:2: error: Tactic `rfl` failed: The left-hand side
+  (let q := dr6ChooseF1ABC p;
+    And.casesOn ⋯ fun hY right =>
+      And.casesOn right fun hZ right =>
+        And.casesOn right fun hX right =>
+          And.casesOn right fun hAB right =>
+            And.casesOn right fun hAC right =>
+              And.casesOn right fun hBC right =>
+                And.casesOn right fun hYr right => And.casesOn right fun hZr hXr => (⟨(q.1, q.2.1), ⋯⟩, q.2.2)).2
+is not definitionally equal to the right-hand side
+  (dr6ChooseF1ABC p).2.2
+
+n d : ℕ
+X : BinaryMatrix n d
+p : dr6ActualF1Pairs X
+⊢ (let q := dr6ChooseF1ABC p;
+      And.casesOn ⋯ fun hY right =>
+        And.casesOn right fun hZ right =>
+          And.casesOn right fun hX right =>
+            And.casesOn right fun hAB right =>
+              And.casesOn right fun hAC right =>
+                And.casesOn right fun hBC right =>
+                  And.casesOn right fun hYr right => And.casesOn right fun hZr hXr => (⟨(q.1, q.2.1), ⋯⟩, q.2.2)).2 =
+    (dr6ChooseF1ABC p).2.2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:448:22: error: Application type mismatch: The argument
+  hOuter
+has type
+  ((dr6ChooseF1ABC p).1, (dr6ChooseF1ABC p).2.1) = ((dr6ChooseF1ABC q).1, (dr6ChooseF1ABC q).2.1)
+but is expected to have type
+  dr6ChooseF1ABC p = dr6ChooseF1ABC q
+in the application
+  congrArg Prod.fst hOuter
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:479:15: error: don't know how to synthesize implicit argument `s`
+  @Finset.sum_le_sum_of_injOn (dr6ActualF1Pairs X) (DR6DirectYDecomposition X × BinaryMatrix n d) ℝ
+    Real.instAddCommMonoid Real.instPreorder w (fun a b => instDecidableEqProd a b) IsOrderedAddMonoid.toAddLeftMono g
+    ?m.147 Finset.univ e (fun ⦃p⦄ => ?m.155) (fun ⦃q⦄ => ?m.170) (fun p => ?m.176) fun q => ?m.180
+context:
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+X : BinaryMatrix n d
+hsupport : ComplexFourierSupportedThrough D f
+e : dr6ActualF1Pairs X → DR6DirectYDecomposition X × BinaryMatrix n d := ⋯
+w : dr6ActualF1Pairs X → ℝ := ⋯
+g : DR6DirectYDecomposition X × BinaryMatrix n d → ℝ := ⋯
+hcharge : ∀ (p : dr6ActualF1Pairs X), w p ≤ g (e p)
+⊢ Finset (dr6ActualF1Pairs X)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:479:7: error: failed to infer `have` declaration type
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:463:55: error: unsolved goals
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+X : BinaryMatrix n d
+hsupport : ComplexFourierSupportedThrough D f
+e : dr6ActualF1Pairs X → DR6DirectYDecomposition X × BinaryMatrix n d := dr6F1PairToOuterCommon
+w : dr6ActualF1Pairs X → ℝ := fun p => ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖
+g : DR6DirectYDecomposition X × BinaryMatrix n d → ℝ :=
+  fun q => dr6ActualPhiCoefficient f (↑q.1).1 q.2 * dr6ActualPhiCoefficient f (↑q.1).2 q.2
+hcharge : ∀ (p : dr6ActualF1Pairs X), w p ≤ g (e p)
+⊢ ∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖ ≤ ∑ q, dr6ActualPhiGram f (↑q).1 (↑q).2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:645:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x, ∑ y, ?f ⟨x, y⟩
+in the target expression
+  ∑ X, ∑ p, H X p ^ 2 ≤ ∑ q, dr6ActualPhiGram f q.1 q.2 ^ 2
+
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+H : (X : BinaryMatrix n d) → DR6DirectYDecomposition X → ℝ := fun X p => dr6ActualPhiGram f (↑p).1 (↑p).2
+hpoint :
+  ∀ (X : BinaryMatrix n d),
+    (∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖) ^ 2 ≤ 2 ^ (4 * D * D) * ∑ p, H X p ^ 2
+hsumPoint :
+  ∑ X, (∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖) ^ 2 ≤
+    2 ^ (4 * D * D) * ∑ X, ∑ p, H X p ^ 2
+Q : Type := (X : BinaryMatrix n d) × DR6DirectYDecomposition X
+e : Q → BinaryMatrix n d × BinaryMatrix n d := fun q => ↑q.snd
+he : Function.Injective e
+⊢ ∑ X, ∑ p, H X p ^ 2 ≤ ∑ q, dr6ActualPhiGram f q.1 q.2 ^ 2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:664:56: error: unsolved goals
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+H : (X : BinaryMatrix n d) → DR6DirectYDecomposition X → ℝ := fun X p => dr6ActualPhiGram f (↑p).1 (↑p).2
+hpoint :
+  ∀ (X : BinaryMatrix n d),
+    (∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖) ^ 2 ≤ 2 ^ (4 * D * D) * ∑ p, H X p ^ 2
+hsumPoint :
+  ∑ X, (∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖) ^ 2 ≤
+    2 ^ (4 * D * D) * ∑ X, ∑ p, H X p ^ 2
+Q : Type := (X : BinaryMatrix n d) × DR6DirectYDecomposition X
+e : Q → BinaryMatrix n d × BinaryMatrix n d := fun q => ↑q.snd
+he : Function.Injective e
+haggregate : ∑ X, ∑ p, H X p ^ 2 ≤ ∑ q, dr6ActualPhiGram f q.1 q.2 ^ 2
+⊢ 2 ^ (4 * D * D) * ∑ q, dr6ActualPhiGram f q.1 q.2 ^ 2 ≤ 2 ^ (4 * D * D) * dr6ActualPhiCoefficientMass f ^ 2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own354\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:698:12: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
