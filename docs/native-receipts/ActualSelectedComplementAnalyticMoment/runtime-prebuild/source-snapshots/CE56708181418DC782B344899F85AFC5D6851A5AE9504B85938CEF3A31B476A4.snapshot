@@ -1,0 +1,242 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+
+/-!
+Actual subspace-lattice Möbius indicator for DR6.
+
+The intended incidence argument is on the actual type `W6Grass E k`.  For a
+fixed hyperplane H in a t-dimensional binary space, k-subspaces contained in
+H contribute the (t-1,k) term.  Every k-subspace not contained in H meets H
+in a (k-1)-subspace W; after choosing e outside H, it is uniquely
+W + span(e+h) for h in H/W.  There are 2^(t-k) such lifts.  This is the
+hyperplane/lifts interpretation of the recurrence below.  The bridge to the
+stored A7 Gaussian is through `w6_card_grass`, which counts these actual
+subspaces by the existing frame-product quotient.
+
+This is only the actual-count recurrence and its Möbius indicator.  It does
+not prove the signed A5 incidence reindexing or the F2/DR6 estimate.
+-/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+
+private abbrev V (n : Nat) := Fin n → F
+
+def dr6ActualGaussian (n k : Nat) : Nat :=
+  Fintype.card (W6Grass (V n) k)
+
+theorem dr6_actual_gaussian_eq_w6 (n k : Nat) :
+    dr6ActualGaussian n k = w6Gaussian n k := by
+  exact w6_card_grass k
+
+theorem dr6_actual_gaussian_zero_dim : dr6ActualGaussian 0 0 = 1 := by
+  rw [dr6_actual_gaussian_eq_w6]
+  norm_num [w6Gaussian, w6FrameProduct]
+
+theorem dr6_actual_gaussian_out_of_range {n k : Nat} (hnk : n < k) :
+    dr6ActualGaussian n k = 0 := by
+  rw [dr6_actual_gaussian_eq_w6]
+  simp [w6Gaussian, Nat.not_le_of_gt hnk]
+
+theorem dr6_actual_gaussian_zero_rank (n : Nat) :
+    dr6ActualGaussian n 0 = 1 := by
+  rw [dr6_actual_gaussian_eq_w6]
+  simp [w6Gaussian, w6FrameProduct]
+
+theorem dr6_actual_gaussian_full_rank (n : Nat) :
+    dr6ActualGaussian n n = 1 := by
+  rw [dr6_actual_gaussian_eq_w6]
+  simp [w6Gaussian, w6FrameProduct]
+
+def dr6QFactorial (n : Nat) : Nat :=
+  ∏ i ∈ Finset.range n, (2^(i+1) - 1)
+
+def dr6GaussianRat (n k : Nat) : Rat :=
+  (dr6QFactorial n : Rat) /
+    ((dr6QFactorial k : Rat) * dr6QFactorial (n-k))
+
+/-- The numerator tail in the frame-product formula for an actual Gaussian
+coefficient. -/
+def dr6FrameTail (n k : Nat) : Nat :=
+  ∏ i ∈ Finset.range k, (2^(n-i) - 1)
+
+private theorem dr6_frame_factor {n k : Nat} (hkn : k ≤ n) (i : Nat)
+    (hi : i < k) :
+    2^n - 2^i = 2^i * (2^(n-i)-1) := by
+  have hin : i ≤ n := Nat.le_trans (Nat.le_of_lt hi) hkn
+  have hpow : 2^n = 2^i * 2^(n-i) := by
+    rw [← Nat.pow_add]
+    congr 1
+    omega
+  calc
+    2^n - 2^i = 2^i * 2^(n-i) - 2^i := by rw [hpow]
+    _ = 2^i * (2^(n-i)-1) := by
+      rw [← Nat.mul_sub_left_distrib]
+      simp
+
+theorem dr6_frame_product_factor (n k : Nat) (hkn : k ≤ n) :
+    w6FrameProduct n k =
+      2^(k*(k-1)/2) * dr6FrameTail n k := by
+  unfold w6FrameProduct dr6FrameTail
+  rw [Fin.prod_univ_eq_prod_range]
+  calc
+    (∏ i ∈ Finset.range k, (2^n - 2^i)) =
+        ∏ i ∈ Finset.range k, (2^i * (2^(n-i)-1)) := by
+      apply Finset.prod_congr rfl
+      intro i hi
+      exact dr6_frame_factor hkn i hi
+    _ = (∏ i ∈ Finset.range k, 2^i) *
+          (∏ i ∈ Finset.range k, (2^(n-i)-1)) := by
+      rw [Finset.prod_mul_distrib]
+    _ = 2^(k*(k-1)/2) * dr6FrameTail n k := by
+      rw [Finset.prod_pow_eq_pow_sum]
+      simp [dr6FrameTail, Finset.sum_range_id]
+
+theorem dr6QFactorial_pos (n : Nat) : 0 < dr6QFactorial n := by
+  unfold dr6QFactorial
+  apply Finset.prod_pos
+  intro i hi
+  have hi' : i < n := Finset.mem_range.mp hi
+  have hp : 0 < 2^(i+1) := by positivity
+  omega
+
+theorem dr6QFactorial_succ (n : Nat) :
+    dr6QFactorial (n+1) = dr6QFactorial n * (2^(n+1)-1) := by
+  unfold dr6QFactorial
+  rw [Finset.prod_range_succ]
+  simp [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+
+@[simp] theorem dr6QFactorial_zero : dr6QFactorial 0 = 1 := by
+  simp [dr6QFactorial]
+
+theorem dr6_qfactorial_tail (n k : Nat) (hkn : k ≤ n) :
+    dr6QFactorial n = dr6QFactorial (n-k) * dr6FrameTail n k := by
+  induction k with
+  | zero => simp [dr6QFactorial, dr6FrameTail]
+  | succ k ih =>
+      have hk : k ≤ n := by omega
+      have hstep : dr6FrameTail n (k+1) =
+          dr6FrameTail n k * (2^(n-k)-1) := by
+        unfold dr6FrameTail
+        rw [Finset.prod_range_succ]
+        ring_nf
+      have hfact : dr6QFactorial (n-k) =
+          dr6QFactorial (n-(k+1)) * (2^(n-k)-1) := by
+        have hp := dr6QFactorial_succ (n-(k+1))
+        have hsub : n-(k+1)+1 = n-k := by omega
+        simpa [hsub] using hp
+      calc
+        dr6QFactorial n = dr6QFactorial (n-k) * dr6FrameTail n k := ih hk
+        _ = dr6QFactorial (n-(k+1)) *
+              (2^(n-k)-1) * dr6FrameTail n k := by rw [hfact]
+        _ = dr6QFactorial (n-(k+1)) *
+              (dr6FrameTail n k * (2^(n-k)-1)) := by ring
+        _ = dr6QFactorial (n-(k+1)) * dr6FrameTail n (k+1) := by
+          rw [← hstep]
+
+theorem dr6_actual_count_qfactorial_mul (n k : Nat) (hkn : k ≤ n) :
+    dr6ActualGaussian n k * dr6QFactorial k = dr6FrameTail n k := by
+  have hgrass := w6_card_grass_mul (E := V n) k hkn
+  rw [← dr6_actual_gaussian_eq_w6] at hgrass
+  rw [dr6_frame_product_factor n k hkn,
+    dr6_frame_product_factor k k le_rfl] at hgrass
+  have htailkk : dr6FrameTail k k = dr6QFactorial k := by
+    have h := dr6_qfactorial_tail k k le_rfl
+    simpa using h.symm
+  rw [htailkk] at hgrass
+  have hpow : 0 < 2^(k*(k-1)/2) := by positivity
+  have hmul : 2^(k*(k-1)/2) *
+      (dr6ActualGaussian n k * dr6QFactorial k) =
+      2^(k*(k-1)/2) * dr6FrameTail n k := by
+    simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hgrass
+  exact Nat.mul_left_cancel hmul
+
+theorem dr6_actual_count_eq_gaussianRat (n k : Nat) (hkn : k ≤ n) :
+    (dr6ActualGaussian n k : Rat) = dr6GaussianRat n k := by
+  have htail := dr6_qfactorial_tail n k hkn
+  have hcount := dr6_actual_count_qfactorial_mul n k hkn
+  have hnum : dr6QFactorial n =
+      dr6QFactorial k * dr6QFactorial (n-k) * dr6ActualGaussian n k := by
+    calc
+      dr6QFactorial n = dr6QFactorial (n-k) * dr6FrameTail n k := htail
+      _ = dr6QFactorial (n-k) *
+          (dr6ActualGaussian n k * dr6QFactorial k) := by rw [← hcount]
+      _ = dr6QFactorial k * dr6QFactorial (n-k) * dr6ActualGaussian n k := by
+        ring
+  unfold dr6GaussianRat
+  have hden : ((dr6QFactorial k : Rat) * dr6QFactorial (n-k)) ≠ 0 := by
+    positivity
+  apply (div_eq_iff hden).2
+  push_cast
+  rw [hnum]
+  ring
+
+def dr6MobiusAlpha (k : Nat) : Int :=
+  if k = 0 then 0 else (-1)^(k+1) * 2^(k*(k-1)/2)
+
+def dr6QBinomialWeight (k : Nat) : Rat :=
+  (-1 : Rat)^k * 2^(k*(k-1)/2)
+
+def dr6QBinomialAlternatingSum (n : Nat) : Rat :=
+  ∑ k ∈ Finset.range (n+1), dr6GaussianRat n k * dr6QBinomialWeight k
+
+theorem dr6GaussianRat_zero_right (n : Nat) : dr6GaussianRat n 0 = 1 := by
+  simp [dr6GaussianRat, dr6QFactorial_zero]
+
+theorem dr6GaussianRat_self (n : Nat) : dr6GaussianRat n n = 1 := by
+  simp [dr6GaussianRat, dr6QFactorial_zero]
+
+theorem dr6MobiusAlpha_one : dr6MobiusAlpha 1 = 1 := by
+  norm_num [dr6MobiusAlpha]
+
+theorem dr6GaussianRat_recurrence {n k : Nat}
+    (hk : 0 < k) (hkn : k < n) :
+    dr6GaussianRat n k = dr6GaussianRat (n-1) k +
+      (2^(n-k) : Rat) * dr6GaussianRat (n-1) (k-1) := by
+  have hn : 0 < n := by omega
+  have hm : 0 < n-k := by omega
+  have hklt : k-1 < n-1 := by omega
+  have hnk : n = (n-k)+k := by omega
+  have hpow : (2 : Rat)^(n-k) * (2 : Rat)^k = (2 : Rat)^n := by
+    rw [← pow_add, Nat.add_comm, hnk]
+  have hqfactN : dr6QFactorial n =
+      dr6QFactorial (n-1) * (2^n-1) := by
+    simpa [Nat.sub_add_cancel hn] using dr6QFactorial_succ (n-1)
+  have hqfactM : dr6QFactorial (n-k) =
+      dr6QFactorial (n-k-1) * (2^(n-k)-1) := by
+    simpa [Nat.sub_add_cancel hm] using dr6QFactorial_succ (n-k-1)
+  have hqfactK : dr6QFactorial k =
+      dr6QFactorial (k-1) * (2^k-1) := by
+    simpa [Nat.sub_add_cancel hk] using dr6QFactorial_succ (k-1)
+  have hNpos := dr6QFactorial_pos n
+  have hMpos := dr6QFactorial_pos (n-k)
+  have hKpos := dr6QFactorial_pos k
+  have hM1pos := dr6QFactorial_pos (n-k-1)
+  have hK1pos := dr6QFactorial_pos (k-1)
+  unfold dr6GaussianRat
+  rw [hqfactN, hqfactM, hqfactK]
+  push_cast
+  field_simp
+  rw [hpow]
+  ring
+
+theorem dr6_actual_gaussian_recurrence {n k : Nat}
+    (hk : 0 < k) (hkn : k < n) :
+    dr6ActualGaussian n k = dr6ActualGaussian (n-1) k +
+      2^(n-k) * dr6ActualGaussian (n-1) (k-1) := by
+  have h0 := dr6_actual_count_eq_gaussianRat n k (by omega)
+  have h1 := dr6_actual_count_eq_gaussianRat (n-1) k (by omega)
+  have h2 := dr6_actual_count_eq_gaussianRat (n-1) (k-1) (by omega)
+  have hrec := dr6GaussianRat_recurrence hk hkn
+  rw [← h0, ← h1, ← h2] at hrec
+  exact_mod_cast hrec
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius
