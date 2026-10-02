@@ -209,7 +209,7 @@ theorem w6_precedes_restriction_surjectivity {n d : Nat}
   constructor
   · intro a
     change ∃ v : LinearMap.ker g, f (v : W n) = a
-    rcases a.property with ⟨w, rfl⟩
+    rcases a.property with ⟨w, hw⟩
     have hy : f w ∈ LinearMap.range Y.transpose.toLin' := by
       rw [hrange]
       exact Submodule.mem_sup_left ⟨w, rfl⟩
@@ -230,8 +230,10 @@ theorem w6_precedes_restriction_surjectivity {n d : Nat}
       exact (LinearMap.range g).neg_mem (LinearMap.mem_range_self g v)
     have hzero : -g v = 0 := by
       have hmem : -g v ∈ (LinearMap.range f ⊓ LinearMap.range g) := by
-        rw [← hdelta]
-        exact ⟨hdeltaF, hdeltaG⟩
+        constructor
+        · rw [← hdelta]
+          exact hdeltaF
+        · exact hdeltaG
       rw [hint] at hmem
       simpa using hmem
     have hgv : g v = 0 := by simpa using hzero
@@ -240,10 +242,10 @@ theorem w6_precedes_restriction_surjectivity {n d : Nat}
         f v = f v + g v := by simp [hgv]
         _ = f w := htarget
     refine ⟨⟨v, hgv⟩, ?_⟩
-    exact hfv
+    exact hfv.trans hw
   · intro b
     change ∃ v : LinearMap.ker f, g (v : W n) = b
-    rcases b.property with ⟨w, rfl⟩
+    rcases b.property with ⟨w, hw⟩
     have hy : g w ∈ LinearMap.range Y.transpose.toLin' := by
       rw [hrange]
       exact Submodule.mem_sup_right ⟨w, rfl⟩
@@ -262,8 +264,10 @@ theorem w6_precedes_restriction_surjectivity {n d : Nat}
       exact LinearMap.mem_range_self g (w - v)
     have hzero : f v = 0 := by
       have hmem : f v ∈ (LinearMap.range f ⊓ LinearMap.range g) := by
-        rw [hdelta]
-        exact ⟨LinearMap.mem_range_self f v, hdeltaG⟩
+        constructor
+        · exact LinearMap.mem_range_self f v
+        · rw [hdelta]
+          exact hdeltaG
       rw [hint] at hmem
       simpa using hmem
     have hgv : g v = g w := by
@@ -271,7 +275,7 @@ theorem w6_precedes_restriction_surjectivity {n d : Nat}
         g v = f v + g v := by simp [hzero]
         _ = g w := htarget
     refine ⟨⟨v, hzero⟩, ?_⟩
-    exact hgv
+    exact hgv.trans hw
 
 /-- The manuscript predecessor relation is invariant under independent
 invertible changes of coordinates on the output and input spaces.  This is
@@ -1418,6 +1422,65 @@ private noncomputable instance w6ActualPredecessorFrequencyFiberFintype
   unfold w6ActualPredecessorFrequencyFiber
   exact Fintype.ofFinite _
 
+/-- The matrix of a fixed actual carrier frequency in the fixed `X`-chosen
+kernel and quotient bases. -/
+def w6ActualCarrierFrequencyCoordinateMatrix {n d m s : Nat}
+    (X : BinaryMatrix n d)
+    (bB : Module.Basis (Fin m) F (LinearMap.ker X.transpose.toLin'))
+    (bQ : Module.Basis (Fin s) F
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin')) :
+    Matrix (Fin s) (Fin m) F :=
+  LinearMap.toMatrix'
+    (bQ.equivFun.toLinearMap.comp
+      (Z.comp bB.equivFun.symm.toLinearMap))
+
+/-- The coordinate matrix of an actual frequency has the same rank as the
+frequency itself, since the chosen kernel and quotient bases are isomorphisms. -/
+theorem w6_actual_carrier_frequency_coordinate_matrix_rank
+    {n d m s : Nat} (X : BinaryMatrix n d)
+    (bB : Module.Basis (Fin m) F (LinearMap.ker X.transpose.toLin'))
+    (bQ : Module.Basis (Fin s) F
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin')) :
+    (w6ActualCarrierFrequencyCoordinateMatrix X bB bQ Z).rank =
+      Module.finrank F (LinearMap.range Z) := by
+  classical
+  let L := bQ.equivFun.toLinearMap.comp
+    (Z.comp bB.equivFun.symm.toLinearMap)
+  let z := w6ActualCarrierFrequencyCoordinateMatrix X bB bQ Z
+  have hrange : LinearMap.range L =
+      (LinearMap.range Z).map bQ.equivFun.toLinearMap := by
+    ext y
+    constructor
+    · rintro ⟨x, rfl⟩
+      apply Submodule.mem_map.mpr
+      refine ⟨Z (bB.equivFun.symm x), ⟨bB.equivFun.symm x, rfl⟩, rfl⟩
+    · intro hy
+      rcases Submodule.mem_map.mp hy with ⟨q, hq, hqy⟩
+      rcases hq with ⟨v, rfl⟩
+      refine ⟨bB.equivFun v, ?_⟩
+      change bQ.equivFun (Z (bB.equivFun.symm (bB.equivFun v))) = y
+      rw [bB.equivFun.symm_apply_apply]
+      exact hqy
+  have hdim : Module.finrank F (LinearMap.range L) =
+      Module.finrank F (LinearMap.range Z) := by
+    rw [hrange]
+    exact bQ.equivFun.finrank_map_eq (LinearMap.range Z)
+  have hmatrix : z.rank = Module.finrank F (LinearMap.range L) := by
+    have h := Matrix.rank_eq_finrank_range_toLin z
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    have hlin : z.toLin' = L := by
+      dsimp [z, w6ActualCarrierFrequencyCoordinateMatrix, L]
+      rw [Matrix.toLin'_toMatrix']
+    calc
+      z.rank = Module.finrank F (LinearMap.range z.toLin') := h
+      _ = Module.finrank F (LinearMap.range L) := by rw [hlin]
+  exact hmatrix.trans hdim
+
 /-- Split the actual domain of `Xᵀ` into its image coordinates and its kernel.
 This is the domain half of the ambient carrier-frequency coordinate change. -/
 theorem w6_actual_transpose_domain_image_kernel_equiv {n d : Nat}
@@ -1911,5 +1974,644 @@ theorem w6_actual_fixed_x_bottom_coordinate_identity {n d : Nat}
   exact (congrArg Prod.snd happ).trans (hY Y b)
 
 
+/-- Under the original rank-additive predecessor relation, the actual
+quotient carrier map has exactly the rank of `Y-X`.  Quotienting loses no
+part of the `(Y-X)ᵀ` image because the two transpose images are disjoint, and
+restriction-surjectivity recovers that full image from `ker Xᵀ`. -/
+theorem w6_precedes_actual_carrier_frequency_rank {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    Module.finrank F
+        (LinearMap.range (w6ActualCarrierFrequency X Y)) = (Y - X).rank := by
+  let f := w6ActualCarrierFrequency X Y
+  let g := (Y - X).transpose.toLin'.comp
+    (LinearMap.ker X.transpose.toLin').subtype
+  let R := (Y - X).transpose.toLin'
+  let A := LinearMap.range X.transpose.toLin'
+  obtain ⟨_, hint⟩ := w6_precedes_transpose_range_decomposition X Y hXY
+  have hsum : Y.transpose.toLin' = X.transpose.toLin' + R := by
+    have hmatrix : Y.transpose = X.transpose + (Y - X).transpose := by
+      ext i j
+      simp
+    rw [hmatrix]
+    exact map_add (Matrix.toLin') X.transpose (Y - X).transpose
+  have hfg : f = A.mkQ.comp g := by
+    ext v
+    change A.mkQ (Y.transpose.toLin' (v : W n)) =
+      A.mkQ (R (v : W n))
+    have hv : X.transpose.toLin' (v : W n) = 0 := v.property
+    calc
+      A.mkQ (Y.transpose.toLin' (v : W n)) =
+          A.mkQ (X.transpose.toLin' (v : W n) + R (v : W n)) := by
+            rw [hsum, LinearMap.add_apply]
+      _ = A.mkQ (R (v : W n)) := by rw [hv]; simp
+  have hker : LinearMap.ker f = LinearMap.ker g := by
+    ext v
+    constructor
+    · intro hv
+      have hfgv := congrArg (fun L : _ →ₗ[F] _ => L v) hfg
+      have hv0 : f v = 0 := LinearMap.mem_ker.mp hv
+      have hq : A.mkQ (g v) = 0 := by
+        rw [hfgv] at hv0
+        exact hv0
+      have hX : g v ∈ LinearMap.range X.transpose.toLin' := by
+        have hmem : g v ∈ LinearMap.ker A.mkQ := LinearMap.mem_ker.mpr hq
+        simpa [A, Submodule.ker_mkQ] using hmem
+      have hR : g v ∈ LinearMap.range R := LinearMap.mem_range_self R (v : W n)
+      have hz : g v ∈ LinearMap.range X.transpose.toLin' ⊓ LinearMap.range R := ⟨hX, hR⟩
+      rw [hint] at hz
+      have hz0 : g v = 0 := by simpa using hz
+      exact LinearMap.mem_ker.mpr hz0
+    · intro hv
+      have hv0 : g v = 0 := LinearMap.mem_ker.mp hv
+      apply LinearMap.mem_ker.mpr
+      change f v = 0
+      rw [hfg]
+      simp [LinearMap.comp_apply, hv0]
+  have hrestriction := (w6_precedes_restriction_surjectivity X Y hXY).2
+  have hgrange : LinearMap.range g = LinearMap.range R := by
+    ext z
+    constructor
+    · intro hz
+      rcases LinearMap.mem_range.mp hz with ⟨v, hv⟩
+      rw [← hv]
+      exact LinearMap.mem_range_self R (v : W n)
+    · intro hz
+      rcases LinearMap.mem_range.mp hz with ⟨w, hw⟩
+      obtain ⟨v, hv⟩ := hrestriction ⟨R w, ⟨w, rfl⟩⟩
+      refine LinearMap.mem_range.mpr ⟨v, ?_⟩
+      change R (v : W n) = z
+      calc
+        R (v : W n) = R w := hv
+        _ = z := hw
+  have hdimF := f.finrank_range_add_finrank_ker
+  have hdimG : Module.finrank F (LinearMap.range g) +
+      Module.finrank F (LinearMap.ker g) =
+        Module.finrank F (LinearMap.ker X.transpose.toLin') := by
+    change Module.finrank F (LinearMap.range g) +
+      Module.finrank F (LinearMap.ker g) =
+        Module.finrank F (LinearMap.ker X.transpose.toLin')
+    exact g.finrank_range_add_finrank_ker
+  have hdimFG : Module.finrank F (LinearMap.range f) =
+      Module.finrank F (LinearMap.range g) := by
+    rw [hker] at hdimF
+    omega
+  have hdimR : Module.finrank F (LinearMap.range R) = (Y - X).rank := by
+    have h := Matrix.rank_eq_finrank_range_toLin (Y - X).transpose
+      (Pi.basisFun F _) (Pi.basisFun F _)
+    rw [Matrix.toLin_eq_toLin'] at h
+    exact h.symm.trans (Matrix.rank_transpose (Y - X))
+  calc
+    Module.finrank F (LinearMap.range f) = Module.finrank F (LinearMap.range g) := hdimFG
+    _ = Module.finrank F (LinearMap.range R) := by rw [hgrange]
+    _ = (Y - X).rank := hdimR
+
+/-- The original ambient predecessor condition yields the A3 graph form in
+the fixed coordinates chosen from `X`. The lower-right block is the actual
+quotient carrier map, whose rank is derived from `hXY`; it is then factored
+through its rank and the fixed-block graph argument recovers both parameters.
+-/
+theorem w6_actual_predecessor_graph_factorization {n d : Nat}
+    (X : BinaryMatrix n d) :
+    ∃ (C : Submodule F (W n))
+      (hBC : IsCompl (LinearMap.ker X.transpose.toLin') C)
+      (D : Submodule F (V d))
+      (hAD : IsCompl (LinearMap.range X.transpose.toLin') D)
+      (bA : Module.Basis (Fin X.rank) F (LinearMap.range X.transpose.toLin'))
+      (bB : Module.Basis (Fin (n - X.rank)) F (LinearMap.ker X.transpose.toLin'))
+      (bQ : Module.Basis (Fin (d - X.rank)) F
+        (V d ⧸ LinearMap.range X.transpose.toLin'))
+      (eW : W n ≃ₗ[F] ((Fin X.rank → F) × (Fin (n - X.rank) → F)))
+      (eV : V d ≃ₗ[F] ((Fin X.rank → F) × (Fin (d - X.rank) → F))),
+      (∀ a b, eV (X.transpose.toLin' (eW.symm (a, b))) = (a, 0)) ∧
+      (∀ (Y' : BinaryMatrix n d) (b : Fin (n - X.rank) → F),
+        (let eIn := LinearEquiv.sumArrowLequivProdArrow
+          (Fin X.rank) (Fin (n - X.rank)) F F
+        let eOut := LinearEquiv.sumArrowLequivProdArrow
+          (Fin X.rank) (Fin (d - X.rank)) F F
+        (eOut ((w6ActualFiniteCoordinateMatrix eW eV Y').mulVecLin
+          (eIn.symm (0, b)))).2 =
+          bQ.equivFun
+            (w6ActualCarrierFrequency X Y' (bB.equivFun.symm b)))) ∧
+      ∀ (Y : BinaryMatrix n d), w6Precedes X Y →
+        ∃ (j : Matrix (Fin (d - X.rank)) (Fin (Y - X).rank) F)
+          (p : Matrix (Fin (Y - X).rank) (Fin (n - X.rank)) F)
+          (u : Matrix (Fin X.rank) (Fin (Y - X).rank) F)
+          (c : Matrix (Fin (Y - X).rank) (Fin X.rank) F),
+          Function.Injective (Matrix.mulVecLin j) ∧
+          Function.Surjective (Matrix.mulVecLin p) ∧
+          w6ActualFiniteCoordinateMatrix eW eV Y =
+            w6CanonicalBlockCandidate u c j p := by
+  classical
+  obtain ⟨C, hBC, D, hAD, bA, bB, bQ, eW, eV, hX, hY⟩ :=
+    w6_actual_fixed_x_finite_block_identities X
+  have hYcoord : ∀ (Y' : BinaryMatrix n d) (b : Fin (n - X.rank) → F),
+      (let eIn := LinearEquiv.sumArrowLequivProdArrow
+        (Fin X.rank) (Fin (n - X.rank)) F F
+      let eOut := LinearEquiv.sumArrowLequivProdArrow
+        (Fin X.rank) (Fin (d - X.rank)) F F
+      (eOut ((w6ActualFiniteCoordinateMatrix eW eV Y').mulVecLin
+        (eIn.symm (0, b)))).2 =
+        bQ.equivFun (w6ActualCarrierFrequency X Y' (bB.equivFun.symm b))) := by
+    intro Y' b
+    let eIn := LinearEquiv.sumArrowLequivProdArrow
+      (Fin X.rank) (Fin (n - X.rank)) F F
+    let eOut := LinearEquiv.sumArrowLequivProdArrow
+      (Fin X.rank) (Fin (d - X.rank)) F F
+    have happ := w6_actual_finite_coordinate_matrix_apply eW eV Y' 0 b
+    exact (congrArg Prod.snd happ).trans (hY Y' b)
+  refine ⟨C, hBC, D, hAD, bA, bB, bQ, eW, eV, hX, hYcoord, ?_⟩
+  intro Y hXY
+  let M := w6ActualFiniteCoordinateMatrix eW eV Y
+  let a := M.toBlocks₁₁
+  let b := M.toBlocks₁₂
+  let c := M.toBlocks₂₁
+  let z := M.toBlocks₂₂
+  have hM : M = Matrix.fromBlocks a b c z :=
+    (Matrix.fromBlocks_toBlocks M).symm
+  have hbase : w6ActualFiniteCoordinateMatrix eW eV X =
+      Matrix.fromBlocks (1 : Matrix (Fin X.rank) (Fin X.rank) F) 0 0 0 :=
+    w6_actual_finite_coordinate_matrix_X X eW eV hX
+  have hcoorddiff : w6ActualFiniteCoordinateMatrix eW eV (Y - X) =
+      M - w6ActualFiniteCoordinateMatrix eW eV X := by
+    let E := w6ActualFiniteCoordinateLinearEquiv eW eV
+    calc
+      w6ActualFiniteCoordinateMatrix eW eV (Y - X) = E ((Y - X).transpose) :=
+        w6_actual_finite_coordinate_matrix_eq_equiv eW eV (Y - X)
+      _ = E (Y.transpose - X.transpose) := by simp
+      _ = E Y.transpose - E X.transpose := map_sub E Y.transpose X.transpose
+      _ = M - w6ActualFiniteCoordinateMatrix eW eV X := by
+        rw [← w6_actual_finite_coordinate_matrix_eq_equiv eW eV Y,
+          ← w6_actual_finite_coordinate_matrix_eq_equiv eW eV X]
+  have hdisp : w6BlockDisplacementMatrix a b c z =
+      M - w6ActualFiniteCoordinateMatrix eW eV X := by
+    change Matrix.fromBlocks (a - 1) b c z = _
+    rw [hM, hbase]
+    simp only [sub_eq_add_neg, Matrix.fromBlocks_neg, Matrix.fromBlocks_add]
+    apply Matrix.fromBlocks_inj.mpr
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · abel
+    · simp
+    · simp
+    · simp
+  have hD : (w6BlockDisplacementMatrix a b c z).rank = (Y - X).rank := by
+    calc
+      (w6BlockDisplacementMatrix a b c z).rank =
+          (M - w6ActualFiniteCoordinateMatrix eW eV X).rank :=
+        congrArg Matrix.rank hdisp
+      _ = (w6ActualFiniteCoordinateMatrix eW eV (Y - X)).rank := by
+        rw [← hcoorddiff]
+      _ = (Y - X).rank := w6_actual_finite_coordinate_matrix_rank eW eV (Y - X)
+  have hzapply (x : Fin (n - X.rank) → F) :
+      (Matrix.mulVecLin z) x =
+        bQ.equivFun
+          (w6ActualCarrierFrequency X Y (bB.equivFun.symm x)) := by
+    let eIn := LinearEquiv.sumArrowLequivProdArrow
+      (Fin X.rank) (Fin (n - X.rank)) F F
+    let eOut := LinearEquiv.sumArrowLequivProdArrow
+      (Fin X.rank) (Fin (d - X.rank)) F F
+    have hinl : eIn.symm (0, x) ∘ Sum.inl = 0 := by
+      funext i
+      simp [eIn, LinearEquiv.sumArrowLequivProdArrow_symm_apply_inl]
+    have hinr : eIn.symm (0, x) ∘ Sum.inr = x := by
+      funext i
+      simp [eIn, LinearEquiv.sumArrowLequivProdArrow_symm_apply_inr]
+    have hbotFun :
+        (M.mulVecLin (eIn.symm (0, x))) ∘ Sum.inr = Matrix.mulVecLin z x := by
+      funext y
+      change Matrix.mulVec M (eIn.symm (0, x)) (Sum.inr y) =
+        Matrix.mulVec z x y
+      rw [hM]
+      simp only [Matrix.fromBlocks_mulVec]
+      rw [hinl, hinr]
+      simp
+    have hbottom :
+        (eOut (M.mulVecLin (eIn.symm (0, x)))).2 = (Matrix.mulVecLin z) x := by
+      funext y
+      rw [LinearEquiv.sumArrowLequivProdArrow_apply_snd]
+      exact congrFun hbotFun y
+    exact hbottom.symm.trans (hYcoord Y x)
+  let qY := w6ActualCarrierFrequency X Y
+  have hrangeZ : LinearMap.range (Matrix.mulVecLin z) =
+      (LinearMap.range qY).map bQ.equivFun.toLinearMap := by
+    ext y
+    constructor
+    · intro hy
+      rcases LinearMap.mem_range.mp hy with ⟨x, hx⟩
+      apply Submodule.mem_map.mpr
+      refine ⟨qY (bB.equivFun.symm x), ⟨bB.equivFun.symm x, rfl⟩, ?_⟩
+      calc
+        bQ.equivFun (qY (bB.equivFun.symm x)) =
+            (Matrix.mulVecLin z) x := (hzapply x).symm
+        _ = y := hx
+    · intro hy
+      rcases Submodule.mem_map.mp hy with ⟨q, hq, hqy⟩
+      rcases LinearMap.mem_range.mp hq with ⟨v, rfl⟩
+      refine LinearMap.mem_range.mpr ⟨bB.equivFun v, ?_⟩
+      calc
+        (Matrix.mulVecLin z) (bB.equivFun v) =
+            bQ.equivFun (qY (bB.equivFun.symm (bB.equivFun v))) := hzapply _
+        _ = bQ.equivFun (qY v) := by simp
+        _ = y := hqy
+  have hdimZ : Module.finrank F (LinearMap.range (Matrix.mulVecLin z)) =
+      Module.finrank F (LinearMap.range qY) := by
+    rw [hrangeZ]
+    exact bQ.equivFun.finrank_map_eq (LinearMap.range qY)
+  have hqrank := w6_precedes_actual_carrier_frequency_rank X Y hXY
+  have hzrank : z.rank = (Y - X).rank := by
+    have hdim : Module.finrank F (LinearMap.range (Matrix.mulVecLin z)) =
+        (Y - X).rank := hdimZ.trans hqrank
+    simpa [Matrix.rank] using hdim
+  obtain ⟨j, p, hj, hp, hzfactor⟩ := w6_matrix_rank_factorization z hzrank
+  have hDjp : (w6BlockDisplacementMatrix a b c (j * p)).rank =
+      (Y - X).rank := by
+    rw [← hzfactor]
+    exact hD
+  obtain ⟨u, c₀, hfactor⟩ :=
+    w6_fixed_block_factorization a b c j p hj hp hDjp
+  have hcoordfactor : M = w6CanonicalBlockCandidate u c₀ j p := by
+    calc
+      M = Matrix.fromBlocks a b c z := hM
+      _ = Matrix.fromBlocks a b c (j * p) := by rw [hzfactor]
+      _ = w6CanonicalBlockCandidate u c₀ j p := hfactor.symm
+  exact ⟨j, p, u, c₀, hj, hp, hcoordfactor⟩
 end
+/- In the fixed coordinates selected by `X`, the lower-right block is the
+matrix of the actual carrier frequency in the chosen kernel and quotient
+bases. -/
+theorem w6_actual_predecessor_bottom_block_eq_frequency_matrix
+    {n d k m s : Nat}
+    (X : BinaryMatrix n d)
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (bB : Module.Basis (Fin m) F (LinearMap.ker X.transpose.toLin'))
+    (bQ : Module.Basis (Fin s) F
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (hYcoord : ∀ (Y : BinaryMatrix n d) (b : Fin m → F),
+      let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+      let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+      (eOut ((w6ActualFiniteCoordinateMatrix eW eV Y).mulVecLin
+        (eIn.symm (0, b)))).2 =
+        bQ.equivFun
+          (w6ActualCarrierFrequency X Y (bB.equivFun.symm b)))
+    (Y : BinaryMatrix n d) :
+    (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₂₂ =
+      w6ActualCarrierFrequencyCoordinateMatrix X bB bQ
+        (w6ActualCarrierFrequency X Y) := by
+  classical
+  let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+  let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+  let M := w6ActualFiniteCoordinateMatrix eW eV Y
+  let z := w6ActualCarrierFrequencyCoordinateMatrix X bB bQ
+    (w6ActualCarrierFrequency X Y)
+  apply Matrix.toLin'.injective
+  apply LinearMap.ext
+  intro x
+  change Matrix.mulVecLin (M.toBlocks₂₂) x = Matrix.mulVecLin z x
+  ext y
+  have hcoord := hYcoord Y x
+  have hbottom :
+      (eOut (M.mulVecLin (eIn.symm (0, x)))).2 y =
+        (Matrix.mulVecLin (M.toBlocks₂₂) x) y := by
+    have hinl : eIn.symm (0, x) ∘ Sum.inl = 0 := by
+      funext i
+      simp [eIn, LinearEquiv.sumArrowLequivProdArrow_symm_apply_inl]
+    have hinr : eIn.symm (0, x) ∘ Sum.inr = x := by
+      funext i
+      simp [eIn, LinearEquiv.sumArrowLequivProdArrow_symm_apply_inr]
+    change Matrix.mulVec M (eIn.symm (0, x)) (Sum.inr y) =
+      Matrix.mulVec (M.toBlocks₂₂) x y
+    rw [← Matrix.fromBlocks_toBlocks M]
+    simp only [Matrix.fromBlocks_mulVec]
+    rw [hinl, hinr]
+    simp
+  have hfrequency :
+      (bQ.equivFun (w6ActualCarrierFrequency X Y
+        (bB.equivFun.symm x))) y = (Matrix.mulVecLin z x) y := by
+    simp [z, w6ActualCarrierFrequencyCoordinateMatrix,
+      Matrix.mulVecLin_apply, Matrix.toLin'_toMatrix']
+  have hfinal :
+      (eOut (M.mulVecLin (eIn.symm (0, x)))).2 y =
+        (Matrix.mulVecLin (M.toBlocks₂₂) x) y := hbottom
+  rw [hcoord] at hfinal
+  exact hfinal.symm.trans hfrequency
+
+/-- Equality of the lower-right coordinate matrix transports back to equality
+of actual carrier frequencies. -/
+theorem w6_actual_predecessor_frequency_eq_of_coordinate_matrix_eq
+    {n d k m s : Nat}
+    (X : BinaryMatrix n d)
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (bB : Module.Basis (Fin m) F (LinearMap.ker X.transpose.toLin'))
+    (bQ : Module.Basis (Fin s) F
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (hYcoord : ∀ (Y : BinaryMatrix n d) (b : Fin m → F),
+      let eIn := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F
+      let eOut := LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin s) F F
+      (eOut ((w6ActualFiniteCoordinateMatrix eW eV Y).mulVecLin
+        (eIn.symm (0, b)))).2 =
+        bQ.equivFun
+          (w6ActualCarrierFrequency X Y (bB.equivFun.symm b)))
+    (Y : BinaryMatrix n d)
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (hbottom : (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₂₂ =
+      w6ActualCarrierFrequencyCoordinateMatrix X bB bQ Z) :
+    w6ActualCarrierFrequency X Y = Z := by
+  have hactual := w6_actual_predecessor_bottom_block_eq_frequency_matrix
+    X eW eV bB bQ hYcoord Y
+  have hmatrix : w6ActualCarrierFrequencyCoordinateMatrix X bB bQ
+      (w6ActualCarrierFrequency X Y) =
+        w6ActualCarrierFrequencyCoordinateMatrix X bB bQ Z :=
+    hactual.symm.trans hbottom
+  have hlinear :
+      bQ.equivFun.toLinearMap.comp
+          ((w6ActualCarrierFrequency X Y).comp bB.equivFun.symm.toLinearMap) =
+        bQ.equivFun.toLinearMap.comp
+          (Z.comp bB.equivFun.symm.toLinearMap) := by
+    apply LinearMap.toMatrix'.injective
+    simpa [w6ActualCarrierFrequencyCoordinateMatrix] using hmatrix
+  ext v
+  have hv := congrArg (fun L => L (bB.equivFun v)) hlinear
+  change bQ.equivFun
+      (w6ActualCarrierFrequency X Y
+        (bB.equivFun.symm (bB.equivFun v))) =
+    bQ.equivFun (Z (bB.equivFun.symm (bB.equivFun v))) at hv
+  rw [bB.equivFun.symm_apply_apply] at hv
+  exact bQ.equivFun.injective hv
+
+/- The fixed coordinate change identifies the rank of each actual
+displacement with the rank of its four-block displacement matrix. -/
+theorem w6_actual_block_displacement_rank
+    {n d k m s : Nat}
+    (X : BinaryMatrix n d)
+    (eW : W n ≃ₗ[F] ((Fin k → F) × (Fin m → F)))
+    (eV : V d ≃ₗ[F] ((Fin k → F) × (Fin s → F)))
+    (hX : ∀ (a : Fin k → F) (b : Fin m → F),
+      eV (X.transpose.toLin' (eW.symm (a, b))) = (a, 0))
+    (Y : BinaryMatrix n d) :
+    (w6BlockDisplacementMatrix
+      (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₁₁
+      (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₁₂
+      (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₂₁
+      (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₂₂).rank =
+      (Y - X).rank := by
+  classical
+  let M := w6ActualFiniteCoordinateMatrix eW eV Y
+  let a := M.toBlocks₁₁
+  let b := M.toBlocks₁₂
+  let c := M.toBlocks₂₁
+  let z := M.toBlocks₂₂
+  have hM : M = Matrix.fromBlocks a b c z :=
+    (Matrix.fromBlocks_toBlocks M).symm
+  have hbase : w6ActualFiniteCoordinateMatrix eW eV X =
+      Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0 0 :=
+    w6_actual_finite_coordinate_matrix_X X eW eV hX
+  have hcoorddiff : w6ActualFiniteCoordinateMatrix eW eV (Y - X) =
+      M - w6ActualFiniteCoordinateMatrix eW eV X := by
+    let E := w6ActualFiniteCoordinateLinearEquiv eW eV
+    calc
+      w6ActualFiniteCoordinateMatrix eW eV (Y - X) = E ((Y - X).transpose) :=
+        w6_actual_finite_coordinate_matrix_eq_equiv eW eV (Y - X)
+      _ = E (Y.transpose - X.transpose) := by simp
+      _ = E Y.transpose - E X.transpose := map_sub E Y.transpose X.transpose
+      _ = M - w6ActualFiniteCoordinateMatrix eW eV X := by
+        rw [← w6_actual_finite_coordinate_matrix_eq_equiv eW eV Y,
+          ← w6_actual_finite_coordinate_matrix_eq_equiv eW eV X]
+  have hdisp : w6BlockDisplacementMatrix a b c z =
+      M - w6ActualFiniteCoordinateMatrix eW eV X := by
+    change Matrix.fromBlocks (a - 1) b c z = _
+    rw [hM, hbase]
+    simp only [sub_eq_add_neg, Matrix.fromBlocks_neg, Matrix.fromBlocks_add]
+    apply Matrix.fromBlocks_inj.mpr
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · abel
+    · simp
+    · simp
+    · simp
+  change (w6BlockDisplacementMatrix a b c z).rank = _
+  calc
+    (w6BlockDisplacementMatrix a b c z).rank =
+        (M - w6ActualFiniteCoordinateMatrix eW eV X).rank :=
+      congrArg Matrix.rank hdisp
+    _ = (w6ActualFiniteCoordinateMatrix eW eV (Y - X)).rank := by
+      rw [← hcoorddiff]
+    _ = (Y - X).rank := w6_actual_finite_coordinate_matrix_rank eW eV (Y - X)
+
+
+/-- The original ambient predecessor fiber at a fixed actual frequency is
+equivalent to the canonical fixed-`Z` block fiber. The coordinates and bases
+are fixed once from `X`; no rank or count condition is added to the ambient
+fiber. -/
+noncomputable def w6_actual_predecessor_frequency_fiber_equiv_fixed_z_of_coordinates
+    {n d l : Nat} (X : BinaryMatrix n d)
+    (eW : W n ≃ₗ[F]
+      ((Fin X.rank → F) × (Fin (n - X.rank) → F)))
+    (eV : V d ≃ₗ[F]
+      ((Fin X.rank → F) × (Fin (d - X.rank) → F)))
+    (bB : Module.Basis (Fin (n - X.rank)) F
+      (LinearMap.ker X.transpose.toLin'))
+    (bQ : Module.Basis (Fin (d - X.rank)) F
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (hX : ∀ (a : Fin X.rank → F) (b : Fin (n - X.rank) → F),
+      eV (X.transpose.toLin' (eW.symm (a, b))) = (a, 0))
+    (hYcoord : ∀ (Y : BinaryMatrix n d) (b : Fin (n - X.rank) → F),
+      let eIn := LinearEquiv.sumArrowLequivProdArrow
+        (Fin X.rank) (Fin (n - X.rank)) F F
+      let eOut := LinearEquiv.sumArrowLequivProdArrow
+        (Fin X.rank) (Fin (d - X.rank)) F F
+      (eOut ((w6ActualFiniteCoordinateMatrix eW eV Y).mulVecLin
+        (eIn.symm (0, b)))).2 =
+        bQ.equivFun
+          (w6ActualCarrierFrequency X Y (bB.equivFun.symm b)))
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (hZ : Module.finrank F (LinearMap.range Z) = l) :
+    w6ActualPredecessorFrequencyFiber X Z ≃
+      w6FixedZBlockFiber (k := X.rank) (l := l)
+        (w6ActualCarrierFrequencyCoordinateMatrix X bB bQ Z) := by
+  classical
+  let z := w6ActualCarrierFrequencyCoordinateMatrix X bB bQ Z
+  have hz : z.rank = l := by
+    rw [w6_actual_carrier_frequency_coordinate_matrix_rank]
+    exact hZ
+  let E := w6ActualFiniteCoordinateEquiv eW eV
+  let forward : w6ActualPredecessorFrequencyFiber X Z →
+      w6FixedZBlockFiber (k := X.rank) (l := l) z := fun y => by
+    let M := E y.1
+    let a := M.toBlocks₁₁
+    let b := M.toBlocks₁₂
+    let c := M.toBlocks₂₁
+    have hb : M.toBlocks₂₂ = z := by
+      have h := w6_actual_predecessor_bottom_block_eq_frequency_matrix
+        X eW eV bB bQ hYcoord y.1
+      simpa [z, M, E, w6ActualFiniteCoordinateEquiv, y.2.2] using h
+    have hdiff : (y.1 - X).rank = l := by
+      calc
+        (y.1 - X).rank = Module.finrank F
+            (LinearMap.range (w6ActualCarrierFrequency X y.1)) :=
+          (w6_precedes_actual_carrier_frequency_rank X y.1 y.2.1).symm
+        _ = Module.finrank F (LinearMap.range Z) := by rw [y.2.2]
+        _ = l := hZ
+    have hD := w6_actual_block_displacement_rank X eW eV hX y.1
+    refine ⟨(a, (b, c)), ?_⟩
+    have hDcoord : (w6BlockDisplacementMatrix
+        (E y.1).toBlocks₁₁ (E y.1).toBlocks₁₂
+        (E y.1).toBlocks₂₁ (E y.1).toBlocks₂₂).rank = (y.1 - X).rank := by
+      simpa [E, w6ActualFiniteCoordinateEquiv] using hD
+    have hDb : (w6BlockDisplacementMatrix a b c z).rank = (y.1 - X).rank := by
+      rw [← hb]
+      simpa [a, b, c, M] using hDcoord
+    exact hDb.trans hdiff
+  let backward : w6FixedZBlockFiber (k := X.rank) (l := l) z →
+      w6ActualPredecessorFrequencyFiber X Z := fun t => by
+    let a := t.1.1
+    let b := t.1.2.1
+    let c := t.1.2.2
+    let M := Matrix.fromBlocks a b c z
+    let Y := E.symm M
+    have hcoords : w6ActualFiniteCoordinateMatrix eW eV Y = M := by
+      change (w6ActualFiniteCoordinateEquiv eW eV)
+        ((w6ActualFiniteCoordinateEquiv eW eV).symm M) = M
+      exact (w6ActualFiniteCoordinateEquiv eW eV).apply_symm_apply M
+    have hpre : w6Precedes X Y := by
+      have hfactorization := w6_matrix_rank_factorization z hz
+      obtain ⟨j, p, hj, hp, hjp⟩ := hfactorization
+      have hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l := by
+        have ht : (w6BlockDisplacementMatrix a b c z).rank = l := t.2
+        rw [hjp] at ht
+        exact ht
+      obtain ⟨u, c₀, hfac⟩ := w6_fixed_block_factorization
+        a b c j p hj hp hD
+      have hMrank : M.rank = X.rank + l := by
+        have hMfac : M = w6CanonicalBlockCandidate u c₀ j p := by
+          calc
+            M = Matrix.fromBlocks a b c z := by rfl
+            _ = Matrix.fromBlocks a b c (j * p) := by rw [hjp]
+            _ = w6CanonicalBlockCandidate u c₀ j p := hfac.symm
+        rw [hMfac]
+        exact w6CanonicalBlockCandidate_rank_of_J_inj_P_surj u c₀ j p hj hp
+      have hYrank : Y.rank = X.rank + l := by
+        calc
+          Y.rank = (w6ActualFiniteCoordinateMatrix eW eV Y).rank :=
+            (w6_actual_finite_coordinate_matrix_rank eW eV Y).symm
+          _ = M.rank := congrArg Matrix.rank hcoords
+          _ = X.rank + l := hMrank
+      have hblockrank := w6_actual_block_displacement_rank X eW eV hX Y
+      have hdiff : (Y - X).rank = l := by
+        calc
+          (Y - X).rank =
+              (w6BlockDisplacementMatrix
+                (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₁₁
+                (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₁₂
+                (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₂₁
+                (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₂₂).rank :=
+            hblockrank.symm
+          _ = l := by
+            simpa [hcoords, M, w6BlockDisplacementMatrix] using t.2
+      change Y.rank = X.rank + (Y - X).rank
+      rw [hYrank, hdiff]
+    have hbottom : (w6ActualFiniteCoordinateMatrix eW eV Y).toBlocks₂₂ = z := by
+      rw [hcoords]
+      rfl
+    have hfreq := w6_actual_predecessor_frequency_eq_of_coordinate_matrix_eq
+      X eW eV bB bQ hYcoord Y Z hbottom
+    exact ⟨Y, hpre, hfreq⟩
+  refine ⟨forward, backward, ?_, ?_⟩
+  · intro y
+    apply Subtype.ext
+    apply E.injective
+    dsimp [backward, forward]
+    have hM := w6_actual_predecessor_bottom_block_eq_frequency_matrix
+      X eW eV bB bQ hYcoord y.1
+    have hbottom : (E y.1).toBlocks₂₂ = z := by
+      simpa [z, E, w6ActualFiniteCoordinateEquiv, y.2.2] using hM
+    change E (E.symm (Matrix.fromBlocks
+      (E y.1).toBlocks₁₁ (E y.1).toBlocks₁₂
+      (E y.1).toBlocks₂₁ z)) = E y.1
+    rw [E.apply_symm_apply]
+    rw [← Matrix.fromBlocks_toBlocks (E y.1)]
+    rw [hbottom]
+    rfl
+  · intro t
+    apply Subtype.ext
+    dsimp [forward, backward]
+    rw [E.apply_symm_apply]
+    simp [Matrix.fromBlocks_toBlocks]
+
+/-- Every genuine fixed-frequency ambient predecessor fiber has the exact
+`2^(2*k*l)` multiplicity. -/
+theorem w6_actual_predecessor_frequency_fiber_card_of_coordinates
+    {n d l : Nat} (X : BinaryMatrix n d)
+    (eW : W n ≃ₗ[F]
+      ((Fin X.rank → F) × (Fin (n - X.rank) → F)))
+    (eV : V d ≃ₗ[F]
+      ((Fin X.rank → F) × (Fin (d - X.rank) → F)))
+    (bB : Module.Basis (Fin (n - X.rank)) F
+      (LinearMap.ker X.transpose.toLin'))
+    (bQ : Module.Basis (Fin (d - X.rank)) F
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (hX : ∀ (a : Fin X.rank → F) (b : Fin (n - X.rank) → F),
+      eV (X.transpose.toLin' (eW.symm (a, b))) = (a, 0))
+    (hYcoord : ∀ (Y : BinaryMatrix n d) (b : Fin (n - X.rank) → F),
+      let eIn := LinearEquiv.sumArrowLequivProdArrow
+        (Fin X.rank) (Fin (n - X.rank)) F F
+      let eOut := LinearEquiv.sumArrowLequivProdArrow
+        (Fin X.rank) (Fin (d - X.rank)) F F
+      (eOut ((w6ActualFiniteCoordinateMatrix eW eV Y).mulVecLin
+        (eIn.symm (0, b)))).2 =
+        bQ.equivFun
+          (w6ActualCarrierFrequency X Y (bB.equivFun.symm b)))
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (hZ : Module.finrank F (LinearMap.range Z) = l) :
+    Fintype.card (w6ActualPredecessorFrequencyFiber X Z) =
+      2 ^ (2 * X.rank * l) := by
+  classical
+  let z := w6ActualCarrierFrequencyCoordinateMatrix X bB bQ Z
+  have hz : z.rank = l := by
+    rw [w6_actual_carrier_frequency_coordinate_matrix_rank]
+    exact hZ
+  let e := w6_actual_predecessor_frequency_fiber_equiv_fixed_z_of_coordinates
+    X eW eV bB bQ hX hYcoord Z hZ
+  calc
+    Fintype.card (w6ActualPredecessorFrequencyFiber X Z) =
+        Fintype.card (w6FixedZBlockFiber (k := X.rank) (l := l) z) :=
+      Fintype.card_congr e
+    _ = 2 ^ (2 * X.rank * l) := by
+      exact w6_fixed_z_block_fiber_card z hz
+
+/-- For every `X` and actual carrier frequency `Z`, the ambient predecessor
+fiber has exactly the manuscript multiplicity. The fixed coordinates are
+chosen internally once from `X`. -/
+theorem w6_actual_predecessor_frequency_fiber_card
+    {n d l : Nat} (X : BinaryMatrix n d)
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin'))
+    (hZ : Module.finrank F (LinearMap.range Z) = l) :
+    Fintype.card (w6ActualPredecessorFrequencyFiber X Z) =
+      2 ^ (2 * X.rank * l) := by
+  classical
+  obtain ⟨C, hBC, D, hAD, bA, bB, bQ, eW, eV, hX, hYcarrier⟩ :=
+    w6_actual_fixed_x_finite_block_identities X
+  have hYcoord : ∀ (Y : BinaryMatrix n d) (b : Fin (n - X.rank) → F),
+      let eIn := LinearEquiv.sumArrowLequivProdArrow
+        (Fin X.rank) (Fin (n - X.rank)) F F
+      let eOut := LinearEquiv.sumArrowLequivProdArrow
+        (Fin X.rank) (Fin (d - X.rank)) F F
+      (eOut ((w6ActualFiniteCoordinateMatrix eW eV Y).mulVecLin
+        (eIn.symm (0, b)))).2 =
+        bQ.equivFun
+          (w6ActualCarrierFrequency X Y (bB.equivFun.symm b)) := by
+    intro Y b
+    let eIn := LinearEquiv.sumArrowLequivProdArrow
+      (Fin X.rank) (Fin (n - X.rank)) F F
+    let eOut := LinearEquiv.sumArrowLequivProdArrow
+      (Fin X.rank) (Fin (d - X.rank)) F F
+    have happ := w6_actual_finite_coordinate_matrix_apply eW eV Y 0 b
+    exact (congrArg Prod.snd happ).trans (hYcarrier Y b)
+  exact w6_actual_predecessor_frequency_fiber_card_of_coordinates
+    X eW eV bB bQ hX hYcoord Z hZ
+
+
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
