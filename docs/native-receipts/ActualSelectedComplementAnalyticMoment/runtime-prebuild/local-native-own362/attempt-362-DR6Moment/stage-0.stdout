@@ -1,0 +1,67 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6ActualF2Pairs {n d : ℕ}
+  (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : Type
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6ActualComplexF2Remainder {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_square_fourierCoeff {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff (fun M => f M * f M) X =
+    ∑ Y,
+      PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y *
+        PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f (X + Y)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_fourth_moment_parseval {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => Complex.normSq (f M) ^ 2) =
+    ∑ X,
+      Complex.normSq
+        (∑ Y,
+          PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y *
+            PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f (X + Y))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_convolution_partition {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  ∑ Y,
+      PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y *
+        PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f (X + Y) =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6ActualComplexF2Remainder f X +
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6ActualComplexF1Complement f X
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_fourth_moment_le_f1_plus_f2 {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => Complex.normSq (f M) ^ 2) ≤
+    2 *
+        (2 ^ (6 * D * D) *
+          (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => Complex.normSq (f M)) ^ 2) +
+      2 * ∑ X, Complex.normSq (PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6ActualComplexF2Remainder f X)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_square_fourierCoeff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_fourth_moment_parseval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_convolution_partition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_fourth_moment_le_f1_plus_f2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_f2_remainder_eq_zero_of_rank_gt {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f)
+  (X : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (hX : 2 * D < Matrix.rank X) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6ActualComplexF2Remainder f X = 0
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_f2_energy_eq_rank_truncated {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  ∑ X, Complex.normSq (PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6ActualComplexF2Remainder f X) =
+    ∑ X,
+      if Matrix.rank X ≤ 2 * D then
+        Complex.normSq (PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6ActualComplexF2Remainder f X)
+      else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_f2_remainder_eq_zero_of_rank_gt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment.dr6_actual_complex_f2_energy_eq_rank_truncated' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
