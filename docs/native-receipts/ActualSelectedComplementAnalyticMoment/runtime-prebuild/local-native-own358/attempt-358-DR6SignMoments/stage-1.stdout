@@ -1,0 +1,59 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6ActualPhiGram {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (A B : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : ℝ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_phi_gram_nonneg {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (A B : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  0 ≤ PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6ActualPhiGram f A B
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_phi_gram_frobenius_le_mass {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  ∑ A, ∑ B, PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6ActualPhiGram f A B ^ 2 ≤
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6ActualPhiCoefficientMass f ^ 2
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_phi_coefficient_mass_le_parseval {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6ActualPhiCoefficientMass f ≤
+    2 ^ (D * D) * PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => Complex.normSq (f M)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_f1_pair_le_gram_sum {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (X Y Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (hFY : Matrix.rank Y ≤ D)
+  (hFZ : Matrix.rank Z ≤ D) (hF1 : PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6F1Witness X Y Z) :
+  ‖PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y‖ *
+      ‖PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Z‖ ≤
+    ∑ p, PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6ActualPhiGram f (↑p).1 (↑p).2
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_f1_total_energy_le_parseval {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  ∑ X,
+      (∑ p,
+          ‖PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f (↑p).1‖ *
+            ‖PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f (↑p).2‖) ^
+        2 ≤
+    2 ^ (4 * D * D) * PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6ActualPhiCoefficientMass f ^ 2
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_f1_total_energy_le {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (hsupport : PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough D f) :
+  ∑ X,
+      (∑ p,
+          ‖PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f (↑p).1‖ *
+            ‖PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f (↑p).2‖) ^
+        2 ≤
+    2 ^ (6 * D * D) * (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => Complex.normSq (f M)) ^ 2
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_phi_gram_nonneg' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_phi_gram_frobenius_le_mass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_phi_coefficient_mass_le_parseval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_f1_pair_le_gram_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_f1_total_energy_le_parseval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments.dr6_actual_f1_total_energy_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
