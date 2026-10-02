@@ -1,0 +1,54 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6QFactorial (n : ℕ) : ℕ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6QFactorial_pos (n : ℕ) : 0 < dr6QFactorial n
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6QFactorial_succ (n : ℕ) :
+  dr6QFactorial (n + 1) = dr6QFactorial n * (2 ^ (n + 1) - 1)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6GaussianRat (n k : ℕ) : ℚ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6ActualGaussian (n k : ℕ) : ℕ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_gaussian_eq_w6 (n k : ℕ) :
+  dr6ActualGaussian n k = PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian n k
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_gaussian_zero_dim : dr6ActualGaussian 0 0 = 1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_gaussian_out_of_range {n k : ℕ} (hnk : n < k) :
+  dr6ActualGaussian n k = 0
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_gaussian_zero_rank (n : ℕ) :
+  dr6ActualGaussian n 0 = 1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_gaussian_full_rank (n : ℕ) :
+  dr6ActualGaussian n n = 1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6MobiusAlpha (k : ℕ) : ℤ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6MobiusAlphaRat (k : ℕ) : ℚ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6MobiusAlphaRat_eq_alpha {k : ℕ} (hk : 0 < k) :
+  dr6MobiusAlphaRat k = ↑(dr6MobiusAlpha k)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6QBinomialAlternatingSum_succ (n : ℕ) :
+  dr6QBinomialAlternatingSum (n + 1) = (1 - 2 ^ n) * dr6QBinomialAlternatingSum n
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6QBinomialProduct (n : ℕ) : ℚ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6QBinomialAlternatingSum_eq_product (n : ℕ) :
+  dr6QBinomialAlternatingSum n = dr6QBinomialProduct n
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6QBinomialAlternatingSum_zero_or_vanish (n : ℕ) :
+  dr6QBinomialAlternatingSum n = if n = 0 then 1 else 0
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6ActualMobiusIndicatorSum (n : ℕ) : ℚ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_mobius_sum_eq_one_sub_alternating (n : ℕ) :
+  dr6ActualMobiusIndicatorSum n = 1 - dr6QBinomialAlternatingSum n
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_mobius_indicator (n : ℕ) :
+  dr6ActualMobiusIndicatorSum n = if 0 < n then 1 else 0
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6GaussianRat_recurrence {n k : ℕ} (hk : 0 < k) (hkn : k < n) :
+  dr6GaussianRat n k = dr6GaussianRat (n - 1) k + 2 ^ (n - k) * dr6GaussianRat (n - 1) (k - 1)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_gaussian_recurrence {n k : ℕ} (hk : 0 < k)
+  (hkn : k < n) : dr6ActualGaussian n k = dr6ActualGaussian (n - 1) k + 2 ^ (n - k) * dr6ActualGaussian (n - 1) (k - 1)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_count_eq_gaussianRat (n k : ℕ) (hkn : k ≤ n) :
+  ↑(dr6ActualGaussian n k) = dr6GaussianRat n k
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6MobiusAlpha_one : dr6MobiusAlpha 1 = 1
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_gaussian_eq_w6' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_gaussian_recurrence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_count_eq_gaussianRat' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6MobiusAlpha_one' depends on axioms: [propext, Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6_actual_mobius_indicator' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius.dr6QBinomialAlternatingSum_eq_product' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
