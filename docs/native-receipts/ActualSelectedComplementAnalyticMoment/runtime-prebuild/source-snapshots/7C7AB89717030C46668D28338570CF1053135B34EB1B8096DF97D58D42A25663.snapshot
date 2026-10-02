@@ -1,0 +1,268 @@
+import Mathlib.Tactic
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments
+
+/-!
+Exact complex DR6 assembly boundary.
+
+For arbitrary finite matrix dimensions and a complex input, this module records
+the additive-square Fourier identity and partitions each convolution fiber
+into the manuscript's F2 obstruction and its complement. The existing matrix
+coverage theorem places every complementary pair in F1. The result bounds the
+fourth moment by the already proved full-scope F1 estimate plus the exact
+complex F2 remainder. It does not assert the separate Möbius estimate or the
+final DR6 theorem.
+-/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Frequencies in the manuscript's actual F2 obstruction class at X. -/
+def dr6ActualF2Pairs {n d : Nat} (X : BinaryMatrix n d) :=
+  {Y : BinaryMatrix n d // DR6F2Obstruction X Y (X + Y)}
+
+noncomputable instance dr6ActualF2PairsFintype {n d : Nat}
+    (X : BinaryMatrix n d) : Fintype (dr6ActualF2Pairs X) := by
+  classical
+  unfold dr6ActualF2Pairs
+  infer_instance
+
+/-- Frequencies outside F2, hence in F1 by exact coverage. -/
+def dr6ActualF1ComplementPairs {n d : Nat}
+    (X : BinaryMatrix n d) :=
+  {Y : BinaryMatrix n d // ¬ DR6F2Obstruction X Y (X + Y)}
+
+noncomputable instance dr6ActualF1ComplementPairsFintype
+    {n d : Nat} (X : BinaryMatrix n d) :
+    Fintype (dr6ActualF1ComplementPairs X) := by
+  classical
+  unfold dr6ActualF1ComplementPairs
+  infer_instance
+
+/-- The exact signed/complex additive remainder on the F2 class. -/
+def dr6ActualComplexF2Remainder {n d : Nat}
+    (f : BinaryMatrix n d → Complex) (X : BinaryMatrix n d) : Complex :=
+  ∑ p : dr6ActualF2Pairs X,
+    complexFourierCoeff f p.val * complexFourierCoeff f (X + p.val)
+
+/-- The complementary convolution contribution, known pointwise to be F1. -/
+def dr6ActualComplexF1Complement {n d : Nat}
+    (f : BinaryMatrix n d → Complex) (X : BinaryMatrix n d) : Complex :=
+  ∑ p : dr6ActualF1ComplementPairs X,
+    complexFourierCoeff f p.val * complexFourierCoeff f (X + p.val)
+
+/-- Fourier coefficients of the pointwise complex square are the ordinary
+additive convolution, with no reality assumption. -/
+theorem dr6_actual_complex_square_fourierCoeff {n d : Nat}
+    (f : BinaryMatrix n d → Complex) (X : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => f M * f M) X =
+      ∑ Y : BinaryMatrix n d,
+        complexFourierCoeff f Y * complexFourierCoeff f (X + Y) := by
+  rw [complexFourierCoeff_mul_eq_convolution]
+
+/-- Complex Parseval turns the fourth moment into the squared norm of each
+actual additive convolution coefficient. -/
+theorem dr6_actual_complex_fourth_moment_parseval {n d : Nat}
+    (f : BinaryMatrix n d → Complex) :
+    uniformMean (fun M => Complex.normSq (f M) ^ 2) =
+      ∑ X : BinaryMatrix n d,
+        Complex.normSq
+          (∑ Y : BinaryMatrix n d,
+            complexFourierCoeff f Y * complexFourierCoeff f (X + Y)) := by
+  calc
+    uniformMean (fun M => Complex.normSq (f M) ^ 2) =
+        uniformMean (fun M => Complex.normSq (f M * f M)) := by
+          apply congrArg uniformMean
+          funext M
+          rw [Complex.normSq_mul]
+          ring
+    _ = ∑ X : BinaryMatrix n d,
+          Complex.normSq (complexFourierCoeff (fun M => f M * f M) X) :=
+        ActualBinaryMatrixHC46A12FourthMoment.complex_fourier_parseval _
+    _ = _ := by
+          apply Fintype.sum_congr
+          intro X
+          rw [dr6_actual_complex_square_fourierCoeff]
+
+private theorem dr6_matrix_add_translate_eq {n d : Nat}
+    (X Y : BinaryMatrix n d) : X = Y + (X + Y) := by
+  ext i j
+  change X i j = Y i j + (X i j + Y i j)
+  calc
+    X i j = (Y i j + Y i j) + X i j := by
+      rw [CharTwo.add_self_eq_zero]
+      simp
+    _ = Y i j + (X i j + Y i j) := by abel
+
+/-- The convolution fiber is exactly the disjoint sum of F2 and its
+complement. Coverage supplies F1 for every pair in the complement. -/
+theorem dr6_actual_complex_convolution_partition {n d : Nat}
+    (f : BinaryMatrix n d → Complex) (X : BinaryMatrix n d) :
+    (∑ Y : BinaryMatrix n d,
+      complexFourierCoeff f Y * complexFourierCoeff f (X + Y)) =
+      dr6ActualComplexF2Remainder f X +
+        dr6ActualComplexF1Complement f X := by
+  classical
+  have h := Fintype.sum_subtype_add_sum_subtype
+    (fun Y : BinaryMatrix n d => DR6F2Obstruction X Y (X + Y))
+    (fun Y : BinaryMatrix n d =>
+      complexFourierCoeff f Y * complexFourierCoeff f (X + Y))
+  simpa [dr6ActualComplexF2Remainder, dr6ActualComplexF1Complement,
+    dr6ActualF2Pairs, dr6ActualF1ComplementPairs] using h
+
+private noncomputable def dr6ComplementToF1Pair {n d : Nat}
+    {X : BinaryMatrix n d} (p : dr6ActualF1ComplementPairs X) :
+    dr6ActualF1Pairs X := by
+  classical
+  let Y := p.val
+  let Z := X + Y
+  have hsum : Y + Z = X := by
+    dsimp [Z, Y]
+    simpa using (dr6_matrix_add_translate_eq X Y).symm
+  have hcoverage := dr6_matrix_f1_or_f2_coverage X Y Z
+    (dr6_matrix_add_translate_eq X Y)
+  have hf1 : DR6F1Witness X Y Z := by
+    rcases hcoverage with hf1 | hf2
+    · exact hf1
+    · exact False.elim (p.property hf2)
+  exact ⟨(Y, Z), hsum, hf1⟩
+
+private theorem dr6ComplementToF1Pair_injective {n d : Nat}
+    {X : BinaryMatrix n d} :
+    Function.Injective (dr6ComplementToF1Pair (X := X)) := by
+  intro p q hpq
+  apply Subtype.ext
+  exact congrArg (fun z : dr6ActualF1Pairs X => z.val.1) hpq
+
+/-- The complementary convolution fiber has norm at most the F1 positive
+weight at that output. -/
+private theorem dr6_actual_complex_f1_complement_norm_le {n d : Nat}
+    (f : BinaryMatrix n d → Complex) (X : BinaryMatrix n d) :
+    norm (dr6ActualComplexF1Complement f X) ≤
+      ∑ p : dr6ActualF1Pairs X,
+        norm (complexFourierCoeff f p.val.1) *
+          norm (complexFourierCoeff f p.val.2) := by
+  classical
+  calc
+    _ ≤ ∑ p : dr6ActualF1ComplementPairs X,
+          norm
+            (complexFourierCoeff f p.val * complexFourierCoeff f (X + p.val)) := by
+          simpa [dr6ActualComplexF1Complement] using
+            (norm_sum_le (Finset.univ : Finset (dr6ActualF1ComplementPairs X))
+              (fun p => complexFourierCoeff f p.val *
+                complexFourierCoeff f (X + p.val)))
+    _ = ∑ p : dr6ActualF1ComplementPairs X,
+          norm (complexFourierCoeff f p.val) *
+            norm (complexFourierCoeff f (X + p.val)) := by
+          apply Fintype.sum_congr
+          intro p
+          rw [norm_mul]
+    _ ≤ ∑ p : dr6ActualF1Pairs X,
+          norm (complexFourierCoeff f p.val.1) *
+            norm (complexFourierCoeff f p.val.2) := by
+          apply Finset.sum_le_sum_of_injOn dr6ComplementToF1Pair
+          · intro p hp q hq hpq
+            exact dr6ComplementToF1Pair_injective hpq
+          · intro q hq
+            exact Finset.mem_univ q
+          · intro p hp
+            rfl
+          · intro q hq hnot
+            exact mul_nonneg (norm_nonneg _) (norm_nonneg _)
+
+/-- Full-scope complex DR6 assembly, stopping at the exact F2 remainder.
+The first term is already bounded by the all-frequency F1 engine; a separate
+Möbius theorem must discharge the displayed F2 energy to obtain paper DR6. -/
+theorem dr6_actual_fourth_moment_le_f1_plus_f2 {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    uniformMean (fun M => Complex.normSq (f M) ^ 2) ≤
+      2 * ((2^(6 * D * D) : Real) *
+        (uniformMean (fun M => Complex.normSq (f M))) ^ 2) +
+      2 * ∑ X : BinaryMatrix n d,
+        Complex.normSq (dr6ActualComplexF2Remainder f X) := by
+  classical
+  have hpoint (X : BinaryMatrix n d) :
+      Complex.normSq
+          (∑ Y : BinaryMatrix n d,
+            complexFourierCoeff f Y * complexFourierCoeff f (X + Y)) ≤
+        2 *
+            (∑ p : dr6ActualF1Pairs X,
+              norm (complexFourierCoeff f p.val.1) *
+                norm (complexFourierCoeff f p.val.2)) ^ 2 +
+          2 * Complex.normSq (dr6ActualComplexF2Remainder f X) := by
+    rw [dr6_actual_complex_convolution_partition]
+    rw [Complex.normSq_eq_norm_sq]
+    have hcomp := dr6_actual_complex_f1_complement_norm_le f X
+    have htriangle :
+        norm (dr6ActualComplexF2Remainder f X +
+          dr6ActualComplexF1Complement f X) ≤
+        norm (dr6ActualComplexF2Remainder f X) +
+          norm (dr6ActualComplexF1Complement f X) := norm_add_le _ _
+    have hcross := sq_nonneg
+      (norm (dr6ActualComplexF1Complement f X) -
+        norm (dr6ActualComplexF2Remainder f X))
+    have hnormcomp := norm_nonneg (dr6ActualComplexF1Complement f X)
+    have hnormf2 := norm_nonneg (dr6ActualComplexF2Remainder f X)
+    have hweight0 : 0 ≤
+        ∑ p : dr6ActualF1Pairs X,
+          norm (complexFourierCoeff f p.val.1) *
+            norm (complexFourierCoeff f p.val.2) := by
+      apply Finset.sum_nonneg
+      intro p hp
+      exact mul_nonneg (norm_nonneg _) (norm_nonneg _)
+    have hnormsum0 : 0 ≤
+        norm (dr6ActualComplexF2Remainder f X) +
+          norm (dr6ActualComplexF1Complement f X) :=
+      add_nonneg hnormf2 hnormcomp
+    have htriangleSq :=
+      (sq_le_sq₀ (norm_nonneg _) hnormsum0).2 htriangle
+    have hcompSq := (sq_le_sq₀ hnormcomp hweight0).2 hcomp
+    have hrealbound :
+        norm (dr6ActualComplexF2Remainder f X +
+          dr6ActualComplexF1Complement f X) ^ 2 ≤
+        2 * (∑ p : dr6ActualF1Pairs X,
+          norm (complexFourierCoeff f p.val.1) *
+            norm (complexFourierCoeff f p.val.2)) ^ 2 +
+        2 * norm (dr6ActualComplexF2Remainder f X) ^ 2 := by
+      nlinarith [htriangleSq, hcross, hcompSq]
+    simpa [Complex.normSq_eq_norm_sq] using hrealbound
+  calc
+    _ = ∑ X : BinaryMatrix n d,
+          Complex.normSq
+            (∑ Y : BinaryMatrix n d,
+              complexFourierCoeff f Y * complexFourierCoeff f (X + Y)) :=
+          dr6_actual_complex_fourth_moment_parseval f
+    _ ≤ ∑ X : BinaryMatrix n d,
+          (2 *
+              (∑ p : dr6ActualF1Pairs X,
+                norm (complexFourierCoeff f p.val.1) *
+                  norm (complexFourierCoeff f p.val.2)) ^ 2 +
+            2 * Complex.normSq (dr6ActualComplexF2Remainder f X)) :=
+          Finset.sum_le_sum fun X hX => hpoint X
+    _ = 2 *
+          (∑ X : BinaryMatrix n d,
+            (∑ p : dr6ActualF1Pairs X,
+              norm (complexFourierCoeff f p.val.1) *
+                norm (complexFourierCoeff f p.val.2)) ^ 2) +
+        2 * ∑ X : BinaryMatrix n d,
+          Complex.normSq (dr6ActualComplexF2Remainder f X) := by
+          simp_rw [Finset.sum_add_distrib, Finset.mul_sum]
+    _ ≤ 2 * ((2^(6 * D * D) : Real) *
+          (uniformMean (fun M => Complex.normSq (f M))) ^ 2) +
+        2 * ∑ X : BinaryMatrix n d,
+          Complex.normSq (dr6ActualComplexF2Remainder f X) := by
+          gcongr
+          exact dr6_actual_f1_total_energy_le f hsupport
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
