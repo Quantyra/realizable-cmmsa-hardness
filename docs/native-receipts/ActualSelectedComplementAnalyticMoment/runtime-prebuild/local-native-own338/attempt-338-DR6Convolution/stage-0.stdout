@@ -1,0 +1,593 @@
+Try this:
+  [apply] abel_nf
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:164:18: error: unsolved goals
+n d : ℕ
+S R : Submodule F (W n)
+hSR : S ⊔ R = ⊤
+f : ↥S →ₗ[F] V d
+g : ↥R →ₗ[F] V d
+hcompat : ∀ (x : W n) (hxS : x ∈ S) (hxR : x ∈ R), f ⟨x, hxS⟩ = g ⟨x, hxR⟩
+x y : ↥S × ↥R
+i : Fin n
+⊢ ↑(x + y).1 i + ↑(x + y).2 i = ↑x.1 i + (↑x.2 i + (↑y.1 i + ↑y.2 i))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:175:8: error: `simp` made no progress
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:209:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:167:19: warning: This simp argument is unused:
+  map_add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Pi.add_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:242:30: error: Application type mismatch: The argument
+  htu
+has type
+  tu ∈ U
+but is expected to have type
+  ?m.140 ∈ ?m.141 ⊔ ?m.142
+in the application
+  Submodule.mem_sup.mp htu
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:418:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+x : ↥KZ
+ha : A ↑x = Y ↑x
+hc : C ↑x = 0
+⊢ Y ↑x = Y ↑x + 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:424:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+x : ↥KY
+ha : A ↑x = 0
+hc : C ↑x = 0
+hx : Y ↑x = 0
+⊢ 0 = 0 + 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:431:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+x : ↥KX
+ha : A ↑x = 0
+hc : C ↑x = Y ↑x
+⊢ Y ↑x = 0 + Y ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:439:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+x : ↥KZ
+hb : B ↑x = 0
+hc : C ↑x = 0
+hx : Z ↑x = 0
+⊢ 0 = 0 + 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:446:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+x : ↥KY
+hb : B ↑x = Z ↑x
+hc : C ↑x = 0
+⊢ Z ↑x = Z ↑x + 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:452:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+x : ↥KX
+hb : B ↑x = 0
+hc : C ↑x = Y ↑x
+hxX : X ↑x = 0
+hsum : Y ↑x + Z ↑x = 0
+hxY : Y ↑x = Z ↑x
+⊢ Z ↑x = 0 + Z ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:465:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+hZ : Z = B + C
+x : ↥KZ
+ha : A ↑x = Y ↑x
+hb : B ↑x = 0
+hxZ : Z ↑x = 0
+hxY : X ↑x = Y ↑x
+⊢ Y ↑x = Y ↑x + 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:474:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+hZ : Z = B + C
+x : ↥KY
+ha : A ↑x = 0
+hb : B ↑x = Z ↑x
+hxY : Y ↑x = 0
+hxZ : X ↑x = Z ↑x
+⊢ Z ↑x = 0 + Z ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:483:5: error: unsolved goals
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+hZ : Z = B + C
+x : ↥KX
+ha : A ↑x = 0
+hb : B ↑x = 0
+hx : X ↑x = 0
+⊢ 0 = 0 + 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:497:43: error: Application type mismatch: The argument
+  hAKZ
+has type
+  ∀ (x : ↥KZ), A ↑x = fA x
+but is expected to have type
+  ∀ (x : ↥KZ), A ↑x = X ↑x
+in the application
+  dr6_glued_range_le KZ RA hKA A X hAKZ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:499:6: error: 'change' tactic failed, pattern
+  A ↑x = X ↑x
+is not definitionally equal to target
+  A ↑x = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:507:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:511:43: error: Application type mismatch: The argument
+  hBKY
+has type
+  ∀ (x : ↥KY), B ↑x = fB x
+but is expected to have type
+  ∀ (x : ↥KY), B ↑x = X ↑x
+in the application
+  dr6_glued_range_le KY RB hKB B X hBKY
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:513:6: error: 'change' tactic failed, pattern
+  B ↑x = X ↑x
+is not definitionally equal to target
+  B ↑x = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:521:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:525:43: error: Application type mismatch: The argument
+  hCKX
+has type
+  ∀ (x : ↥KX), C ↑x = fC x
+but is expected to have type
+  ∀ (x : ↥KX), C ↑x = Z ↑x
+in the application
+  dr6_glued_range_le KX RC hKC C Z hCKX
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:527:6: error: 'change' tactic failed, pattern
+  C ↑x = Z ↑x
+is not definitionally equal to target
+  C ↑x = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:535:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:607:12: error: Type mismatch
+  congrArg ?m.2635 (Eq.symm hsupY)
+has type
+  ?m.2635 (LinearMap.range Y) = ?m.2635 (A.range ⊔ C.range)
+but is expected to have type
+  Module.finrank F ↥(LinearMap.range Y) = Module.finrank F ↥(A.range ⊔ C.range)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:618:12: error: Type mismatch
+  congrArg ?m.2842 (Eq.symm hsupZ)
+has type
+  ?m.2842 (LinearMap.range Z) = ?m.2842 (B.range ⊔ C.range)
+but is expected to have type
+  Module.finrank F ↥(LinearMap.range Z) = Module.finrank F ↥(B.range ⊔ C.range)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:629:12: error: Type mismatch
+  congrArg ?m.3049 (Eq.symm hsupX)
+has type
+  ?m.3049 (LinearMap.range X) = ?m.3049 (A.range ⊔ B.range)
+but is expected to have type
+  Module.finrank F ↥(LinearMap.range X) = Module.finrank F ↥(A.range ⊔ B.range)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:640:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LinearMap.toMatrix' (Matrix.toLin' ?M)
+in the target expression
+  Matrix.toLin' (LinearMap.toMatrix' L) = L
+
+n d : ℕ
+L : DR6Map n d
+⊢ Matrix.toLin' (LinearMap.toMatrix' L) = L
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:687:8: error: Type mismatch: After simplification, term
+  dr6_matrixOfMap_transpose_toLin Y
+ has type
+  dr6MatrixOfMap (Matrix.toLin' (Matrix.transpose Y)) = Y
+but is expected to have type
+  Y = dr6MatrixOfMap (Matrix.toLin' (Matrix.transpose Y))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:695:8: error: Type mismatch: After simplification, term
+  dr6_matrixOfMap_transpose_toLin Z
+ has type
+  dr6MatrixOfMap (Matrix.toLin' (Matrix.transpose Z)) = Z
+but is expected to have type
+  Z = dr6MatrixOfMap (Matrix.toLin' (Matrix.transpose Z))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:703:8: error: Type mismatch: After simplification, term
+  dr6_matrixOfMap_transpose_toLin X
+ has type
+  dr6MatrixOfMap (Matrix.toLin' (Matrix.transpose X)) = X
+but is expected to have type
+  X = dr6MatrixOfMap (Matrix.toLin' (Matrix.transpose X))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:780:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (DR6DirectYDecomposition Y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:781:44: error(lean.unknownIdentifier): Unknown identifier `w6Precedes`
+
+Note: It is not possible to treat `w6Precedes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:784:31: error(lean.unknownIdentifier): Unknown identifier `w6Precedes`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:789:23: error: unsolved goals
+n d : ℕ
+Y : BinaryMatrix n d
+p : DR6DirectYDecomposition Y
+i : Fin n
+j : Fin d
+⊢ (↑p).1 i j + ((↑p).2 i j + (↑p).1 i j) = (↑p).2 i j
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:807:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (DR6DirectYDecomposition Y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:813:42: error(lean.unknownIdentifier): Unknown identifier `w6Precedes`
+
+Note: It is not possible to treat `w6Precedes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:817:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:818:2: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:820:39: error(lean.unknownIdentifier): Unknown identifier `w6Precedes`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:840:8: error: invalid 'calc' step, failed to synthesize `Trans` instance
+  Trans Eq Eq ?m.308
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:848:8: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  this
+inferred
+  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:854:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (DR6DirectYDecomposition Y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:857:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (DR6DirectYDecomposition Y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:858:46: error(lean.unknownIdentifier): Unknown identifier `w6Precedes`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:862:31: error: unsolved goals
+n d : ℕ
+Y : BinaryMatrix n d
+E : Submodule F (V d) := (Matrix.toLin' (Matrix.transpose Y)).range
+b : Module.Basis (Fin (Module.finrank F ↥E)) F ↥E := Module.finBasis F ↥E
+hdim : Module.finrank F ↥E = Matrix.rank Y
+e : (↥E →ₗ[F] ↥E) ≃ₗ[F] Matrix (Fin (Module.finrank F ↥E)) (Fin (Module.finrank F ↥E)) F := LinearMap.toMatrix b b
+⊢ Fintype.card
+      (Fin (Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Y)).range) →
+        Fin (Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Y)).range) → F) =
+    2 ^ (Matrix.rank Y * Matrix.rank Y)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:869:20: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Matrix, Fintype.card_fin, E, hdim]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:869:38: warning: This simp argument is unused:
+  Fintype.card_fin
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Matrix, Fintype.card_fun, E, hdim]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:869:59: warning: This simp argument is unused:
+  hdim
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Matrix, Fintype.card_fun, Fintype.card_fin, E]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:899:4: error: unsolved goals
+case a
+n d : ℕ
+f : BinaryMatrix n d → ℝ
+K : BinaryMatrix n d
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+g : BinaryMatrix n d → ℝ
+Y : BinaryMatrix n d
+⊢ fourierCoeff (fun M => (↑(g M)).re) Y = (↑(fourierCoeff g Y)).re
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:926:2: error: Type mismatch: After simplification, term
+  hre
+ has type
+  fourierCoeff (fun M => f M ^ 2) K =
+    ∑ x, (fourierCoeff f x * fourierCoeff f (K + x) - (↑(fourierCoeff f x)).im * (↑(fourierCoeff f (K + x))).im)
+but is expected to have type
+  fourierCoeff (fun M => f M ^ 2) K = ∑ X, fourierCoeff f X * fourierCoeff f (K + X)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:902:8: warning: This simp argument is unused:
+  BinaryMatrixFourier.uniformMean_const
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [BinaryMatrixFourier.fourierCoeff, BinaryMatrixFourier.uniformMean]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own338\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:943:4: error: unsolved goals
+case a
+n d D : ℕ
+f : BinaryMatrix n d → ℝ
+hsupport : ∀ (Y : BinaryMatrix n d), D < Matrix.rank Y → fourierCoeff f Y = 0
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+Y : BinaryMatrix n d
+hY : D < Matrix.rank Y
+⊢ fourierCoeff (fun M => 0) Y = 0
