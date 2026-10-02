@@ -1,0 +1,34 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment.complex_fourier_parseval {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => Complex.normSq (f M)) =
+    ∑ Y, Complex.normSq (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment.complex_fourier_parseval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment.actual_affine_base_energy_eq_selected_fourier_mass
+  {n d : ℕ} (A : Submodule (ZMod 2) (Fin d → ZMod 2)) (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) (M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun T =>
+      Complex.normSq
+        (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B (Matrix.toLin' T) f M)) =
+    ∑ Y,
+      if PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected A B (Matrix.toLin' (Matrix.transpose Y)) then
+        Complex.normSq (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y)
+      else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment.actual_affine_base_energy_eq_selected_fourier_mass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment.actual_affine_derivative_energy_eq_selected_fourier_mass
+  {n d : ℕ} (A : Submodule (ZMod 2) (Fin d → ZMod 2)) (B : Submodule (ZMod 2) (Fin n → ZMod 2))
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun T =>
+      PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.carrierMean A B fun M =>
+        Complex.normSq
+          (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.filteredCarrierFunction A B (Matrix.toLin' T) f M)) =
+    ∑ Y,
+      if PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.Selected A B (Matrix.toLin' (Matrix.transpose Y)) then
+        Complex.normSq (PvNP.RealizableHardness.BinaryMatrixA1Complex.complexFourierCoeff f Y)
+      else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment.actual_affine_derivative_energy_eq_selected_fourier_mass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
