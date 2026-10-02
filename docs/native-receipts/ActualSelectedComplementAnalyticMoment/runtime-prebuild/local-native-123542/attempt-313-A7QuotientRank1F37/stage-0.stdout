@@ -1,0 +1,272 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:212:31: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  (Matrix.toLin' (Matrix.transpose X)) w = ↑a
+
+case left
+n d : ℕ
+X Y : BinaryMatrix n d
+hXY : w6Precedes X Y
+f : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose X)
+g : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose (Y - X))
+hrange :
+  (Matrix.toLin' (Matrix.transpose Y)).range =
+    (Matrix.toLin' (Matrix.transpose X)).range ⊔ (Matrix.toLin' (Matrix.transpose (Y - X))).range
+hint : (Matrix.toLin' (Matrix.transpose X)).range ⊓ (Matrix.toLin' (Matrix.transpose (Y - X))).range = ⊥
+hsum : Matrix.toLin' (Matrix.transpose Y) = f + g
+a : ↥(Matrix.toLin' (Matrix.transpose X)).range
+w : Fin n → ZMod 2
+h✝ : (Matrix.toLin' (Matrix.transpose X)) w = ↑a
+⊢ ∃ v, f ↑v = ↑a
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:246:31: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  (Matrix.toLin' (Matrix.transpose (Y - X))) w = ↑b
+
+case right
+n d : ℕ
+X Y : BinaryMatrix n d
+hXY : w6Precedes X Y
+f : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose X)
+g : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose (Y - X))
+hrange :
+  (Matrix.toLin' (Matrix.transpose Y)).range =
+    (Matrix.toLin' (Matrix.transpose X)).range ⊔ (Matrix.toLin' (Matrix.transpose (Y - X))).range
+hint : (Matrix.toLin' (Matrix.transpose X)).range ⊓ (Matrix.toLin' (Matrix.transpose (Y - X))).range = ⊥
+hsum : Matrix.toLin' (Matrix.transpose Y) = f + g
+b : ↥(Matrix.toLin' (Matrix.transpose (Y - X))).range
+w : Fin n → ZMod 2
+h✝ : (Matrix.toLin' (Matrix.transpose (Y - X))) w = ↑b
+⊢ ∃ v, g ↑v = ↑b
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:401:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:424:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:429:8: warning: This simp argument is unused:
+  BinaryMatrixA1TypedFourier.carrierMean
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, complexCarrierFourierCoeff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:593:38: warning: This simp argument is unused:
+  Matrix.mulVecLin_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [w6BlockBottomDisplacementMap, Matrix.fromCols_mulVec, Matrix.mulVecLin_mul, Matrix.mulVecLin_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:594:50: warning: This simp argument is unused:
+  Matrix.mulVecLin_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [w6BlockBottomDisplacementMap, Matrix.mulVecLin_apply, Matrix.fromCols_mulVec, Matrix.mulVecLin_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:770:47: warning: This simp argument is unused:
+  CharTwo.add_self_eq_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [L, w6CanonicalBlockCandidate, Matrix.fromBlocks_multiply, hsJc, hsJp, Matrix.mul_assoc, add_assoc,
+    w6_matrix_add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:777:6: warning: This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [K, Matrix.fromBlocks_multiply, hrPc, Matrix.mul_assoc, CharTwo.add_self_eq_zero,
+    w6_matrix_add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:777:17: warning: This simp argument is unused:
+  CharTwo.add_self_eq_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [K, Matrix.fromBlocks_multiply, hrPc, Matrix.mul_assoc, add_assoc, w6_matrix_add_self_eq_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:807:17: warning: This simp argument is unused:
+  Matrix.mulVecLin_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [B, Matrix.fromBlocks_mulVec]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1118:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1078:43: warning: This simp argument is unused:
+  Matrix.mulVecLin_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g, w6BlockBottomDisplacementMap, Matrix.fromCols_mulVec, Matrix.mulVecLin_mul, cMap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1079:30: warning: This simp argument is unused:
+  Matrix.mulVecLin_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g, w6BlockBottomDisplacementMap, Matrix.mulVecLin_apply, Matrix.fromCols_mulVec, cMap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1099:45: warning: This simp argument is unused:
+  Matrix.mulVecLin_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g, w6BlockBottomDisplacementMap, Matrix.fromCols_mulVec, cMap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1111:45: warning: This simp argument is unused:
+  Matrix.mulVecLin_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [g, w6BlockBottomDisplacementMap, Matrix.fromCols_mulVec]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1390:12: warning: This simp argument is unused:
+  w6FixedZBlockFiber
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [w6FixedBottomBlockFiber, hzfactor]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1390:32: warning: This simp argument is unused:
+  w6FixedBottomBlockFiber
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [w6FixedZBlockFiber, hzfactor]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1497:7: warning: Variable name `hBC` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hBC
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1502:7: warning: Variable name `hAD` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hAD
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1619:7: warning: Variable name `hBC` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hBC
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1621:7: warning: Variable name `hAD` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hAD
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1622:7: warning: Variable name `bA` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bA
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1664:12: warning: This simp argument is unused:
+  hquot
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1840:40: warning: This simp argument is unused:
+  Matrix.mulVecLin_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [w6ActualFiniteCoordinateMatrix, Matrix.toLin'_toMatrix', LinearEquiv.trans_apply,
+    LinearEquiv.trans_symm, LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1841:4: warning: This simp argument is unused:
+  Matrix.toLin'_toMatrix'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [w6ActualFiniteCoordinateMatrix, Matrix.mulVecLin_apply, LinearEquiv.trans_apply, LinearEquiv.trans_symm,
+    LinearMap.comp_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1888:7: warning: Variable name `hBC` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hBC
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1890:7: warning: Variable name `hAD` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hAD
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1891:7: warning: Variable name `bA` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bA
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1941:64: error: unsolved goals
+n d : ℕ
+X Y : BinaryMatrix n d
+hXY : w6Precedes X Y
+f : ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[F] V d ⧸ (Matrix.toLin' (Matrix.transpose X)).range :=
+  w6ActualCarrierFrequency X Y
+g : ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[ZMod 2] Fin d → ZMod 2 :=
+  Matrix.toLin' (Matrix.transpose (Y - X)) ∘ₗ (Matrix.toLin' (Matrix.transpose X)).ker.subtype
+R : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose (Y - X))
+A : Submodule (ZMod 2) (Fin d → ZMod 2) := (Matrix.toLin' (Matrix.transpose X)).range
+left✝ :
+  (Matrix.toLin' (Matrix.transpose Y)).range =
+    (Matrix.toLin' (Matrix.transpose X)).range ⊔ (Matrix.toLin' (Matrix.transpose (Y - X))).range
+hint : (Matrix.toLin' (Matrix.transpose X)).range ⊓ (Matrix.toLin' (Matrix.transpose (Y - X))).range = ⊥
+hsum : Matrix.toLin' (Matrix.transpose Y) = Matrix.toLin' (Matrix.transpose X) + R
+v : ↥(Matrix.toLin' (Matrix.transpose X)).ker
+hv : (Matrix.toLin' (Matrix.transpose X)) ↑v = 0
+⊢ A.mkQ ((Matrix.toLin' (Matrix.transpose X) + R) ↑v) = A.mkQ ((Matrix.toLin' (Matrix.transpose X)) ↑v + R ↑v)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1959:28: error(lean.unknownIdentifier): Unknown constant `Submodule.mem_bot.mp`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1965:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  g v
+in the target expression
+  (A.mkQ ∘ₗ g) v = 0
+
+case mpr
+n d : ℕ
+X Y : BinaryMatrix n d
+hXY : w6Precedes X Y
+f : ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[F] V d ⧸ (Matrix.toLin' (Matrix.transpose X)).range :=
+  w6ActualCarrierFrequency X Y
+g : ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[ZMod 2] Fin d → ZMod 2 :=
+  Matrix.toLin' (Matrix.transpose (Y - X)) ∘ₗ (Matrix.toLin' (Matrix.transpose X)).ker.subtype
+R : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose (Y - X))
+A : Submodule (ZMod 2) (Fin d → ZMod 2) := (Matrix.toLin' (Matrix.transpose X)).range
+left✝ :
+  (Matrix.toLin' (Matrix.transpose Y)).range =
+    (Matrix.toLin' (Matrix.transpose X)).range ⊔ (Matrix.toLin' (Matrix.transpose (Y - X))).range
+hint : (Matrix.toLin' (Matrix.transpose X)).range ⊓ (Matrix.toLin' (Matrix.transpose (Y - X))).range = ⊥
+hsum : Matrix.toLin' (Matrix.transpose Y) = Matrix.toLin' (Matrix.transpose X) + R
+hfg : f = A.mkQ ∘ₗ g
+v : ↥(Matrix.toLin' (Matrix.transpose X)).ker
+hv : v ∈ g.ker
+hfgv : f v = (A.mkQ ∘ₗ g) v
+hv0 : g v = 0
+⊢ (A.mkQ ∘ₗ g) v = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1981:32: error: Type mismatch: After simplification, term
+  hv
+ has type
+  (Matrix.transpose Y).mulVec ↑v = R w
+but is expected to have type
+  R ↑v = R w
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:1988:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  e ≥ 0
+  c ≥ 0
+  c - e ≤ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ 0
+  a - b + h ≥ 1
+where
+ a := ↑(Module.finrank F ↥g.ker)
+ b := ↑(Module.finrank F ↥(Matrix.toLin' (Matrix.transpose X)).ker)
+ c := ↑(Module.finrank (ZMod 2) ↥g.ker)
+ e := ↑(Module.finrank (ZMod 2) ↥(Matrix.toLin' (Matrix.transpose X)).ker)
+ h := ↑(Module.finrank F ↥g.range)
