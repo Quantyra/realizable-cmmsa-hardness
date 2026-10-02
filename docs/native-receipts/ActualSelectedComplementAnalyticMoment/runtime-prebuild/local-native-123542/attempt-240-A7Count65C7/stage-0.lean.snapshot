@@ -1,0 +1,127 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+import PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+import Mathlib.LinearAlgebra.Projection
+import Mathlib.LinearAlgebra.Isomorphisms
+
+/-! Rank-additive predecessors at a fixed frequency.  This module starts the
+actual matrix-to-projection adapter used by the W6 predecessor count; it does
+not import the uncompiled GrassmannCounting draft. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- The transposed linear map represented by a matrix in the manuscript's
+`W n → V d` convention. -/
+def transposeMap {n d : Nat} (M : BinaryMatrix n d) : W n →ₗ[F] V d :=
+  M.transpose.toLin'
+
+private theorem transposeMap_rank {n d : Nat} (M : BinaryMatrix n d) :
+    Module.finrank F (LinearMap.range (transposeMap M)) = M.rank := by
+  change Module.finrank F (LinearMap.range M.transpose.toLin') = M.rank
+  rw [← Matrix.rank_transpose M]
+  rw [Matrix.rank_eq_finrank_range_toLin M.transpose
+    (Pi.basisFun F _) (Pi.basisFun F _)]
+  rw [Matrix.toLin_eq_toLin']
+
+/-- Rank additivity makes the two transposed image subspaces disjoint and
+their sum exactly the image of the parent map.  The map direction is
+`W n → V d`, since `M.transpose.toLin'` is the represented map. -/
+theorem w6_predecessor_range_decomposition {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    LinearMap.range (transposeMap X) ⊓
+        LinearMap.range (transposeMap (Y - X)) = ⊥ ∧
+      LinearMap.range (transposeMap X) ⊔
+        LinearMap.range (transposeMap (Y - X)) =
+          LinearMap.range (transposeMap Y) := by
+  let LX := transposeMap X
+  let LY := transposeMap Y
+  let LZ := transposeMap (Y - X)
+  have hsum : LY = LX + LZ := by
+    ext v i
+    simp [LY, LX, LZ, transposeMap, Matrix.toLin'_apply,
+      Matrix.transpose_sub, Matrix.sub_apply]
+  have hRle : LinearMap.range LY ≤
+      LinearMap.range LX ⊔ LinearMap.range LZ := by
+    intro z hz
+    rcases hz with ⟨v, rfl⟩
+    rw [hsum]
+    change LX v + LZ v ∈ LinearMap.range LX ⊔ LinearMap.range LZ
+    apply add_mem
+    · exact le_sup_left (LinearMap.mem_range_self v)
+    · exact le_sup_right (LinearMap.mem_range_self v)
+  have hdim : Module.finrank F (LinearMap.range LY) =
+      Module.finrank F (LinearMap.range LX) +
+        Module.finrank F (LinearMap.range LZ) := by
+    rw [transposeMap_rank, transposeMap_rank, transposeMap_rank]
+    exact hXY
+  have hsup_le : Module.finrank F
+      (LinearMap.range LX ⊔ LinearMap.range LZ) ≤
+        Module.finrank F (LinearMap.range LX) +
+          Module.finrank F (LinearMap.range LZ) := by
+    have h := Submodule.finrank_sup_add_finrank_inf_eq
+      (LinearMap.range LX) (LinearMap.range LZ)
+    omega
+  have hsup_dim : Module.finrank F
+      (LinearMap.range LX ⊔ LinearMap.range LZ) =
+        Module.finrank F (LinearMap.range LY) := by
+    have hmono := Submodule.finrank_mono hRle
+    omega
+  have hsum_eq : LinearMap.range LY =
+      LinearMap.range LX ⊔ LinearMap.range LZ :=
+    Submodule.eq_of_le_of_finrank_eq hRle hsup_dim.symm
+  have hinf_dim : Module.finrank F
+      (LinearMap.range LX ⊓ LinearMap.range LZ) = 0 := by
+    have h := Submodule.finrank_sup_add_finrank_inf_eq
+      (LinearMap.range LX) (LinearMap.range LZ)
+    rw [hsup_dim] at h
+    omega
+  have hinf : LinearMap.range LX ⊓ LinearMap.range LZ = ⊥ :=
+    (Submodule.finrank_eq_zero).mp hinf_dim
+  exact ⟨hinf, hsum_eq.symm⟩
+
+/-- The parent's kernel is contained in the predecessor's kernel.  This is
+the well-definedness fact needed to descend `Xᵀ` to `range(Yᵀ)`. -/
+theorem w6_predecessor_ker_le {n d : Nat}
+    (X Y : BinaryMatrix n d) (hXY : w6Precedes X Y) :
+    LinearMap.ker (transposeMap Y) ≤ LinearMap.ker (transposeMap X) := by
+  have hsum : transposeMap Y = transposeMap X + transposeMap (Y - X) := by
+    ext v i
+    simp [transposeMap, Matrix.toLin'_apply, Matrix.transpose_sub,
+      Matrix.sub_apply]
+  have hdisj := (w6_predecessor_range_decomposition X Y hXY).1
+  intro v hv
+  apply LinearMap.mem_ker.mpr
+  have hzero := LinearMap.mem_ker.mp hv
+  have hparts : transposeMap X v = -(transposeMap (Y - X) v) := by
+    have := congrArg (fun z : V d => z) (hzero)
+    rw [hsum, LinearMap.add_apply] at this
+    exact (eq_neg_iff_add_eq_zero).2 this
+  have hx : transposeMap X v ∈ LinearMap.range (transposeMap X) :=
+    LinearMap.mem_range_self v
+  have hz : -(transposeMap (Y - X) v) ∈ LinearMap.range (transposeMap (Y - X)) :=
+    (LinearMap.range (transposeMap (Y - X))).neg_mem
+      (LinearMap.mem_range_self v)
+  have hboth : transposeMap X v ∈
+      LinearMap.range (transposeMap X) ⊓ LinearMap.range (transposeMap (Y - X)) :=
+    ⟨hx, by rw [hparts]; exact hz⟩
+  have hbot : transposeMap X v = 0 := by
+    have hm := hboth
+    rw [hdisj] at hm
+    simpa using hm
+  exact hbot
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
