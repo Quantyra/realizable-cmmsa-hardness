@@ -1,7 +1,7 @@
 import pathlib,json,hashlib,re,os,subprocess,time
 repo=pathlib.Path(__file__).resolve().parents[4]
 b=repo/'docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild'
-out=b/'local-native-123542';src=out/'src';lib=out/'lib';out.mkdir(exist_ok=True);log=out/'attempt-283-A7EnergyC242';log.mkdir(exist_ok=True)
+out=b/'local-native-123542';src=out/'src';lib=out/'lib';out.mkdir(exist_ok=True);log=out/'attempt-283-A7CoordinatesF877';log.mkdir(exist_ok=True)
 pins=json.loads((b/'local-a18-283-pins.json').read_text())
 snaps={hashlib.sha256(p.read_bytes()).hexdigest().upper():p for p in (b/'source-snapshots').glob('*.snapshot')}
 for s,h in pins.items():
@@ -31,7 +31,7 @@ def build(n):
  records.append({'module':n,'exit':r.returncode,'seconds':round(time.time()-started,2),'source_sha':hashlib.sha256(p.read_bytes()).hexdigest().upper()});(log/'stages.json').write_text(json.dumps(records,indent=2)+'\n');print(json.dumps(records[-1]),flush=True)
  if r.returncode:failed.add(n)
  return r.returncode==0
-targets=['PvNP.RealizableHardness.'+n+s for n in ['ActualBinaryMatrixHC46A7EnergyConsumer'] for s in ['', 'Checks']]
+targets=['PvNP.RealizableHardness.'+n+s for n in ['ActualBinaryMatrixHC46A7WeightedPredecessor'] for s in ['', 'Checks']]
 okay=True
 for i in range(0,len(targets),2):
  good=build(targets[i]);good=build(targets[i+1]) if good else False;okay=okay and good
