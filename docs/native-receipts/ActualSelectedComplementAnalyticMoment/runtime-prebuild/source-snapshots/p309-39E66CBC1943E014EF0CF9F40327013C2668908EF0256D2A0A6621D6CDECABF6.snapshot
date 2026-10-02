@@ -1,0 +1,151 @@
+import Mathlib.Tactic
+
+/-! Exact scalar absorption estimates used by the outer A18 rank induction.
+These bounds only normalize the manuscript's numerical constants. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds
+
+open scoped BigOperators
+
+def a18BudgetScale (D r : Nat) (eps : Real) : Real :=
+  (2 : Real) ^ (10 * D * r) * eps
+
+/-- The top A17 contribution is at most `9/512` of the induction budget. -/
+theorem a18_top_contribution_le_nine512
+    {D r : Nat} {eps : Real} (hD : 1 ≤ D) (hr : 1 ≤ r)
+    (heps : 0 ≤ eps) :
+    2 * (2 : Real) ^ (10 * (D - 1) * (r - 1)) * eps +
+      4 * (2 : Real) ^ (2 * D) * (2 : Real) ^ (10 * D * (r - 1)) * eps ≤
+        (9 / 512 : Real) * a18BudgetScale D r eps := by
+  let d0 := D - 1
+  let r0 := r - 1
+  have hd0 : d0 + 1 = D := by dsimp [d0]; omega
+  have hr0 : r0 + 1 = r := by dsimp [r0]; omega
+  have hd0nonneg : 0 ≤ d0 := Nat.zero_le _
+  have hr0nonneg : 0 ≤ r0 := Nat.zero_le _
+  have hexp1 : 10 * d0 * r0 + 10 ≤ 10 * D * r := by
+    rw [← hd0, ← hr0]
+    nlinarith [mul_nonneg hd0nonneg hr0nonneg]
+  have hexp2 : 2 * D + 10 * D * r0 + 8 ≤ 10 * D * r := by
+    rw [← hd0, ← hr0]
+    nlinarith [mul_nonneg hd0nonneg hr0nonneg]
+  have hpow1 : (2 : Real) ^ (10 * d0 * r0 + 10) ≤
+      (2 : Real) ^ (10 * D * r) :=
+    pow_le_pow_right₀ (by norm_num) hexp1
+  have hpow2 : (2 : Real) ^ (2 * D + 10 * D * r0 + 8) ≤
+      (2 : Real) ^ (10 * D * r) :=
+    pow_le_pow_right₀ (by norm_num) hexp2
+  have hfirst : 2 * (2 : Real) ^ (10 * d0 * r0) * eps ≤
+      a18BudgetScale D r eps / 512 := by
+    rw [le_div_iff₀ (by norm_num : (0 : Real) < 512)]
+    calc
+      (2 * (2 : Real) ^ (10 * d0 * r0) * eps) * 512 =
+          (2 : Real) ^ (10 * d0 * r0 + 10) * eps := by
+            norm_num [pow_add]
+            ring
+      _ ≤ (2 : Real) ^ (10 * D * r) * eps :=
+        mul_le_mul_of_nonneg_right hpow1 heps
+      _ = a18BudgetScale D r eps := by rfl
+  have hsecond : 4 * (2 : Real) ^ (2 * D) *
+      (2 : Real) ^ (10 * D * r0) * eps ≤
+        a18BudgetScale D r eps / 64 := by
+    rw [le_div_iff₀ (by norm_num : (0 : Real) < 64)]
+    calc
+      (4 * (2 : Real) ^ (2 * D) *
+          (2 : Real) ^ (10 * D * r0) * eps) * 64 =
+          (2 : Real) ^ (2 * D + 10 * D * r0 + 8) * eps := by
+            norm_num [pow_add]
+            ring
+      _ ≤ (2 : Real) ^ (10 * D * r) * eps :=
+        mul_le_mul_of_nonneg_right hpow2 heps
+      _ = a18BudgetScale D r eps := by rfl
+  calc
+    _ ≤ a18BudgetScale D r eps / 512 +
+          a18BudgetScale D r eps / 64 := add_le_add hfirst hsecond
+    _ = (9 / 512 : Real) * a18BudgetScale D r eps := by ring
+
+private theorem a18_geometric_sum_le {D r : Nat} (hr : 1 ≤ r) :
+    (∑ i ∈ Finset.range D, (2 : Real) ^ (5 * i * r)) ≤
+      (2 : Real) ^ (5 * D * r) / 31 := by
+  induction D with
+  | zero => simp
+  | succ D ih =>
+      rw [Finset.sum_range_succ]
+      have hq : (32 : Real) ≤ (2 : Real) ^ (5 * r) := by
+        have he : 5 ≤ 5 * r := by omega
+        calc
+          (32 : Real) = 2 ^ 5 := by norm_num
+          _ ≤ 2 ^ (5 * r) := pow_le_pow_right₀ (by norm_num) he
+      have hpow : (2 : Real) ^ (5 * (D + 1) * r) =
+          (2 : Real) ^ (5 * D * r) * (2 : Real) ^ (5 * r) := by
+        rw [← pow_add]
+        congr 1
+        ring
+      have hx : 0 ≤ (2 : Real) ^ (5 * D * r) := by positivity
+      calc
+        (∑ i ∈ Finset.range D, (2 : Real) ^ (5 * i * r)) +
+            (2 : Real) ^ (5 * D * r) ≤
+          (2 : Real) ^ (5 * D * r) / 31 +
+            (2 : Real) ^ (5 * D * r) := add_le_add ih le_rfl
+        _ ≤ ((2 : Real) ^ (5 * r) / 31) *
+            (2 : Real) ^ (5 * D * r) := by
+          nlinarith [mul_le_mul_of_nonneg_right hq hx]
+        _ = (2 : Real) ^ (5 * (D + 1) * r) / 31 := by rw [hpow]; ring
+
+/-- The square of the sum of all lower-level square-root bounds is at most
+`K/961`; this preserves the cross terms in the outer induction. -/
+theorem a18_lower_levels_square_le
+    {D r : Nat} {eps : Real} (hr : 1 ≤ r) (heps : 0 ≤ eps) :
+    ((∑ i ∈ Finset.range D, (2 : Real) ^ (5 * i * r)) ^ 2) * eps ≤
+      a18BudgetScale D r eps / 961 := by
+  have hsum := a18_geometric_sum_le (D := D) hr
+  have hsum_nonneg :
+      0 ≤ ∑ i ∈ Finset.range D, (2 : Real) ^ (5 * i * r) := by
+    exact Finset.sum_nonneg fun i hi => by positivity
+  have hsq :
+      (∑ i ∈ Finset.range D, (2 : Real) ^ (5 * i * r)) ^ 2 ≤
+        ((2 : Real) ^ (5 * D * r) / 31) ^ 2 := by
+    have hright : 0 ≤ (2 : Real) ^ (5 * D * r) / 31 := by positivity
+    have hsumPlus : 0 ≤
+        (∑ i ∈ Finset.range D, (2 : Real) ^ (5 * i * r)) +
+          (2 : Real) ^ (5 * D * r) / 31 := by linarith
+    have hdiff : 0 ≤ (2 : Real) ^ (5 * D * r) / 31 -
+        (∑ i ∈ Finset.range D, (2 : Real) ^ (5 * i * r)) :=
+      sub_nonneg.mpr hsum
+    nlinarith [mul_nonneg hsumPlus hdiff]
+  calc
+    _ ≤ ((2 : Real) ^ (5 * D * r) / 31) ^ 2 * eps :=
+      mul_le_mul_of_nonneg_right hsq heps
+    _ = a18BudgetScale D r eps / 961 := by
+      simp only [div_pow]
+      rw [← pow_mul]
+      have hexp : 5 * D * r * 2 = 10 * D * r := by ring
+      rw [hexp]
+      norm_num [a18BudgetScale] <;> ring
+
+/-- The manuscript's two lower-level contributions fit inside half of the
+budget, including the zero-epsilon boundary case. -/
+theorem a18_lower_absorption {D r : Nat} {eps : Real}
+    (hr : 1 ≤ r) (heps : 0 ≤ eps) :
+    a18BudgetScale D r eps / 2 +
+      2 * (((∑ i ∈ Finset.range D, (2 : Real) ^ (5 * i * r)) ^ 2) * eps) ≤
+        a18BudgetScale D r eps := by
+  have hlow := a18_lower_levels_square_le (D := D) hr heps
+  have hK : 0 ≤ a18BudgetScale D r eps := by
+    unfold a18BudgetScale
+    positivity
+  calc
+    _ ≤ a18BudgetScale D r eps / 2 +
+        2 * (a18BudgetScale D r eps / 961) := by
+          exact add_le_add le_rfl (mul_le_mul_of_nonneg_left hlow (by norm_num))
+    _ ≤ a18BudgetScale D r eps := by
+      have hc : (1 / 2 : Real) + 2 / 961 ≤ 1 := by norm_num
+      calc
+        a18BudgetScale D r eps / 2 +
+            2 * (a18BudgetScale D r eps / 961) =
+          ((1 / 2 : Real) + 2 / 961) * a18BudgetScale D r eps := by ring
+        _ ≤ 1 * a18BudgetScale D r eps :=
+          mul_le_mul_of_nonneg_right hc hK
+        _ = a18BudgetScale D r eps := by ring
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds
