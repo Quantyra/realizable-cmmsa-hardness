@@ -1,0 +1,44 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:78:42: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:82:37: warning: This simp argument is unused:
+  complexFourierCoeff
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [affineBaseFourierTerm, hs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:100:42: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:127:2: error: unsolved goals
+case pos
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+Y : BinaryMatrix n d
+hfun : (fun T => filteredCarrierFunction A B (Matrix.toLin' T) f M) = fun T => ∑ Z, affineBaseFourierTerm A B f M Z T
+hs : Selected A B (Matrix.toLin' (Matrix.transpose Y))
+⊢ (∑ x,
+      if Selected A B (Matrix.toLin' (Matrix.transpose x)) then
+        if Y = x then
+          complexFourierCoeff f x * ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose x) ∘ₗ B.subtype) M)
+        else 0
+      else 0) =
+    complexFourierCoeff f Y * ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype) M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:128:2: error: unsolved goals
+case neg
+n d : ℕ
+A : Submodule (ZMod 2) (Fin d → ZMod 2)
+B : Submodule (ZMod 2) (Fin n → ZMod 2)
+f : BinaryMatrix n d → ℂ
+M : (Fin d → ZMod 2) ⧸ A →ₗ[ZMod 2] ↥B
+Y : BinaryMatrix n d
+hfun : (fun T => filteredCarrierFunction A B (Matrix.toLin' T) f M) = fun T => ∑ Z, affineBaseFourierTerm A B f M Z T
+hs : ¬Selected A B (Matrix.toLin' (Matrix.transpose Y))
+⊢ (∑ x,
+      if Selected A B (Matrix.toLin' (Matrix.transpose x)) then
+        if Y = x then
+          complexFourierCoeff f x * ↑(traceCharacter (A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose x) ∘ₗ B.subtype) M)
+        else 0
+      else 0) =
+    0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A12FourthMoment.lean:157:19: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
