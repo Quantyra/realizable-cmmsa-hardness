@@ -1,0 +1,56 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own345\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:58:18: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own345\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:96:2: warning: Unused tactic linter: `change
+  Finset.univ.prod (fun i : Fin k => 2 ^ n - 2 ^ i.val) =
+    2 ^ (k * (k - 1) / 2) * Finset.prod (Finset.range k) (fun i => 2 ^ (n - i) - 1)` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own345\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:285:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  2 ^ (n - k) * 2 ^ k
+in the target expression
+  2 ^ n - 1 =
+    (2 ^ (n - k) - 1) * (1 + (2 ^ k - 1) * ↑(dr6QFactorial (n - k - 1)) * 2 ^ (n - k) / ↑(dr6QFactorial (n - k)))
+
+n k : ℕ
+hk : 0 < k
+hkn : k < n
+hn : 0 < n
+hm : 0 < n - k
+hklt : k - 1 < n - 1
+hnk : n = n - k + k
+hpow : 2 ^ (n - k) * 2 ^ k = 2 ^ n
+hqfactN : dr6QFactorial n = dr6QFactorial (n - 1) * (2 ^ n - 1)
+hqfactM : dr6QFactorial (n - k) = dr6QFactorial (n - k - 1) * (2 ^ (n - k) - 1)
+hqfactK : dr6QFactorial k = dr6QFactorial (k - 1) * (2 ^ k - 1)
+hidxM : n - 1 - k = n - k - 1
+hidxK : n - 1 - (k - 1) = n - k
+hqN1 : 0 < ↑(dr6QFactorial (n - 1))
+hqM1 : 0 < ↑(dr6QFactorial (n - k - 1))
+hqK1 : 0 < ↑(dr6QFactorial (k - 1))
+hnN : 1 < 2 ^ n
+hnM : 1 < 2 ^ (n - k)
+hnK : 1 < 2 ^ k
+hnCast : ↑(2 ^ n - 1) = 2 ^ n - 1
+hmCast : ↑(2 ^ (n - k) - 1) = 2 ^ (n - k) - 1
+hkCast : ↑(2 ^ k - 1) = 2 ^ k - 1
+hn1 : 0 < 2 ^ n - 1
+hm1 : 0 < 2 ^ (n - k) - 1
+hk1 : 0 < 2 ^ k - 1
+⊢ 2 ^ n - 1 =
+    (2 ^ (n - k) - 1) * (1 + (2 ^ k - 1) * ↑(dr6QFactorial (n - k - 1)) * 2 ^ (n - k) / ↑(dr6QFactorial (n - k)))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own345\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:311:10: warning: This simp argument is unused:
+  Nat.sub_self
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own345\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Mobius.lean:315:46: error: unsolved goals
+case calc.step
+n k : ℕ
+hkn : k ≤ n
+hsum : (k + 1) * (k + 1 - 1) / 2 = k * (k - 1) / 2 + k
+htri : (k + 1) * k / 2 = k * (k - 1) / 2 + k
+htri' : (k + 1) * (k + 1 - 1) / 2 = k * (k - 1) / 2 + k
+hpow2 : 2 ^ k * 2 ^ (n - k) = 2 ^ (k + (n - k))
+hpow3 : k * (k - 1) / 2 + (k + (n - k)) = n + k * (k - 1) / 2
+⊢ -(2 ^ n * ((-1) ^ k * 2 ^ (k * (k - 1) / 2))) = -2 ^ n * ((-1) ^ k * 2 ^ (k * (k - 1) / 2))
