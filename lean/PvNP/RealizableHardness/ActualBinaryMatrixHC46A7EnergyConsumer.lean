@@ -1,0 +1,116 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+
+/-! The actual W6 energy consumer.  The finite-sum estimate below is the
+pointwise Cauchy step used on each genuine predecessor-frequency fiber. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1Phase
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- Squared complex magnitude of a finite sum is bounded by the fiber size
+times the sum of the squared magnitudes. -/
+theorem complex_normSq_sum_le_card_mul_sum_normSq
+    {ι : Type*} [Fintype ι] (f : ι → Complex) :
+    Complex.normSq (∑ i, f i) ≤
+      (Fintype.card ι : ℝ) * ∑ i, Complex.normSq (f i) := by
+  have hcauchy := Finset.sum_mul_sq_le_sq_mul_sq (Finset.univ : Finset ι)
+    (fun _ : ι => (1 : ℝ)) (fun i => ‖f i‖)
+  have hcauchy' : (∑ i : ι, ‖f i‖) ^ 2 ≤
+      (Fintype.card ι : ℝ) * ∑ i : ι, ‖f i‖ ^ 2 := by
+    simpa using hcauchy
+  have hnorm : ‖∑ i : ι, f i‖ ≤ ∑ i : ι, ‖f i‖ := norm_sum_le _ _
+  rw [Complex.normSq_eq_norm_sq]
+  calc
+    ‖∑ i : ι, f i‖ ^ 2 ≤ (∑ i : ι, ‖f i‖) ^ 2 := by
+      nlinarith [norm_nonneg (∑ i : ι, f i), Finset.sum_nonneg
+        (fun i (_ : i ∈ Finset.univ) => norm_nonneg (f i))]
+    _ ≤ (Fintype.card ι : ℝ) * ∑ i : ι, ‖f i‖ ^ 2 := hcauchy'
+    _ = (Fintype.card ι : ℝ) * ∑ i : ι, Complex.normSq (f i) := by
+      congr 1
+      apply Finset.sum_congr rfl
+      intro i hi
+      exact (Complex.normSq_eq_norm_sq (f i)).symm
+
+/-- The collision coefficient of the actual W6 derivative is a sum over the
+literal predecessor-frequency fiber. -/
+theorem actualW6Derivative_carrierCoeff_fiberSum {n d : Nat}
+    (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin')) :
+    complexCarrierFourierCoeff
+        (LinearMap.range X.transpose.toLin')
+        (LinearMap.ker X.transpose.toLin')
+        (actualW6Derivative X T f) Z =
+      ∑ Y : w6ActualPredecessorFrequencyFiber X Z,
+        complexFourierCoeff f Y.1 *
+          (traceCharacter Y.1.transpose.toLin' T : Complex) := by
+  classical
+  rw [actualW6Derivative_carrier_fourierCoeff]
+  let p : BinaryMatrix n d → Prop := fun Y =>
+    w6Precedes X Y ∧ w6ActualCarrierFrequency X Y = Z
+  calc
+    (∑ Y : BinaryMatrix n d,
+        if w6Precedes X Y then
+          if Z = (LinearMap.range X.transpose.toLin').mkQ.comp
+              (Y.transpose.toLin'.comp (LinearMap.ker X.transpose.toLin').subtype)
+          then complexFourierCoeff f Y *
+              (traceCharacter Y.transpose.toLin' T : Complex)
+          else 0
+        else 0) =
+        ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n d)).filter p,
+          complexFourierCoeff f Y *
+            (traceCharacter Y.transpose.toLin' T : Complex) := by
+      rw [Finset.sum_filter]
+      apply Finset.sum_congr rfl
+      intro Y hY
+      by_cases hp : w6Precedes X Y
+      · simp [p, hp, w6ActualCarrierFrequency, eq_comm]
+      · simp [p, hp]
+    _ = ∑ Y : w6ActualPredecessorFrequencyFiber X Z,
+          complexFourierCoeff f Y.1 *
+            (traceCharacter Y.1.transpose.toLin' T : Complex) := by
+      symm
+      simpa [p, w6ActualPredecessorFrequencyFiber] using
+        (Finset.sum_subtype_eq_sum_filter
+          (s := (Finset.univ : Finset (BinaryMatrix n d)))
+          (p := fun Y => w6Precedes X Y ∧
+            w6ActualCarrierFrequency X Y = Z)
+          (fun Y => complexFourierCoeff f Y *
+            (traceCharacter Y.transpose.toLin' T : Complex)))
+
+/-- Pointwise Cauchy bound for every genuine actual carrier-frequency
+collision fiber. -/
+theorem actualW6Derivative_carrierCoeff_normSq_le_fiber
+    {n d : Nat} (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin')) :
+    Complex.normSq (complexCarrierFourierCoeff
+      (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin')
+      (actualW6Derivative X T f) Z) ≤
+      (Fintype.card (w6ActualPredecessorFrequencyFiber X Z) : ℝ) *
+        ∑ Y : w6ActualPredecessorFrequencyFiber X Z,
+          Complex.normSq (complexFourierCoeff f Y.1 *
+            (traceCharacter Y.1.transpose.toLin' T : Complex)) := by
+  rw [actualW6Derivative_carrierCoeff_fiberSum]
+  exact complex_normSq_sum_le_card_mul_sum_normSq _
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer
