@@ -1,0 +1,502 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+import Mathlib.LinearAlgebra.Dual.Lemmas
+import Mathlib.Algebra.Module.Submodule.Map
+
+/-!
+Complex-valued signed incidence stage for the DR6 F2 argument.
+
+The source theorem (submission-manuscript.md, especially lines 1385--1386
+and 1584--1613) permits complex-valued functions except for the final
+indicator. Accordingly every Fourier coefficient and every incidence sum
+below remains in `Complex`; cancellation is performed before absolute values
+or norms are introduced. No reality, Booleanity, idempotence, Gaussian-count,
+L4, or DR6 premise is assumed.
+
+For X=Y+Z, let I be the common intersection of the three actual transpose
+images in F_2^d. Actual k-subspaces of I contribute
+  sum_{k>0} alpha_k * 1_{A <= im(X^T), im(Y^T), im(Z^T)},
+which is exactly 1_{I != 0} by the actual W6Grass Möbius indicator. Let
+K=ker(X^T)+ker(Y^T)+ker(Z^T) in F_2^n. The coordinate realization of
+K.dualAnnihilator is the common intersection of im(X), im(Y), im(Z), so
+the same actual-subspace indicator is exactly 1_{K != F_2^n}. The map
+B |-> B.dualAnnihilator is order reversing and dimension complementary;
+the coordinate dual equivalence transports it to an actual Grassmannian
+bijection. Thus the latter sum is a count of actual codimension-j
+superspaces B of K, not an assumed Gaussian symmetry or proxy count.
+
+The union indicator is Iind + Kind - Iind*Kind. Expanding the product and
+reindexing finite sums over actual subspaces gives coefficients
+alpha_i, alpha_j, and -alpha_i*alpha_j. The i=0 and j=0 terms are excluded
+by the Mobius alpha convention; when an ambient dimension is zero the
+corresponding positive-dimensional Grassmannians are empty, and the common
+image/kernel indicators are zero. A=0 and B=F_2^n remain included in each
+one-sided sum and are removed only by the explicit exclusion of (i,j)=(0,0).
+
+For fixed A <= F_2^d and B <= F_2^n, a frequency Y is selected precisely
+when A <= range(Y^T) and ker(Y^T) <= B. Under coordinate duality the latter
+condition is equivalent to B.dualAnnihilator <= range(Y). The two incidence
+conditions on Y and Z therefore are exactly the ordinary P_{A,B} filter
+conditions. The signed sum over Y+Z=X is the Xth complex Fourier coefficient
+of the pointwise square of that complex ordinary filter, by the exact complex
+convolution identity. Parseval later applies to this complex square as
+sum_X |hat g(X)|^2 = E |P_{A,B}f|^4.
+
+This module is scoped to the actual annihilator/incidence and signed
+reindexing step. The weighted count, Cauchy estimate, F1/F2 combination,
+and complete DR6 theorem remain separate open obligations. Until the final
+finite reindexing theorem is present, the signed-incidence argument remains
+incomplete and no DR6/F2 claim is certified by this file.
+-/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Incidence
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Mobius
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17TransposeHybridFilter
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (n : Nat) := Fin n -> F
+
+/-- Actual ambient k-subspaces contained in I are equivalent to actual
+k-subspaces of the subspace I. This is the map/comap-subtype equivalence;
+rank is preserved by `finrank_map_subtype_eq`. -/
+noncomputable def dr6GrassBelowEquiv {E : Type*} [AddCommGroup E]
+    [Module F E] [Fintype E] (I : Submodule F E) (k : Nat) :
+    {A : W6Grass E k // A.1 <= I} ≃ W6Grass I k where
+  toFun A := by
+    let U : Submodule F I := A.1.1.comap I.subtype
+    have hdim : Module.finrank F U = Module.finrank F A.1.1 := by
+      rw [← Submodule.finrank_map_subtype_eq I U,
+        Submodule.map_comap_subtype, inf_of_le_right A.2]
+    exact ⟨U, hdim.trans A.1.2⟩
+  invFun U :=
+    ⟨⟨U.1.map I.subtype, by simpa using Submodule.finrank_map_subtype_eq I U.1⟩,
+      Submodule.map_subtype_le I U.1⟩
+  left_inv A := by
+    apply Subtype.ext
+    apply Subtype.ext
+    change (A.1.1.comap I.subtype).map I.subtype = A.1.1
+    rw [Submodule.map_comap_subtype, inf_of_le_right A.2]
+  right_inv U := by
+    apply Subtype.ext
+    apply Subtype.ext
+    change (U.1.map I.subtype).comap I.subtype = U.1
+    exact Submodule.comap_map_eq_of_injective
+      (show Function.Injective I.subtype from Subtype.val_injective) U.1
+
+/-- Actual weighted count of subspaces of the concrete intersection I. -/
+def dr6ActualIntersectionMobiusSum {d : Nat} (I : Submodule F (V d)) : Rat :=
+  ∑ k ∈ Finset.range (Module.finrank F I + 1),
+    ∑ A : {A : W6Grass (V d) k // A.1 <= I}, dr6MobiusAlphaRat k
+
+/-- Reindexing the actual ambient subspaces below I by the actual Grassmannian
+of I gives the already-proved actual Mobius indicator at dim(I). -/
+theorem dr6_actual_intersection_mobius_indicator {d : Nat}
+    (I : Submodule F (V d)) :
+    dr6ActualIntersectionMobiusSum I =
+      if 0 < Module.finrank F I then 1 else 0 := by
+  classical
+  have hsum : dr6ActualIntersectionMobiusSum I =
+      dr6ActualMobiusIndicatorSum (Module.finrank F I) := by
+    unfold dr6ActualIntersectionMobiusSum dr6ActualMobiusIndicatorSum
+    apply Finset.sum_congr rfl
+    intro k hk
+    have hinner :
+        (∑ A : {A : W6Grass (V d) k // A.1 <= I}, dr6MobiusAlphaRat k) =
+          (Fintype.card (W6Grass I k) : Rat) * dr6MobiusAlphaRat k := by
+      calc
+        _ = ∑ U : W6Grass I k, dr6MobiusAlphaRat k := by
+          apply Fintype.sum_equiv (dr6GrassBelowEquiv I k)
+          intro A
+          rfl
+        _ = _ := by simp
+    have hcard : Fintype.card (W6Grass I k) =
+        dr6ActualGaussian (Module.finrank F I) k := by
+      rw [dr6_actual_gaussian_eq_w6]
+      exact w6_card_grass (E := I) k
+    rw [hinner, hcard]
+  rw [hsum]
+  exact dr6_actual_mobius_indicator (Module.finrank F I)
+
+/-- The actual common transpose-image intersection in the codomain. -/
+def dr6F2CommonImage {n d : Nat} (X Y Z : BinaryMatrix n d) :
+    Submodule F (V d) :=
+  LinearMap.range X.transpose.mulVecLin ⊓
+    LinearMap.range Y.transpose.mulVecLin ⊓
+      LinearMap.range Z.transpose.mulVecLin
+
+/-- The actual sum of the three transposed kernels in the domain. -/
+def dr6F2KernelSum {n d : Nat} (X Y Z : BinaryMatrix n d) :
+    Submodule F (V n) :=
+  LinearMap.ker X.transpose.mulVecLin ⊔
+    LinearMap.ker Y.transpose.mulVecLin ⊔
+      LinearMap.ker Z.transpose.mulVecLin
+
+def dr6F2ImageMobiusSum {n d : Nat} (X Y Z : BinaryMatrix n d) : Rat :=
+  dr6ActualIntersectionMobiusSum (dr6F2CommonImage X Y Z)
+
+def dr6F2KernelMobiusSum {n d : Nat} (X Y Z : BinaryMatrix n d) : Rat :=
+  dr6ActualIntersectionMobiusSum
+    (dr6CoordinateDualAnnihilator (dr6F2KernelSum X Y Z))
+
+/-- The kernel-sum obstruction is detected by positive dimension of its
+actual coordinate annihilator. -/
+theorem dr6_kernelSum_proper_iff_annihilator_positive {n : Nat}
+    (K : Submodule F (V n)) :
+    K ≠ ⊤ <-> 0 < Module.finrank F (dr6CoordinateDualAnnihilator K) := by
+  have hdim := dr6_coordinateDualAnnihilator_finrank K
+  have htop : Module.finrank F (⊤ : Submodule F (V n)) = n := by
+    simp [V]
+  constructor
+  · intro hK
+    have hlt : K < (⊤ : Submodule F (V n)) := lt_of_le_of_ne le_top hK
+    have hrank := Submodule.finrank_lt_finrank_of_lt hlt
+    rw [htop] at hrank
+    omega
+  · intro hpos heq
+    rw [heq, htop] at hdim
+    omega
+
+/-- Exact actual Mobius indicator for the F2 common-image obstruction. -/
+theorem dr6_f2_imageMobius_indicator {n d : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    dr6F2ImageMobiusSum X Y Z =
+      if dr6F2CommonImage X Y Z ≠ ⊥ then 1 else 0 := by
+  unfold dr6F2ImageMobiusSum
+  have hpos : 0 < Module.finrank F (dr6F2CommonImage X Y Z) <->
+      dr6F2CommonImage X Y Z ≠ ⊥ := by
+    rw [Module.finrank_pos_iff, Submodule.nontrivial_iff_ne_bot]
+  rw [dr6_actual_intersection_mobius_indicator]
+  rw [hpos]
+  rfl
+
+/-- Exact actual Mobius indicator for failure of the three kernels to span. -/
+theorem dr6_f2_kernelMobius_indicator {n d : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    dr6F2KernelMobiusSum X Y Z =
+      if dr6F2KernelSum X Y Z ≠ ⊤ then 1 else 0 := by
+  unfold dr6F2KernelMobiusSum
+  rw [dr6_actual_intersection_mobius_indicator]
+  rw [dr6_kernelSum_proper_iff_annihilator_positive]
+  rfl
+
+/-- The signed union indicator uses exactly alpha_i, alpha_j, and
+`-alpha_i*alpha_j`, with the overlap subtracted once. -/
+def dr6F2SignedIncidenceWeight (i j : Nat) : Rat :=
+  if i = 0 then
+    if j = 0 then 0 else dr6MobiusAlphaRat j
+  else if j = 0 then dr6MobiusAlphaRat i
+  else -(dr6MobiusAlphaRat i * dr6MobiusAlphaRat j)
+
+theorem dr6_f2_signed_weight_endpoints (i j : Nat) :
+    dr6F2SignedIncidenceWeight i j =
+      if i = 0 then
+        if j = 0 then 0 else dr6MobiusAlphaRat j
+      else if j = 0 then dr6MobiusAlphaRat i
+      else -(dr6MobiusAlphaRat i * dr6MobiusAlphaRat j) := by
+  rfl
+
+def dr6F2UnionSignedMobiusSum {n d : Nat}
+    (X Y Z : BinaryMatrix n d) : Rat :=
+  dr6F2ImageMobiusSum X Y Z + dr6F2KernelMobiusSum X Y Z -
+    dr6F2ImageMobiusSum X Y Z * dr6F2KernelMobiusSum X Y Z
+
+theorem dr6_f2_union_signed_indicator {n d : Nat}
+    (X Y Z : BinaryMatrix n d) :
+    dr6F2UnionSignedMobiusSum X Y Z =
+      if dr6F2CommonImage X Y Z ≠ ⊥ ∨
+          dr6F2KernelSum X Y Z ≠ ⊤ then 1 else 0 := by
+  rw [dr6F2UnionSignedMobiusSum, dr6_f2_imageMobius_indicator,
+    dr6_f2_kernelMobius_indicator]
+  by_cases hi : dr6F2CommonImage X Y Z ≠ ⊥ <;>
+    by_cases hk : dr6F2KernelSum X Y Z ≠ ⊤ <;>
+    simp [hi, hk]
+
+private def dr6DualCoordinateEquiv (n : Nat) :
+    Module.Dual F (V n) ≃ₗ[F] V n :=
+  (Pi.basisFun F (Fin n)).dualBasis.equivFun
+
+/-- The coordinate realization of the linear-functional annihilator. -/
+def dr6CoordinateDualAnnihilator {n : Nat} (B : Submodule F (V n)) :
+    Submodule F (V n) := coordinateDualAnnihilator B
+
+/-- Actual j-dimensional annihilator subspaces corresponding to actual
+codimension-j superspaces of K. The subtype retains the actual containment
+proof; it is not a Gaussian-count placeholder. -/
+def dr6KernelSuperspaces {n j : Nat} (K : Submodule F (V n)) :=
+  {B : Submodule F (V n) // K <= B /\
+    Module.finrank F (V n) - Module.finrank F B = j}
+
+def dr6KernelAnnihilatorSubspaces {n j : Nat} (K : Submodule F (V n)) :=
+  {C : W6Grass (V n) j // C.1 <= dr6CoordinateDualAnnihilator K}
+
+/-- Coordinate dual annihilation sends a subspace to a complementary-dimension
+subspace. -/
+theorem dr6_coordinateDualAnnihilator_finrank {n : Nat}
+    (B : Submodule F (V n)) :
+    Module.finrank F (dr6CoordinateDualAnnihilator B) +
+      Module.finrank F B = n := by
+  have h := coordinateDualAnnihilator_finrank B
+  simpa [dr6CoordinateDualAnnihilator, V] using h
+
+private theorem dr6_dualMap_coordinates {r c : Nat}
+    (M : BinaryMatrix r c) (φ : Module.Dual F (V r)) :
+    dr6DualCoordinateEquiv c (M.mulVecLin.dualMap φ) =
+      M.transpose.mulVec (dr6DualCoordinateEquiv r φ) := by
+  funext i
+  simp only [dr6DualCoordinateEquiv, Module.Basis.dualBasis_equivFun,
+    Pi.basisFun_apply]
+  simp only [LinearMap.dualMap_apply, Matrix.mulVec, dotProduct,
+    Matrix.mulVecLin_apply]
+  rw [Matrix.mulVec_single_one]
+  conv_lhs => rw [← (Pi.basisFun F (Fin r)).sum_repr (Matrix.col M i)]
+  simp [map_sum, map_smul, Pi.basisFun_repr]
+
+private theorem dr6_range_eq_dualAnnihilator_ker {n d : Nat}
+    (Y : BinaryMatrix n d) :
+    LinearMap.range Y.mulVecLin =
+      (LinearMap.ker Y.transpose.mulVecLin).dualAnnihilator.map
+        (dr6DualCoordinateEquiv n).toLinearMap := by
+  classical
+  let eN := dr6DualCoordinateEquiv n
+  let eD := dr6DualCoordinateEquiv d
+  let f := Y.transpose.mulVecLin
+  have hcoord (φ : Module.Dual F (V d)) :
+      eN (f.dualMap φ) = Y.mulVecLin (eD φ) := by
+    change eN (Y.transpose.mulVecLin.dualMap φ) = Y.mulVec (eD φ)
+    exact dr6_dualMap_coordinates Y.transpose φ
+  ext x
+  constructor
+  · rintro ⟨v, rfl⟩
+    have hphi : f.dualMap (eD.symm v) ∈ (LinearMap.ker f).dualAnnihilator := by
+      rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
+      exact ⟨eD.symm v, rfl⟩
+    refine ⟨f.dualMap (eD.symm v), hphi, ?_⟩
+    change eN (f.dualMap (eD.symm v)) = Y.mulVecLin v
+    simpa only [LinearEquiv.apply_symm_apply] using hcoord (eD.symm v)
+  · rintro ⟨φ, hφ, hx⟩
+    have hphirange : φ ∈ LinearMap.range f.dualMap := by
+      rw [LinearMap.range_dualMap_eq_dualAnnihilator_ker]
+      exact hφ
+    rcases hphirange with ⟨ψ, hψ⟩
+    have hval : Y.mulVecLin (eD ψ) = x := by
+      rw [← hcoord ψ, hψ]
+      change eN φ = x
+      exact hx
+    exact ⟨eD ψ, hval⟩
+
+/-- A superspace of K of codimension j has an annihilator of dimension j. -/
+theorem dr6_kernelSuperspace_annihilator_dim {n j : Nat}
+    (K B : Submodule F (V n)) (hKB : K <= B)
+    (hBj : n - Module.finrank F B = j) :
+    Module.finrank F (dr6CoordinateDualAnnihilator B) = j := by
+  have h := dr6_coordinateDualAnnihilator_finrank B
+  omega
+
+/-- Conversely, actual j-subspaces of the coordinate annihilator correspond
+to actual superspaces of codimension j; this implication records the order
+reversal explicitly. -/
+theorem dr6_annihilator_le_iff_superspace {n : Nat}
+    (K B : Submodule F (V n)) :
+    dr6CoordinateDualAnnihilator B <= dr6CoordinateDualAnnihilator K <-> K <= B := by
+  constructor
+  · intro hCB
+    have hdual : B.dualAnnihilator <= K.dualAnnihilator := by
+      intro phi hphi
+      have hmap : dr6DualCoordinateEquiv n phi ∈
+          dr6CoordinateDualAnnihilator B := by
+        exact ⟨phi, hphi, rfl⟩
+      have hmapK := hCB hmap
+      rcases hmapK with ⟨psi, hpsi, heq⟩
+      have he : phi = psi := (dr6DualCoordinateEquiv n).injective heq
+      simpa [he] using hpsi
+    exact (Subspace.dualAnnihilator_le_dualAnnihilator_iff.mp hdual)
+  · intro hKB
+    exact Submodule.map_mono (dr6DualCoordinateEquiv n).toLinearMap
+      (Submodule.dualAnnihilator_anti hKB)
+/-- Actual codimension-j superspaces and actual j-subspaces of the
+coordinate annihilator are equivalent. The inverse takes the dual
+coannihilator, so both the containment and codimension assertions are
+derived from annihilator duality. -/
+noncomputable def dr6KernelSuperspacesEquiv {n j : Nat}
+    (K : Submodule F (V n)) :
+    dr6KernelSuperspaces (j := j) K ≃
+      dr6KernelAnnihilatorSubspaces (j := j) K := by
+  classical
+  let e := dr6DualCoordinateEquiv n
+  refine {
+    toFun := fun B => ?_
+    invFun := fun C => ?_
+    left_inv := ?_
+    right_inv := ?_ }
+  · let C : Submodule F (V n) :=
+      B.1.dualAnnihilator.map e.toLinearMap
+    have hdim : Module.finrank F C = j := by
+      have hc := dr6_coordinateDualAnnihilator_finrank B.1
+      have hcod := B.2.2
+      change Module.finrank F C + Module.finrank F B.1 = n at hc
+      omega
+    refine ⟨⟨C, hdim⟩, ?_⟩
+    change C <= dr6CoordinateDualAnnihilator K
+    exact Submodule.map_mono e.toLinearMap
+      (Submodule.dualAnnihilator_anti B.2.1)
+  · let H : Submodule F (Module.Dual F (V n)) := C.1.1.map e.symm.toLinearMap
+    let B : Submodule F (V n) := H.dualCoannihilator
+    have hdimH : Module.finrank F H = j := by
+      rw [H, e.finrank_map_eq]
+      exact C.1.2
+    have hdouble : B.dualAnnihilator = H := by
+      rw [B, H, Subspace.dualCoannihilator_dualAnnihilator_eq]
+    have hdimB : Module.finrank F B = n-j := by
+      have hcomp := Subspace.finrank_add_finrank_dualAnnihilator_eq B
+      rw [hdouble, hdimH] at hcomp
+      omega
+    have hcod : n - Module.finrank F B = j := by omega
+    have hH : H <= K.dualAnnihilator := by
+      intro phi hphi
+      rcases hphi with ⟨v, hv, hev⟩
+      have hvK : v ∈ dr6CoordinateDualAnnihilator K := C.2 hv
+      rcases hvK with ⟨psi, hpsi, hpsiEq⟩
+      have hvEq : v = e phi := by
+        simpa [e] using congrArg e hev
+      have heq : psi = phi := e.injective (hpsiEq.trans hvEq)
+      simpa [heq] using hpsi
+    have hK : K <= B :=
+      (Submodule.le_dualAnnihilator_iff_le_dualCoannihilator).2 hH
+    exact ⟨B, hK, hcod⟩
+  · intro B
+    apply Subtype.ext
+    change ((B.1.dualAnnihilator.map e.toLinearMap).map
+      e.symm.toLinearMap).dualCoannihilator = B.1
+    rw [Submodule.map_map]
+    simp [e, Subspace.dualAnnihilator_dualCoannihilator_eq]
+  · intro C
+    apply Subtype.ext
+    apply Subtype.ext
+    change ((C.1.1.map e.symm.toLinearMap).dualCoannihilator).
+      dualAnnihilator.map e.toLinearMap = C.1.1
+    rw [Subspace.dualCoannihilator_dualAnnihilator_eq]
+    rw [Submodule.map_map]
+    simp [e]
+
+/-- The actual range/annihilator identity used to transport the kernel
+incidence. -/
+theorem dr6_range_eq_coordinateDualAnnihilator_ker {n d : Nat}
+    (Y : BinaryMatrix n d) :
+    LinearMap.range Y.mulVecLin =
+      dr6CoordinateDualAnnihilator (LinearMap.ker Y.transpose.mulVecLin) := by
+  simpa [dr6CoordinateDualAnnihilator, coordinateDualAnnihilator,
+    dr6DualCoordinateEquiv] using dr6_range_eq_dualAnnihilator_ker Y
+
+/-- Kernel containment is equivalent to incidence of the actual coordinate
+annihilator in the matrix image. -/
+theorem dr6_kernel_le_iff_annihilator_le_range {n d : Nat}
+    (Y : BinaryMatrix n d) (B : Submodule F (V n)) :
+    LinearMap.ker Y.transpose.mulVecLin <= B <->
+      dr6CoordinateDualAnnihilator B <= LinearMap.range Y.mulVecLin := by
+  rw [dr6_range_eq_coordinateDualAnnihilator_ker Y]
+  constructor
+  · intro hKB
+    exact Submodule.map_mono (dr6DualCoordinateEquiv n).toLinearMap
+      (Submodule.dualAnnihilator_anti hKB)
+  · intro hmap
+    have hdual : B.dualAnnihilator <=
+        (LinearMap.ker Y.transpose.mulVecLin).dualAnnihilator := by
+      intro phi hphi
+      have hmem : dr6DualCoordinateEquiv n phi ∈
+          (LinearMap.ker Y.transpose.mulVecLin).dualAnnihilator.map
+            (dr6DualCoordinateEquiv n).toLinearMap := hmap
+              ⟨phi, hphi, rfl⟩
+      rcases hmem with ⟨psi, hpsi, heq⟩
+      have he : phi = psi := (dr6DualCoordinateEquiv n).injective heq
+      simpa [he] using hpsi
+    exact (Subspace.dualAnnihilator_le_dualAnnihilator_iff.mp hdual)
+/-- The complex ordinary selector, with the exact two incidences exposed. -/
+def DR6ComplexOrdinarySelected {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (Y : BinaryMatrix n d) : Prop :=
+  A <= LinearMap.range Y.transpose.mulVecLin /\
+    dr6CoordinateDualAnnihilator B <= LinearMap.range Y.mulVecLin
+
+def DR6ComplexOrdinaryFilter {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d -> Complex) (M : BinaryMatrix n d) : Complex :=
+  ∑ Y : BinaryMatrix n d,
+    if DR6ComplexOrdinarySelected A B Y then
+      complexFourierCoeff f Y * (character Y M : Complex) else 0
+
+private theorem dr6_toLin'_eq_mulVecLin {n d : Nat}
+    (Y : BinaryMatrix n d) : Y.toLin' = Y.mulVecLin := by
+  ext x
+  rfl
+
+/-- The complex selector is exactly the manuscript ordinary selector. -/
+theorem dr6_complexSelector_iff_actualOrdinary {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (Y : BinaryMatrix n d) :
+    DR6ComplexOrdinarySelected A B Y <-> DR6OrdinarySelected A B Y := by
+  unfold DR6ComplexOrdinarySelected DR6OrdinarySelected
+  rw [dr6_toLin'_eq_mulVecLin, dr6_toLin'_eq_mulVecLin]
+  exact Iff.and Iff.rfl (dr6_kernel_le_iff_annihilator_le_range Y B).symm
+
+/-- A complex ordinary filter retains exactly its selected coefficients. -/
+theorem dr6_complexFilter_fourierCoeff {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d -> Complex) (Y : BinaryMatrix n d) :
+    complexFourierCoeff (DR6ComplexOrdinaryFilter A B f) Y =
+      if DR6ComplexOrdinarySelected A B Y then complexFourierCoeff f Y else 0 := by
+  classical
+  unfold DR6ComplexOrdinaryFilter
+  rw [complexFourierCoeff_finset_sum]
+  simp_rw [complexFourierCoeff_smul, complexFourierCoeff_character]
+  simp
+
+/-- Exact signed complex convolution identity for the filtered square. -/
+theorem dr6_complexFilter_square_fourierCoeff {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (V n))
+    (f : BinaryMatrix n d -> Complex) (X : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => (DR6ComplexOrdinaryFilter A B f M)^2) X =
+      Finset.univ.sum (fun Y : BinaryMatrix n d =>
+        if DR6ComplexOrdinarySelected A B Y /\
+            DR6ComplexOrdinarySelected A B (X + Y) then
+          complexFourierCoeff f Y * complexFourierCoeff f (X + Y) else 0) := by
+  have h := complexFourierCoeff_mul_eq_convolution
+    (DR6ComplexOrdinaryFilter A B f) (DR6ComplexOrdinaryFilter A B f) X
+  rw [show (fun M => (DR6ComplexOrdinaryFilter A B f M)^2) =
+      fun M => DR6ComplexOrdinaryFilter A B f M *
+        DR6ComplexOrdinaryFilter A B f M by
+      funext M; exact pow_two _] at h
+  rw [h]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  rw [dr6_complexFilter_fourierCoeff, dr6_complexFilter_fourierCoeff]
+  by_cases h1 : DR6ComplexOrdinarySelected A B Y <;>
+    by_cases h2 : DR6ComplexOrdinarySelected A B (X + Y) <;>
+    simp [h1, h2]
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Incidence
+
+
+
+
+
+
+
+
+
+
