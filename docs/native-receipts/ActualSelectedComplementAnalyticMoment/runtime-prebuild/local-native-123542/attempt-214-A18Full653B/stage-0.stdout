@@ -1,0 +1,46 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:112:4: error: Type mismatch
+  (carrierMatrixEquiv ⊥ ⊤).symm.trans ?m.136
+has type
+  BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥⊤)
+      (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+        (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ ⊥)) ≃ₛₗ[?m.110]
+    ?m.96
+but is expected to have type
+  BinaryMatrix (Module.finrank F ↥⊤) (Module.finrank F (V d ⧸ ⊥)) ≃ BinaryMatrix n d
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:647:42: warning: Variable name `n` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _n
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:658:38: warning: Variable name `d` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _d
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:732:31: warning: This simp argument is unused:
+  LinearEquiv.apply_symm_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [LinearMap.add_apply, LinearMap.comp_apply, carrierCoordinateBaseLift, LinearEquiv.arrowCongr_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1099:12: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1127:35: error: Application type mismatch: The argument
+  htopBudget
+has type
+  2 * 2 ^ (10 * (D - 1) * (r - 1)) * eps + 4 * 2 ^ (2 * D) * 2 ^ (10 * D * (r - 1)) * eps ≤
+    9 / 512 * a18BudgetScale D r eps
+but is expected to have type
+  2 * a18BudgetScale (D - 1) (r - 1) eps + 4 * 2 ^ (2 * D) * a18BudgetScale D (r - 1) eps ≤
+    9 / 512 * a18BudgetScale D r eps
+in the application
+  LE.le.trans htopEnergy htopBudget
