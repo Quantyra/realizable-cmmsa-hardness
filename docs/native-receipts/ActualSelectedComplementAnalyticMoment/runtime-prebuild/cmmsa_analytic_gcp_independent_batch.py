@@ -119,9 +119,25 @@ if [ 'REUSEMODE' = 'yes' ]; then
 import hashlib,pathlib,sys,tarfile
 root=pathlib.Path(sys.argv[1]); targets=sys.argv[3].split(',')
 with tarfile.open(sys.argv[2]) as t:
+    additions=[]
     for m in t:
         if m.isfile() and m.name not in targets:
-            assert (root/m.name).read_bytes() == t.extractfile(m).read(), m.name
+            dest=(root/m.name).resolve()
+            assert dest.is_relative_to(root.resolve()), m.name
+            payload=t.extractfile(m).read()
+            if dest.exists():
+                assert dest.read_bytes() == payload, m.name
+            else:
+                assert m.name.startswith('lean/') and m.name.endswith('.lean'), m.name
+                obj=root/'.lake/build/lib/lean'/pathlib.Path(m.name).relative_to('lean').with_suffix('.olean')
+                assert not any(obj.parent.glob(obj.stem+'.olean*')), ('stale cache for added source',m.name)
+                additions.append((m.name,payload))
+    for name,payload in additions:
+        dest=root/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(payload)
+    import json
+    pathlib.Path('/tmp/TAG-evidence/cache-added-sources.json').write_text(json.dumps([
+        {'source':name,'sha256':hashlib.sha256(payload).hexdigest(),'no_stale_olean':True}
+        for name,payload in additions],indent=2))
     for target in targets:
         (root/target).write_bytes(t.extractfile(target).read())
 print('REUSED_DEPENDENCY_BYTES_VERIFIED')
