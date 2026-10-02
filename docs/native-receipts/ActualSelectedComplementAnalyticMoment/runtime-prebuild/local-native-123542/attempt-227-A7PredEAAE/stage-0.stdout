@@ -1,0 +1,44 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:127:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:150:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:150:4: error: unsolved goals
+case pos
+n d : ℕ
+X : BinaryMatrix n d
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+Z : ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[F] V d ⧸ (Matrix.toLin' (Matrix.transpose X)).range
+A : Submodule F (V d) := (Matrix.toLin' (Matrix.transpose X)).range
+B : Submodule F (W n) := (Matrix.toLin' (Matrix.transpose X)).ker
+qY : BinaryMatrix n d → ↥B →ₗ[F] V d ⧸ A := fun Y => A.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ B.subtype
+cY : BinaryMatrix n d → ℂ := fun Y => complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+hchar :
+  ∀ (Y : BinaryMatrix n d) (N : V d ⧸ A →ₗ[F] ↥B),
+    character Y (LinearMap.toMatrix' (T + B.subtype ∘ₗ N ∘ₗ A.mkQ)) =
+      traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T * traceCharacter (qY Y) N
+hsignal :
+  ∀ (N : V d ⧸ A →ₗ[F] ↥B),
+    actualW6Derivative X T f N = ∑ Y, if w6Precedes X Y then cY Y * ↑(traceCharacter (qY Y) N) else 0
+AA : Submodule F (V d) := (Matrix.toLin' (Matrix.transpose X)).range
+BB : Submodule F (W n) := (Matrix.toLin' (Matrix.transpose X)).ker
+qY' : BinaryMatrix n d → ↥BB →ₗ[F] V d ⧸ AA := fun Y => AA.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ BB.subtype
+cY' : BinaryMatrix n d → ℂ :=
+  fun Y => complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+hp : w6Precedes X Y
+⊢ (if Z = AA.mkQ ∘ₗ Matrix.toLin' (Matrix.transpose Y) ∘ₗ BB.subtype then
+      complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+    else 0) =
+    if
+        Z =
+          (Matrix.toLin' (Matrix.transpose X)).range.mkQ ∘ₗ
+            Matrix.toLin' (Matrix.transpose Y) ∘ₗ (Matrix.toLin' (Matrix.transpose X)).ker.subtype then
+      complexFourierCoeff f Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+    else 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7WeightedPredecessor.lean:155:8: warning: This simp argument is unused:
+  BinaryMatrixA1TypedFourier.carrierMean
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, complexCarrierFourierCoeff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
