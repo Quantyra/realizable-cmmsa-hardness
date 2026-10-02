@@ -1,0 +1,328 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixFourier
+import PvNP.RealizableHardness.BinaryMatrixA1Phase
+import PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+import Mathlib.Data.Matrix.ColumnRowPartitioned
+
+/-! The W6 predecessor derivative is a distinct operator from the A18
+rank-layer projection.  Its frequency filter is the rank-additive predecessor
+relation from the manuscript, and the output is the actual affine restriction
+to the quotient/kernel carrier. -/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Phase
+open PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- The manuscript predecessor relation: `X` is below `Y` when the rank of
+`Y` is the sum of the ranks of `X` and `Y-X`. -/
+def w6Precedes {n d : Nat} (X Y : BinaryMatrix n d) : Prop :=
+  Y.rank = X.rank + (Y - X).rank
+
+/-- The manuscript predecessor relation is invariant under independent
+invertible changes of coordinates on the output and input spaces.  This is
+the rank-theoretic part of transporting a fixed predecessor fiber from an
+arbitrary rectangular matrix to its canonical block form. -/
+theorem w6Precedes_mul_equiv {n d : Nat}
+    (L : Matrix (Fin n) (Fin n) F) (R : Matrix (Fin d) (Fin d) F)
+    (X Y : BinaryMatrix n d)
+    (hL : IsUnit L.det) (hR : IsUnit R.det) :
+    w6Precedes (L * X * R) (L * Y * R) ↔ w6Precedes X Y := by
+  have hX : (L * X * R).rank = X.rank := by
+    rw [Matrix.rank_mul_eq_left_of_isUnit_det R (L * X) hR,
+      Matrix.rank_mul_eq_right_of_isUnit_det L X hL]
+  have hY : (L * Y * R).rank = Y.rank := by
+    rw [Matrix.rank_mul_eq_left_of_isUnit_det R (L * Y) hR,
+      Matrix.rank_mul_eq_right_of_isUnit_det L Y hL]
+  have hdiff :
+      (L * Y * R - L * X * R).rank = (Y - X).rank := by
+    have hmatrix : L * Y * R - L * X * R = L * (Y - X) * R := by
+      simp only [Matrix.mul_sub, Matrix.sub_mul]
+    rw [hmatrix, Matrix.rank_mul_eq_left_of_isUnit_det R
+      (L * (Y - X)) hR, Matrix.rank_mul_eq_right_of_isUnit_det
+      L (Y - X) hL]
+  constructor
+  · intro h
+    unfold w6Precedes at h ⊢
+    rw [hY, hX, hdiff] at h
+    exact h
+  · intro h
+    unfold w6Precedes at h ⊢
+    rw [hY, hX, hdiff]
+    exact h
+
+/-- `L_X f`: retain exactly the ambient Fourier frequencies above `X` in the
+rank-additive predecessor order. -/
+def w6PredecessorFilter {n d : Nat}
+    (X : BinaryMatrix n d) (f : BinaryMatrix n d → Complex)
+    (M : BinaryMatrix n d) : Complex :=
+  ∑ Y : BinaryMatrix n d,
+    if w6Precedes X Y then
+      complexFourierCoeff f Y * (character Y M : Complex) else 0
+
+/-- The actual W6 derivative `D_{X,T}=R_{range(Xᵀ),ker(Xᵀ),T} L_X f` on
+the canonical affine quotient/kernel carrier. -/
+def actualW6Derivative {n d : Nat}
+    (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range X.transpose.toLin') →ₗ[F]
+      LinearMap.ker X.transpose.toLin') : Complex :=
+  complexAmbientAffineRestrict
+    (LinearMap.range X.transpose.toLin')
+    (LinearMap.ker X.transpose.toLin') T (w6PredecessorFilter X f) M
+
+/-- Pointwise finite Fourier expansion of the actual W6 affine derivative.
+This explicit formula is the entry point for the A3 collision-fiber count. -/
+theorem actualW6Derivative_fourier_expansion {n d : Nat}
+    (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range X.transpose.toLin') →ₗ[F]
+      LinearMap.ker X.transpose.toLin') :
+    actualW6Derivative X T f M =
+      ∑ Y : BinaryMatrix n d,
+        if w6Precedes X Y then
+          complexFourierCoeff f Y *
+            (character Y (LinearMap.toMatrix'
+              (T + (LinearMap.ker X.transpose.toLin').subtype.comp
+                (M.comp (LinearMap.range X.transpose.toLin').mkQ))) : Complex)
+        else 0 := by
+  rfl
+
+/-- The carrier Fourier coefficient of the actual predecessor derivative is
+the sum over all ambient predecessors inducing that carrier frequency.  This
+is the collision identity used before the A3 fiber-cardinality estimate; it
+does not assert orthogonality at a fixed affine base. -/
+theorem actualW6Derivative_carrier_fourierCoeff {n d : Nat}
+    (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+      (V d ⧸ LinearMap.range X.transpose.toLin')) :
+    complexCarrierFourierCoeff
+      (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin')
+      (actualW6Derivative X T f) Z =
+      ∑ Y : BinaryMatrix n d,
+        if w6Precedes X Y then
+          if Z = (LinearMap.range X.transpose.toLin').mkQ.comp
+              (Y.transpose.toLin'.comp
+                (LinearMap.ker X.transpose.toLin').subtype) then
+            complexFourierCoeff f Y *
+              (traceCharacter Y.transpose.toLin' T : Complex)
+          else 0
+        else 0 := by
+  classical
+  let A : Submodule F (V d) := LinearMap.range X.transpose.toLin'
+  let B : Submodule F (W n) := LinearMap.ker X.transpose.toLin'
+  let qY := fun Y : BinaryMatrix n d =>
+    A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)
+  let cY := fun Y : BinaryMatrix n d =>
+    complexFourierCoeff f Y * (traceCharacter Y.transpose.toLin' T : Complex)
+  have hchar (Y : BinaryMatrix n d) (N : (V d ⧸ A) →ₗ[F] B) :
+      character Y
+          (LinearMap.toMatrix'
+            (T + B.subtype.comp (N.comp A.mkQ))) =
+        traceCharacter Y.transpose.toLin' T *
+          traceCharacter (qY Y) N := by
+    have hmatrix :
+        character Y
+            (LinearMap.toMatrix'
+              (T + B.subtype.comp (N.comp A.mkQ))) =
+          traceCharacter Y.transpose.toLin'
+            (T + B.subtype.comp (N.comp A.mkQ)) := by
+      simpa only [Matrix.toLin'_toMatrix'] using
+        (traceCharacter_eq_matrix_character Y
+          (LinearMap.toMatrix'
+            (T + B.subtype.comp (N.comp A.mkQ)))).symm
+    rw [hmatrix, traceCharacter_carrier_base]
+  have hsignal (N : (V d ⧸ A) →ₗ[F] B) :
+      actualW6Derivative X T f N =
+        ∑ Y : BinaryMatrix n d,
+          if w6Precedes X Y then
+            cY Y * (traceCharacter (qY Y) N : Complex) else 0 := by
+    unfold actualW6Derivative complexAmbientAffineRestrict
+      w6PredecessorFilter
+    apply Finset.sum_congr rfl
+    intro Y hY
+    by_cases hp : w6Precedes X Y
+    · simp only [hp, if_pos]
+      have hh := hchar Y N
+      rw [hh]
+      simp only [qY, cY, Complex.ofReal_mul]
+      ring
+    · simp [hp]
+  let AA : Submodule F (V d) := LinearMap.range X.transpose.toLin'
+  let BB : Submodule F (W n) := LinearMap.ker X.transpose.toLin'
+  let qY' := fun Y : BinaryMatrix n d =>
+    AA.mkQ.comp (Y.transpose.toLin'.comp BB.subtype)
+  let cY' := fun Y : BinaryMatrix n d =>
+    complexFourierCoeff f Y * (traceCharacter Y.transpose.toLin' T : Complex)
+  change complexCarrierFourierCoeff AA BB
+      (actualW6Derivative X T f) Z = _
+  rw [show actualW6Derivative X T f =
+      fun N : (V d ⧸ AA) →ₗ[F] BB =>
+        ∑ Y : BinaryMatrix n d,
+          if w6Precedes X Y then
+            cY' Y * (traceCharacter (qY' Y) N : Complex) else 0 from ?_]
+  · rw [complexCarrierFourierCoeff_finset_sum]
+    apply Finset.sum_congr rfl
+    intro Y hY
+    by_cases hp : w6Precedes X Y
+    · simp only [hp, if_pos]
+      rw [complexCarrierFourierCoeff_smul,
+        complexCarrierFourierCoeff_character]
+      simp [AA, BB, qY', cY']
+    · simp [hp, complexCarrierFourierCoeff,
+        BinaryMatrixA1TypedFourier.carrierMean]
+  · funext N
+    simpa [AA, BB, qY', cY'] using hsignal N
+
+/-- Over `F₂`, a finite-dimensional space of linear maps has one binary
+coordinate per pair of basis vectors.  This is the cardinality factor needed
+for the two Hom-parameters in the A3 predecessor fiber. -/
+theorem w6_card_linearMap_binary {U V : Type*}
+    [AddCommGroup U] [Module F U] [Module.Free F U] [Module.Finite F U]
+    [Fintype U] [AddCommGroup V] [Module F V]
+    [Module.Free F V] [Module.Finite F V] [Fintype V] :
+    Fintype.card (U →ₗ[F] V) =
+      2 ^ (Module.finrank F U * Module.finrank F V) := by
+  classical
+  rw [Module.card_eq_pow_finrank (K := F) (V := U →ₗ[F] V),
+    Module.finrank_linearMap, ZMod.card]
+
+/-- The pair `(u,C)` in the A3 block parameterization has exactly the stated
+cardinality.  The still-needed fiber equivalence identifies each fixed-Z
+predecessor fiber with this product without adding a counting hypothesis. -/
+theorem w6_card_a3_parameter_pair {U V : Type*}
+    [AddCommGroup U] [Module F U] [Module.Free F U] [Module.Finite F U]
+    [Fintype U] [AddCommGroup V] [Module F V]
+    [Module.Free F V] [Module.Finite F V] [Fintype V] :
+    Fintype.card ((U →ₗ[F] V) × (V →ₗ[F] U)) =
+      2 ^ (2 * Module.finrank F U * Module.finrank F V) := by
+  classical
+  rw [Fintype.card_prod, w6_card_linearMap_binary,
+    w6_card_linearMap_binary, ← pow_add]
+  congr 1
+  ring
+
+/-- The canonical rank-`k` base matrix used in the A3 block calculation. -/
+def w6CanonicalBase (k m s : Nat) :
+    Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin s) F :=
+  Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0 0
+
+/-- The block matrix built from the two A3 parameters and a fixed rank
+factorization `J * P = Z`. -/
+def w6CanonicalBlockCandidate {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F) :
+    Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin s) F :=
+  Matrix.fromBlocks (1 + u * c) (u * p) (j * c) (j * p)
+
+/-- The displacement of the canonical A3 candidate factors through the
+rank-`l` parameter space.  This is the block identity underlying the exact
+rank calculation for the predecessor fiber. -/
+theorem w6CanonicalBlockCandidate_sub_base {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F) :
+    w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s =
+      Matrix.fromRows u j * Matrix.fromCols c p := by
+  change Matrix.fromBlocks (1 + u * c) (u * p) (j * c) (j * p) -
+      Matrix.fromBlocks (1 : Matrix (Fin k) (Fin k) F) 0 0 0 = _
+  rw [Matrix.fromRows_mul_fromCols]
+  rw [sub_eq_add_neg, Matrix.fromBlocks_neg, Matrix.fromBlocks_add]
+  apply Matrix.fromBlocks_inj.mpr
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · abel
+  · simp only [add_zero, neg_zero]
+  · simp only [add_zero, neg_zero]
+  · simp only [add_zero, neg_zero]
+
+/-- An injective left factor and surjective right factor preserve the full
+rank of their intermediate space. -/
+theorem w6_matrix_rank_mul_of_injective_surjective
+    {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
+    [DecidableEq α] [DecidableEq β] [DecidableEq γ]
+    (A : Matrix α β F)
+    (B : Matrix β γ F)
+    (hA : Function.Injective (Matrix.mulVecLin A))
+    (hB : Function.Surjective (Matrix.mulVecLin B)) :
+    (A * B).rank = Fintype.card β := by
+  rw [Matrix.rank, Matrix.mulVecLin_mul,
+    LinearMap.range_comp_of_range_eq_top (Matrix.mulVecLin A)
+      (LinearMap.range_eq_top.2 hB),
+    LinearMap.finrank_range_of_inj hA, Module.finrank_pi]
+
+/-- The canonical block candidate has displacement rank `l` when its column
+factor is injective and its row factor is surjective. -/
+theorem w6CanonicalBlockCandidate_sub_base_rank {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hleft : Function.Injective
+      (Matrix.mulVecLin (Matrix.fromRows u j)))
+    (hright : Function.Surjective
+      (Matrix.mulVecLin (Matrix.fromCols c p))) :
+    (w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s).rank = l := by
+  rw [w6CanonicalBlockCandidate_sub_base]
+  simpa using w6_matrix_rank_mul_of_injective_surjective
+    (Matrix.fromRows u j) (Matrix.fromCols c p) hleft hright
+
+/-- The vertical block map is injective when its lower block is injective. -/
+theorem w6_fromRows_injective_of_lower_injective {k m l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (hj : Function.Injective (Matrix.mulVecLin j)) :
+    Function.Injective (Matrix.mulVecLin (Matrix.fromRows u j)) := by
+  intro x y h
+  apply hj
+  ext b
+  have hb := congrArg (fun z : Fin k ⊕ Fin m → F => z (Sum.inr b)) h
+  simpa using hb
+
+/-- The horizontal block map is surjective when its right block is. -/
+theorem w6_fromCols_surjective_of_right_surjective {k l s : Nat}
+    (c : Matrix (Fin l) (Fin k) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hp : Function.Surjective (Matrix.mulVecLin p)) :
+    Function.Surjective (Matrix.mulVecLin (Matrix.fromCols c p)) := by
+  intro y
+  obtain ⟨x, hx⟩ := hp y
+  refine ⟨Sum.elim (0 : Fin k → F) x, ?_⟩
+  simpa using hx
+
+/-- For the canonical A3 candidate, injectivity of J and surjectivity of P
+therefore give the required displacement rank without extra fiber data. -/
+theorem w6CanonicalBlockCandidate_sub_base_rank_of_J_inj_P_surj
+    {k m s l : Nat}
+    (u : Matrix (Fin k) (Fin l) F)
+    (c : Matrix (Fin l) (Fin k) F)
+    (j : Matrix (Fin m) (Fin l) F)
+    (p : Matrix (Fin l) (Fin s) F)
+    (hj : Function.Injective (Matrix.mulVecLin j))
+    (hp : Function.Surjective (Matrix.mulVecLin p)) :
+    (w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s).rank = l := by
+  exact w6CanonicalBlockCandidate_sub_base_rank u c j p
+    (w6_fromRows_injective_of_lower_injective u j hj)
+    (w6_fromCols_surjective_of_right_surjective c p hp)
+
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
