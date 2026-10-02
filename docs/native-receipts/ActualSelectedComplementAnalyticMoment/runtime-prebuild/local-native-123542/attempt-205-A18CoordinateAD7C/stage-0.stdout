@@ -1,0 +1,126 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:505:42: warning: Variable name `n` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _n
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:516:38: warning: Variable name `d` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _d
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:563:47: error: unsolved goals
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+C : Submodule F (Fin (Module.finrank F (V d ⧸ A)) → F)
+D : Submodule F (Fin (Module.finrank F ↥B) → F)
+R : (Fin (Module.finrank F (V d ⧸ A)) → F) →ₗ[F] Fin (Module.finrank F ↥B) → F
+N : (Fin (Module.finrank F (V d ⧸ A)) → F) ⧸ C →ₗ[F] ↥D
+x :
+  Fin
+      (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+        (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) →
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+eD : (Fin (Module.finrank F (V d ⧸ A)) → F) ≃ₗ[F] V d ⧸ A := (domainBasis A).equivFun.symm
+eC : (Fin (Module.finrank F ↥B) → F) ≃ₗ[F] ↥B := (codomainBasis B).equivFun.symm
+eQ : ((Fin (Module.finrank F (V d ⧸ A)) → F) ⧸ C) ≃ₗ[F] (V d ⧸ A) ⧸ Submodule.map (↑(domainBasis A).equivFun.symm) C :=
+  carrierCoordinateDomainQuotientEquiv A C
+hq : eQ (C.mkQ x) = (Submodule.map (↑eD) C).mkQ (eD x)
+hq' : eQ.symm ((Submodule.map (↑eD) C).mkQ (eD x)) = C.mkQ x
+⊢ eC.symm (↑(codomainBasis B).equivFun.symm (R (↑(domainBasis A).equivFun (eD x)))) +
+      eC.symm
+        ((Submodule.map (↑eC) D).subtype
+          ((Submodule.equivMapOfInjective ↑(codomainBasis B).equivFun.symm ⋯ D) (N (C.mkQ x)))) =
+    R x + D.subtype (N (C.mkQ x))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:590:31: warning: This simp argument is unused:
+  LinearEquiv.apply_symm_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [LinearMap.add_apply, LinearMap.comp_apply, carrierCoordinateBaseLift, LinearEquiv.arrowCongr_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:594:13: warning: This simp argument is unused:
+  LinearMap.comp_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [LinearEquiv.symm_apply_apply, Submodule.coe_equivMapOfInjective_apply,
+    carrierCoordinateCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:594:35: warning: This simp argument is unused:
+  LinearEquiv.symm_apply_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [LinearMap.comp_apply, Submodule.coe_equivMapOfInjective_apply, carrierCoordinateCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:595:4: warning: This simp argument is unused:
+  Submodule.coe_equivMapOfInjective_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [LinearMap.comp_apply, LinearEquiv.symm_apply_apply, carrierCoordinateCodomainEquiv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:739:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, g (E.toEquiv i)
+in the target expression
+  (∑ N, g (E N)) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.V✝ (Module.finrank F (V d ⧸ A)) ⧸
+              P →ₗ[PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.F✝]
+            ↥Q)) =
+    (∑ x,
+        (fun N =>
+            Complex.normSq
+              (complexCarrierAffineRestrict A B (Submodule.map (↑(domainBasis A).equivFun.symm) P)
+                (Submodule.map (↑(codomainBasis B).equivFun.symm) Q) (carrierCoordinateBaseLift A B R)
+                (complexCarrierHybridFilter A B (Submodule.map (↑(domainBasis A).equivFun.symm) P)
+                  (Submodule.map (↑(codomainBasis B).equivFun.symm) Q) fun M => filteredCarrierFunction A B T f M)
+                N))
+          x) /
+      ↑(Fintype.card
+          ((V d ⧸ A) ⧸ Submodule.map (↑(domainBasis A).equivFun.symm) P →ₗ[F]
+            ↥(Submodule.map (↑(codomainBasis B).equivFun.symm) Q)))
+
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+P : Submodule F (Fin (Module.finrank F (V d ⧸ A)) → F)
+Q : Submodule F (Fin (Module.finrank F ↥B) → F)
+R : (Fin (Module.finrank F (V d ⧸ A)) → F) →ₗ[F] Fin (Module.finrank F ↥B) → F
+E : ((Fin (Module.finrank F (V d ⧸ A)) → F) ⧸ P →ₗ[F] ↥Q) ≃ₗ[F]
+  (V d ⧸ A) ⧸ Submodule.map (↑(domainBasis A).equivFun.symm) P →ₗ[F]
+    ↥(Submodule.map (↑(codomainBasis B).equivFun.symm) Q) :=
+  carrierCoordinateNestedHomEquiv A B P Q
+g : ((V d ⧸ A) ⧸ Submodule.map (↑(domainBasis A).equivFun.symm) P →ₗ[F]
+    ↥(Submodule.map (↑(codomainBasis B).equivFun.symm) Q)) →
+  ℝ :=
+  fun N =>
+    Complex.normSq
+      (complexCarrierAffineRestrict A B (Submodule.map (↑(domainBasis A).equivFun.symm) P)
+        (Submodule.map (↑(codomainBasis B).equivFun.symm) Q) (carrierCoordinateBaseLift A B R)
+        (complexCarrierHybridFilter A B (Submodule.map (↑(domainBasis A).equivFun.symm) P)
+          (Submodule.map (↑(codomainBasis B).equivFun.symm) Q) fun M => filteredCarrierFunction A B T f M)
+        N)
+hsum : ∑ N, Complex.normSq (filteredCarrierFunction P Q R (actualDerivativeCoordinate A B T f) N) = ∑ N, g (E N)
+⊢ (∑ N, g (E N)) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.V✝ (Module.finrank F (V d ⧸ A)) ⧸
+              P →ₗ[PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.F✝]
+            ↥Q)) =
+    (∑ x,
+        (fun N =>
+            Complex.normSq
+              (complexCarrierAffineRestrict A B (Submodule.map (↑(domainBasis A).equivFun.symm) P)
+                (Submodule.map (↑(codomainBasis B).equivFun.symm) Q) (carrierCoordinateBaseLift A B R)
+                (complexCarrierHybridFilter A B (Submodule.map (↑(domainBasis A).equivFun.symm) P)
+                  (Submodule.map (↑(codomainBasis B).equivFun.symm) Q) fun M => filteredCarrierFunction A B T f M)
+                N))
+          x) /
+      ↑(Fintype.card
+          ((V d ⧸ A) ⧸ Submodule.map (↑(domainBasis A).equivFun.symm) P →ₗ[F]
+            ↥(Submodule.map (↑(codomainBasis B).equivFun.symm) Q)))
