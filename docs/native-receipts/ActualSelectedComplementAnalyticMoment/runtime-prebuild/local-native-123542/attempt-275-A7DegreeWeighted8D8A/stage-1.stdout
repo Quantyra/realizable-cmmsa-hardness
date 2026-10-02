@@ -1,0 +1,199 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap {n d : ℕ}
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W✝
+      n →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.V✝ d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_range_decomposition {n d : ℕ}
+  (X Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hXY : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes X Y) :
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap X).range ⊓
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap (Y - X)).range =
+      ⊥ ∧
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap X).range ⊔
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap (Y - X)).range =
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).range
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_ker_le {n d : ℕ}
+  (X Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hXY : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes X Y) :
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).ker ≤
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap X).ker
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6PredecessorRestrictedMap {n d : ℕ}
+  (X Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hXY : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes X Y) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W✝
+      n →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝]
+    ↥(PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).range
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_descended_idempotent {n d : ℕ}
+  (X Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hXY : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes X Y) :
+  ∃! q,
+    IsIdempotentElem q ∧
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥(LinearMap.range q) =
+          Matrix.rank X ∧
+        q ∘ₗ (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).rangeRestrict =
+          PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6PredecessorRestrictedMap X Y hXY
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6IdempotentLiftMap {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (q :
+    Module.End PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝
+      ↥(PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).range) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W✝
+      n →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.V✝ d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6IdempotentPredecessorMatrix {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (q :
+    Module.End PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝
+      ↥(PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).range) :
+  PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_idempotent_gives_predecessor {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (q :
+    Module.End PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝
+      ↥(PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).range)
+  (hq : IsIdempotentElem q) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6IdempotentPredecessorMatrix Y q) Y ∧
+    Matrix.rank (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6IdempotentPredecessorMatrix Y q) =
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥(LinearMap.range q)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6RankKPredecessor {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (k : ℕ) : Type
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6RankKIdempotent {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (k : ℕ) : Type
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_rank_k_predecessor_equiv {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (k : ℕ) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6RankKPredecessor Y k ≃
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6RankKIdempotent Y k
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6Retraction.{u_1} (E : Type u_1) [AddCommGroup E]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  (U : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E) : Type u_1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_retraction_quotient_equiv.{u_1} (E : Type u_1)
+  [AddCommGroup E] [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  (U : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E)
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U] [Finite E] :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6Retraction E U ≃
+    (E ⧸ U →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝] ↥U)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_retractions.{u_1} {E : Type u_1} {k : ℕ}
+  [AddCommGroup E] [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E] [Fintype E]
+  (U : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E)
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U]
+  (hU : Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U = k) :
+  Fintype.card (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6Retraction E U) =
+    2 ^ (k * (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E - k))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6FixedRangeIdempotent.{u_1} (E : Type u_1)
+  [AddCommGroup E] [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  (U : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E) : Type u_1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_fixed_range_idempotents.{u_1} {E : Type u_1}
+  {k : ℕ} [AddCommGroup E] [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E] [Fintype E]
+  (U : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E)
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U]
+  (hU : Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥U = k) :
+  Fintype.card (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6FixedRangeIdempotent E U) =
+    2 ^ (k * (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E - k))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6Grass.{u_1} (E : Type u_1) [AddCommGroup E]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E] (a : ℕ) : Type u_1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6Frame.{u_1} (E : Type u_1) [AddCommGroup E]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E] (a : ℕ) : Type u_1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_grass_mul.{u_1} {E : Type u_1} [AddCommGroup E]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E] [Fintype E] (a : ℕ)
+  (ha : a ≤ Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E) :
+  Fintype.card (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6Grass E a) *
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6FrameProduct a a =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6FrameProduct
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E) a
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_grass.{u_1} {E : Type u_1} [AddCommGroup E]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E] [Fintype E] (a : ℕ) :
+  Fintype.card (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6Grass E a) =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E) a
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_rank_k_idempotents.{u_1} {E : Type u_1}
+  [AddCommGroup E] [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E] [Fintype E] (k : ℕ) :
+  Fintype.card
+      { q //
+        IsIdempotentElem q ∧
+          Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥(LinearMap.range q) =
+            k } =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian
+        (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E) k *
+      2 ^ (k * (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ E - k))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_rank_k_predecessors {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (k : ℕ) :
+  Fintype.card (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6RankKPredecessor Y k) =
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian (Matrix.rank Y) k *
+      2 ^ (k * (Matrix.rank Y - k))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_range_decomposition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_ker_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_descended_idempotent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_idempotent_gives_predecessor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_rank_k_predecessor_equiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_retraction_quotient_equiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_retractions' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_fixed_range_idempotents' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_grass_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_grass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_rank_k_idempotents' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_card_rank_k_predecessors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_gaussian_le_four_pow {j k : ℕ} (hkj : k ≤ j) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian j k ≤ 4 * 2 ^ (k * (j - k))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_gaussian_le_four_pow_all (j k : ℕ) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian j k ≤ 4 * 2 ^ (k * (j - k))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_rank_k_predecessors_le_four_pow {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (k : ℕ) :
+  Fintype.card (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6RankKPredecessor Y k) ≤
+    4 * 2 ^ (2 * (k * (Matrix.rank Y - k)))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_gaussian_le_four_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_gaussian_le_four_pow_all' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_rank_k_predecessors_le_four_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_weighted_rank_k_predecessor_sum_le {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (D : ℕ) (hjD : Matrix.rank Y ≤ D) :
+  ∑ k ∈ Finset.range (Matrix.rank Y + 1),
+      ↑(Fintype.card (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W6RankKPredecessor Y k)) *
+          2 ^ (4 * k * (D - k)) /
+        2 ^ (6 * D * k) ≤
+    67 / 63
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_weighted_rank_k_predecessor_sum_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
