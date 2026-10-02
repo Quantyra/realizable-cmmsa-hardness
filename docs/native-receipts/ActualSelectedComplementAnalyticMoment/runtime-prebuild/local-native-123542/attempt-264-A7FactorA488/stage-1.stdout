@@ -1,0 +1,249 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes {n d : ℕ}
+  (X Y : BinaryMatrixFourier.BinaryMatrix n d) : Prop
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes_mul_equiv {n d : ℕ}
+  (L : Matrix (Fin n) (Fin n) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (R : Matrix (Fin d) (Fin d) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (X Y : BinaryMatrixFourier.BinaryMatrix n d) (hL : IsUnit L.det) (hR : IsUnit R.det) :
+  w6Precedes (L * X * R) (L * Y * R) ↔ w6Precedes X Y
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes_mul_equiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6PredecessorFilter {n d : ℕ}
+  (X : BinaryMatrixFourier.BinaryMatrix n d) (f : BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M : BinaryMatrixFourier.BinaryMatrix n d) : ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative {n d : ℕ}
+  (X : BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.W✝ n)
+  (f : BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝ d ⧸
+        (Matrix.toLin'
+            (Matrix.transpose X)).range →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      ↥(Matrix.toLin' (Matrix.transpose X)).ker) :
+  ℂ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative_fourier_expansion {n d : ℕ}
+  (X : BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.W✝ n)
+  (f : BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (M :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝ d ⧸
+        (Matrix.toLin'
+            (Matrix.transpose X)).range →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      ↥(Matrix.toLin' (Matrix.transpose X)).ker) :
+  actualW6Derivative X T f M =
+    ∑ Y,
+      if w6Precedes X Y then
+        BinaryMatrixA1Complex.complexFourierCoeff f Y *
+          ↑(BinaryMatrixFourier.character Y
+              (LinearMap.toMatrix'
+                (T +
+                  (Matrix.toLin' (Matrix.transpose X)).ker.subtype ∘ₗ
+                    M ∘ₗ (Matrix.toLin' (Matrix.transpose X)).range.mkQ)))
+      else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative_fourier_expansion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative_carrier_fourierCoeff {n d : ℕ}
+  (X : BinaryMatrixFourier.BinaryMatrix n d)
+  (T :
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝
+        d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.W✝ n)
+  (f : BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (Z :
+    ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝]
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.V✝ d ⧸
+        (Matrix.toLin' (Matrix.transpose X)).range) :
+  BinaryMatrixA1Complex.complexCarrierFourierCoeff (Matrix.toLin' (Matrix.transpose X)).range
+      (Matrix.toLin' (Matrix.transpose X)).ker (actualW6Derivative X T f) Z =
+    ∑ Y,
+      if w6Precedes X Y then
+        if
+            Z =
+              (Matrix.toLin' (Matrix.transpose X)).range.mkQ ∘ₗ
+                Matrix.toLin' (Matrix.transpose Y) ∘ₗ (Matrix.toLin' (Matrix.transpose X)).ker.subtype then
+          BinaryMatrixA1Complex.complexFourierCoeff f Y *
+            ↑(BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose Y)) T)
+        else 0
+      else 0
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.actualW6Derivative_carrier_fourierCoeff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_card_linearMap_binary.{u_1, u_2} {U : Type u_1}
+  {V : Type u_2} [AddCommGroup U] [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U] [Fintype U] [AddCommGroup V]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ V]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ V]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ V] [Fintype V] :
+  Fintype.card (U →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝] V) =
+    2 ^
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U *
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ V)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_card_linearMap_binary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_card_a3_parameter_pair.{u_1, u_2} {U : Type u_1}
+  {V : Type u_2} [AddCommGroup U] [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U] [Fintype U] [AddCommGroup V]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ V]
+  [Module.Free PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ V]
+  [Module.Finite PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ V] [Fintype V] :
+  Fintype.card
+      ((U →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝] V) ×
+        (V →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝] U)) =
+    2 ^
+      (2 * Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U *
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ V)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_card_a3_parameter_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBase (k m s : ℕ) :
+  Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate {k m s l : ℕ}
+  (u : Matrix (Fin k) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin l) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝) :
+  Matrix (Fin k ⊕ Fin m) (Fin k ⊕ Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_sub_base {k m s l : ℕ}
+  (u : Matrix (Fin k) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin l) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝) :
+  w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s = u.fromRows j * c.fromCols p
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_sub_base' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_matrix_rank_mul_of_injective_surjective.{u_1,
+    u_2, u_3}
+  {α : Type u_1} {β : Type u_2} {γ : Type u_3} [Fintype α] [Fintype β] [Fintype γ] [DecidableEq α] [DecidableEq β]
+  [DecidableEq γ] (A : Matrix α β PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (B : Matrix β γ PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hA : Function.Injective ⇑A.mulVecLin) (hB : Function.Surjective ⇑B.mulVecLin) : (A * B).rank = Fintype.card β
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_matrix_rank_mul_of_injective_surjective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_sub_base_rank
+  {k m s l : ℕ} (u : Matrix (Fin k) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin l) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hleft : Function.Injective ⇑(u.fromRows j).mulVecLin) (hright : Function.Surjective ⇑(c.fromCols p).mulVecLin) :
+  (w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s).rank = l
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_sub_base_rank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fromRows_injective_of_lower_injective {k m l : ℕ}
+  (u : Matrix (Fin k) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hj : Function.Injective ⇑j.mulVecLin) : Function.Injective ⇑(u.fromRows j).mulVecLin
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fromRows_injective_of_lower_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fromCols_surjective_of_right_surjective
+  {k l s : ℕ} (c : Matrix (Fin l) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hp : Function.Surjective ⇑p.mulVecLin) : Function.Surjective ⇑(c.fromCols p).mulVecLin
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fromCols_surjective_of_right_surjective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_sub_base_rank_of_J_inj_P_surj
+  {k m s l : ℕ} (u : Matrix (Fin k) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin l) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hj : Function.Injective ⇑j.mulVecLin) (hp : Function.Surjective ⇑p.mulVecLin) :
+  (w6CanonicalBlockCandidate u c j p - w6CanonicalBase k m s).rank = l
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_sub_base_rank_of_J_inj_P_surj' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_rank_of_J_inj_P_surj
+  {k m s l : ℕ} (u : Matrix (Fin k) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin l) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hj : Function.Injective ⇑j.mulVecLin) (hp : Function.Surjective ⇑p.mulVecLin) :
+  (w6CanonicalBlockCandidate u c j p).rank = k + l
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_rank_of_J_inj_P_surj' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_injective_parameters
+  {k m s l : ℕ} (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hj : Function.Injective ⇑j.mulVecLin) (hp : Function.Surjective ⇑p.mulVecLin) :
+  Function.Injective fun q => w6CanonicalBlockCandidate q.1 q.2 j p
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6CanonicalBlockCandidate_injective_parameters' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_unique_graph_factor_of_rank_eq.{u_1, u_2, u_3}
+  {U : Type u_1} {E : Type u_2} {T : Type u_3} [AddCommGroup U]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U]
+  [FiniteDimensional PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ U] [AddCommGroup E]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ E]
+  [FiniteDimensional PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ E] [AddCommGroup T]
+  [Module PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ T]
+  (f : U →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝] T)
+  (g : U →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝] E) (hg : Function.Surjective ⇑g)
+  (hrank :
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ ↥(f.prod g).range =
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝ ↥g.range) :
+  ∃! q, q ∘ₗ g = f
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_unique_graph_factor_of_rank_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fixed_block_graph_factor {k m s l : ℕ}
+  (a : Matrix (Fin k) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (b : Matrix (Fin k) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin m) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hj : Function.Injective ⇑j.mulVecLin) (hp : Function.Surjective ⇑p.mulVecLin)
+  (hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l) :
+  ∃ q, q ∘ₗ (w6BlockBottomDisplacementMap c (j * p)).rangeRestrict = w6BlockTopDisplacementMap a b
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fixed_block_graph_factor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fixed_bottom_range_eq {k m s l : ℕ}
+  (a : Matrix (Fin k) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (b : Matrix (Fin k) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin m) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hj : Function.Injective ⇑j.mulVecLin) (hp : Function.Surjective ⇑p.mulVecLin)
+  (hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l) :
+  j.mulVecLin.range = (w6BlockBottomDisplacementMap c (j * p)).range
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fixed_bottom_range_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fixed_block_parameter_maps {k m s l : ℕ}
+  (a : Matrix (Fin k) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (b : Matrix (Fin k) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin m) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hj : Function.Injective ⇑j.mulVecLin) (hp : Function.Surjective ⇑p.mulVecLin)
+  (hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l) :
+  ∃ u c₀, j.mulVecLin ∘ₗ c₀ = c.mulVecLin ∧ u ∘ₗ c₀ = (a - 1).mulVecLin ∧ u ∘ₗ p.mulVecLin = b.mulVecLin
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fixed_block_parameter_maps' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fixed_block_factorization {k m s l : ℕ}
+  (a : Matrix (Fin k) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (b : Matrix (Fin k) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (c : Matrix (Fin m) (Fin k) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (j : Matrix (Fin m) (Fin l) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (p : Matrix (Fin l) (Fin s) PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.F✝)
+  (hj : Function.Injective ⇑j.mulVecLin) (hp : Function.Surjective ⇑p.mulVecLin)
+  (hD : (w6BlockDisplacementMatrix a b c (j * p)).rank = l) :
+  ∃ u c₀, w6CanonicalBlockCandidate u c₀ j p = Matrix.fromBlocks a b c (j * p)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6_fixed_block_factorization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
