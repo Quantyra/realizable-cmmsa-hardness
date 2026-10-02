@@ -1,0 +1,60 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6TransportChecks
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7EnergyConsumer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+
+#check typedUniformMean
+#print axioms typedUniformMean
+#check typedW6MomentSum
+#print axioms typedW6MomentSum
+#check typedW6QComponent
+#print axioms typedW6QComponent
+#check typedW6FilteredCarrierFunction_uniformT_le_two
+#print axioms typedW6FilteredCarrierFunction_uniformT_le_two
+#check typedW6AllPairs_uniformT_le_two
+#print axioms typedW6AllPairs_uniformT_le_two
+#check typedW6Precedes
+#print axioms typedW6Precedes
+#check typedW6Precedes_coordinate_iff
+#print axioms typedW6Precedes_coordinate_iff
+#check typedW6SelectedFourierSum_coordinate
+#print axioms typedW6SelectedFourierSum_coordinate
+#check carrierFrequency_to_coordinateMap
+#check carrierFrequency_range_pullback
+#check carrierFrequency_kernel_pullback
+#check typedW6OutputCoordinateEquiv
+#print axioms typedW6OutputCoordinateEquiv
+#check typedW6ActualDerivative
+#print axioms typedW6ActualDerivative
+#check typedW6FourierDerivative
+#print axioms typedW6FourierDerivative
+#check typedW6FourierDerivative_eq_actual
+#print axioms typedW6FourierDerivative_eq_actual
+#check typedW6OutputEnergy
+#print axioms typedW6OutputEnergy
+#check typedW6OutputEnergy_coordinate
+#print axioms typedW6OutputEnergy_coordinate
+#check typedW6WeightedFourthMoment_le_two
+#print axioms typedW6WeightedFourthMoment_le_two
+#check typedW6FilteredCarrierFunction_le_two
+#print axioms typedW6FilteredCarrierFunction_le_two
+#check hybridInputCoordinate
+#check hybridInputCoordinate_supportedThrough
+#print axioms hybridInputCoordinate_supportedThrough
+#check hybridInputCoordinate_w6_le_two
+#print axioms hybridInputCoordinate_w6_le_two
+#check actualW6Derivative_weighted_fourth_moment_le_two
+#check actualW6Derivative_weighted_fourth_moment_degree_zero_eq
+#check PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.carrierCoordinateNestedHomEquiv
+#check PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.carrierCoordinate_affineMatrix
+#check carrierFrequency_tracePair
+#check carrierFrequency_rank
+#check carrierFourierCoeff_coordinate
+#check carrierComplexEnergy_coordinate
+#check carrierFourier_support_iff_coordinate
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6TransportChecks
