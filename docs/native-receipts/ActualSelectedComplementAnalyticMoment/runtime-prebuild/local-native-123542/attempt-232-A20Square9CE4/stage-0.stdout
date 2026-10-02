@@ -1,0 +1,35 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:363:4: error: Type mismatch: After simplification, term
+  horder
+ has type
+  Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ r
+but is expected to have type
+  Module.finrank PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.F✝
+          (PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget.W✝ n ⧸ B) +
+      Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ (↥B ⧸ ⊤) ≤
+    r
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A20SquareSupport.lean:372:4: error: Type mismatch: After simplification, term
+  liftCarrierMatrix_normalizedMean A B T Q fun Y => Complex.normSq (f Y)
+ has type
+  (∑
+        x ∈
+          @Finset.univ
+            (↥{M |
+                (∀ a ∈ ⊥, M a - 0 = 0) ∧
+                  ∀ (v : PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A), M v - 0 ∈ ⊤})
+            (Finset.Subtype.fintype Q.fibre),
+        Complex.normSq (f (LinearMap.toMatrix' T + LinearMap.toMatrix' (B.subtype ∘ₗ ↑x ∘ₗ A.mkQ)))) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.V✝ d ⧸
+              A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge.F✝]
+            ↥B)) =
+    (∑ y ∈ (liftCarrierRestriction A B T { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }).fibre.attach,
+        Complex.normSq (f ↑y)) /
+      ↑(liftCarrierRestriction A B T { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }).fibre.card
+but is expected to have type
+  (∑ x ∈ @Finset.univ (V d ⧸ A →ₗ[F] ↥B) (PvNP.RealizableHardness.ActualTypedABProjectionEnergy.carrierMapFintype✝ A B),
+        Complex.normSq (f (LinearMap.toMatrix' T + LinearMap.toMatrix' (B.subtype ∘ₗ x ∘ₗ A.mkQ)))) /
+      ↑(Fintype.card (V d ⧸ A →ₗ[F] ↥B)) =
+    (∑ M ∈ (liftCarrierRestriction A B T { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }).fibre,
+        Complex.normSq (f M)) /
+      ↑(liftCarrierRestriction A B T { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }).fibre.card
