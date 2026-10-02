@@ -1,0 +1,198 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:111:42: error(lean.unknownIdentifier): Unknown identifier `bottomTopAmbientMatrixEquiv`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:196:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 1
+  a ≥ 0
+where
+ a := ↑(Module.finrank F (W n ⧸ Q.codomainVariation))
+ b := ↑(Module.finrank F ↥Q.domainFixed)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:201:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 1
+where
+ a := ↑(Module.finrank F (W n ⧸ Q.codomainVariation))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:206:34: error: Type mismatch
+  finrank_top
+has type
+  ∀ (R : Type ?u.69) (M : Type ?u.68) [inst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : Module R M],
+    Module.finrank R ↥⊤ = Module.finrank R M
+but is expected to have type
+  Module.finrank F ↥⊤ = Module.finrank F (W n)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:640:42: warning: Variable name `n` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _n
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:651:38: warning: Variable name `d` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _d
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:725:31: warning: This simp argument is unused:
+  LinearEquiv.apply_symm_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [LinearMap.add_apply, LinearMap.comp_apply, carrierCoordinateBaseLift, LinearEquiv.arrowCongr_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:963:8: error: Type mismatch: After simplification, term
+  Eq.symm (Finset.sum_subtype_eq_sum_filter fun M => Complex.normSq (g M))
+ has type
+  ∑ x with x ∈ Q.fibre, Complex.normSq (g x) = ∑ x, Complex.normSq (g ↑x)
+but is expected to have type
+  ∑ x, Complex.normSq (g ↑x) = ∑ M with M ∈ Q.fibre, Complex.normSq (g M)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:982:21: error: Application type mismatch: The argument
+  hnonneg'
+has type
+  0 ≤ (∑ x, Complex.normSq (g ↑x)) / ↑Q.fibre.card
+but is expected to have type
+  0 ≤ (∑ M ∈ Q.fibre, Complex.normSq (g M)) / ↑Q.fibre.card
+in the application
+  Real.sq_sqrt hnonneg'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:991:28: error: unsolved goals
+X : Type u_1
+inst✝¹ : Fintype X
+inst✝ : Nonempty X
+f g : X → ℂ
+pair : Bool → X → ℂ := fun b => if b = true then g else f
+h : (a18UniformL2 fun x => ∑ i, pair i x) ≤ ∑ i, a18UniformL2 (pair i)
+x : X
+⊢ g x + f x = f x + g x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:995:41: error: unsolved goals
+X : Type u_1
+inst✝¹ : Fintype X
+inst✝ : Nonempty X
+f g : X → ℂ
+pair : Bool → X → ℂ := fun b => if b = true then g else f
+h : (a18UniformL2 fun x => ∑ i, pair i x) ≤ ∑ i, a18UniformL2 (pair i)
+hsum : (fun x => ∑ b, pair b x) = fun x => f x + g x
+⊢ a18UniformL2 g + a18UniformL2 f = a18UniformL2 f + a18UniformL2 g
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:997:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  (a18UniformL2 fun x => pair true x + pair false x) ≤ a18UniformL2 (pair true) + a18UniformL2 (pair false)
+but is expected to have type
+  (a18UniformL2 fun x => f x + g x) ≤ a18UniformL2 f + a18UniformL2 g
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1036:49: error: Tactic `unfold` failed to unfold `uniformMean` in
+  (∑ M, (fun X => Complex.normSq (f X)) M) / ↑(Fintype.card (BinaryMatrix n d)) ≤ eps
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1075:14: error: Application type mismatch: The argument
+  hsupportDeriv
+has type
+  ComplexFourierSupportedThrough
+    (D -
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝ ↥A +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝
+          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n ⧸ B)))
+    (actualDerivativeCoordinate A B T fTop)
+but is expected to have type
+  ComplexFourierSupportedThrough (D - 1) (actualDerivativeCoordinate A B T fTop)
+in the application
+  ihD (D - 1) ?m.422 (actualDerivativeCoordinate A B T fTop) hsupportDeriv
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1088:12: warning: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1115:50: error: Application type mismatch: The argument
+  hK
+has type
+  0 ≤ a18BudgetScale D r eps
+but is expected to have type
+  0 ≤ 4⁻¹
+in the application
+  mul_le_mul_of_nonneg_right ?m.746 hK
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1115:44: error: Application type mismatch: The argument
+  hfrac
+has type
+  9 / 512 ≤ 1 / 4
+but is expected to have type
+  ?m.743 ≤ a18BudgetScale D r eps
+in the application
+  mul_le_mul_of_nonneg_right hfrac
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1139:42: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?a ^ ?m) ^ ?n
+in the target expression
+  √(2 ^ (2 * (5 * i * r)) * eps) = 2 ^ (5 * i * r) * √eps
+
+D : ℕ
+ihD :
+  ∀ m < D,
+    ∀ {n d r : ℕ} {eps : ℝ} (f : BinaryMatrix n d → ℂ),
+      ComplexFourierSupportedThrough m f →
+        OriginalActualInfluenceThrough m eps f → UpToActualNormSqGlobal r (a18BudgetScale m r eps) f
+r : ℕ
+ihr :
+  ∀ m < r,
+    ∀ {n d : ℕ} {eps : ℝ} (f : BinaryMatrix n d → ℂ),
+      ComplexFourierSupportedThrough D f →
+        OriginalActualInfluenceThrough D eps f → UpToActualNormSqGlobal m (a18BudgetScale D m eps) f
+n d : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hinfl : OriginalActualInfluenceThrough D eps f
+hD0 : ¬D = 0
+hDpos : 1 ≤ D
+hr0 : ¬r = 0
+hrpos : 1 ≤ r
+heps : 0 ≤ eps
+fTop : BinaryMatrix n d → ℂ := complexRankProjection D f
+htopSupport : ComplexFourierSupportedThrough D fTop
+htopInfl : OriginalActualInfluenceThrough D eps fTop
+hsource : UpToActualNormSqGlobal (r - 1) (a18BudgetScale D (r - 1) eps) fTop
+hderiv :
+  ∀ (A : Submodule F (V d)) (B : Submodule F (W n)) (T : V d →ₗ[F] W n),
+    Module.finrank F ↥A + Module.finrank F (W n ⧸ B) = 1 →
+      UpToActualNormSqGlobal (r - 1) (a18BudgetScale (D - 1) (r - 1) eps) (actualDerivativeCoordinate A B T fTop)
+hdecomp : ∀ (M : BinaryMatrix n d), f M = fTop M + ∑ i ∈ Finset.range D, complexRankProjection i f M
+Q : ActualAffineRestriction n d
+hQ : Q.order ≤ r
+hExact : Q.order = r
+X : Type := ↥Q.fibre
+this : Nonempty X := Nonempty.intro ⟨Q.base, actual_fibre_base_mem Q⟩
+gTop : X → ℂ := fun x => fTop ↑x
+gLow : ℕ → X → ℂ := fun i x => complexRankProjection i f ↑x
+hMinkowski : (a18UniformL2 fun x => ∑ i ∈ Finset.range D, gLow i x) ≤ ∑ i ∈ Finset.range D, a18UniformL2 (gLow i)
+hdecompX : (fun x => f ↑x) = fun x => gTop x + ∑ i ∈ Finset.range D, gLow i x
+htopEnergy :
+  fibreEnergy Q.fibre fTop ≤ 2 * a18BudgetScale (D - 1) (r - 1) eps + 4 * 2 ^ (2 * D) * a18BudgetScale D (r - 1) eps
+htopBudget :
+  2 * 2 ^ (10 * (D - 1) * (r - 1)) * eps + 4 * 2 ^ (2 * D) * 2 ^ (10 * D * (r - 1)) * eps ≤
+    9 / 512 * a18BudgetScale D r eps
+htopL2sq : (a18UniformL2 fun x => fTop ↑x) ^ 2 = fibreEnergy Q.fibre fTop
+htopL2nonneg : 0 ≤ a18UniformL2 gTop
+htopBound : a18UniformL2 gTop ^ 2 ≤ a18BudgetScale D r eps / 4
+hlowEnergy : ∀ i ∈ Finset.range D, fibreEnergy Q.fibre (complexRankProjection i f) ≤ a18BudgetScale i r eps
+i : ℕ
+hi : i ∈ Finset.range D
+henergy : fibreEnergy Q.fibre (complexRankProjection i f) ≤ a18BudgetScale i r eps
+hsq : (a18UniformL2 fun x => complexRankProjection i f ↑x) ^ 2 = fibreEnergy Q.fibre (complexRankProjection i f)
+hsqrt : √(fibreEnergy Q.fibre (complexRankProjection i f)) ≤ √(a18BudgetScale i r eps)
+hexp : 10 * i * r = 2 * (5 * i * r)
+⊢ √(2 ^ (2 * (5 * i * r)) * eps) = 2 ^ (5 * i * r) * √eps
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1144:14: error: Type mismatch: After simplification, term
+  hsqrt
+ has type
+  |a18UniformL2 fun x => complexRankProjection i f ↑x| ≤ 2 ^ (5 * i * r) * √eps
+but is expected to have type
+  a18UniformL2 (gLow i) ≤ 2 ^ (5 * i * r) * √eps
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A18OriginalGlobalInduction.lean:1199:61: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  e ≥ 0
+  e - g ≥ 1
+  c ≥ 0
+  b ≥ 0
+  b - c ≤ 0
+  a ≥ 1
+where
+ a := ↑D
+ b := ↑Q.order
+ c := ↑(r - 1)
+ e := ↑(10 * D) * ↑(r - 1)
+ g := ↑(10 * D) * ↑r
