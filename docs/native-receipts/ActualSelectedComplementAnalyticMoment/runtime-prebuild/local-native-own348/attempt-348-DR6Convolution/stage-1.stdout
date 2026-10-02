@@ -1,0 +1,88 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6OrdinarySelected {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.W✝ n))
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : Prop
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6OrdinaryFilter {n d : ℕ}
+  (A :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.V✝ d))
+  (B :
+    Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.F✝
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.W✝ n))
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℝ)
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : ℝ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6F1Witness {n d : ℕ}
+  (X Y Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : Prop
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6F2Obstruction {n d : ℕ}
+  (X Y Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : Prop
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6MapF1Witness {n d : ℕ}
+  (X Y Z : PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6Map✝ n d) : Prop
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_map_f1_coverage {n d : ℕ}
+  (X Y Z : PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6Map✝ n d) (hXY : X = Y + Z)
+  (hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥)
+  (hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6MapF1Witness X Y Z
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_matrix_f1_coverage {n d : ℕ}
+  (X Y Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (hXY : X = Y + Z)
+  (hTriple :
+    (Matrix.toLin' (Matrix.transpose X)).range ⊓ (Matrix.toLin' (Matrix.transpose Y)).range ⊓
+        (Matrix.toLin' (Matrix.transpose Z)).range =
+      ⊥)
+  (hKernels :
+    (Matrix.toLin' (Matrix.transpose X)).ker ⊔ (Matrix.toLin' (Matrix.transpose Y)).ker ⊔
+        (Matrix.toLin' (Matrix.transpose Z)).ker =
+      ⊤) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6F1Witness X Y Z
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_matrix_f1_or_f2_coverage {n d : ℕ}
+  (X Y Z : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) (hXY : X = Y + Z) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6F1Witness X Y Z ∨
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6F2Obstruction X Y Z
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6DirectYDecomposition {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) : Type
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_y_decomposition_card_le_pow {n d : ℕ}
+  (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  Fintype.card (PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.DR6DirectYDecomposition Y) ≤
+    2 ^ (Matrix.rank Y * Matrix.rank Y)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_fourth_moment_parseval {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℝ) :
+  (PvNP.RealizableHardness.BinaryMatrixFourier.uniformMean fun M => f M ^ 4) =
+    ∑ X, PvNP.RealizableHardness.BinaryMatrixFourier.fourierCoeff (fun M => f M ^ 2) X ^ 2
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_square_fourierCoeff_convolution {n d : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℝ)
+  (K : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  PvNP.RealizableHardness.BinaryMatrixFourier.fourierCoeff (fun M => f M ^ 2) K =
+    ∑ X,
+      PvNP.RealizableHardness.BinaryMatrixFourier.fourierCoeff f X *
+        PvNP.RealizableHardness.BinaryMatrixFourier.fourierCoeff f (K + X)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_square_fourier_supported {n d D : ℕ}
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℝ)
+  (hsupport :
+    ∀ (Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d),
+      D < Matrix.rank Y → PvNP.RealizableHardness.BinaryMatrixFourier.fourierCoeff f Y = 0) :
+  PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction.ComplexFourierSupportedThrough (2 * D) fun M =>
+    ↑(f M) * ↑(f M)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_fourth_moment_parseval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_square_fourierCoeff_convolution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_square_fourier_supported' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_map_f1_coverage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_matrix_f1_coverage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_matrix_f1_or_f2_coverage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution.dr6_y_decomposition_card_le_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
