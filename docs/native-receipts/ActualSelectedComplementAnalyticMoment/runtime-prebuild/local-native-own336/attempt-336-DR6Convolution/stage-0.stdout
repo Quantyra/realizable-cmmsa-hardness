@@ -1,0 +1,717 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:150:18: error: unsolved goals
+n d : ℕ
+S R : Submodule F (W n)
+hSR : S ⊔ R = ⊤
+f : ↥S →ₗ[F] V d
+g : ↥R →ₗ[F] V d
+hcompat : ∀ (x : W n) (hxS : x ∈ S) (hxR : x ∈ R), f ⟨x, hxS⟩ = g ⟨x, hxR⟩
+x y : ↥S × ↥R
+⊢ ↑y.1 + (↑x.2 + ↑y.2) = ↑x.2 + (↑y.1 + ↑y.2)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:154:18: error: unsolved goals
+n d : ℕ
+S R : Submodule F (W n)
+hSR : S ⊔ R = ⊤
+f : ↥S →ₗ[F] V d
+g : ↥R →ₗ[F] V d
+hcompat : ∀ (x : W n) (hxS : x ∈ S) (hxR : x ∈ R), f ⟨x, hxS⟩ = g ⟨x, hxR⟩
+p : ↥S × ↥R →ₗ[F] W n := { toFun := fun q => ↑q.1 + ↑q.2, map_add' := ⋯, map_smul' := ⋯ }
+x y : ↥S × ↥R
+⊢ f y.1 + (g x.2 + g y.2) = g x.2 + (f y.1 + g y.2)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:180:31: error: unsolved goals
+case hr
+n d : ℕ
+S R : Submodule F (W n)
+hSR : S ⊔ R = ⊤
+f : ↥S →ₗ[F] V d
+g : ↥R →ₗ[F] V d
+hcompat : ∀ (x : W n) (hxS : x ∈ S) (hxR : x ∈ R), f ⟨x, hxS⟩ = g ⟨x, hxR⟩
+p : ↥S × ↥R →ₗ[F] W n := { toFun := fun q => ↑q.1 + ↑q.2, map_add' := ⋯, map_smul' := ⋯ }
+q : ↥S × ↥R →ₗ[F] V d := { toFun := fun z => f z.1 + g z.2, map_add' := ⋯, map_smul' := ⋯ }
+hp : Function.Surjective ⇑p
+hker : p.ker ≤ q.ker
+e : ((↥S × ↥R) ⧸ p.ker) ≃ₗ[F] W n := p.quotKerEquivOfSurjective hp
+q' : (↥S × ↥R) ⧸ p.ker →ₗ[F] V d := p.ker.liftQ q hker
+h : W n →ₗ[F] V d := q' ∘ₗ ↑e.symm
+z : ↥R
+x✝ : Fin d
+⊢ ((h ∘ₗ p) ∘ₗ LinearMap.inr F ↥S ↥R) z x✝ = (q ∘ₗ LinearMap.inr F ↥S ↥R) z x✝
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:186:25: error: Application type mismatch: The argument
+  hcomp
+has type
+  h ∘ₗ p = q
+but is expected to have type
+  ?m.566 = ?m.567
+in the application
+  congrFun hcomp
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:189:25: error: Application type mismatch: The argument
+  hcomp
+has type
+  h ∘ₗ p = q
+but is expected to have type
+  ?m.581 = ?m.582
+in the application
+  congrFun hcomp
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:203:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s + r
+in the target expression
+  L s = h x
+
+n d : ℕ
+S R : Submodule F (W n)
+hSR : S ⊔ R = ⊤
+h L : W n →ₗ[F] V d
+hS : ∀ (x : ↥S), h ↑x = L ↑x
+hR : ∀ (x : ↥R), h ↑x = 0
+x : W n
+hy : h x ∈ h.range
+hx : x ∈ S ⊔ R
+s : W n
+hs : s ∈ S
+r : W n
+hr : r ∈ R
+hsr : s + r = x
+⊢ L s = h x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:213:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Membership (Fin n) (Submodule F (W n))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:231:25: error: Application type mismatch: The argument
+  hXY
+has type
+  X = Y + Z
+but is expected to have type
+  ?m.220 = ?m.221
+in the application
+  congrFun hXY
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:235:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  CharP (V d) 2
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:237:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  y + z
+in the target expression
+  Y x = Y z
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+x : W n
+hxZ : x ∈ LinearMap.ker Z
+hxR : x ∈ LinearMap.ker Y ⊔ LinearMap.ker X
+y : W n
+hy : y ∈ LinearMap.ker Y
+z : W n
+hz : z ∈ LinearMap.ker X
+hxyz : y + z = x
+hy0 : Y y = 0
+hz0 : X z = 0
+hx0 : Z x = 0
+hYzZz : Y z = Z z
+⊢ Y x = Y z
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:240:23: error: Application type mismatch: The argument
+  hXY
+has type
+  X = Y + Z
+but is expected to have type
+  ?m.247 = ?m.248
+in the application
+  congrFun hXY
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:269:35: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  u + v
+in the target expression
+  Z x = Z v
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+x : W n
+hxY : x ∈ LinearMap.ker Y
+hxR : x ∈ LinearMap.ker Z ⊔ LinearMap.ker X
+u : W n
+hu : u ∈ LinearMap.ker Z
+v : W n
+hv : v ∈ LinearMap.ker X
+hxuv : u + v = x
+hu0 : Z u = 0
+hv0 : X v = 0
+hxY0 : Y x = 0
+⊢ Z x = Z v
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:272:25: error: Application type mismatch: The argument
+  hXY
+has type
+  X = Y + Z
+but is expected to have type
+  ?m.226 = ?m.227
+in the application
+  congrFun hXY
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:276:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  CharP (V d) 2
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:279:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  x
+in the target expression
+  Y u + Y v = 0
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+x : W n
+hxY : x ∈ LinearMap.ker Y
+hxR : x ∈ LinearMap.ker Z ⊔ LinearMap.ker X
+u : W n
+hu : u ∈ LinearMap.ker Z
+v : W n
+hv : v ∈ LinearMap.ker X
+hxuv : u + v = x
+hu0 : Z u = 0
+hv0 : X v = 0
+hxY0 : Y x = 0
+hZuZv : Z x = Z v
+hYvZv : Y v = Z v
+⊢ Y u + Y v = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:281:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  CharP (V d) 2
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:284:23: error: Application type mismatch: The argument
+  hXY
+has type
+  X = Y + Z
+but is expected to have type
+  ?m.291 = ?m.292
+in the application
+  congrFun hXY
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:312:35: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  u + v
+in the target expression
+  Y x = Y u
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+x : W n
+hxX : x ∈ LinearMap.ker X
+hxR : x ∈ LinearMap.ker Z ⊔ LinearMap.ker Y
+u : W n
+hu : u ∈ LinearMap.ker Z
+v : W n
+hv : v ∈ LinearMap.ker Y
+hxuv : u + v = x
+hu0 : Z u = 0
+hv0 : Y v = 0
+hx0 : X x = 0
+⊢ Y x = Y u
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:315:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  x
+in the target expression
+  X u + X v = 0
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+x : W n
+hxX : x ∈ LinearMap.ker X
+hxR : x ∈ LinearMap.ker Z ⊔ LinearMap.ker Y
+u : W n
+hu : u ∈ LinearMap.ker Z
+v : W n
+hv : v ∈ LinearMap.ker Y
+hxuv : u + v = x
+hu0 : Z u = 0
+hv0 : Y v = 0
+hx0 : X x = 0
+hYxYu : Y x = Y u
+⊢ X u + X v = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:317:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  CharP (V d) 2
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:319:26: error: Application type mismatch: The argument
+  hXY
+has type
+  X = Y + Z
+but is expected to have type
+  ?m.239 = ?m.240
+in the application
+  congrFun hXY
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:325:26: error: Application type mismatch: The argument
+  hXY
+has type
+  X = Y + Z
+but is expected to have type
+  ?m.266 = ?m.267
+in the application
+  congrFun hXY
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:394:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  Y ↑x = (A + C) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+x : ↥KZ
+⊢ Y ↑x = (A + C) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:398:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  Y ↑x = (A + C) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+x : ↥KY
+⊢ Y ↑x = (A + C) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:405:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  Y ↑x = (A + C) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+x : ↥KX
+⊢ Y ↑x = (A + C) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:410:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  Z ↑x = (B + C) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+x : ↥KZ
+⊢ Z ↑x = (B + C) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:417:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  Z ↑x = (B + C) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+x : ↥KY
+⊢ Z ↑x = (B + C) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:421:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  Z ↑x = (B + C) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+x : ↥KX
+⊢ Z ↑x = (B + C) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:430:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  X ↑x = (A + B) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+hZ : Z = B + C
+x : ↥KZ
+⊢ X ↑x = (A + B) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:438:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  X ↑x = (A + B) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+hZ : Z = B + C
+x : ↥KY
+⊢ X ↑x = (A + B) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:447:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (?x + ?y)
+in the target expression
+  X ↑x = (A + B) ↑x
+
+n d : ℕ
+X Y Z : DR6Map n d
+hXY : X = Y + Z
+hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓ LinearMap.range Z = ⊥
+hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔ LinearMap.ker Z = ⊤
+KX : Submodule F (W n) := LinearMap.ker X
+KY : Submodule F (W n) := LinearMap.ker Y
+KZ : Submodule F (W n) := LinearMap.ker Z
+hCover : KZ ⊔ KY ⊔ KX = ⊤
+RA : Submodule F (W n) := KY ⊔ KX
+RB : Submodule F (W n) := KZ ⊔ KX
+RC : Submodule F (W n) := KZ ⊔ KY
+hKA : KZ ⊔ RA = ⊤
+hKB : KY ⊔ RB = ⊤
+hKC : KX ⊔ RC = ⊤
+fA : ↥KZ →ₗ[F] V d := Y ∘ₗ KZ.subtype
+fB : ↥KY →ₗ[F] V d := Z ∘ₗ KY.subtype
+fC : ↥KX →ₗ[F] V d := Y ∘ₗ KX.subtype
+zA : ↥RA →ₗ[F] V d := 0
+zB : ↥RB →ₗ[F] V d := 0
+zC : ↥RC →ₗ[F] V d := 0
+hcA : ∀ (x : W n) (hxS : x ∈ KZ) (hxR : x ∈ RA), fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩
+hcB : ∀ (x : W n) (hxS : x ∈ KY) (hxR : x ∈ RB), fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩
+hcC : ∀ (x : W n) (hxS : x ∈ KX) (hxR : x ∈ RC), fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩
+A : W n →ₗ[F] V d
+hAKZ : ∀ (x : ↥KZ), A ↑x = fA x
+hARA : ∀ (x : ↥RA), A ↑x = zA x
+B : W n →ₗ[F] V d
+hBKY : ∀ (x : ↥KY), B ↑x = fB x
+hBRB : ∀ (x : ↥RB), B ↑x = zB x
+C : W n →ₗ[F] V d
+hCKX : ∀ (x : ↥KX), C ↑x = fC x
+hCRC : ∀ (x : ↥RC), C ↑x = zC x
+hY : Y = A + C
+hZ : Z = B + C
+x : ↥KX
+⊢ X ↑x = (A + B) ↑x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:461:43: error: Application type mismatch: The argument
+  hAKZ
+has type
+  ∀ (x : ↥KZ), A ↑x = fA x
+but is expected to have type
+  ∀ (x : ↥KZ), A ↑x = X ↑x
+in the application
+  dr6_glued_range_le KZ RA hKA A X hAKZ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:463:15: error: Application type mismatch: The argument
+  x
+has type
+  ↥RA
+but is expected to have type
+  ↥KZ
+in the application
+  hAKZ x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:467:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:471:43: error: Application type mismatch: The argument
+  hBKY
+has type
+  ∀ (x : ↥KY), B ↑x = fB x
+but is expected to have type
+  ∀ (x : ↥KY), B ↑x = X ↑x
+in the application
+  dr6_glued_range_le KY RB hKB B X hBKY
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:473:15: error: Application type mismatch: The argument
+  x
+has type
+  ↥RB
+but is expected to have type
+  ↥KY
+in the application
+  hBKY x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:477:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:481:43: error: Application type mismatch: The argument
+  hCKX
+has type
+  ∀ (x : ↥KX), C ↑x = fC x
+but is expected to have type
+  ∀ (x : ↥KX), C ↑x = Z ↑x
+in the application
+  dr6_glued_range_le KX RC hKC C Z hCKX
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:483:15: error: Application type mismatch: The argument
+  x
+has type
+  ↥RC
+but is expected to have type
+  ↥KX
+in the application
+  hCKX x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:487:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:498:13: error(lean.unknownIdentifier): Unknown constant `Submodule.mem_bot.mp`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:508:13: error(lean.unknownIdentifier): Unknown constant `Submodule.mem_bot.mp`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:518:13: error(lean.unknownIdentifier): Unknown constant `Submodule.mem_bot.mp`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:552:24: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Max Type
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:563:24: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Max Type
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:574:24: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Max Type
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:590:2: error: Type mismatch: After simplification, term
+  fourier_parseval fun M => f M ^ 2
+ has type
+  (uniformMean fun M => f M ^ 2 * f M ^ 2) = ∑ x, fourierCoeff (fun M => f M ^ 2) x * fourierCoeff (fun M => f M ^ 2) x
+but is expected to have type
+  (uniformMean fun M => f M * f M * f M * f M) =
+    ∑ x, fourierCoeff (fun M => f M * f M) x * fourierCoeff (fun M => f M * f M) x
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:604:4: error: unsolved goals
+case a
+n d : ℕ
+f : BinaryMatrix n d → ℝ
+K : BinaryMatrix n d
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+g : BinaryMatrix n d → ℝ
+Y : BinaryMatrix n d
+⊢ fourierCoeff (fun M => (↑(g M)).re) Y = (↑(fourierCoeff g Y)).re
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:630:2: error: Type mismatch: After simplification, term
+  hre
+ has type
+  fourierCoeff (fun M => f M ^ 2) K =
+    ∑ x, (fourierCoeff f x * fourierCoeff f (K + x) - (↑(fourierCoeff f x)).im * (↑(fourierCoeff f (K + x))).im)
+but is expected to have type
+  fourierCoeff (fun M => f M ^ 2) K = ∑ X, fourierCoeff f X * fourierCoeff f (K + X)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own336\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:647:4: error: unsolved goals
+case a
+n d D : ℕ
+f : BinaryMatrix n d → ℝ
+hsupport : ∀ (Y : BinaryMatrix n d), D < Matrix.rank Y → fourierCoeff f Y = 0
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+Y : BinaryMatrix n d
+hY : D < Matrix.rank Y
+⊢ fourierCoeff (fun M => 0) Y = 0
