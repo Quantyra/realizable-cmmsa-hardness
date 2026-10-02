@@ -1,0 +1,27 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18BudgetScale (D r : ℕ) (eps : ℝ) : ℝ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18_top_contribution_le_nine512 {D r : ℕ} {eps : ℝ}
+  (hD : 1 ≤ D) (hr : 1 ≤ r) (heps : 0 ≤ eps) :
+  2 * 2 ^ (10 * (D - 1) * (r - 1)) * eps + 4 * 2 ^ (2 * D) * 2 ^ (10 * D * (r - 1)) * eps ≤
+    9 / 512 * a18BudgetScale D r eps
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18_top_contribution_le_nine512' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18_lower_levels_square_le {D r : ℕ} {eps : ℝ}
+  (hr : 1 ≤ r) (heps : 0 ≤ eps) : (∑ i ∈ Finset.range D, 2 ^ (5 * i * r)) ^ 2 * eps ≤ a18BudgetScale D r eps / 961
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18_lower_levels_square_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18_lower_absorption {D r : ℕ} {eps : ℝ} (hr : 1 ≤ r)
+  (heps : 0 ≤ eps) :
+  a18BudgetScale D r eps / 2 + 2 * ((∑ i ∈ Finset.range D, 2 ^ (5 * i * r)) ^ 2 * eps) ≤ a18BudgetScale D r eps
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18_lower_absorption' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18UniformL2.{u_1} {X : Type u_1} [Fintype X]
+  [Nonempty X] (f : X → ℂ) : ℝ
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18_uniformL2_finset_sum_le.{u_1, u_2} {X : Type u_1}
+  {I : Type u_2} [Fintype X] [Nonempty X] (s : Finset I) (g : I → X → ℂ) :
+  (a18UniformL2 fun x => ∑ i ∈ s, g i x) ≤ ∑ i ∈ s, a18UniformL2 (g i)
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds.a18_uniformL2_finset_sum_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
