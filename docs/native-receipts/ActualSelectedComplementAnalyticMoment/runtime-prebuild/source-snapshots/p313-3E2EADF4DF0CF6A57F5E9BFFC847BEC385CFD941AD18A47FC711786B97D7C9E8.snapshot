@@ -1,0 +1,14 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18InductionBounds
+
+#check a18BudgetScale
+#check a18_top_contribution_le_nine512
+#print axioms a18_top_contribution_le_nine512
+#check a18_lower_levels_square_le
+#print axioms a18_lower_levels_square_le
+#check a18_lower_absorption
+#print axioms a18_lower_absorption
+#check a18UniformL2
+#check a18_uniformL2_finset_sum_le
+#print axioms a18_uniformL2_finset_sum_le
