@@ -1,7 +1,7 @@
 import pathlib,json,hashlib,re,os,subprocess,time
 repo=pathlib.Path(__file__).resolve().parents[4]
 b=repo/'docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild'
-out=b/'local-native-123542';src=out/'src';lib=out/'lib';out.mkdir(exist_ok=True);log=out/'attempt-293-A7Evaluation50D7';log.mkdir(exist_ok=True)
+out=b/'local-native-123542';src=out/'src';lib=out/'lib';out.mkdir(exist_ok=True);log=out/'attempt-293-A7Evaluation285F';log.mkdir(exist_ok=True)
 pins=json.loads((b/'local-a18-293-pins.json').read_text())
 snaps={hashlib.sha256(p.read_bytes()).hexdigest().upper():p for p in (b/'source-snapshots').glob('*.snapshot')}
 for s,h in pins.items():
