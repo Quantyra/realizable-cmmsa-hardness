@@ -1,0 +1,861 @@
+import Mathlib.Tactic
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment
+
+/-!
+The DR6 F1 fourth-moment engine, under the exact ordinary-selector scope.
+
+The manuscript permits complex-valued inputs `f`; only its final indicator is
+real.  Thus all Fourier coefficients below are complex and the positive F1
+weights are `Complex.norm (complexFourierCoeff f (A + C))`.  No reality,
+Booleanity, or prior hypercontractive estimate is assumed.
+
+For an F1 triple `X= A+B`, `Y=A+C`, `Z=B+C`, the witness includes all three
+pairwise image intersections equal to bottom and the three exact rank
+additivities.  At a fixed output X, assigning a witness to each contributing
+F1 pair is injective into witness triples (A,B,C): the triple recovers Y,Z.
+Group these triples by their outer pair (A,B), and sum over C inside
+`H(A,B)`; do not count triples as distinct outer splits.  Each outer split is
+a predecessor of X, so there are at most
+`2^(rank X ^ 2) <= 2^(4D^2)` of them.  For the remaining common summand C,
+put `c(A,C)=norm(fhat(A+C))` on direct supported A,C pairs and zero otherwise,
+and `H(A,B)=sum_C c(A,C)c(B,C)`.  Independent sign families indexed by
+separate copies of matrix labels define `Phi(x,y)=sum_(A,C) c(A,C)x_A y_C`.
+Parseval and the exact direct-Y split count give `E Phi^2 <= 2^(D^2)||f||_2^2`.
+The F1 witness sum is bounded by `sum_(A,B):A+B=X H(A,B)`.  In the square of
+`E_y Phi^2`, monomial collisions are grouped by unordered pairs `{A,B}`;
+all extra cross terms are nonnegative, so `sum_(A,B) H(A,B)^2` is bounded by
+that square.  Jensen then bounds it by `E Phi^4`.  The finite independent-sign
+bilinear estimate is proved below from coordinate flips and finite sums; it
+does not use a Khintchine or hypercontractivity premise.  Rank zero is included.
+
+This is only the F1 moment engine.  It does not certify the separate F2
+Möbius estimate or the full DR6 theorem.
+-/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private def dr6Rademacher (b : Bool) : Real := if b then 1 else -1
+
+private def dr6SignAverage {ι : Type*} [Fintype ι]
+    (g : (ι → Bool) → Real) : Real :=
+  (∑ s : ι → Bool, g s) / (Fintype.card (ι → Bool) : Real)
+
+private theorem dr6SignAverage_add {ι : Type*} [Fintype ι]
+    (f g : (ι → Bool) → Real) :
+    dr6SignAverage (fun s => f s + g s) =
+      dr6SignAverage f + dr6SignAverage g := by
+  unfold dr6SignAverage
+  rw [Finset.sum_add_distrib, add_div]
+
+private theorem dr6SignAverage_const {ι : Type*} [Fintype ι]
+    (c : Real) : dr6SignAverage (fun _ : ι → Bool => c) = c := by
+  classical
+  unfold dr6SignAverage
+  simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  have hc : (Fintype.card (ι → Bool) : Real) ≠ 0 := by
+    exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (ι → Bool)).ne'
+  field_simp [hc]
+
+private theorem dr6SignAverage_const_mul {ι : Type*} [Fintype ι]
+    (c : Real) (f : (ι → Bool) → Real) :
+    dr6SignAverage (fun s => c * f s) = c * dr6SignAverage f := by
+  unfold dr6SignAverage
+  rw [← Finset.mul_sum]
+  ring
+
+private theorem dr6SignAverage_sum {ι κ : Type*} [Fintype ι]
+    (s : Finset κ) (f : κ → (ι → Bool) → Real) :
+    dr6SignAverage (fun x => ∑ i ∈ s, f i x) =
+      ∑ i ∈ s, dr6SignAverage (f i) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp [dr6SignAverage]
+  | @insert a s ha ih =>
+      simp only [Finset.sum_insert ha]
+      rw [dr6SignAverage_add, ih]
+
+private theorem dr6SignAverage_le {ι : Type*} [Fintype ι]
+    (f g : (ι → Bool) → Real) (h : ∀ s, f s ≤ g s) :
+    dr6SignAverage f ≤ dr6SignAverage g := by
+  classical
+  unfold dr6SignAverage
+  apply div_le_div_of_nonneg_right
+  · exact Finset.sum_le_sum fun s _ => h s
+  · exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (ι → Bool)).le
+
+private theorem dr6SignAverage_mul_sq_le {ι : Type*} [Fintype ι]
+    (f g : (ι → Bool) → Real) :
+    (dr6SignAverage (fun s => f s * g s)) ^ 2 ≤
+      dr6SignAverage (fun s => f s ^ 2) *
+        dr6SignAverage (fun s => g s ^ 2) := by
+  classical
+  let N : Real := Fintype.card (ι → Bool)
+  have hN : 0 < N := by
+    dsimp [N]
+    exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (ι → Bool))
+  have hcs := Finset.sum_mul_sq_le_sq_mul_sq
+    (Finset.univ : Finset (ι → Bool)) f g
+  unfold dr6SignAverage
+  dsimp [N] at hN
+  dsimp [N] at hcs
+  have hNne : (Fintype.card (ι → Bool) : Real) ≠ 0 := ne_of_gt hN
+  field_simp [hNne]
+  nlinarith [hcs]
+
+private def dr6FlipAt {ι : Type*} [DecidableEq ι] (a : ι) :
+    (ι → Bool) ≃ (ι → Bool) where
+  toFun s i := if i = a then !s i else s i
+  invFun := fun s i => if i = a then !s i else s i
+  left_inv := by intro s; funext i; by_cases h : i = a <;> simp [h]
+  right_inv := by intro s; funext i; by_cases h : i = a <;> simp [h]
+
+private theorem dr6Rademacher_flip {ι : Type*} [DecidableEq ι]
+    (a : ι) (s : ι → Bool) :
+    dr6Rademacher (dr6FlipAt a s a) = -dr6Rademacher (s a) := by
+  simp [dr6FlipAt, dr6Rademacher]
+
+private theorem dr6Rademacher_sq {ι : Type*} (s : ι → Bool) (a : ι) :
+    dr6Rademacher (s a) ^ 2 = 1 := by
+  cases s a <;> norm_num [dr6Rademacher]
+
+private theorem dr6SignAverage_flip_odd {ι : Type*} [Fintype ι]
+    [DecidableEq ι] (a : ι) (g : (ι → Bool) → Real)
+    (hinv : ∀ s, g (dr6FlipAt a s) = g s) :
+    dr6SignAverage (fun s => g s * dr6Rademacher (s a)) = 0 := by
+  classical
+  unfold dr6SignAverage
+  have hsum : (∑ s : ι → Bool, g s * dr6Rademacher (s a)) =
+      -(∑ s : ι → Bool, g s * dr6Rademacher (s a)) := by
+    calc
+      (∑ s : ι → Bool, g s * dr6Rademacher (s a)) =
+          ∑ s : ι → Bool,
+            g (dr6FlipAt a s) * dr6Rademacher (dr6FlipAt a s a) := by
+              symm
+              exact Fintype.sum_equiv (dr6FlipAt a)
+                (fun s => g s * dr6Rademacher (s a))
+                (fun s => g (dr6FlipAt a s) *
+                  dr6Rademacher (dr6FlipAt a s a)) (by intro s; rfl)
+      _ = -(∑ s : ι → Bool, g s * dr6Rademacher (s a)) := by
+        simp_rw [hinv, dr6Rademacher_flip]
+        rw [Finset.sum_neg_distrib]
+  have hzero : (∑ s : ι → Bool, g s * dr6Rademacher (s a)) = 0 := by
+    linarith
+  simp [hzero]
+
+private def dr6LinearSignSum {ι : Type*} [Fintype ι]
+    (S : Finset ι) (a : ι → Real) (s : ι → Bool) : Real :=
+  ∑ i ∈ S, a i * dr6Rademacher (s i)
+
+private theorem dr6LinearSignSum_flip {ι : Type*} [Fintype ι]
+    [DecidableEq ι] (S : Finset ι) (a : ι → Real) (j : ι)
+    (hj : j ∉ S) (s : ι → Bool) :
+    dr6LinearSignSum S a (dr6FlipAt j s) = dr6LinearSignSum S a s := by
+  unfold dr6LinearSignSum
+  apply Finset.sum_congr rfl
+  intro i hi
+  simp [dr6FlipAt, ne_of_mem_of_not_mem hi hj]
+
+/-- Exact second moment of a finite linear form in independent signs. -/
+theorem dr6_rademacher_linear_second_moment {ι : Type*}
+    [Fintype ι] [DecidableEq ι] (S : Finset ι) (a : ι → Real) :
+    dr6SignAverage (fun s => dr6LinearSignSum S a s ^ 2) =
+      ∑ i ∈ S, a i ^ 2 := by
+  classical
+  induction S using Finset.induction_on with
+  | empty => simp [dr6LinearSignSum, dr6SignAverage]
+  | @insert j S hj ih =>
+      let g : (ι → Bool) → Real := dr6LinearSignSum S a
+      let c : Real := a j
+      have hinv (s : ι → Bool) : g (dr6FlipAt j s) = g s := by
+        exact dr6LinearSignSum_flip S a j hj s
+      have hodd := dr6SignAverage_flip_odd j g hinv
+      have hsecond : dr6SignAverage (fun s => (g s + c *
+          dr6Rademacher (s j)) ^ 2) =
+          dr6SignAverage (fun s => g s ^ 2) + c ^ 2 := by
+        calc
+          _ = dr6SignAverage (fun s => g s ^ 2 + c ^ 2 +
+                2 * c * (g s * dr6Rademacher (s j))) := by
+              congr 1
+              funext s
+              rw [add_sq, mul_pow, dr6Rademacher_sq]
+              ring
+          _ = dr6SignAverage (fun s => g s ^ 2 + c ^ 2) +
+                dr6SignAverage (fun s => 2 * c *
+                  (g s * dr6Rademacher (s j))) := dr6SignAverage_add _ _
+          _ = dr6SignAverage (fun s => g s ^ 2) + c ^ 2 := by
+              rw [dr6SignAverage_add, dr6SignAverage_const,
+                dr6SignAverage_const_mul, hodd]
+              ring
+      simpa [dr6LinearSignSum, g, c, hsecond] using
+        congrArg (fun x : Real => x + a j ^ 2) ih
+
+theorem dr6_rademacher_linear_fourth_moment {ι : Type*}
+    [Fintype ι] [DecidableEq ι] (S : Finset ι) (a : ι → Real) :
+    dr6SignAverage (fun s => dr6LinearSignSum S a s ^ 4) ≤
+      3 * (dr6SignAverage (fun s => dr6LinearSignSum S a s ^ 2)) ^ 2 := by
+  classical
+  induction S using Finset.induction_on with
+  | empty => simp [dr6LinearSignSum, dr6SignAverage]
+  | @insert j S hj ih =>
+      let g : (ι → Bool) → Real := dr6LinearSignSum S a
+      let c : Real := a j
+      have hinv (s : ι → Bool) : g (dr6FlipAt j s) = g s := by
+        exact dr6LinearSignSum_flip S a j hj s
+      have hodd1 := dr6SignAverage_flip_odd j g hinv
+      have hodd3 := dr6SignAverage_flip_odd j (fun s => g s ^ 3) (by
+        intro s
+        rw [hinv])
+      have hsecond : dr6SignAverage (fun s => (g s + c *
+          dr6Rademacher (s j)) ^ 2) =
+          dr6SignAverage (fun s => g s ^ 2) + c ^ 2 := by
+        calc
+          _ = dr6SignAverage (fun s => g s ^ 2 + c ^ 2 +
+                2 * c * (g s * dr6Rademacher (s j))) := by
+              congr 1
+              funext s
+              rw [add_sq, mul_pow, dr6Rademacher_sq]
+              ring
+          _ = dr6SignAverage (fun s => g s ^ 2 + c ^ 2) +
+                dr6SignAverage (fun s => 2 * c *
+                  (g s * dr6Rademacher (s j))) := dr6SignAverage_add _ _
+          _ = dr6SignAverage (fun s => g s ^ 2) + c ^ 2 := by
+              rw [dr6SignAverage_add, dr6SignAverage_const,
+                dr6SignAverage_const_mul, hodd1]
+              ring
+      have hfourth : dr6SignAverage (fun s => (g s + c *
+          dr6Rademacher (s j)) ^ 4) =
+          dr6SignAverage (fun s => g s ^ 4) +
+            6 * c ^ 2 * dr6SignAverage (fun s => g s ^ 2) + c ^ 4 := by
+        have hpoint (s : ι → Bool) :
+            (g s + c * dr6Rademacher (s j)) ^ 4 =
+              g s ^ 4 + 4 * c * (g s ^ 3 * dr6Rademacher (s j)) +
+                6 * c ^ 2 * g s ^ 2 +
+                4 * c ^ 3 * (g s * dr6Rademacher (s j)) + c ^ 4 := by
+          rw [add_pow]
+          simp [dr6Rademacher_sq]
+          ring
+        calc
+          _ = dr6SignAverage (fun s => g s ^ 4 +
+                4 * c * (g s ^ 3 * dr6Rademacher (s j)) +
+                6 * c ^ 2 * g s ^ 2 +
+                4 * c ^ 3 * (g s * dr6Rademacher (s j)) + c ^ 4) := by
+              congr 1
+              funext s
+              exact hpoint s
+          _ = dr6SignAverage (fun s => g s ^ 4) +
+                dr6SignAverage (fun s =>
+                  4 * c * (g s ^ 3 * dr6Rademacher (s j))) +
+                dr6SignAverage (fun s => 6 * c ^ 2 * g s ^ 2) +
+                dr6SignAverage (fun s =>
+                  4 * c ^ 3 * (g s * dr6Rademacher (s j))) +
+                dr6SignAverage (fun _ => c ^ 4) := by
+              simp_rw [dr6SignAverage_add]
+          _ = dr6SignAverage (fun s => g s ^ 4) +
+                6 * c ^ 2 * dr6SignAverage (fun s => g s ^ 2) + c ^ 4 := by
+              rw [dr6SignAverage_const_mul, hodd3,
+                dr6SignAverage_const_mul, dr6SignAverage_const_mul, hodd1,
+                dr6SignAverage_const_mul, dr6SignAverage_const]
+              ring
+      have hnonneg : 0 ≤ dr6SignAverage (fun s => g s ^ 2) := by
+        unfold dr6SignAverage
+        apply div_nonneg
+        · exact Finset.sum_nonneg fun s _ => sq_nonneg (g s)
+        · exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (ι → Bool))
+      have hc4 : 0 ≤ c ^ 4 := by positivity
+      have htarget : dr6SignAverage (fun s => g s ^ 4) +
+          6 * c ^ 2 * dr6SignAverage (fun s => g s ^ 2) + c ^ 4 ≤
+          3 * (dr6SignAverage (fun s => g s ^ 2) + c ^ 2) ^ 2 := by
+        nlinarith [ih]
+      simpa [dr6LinearSignSum, g, c, hsecond, hfourth] using htarget
+
+private def dr6BilinearSignSum {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (S : Finset ι) (T : Finset κ) (c : ι → κ → Real)
+    (x : ι → Bool) (y : κ → Bool) : Real :=
+  ∑ i ∈ S, ∑ j ∈ T, c i j * dr6Rademacher (x i) * dr6Rademacher (y j)
+
+/-- The actual finite independent-sign bilinear fourth-moment estimate.
+It is proved from the coordinate-flip linear estimate above, with no
+hypercontractive or Khintchine hypothesis. -/
+theorem dr6_independent_bilinear_sign_fourth_moment {ι κ : Type*}
+    [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
+    (S : Finset ι) (T : Finset κ) (c : ι → κ → Real) :
+    dr6SignAverage (fun y =>
+      dr6SignAverage (fun x => dr6BilinearSignSum S T c x y ^ 4)) ≤
+      9 * (∑ i ∈ S, ∑ j ∈ T, c i j ^ 2) ^ 2 := by
+  classical
+  let v (i : ι) (y : κ → Bool) : Real := dr6LinearSignSum T (c i) y
+  let si (i : ι) : Real := ∑ j ∈ T, c i j ^ 2
+  have hsecond (i : ι) :
+      dr6SignAverage (fun y => v i y ^ 2) = si i := by
+    simpa [v, si] using dr6_rademacher_linear_second_moment T (c i)
+  have hfourth (i : ι) :
+      dr6SignAverage (fun y => v i y ^ 4) ≤ 3 * (si i) ^ 2 := by
+    rw [← hsecond i]
+    exact dr6_rademacher_linear_fourth_moment T (c i)
+  have hsi (i : ι) : 0 ≤ si i := by
+    simp [si, Finset.sum_nonneg]
+  have hcross (i k : ι) :
+      dr6SignAverage (fun y => v i y ^ 2 * v k y ^ 2) ≤
+        3 * si i * si k := by
+    have hcs := dr6SignAverage_mul_sq_le
+      (fun y => v i y ^ 2) (fun y => v k y ^ 2)
+    have havg4 (j : ι) : 0 ≤ dr6SignAverage (fun y => v j y ^ 4) := by
+      unfold dr6SignAverage
+      apply div_nonneg
+      · exact Finset.sum_nonneg fun y _ => by positivity
+      · exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (κ → Bool)).le
+    have hnonneg : 0 ≤ dr6SignAverage
+        (fun y => v i y ^ 2 * v k y ^ 2) := by
+      unfold dr6SignAverage
+      apply div_nonneg
+      · exact Finset.sum_nonneg fun y _ => mul_nonneg (sq_nonneg _) (sq_nonneg _)
+      · exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (κ → Bool)).le
+    have hproduct := mul_le_mul_of_nonneg' (hfourth i) (hfourth k)
+      (havg4 k) (show 0 ≤ 3 * (si i) ^ 2 by positivity)
+    have hcs' : (dr6SignAverage
+        (fun y => v i y ^ 2 * v k y ^ 2)) ^ 2 ≤
+        dr6SignAverage (fun y => v i y ^ 4) *
+          dr6SignAverage (fun y => v k y ^ 4) := by
+      simpa [pow_mul] using hcs
+    nlinarith [hcs', hproduct, hsi i, hsi k,
+      mul_nonneg (hsi i) (hsi k)]
+  have houter : dr6SignAverage (fun y =>
+      (∑ i ∈ S, v i y ^ 2) ^ 2) ≤
+      3 * (∑ i ∈ S, si i) ^ 2 := by
+    calc
+      _ = ∑ i ∈ S, ∑ k ∈ S,
+            dr6SignAverage (fun y => v i y ^ 2 * v k y ^ 2) := by
+          rw [pow_two, Finset.sum_mul_sum]
+          simp_rw [dr6SignAverage_sum]
+      _ ≤ ∑ i ∈ S, ∑ k ∈ S, 3 * si i * si k := by
+          apply Finset.sum_le_sum
+          intro i hi
+          apply Finset.sum_le_sum
+          intro k hk
+          exact hcross i k
+      _ = 3 * (∑ i ∈ S, si i) ^ 2 := by
+          rw [pow_two, Finset.sum_mul_sum]
+          simp [mul_assoc, mul_left_comm, mul_comm]
+  have hmain : dr6SignAverage (fun y =>
+      dr6SignAverage (fun x => dr6BilinearSignSum S T c x y ^ 4)) ≤
+      3 * dr6SignAverage (fun y => (∑ i ∈ S, v i y ^ 2) ^ 2) := by
+    rw [← dr6SignAverage_const_mul]
+    apply dr6SignAverage_le
+    intro y
+    have hlin := dr6_rademacher_linear_fourth_moment S
+      (fun i => v i y)
+    have hsecx := dr6_rademacher_linear_second_moment S (fun i => v i y)
+    rw [hsecx] at hlin
+    simpa [dr6BilinearSignSum, dr6LinearSignSum, v, mul_comm, mul_left_comm,
+      mul_assoc] using hlin
+  calc
+    _ ≤ 3 * dr6SignAverage (fun y => (∑ i ∈ S, v i y ^ 2) ^ 2) := hmain
+    _ ≤ 9 * (∑ i ∈ S, si i) ^ 2 := by nlinarith [houter]
+    _ = 9 * (∑ i ∈ S, ∑ j ∈ T, c i j ^ 2) ^ 2 := by simp [si]
+
+/-- The exact complex Fourier coefficient weight used by manuscript F1.
+The cutoff is on the frequency `A+C`; the complex input itself is not
+restricted to be real-valued. -/
+def dr6ActualPhiCoefficient {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) (A C : BinaryMatrix n d) : Real :=
+  if LinearMap.range A.transpose.toLin' ⊓
+        LinearMap.range C.transpose.toLin' = ⊥ ∧
+      (A + C).rank = A.rank + C.rank ∧ (A + C).rank ≤ D then
+    Complex.norm (complexFourierCoeff f (A + C))
+  else 0
+
+/-- The two-copy sign polynomial built from the actual complex DR6 F1
+coefficients. Its scalar coefficients are nonnegative norms. -/
+def dr6ActualPhi {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (x y : BinaryMatrix n d → Bool) : Real :=
+  ∑ A : BinaryMatrix n d, ∑ C : BinaryMatrix n d,
+    dr6ActualPhiCoefficient (D := D) f A C *
+      dr6Rademacher (x A) * dr6Rademacher (y C)
+
+/-- The actual complex-input F1 polynomial inherits the finite independent
+sign fourth-moment bound. -/
+theorem dr6_actual_phi_fourth_moment {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) :
+    dr6SignAverage (fun y => dr6SignAverage (fun x =>
+      dr6ActualPhi (D := D) f x y ^ 4)) ≤
+      9 * (∑ A : BinaryMatrix n d, ∑ C : BinaryMatrix n d,
+        dr6ActualPhiCoefficient (D := D) f A C ^ 2) ^ 2 := by
+  simpa [dr6ActualPhi, dr6BilinearSignSum] using
+    (dr6_independent_bilinear_sign_fourth_moment
+      (S := Finset.univ) (T := Finset.univ)
+      (c := dr6ActualPhiCoefficient (D := D) f))
+
+/-- The nonnegative Gram coefficients that collect the shared summand C
+inside each outer pair (A,B). -/
+def dr6ActualPhiGram {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) (A B : BinaryMatrix n d) : Real :=
+  ∑ C : BinaryMatrix n d,
+    dr6ActualPhiCoefficient (D := D) f A C *
+      dr6ActualPhiCoefficient (D := D) f B C
+
+theorem dr6_actual_phi_coefficient_nonneg {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) (A C : BinaryMatrix n d) :
+    0 ≤ dr6ActualPhiCoefficient (D := D) f A C := by
+  unfold dr6ActualPhiCoefficient
+  split_ifs <;> positivity
+
+theorem dr6_actual_phi_gram_nonneg {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) (A B : BinaryMatrix n d) :
+    0 ≤ dr6ActualPhiGram (D := D) f A B := by
+  unfold dr6ActualPhiGram
+  apply Finset.sum_nonneg
+  intro C hC
+  exact mul_nonneg (dr6_actual_phi_coefficient_nonneg f A C)
+    (dr6_actual_phi_coefficient_nonneg f B C)
+
+private def dr6ActualPhiRowEnergy {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) (A : BinaryMatrix n d) : Real :=
+  ∑ C : BinaryMatrix n d,
+    dr6ActualPhiCoefficient (D := D) f A C ^ 2
+
+private def dr6ActualPhiCoefficientMass {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) : Real :=
+  ∑ A : BinaryMatrix n d, dr6ActualPhiRowEnergy (D := D) f A
+
+private def dr6ActualSupportedDirectPair {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) :=
+  {p : BinaryMatrix n d × BinaryMatrix n d //
+    LinearMap.range p.1.transpose.toLin' ⊓
+        LinearMap.range p.2.transpose.toLin' = ⊥ ∧
+      (p.1 + p.2).rank = p.1.rank + p.2.rank ∧
+      (p.1 + p.2).rank ≤ D}
+
+private noncomputable instance dr6ActualSupportedDirectPairFintype
+    {n d D : Nat} (f : BinaryMatrix n d → Complex) :
+    Fintype (dr6ActualSupportedDirectPair (D := D) f) := by
+  classical
+  unfold dr6ActualSupportedDirectPair
+  infer_instance
+
+/-- The actual coefficient mass is bounded by the supported direct-split
+fibers, then by their rank-scale count and complex Parseval. -/
+theorem dr6_actual_phi_coefficient_mass_le_parseval {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    dr6ActualPhiCoefficientMass (D := D) f ≤
+      (2^(D * D) : Real) * uniformMean (fun M => Complex.normSq (f M)) := by
+  classical
+  let P := dr6ActualSupportedDirectPair (D := D) f
+  let Q := Σ Y : BinaryMatrix n d, DR6DirectYDecomposition Y
+  let e : P → Q := fun p =>
+    ⟨p.1.1 + p.1.2,
+      ⟨⟨p.1, rfl, p.2.1, p.2.2.1⟩, p.2.2.2⟩⟩
+  have he : Function.Injective e := by
+    intro p q hpq
+    apply Subtype.ext
+    apply Prod.ext
+    · exact congrArg (fun z : Q => z.2.val.val.1) hpq
+    · exact congrArg (fun z : Q => z.2.val.val.2) hpq
+  have hmass : dr6ActualPhiCoefficientMass (D := D) f =
+      ∑ p : P, Complex.normSq
+        (complexFourierCoeff f (p.val.1 + p.val.2)) := by
+    simp [P, dr6ActualPhiCoefficientMass, dr6ActualPhiRowEnergy,
+      dr6ActualPhiCoefficient, dr6ActualSupportedDirectPair,
+      Complex.normSq_apply, Complex.normSq_eq_norm_sq,
+      Finset.sum_subtype]
+  rw [hmass]
+  have hembed :
+      (∑ p : P, Complex.normSq
+        (complexFourierCoeff f (p.val.1 + p.val.2))) ≤
+      ∑ q : Q, Complex.normSq (complexFourierCoeff f q.1) := by
+    apply Finset.sum_le_sum_of_injOn e
+    · intro p hp q hq hpq
+      exact he hpq
+    · intro q hq
+      exact Finset.mem_univ q
+    · intro p hp
+      rfl
+    · intro q hq hnot
+      exact Complex.normSq_nonneg _
+  have hfiber :
+      (∑ q : Q, Complex.normSq (complexFourierCoeff f q.1)) ≤
+      (2^(D * D) : Real) *
+        ∑ Y : BinaryMatrix n d, Complex.normSq (complexFourierCoeff f Y) := by
+    rw [Fintype.sum_sigma_type]
+    apply Fintype.sum_le_sum
+    intro Y
+    by_cases hYr : Y.rank ≤ D
+    · have hcard :
+          (Fintype.card (DR6DirectYDecomposition Y) : Real) ≤
+            (2^(D * D) : Real) := by
+        calc
+          (Fintype.card (DR6DirectYDecomposition Y) : Real) ≤
+              (2^(Y.rank * Y.rank) : Real) := by
+                exact_mod_cast dr6_y_decomposition_card_le_pow Y
+          _ ≤ (2^(D * D) : Real) := by
+                apply Nat.cast_le.mpr
+                apply Nat.pow_le_pow_right
+                nlinarith [hYr]
+      simpa [Finset.sum_const, nsmul_eq_mul] using
+        (mul_le_mul_of_nonneg_right hcard
+          (Complex.normSq_nonneg (complexFourierCoeff f Y)))
+    · have hzero : complexFourierCoeff f Y = 0 :=
+        hsupport Y (Nat.lt_of_not_ge hYr)
+      simp [hzero]
+  calc
+    _ ≤ ∑ q : Q, Complex.normSq (complexFourierCoeff f q.1) := hembed
+    _ ≤ (2^(D * D) : Real) *
+          ∑ Y : BinaryMatrix n d, Complex.normSq (complexFourierCoeff f Y) := hfiber
+    _ = (2^(D * D) : Real) * uniformMean
+          (fun M => Complex.normSq (f M)) := by
+          rw [← ActualBinaryMatrixHC46A12FourthMoment.complex_fourier_parseval]
+
+/-- Finite Cauchy-Schwarz bounds the squared Frobenius norm of the actual
+nonnegative Gram matrix by the square of its coefficient mass. -/
+theorem dr6_actual_phi_gram_frobenius_le_mass {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) :
+    (∑ A : BinaryMatrix n d, ∑ B : BinaryMatrix n d,
+      dr6ActualPhiGram (D := D) f A B ^ 2) ≤
+      dr6ActualPhiCoefficientMass (D := D) f ^ 2 := by
+  classical
+  have hentry (A B : BinaryMatrix n d) :
+      dr6ActualPhiGram (D := D) f A B ^ 2 ≤
+        dr6ActualPhiRowEnergy (D := D) f A *
+          dr6ActualPhiRowEnergy (D := D) f B := by
+    simpa [dr6ActualPhiGram, dr6ActualPhiRowEnergy, pow_two] using
+      (Finset.sum_mul_sq_le_sq_mul_sq
+        (Finset.univ : Finset (BinaryMatrix n d))
+        (fun C => dr6ActualPhiCoefficient (D := D) f A C)
+        (fun C => dr6ActualPhiCoefficient (D := D) f B C))
+  calc
+    _ ≤ ∑ A : BinaryMatrix n d, ∑ B : BinaryMatrix n d,
+          dr6ActualPhiRowEnergy (D := D) f A *
+            dr6ActualPhiRowEnergy (D := D) f B := by
+      apply Fintype.sum_le_sum
+      intro A
+      apply Fintype.sum_le_sum
+      intro B
+      exact hentry A B
+    _ = dr6ActualPhiCoefficientMass (D := D) f ^ 2 := by
+      simp [dr6ActualPhiCoefficientMass, pow_two, Fintype.sum_mul_sum,
+        mul_assoc]
+
+/-- A single supported F1 pair is charged to the Gram entry for its outer
+`(A,B)` split. The common summand remains inside that Gram entry. -/
+theorem dr6_actual_f1_pair_le_gram_sum {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) (X Y Z : BinaryMatrix n d)
+    (hFY : Y.rank ≤ D) (hFZ : Z.rank ≤ D)
+    (hF1 : DR6F1Witness X Y Z) :
+    Complex.norm (complexFourierCoeff f Y) *
+        Complex.norm (complexFourierCoeff f Z) ≤
+      ∑ p : DR6DirectYDecomposition X,
+        dr6ActualPhiGram (D := D) f p.val.1 p.val.2 := by
+  classical
+  rcases hF1 with ⟨A, B, C, hY, hZ, hX, hAB, hAC, hBC,
+    hYr, hZr, hXr⟩
+  have hYr' : (A + C).rank = A.rank + C.rank := by
+    rw [← hY]
+    exact hYr
+  have hZr' : (B + C).rank = B.rank + C.rank := by
+    rw [← hZ]
+    exact hZr
+  have hYcut : (A + C).rank ≤ D := by rw [← hY]; exact hFY
+  have hZcut : (B + C).rank ≤ D := by rw [← hZ]; exact hFZ
+  have hcA : dr6ActualPhiCoefficient (D := D) f A C =
+      Complex.norm (complexFourierCoeff f Y) := by
+    unfold dr6ActualPhiCoefficient
+    rw [if_pos ⟨hAC, hYr', hYcut⟩, ← hY]
+  have hcB : dr6ActualPhiCoefficient (D := D) f B C =
+      Complex.norm (complexFourierCoeff f Z) := by
+    unfold dr6ActualPhiCoefficient
+    rw [if_pos ⟨hBC, hZr', hZcut⟩, ← hZ]
+  have hInner :
+      dr6ActualPhiCoefficient (D := D) f A C *
+        dr6ActualPhiCoefficient (D := D) f B C ≤
+      dr6ActualPhiGram (D := D) f A B := by
+    unfold dr6ActualPhiGram
+    exact Finset.single_le_sum
+      (fun C' hC' => mul_nonneg
+        (dr6_actual_phi_coefficient_nonneg f A C')
+        (dr6_actual_phi_coefficient_nonneg f B C'))
+      (Finset.mem_univ C)
+  let p : DR6DirectYDecomposition X :=
+    ⟨(A, B), hX, hAB, hXr⟩
+  have hOuter : dr6ActualPhiGram (D := D) f A B ≤
+      ∑ q : DR6DirectYDecomposition X,
+        dr6ActualPhiGram (D := D) f q.val.1 q.val.2 := by
+    exact Finset.single_le_sum
+      (fun q hq => dr6_actual_phi_gram_nonneg f q.val.1 q.val.2)
+      (Finset.mem_univ p)
+  calc
+    _ = dr6ActualPhiCoefficient (D := D) f A C *
+          dr6ActualPhiCoefficient (D := D) f B C := by rw [hcA, hcB]
+    _ ≤ dr6ActualPhiGram (D := D) f A B := hInner
+    _ ≤ _ := hOuter
+
+/-- A finite type of the F1 additive pairs at one output. -/
+private def dr6ActualF1Pairs {n d : Nat} (X : BinaryMatrix n d) :=
+  {p : BinaryMatrix n d × BinaryMatrix n d //
+    p.1 + p.2 = X ∧ DR6F1Witness X p.1 p.2}
+
+private noncomputable instance dr6DirectYDecompositionFintype {n d : Nat}
+    (Y : BinaryMatrix n d) : Fintype (DR6DirectYDecomposition Y) := by
+  classical
+  unfold DR6DirectYDecomposition
+  infer_instance
+
+private noncomputable instance dr6ActualF1PairsFintype {n d : Nat}
+    (X : BinaryMatrix n d) : Fintype (dr6ActualF1Pairs X) := by
+  classical
+  unfold dr6ActualF1Pairs
+  infer_instance
+
+private noncomputable def dr6ChooseF1ABC {n d : Nat} {X : BinaryMatrix n d}
+    (p : dr6ActualF1Pairs X) :
+    BinaryMatrix n d × BinaryMatrix n d × BinaryMatrix n d := by
+  classical
+  let h := p.property.2.1
+  let A := Classical.choose h
+  let hA := Classical.choose_spec h
+  let B := Classical.choose hA
+  let hB := Classical.choose_spec hA
+  let C := Classical.choose hB
+  exact (A, B, C)
+
+private theorem dr6ChooseF1ABC_spec {n d : Nat} {X : BinaryMatrix n d}
+    (p : dr6ActualF1Pairs X) :
+    let q := dr6ChooseF1ABC p
+    p.val.1 = q.1 + q.2.2 ∧ p.val.2 = q.2.1 + q.2.2 ∧
+      X = q.1 + q.2.1 ∧
+      LinearMap.range q.1.transpose.toLin' ⊓
+          LinearMap.range q.2.1.transpose.toLin' = ⊥ ∧
+      LinearMap.range q.1.transpose.toLin' ⊓
+          LinearMap.range q.2.2.transpose.toLin' = ⊥ ∧
+      LinearMap.range q.2.1.transpose.toLin' ⊓
+          LinearMap.range q.2.2.transpose.toLin' = ⊥ ∧
+      q.1.rank + q.2.2.rank = p.val.1.rank ∧
+      q.2.1.rank + q.2.2.rank = p.val.2.rank ∧
+      X.rank = q.1.rank + q.2.1.rank := by
+  classical
+  dsimp [dr6ChooseF1ABC]
+  let h := p.property.2.1
+  let A := Classical.choose h
+  have hA := Classical.choose_spec h
+  let B := Classical.choose hA
+  have hB := Classical.choose_spec hA
+  let C := Classical.choose hB
+  rcases Classical.choose_spec hB with
+    ⟨hY, hZ, hX, hAB, hAC, hBC, hYr, hZr, hXr⟩
+  exact ⟨hY, hZ, hX, hAB, hAC, hBC, hYr, hZr, hXr⟩
+
+private theorem dr6ChooseF1ABC_injective {n d : Nat} {X : BinaryMatrix n d} :
+    Function.Injective (dr6ChooseF1ABC (X := X)) := by
+  intro p q hpq
+  rcases dr6ChooseF1ABC_spec p with ⟨hpY, hpZ, hpX, hpAB, hpAC, hpBC,
+    hpYr, hpZr, hpRank⟩
+  rcases dr6ChooseF1ABC_spec q with ⟨hqY, hqZ, hqX, hqAB, hqAC, hqBC,
+    hqYr, hqZr, hqRank⟩
+  have hA : (dr6ChooseF1ABC p).1 = (dr6ChooseF1ABC q).1 :=
+    congrArg Prod.fst hpq
+  have hBC : (dr6ChooseF1ABC p).2 = (dr6ChooseF1ABC q).2 :=
+    congrArg Prod.snd hpq
+  have hB : (dr6ChooseF1ABC p).2.1 = (dr6ChooseF1ABC q).2.1 :=
+    congrArg Prod.fst hBC
+  have hC : (dr6ChooseF1ABC p).2.2 = (dr6ChooseF1ABC q).2.2 :=
+    congrArg Prod.snd hBC
+  apply Subtype.ext
+  apply Prod.ext
+  · calc
+      p.val.1 = (dr6ChooseF1ABC p).1 + (dr6ChooseF1ABC p).2.2 := hpY
+      _ = (dr6ChooseF1ABC q).1 + (dr6ChooseF1ABC q).2.2 := by rw [hA, hC]
+      _ = q.val.1 := hqY.symm
+  · calc
+      p.val.2 = (dr6ChooseF1ABC p).2.1 + (dr6ChooseF1ABC p).2.2 := hpZ
+      _ = (dr6ChooseF1ABC q).2.1 + (dr6ChooseF1ABC q).2.2 := by rw [hB, hC]
+      _ = q.val.2 := hqZ.symm
+
+private theorem dr6_actual_f1_pair_chosen_charge {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) {X : BinaryMatrix n d}
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (p : dr6ActualF1Pairs X) :
+    Complex.norm (complexFourierCoeff f p.val.1) *
+        Complex.norm (complexFourierCoeff f p.val.2) ≤
+      dr6ActualPhiCoefficient (D := D) f
+          (dr6ChooseF1ABC p).1 (dr6ChooseF1ABC p).2.2 *
+        dr6ActualPhiCoefficient (D := D) f
+          (dr6ChooseF1ABC p).2.1 (dr6ChooseF1ABC p).2.2 := by
+  classical
+  rcases dr6ChooseF1ABC_spec p with ⟨hY, hZ, hX, hAB, hAC, hBC,
+    hYr, hZr, hXr⟩
+  have hYr' : ((dr6ChooseF1ABC p).1 + (dr6ChooseF1ABC p).2.2).rank =
+      (dr6ChooseF1ABC p).1.rank + (dr6ChooseF1ABC p).2.2.rank := by
+    rw [← hY]
+    exact hYr.symm
+  have hZr' : ((dr6ChooseF1ABC p).2.1 + (dr6ChooseF1ABC p).2.2).rank =
+      (dr6ChooseF1ABC p).2.1.rank + (dr6ChooseF1ABC p).2.2.rank := by
+    rw [← hZ]
+    exact hZr.symm
+  by_cases hYcut : p.val.1.rank ≤ D
+  · by_cases hZcut : p.val.2.rank ≤ D
+    · have hYcut' : ((dr6ChooseF1ABC p).1 +
+          (dr6ChooseF1ABC p).2.2).rank ≤ D := by rw [← hY]; exact hYcut
+      have hZcut' : ((dr6ChooseF1ABC p).2.1 +
+          (dr6ChooseF1ABC p).2.2).rank ≤ D := by rw [← hZ]; exact hZcut
+      have hcA : dr6ActualPhiCoefficient (D := D) f
+          (dr6ChooseF1ABC p).1 (dr6ChooseF1ABC p).2.2 =
+          Complex.norm (complexFourierCoeff f p.val.1) := by
+        unfold dr6ActualPhiCoefficient
+        rw [if_pos ⟨hAC, hYr', hYcut'⟩, ← hY]
+      have hcB : dr6ActualPhiCoefficient (D := D) f
+          (dr6ChooseF1ABC p).2.1 (dr6ChooseF1ABC p).2.2 =
+          Complex.norm (complexFourierCoeff f p.val.2) := by
+        unfold dr6ActualPhiCoefficient
+        rw [if_pos ⟨hBC, hZr', hZcut'⟩, ← hZ]
+      rw [hcA, hcB]
+    · have hZzero : complexFourierCoeff f p.val.2 = 0 :=
+        hsupport p.val.2 (Nat.lt_of_not_ge hZcut)
+      rw [hZzero]
+      exact mul_nonneg (dr6_actual_phi_coefficient_nonneg f
+        (dr6ChooseF1ABC p).1 (dr6ChooseF1ABC p).2.2)
+        (dr6_actual_phi_coefficient_nonneg f
+          (dr6ChooseF1ABC p).2.1 (dr6ChooseF1ABC p).2.2)
+  · have hYzero : complexFourierCoeff f p.val.1 = 0 :=
+      hsupport p.val.1 (Nat.lt_of_not_ge hYcut)
+    rw [hYzero]
+    exact mul_nonneg (dr6_actual_phi_coefficient_nonneg f
+      (dr6ChooseF1ABC p).1 (dr6ChooseF1ABC p).2.2)
+      (dr6_actual_phi_coefficient_nonneg f
+        (dr6ChooseF1ABC p).2.1 (dr6ChooseF1ABC p).2.2)
+
+private noncomputable def dr6F1PairToOuterCommon {n d : Nat}
+    {X : BinaryMatrix n d} (p : dr6ActualF1Pairs X) :
+    DR6DirectYDecomposition X × BinaryMatrix n d := by
+  classical
+  let q := dr6ChooseF1ABC p
+  rcases dr6ChooseF1ABC_spec p with
+    ⟨hY, hZ, hX, hAB, hAC, hBC, hYr, hZr, hXr⟩
+  exact (⟨(q.1, q.2.1), hX, hAB, hXr⟩, q.2.2)
+
+private theorem dr6F1PairToOuterCommon_injective {n d : Nat}
+    {X : BinaryMatrix n d} :
+    Function.Injective (dr6F1PairToOuterCommon (X := X)) := by
+  intro p q hpq
+  have hOuter : (dr6F1PairToOuterCommon p).1.val =
+      (dr6F1PairToOuterCommon q).1.val :=
+    congrArg Subtype.val (congrArg Prod.fst hpq)
+  have hA : (dr6ChooseF1ABC p).1 = (dr6ChooseF1ABC q).1 :=
+    congrArg Prod.fst hOuter
+  have hB : (dr6ChooseF1ABC p).2.1 = (dr6ChooseF1ABC q).2.1 :=
+    congrArg Prod.snd hOuter
+  have hC : (dr6ChooseF1ABC p).2.2 = (dr6ChooseF1ABC q).2.2 :=
+    congrArg Prod.snd hpq
+  apply dr6ChooseF1ABC_injective (D := D)
+  exact Prod.ext hA (Prod.ext hB hC)
+
+private theorem dr6_actual_f1_weight_sum_le_gram {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) (X : BinaryMatrix n d)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    (∑ p : dr6ActualF1Pairs X,
+      Complex.norm (complexFourierCoeff f p.val.1) *
+        Complex.norm (complexFourierCoeff f p.val.2)) ≤
+      ∑ q : DR6DirectYDecomposition X,
+        dr6ActualPhiGram (D := D) f q.val.1 q.val.2 := by
+  classical
+  let e := dr6F1PairToOuterCommon (X := X)
+  let w (p : dr6ActualF1Pairs X) :=
+    Complex.norm (complexFourierCoeff f p.val.1) *
+      Complex.norm (complexFourierCoeff f p.val.2)
+  let g (q : DR6DirectYDecomposition X × BinaryMatrix n d) :=
+    dr6ActualPhiCoefficient (D := D) f q.1.val.1 q.2 *
+      dr6ActualPhiCoefficient (D := D) f q.1.val.2 q.2
+  have hsum := Finset.sum_le_sum_of_injOn e
+    (by
+      intro p hp q hq heq
+      exact dr6F1PairToOuterCommon_injective heq)
+    (by intro q hq; exact Set.mem_univ q)
+    (by
+      intro p hp
+      simpa [e, g, w, dr6F1PairToOuterCommon] using
+        dr6_actual_f1_pair_chosen_charge f hsupport p)
+    (by
+      intro q hq hnot
+      exact mul_nonneg
+        (dr6_actual_phi_coefficient_nonneg f q.1.val.1 q.2)
+        (dr6_actual_phi_coefficient_nonneg f q.1.val.2 q.2))
+  change (∑ p : dr6ActualF1Pairs X, w p) ≤
+    ∑ q : DR6DirectYDecomposition X × BinaryMatrix n d, g q at hsum
+  change (∑ p : dr6ActualF1Pairs X, w p) ≤ _
+  calc
+    _ ≤ ∑ q : DR6DirectYDecomposition X × BinaryMatrix n d, g q := hsum
+    _ = ∑ p : DR6DirectYDecomposition X,
+          dr6ActualPhiGram (D := D) f p.val.1 p.val.2 := by
+      simp [g, dr6ActualPhiGram, Fintype.sum_prod_type]
+
+private theorem dr6_actual_f1_energy_at_X_le {n d D : Nat}
+    (f : BinaryMatrix n d → Complex) (X : BinaryMatrix n d)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (hXrank : X.rank ≤ 2 * D) :
+    (∑ p : dr6ActualF1Pairs X,
+      Complex.norm (complexFourierCoeff f p.val.1) *
+        Complex.norm (complexFourierCoeff f p.val.2)) ^ 2 ≤
+      (2^(4 * D * D) : Real) *
+        (∑ p : DR6DirectYDecomposition X,
+          dr6ActualPhiGram (D := D) f p.val.1 p.val.2 ^ 2) := by
+  classical
+  let H (p : DR6DirectYDecomposition X) :=
+    dr6ActualPhiGram (D := D) f p.val.1 p.val.2
+  have hpair := dr6_actual_f1_weight_sum_le_gram f X hsupport
+  have hOuterCount : Fintype.card (DR6DirectYDecomposition X) ≤
+      2^(4 * D * D) := by
+    calc
+      Fintype.card (DR6DirectYDecomposition X) ≤ 2^(X.rank * X.rank) :=
+        dr6_y_decomposition_card_le_pow X
+      _ ≤ 2^(4 * D * D) := by
+        have hexp : X.rank * X.rank ≤ 4 * D * D := by
+          calc
+            X.rank * X.rank ≤ (2 * D) * (2 * D) := Nat.mul_le_mul hXrank hXrank
+            _ = 4 * D * D := by ring
+        exact Nat.pow_le_pow_right (by decide) hexp
+  have hgram : (∑ p : DR6DirectYDecomposition X, H p) ^ 2 ≤
+      (Fintype.card (DR6DirectYDecomposition X) : Real) *
+        (∑ p : DR6DirectYDecomposition X, H p ^ 2) := by
+    simpa [H, one_pow] using
+      (Finset.sum_mul_sq_le_sq_mul_sq
+        (Finset.univ : Finset (DR6DirectYDecomposition X))
+        (fun _ => (1 : Real)) H)
+  have hCardReal :
+      (Fintype.card (DR6DirectYDecomposition X) : Real) ≤
+        (2^(4 * D * D) : Real) := by exact_mod_cast hOuterCount
+  have hHnonneg : 0 ≤ ∑ p : DR6DirectYDecomposition X, H p := by
+    apply Finset.sum_nonneg
+    intro p hp
+    exact dr6_actual_phi_gram_nonneg f p.val.1 p.val.2
+  have hHSqBound : (∑ p : DR6DirectYDecomposition X, H p) ^ 2 ≤
+      (2^(4 * D * D) : Real) *
+        (∑ p : DR6DirectYDecomposition X, H p ^ 2) := by
+    calc
+      _ ≤ (Fintype.card (DR6DirectYDecomposition X) : Real) *
+            (∑ p : DR6DirectYDecomposition X, H p ^ 2) := hgram
+      _ ≤ (2^(4 * D * D) : Real) *
+            (∑ p : DR6DirectYDecomposition X, H p ^ 2) :=
+        mul_le_mul_of_nonneg_right hCardReal
+          (Finset.sum_nonneg fun p hp => sq_nonneg (H p))
+  have hPairNonneg : 0 ≤ ∑ p : dr6ActualF1Pairs X,
+      Complex.norm (complexFourierCoeff f p.val.1) *
+        Complex.norm (complexFourierCoeff f p.val.2) := by
+    apply Finset.sum_nonneg
+    intro p hp
+    exact mul_nonneg (norm_nonneg _) (norm_nonneg _)
+  have hP := (sq_le_sq₀ hPairNonneg hHnonneg).2 hpair
+  simpa [H] using hP.trans hHSqBound
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6SignMoments
