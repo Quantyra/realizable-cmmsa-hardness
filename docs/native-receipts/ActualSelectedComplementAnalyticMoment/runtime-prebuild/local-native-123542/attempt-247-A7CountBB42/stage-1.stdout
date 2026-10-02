@@ -1,0 +1,43 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap {n d : ℕ}
+  (M : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W✝
+      n →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.V✝ d
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_range_decomposition {n d : ℕ}
+  (X Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hXY : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes X Y) :
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap X).range ⊓
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap (Y - X)).range =
+      ⊥ ∧
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap X).range ⊔
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap (Y - X)).range =
+      (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).range
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_ker_le {n d : ℕ}
+  (X Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hXY : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes X Y) :
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).ker ≤
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap X).ker
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6PredecessorRestrictedMap {n d : ℕ}
+  (X Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hXY : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes X Y) :
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W✝
+      n →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝]
+    ↥(PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).range
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_descended_idempotent {n d : ℕ}
+  (X Y : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d)
+  (hXY : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor.w6Precedes X Y) :
+  ∃! q,
+    IsIdempotentElem q ∧
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝ ↥(LinearMap.range q) =
+          Matrix.rank X ∧
+        q ∘ₗ (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.transposeMap Y).rangeRestrict =
+          PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6PredecessorRestrictedMap X Y hXY
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_range_decomposition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_ker_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6_predecessor_descended_idempotent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
