@@ -1,0 +1,57 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:434:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:441:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:447:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:455:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:461:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:473:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:483:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:492:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:499:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:805:23: error: unsolved goals
+n d : ℕ
+Y : BinaryMatrix n d
+p : DR6DirectYDecomposition Y
+i : Fin n
+j : Fin d
+⊢ (↑p).1 i j * 2 + (↑p).2 i j = (↑p).2 i j
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:889:12: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Fintype.card_fin, ZMod.card, hdim]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:925:8: warning: This simp argument is unused:
+  BinaryMatrixFourier.uniformMean_const
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [BinaryMatrixFourier.fourierCoeff, BinaryMatrixFourier.uniformMean]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own344\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:966:4: error: unsolved goals
+case a
+n d D : ℕ
+f : BinaryMatrix n d → ℝ
+hsupport : ∀ (Y : BinaryMatrix n d), D < Matrix.rank Y → fourierCoeff f Y = 0
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+Y : BinaryMatrix n d
+hY : D < Matrix.rank Y
+⊢ ∑ x, (fc x).im * character Y x = 0
