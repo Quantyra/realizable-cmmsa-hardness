@@ -1,0 +1,65 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:88:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, w6ActualCarrierFrequency, eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:89:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:97:19: warning: This simp argument is unused:
+  w6ActualPredecessorFrequencyFiber
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [p]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:129:8: warning: Unused tactic linter: `change
+  (∑ Y ∈ (Finset.univ : Finset filteredSubtype),
+      complexFourierCoeff f Y.1 * (traceCharacter Y.1.transpose.toLin' T : Complex)) =
+    _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:300:12: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:301:12: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, Complex.normSq_nonneg]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:281:4: warning: Unused tactic linter: `change
+  (∑ Y ∈ (Finset.univ : Finset Pred), Complex.normSq (complexFourierCoeff f Y.1)) = _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-123542\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:344:2: error: Tactic `apply` failed: could not unify the conclusion of `@Finset.sum_eq_zero`
+  ∑ x ∈ ?s, ?f x = 0
+with the goal
+  Complex.normSq (∑ Y, complexFourierCoeff f ↑Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose ↑Y)) T)) = 0
+
+Note: The full type of `@Finset.sum_eq_zero` is
+  ∀ {ι : Type ?u.51} {M : Type ?u.50} {s : Finset ι} [inst : AddCommMonoid M] {f : ι → M},
+    (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+
+n d D : ℕ
+X : BinaryMatrix n d
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hXD : D < Matrix.rank X
+Z :
+  ↥(Matrix.toLin' (Matrix.transpose X)).ker →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.V✝ d ⧸ (Matrix.toLin' (Matrix.transpose X)).range
+hZ : Z ∈ Finset.univ
+⊢ Complex.normSq (∑ Y, complexFourierCoeff f ↑Y * ↑(traceCharacter (Matrix.toLin' (Matrix.transpose ↑Y)) T)) = 0
