@@ -1,0 +1,111 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:94:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, w6ActualCarrierFrequency, eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:95:14: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:103:19: warning: This simp argument is unused:
+  w6ActualPredecessorFrequencyFiber
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [p]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:135:8: warning: Unused tactic linter: `change
+  (∑ Y ∈ (Finset.univ : Finset filteredSubtype),
+      complexFourierCoeff f Y.1 * (traceCharacter Y.1.transpose.toLin' T : Complex)) =
+    _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:306:12: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:307:12: warning: This simp argument is unused:
+  p
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hp, Complex.normSq_nonneg]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:287:4: warning: Unused tactic linter: `change
+  (∑ Y ∈ (Finset.univ : Finset Pred), Complex.normSq (complexFourierCoeff f Y.1)) = _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:730:8: error: Tactic `rfl` failed: The left-hand side
+  E * (2 ^ (4 * Matrix.rank X * (D - Matrix.rank X)) / 2 ^ (6 * D * Matrix.rank X)) * w6PredecessorFourierEnergy X f *
+    2 ^ (6 * D * Matrix.rank X)
+is not definitionally equal to the right-hand side
+  E * (2 ^ (4 * Matrix.rank X * (D - Matrix.rank X)) / 2 ^ (6 * D * Matrix.rank X) * w6PredecessorFourierEnergy X f) *
+    2 ^ (6 * D * Matrix.rank X)
+
+n d D : ℕ
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+E : ℝ := uniformMean fun M => Complex.normSq (f M)
+Coeff : BinaryMatrix n d → ℝ := fun Y => Complex.normSq (complexFourierCoeff f Y)
+PredOfX : BinaryMatrix n d → Type := fun X => { Y // w6Precedes X Y }
+PredOfY : BinaryMatrix n d → Type := fun Y => { X // w6Precedes X Y }
+PairX : Type := (X : BinaryMatrix n d) × PredOfX X
+PairY : Type := (Y : BinaryMatrix n d) × PredOfY Y
+swap : PairX ≃ PairY :=
+  { toFun := fun p => ⟨↑p.snd, ⟨p.fst, ⋯⟩⟩, invFun := fun p => ⟨↑p.snd, ⟨p.fst, ⋯⟩⟩, left_inv := ⋯, right_inv := ⋯ }
+hdouble :
+  ∑ X, w6EnergyRankWeight D (Matrix.rank X) * w6PredecessorFourierEnergy X f =
+    ∑ Y, Coeff Y * ∑ X, w6EnergyRankWeight D (Matrix.rank ↑X)
+hpredBound : ∀ (Y : BinaryMatrix n d), Coeff Y * ∑ X, w6EnergyRankWeight D (Matrix.rank ↑X) ≤ 67 / 63 * Coeff Y
+hpredWeighted : ∑ X, w6EnergyRankWeight D (Matrix.rank X) * w6PredecessorFourierEnergy X f ≤ 67 / 63 * E
+X : BinaryMatrix n d
+e : ℝ :=
+  carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+    Complex.normSq (actualW6Derivative X T f M)
+a : ℝ := w6PredecessorFourierEnergy X f
+hsq :
+  (carrierMean (Matrix.toLin' (Matrix.transpose X)).range (Matrix.toLin' (Matrix.transpose X)).ker fun M =>
+        Complex.normSq (actualW6Derivative X T f M)) ^
+      2 ≤
+    (2 ^ (4 * Matrix.rank X * (D - Matrix.rank X)) * uniformMean fun M => Complex.normSq (f M)) *
+      w6PredecessorFourierEnergy X f
+hden : 0 < 2 ^ (6 * D * Matrix.rank X)
+⊢ E * (2 ^ (4 * Matrix.rank X * (D - Matrix.rank X)) / 2 ^ (6 * D * Matrix.rank X)) * w6PredecessorFourierEnergy X f *
+      2 ^ (6 * D * Matrix.rank X) =
+    E * (2 ^ (4 * Matrix.rank X * (D - Matrix.rank X)) / 2 ^ (6 * D * Matrix.rank X) * w6PredecessorFourierEnergy X f) *
+      2 ^ (6 * D * Matrix.rank X)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:829:33: error: unsolved goals
+n d : ℕ
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough 0 f
+hconstant : ∀ (M : BinaryMatrix n d), f M = f 0
+hfilter : w6PredecessorFilter 0 f = fun x => f 0
+hactual :
+  ∀ (M : V d ⧸ (Matrix.toLin' (Matrix.transpose 0)).range →ₗ[F] ↥(Matrix.toLin' (Matrix.transpose 0)).ker),
+    actualW6Derivative 0 T f M = f 0
+hconstantFunction : (fun M => Complex.normSq (actualW6Derivative 0 T f M)) = fun x => Complex.normSq (f 0)
+hcard :
+  ↑(Fintype.card (V d ⧸ (Matrix.toLin' (Matrix.transpose 0)).range →ₗ[F] ↥(Matrix.toLin' (Matrix.transpose 0)).ker)) ≠ 0
+⊢ ↑Finset.univ.card * Complex.normSq (f 0) /
+      ↑(Fintype.card
+          (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.V✝ d ⧸
+              (Matrix.toLin' 0).range →ₗ[PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.F✝]
+            ↥(Matrix.toLin' 0).ker)) =
+    Complex.normSq (f 0)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own332\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46A7EnergyConsumer.lean:850:55: warning: This simp argument is unused:
+  Finset.card_univ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [carrierMean, Finset.sum_const, nsmul_eq_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
