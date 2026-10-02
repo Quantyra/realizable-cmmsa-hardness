@@ -1,0 +1,159 @@
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:90:5: warning: Variable name `f` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _f
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:152:19: error: unsolved goals
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+P : Type := dr6ActualSupportedDirectPair f
+pred : BinaryMatrix n d × BinaryMatrix n d → Prop :=
+  fun z =>
+    (Matrix.toLin' (Matrix.transpose z.1)).range ⊓ (Matrix.toLin' (Matrix.transpose z.2)).range = ⊥ ∧
+      Matrix.rank (z.1 + z.2) = Matrix.rank z.1 + Matrix.rank z.2 ∧ Matrix.rank (z.1 + z.2) ≤ D
+weight : BinaryMatrix n d × BinaryMatrix n d → ℝ :=
+  fun z => if pred z then Complex.normSq (complexFourierCoeff f (z.1 + z.2)) else 0
+Q : Type := (Y : BinaryMatrix n d) × DR6DirectYDecomposition Y
+e : P → Q := fun p => ⟨(↑p).1 + (↑p).2, ⟨↑p, ⋯⟩⟩
+he : Function.Injective e
+hcompl : ∑ z, weight ↑z = 0
+hpartition : ∑ i, weight i = ∑ i, weight ↑i
+p : P
+⊢ D < Matrix.rank (↑p).1 + Matrix.rank (↑p).2 → 0 = Complex.normSq (complexFourierCoeff f ((↑p).1 + (↑p).2))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:194:4: error: unsolved goals
+case neg
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+P : Type := dr6ActualSupportedDirectPair f
+pred : BinaryMatrix n d × BinaryMatrix n d → Prop :=
+  fun z =>
+    (Matrix.toLin' (Matrix.transpose z.1)).range ⊓ (Matrix.toLin' (Matrix.transpose z.2)).range = ⊥ ∧
+      Matrix.rank (z.1 + z.2) = Matrix.rank z.1 + Matrix.rank z.2 ∧ Matrix.rank (z.1 + z.2) ≤ D
+weight : BinaryMatrix n d × BinaryMatrix n d → ℝ :=
+  fun z => if pred z then Complex.normSq (complexFourierCoeff f (z.1 + z.2)) else 0
+Q : Type := (Y : BinaryMatrix n d) × DR6DirectYDecomposition Y
+e : P → Q := fun p => ⟨(↑p).1 + (↑p).2, ⟨↑p, ⋯⟩⟩
+he : Function.Injective e
+hcompl : ∑ z, weight ↑z = 0
+hpartition : ∑ i, weight i = ∑ i, weight ↑i
+hmass : dr6ActualPhiCoefficientMass f = ∑ p, Complex.normSq (complexFourierCoeff f ((↑p).1 + (↑p).2))
+hembed :
+  ∑ p, Complex.normSq (complexFourierCoeff f ((↑p).1 + (↑p).2)) ≤ ∑ q, Complex.normSq (complexFourierCoeff f q.fst)
+Y : BinaryMatrix n d
+hY : Y ∈ Finset.univ
+hYr : ¬Matrix.rank Y ≤ D
+hzero : complexFourierCoeff f Y = 0
+⊢ ∑ y, Complex.normSq (complexFourierCoeff f ⟨Y, y⟩.fst) ≤ 2 ^ (D * D) * Complex.normSq 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:144:35: warning: This simp argument is unused:
+  dr6ActualSupportedDirectPair
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [dr6ActualPhiCoefficientMass, dr6ActualPhiRowEnergy, dr6ActualPhiCoefficient, pred, weight,
+    Fintype.sum_prod_type, Complex.normSq_eq_norm_sq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:155:32: warning: This simp argument is unused:
+  P
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [weight, pred, dr6ActualSupportedDirectPair, p.property]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:155:35: warning: This simp argument is unused:
+  dr6ActualSupportedDirectPair
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [weight, pred, P, p.property]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:233:8: warning: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [dr6ActualPhiCoefficientMass, pow_two, Fintype.sum_mul_sum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:259:8: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:263:8: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:400:12: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:405:12: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:413:4: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:378:59: error: unsolved goals
+case neg
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+X : BinaryMatrix n d
+hsupport : ComplexFourierSupportedThrough D f
+p : dr6ActualF1Pairs X
+hY : (↑p).1 = (dr6ChooseF1ABC p).1 + (dr6ChooseF1ABC p).2.2
+hZ : (↑p).2 = (dr6ChooseF1ABC p).2.1 + (dr6ChooseF1ABC p).2.2
+hX : X = (dr6ChooseF1ABC p).1 + (dr6ChooseF1ABC p).2.1
+hAB :
+  (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).1)).range ⊓
+      (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).2.1)).range =
+    ⊥
+hAC :
+  (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).1)).range ⊓
+      (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).2.2)).range =
+    ⊥
+hBC :
+  (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).2.1)).range ⊓
+      (Matrix.toLin' (Matrix.transpose (dr6ChooseF1ABC p).2.2)).range =
+    ⊥
+hYr : Matrix.rank (dr6ChooseF1ABC p).1 + Matrix.rank (dr6ChooseF1ABC p).2.2 = Matrix.rank (↑p).1
+hZr : Matrix.rank (dr6ChooseF1ABC p).2.1 + Matrix.rank (dr6ChooseF1ABC p).2.2 = Matrix.rank (↑p).2
+hXr : Matrix.rank X = Matrix.rank (dr6ChooseF1ABC p).1 + Matrix.rank (dr6ChooseF1ABC p).2.1
+hYr' :
+  Matrix.rank ((dr6ChooseF1ABC p).1 + (dr6ChooseF1ABC p).2.2) =
+    Matrix.rank (dr6ChooseF1ABC p).1 + Matrix.rank (dr6ChooseF1ABC p).2.2
+hZr' :
+  Matrix.rank ((dr6ChooseF1ABC p).2.1 + (dr6ChooseF1ABC p).2.2) =
+    Matrix.rank (dr6ChooseF1ABC p).2.1 + Matrix.rank (dr6ChooseF1ABC p).2.2
+hYcut : ¬Matrix.rank (↑p).1 ≤ D
+⊢ ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖ ≤
+    dr6ActualPhiCoefficient f (dr6ChooseF1ABC p).1 (dr6ChooseF1ABC p).2.2 *
+      dr6ActualPhiCoefficient f (dr6ChooseF1ABC p).2.1 (dr6ChooseF1ABC p).2.2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:436:2: error: No goals to be solved
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:682:24: error: don't know how to synthesize implicit argument `D`
+  @dr6_actual_phi_gram_frobenius_le_mass n d ?m.1170 f
+context:
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+H : (X : BinaryMatrix n d) → DR6DirectYDecomposition X → ℝ := ⋯
+hpoint :
+  ∀ (X : BinaryMatrix n d),
+    (∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖) ^ 2 ≤ 2 ^ (4 * D * D) * ∑ p, H X p ^ 2
+hsumPoint :
+  ∑ X, (∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖) ^ 2 ≤
+    2 ^ (4 * D * D) * ∑ X, ∑ p, H X p ^ 2
+Q : Type := ⋯
+e : Q → BinaryMatrix n d × BinaryMatrix n d := ⋯
+he : Function.Injective e
+hSigma : ∑ q, H q.fst q.snd ^ 2 = ∑ X, ∑ p, H X p ^ 2
+haggregate : ∑ X, ∑ p, H X p ^ 2 ≤ ∑ q, dr6ActualPhiGram f q.1 q.2 ^ 2
+⊢ ℕ
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:682:15: error: failed to infer `have` declaration type
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:681:56: error: unsolved goals
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+H : (X : BinaryMatrix n d) → DR6DirectYDecomposition X → ℝ := fun X p => dr6ActualPhiGram f (↑p).1 (↑p).2
+hpoint :
+  ∀ (X : BinaryMatrix n d),
+    (∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖) ^ 2 ≤ 2 ^ (4 * D * D) * ∑ p, H X p ^ 2
+hsumPoint :
+  ∑ X, (∑ p, ‖complexFourierCoeff f (↑p).1‖ * ‖complexFourierCoeff f (↑p).2‖) ^ 2 ≤
+    2 ^ (4 * D * D) * ∑ X, ∑ p, H X p ^ 2
+Q : Type := (X : BinaryMatrix n d) × DR6DirectYDecomposition X
+e : Q → BinaryMatrix n d × BinaryMatrix n d := fun q => ↑q.snd
+he : Function.Injective e
+hSigma : ∑ q, H q.fst q.snd ^ 2 = ∑ X, ∑ p, H X p ^ 2
+haggregate : ∑ X, ∑ p, H X p ^ 2 ≤ ∑ q, dr6ActualPhiGram f q.1 q.2 ^ 2
+⊢ 2 ^ (4 * D * D) * ∑ q, dr6ActualPhiGram f q.1 q.2 ^ 2 ≤ 2 ^ (4 * D * D) * dr6ActualPhiCoefficientMass f ^ 2
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own355\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6SignMoments.lean:715:12: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
