@@ -1,0 +1,202 @@
+Try this:
+  [apply] abel_nf
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:175:18: error: unsolved goals
+n d : ℕ
+S R : Submodule F (W n)
+hSR : S ⊔ R = ⊤
+f : ↥S →ₗ[F] V d
+g : ↥R →ₗ[F] V d
+hcompat : ∀ (x : W n) (hxS : x ∈ S) (hxR : x ∈ R), f ⟨x, hxS⟩ = g ⟨x, hxR⟩
+p : ↥S × ↥R →ₗ[F] W n := { toFun := fun q => ↑q.1 + ↑q.2, map_add' := ⋯, map_smul' := ⋯ }
+x y : ↥S × ↥R
+i : Fin d
+⊢ (f x.1 + f y.1) i + (g x.2 + g y.2) i = (f x.1 + g x.2) i + (f y.1 + g y.2) i
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:190:51: error: unsolved goals
+n d : ℕ
+S R : Submodule F (W n)
+hSR : S ⊔ R = ⊤
+f : ↥S →ₗ[F] V d
+g : ↥R →ₗ[F] V d
+hcompat : ∀ (x : W n) (hxS : x ∈ S) (hxR : x ∈ R), f ⟨x, hxS⟩ = g ⟨x, hxR⟩
+p : ↥S × ↥R →ₗ[F] W n := { toFun := fun q => ↑q.1 + ↑q.2, map_add' := ⋯, map_smul' := ⋯ }
+q : ↥S × ↥R →ₗ[F] V d := { toFun := fun z => f z.1 + g z.2, map_add' := ⋯, map_smul' := ⋯ }
+hp : Function.Surjective ⇑p
+s : ↥S
+r : ↥R
+hz : ↑s + ↑r = 0
+hrneg : ↑r = -↑s
+hsR : ↑s ∈ R
+hco : f ⟨↑s, ⋯⟩ = g ⟨↑s, hsR⟩
+hrEq : r = -⟨↑s, hsR⟩
+⊢ f s + -f ⟨↑s, ⋯⟩ = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:249:57: error: Application type mismatch: The argument
+  hst'
+has type
+  s + t = st
+but is expected to have type
+  st = s + t
+in the application
+  congrArg (fun z => z + u) hst'
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:250:25: error: Type mismatch
+  add_assoc
+has type
+  ∀ (a b c : ?m.227), a + b + c = a + (b + c)
+but is expected to have type
+  s + t + u = s + (t + u)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:240:49: error: unsolved goals
+n d : ℕ
+S T U : Submodule F (W n)
+hSTU : S ⊔ T ⊔ U = ⊤
+f g : W n →ₗ[F] V d
+hS : ∀ (x : ↥S), f ↑x = g ↑x
+hT : ∀ (x : ↥T), f ↑x = g ↑x
+hU : ∀ (x : ↥U), f ↑x = g ↑x
+x : W n
+hx : x ∈ S ⊔ T ⊔ U
+st : W n
+hst : st ∈ S ⊔ T
+u : W n
+hu : u ∈ U
+hsum : st + u = x
+s : W n
+hs : s ∈ S
+t : W n
+ht : t ∈ T
+hst' : s + t = st
+hdecomp : x = s + (t + u)
+⊢ g ↑⟨s, hs⟩ + (g ↑⟨t, ht⟩ + g ↑⟨u, hu⟩) = g (s + (t + u))
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:429:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:436:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:442:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:450:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:456:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:468:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:478:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:487:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:494:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:785:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (DR6DirectYDecomposition Y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:794:23: error: unsolved goals
+n d : ℕ
+Y : BinaryMatrix n d
+p : DR6DirectYDecomposition Y
+i : Fin n
+j : Fin d
+⊢ (↑p).1 i j + ((↑p).2 i j + (↑p).1 i j) = (↑p).2 i j
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:813:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (DR6DirectYDecomposition Y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:797:12: warning: This simp argument is unused:
+  ZModModule.add_self
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Matrix.sub_apply, sub_eq_add_neg, add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:835:6: error: Type mismatch: After simplification, term
+  hA.right.right
+ has type
+  @Eq
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W✝
+        n →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝]
+      ↥(transposeMap Y).range)
+    (Classical.choose ⋯ ∘ₗ (transposeMap Y).rangeRestrict) (w6PredecessorRestrictedMap (↑A) Y ⋯)
+but is expected to have type
+  @Eq (W n →ₗ[F] ↥E) (Classical.choose ⋯ ∘ₗ (Matrix.toLin' (Matrix.transpose Y)).rangeRestrict)
+    (w6PredecessorRestrictedMap (↑A) Y ⋯)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:838:6: error: Type mismatch: After simplification, term
+  hB.right.right
+ has type
+  @Eq
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.W✝
+        n →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.F✝]
+      ↥(transposeMap Y).range)
+    (Classical.choose ⋯ ∘ₗ (transposeMap Y).rangeRestrict) (w6PredecessorRestrictedMap (↑B) Y ⋯)
+but is expected to have type
+  @Eq (W n →ₗ[F] ↥E) (Classical.choose ⋯ ∘ₗ (Matrix.toLin' (Matrix.transpose Y)).rangeRestrict)
+    (w6PredecessorRestrictedMap (↑B) Y ⋯)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:844:8: error: invalid 'calc' step, failed to synthesize `Trans` instance
+  Trans Eq Eq ?m.331
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:858:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (DR6DirectYDecomposition Y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:861:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (DR6DirectYDecomposition Y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:876:48: error(lean.unknownIdentifier): Unknown constant `Fintype.card_zmod`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:866:31: error: unsolved goals
+n d : ℕ
+Y : BinaryMatrix n d
+E : Submodule F (V d) := (Matrix.toLin' (Matrix.transpose Y)).range
+b : Module.Basis (Fin (Module.finrank F ↥E)) F ↥E := Module.finBasis F ↥E
+hdim : Module.finrank F ↥E = Matrix.rank Y
+e : (↥E →ₗ[F] ↥E) ≃ₗ[F] Matrix (Fin (Module.finrank F ↥E)) (Fin (Module.finrank F ↥E)) F := LinearMap.toMatrix b b
+⊢ (2 ^ Matrix.rank Y) ^ Matrix.rank Y = 2 ^ (Matrix.rank Y * Matrix.rank Y)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:876:12: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Fintype.card_fin, Fintype.card_zmod, hdim]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:935:2: error: Type mismatch: After simplification, term
+  hre
+ has type
+  fourierCoeff (fun M => f M ^ 2) K = ∑ x, (fourierCoeff f x * fourierCoeff f (K + x) - 0 * 0)
+but is expected to have type
+  fourierCoeff (fun M => f M ^ 2) K = ∑ X, fourierCoeff f X * fourierCoeff f (K + X)
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:911:8: warning: This simp argument is unused:
+  BinaryMatrixFourier.uniformMean_const
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [BinaryMatrixFourier.fourierCoeff, BinaryMatrixFourier.uniformMean]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:952:4: error: unsolved goals
+case a
+n d D : ℕ
+f : BinaryMatrix n d → ℝ
+hsupport : ∀ (Y : BinaryMatrix n d), D < Matrix.rank Y → fourierCoeff f Y = 0
+fc : BinaryMatrix n d → ℂ := fun M => ↑(f M)
+Y : BinaryMatrix n d
+hY : D < Matrix.rank Y
+⊢ fourierCoeff (fun M => 0) Y = 0
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:953:16: warning: This simp argument is unused:
+  complexFourierCoeff
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fc, BinaryMatrixFourier.uniformMean]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+C:\Users\Dan\Desktop\Projects\realizable-cmmsa-hardness\docs\native-receipts\ActualSelectedComplementAnalyticMoment\runtime-prebuild\local-native-own340\src\PvNP\RealizableHardness\ActualBinaryMatrixHC46DR6Convolution.lean:953:37: warning: This simp argument is unused:
+  BinaryMatrixFourier.uniformMean
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fc, complexFourierCoeff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
