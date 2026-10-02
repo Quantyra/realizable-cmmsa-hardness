@@ -1,0 +1,974 @@
+import PvNP.RealizableHardness.BinaryMatrixA1Composition
+import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+
+/-!
+DR6 is the manuscript ordinary-filter fourth-power inequality, for an
+arbitrary finite binary matrix space and a real-valued function supported
+through Fourier rank D.  This is the ordinary selector
+
+    A <= range(Y.transpose.toLin')  and  ker(Y.transpose.toLin') <= B.
+
+It is deliberately not `BinaryMatrixNestedSelectorA1.Selected`, whose
+second condition is `Y w in A -> w in B` and is the hybrid selector used
+later in A7/A12.
+
+The proof route recorded for the DR6 increment is the complete manuscript
+argument (submission-manuscript.md, 1513-1615), with no DR6/L4 premise:
+
+* Write the fourth moment as the sum over convolution outputs X of
+  `|sum_{Y+Z=X} fhat(Y) fhat(Z)|^2`.  Since each nonzero coefficient has
+  rank at most D, every contributing Y,Z has rank <= D and X has rank
+  <= 2D; no rank-D cutoff on X is valid or used.
+* Partition pairs into F1 and F2.  F1 consists of pairs with direct
+  decompositions Y=A+C, Z=B+C, X=A+B, with the three image summands
+  pairwise disjoint and their kernels spanning the domain.  F2 consists
+  of pairs whose three image ranges have nonzero common intersection or
+  whose three kernels fail to span.  Outside F2, construct A,B,C by
+  prescribing them on ker Z, ker Y, ker X; the zero triple intersection
+  proves the prescriptions are well-defined and the image/kernel
+  conditions prove the direct decompositions.  Thus F1 union F2 covers
+  every convolution pair.
+* For F1, use independent Rademacher signs x_A,y_C on disjoint copies
+  of maps of rank <=D and the degree-two polynomial
+  Phi=sum_{A direct-sum C} |fhat(A+C)| x_A y_C.  A rank-r map has at most
+  2^(r^2) direct decompositions, so ||Phi||_2^2 <= 2^(D^2)||f||_2^2.
+  The elementary real degree-two inequality ||Phi||_4^4 <=81||Phi||_2^4
+  gives the F1 contribution after the A+B decomposition multiplicity
+  (at most 2^(4D^2)); coefficient comparison in Phi^2 handles A!=B,
+  and (A,B)=(0,0) is bounded by the constant coefficient.  This yields
+  sum_X H_X^2 <=81*2^(6D^2)||f||_2^4.
+* For F2, preserve signed/complex convolution coefficients.  Expand the
+  indicator of a nonzero t-dimensional common image/kernel obstruction
+  using alpha_k=(-1)^(k+1)2^(k(k-1)/2) and the binary Gaussian-binomial
+  identity at z=-1.  Inclusion-exclusion produces the exact A5 sum of
+  alpha_{i,j} times Fourier coefficients of `(P_{A,B}f)^2`, where P is
+  the ordinary selector above.  For i,j<=D, the pair count is at most
+  2^(2D(i+j)) because rank(X)<=2D, and |alpha_{i,j}|^2<=2^(D(i+j)).
+  Weighted Cauchy with weight 2^(7D(i+j)) leaves a factor bounded by
+  sum_{i+j>0}2^(-4D(i+j))<1 for D>=1.  Parseval bounds the F2 squared
+  contribution by the nontrivial ordinary-filter sum in DR6.
+* Combining |convolution|<=H_X+|O_X| and (a+b)^2<=2a^2+2b^2,
+  the F1 coefficient 2*81=162 is exactly why DR6 has denominator 162;
+  the F2 coefficient is at most 2.  For D=0, f is constant and all
+  nontrivial ordinary filters vanish, so the stated weakened inequality
+  is immediate.  The ambient dimensions n,d are arbitrary throughout.
+
+The source translation is staged by named DR6 obligations.  This module
+currently establishes the exact ordinary selector/filter interface and
+the convolution-support boundary used by both F1 and F2.  It does not claim
+that DR6 or any later A7/A12 theorem has been proved.
+-/
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Composition
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d -> F
+private abbrev W (n : Nat) := Fin n -> F
+
+/-- Manuscript ordinary selector P_{A,B}. -/
+def DR6OrdinarySelected {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d) : Prop :=
+  A <= LinearMap.range Y.transpose.toLin' /\
+    LinearMap.ker Y.transpose.toLin' <= B
+
+/-- The ordinary P_{A,B} Fourier projection.  It is distinct from the
+hybrid `ambientHybridFilter` in A1Composition. -/
+def DR6OrdinaryFilter {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d -> Real) (M : BinaryMatrix n d) : Real :=
+  ∑ Y : BinaryMatrix n d,
+    if DR6OrdinarySelected A B Y then fourierCoeff f Y * character Y M else 0
+
+/-- The F2 obstruction in the manuscript DR6 partition. -/
+def DR6F2Obstruction {n d : Nat}
+    (X Y Z : BinaryMatrix n d) : Prop :=
+  (LinearMap.range X.transpose.toLin' ⊓
+      LinearMap.range Y.transpose.toLin' ⊓
+      LinearMap.range Z.transpose.toLin' : Submodule F (V d)) ≠ ⊥ ∨
+    (LinearMap.ker X.transpose.toLin' ⊔
+      LinearMap.ker Y.transpose.toLin' ⊔
+      LinearMap.ker Z.transpose.toLin' : Submodule F (W n)) ≠ ⊤
+
+/-- The F1 witness: pairwise disjoint output images and the three exact
+matrix decompositions from the manuscript. -/
+def DR6F1Witness {n d : Nat} (X Y Z : BinaryMatrix n d) : Prop :=
+  ∃ A B C : BinaryMatrix n d,
+    Y = A + C ∧ Z = B + C ∧ X = A + B ∧
+    LinearMap.range A.transpose.toLin' ⊓
+          LinearMap.range B.transpose.toLin' = ⊥ ∧
+      LinearMap.range A.transpose.toLin' ⊓
+          LinearMap.range C.transpose.toLin' = ⊥ ∧
+      LinearMap.range B.transpose.toLin' ⊓
+          LinearMap.range C.transpose.toLin' = ⊥ ∧
+      Y.rank = A.rank + C.rank ∧
+      Z.rank = B.rank + C.rank ∧
+      X.rank = A.rank + B.rank
+
+private abbrev DR6Map (n d : Nat) := W n →ₗ[F] V d
+
+/-- The map-level F1 witness used while proving coverage, before converting
+its three linear maps back to their matrix representatives. -/
+def DR6MapF1Witness {n d : Nat} (X Y Z : DR6Map n d) : Prop :=
+  ∃ A B C : DR6Map n d,
+    Y = A + C ∧ Z = B + C ∧ X = A + B ∧
+      LinearMap.range A ⊓ LinearMap.range B = ⊥ ∧
+      LinearMap.range A ⊓ LinearMap.range C = ⊥ ∧
+      LinearMap.range B ⊓ LinearMap.range C = ⊥ ∧
+      Module.finrank F (LinearMap.range Y) =
+        Module.finrank F (LinearMap.range A) + Module.finrank F (LinearMap.range C) ∧
+      Module.finrank F (LinearMap.range Z) =
+        Module.finrank F (LinearMap.range B) + Module.finrank F (LinearMap.range C) ∧
+      Module.finrank F (LinearMap.range X) =
+        Module.finrank F (LinearMap.range A) + Module.finrank F (LinearMap.range B)
+
+/-- Glue two linear maps along subspaces whose sum is the whole domain.
+The compatibility condition on their overlap is precisely the condition
+needed to descend the sum map through the kernel of `(s,r) |-> s+r`. -/
+private theorem dr6_add_zero_eq {d : Nat} (u v : V d) (h : u + v = 0) :
+    u = v := by
+  funext i
+  have hi : u i + v i = 0 := by
+    simpa using congrArg (fun w : V d => w i) h
+  exact CharTwo.add_eq_zero.mp hi
+
+private theorem dr6_apply_add {n d : Nat} (X Y Z : DR6Map n d)
+    (hXY : X = Y + Z) (x : W n) : X x = Y x + Z x := by
+  have h := LinearMap.congr_fun hXY x
+  simpa only [LinearMap.add_apply] using h
+
+private theorem dr6_glue_maps {n d : Nat}
+    (S R : Submodule F (W n)) (hSR : S ⊔ R = ⊤)
+    (f : S →ₗ[F] V d) (g : R →ₗ[F] V d)
+    (hcompat : ∀ x (hxS : x ∈ S) (hxR : x ∈ R),
+      f ⟨x, hxS⟩ = g ⟨x, hxR⟩) :
+    ∃ h : W n →ₗ[F] V d,
+      (∀ x : S, h x.val = f x) ∧ (∀ x : R, h x.val = g x) := by
+  classical
+  let p : (S × R) →ₗ[F] W n :=
+    { toFun := fun q => q.1.val + q.2.val
+      map_add' := by
+        intro x y
+        ext i
+        change (x.1.val i + y.1.val i) + (x.2.val i + y.2.val i) =
+          (x.1.val i + x.2.val i) + (y.1.val i + y.2.val i)
+        ring
+      map_smul' := by intro c x; simp }
+  let q : (S × R) →ₗ[F] V d :=
+    { toFun := fun z => f z.1 + g z.2
+      map_add' := by
+        intro x y
+        ext i
+        change f (x.1 + y.1) i + g (x.2 + y.2) i =
+          (f x.1 + g x.2) i + (f y.1 + g y.2) i
+        rw [map_add, map_add]
+        simp only [Pi.add_apply]
+        ring
+      map_smul' := by intro c x; simp }
+  have hp : Function.Surjective p := by
+    intro x
+    have hx : x ∈ S ⊔ R := by rw [hSR]; exact Submodule.mem_top
+    rcases Submodule.mem_sup.mp hx with ⟨s, hs, r, hr, hsr⟩
+    refine ⟨(⟨s, hs⟩, ⟨r, hr⟩), ?_⟩
+    change s + r = x
+    exact hsr
+  have hker : LinearMap.ker p ≤ LinearMap.ker q := by
+    intro z hz
+    rcases z with ⟨s, r⟩
+    change s.val + r.val = 0 at hz
+    have hrneg : r.val = -s.val := eq_neg_of_add_eq_zero_right hz
+    have hsR : s.val ∈ R := by
+      simpa [hrneg] using R.neg_mem r.property
+    have hco := hcompat s.val s.property hsR
+    have hrEq : r = -⟨s.val, hsR⟩ := by
+      apply Subtype.ext
+      simp [hrneg]
+    change f s + g r = 0
+    rw [hrEq, map_neg]
+    change f ⟨s.val, s.property⟩ + -g ⟨s.val, hsR⟩ = 0
+    rw [hco]
+    simp
+  let e := p.quotKerEquivOfSurjective hp
+  let q' := (LinearMap.ker p).liftQ q hker
+  let h : W n →ₗ[F] V d := q'.comp e.symm.toLinearMap
+  have hcomp : h.comp p = q := by
+    apply LinearMap.ext
+    intro z
+    change q' (e.symm (p z)) = q z
+    dsimp [q', e]
+    rw [LinearMap.quotKerEquivOfSurjective_symm_apply,
+      Submodule.liftQ_apply]
+  refine ⟨h, ?_, ?_⟩
+  · intro x
+    have heq := LinearMap.congr_fun hcomp (x, (0 : R))
+    simpa [p, q] using heq
+  · intro x
+    have heq := LinearMap.congr_fun hcomp ((0 : S), x)
+    simpa [p, q] using heq
+
+private theorem dr6_glued_range_le {n d : Nat}
+    (S R : Submodule F (W n)) (hSR : S ⊔ R = ⊤)
+    (h : W n →ₗ[F] V d) (L : W n →ₗ[F] V d)
+    (hS : ∀ x : S, h x.val = L x.val)
+    (hR : ∀ x : R, h x.val = 0) :
+    LinearMap.range h ≤ LinearMap.range L := by
+  intro y hy
+  rcases LinearMap.mem_range.mp hy with ⟨x, rfl⟩
+  have hx : x ∈ S ⊔ R := by rw [hSR]; exact Submodule.mem_top
+  rcases Submodule.mem_sup.mp hx with ⟨s, hs, r, hr, hsr⟩
+  refine LinearMap.mem_range.mpr ⟨s, ?_⟩
+  rw [← hsr, map_add, hS ⟨s, hs⟩, hR ⟨r, hr⟩]
+  simp
+
+private theorem dr6_eq_of_eq_on_three {n d : Nat}
+    (S T U : Submodule F (W n)) (hSTU : S ⊔ T ⊔ U = ⊤)
+    (f g : W n →ₗ[F] V d)
+    (hS : ∀ x : S, f x.val = g x.val)
+    (hT : ∀ x : T, f x.val = g x.val)
+    (hU : ∀ x : U, f x.val = g x.val) : f = g := by
+  apply LinearMap.ext
+  intro x
+  have hx : x ∈ (S ⊔ T) ⊔ U := by rw [hSTU]; exact Submodule.mem_top
+  rcases Submodule.mem_sup.mp hx with ⟨st, hst, u, hu, hsum⟩
+  rcases Submodule.mem_sup.mp hst with ⟨s, hs, t, ht, hst'⟩
+  have hdecomp : x = s + (t + u) := by
+    calc
+      x = st + u := hsum.symm
+      _ = (s + t) + u := congrArg (fun z : W n => z + u) hst'.symm
+      _ = s + (t + u) := add_assoc s t u
+  rw [hdecomp, map_add, map_add, hS ⟨s, hs⟩, hT ⟨t, ht⟩, hU ⟨u, hu⟩]
+  simp [map_add]
+
+private theorem dr6_A_overlap_zero {n d : Nat}
+    (X Y Z : DR6Map n d) (hXY : X = Y + Z)
+    (hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓
+      LinearMap.range Z = ⊥)
+    (x : W n) (hxZ : x ∈ LinearMap.ker Z)
+    (hxR : x ∈ LinearMap.ker Y ⊔ LinearMap.ker X) : Y x = 0 := by
+  rcases Submodule.mem_sup.mp hxR with ⟨y, hy, z, hz, hxyz⟩
+  have hy0 : Y y = 0 := LinearMap.mem_ker.mp hy
+  have hz0 : X z = 0 := LinearMap.mem_ker.mp hz
+  have hx0 : Z x = 0 := LinearMap.mem_ker.mp hxZ
+  have hYzZz : Y z = Z z := by
+    have hsum : Y z + Z z = 0 := by
+      have h := dr6_apply_add X Y Z hXY z
+      rw [← h]
+      exact hz0
+    exact dr6_add_zero_eq _ _ hsum
+  have hYxYz : Y x = Y z := by
+    rw [← hxyz, map_add, hy0]
+    simp
+  have hYxXx : Y x = X x := by
+    simpa [hx0] using (dr6_apply_add X Y Z hXY x).symm
+  have hYxZz : Y x = Z z := hYxYz.trans hYzZz
+  have hXmem : Y x ∈ LinearMap.range X := by
+    rw [hYxXx]
+    exact LinearMap.mem_range_self X x
+  have hYmem : Y x ∈ LinearMap.range Y := LinearMap.mem_range_self Y x
+  have hZmem : Y x ∈ LinearMap.range Z := by
+    rw [hYxZz]
+    exact LinearMap.mem_range_self Z z
+  have hmem : Y x ∈ LinearMap.range X ⊓ LinearMap.range Y ⊓
+      LinearMap.range Z := ⟨⟨hXmem, hYmem⟩, hZmem⟩
+  have hbot : Y x ∈ (⊥ : Submodule F (V d)) := by
+    rw [← hTriple]
+    exact hmem
+  simpa using hbot
+
+private theorem dr6_B_overlap_zero {n d : Nat}
+    (X Y Z : DR6Map n d) (hXY : X = Y + Z)
+    (hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓
+      LinearMap.range Z = ⊥)
+    (x : W n) (hxY : x ∈ LinearMap.ker Y)
+    (hxR : x ∈ LinearMap.ker Z ⊔ LinearMap.ker X) : Z x = 0 := by
+  rcases Submodule.mem_sup.mp hxR with ⟨u, hu, v, hv, hxuv⟩
+  have hu0 : Z u = 0 := LinearMap.mem_ker.mp hu
+  have hv0 : X v = 0 := LinearMap.mem_ker.mp hv
+  have hxY0 : Y x = 0 := LinearMap.mem_ker.mp hxY
+  have hZuZv : Z x = Z v := by rw [← hxuv, map_add, hu0]; simp
+  have hYvZv : Y v = Z v := by
+    have hsum : Y v + Z v = 0 := by
+      have h := dr6_apply_add X Y Z hXY v
+      rw [← h]
+      exact hv0
+    exact dr6_add_zero_eq _ _ hsum
+  have hYuYv : Y u = Y v := by
+    have hsum : Y u + Y v = 0 := by
+      calc
+        Y u + Y v = Y (u + v) := (map_add Y u v).symm
+        _ = Y x := by rw [← hxuv]
+        _ = 0 := hxY0
+    exact dr6_add_zero_eq _ _ hsum
+  have hZxYu : Z x = Y u := hZuZv.trans hYvZv.symm |>.trans hYuYv.symm
+  have hXxZx : X x = Z x := by
+    simpa [hxY0] using dr6_apply_add X Y Z hXY x
+  have hXmem : Z x ∈ LinearMap.range X := by
+    rw [← hXxZx]
+    exact LinearMap.mem_range_self X x
+  have hYmem : Z x ∈ LinearMap.range Y := by
+    rw [hZxYu]
+    exact LinearMap.mem_range_self Y u
+  have hZmem : Z x ∈ LinearMap.range Z := LinearMap.mem_range_self Z x
+  have hmem : Z x ∈ LinearMap.range X ⊓ LinearMap.range Y ⊓
+      LinearMap.range Z := ⟨⟨hXmem, hYmem⟩, hZmem⟩
+  have hbot : Z x ∈ (⊥ : Submodule F (V d)) := by
+    rw [← hTriple]
+    exact hmem
+  simpa using hbot
+
+private theorem dr6_C_overlap_zero {n d : Nat}
+    (X Y Z : DR6Map n d) (hXY : X = Y + Z)
+    (hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓
+      LinearMap.range Z = ⊥)
+    (x : W n) (hxX : x ∈ LinearMap.ker X)
+    (hxR : x ∈ LinearMap.ker Z ⊔ LinearMap.ker Y) : Y x = 0 := by
+  rcases Submodule.mem_sup.mp hxR with ⟨u, hu, v, hv, hxuv⟩
+  have hu0 : Z u = 0 := LinearMap.mem_ker.mp hu
+  have hv0 : Y v = 0 := LinearMap.mem_ker.mp hv
+  have hx0 : X x = 0 := LinearMap.mem_ker.mp hxX
+  have hYxYu : Y x = Y u := by rw [← hxuv, map_add, hv0]; simp
+  have hXuXv : X u = X v := by
+    have hsum : X u + X v = 0 := by
+      calc
+        X u + X v = X (u + v) := (map_add X u v).symm
+        _ = X x := by rw [← hxuv]
+        _ = 0 := hx0
+    exact dr6_add_zero_eq _ _ hsum
+  have hYuZv : Y u = Z v := by
+    have huXY := dr6_apply_add X Y Z hXY u
+    have huXY : X u = Y u := by simpa [hu0] using huXY
+    have hvXY := dr6_apply_add X Y Z hXY v
+    have hvXY : X v = Z v := by simpa [hv0] using hvXY
+    exact huXY.symm.trans (hXuXv.trans hvXY)
+  have hXmem : Y x ∈ LinearMap.range X := by
+    have huXY := dr6_apply_add X Y Z hXY u
+    have huXY : X u = Y u := by simpa [hu0] using huXY
+    rw [hYxYu, huXY.symm]
+    exact LinearMap.mem_range_self X u
+  have hYmem : Y x ∈ LinearMap.range Y := LinearMap.mem_range_self Y x
+  have hZmem : Y x ∈ LinearMap.range Z := by
+    rw [hYxYu, hYuZv]
+    exact LinearMap.mem_range_self Z v
+  have hmem : Y x ∈ LinearMap.range X ⊓ LinearMap.range Y ⊓
+      LinearMap.range Z := ⟨⟨hXmem, hYmem⟩, hZmem⟩
+  have hbot : Y x ∈ (⊥ : Submodule F (V d)) := by
+    rw [← hTriple]
+    exact hmem
+  simpa using hbot
+
+/-- If the triple-image and triple-kernel obstructions both vanish, the
+kernel prescriptions descend to an exact F1 decomposition.  This is the
+coverage direction of the DR6 F1/F2 partition. -/
+theorem dr6_map_f1_coverage {n d : Nat}
+    (X Y Z : DR6Map n d) (hXY : X = Y + Z)
+    (hTriple : LinearMap.range X ⊓ LinearMap.range Y ⊓
+      LinearMap.range Z = ⊥)
+    (hKernels : LinearMap.ker X ⊔ LinearMap.ker Y ⊔
+      LinearMap.ker Z = ⊤) : DR6MapF1Witness X Y Z := by
+  classical
+  let KX := LinearMap.ker X
+  let KY := LinearMap.ker Y
+  let KZ := LinearMap.ker Z
+  have hCover : KZ ⊔ KY ⊔ KX = ⊤ := by
+    dsimp [KX, KY, KZ]
+    simpa [sup_assoc, sup_comm, sup_left_comm] using hKernels
+  let RA := KY ⊔ KX
+  let RB := KZ ⊔ KX
+  let RC := KZ ⊔ KY
+  have hKA : KZ ⊔ RA = ⊤ := by
+    dsimp [RA]
+    simpa [sup_assoc] using hCover
+  have hKB : KY ⊔ RB = ⊤ := by
+    dsimp [RB]
+    simpa [sup_assoc, sup_comm, sup_left_comm] using hCover
+  have hKC : KX ⊔ RC = ⊤ := by
+    dsimp [RC]
+    simpa [sup_assoc, sup_comm, sup_left_comm] using hCover
+  let fA : KZ →ₗ[F] V d := Y.comp KZ.subtype
+  let fB : KY →ₗ[F] V d := Z.comp KY.subtype
+  let fC : KX →ₗ[F] V d := Y.comp KX.subtype
+  let zA : RA →ₗ[F] V d := 0
+  let zB : RB →ₗ[F] V d := 0
+  let zC : RC →ₗ[F] V d := 0
+  have hcA : ∀ x (hxS : x ∈ KZ) (hxR : x ∈ RA),
+      fA ⟨x, hxS⟩ = zA ⟨x, hxR⟩ := by
+    intro x hxS hxR
+    change Y x = 0
+    exact dr6_A_overlap_zero X Y Z hXY hTriple x hxS (by simpa [RA] using hxR)
+  have hcB : ∀ x (hxS : x ∈ KY) (hxR : x ∈ RB),
+      fB ⟨x, hxS⟩ = zB ⟨x, hxR⟩ := by
+    intro x hxS hxR
+    change Z x = 0
+    exact dr6_B_overlap_zero X Y Z hXY hTriple x hxS (by simpa [RB] using hxR)
+  have hcC : ∀ x (hxS : x ∈ KX) (hxR : x ∈ RC),
+      fC ⟨x, hxS⟩ = zC ⟨x, hxR⟩ := by
+    intro x hxS hxR
+    change Y x = 0
+    exact dr6_C_overlap_zero X Y Z hXY hTriple x hxS (by simpa [RC] using hxR)
+  obtain ⟨A, hAKZ, hARA⟩ := dr6_glue_maps KZ RA hKA fA zA hcA
+  obtain ⟨B, hBKY, hBRB⟩ := dr6_glue_maps KY RB hKB fB zB hcB
+  obtain ⟨C, hCKX, hCRC⟩ := dr6_glue_maps KX RC hKC fC zC hcC
+
+  have hY : Y = A + C := dr6_eq_of_eq_on_three KZ KY KX hCover Y (A + C)
+    (by intro x
+        have ha := hAKZ x
+        change A x.val = Y x.val at ha
+        have hc := hCRC ⟨x.val, Submodule.mem_sup_left x.property⟩
+        change C x.val = 0 at hc
+        simpa [LinearMap.add_apply, ha, hc])
+    (by intro x
+        have ha := hARA ⟨x.val, Submodule.mem_sup_left x.property⟩
+        have hc := hCRC ⟨x.val, Submodule.mem_sup_right x.property⟩
+        change A x.val = 0 at ha
+        change C x.val = 0 at hc
+        have hx : Y x.val = 0 := LinearMap.mem_ker.mp x.property
+        simpa [LinearMap.add_apply, ha, hc, hx])
+    (by intro x
+        have ha := hARA ⟨x.val, Submodule.mem_sup_right x.property⟩
+        change A x.val = 0 at ha
+        have hc := hCKX x
+        change C x.val = Y x.val at hc
+        simpa [LinearMap.add_apply, ha, hc])
+  have hZ : Z = B + C := dr6_eq_of_eq_on_three KZ KY KX hCover Z (B + C)
+    (by intro x
+        have hb := hBRB ⟨x.val, Submodule.mem_sup_left x.property⟩
+        have hc := hCRC ⟨x.val, Submodule.mem_sup_left x.property⟩
+        change B x.val = 0 at hb
+        change C x.val = 0 at hc
+        have hx : Z x.val = 0 := LinearMap.mem_ker.mp x.property
+        simpa [LinearMap.add_apply, hb, hc, hx])
+    (by intro x
+        have hb := hBKY x
+        change B x.val = Z x.val at hb
+        have hc := hCRC ⟨x.val, Submodule.mem_sup_right x.property⟩
+        change C x.val = 0 at hc
+        simpa [LinearMap.add_apply, hb, hc])
+    (by intro x
+        have hb := hBRB ⟨x.val, Submodule.mem_sup_right x.property⟩
+        change B x.val = 0 at hb
+        have hc := hCKX x
+        change C x.val = Y x.val at hc
+        have hxX : X x.val = 0 := LinearMap.mem_ker.mp x.property
+        have hsum : Y x.val + Z x.val = 0 := by
+          calc
+            Y x.val + Z x.val = X x.val := (dr6_apply_add X Y Z hXY x.val).symm
+            _ = 0 := hxX
+        have hxY : Y x.val = Z x.val := dr6_add_zero_eq _ _ hsum
+        simpa [LinearMap.add_apply, hb, hc, hxY])
+  have hX : X = A + B := dr6_eq_of_eq_on_three KZ KY KX hCover X (A + B)
+    (by intro x
+        have ha := hAKZ x
+        change A x.val = Y x.val at ha
+        have hb := hBRB ⟨x.val, Submodule.mem_sup_left x.property⟩
+        change B x.val = 0 at hb
+        have hxZ : Z x.val = 0 := LinearMap.mem_ker.mp x.property
+        have hxY : X x.val = Y x.val := by
+          simpa [hxZ] using dr6_apply_add X Y Z hXY x.val
+        simpa [LinearMap.add_apply, ha, hb, hxY])
+    (by intro x
+        have ha := hARA ⟨x.val, Submodule.mem_sup_left x.property⟩
+        change A x.val = 0 at ha
+        have hb := hBKY x
+        change B x.val = Z x.val at hb
+        have hxY : Y x.val = 0 := LinearMap.mem_ker.mp x.property
+        have hxZ : X x.val = Z x.val := by
+          simpa [hxY] using dr6_apply_add X Y Z hXY x.val
+        simpa [LinearMap.add_apply, ha, hb, hxZ])
+    (by intro x
+        have ha := hARA ⟨x.val, Submodule.mem_sup_right x.property⟩
+        have hb := hBRB ⟨x.val, Submodule.mem_sup_right x.property⟩
+        change A x.val = 0 at ha
+        change B x.val = 0 at hb
+        have hx : X x.val = 0 := LinearMap.mem_ker.mp x.property
+        simpa [LinearMap.add_apply, ha, hb, hx])
+
+  -- The glued maps land in the two manuscript image summands indicated by
+  -- their restrictions.  The third-image intersection is therefore their
+  -- pairwise intersection.
+  have hAY : LinearMap.range A ≤ LinearMap.range Y :=
+    dr6_glued_range_le KZ RA hKA A Y hAKZ hARA
+  have hAKZX : ∀ x : KZ, A x.val = X x.val := by
+    intro x
+    have ha := hAKZ x
+    change A x.val = Y x.val at ha
+    have hpoint := dr6_apply_add X Y Z hXY x.val
+    have hz : Z x.val = 0 := LinearMap.mem_ker.mp x.property
+    rw [hz] at hpoint
+    calc
+      A x.val = Y x.val := ha
+      _ = X x.val := by simpa using hpoint.symm
+  have hAX : LinearMap.range A ≤ LinearMap.range X := by
+    exact dr6_glued_range_le KZ RA hKA A X hAKZX hARA
+  have hBZ : LinearMap.range B ≤ LinearMap.range Z :=
+    dr6_glued_range_le KY RB hKB B Z hBKY hBRB
+  have hBKYX : ∀ x : KY, B x.val = X x.val := by
+    intro x
+    have hb := hBKY x
+    change B x.val = Z x.val at hb
+    have hpoint := dr6_apply_add X Y Z hXY x.val
+    have hy : Y x.val = 0 := LinearMap.mem_ker.mp x.property
+    rw [hy] at hpoint
+    calc
+      B x.val = Z x.val := hb
+      _ = X x.val := by simpa using hpoint.symm
+  have hBX : LinearMap.range B ≤ LinearMap.range X := by
+    exact dr6_glued_range_le KY RB hKB B X hBKYX hBRB
+  have hCY : LinearMap.range C ≤ LinearMap.range Y :=
+    dr6_glued_range_le KX RC hKC C Y hCKX hCRC
+  have hCKXZ : ∀ x : KX, C x.val = Z x.val := by
+    intro x
+    have hc := hCKX x
+    change C x.val = Y x.val at hc
+    have hpoint := dr6_apply_add X Y Z hXY x.val
+    have hx : X x.val = 0 := LinearMap.mem_ker.mp x.property
+    rw [hx] at hpoint
+    calc
+      C x.val = Y x.val := hc
+      _ = Z x.val := dr6_add_zero_eq _ _ hpoint.symm
+  have hCZ : LinearMap.range C ≤ LinearMap.range Z := by
+    exact dr6_glued_range_le KX RC hKC C Z hCKXZ hCRC
+
+  have hAB : LinearMap.range A ⊓ LinearMap.range B = ⊥ := by
+    ext v
+    constructor
+    · rintro ⟨ha, hb⟩
+      have hmem : v ∈ LinearMap.range X ⊓ LinearMap.range Y ⊓
+          LinearMap.range Z := ⟨⟨hAX ha, hAY ha⟩, hBZ hb⟩
+      have : v ∈ (⊥ : Submodule F (V d)) := by rw [← hTriple]; exact hmem
+      exact this
+    · intro hv
+      have hv0 : v = 0 := by simpa using hv
+      subst v
+      simp
+  have hAC : LinearMap.range A ⊓ LinearMap.range C = ⊥ := by
+    ext v
+    constructor
+    · rintro ⟨ha, hc⟩
+      have hmem : v ∈ LinearMap.range X ⊓ LinearMap.range Y ⊓
+          LinearMap.range Z := ⟨⟨hAX ha, hAY ha⟩, hCZ hc⟩
+      have : v ∈ (⊥ : Submodule F (V d)) := by rw [← hTriple]; exact hmem
+      exact this
+    · intro hv
+      have hv0 : v = 0 := by simpa using hv
+      subst v
+      simp
+  have hBC : LinearMap.range B ⊓ LinearMap.range C = ⊥ := by
+    ext v
+    constructor
+    · rintro ⟨hb, hc⟩
+      have hmem : v ∈ LinearMap.range X ⊓ LinearMap.range Y ⊓
+          LinearMap.range Z := ⟨⟨hBX hb, hCY hc⟩, hBZ hb⟩
+      have : v ∈ (⊥ : Submodule F (V d)) := by rw [← hTriple]; exact hmem
+      exact this
+    · intro hv
+      have hv0 : v = 0 := by simpa using hv
+      subst v
+      simp
+
+  have hsupY : LinearMap.range A ⊔ LinearMap.range C = LinearMap.range Y := by
+    apply le_antisymm
+    · exact sup_le hAY hCY
+    · intro v hv
+      rcases LinearMap.mem_range.mp hv with ⟨x, rfl⟩
+      rw [hY]
+      exact add_mem (Submodule.mem_sup_left (LinearMap.mem_range_self A x))
+        (Submodule.mem_sup_right (LinearMap.mem_range_self C x))
+  have hsupZ : LinearMap.range B ⊔ LinearMap.range C = LinearMap.range Z := by
+    apply le_antisymm
+    · exact sup_le hBZ hCZ
+    · intro v hv
+      rcases LinearMap.mem_range.mp hv with ⟨x, rfl⟩
+      rw [hZ]
+      exact add_mem (Submodule.mem_sup_left (LinearMap.mem_range_self B x))
+        (Submodule.mem_sup_right (LinearMap.mem_range_self C x))
+  have hsupX : LinearMap.range A ⊔ LinearMap.range B = LinearMap.range X := by
+    apply le_antisymm
+    · exact sup_le hAX hBX
+    · intro v hv
+      rcases LinearMap.mem_range.mp hv with ⟨x, rfl⟩
+      rw [hX]
+      exact add_mem (Submodule.mem_sup_left (LinearMap.mem_range_self A x))
+        (Submodule.mem_sup_right (LinearMap.mem_range_self B x))
+
+  have hdimY : Module.finrank F (LinearMap.range Y) =
+      Module.finrank F (LinearMap.range A) + Module.finrank F (LinearMap.range C) := by
+    have h := Submodule.finrank_sup_add_finrank_inf_eq
+      (LinearMap.range A) (LinearMap.range C)
+    rw [hAC] at h
+    calc
+      Module.finrank F (LinearMap.range Y) =
+      Module.finrank F ((LinearMap.range A ⊔ LinearMap.range C) : Submodule F (V d)) :=
+            congrArg (fun S : Submodule F (V d) => Module.finrank F S) hsupY.symm
+      _ = Module.finrank F (LinearMap.range A) + Module.finrank F (LinearMap.range C) := by
+        simpa using h
+  have hdimZ : Module.finrank F (LinearMap.range Z) =
+      Module.finrank F (LinearMap.range B) + Module.finrank F (LinearMap.range C) := by
+    have h := Submodule.finrank_sup_add_finrank_inf_eq
+      (LinearMap.range B) (LinearMap.range C)
+    rw [hBC] at h
+    calc
+      Module.finrank F (LinearMap.range Z) =
+      Module.finrank F ((LinearMap.range B ⊔ LinearMap.range C) : Submodule F (V d)) :=
+            congrArg (fun S : Submodule F (V d) => Module.finrank F S) hsupZ.symm
+      _ = Module.finrank F (LinearMap.range B) + Module.finrank F (LinearMap.range C) := by
+        simpa using h
+  have hdimX : Module.finrank F (LinearMap.range X) =
+      Module.finrank F (LinearMap.range A) + Module.finrank F (LinearMap.range B) := by
+    have h := Submodule.finrank_sup_add_finrank_inf_eq
+      (LinearMap.range A) (LinearMap.range B)
+    rw [hAB] at h
+    calc
+      Module.finrank F (LinearMap.range X) =
+      Module.finrank F ((LinearMap.range A ⊔ LinearMap.range B) : Submodule F (V d)) :=
+            congrArg (fun S : Submodule F (V d) => Module.finrank F S) hsupX.symm
+      _ = Module.finrank F (LinearMap.range A) + Module.finrank F (LinearMap.range B) := by
+        simpa using h
+  exact ⟨A, B, C, hY, hZ, hX, hAB, hAC, hBC, hdimY, hdimZ, hdimX⟩
+
+private def dr6MatrixOfMap {n d : Nat} (L : DR6Map n d) : BinaryMatrix n d :=
+  (LinearMap.toMatrix' L).transpose
+
+private theorem dr6_matrixOfMap_toLin {n d : Nat} (L : DR6Map n d) :
+    (dr6MatrixOfMap L).transpose.toLin' = L := by
+  change (Matrix.transpose (Matrix.transpose (LinearMap.toMatrix' L))).toLin' = L
+  rw [Matrix.transpose_transpose, Matrix.toLin'_toMatrix']
+
+private theorem dr6_matrixOfMap_transpose_toLin {n d : Nat}
+    (M : BinaryMatrix n d) :
+    dr6MatrixOfMap (M.transpose.toLin') = M := by
+  change (LinearMap.toMatrix' (M.transpose.toLin')).transpose = M
+  rw [LinearMap.toMatrix'_toLin', Matrix.transpose_transpose]
+
+private theorem dr6_matrix_rank_eq_finrank {n d : Nat} (M : BinaryMatrix n d) :
+    Module.finrank F (LinearMap.range M.transpose.toLin') = M.rank := by
+  have h := Matrix.rank_eq_finrank_range_toLin M.transpose
+    (Pi.basisFun F _) (Pi.basisFun F _)
+  rw [Matrix.toLin_eq_toLin'] at h
+  exact h.symm.trans (Matrix.rank_transpose M)
+
+/-- Matrix-level form of the DR6 F1 coverage implication. -/
+theorem dr6_matrix_f1_coverage {n d : Nat}
+    (X Y Z : BinaryMatrix n d) (hXY : X = Y + Z)
+    (hTriple : LinearMap.range X.transpose.toLin' ⊓
+      LinearMap.range Y.transpose.toLin' ⊓
+      LinearMap.range Z.transpose.toLin' = ⊥)
+    (hKernels : LinearMap.ker X.transpose.toLin' ⊔
+      LinearMap.ker Y.transpose.toLin' ⊔
+      LinearMap.ker Z.transpose.toLin' = ⊤) : DR6F1Witness X Y Z := by
+  let Xmap : DR6Map n d := X.transpose.toLin'
+  let Ymap : DR6Map n d := Y.transpose.toLin'
+  let Zmap : DR6Map n d := Z.transpose.toLin'
+  have hXYmap : Xmap = Ymap + Zmap := by
+    dsimp [Xmap, Ymap, Zmap]
+    rw [hXY, Matrix.transpose_add]
+    ext x i
+    simp [Matrix.toLin'_apply]
+  obtain ⟨am, bm, cm, hYmap, hZmap, hXmap, hABmap, hACmap, hBCmap,
+      hdimYmap, hdimZmap, hdimXmap⟩ :=
+    dr6_map_f1_coverage Xmap Ymap Zmap hXYmap hTriple hKernels
+  let A : BinaryMatrix n d := dr6MatrixOfMap am
+  let B : BinaryMatrix n d := dr6MatrixOfMap bm
+  let C : BinaryMatrix n d := dr6MatrixOfMap cm
+  have hAmap : A.transpose.toLin' = am := by
+    simpa [A] using dr6_matrixOfMap_toLin am
+  have hBmap : B.transpose.toLin' = bm := by
+    simpa [B] using dr6_matrixOfMap_toLin bm
+  have hCmap : C.transpose.toLin' = cm := by
+    simpa [C] using dr6_matrixOfMap_toLin cm
+  have hYmatrix : Y = A + C := by
+    calc
+      Y = dr6MatrixOfMap Ymap := by
+        simpa [Ymap] using (dr6_matrixOfMap_transpose_toLin Y).symm
+      _ = dr6MatrixOfMap (am + cm) := congrArg dr6MatrixOfMap hYmap
+      _ = A + C := by
+        ext i j
+        simp [A, C, dr6MatrixOfMap, LinearMap.toMatrix'_apply]
+  have hZmatrix : Z = B + C := by
+    calc
+      Z = dr6MatrixOfMap Zmap := by
+        simpa [Zmap] using (dr6_matrixOfMap_transpose_toLin Z).symm
+      _ = dr6MatrixOfMap (bm + cm) := congrArg dr6MatrixOfMap hZmap
+      _ = B + C := by
+        ext i j
+        simp [B, C, dr6MatrixOfMap, LinearMap.toMatrix'_apply]
+  have hXmatrix : X = A + B := by
+    calc
+      X = dr6MatrixOfMap Xmap := by
+        simpa [Xmap] using (dr6_matrixOfMap_transpose_toLin X).symm
+      _ = dr6MatrixOfMap (am + bm) := congrArg dr6MatrixOfMap hXmap
+      _ = A + B := by
+        ext i j
+        simp [A, B, dr6MatrixOfMap, LinearMap.toMatrix'_apply]
+  have hABmatrix : LinearMap.range A.transpose.toLin' ⊓
+      LinearMap.range B.transpose.toLin' = ⊥ := by
+    rw [hAmap, hBmap]
+    exact hABmap
+  have hACmatrix : LinearMap.range A.transpose.toLin' ⊓
+      LinearMap.range C.transpose.toLin' = ⊥ := by
+    rw [hAmap, hCmap]
+    exact hACmap
+  have hBCmatrix : LinearMap.range B.transpose.toLin' ⊓
+      LinearMap.range C.transpose.toLin' = ⊥ := by
+    rw [hBmap, hCmap]
+    exact hBCmap
+  have hArank : Module.finrank F (LinearMap.range am) = A.rank := by
+    rw [← hAmap]
+    exact dr6_matrix_rank_eq_finrank A
+  have hBrank : Module.finrank F (LinearMap.range bm) = B.rank := by
+    rw [← hBmap]
+    exact dr6_matrix_rank_eq_finrank B
+  have hCrank : Module.finrank F (LinearMap.range cm) = C.rank := by
+    rw [← hCmap]
+    exact dr6_matrix_rank_eq_finrank C
+  have hYrank : Y.rank = A.rank + C.rank := by
+    calc
+      Y.rank = Module.finrank F (LinearMap.range Ymap) := by
+        simpa [Ymap] using (dr6_matrix_rank_eq_finrank Y).symm
+      _ = Module.finrank F (LinearMap.range am) +
+          Module.finrank F (LinearMap.range cm) := hdimYmap
+      _ = A.rank + C.rank := by rw [hArank, hCrank]
+  have hZrank : Z.rank = B.rank + C.rank := by
+    calc
+      Z.rank = Module.finrank F (LinearMap.range Zmap) := by
+        simpa [Zmap] using (dr6_matrix_rank_eq_finrank Z).symm
+      _ = Module.finrank F (LinearMap.range bm) +
+          Module.finrank F (LinearMap.range cm) := hdimZmap
+      _ = B.rank + C.rank := by rw [hBrank, hCrank]
+  have hXrank : X.rank = A.rank + B.rank := by
+    calc
+      X.rank = Module.finrank F (LinearMap.range Xmap) := by
+        simpa [Xmap] using (dr6_matrix_rank_eq_finrank X).symm
+      _ = Module.finrank F (LinearMap.range am) +
+          Module.finrank F (LinearMap.range bm) := hdimXmap
+      _ = A.rank + B.rank := by rw [hArank, hBrank]
+  exact ⟨A, B, C, hYmatrix, hZmatrix, hXmatrix,
+    hABmatrix, hACmatrix, hBCmatrix, hYrank, hZrank, hXrank⟩
+
+/-- Exact F1/F2 coverage for each additive convolution triple. -/
+theorem dr6_matrix_f1_or_f2_coverage {n d : Nat}
+    (X Y Z : BinaryMatrix n d) (hXY : X = Y + Z) :
+    DR6F1Witness X Y Z ∨ DR6F2Obstruction X Y Z := by
+  classical
+  by_cases hTriple : LinearMap.range X.transpose.toLin' ⊓
+      LinearMap.range Y.transpose.toLin' ⊓
+      LinearMap.range Z.transpose.toLin' = ⊥
+  · by_cases hKernels : LinearMap.ker X.transpose.toLin' ⊔
+        LinearMap.ker Y.transpose.toLin' ⊔
+        LinearMap.ker Z.transpose.toLin' = ⊤
+    · exact Or.inl (dr6_matrix_f1_coverage X Y Z hXY hTriple hKernels)
+    · exact Or.inr (Or.inr hKernels)
+  · exact Or.inr (Or.inl hTriple)
+
+/-- The pair encoded by an F1 Y-splitting. -/
+def DR6DirectYDecomposition {n d : Nat} (Y : BinaryMatrix n d) :=
+  {p : BinaryMatrix n d × BinaryMatrix n d //
+    Y = p.1 + p.2 ∧
+      LinearMap.range p.1.transpose.toLin' ⊓
+        LinearMap.range p.2.transpose.toLin' = ⊥ ∧
+      Y.rank = p.1.rank + p.2.rank}
+
+private noncomputable instance dr6DirectYDecompositionFintype {n d : Nat}
+    (Y : BinaryMatrix n d) : Fintype (DR6DirectYDecomposition Y) := by
+  classical
+  unfold DR6DirectYDecomposition
+  infer_instance
+
+/-- Every direct, rank-additive splitting of a fixed matrix injects into its
+rank-additive predecessor family, by its first component. -/
+private theorem dr6_y_decomposition_card_le_predecessors {n d : Nat}
+    (Y : BinaryMatrix n d) :
+    Fintype.card (DR6DirectYDecomposition Y) ≤
+      Fintype.card {A : BinaryMatrix n d // w6Precedes A Y} := by
+  classical
+  let toPred : DR6DirectYDecomposition Y →
+      {A : BinaryMatrix n d // w6Precedes A Y} := fun p => by
+    have hsub : Y - p.val.1 = p.val.2 := by
+      calc
+        Y - p.val.1 = (p.val.1 + p.val.2) - p.val.1 :=
+          congrArg (fun M : BinaryMatrix n d => M - p.val.1) p.property.1
+        _ = p.val.2 := by
+          ext i j
+          simp [Matrix.sub_apply, sub_eq_add_neg]
+          have htwo : (2 : ZMod 2) = 0 := by norm_num
+          simp [htwo]
+    refine ⟨p.val.1, ?_⟩
+    change Y.rank = p.val.1.rank + (Y - p.val.1).rank
+    rw [hsub]
+    exact p.property.2.2
+  have htoPred : Function.Injective toPred := by
+    intro p q hpq
+    apply Subtype.ext
+    apply Prod.ext
+    · exact congrArg Subtype.val hpq
+    · have ha : p.val.1 = q.val.1 :=
+        congrArg Subtype.val hpq
+      have hs : p.val.1 + p.val.2 = q.val.1 + q.val.2 :=
+        p.property.1.symm.trans q.property.1
+      rw [ha] at hs
+      exact add_left_cancel hs
+  exact Fintype.card_le_of_injective toPred htoPred
+
+/-- A rank-additive predecessor injects into an endomorphism of the parent's
+transposed image through its unique descended idempotent. -/
+private theorem dr6_predecessor_card_le_end {n d : Nat}
+    (Y : BinaryMatrix n d) :
+    Fintype.card {A : BinaryMatrix n d // w6Precedes A Y} ≤
+      Fintype.card (Module.End F (LinearMap.range Y.transpose.toLin')) := by
+  classical
+  let E : Submodule F (V d) := LinearMap.range (transposeMap Y)
+  let g : W n →ₗ[F] E := LinearMap.rangeRestrict (transposeMap Y)
+  let toEnd : {A : BinaryMatrix n d // w6Precedes A Y} → Module.End F E :=
+    fun A => w6PredecessorDescendedEnd Y A.val A.property
+  have htoEnd : Function.Injective toEnd := by
+    intro A B hAB
+    apply Subtype.ext
+    have hA := Classical.choose_spec (ExistsUnique.exists
+      (w6_predecessor_descended_idempotent A.val Y A.property))
+    have hB := Classical.choose_spec (ExistsUnique.exists
+      (w6_predecessor_descended_idempotent B.val Y B.property))
+    have hAfactor : (toEnd A).comp g =
+        w6PredecessorRestrictedMap A.val Y A.property := by
+      simpa [toEnd, w6PredecessorDescendedEnd, g, E, transposeMap] using hA.2.2
+    have hBfactor : (toEnd B).comp g =
+        w6PredecessorRestrictedMap B.val Y B.property := by
+      simpa [toEnd, w6PredecessorDescendedEnd, g, E, transposeMap] using hB.2.2
+    have hrestrict : w6PredecessorRestrictedMap A.val Y A.property =
+        w6PredecessorRestrictedMap B.val Y B.property := by
+      calc
+        _ = (toEnd A).comp g := hAfactor.symm
+        _ = (toEnd B).comp g := congrArg (fun e : Module.End F E => e.comp g) hAB
+        _ = _ := hBfactor
+    have hmap : A.val.transpose.toLin' = B.val.transpose.toLin' := by
+      apply LinearMap.ext
+      intro v
+      have h := LinearMap.congr_fun hrestrict v
+      exact congrArg Subtype.val h
+    apply Matrix.transpose_injective
+    exact Matrix.toLin'.injective hmap
+  exact Fintype.card_le_of_injective toEnd htoEnd
+
+/-- The F1 Y-splitting count is bounded by all linear endomorphisms of the
+rank-r image, hence by the manuscript scale `2^(r^2)`. -/
+theorem dr6_y_decomposition_card_le_pow {n d : Nat}
+    (Y : BinaryMatrix n d) :
+    Fintype.card (DR6DirectYDecomposition Y) ≤ 2^(Y.rank * Y.rank) := by
+  classical
+  calc
+    Fintype.card (DR6DirectYDecomposition Y) ≤
+        Fintype.card {A : BinaryMatrix n d // w6Precedes A Y} :=
+      dr6_y_decomposition_card_le_predecessors Y
+    _ ≤ Fintype.card (Module.End F (LinearMap.range Y.transpose.toLin')) := by
+      simpa using dr6_predecessor_card_le_end Y
+    _ = 2^(Y.rank * Y.rank) := by
+      let E : Submodule F (V d) := LinearMap.range (transposeMap Y)
+      let b := Module.finBasis F E
+      have hdim : Module.finrank F E = Y.rank := by
+        change Module.finrank F (LinearMap.range Y.transpose.toLin') = Y.rank
+        exact dr6_matrix_rank_eq_finrank Y
+      let e := LinearMap.toMatrix b b
+      change Fintype.card (Module.End F E) = 2^(Y.rank * Y.rank)
+      rw [Fintype.card_congr e.toEquiv]
+      change Fintype.card
+          (Fin (Module.finrank F E) → Fin (Module.finrank F E) → F) =
+        2 ^ (Y.rank * Y.rank)
+      simp [Fintype.card_fun, Fintype.card_fin, ZMod.card, hdim]
+      rw [← pow_mul]
+
+/-- Parseval expresses the fourth moment as the squared Fourier mass of the
+pointwise square; `dr6_square_fourierCoeff_convolution` then expands each
+coefficient into the original additive convolution. -/
+theorem dr6_fourth_moment_parseval {n d : Nat}
+    (f : BinaryMatrix n d -> Real) :
+    uniformMean (fun M => f M ^ 4) =
+      ∑ X : BinaryMatrix n d,
+        (fourierCoeff (fun M => f M ^ 2) X) ^ 2 := by
+  calc
+    uniformMean (fun M => f M ^ 4) = uniformMean (fun M => (f M ^ 2) ^ 2) := by
+      congr 1
+      funext M
+      ring
+    _ = ∑ X : BinaryMatrix n d,
+          fourierCoeff (fun M => f M ^ 2) X ^ 2 :=
+      fourier_parseval (fun M => f M ^ 2)
+
+/-- The real Fourier convolution formula for the pointwise square of `f`. -/
+theorem dr6_square_fourierCoeff_convolution {n d : Nat}
+    (f : BinaryMatrix n d -> Real) (K : BinaryMatrix n d) :
+    fourierCoeff (fun M => f M ^ 2) K =
+      ∑ X : BinaryMatrix n d,
+        fourierCoeff f X * fourierCoeff f (K + X) := by
+  let fc : BinaryMatrix n d -> Complex := fun M => (f M : Complex)
+  have hreal (g : BinaryMatrix n d -> Real) (Y : BinaryMatrix n d) :
+      complexFourierCoeff (fun M => (g M : Complex)) Y =
+        (fourierCoeff g Y : Complex) := by
+    apply Complex.ext
+    · simpa only [Complex.ofReal_re] using
+        (BinaryMatrixA1Complex.complexFourierCoeff_re
+          (fun M => (g M : Complex)) Y)
+    · rw [BinaryMatrixA1Complex.complexFourierCoeff_im]
+      simp [BinaryMatrixFourier.fourierCoeff, BinaryMatrixFourier.uniformMean,
+        BinaryMatrixFourier.uniformMean_const]
+  have hmul := complexFourierCoeff_mul_eq_convolution fc fc K
+  have hfun : (fun M => fc M * fc M) =
+      (fun M => ((f M ^ 2 : Real) : Complex)) := by
+    funext M
+    simp [fc, pow_two]
+  have hcomplex :
+      (fourierCoeff (fun M => f M ^ 2) K : Complex) =
+        ∑ X : BinaryMatrix n d,
+          (fourierCoeff f X : Complex) *
+            (fourierCoeff f (K + X) : Complex) := by
+    calc
+      (fourierCoeff (fun M => f M ^ 2) K : Complex) =
+          complexFourierCoeff (fun M => fc M * fc M) K := by
+            rw [hfun]
+            exact (hreal (fun M => f M ^ 2) K).symm
+      _ = ∑ X : BinaryMatrix n d,
+            (fourierCoeff f X : Complex) *
+              (fourierCoeff f (K + X) : Complex) := by
+            rw [hmul]
+            apply Finset.sum_congr rfl
+            intro X hX
+            rw [hreal f X, hreal f (K + X)]
+  have hre := congrArg Complex.re hcomplex
+  simpa only [Complex.ofReal_re, Complex.ofReal_im, Complex.re_sum,
+    Complex.mul_re, Complex.ofReal_mul, zero_mul, mul_zero, sub_zero] using hre
+
+
+/-- The supported pointwise square has cutoff 2D.  This marks the exact
+convolution-output rank ceiling required by the F2 Möbius estimate. -/
+theorem dr6_square_fourier_supported {n d D : Nat}
+    (f : BinaryMatrix n d -> Real)
+    (hsupport : forall Y, D < Y.rank -> fourierCoeff f Y = 0) :
+    ComplexFourierSupportedThrough (2 * D)
+      (fun M => (f M : Complex) * (f M : Complex)) := by
+  let fc : BinaryMatrix n d -> Complex := fun M => (f M : Complex)
+  have hfc : ComplexFourierSupportedThrough D fc := by
+    intro Y hY
+    apply Complex.ext
+    · rw [complexFourierCoeff_re]
+      exact hsupport Y hY
+    · rw [complexFourierCoeff_im]
+      simp [fc, BinaryMatrixFourier.fourierCoeff,
+        BinaryMatrixFourier.uniformMean]
+  have hprod := complexFourierSupportedThrough_mul fc fc hfc hfc
+  simpa [fc, two_mul, mul_assoc] using hprod
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
