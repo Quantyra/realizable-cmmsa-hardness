@@ -1,0 +1,46 @@
+**GO-WITH-NOTES** for the frozen own333 degree-energy, weighted W6, and exact D0 gate. **Full-source reproducibility and full HC46/manuscript certification remain INCOMPLETE.**
+
+I reviewed the complete target source and Checks, the original A3 and predecessor-count proofs, and the relevant phase, Parseval, carrier-transport, and reconstruction dependencies. No compilation, edits, Git mutations, infrastructure changes, or nested agents were performed.
+
+The accepted mathematical scope is:
+
+- Arbitrary `n,d,D : Nat`, arbitrary complex-valued `f` on binary `n × d` matrices, and every fixed linear translation `T`.
+- The sole substantive input hypothesis is `ComplexFourierSupportedThrough D f`: coefficients vanish above rank `D`.
+- No Booleanity, contraction, assumed count, L4 estimate, or relation between `D` and ambient width is required.
+
+Writing `E = uniformMean |f|²`, `e_X = carrierMean |actualW6Derivative X T f|²`, and `a_X` for predecessor Fourier energy, the reviewed conclusions are
+\[
+e_X\le2^{2r(D-r)}a_X,\qquad
+e_X^2\le2^{4r(D-r)}Ea_X,\qquad
+\sum_X\frac{e_X^2}{2^{6Dr}}\le\frac{67}{63}E^2\le2E^2.
+\]
+Here subtraction follows the source’s natural-number convention. At `D=0`, the weighted sum equals `E²`.
+
+The proof respects the requested boundaries:
+
+- **Support before cardinality bound:** [source line 394](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own333/attempt-333-A7DegreeEnergyW6D0/stage-0.lean.snapshot:394) separates `rank Z ≤ D−rank X` from larger ranks. The latter have zero fibre energy, derived from `rank Y = rank X + rank Z` and Fourier support. There is no invalid global cardinality cap.
+- **Actual operator and weighted sum:** the coefficient identity retains the actual translation phase; its squared magnitude is one. Carrier Parseval, the literal ambient-fibre count, finite partition, squared-energy estimate, and finite interchange lead to the rational bound. See [weighted proof line 614](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own333/attempt-333-A7DegreeEnergyW6D0/stage-0.lean.snapshot:614). This establishes weighted fourth powers of **L2 norms**.
+- **Endpoints:** ranks above `D` vanish; rank-zero counting is exactly one; all denominator powers are positive. Zero dimensions remain covered because the matrix and linear-map carriers contain zero. [D0 line 783](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own333/attempt-333-A7DegreeEnergyW6D0/stage-0.lean.snapshot:783) reconstructs constant `f`, evaluates the actual dependent-carrier mean, and eliminates every nonzero parent.
+
+Evidence checks passed:
+
+| Item | Independently verified |
+|---|---|
+| Source SHA256 | `F5A0AB8CC30955BB592C086D54945BFA2743029CBB3A72511B6757BEC596142D` |
+| Checks SHA256 | `BEDA260A86C5EA6417274FFE949C558668E716FFAD652EDAE09DF77AEDDF9D5E` |
+| Exact archives | Both input members and every terminal-archive member match local bytes |
+| Recorded gate | Terminal `49e6ed`; aggregate/source/Checks exits zero; `147.79s / 22.39s`; empty stderr |
+| Axiom output | Exactly 19 requested profiles, each `{propext, Classical.choice, Quot.sound}` |
+| Custody/import inventory | All 206 source entries match; all 1,173 recorded object entries match; 645 inherited project objects match the first search path |
+
+The archived A3 object also matches `1AB497FE…31E6DBC`; its raw Checks contain all 46 expected standard-three profiles. The predecessor-count source matches attempt 275’s `8D8AF4E5…982F64`, and its object matches own333’s `8D3EFE0F…725827`.
+
+Remaining findings:
+
+1. **HIGH — Source certification debt.** The [driver, lines 16–30](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-a18-333-diagnostic.py:16) reuses cached imports. Its inventory explicitly declares development-only scope and CanonicalFlag reproducibility debt. Matching hashes and standard axioms do not establish complete source-to-object provenance, toolchain attestation, or a fresh transitive build.
+
+2. **MEDIUM — Custody is not compilation coverage.** The 206-source roster omits direct imports including `A7PredecessorCount` and `BinaryMatrixComplexA14`. I traced the former to its earlier receipt; own333 still provides a bounded cached-import gate. The 19 axiom profiles cover the named declarations, not every imported declaration.
+
+3. **LOW — Git bytes differ from exact receipt bytes.** At `489bc798`, three JSON blobs have LF normalization. Parsed contents agree, and the committed terminal archive preserves the exact local bytes. No mathematical or receipt-content discrepancy resulted.
+
+This lens accepts the reviewed argument and recorded bounded kernel gate. A7 degree induction, A12 inequality (103), A19 L4 (114), and final Claude/Gemini reviews remain outside acceptance. I did not independently authenticate the supplied prerequisite-map handle `3312d30d` or external reviewer completion state.

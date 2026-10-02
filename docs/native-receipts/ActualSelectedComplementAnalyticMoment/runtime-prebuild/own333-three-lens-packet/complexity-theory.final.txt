@@ -1,0 +1,29 @@
+**GO-WITH-NOTES — complexity-theory lens.** The frozen degree-D energy bound, weighted W6 bound \(67/63\), factor-2 corollary, and exact D=0 equality pass this source-and-receipt review. No blocking mathematical defect found within that scope.
+
+**Complete mathematical assumptions:** \(n,d,D\in\mathbb N\), including zero; matrices over \(\mathbb F_2\); arbitrary complex-valued \(f\) on the full \(n\times d\) matrix space; arbitrary linear-map affine base \(T:\mathbb F_2^d\to\mathbb F_2^n\); and only
+\[
+\operatorname{rank}(Y)>D\implies\widehat f(Y)=0.
+\]
+Means are normalized uniform means on the stated ambient or dependent Hom carrier. There is no Booleanity, globalness, contraction, caller-supplied counting/L4 assumption, or relation between D and ambient width.
+
+The substantive checks passed:
+
+- **Actual energy and support restriction.** The proof retains the affine character phases, establishes their unit magnitude, and uses actual carrier Parseval. For \(k=\operatorname{rank}(X)\le D\), it applies the original ambient fibre count \(2^{2k\operatorname{rank}(Z)}\) only in the branch \(\operatorname{rank}(Z)\le D-k\). Otherwise, rank additivity gives \(\operatorname{rank}(Y)=k+\operatorname{rank}(Z)>D\), so every coefficient in that fibre vanishes. It never asserts the invalid global cardinality bound. For \(k>D\), both predecessor energy and derivative energy vanish. See [energy proof, lines 375–472](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own333/attempt-333-A7DegreeEnergyW6D0/stage-0.lean.snapshot:375).
+
+- **Squared energy and constants.** With \(E=\mathbb E|f|^2\), predecessor energy \(a_X\), and actual derivative energy \(e_X\), the proof obtains
+  \[
+  e_X^2\le 2^{4k(D-k)}Ea_X.
+  \]
+  Nonnegativity justifies squaring and multiplication; explicit finite equivalences justify partitioning and interchanging sums. The predecessor count is derived as \({j\brack k}_2\,2^{k(j-k)}\), with the zero-rank term exactly one. Positive-rank terms are bounded by \(4/64^k\), yielding \(1+4/63=67/63\). This is a sufficient relaxation of the manuscript’s \(2^{-6k^2}\) estimate. The factor 2 follows from \(67/63\le2\). See [squared-energy proof](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own333/attempt-333-A7DegreeEnergyW6D0/stage-0.lean.snapshot:503), [exact count and weighted estimate](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-123542/attempt-275-A7DegreeWeighted8D8A/stage-0.lean.snapshot:854), and [W6 assembly](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own333/attempt-333-A7DegreeEnergyW6D0/stage-0.lean.snapshot:614).
+
+- **Exact D=0 and endpoints.** Fourier reconstruction proves \(f\) constant. The zero-parent filter reconstructs \(f\), and the proof evaluates the actual dependent carrier mean using its positive cardinality. Every nonzero parent has positive rank and zero energy. Zero dimensions, \(k=0\), \(k=D\), \(k>D\), unavailable ranks, and \(E=0\) are covered without division by E. See [D=0 proof](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own333/attempt-333-A7DegreeEnergyW6D0/stage-0.lean.snapshot:783).
+
+**Severity and scope notes:**
+
+- **HIGH — full-source reproducibility remains open.** The receipt explicitly marks cached imports as development-only and records CanonicalFlag source reproducibility debt. Object identity verification does not discharge that debt. [Recorded boundary](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/docs/native-receipts/ActualSelectedComplementAnalyticMoment/runtime-prebuild/local-native-own333/attempt-333-A7DegreeEnergyW6D0/cached-import-identities.json:2).
+- **HIGH — broader certification remains INCOMPLETE.** This establishes manuscript W6, including arbitrary T, but does not establish the degree induction (A7), inequality (A12) with exponent 103, (A19) with exponent 114, or full HC46. The A12-named dependency used here supplies Parseval/A2 identities. The later manuscript induction requires additional ingredients. [W6 correspondence](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/paper/submission-manuscript.md:1478), [A7 induction](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/paper/submission-manuscript.md:1726), [A12](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/paper/submission-manuscript.md:1802), [A19](C:/Users/Dan/Desktop/Projects/realizable-cmmsa-hardness/paper/submission-manuscript.md:1959).
+- **LOW — terminology boundary.** “Weighted fourth moment” here means \(\sum_X2^{-6D\operatorname{rank}(X)}\|D_{X,T}f\|_2^4\), not an L4 moment of each derivative. This matches W6.
+
+Evidence verified: both supplied full source/Checks hashes; both exact-input archive members; all terminal-archive members against the loose receipts; all 206 custody hashes; and all 1,173 recorded object hashes. The original A3 source `775FFB…` and object `1AB497…` match the supplied dependency identity. Terminal `49e6ed` records aggregate exit 0, source 147.79s and Checks 22.39s. Actual Checks stdout contains 19 profiles, each exactly `propext`, `Classical.choice`, and `Quot.sound`; stderr is empty.
+
+I read the complete target and supporting mathematical proofs. This was an independent read-only review, with no compilation, edits, Git operations, nested agents, or infrastructure changes. It does not independently rebuild the transitive environment, authenticate the supplied commit labels, or close the remaining external review gates.
