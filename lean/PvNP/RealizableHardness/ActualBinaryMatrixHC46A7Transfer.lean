@@ -4856,5 +4856,130 @@ theorem a7OrderOne_output_q_exceeds_component :
     a7OrderOne_output_character]
   exact h
 
+/-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
+noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
+    [AddCommGroup M] [Module F M] [Module.Finite F M]
+    (h : Module.finrank F M = n) : M ≃ₗ[F] (V n) := by
+  letI : Module.Free F M := Module.Free.of_basis (Module.finBasis F M)
+  exact (Module.finBasis F M).equivFun.trans
+    (LinearEquiv.piCongrLeft F (fun _ => F) (Equiv.cast (congrArg Fin h)))
+
+/-- Push a subspace across a linear equivalence. -/
+noncomputable def a9TransportGrass {M N : Type*} [AddCommGroup M] [Module F M]
+    [AddCommGroup N] [Module F N] {i : Nat} (e : M ≃ₗ[F] N)
+    (U : W6Grass M i) : W6Grass N i :=
+  ⟨Submodule.map e.toLinearMap U.1, by
+    rw [LinearEquiv.finrank_map_eq e]
+    exact U.2⟩
+
+theorem a9TransportGrass_injective {M N : Type*} [AddCommGroup M] [Module F M]
+    [AddCommGroup N] [Module F N] {i : Nat} (e : M ≃ₗ[F] N) :
+    Function.Injective (a9TransportGrass (i := i) e) := by
+  intro U₁ U₂ h
+  apply Subtype.ext
+  have hmap : Submodule.map e.toLinearMap U₁.1 =
+      Submodule.map e.toLinearMap U₂.1 :=
+    congrArg Subtype.val h
+  ext x
+  constructor
+  · intro hx
+    have hmem : e x ∈ Submodule.map e.toLinearMap U₂.1 := by
+      rw [← hmap]
+      exact ⟨x, hx, rfl⟩
+    rcases hmem with ⟨y, hy, he⟩
+    have hyx : y = x := e.injective he
+    simpa [hyx] using hy
+  · intro hx
+    have hmem : e x ∈ Submodule.map e.toLinearMap U₁.1 := by
+      rw [hmap]
+      exact ⟨x, hx, rfl⟩
+    rcases hmem with ⟨y, hy, he⟩
+    have hyx : y = x := e.injective he
+    simpa [hyx] using hy
+
+/-- The quotient by a subspace travels with the linear equivalence. -/
+noncomputable def a9QuotientTransport {M N : Type*}
+    [AddCommGroup M] [Module F M] [AddCommGroup N] [Module F N]
+    (e : M ≃ₗ[F] N) (U : Submodule F M) :
+    (M ⧸ U) ≃ₗ[F] (N ⧸ Submodule.map e.toLinearMap U) :=
+  LinearEquiv.ofBijective
+    (U.mapQ (Submodule.map e.toLinearMap U) e.toLinearMap (by
+      intro x hx
+      exact ⟨x, hx, rfl⟩))
+    (by
+      constructor
+      · intro q₁ q₂ hq
+        obtain ⟨x, rfl⟩ := Submodule.mkQ_surjective U q₁
+        obtain ⟨y, rfl⟩ := Submodule.mkQ_surjective U q₂
+        apply (Submodule.Quotient.eq U).mpr
+        have hq' : Submodule.Quotient.mk (e x) =
+            Submodule.Quotient.mk (e y) := hq
+        have hdiff : e x - e y ∈ Submodule.map e.toLinearMap U :=
+          (Submodule.Quotient.eq (Submodule.map e.toLinearMap U)).mp hq'
+        rcases hdiff with ⟨u, hu, he⟩
+        have hxy : x - y = u := e.injective (by
+          simpa [map_sub] using he.symm)
+        rw [hxy]
+        exact hu
+      · intro q
+        obtain ⟨y, rfl⟩ := Submodule.mkQ_surjective
+          (Submodule.map e.toLinearMap U) q
+        obtain ⟨x, hx⟩ := e.surjective y
+        refine ⟨U.mkQ x, ?_⟩
+        change Submodule.Quotient.mk (e x) = Submodule.Quotient.mk y
+        rw [hx])
+
+/-- Move one fixed-final graph datum onto coordinate carriers. -/
+noncomputable def a9TransportDatum {A B S : Type*}
+    [AddCommGroup A] [Module F A] [AddCommGroup B] [Module F B]
+    [AddCommGroup S] [Module F S]
+    {a b k i j : Nat}
+    (eA : A ≃ₗ[F] (V a)) (eB : B ≃ₗ[F] (V b)) (eS : S ≃ₗ[F] (V k))
+    (d : A9InitialDatum A B S i j) :
+    A9InitialDatum (V a) (V b) (V k) i j where
+  A0 := a9TransportGrass eA d.A0
+  B0 := a9TransportGrass eB d.B0
+  imGraph :=
+    (a9QuotientTransport eA d.A0.1).toLinearMap.comp
+      (d.imGraph.comp eS.symm.toLinearMap)
+  kerGraph :=
+    eS.toLinearMap.comp
+      (d.kerGraph.comp (a9QuotientTransport eB d.B0.1).symm.toLinearMap)
+
+/-- Each graph datum of one fixed final `(A, W/B, range Y)` is sent to a
+positive-degree sum index by the coordinate transport. `a9FinalTheta_rank`
+keeps rank `k` on that image. Injectivity of the transport is not proved
+here; `a9EmbedSumFiber_injective` is the inverse on coordinate data. The
+multiplicity `2^{3D(i+j+k)}` remains `a9_final_inducing_multiplicity`.
+This does not bound `a7HybridQ` of an output, and it does not remove the
+share. -/
+noncomputable def a9FinalInducingTriple {n d a b k i j : Nat}
+    (hk : 0 < k)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k)
+    (datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) :
+    A9EmbeddedSumFiber a b k i j :=
+  a9EmbedSumFiber hk
+    (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
+      (a9ModuleToFin k hY) datum)
+
+/-- The transported project-then-lift map still has rank `k`. -/
+theorem a9FinalInducingTriple_rank {n d a b k i j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k)
+    (datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) :
+    Module.finrank F (LinearMap.range (a9FinalTheta
+      (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
+        (a9ModuleToFin k hY) datum))) = k :=
+  a9FinalTheta_rank
+    (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
+      (a9ModuleToFin k hY) datum)
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
