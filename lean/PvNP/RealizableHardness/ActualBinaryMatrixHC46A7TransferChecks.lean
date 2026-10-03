@@ -70,6 +70,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_output_zero_summand_le_q
 #check a7_hybrid_filter_coefficient
 #check a7_hybrid_filter_energy
+#check a7_hybrid_filter_energy_le_total
+#check a7_one_hybrid_filter_sq_le_component
 
 #print axioms a7_constant_of_degree_zero
 #print axioms a7_q_eq_zero_order
@@ -132,3 +134,5 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_output_zero_summand_le_q
 #print axioms a7_hybrid_filter_coefficient
 #print axioms a7_hybrid_filter_energy
+#print axioms a7_hybrid_filter_energy_le_total
+#print axioms a7_one_hybrid_filter_sq_le_component

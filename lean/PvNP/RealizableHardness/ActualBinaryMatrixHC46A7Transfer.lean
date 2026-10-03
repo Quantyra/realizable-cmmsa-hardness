@@ -3000,5 +3000,77 @@ theorem a7_hybrid_filter_energy {n d : Nat}
   · rw [if_neg hsel, if_neg hsel]
     simp [Complex.normSq_zero]
 
+/-- A carrier hybrid filter drops frequencies, so its `L2` energy is at most
+the carrier energy of the unfiltered function. -/
+theorem a7_hybrid_filter_energy_le_total {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (A₁₂ : Submodule F (V d ⧸ A₂)) (B₁₂ : Submodule F B₂)
+    (g : ((V d ⧸ A₂) →ₗ[F] B₂) → Complex) :
+    carrierMean A₂ B₂ (fun M =>
+      Complex.normSq (complexCarrierHybridFilter A₂ B₂ A₁₂ B₁₂ g M)) ≤
+      carrierMean A₂ B₂ (fun M => Complex.normSq (g M)) := by
+  classical
+  rw [a7_hybrid_filter_energy]
+  rw [PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.complex_carrier_parseval
+    A₂ B₂ g]
+  refine Finset.sum_le_sum ?_
+  intro Z _
+  by_cases hsel : Selected A₁₂ B₁₂ Z
+  · rw [if_pos hsel]
+  · rw [if_neg hsel]
+    exact Complex.normSq_nonneg _
+
+/-- One hybrid filter of a mixed derivative has squared `L2` energy at most
+the same `2^{4k(D-order)}` multiple of that triple's original pair component
+as the full derivative. This is one filter, not the sum of an output `Q`, and
+it does not remove the share hypothesis. -/
+theorem a7_one_hybrid_filter_sq_le_component {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t ≤ D)
+    (filterEnergy : ℝ)
+    (hnn : 0 ≤ filterEnergy)
+    (hle : filterEnergy ≤
+      carrierMean
+        (LinearMap.range (a7MixedCoordinateParent t).transpose.toLin')
+        (LinearMap.ker (a7MixedCoordinateParent t).transpose.toLin')
+        (fun M => Complex.normSq
+          (actualW6Derivative (a7MixedCoordinateParent t) 0
+            (a7MixedCoordinate t T f) M))) :
+    filterEnergy ^ 2 ≤
+      (2 : ℝ) ^ (4 * Module.finrank F (LinearMap.range (t1PullbackMap t)) *
+        (D - a6Order t)) *
+        typedW6QComponent (t1AmbientC t.C) (t1AmbientH t.K) T f := by
+  have hfull := a7_output_energy_sq_le_component t T f hsupport horder
+  have hfullNn : 0 ≤
+      carrierMean
+        (LinearMap.range (a7MixedCoordinateParent t).transpose.toLin')
+        (LinearMap.ker (a7MixedCoordinateParent t).transpose.toLin')
+        (fun M => Complex.normSq
+          (actualW6Derivative (a7MixedCoordinateParent t) 0
+            (a7MixedCoordinate t T f) M)) := by
+    refine le_trans ?_ hle
+    exact hnn
+  have hsq : filterEnergy ^ 2 ≤
+      (carrierMean
+        (LinearMap.range (a7MixedCoordinateParent t).transpose.toLin')
+        (LinearMap.ker (a7MixedCoordinateParent t).transpose.toLin')
+        (fun M => Complex.normSq
+          (actualW6Derivative (a7MixedCoordinateParent t) 0
+            (a7MixedCoordinate t T f) M))) ^ 2 := by
+    have habs : |filterEnergy| ≤
+        |carrierMean
+          (LinearMap.range (a7MixedCoordinateParent t).transpose.toLin')
+          (LinearMap.ker (a7MixedCoordinateParent t).transpose.toLin')
+          (fun M => Complex.normSq
+            (actualW6Derivative (a7MixedCoordinateParent t) 0
+              (a7MixedCoordinate t T f) M))| := by
+      rw [abs_of_nonneg hnn, abs_of_nonneg hfullNn]
+      exact hle
+    exact sq_le_sq.mpr habs
+  exact le_trans hsq hfull
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
