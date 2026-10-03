@@ -7759,6 +7759,203 @@ theorem a7_mixed_coordinate_pair_avg_eq_original {n d : Nat}
   simpa [typedUniformMean, C, H, A12, B12, A1, B1] using
     a7_coordinate_pair_avg_eq_original C H f P Q
 
+/-- The zero-parent chart sends an output matrix to the ambient matrix read by
+the derivative. Output rows are the kernel rank and output columns are the
+quotient rank; both are propositionally the ambient dimensions. -/
+def a7ZeroChart {n0 d0 : Nat}
+    (X : BinaryMatrix
+      (Module.finrank F (a7ZeroHout n0 d0))
+      (Module.finrank F (V d0 ⧸ a7ZeroCout n0 d0))) : BinaryMatrix n0 d0 :=
+  LinearMap.toMatrix'
+    ((a7ZeroIsoL n0 d0).comp (X.toLin'.comp (a7ZeroIsoR n0 d0)))
+
+/-- Reading any complex function through the zero parent evaluates it on the
+charted matrix. The same identity was previously stated only for characters. -/
+theorem a7_zero_derivative_chart {n0 d0 : Nat}
+    (g : BinaryMatrix n0 d0 → Complex)
+    (X : BinaryMatrix
+      (Module.finrank F (a7ZeroHout n0 d0))
+      (Module.finrank F (V d0 ⧸ a7ZeroCout n0 d0))) :
+    actualW6Derivative (0 : BinaryMatrix n0 d0) 0 g
+        ((carrierMatrixEquiv (a7ZeroCout n0 d0) (a7ZeroHout n0 d0)).symm X) =
+      g (a7ZeroChart X) := by
+  let Cout := a7ZeroCout n0 d0
+  let Hout := a7ZeroHout n0 d0
+  have hderiv := a7_zero_derivative_apply g
+    ((carrierMatrixEquiv Cout Hout).symm X)
+  rw [hderiv]
+  let M := (carrierMatrixEquiv Cout Hout).symm X
+  have hlin := carrierMatrix_toLin Cout Hout M
+  have hXM : carrierMatrixEquiv Cout Hout M = X :=
+    (carrierMatrixEquiv Cout Hout).apply_symm_apply X
+  rw [hXM] at hlin
+  have hM : M =
+      (codomainBasis Hout).equivFun.symm.toLinearMap.comp
+        (X.toLin'.comp (domainBasis Cout).equivFun.toLinearMap) := by
+    refine LinearMap.ext ?_
+    intro v
+    have hpt := congrFun (congrArg DFunLike.coe hlin)
+      ((domainBasis Cout).equivFun v)
+    simp only [LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+      LinearEquiv.symm_apply_apply] at hpt
+    exact ((LinearEquiv.symm_apply_eq ((codomainBasis Hout).equivFun)).mpr hpt).symm
+  have hmap : Hout.subtype.comp (M.comp Cout.mkQ) =
+      (a7ZeroIsoL n0 d0).comp (X.toLin'.comp (a7ZeroIsoR n0 d0)) := by
+    rw [hM]
+    rfl
+  have hmat : LinearMap.toMatrix' (Hout.subtype.comp
+      (((carrierMatrixEquiv Cout Hout).symm X).comp Cout.mkQ)) =
+      a7ZeroChart X := by
+    have hMeq : (carrierMatrixEquiv Cout Hout).symm X = M := rfl
+    rw [hMeq, hmap]
+    rfl
+  rw [hmat]
+
+noncomputable def a7ZeroChartEquiv {n0 d0 : Nat} :
+    BinaryMatrix (Module.finrank F (a7ZeroHout n0 d0))
+      (Module.finrank F (V d0 ⧸ a7ZeroCout n0 d0)) ≃ BinaryMatrix n0 d0 where
+  toFun := a7ZeroChart
+  invFun := fun Y =>
+    let eL := LinearEquiv.ofBijective (a7ZeroIsoL n0 d0) (a7ZeroIsoL_bijective n0 d0)
+    let eR := LinearEquiv.ofBijective (a7ZeroIsoR n0 d0) (a7ZeroIsoR_bijective n0 d0)
+    LinearMap.toMatrix' (eL.symm.toLinearMap.comp (Y.toLin'.comp eR.symm.toLinearMap))
+  left_inv := fun X => by
+    unfold a7ZeroChart
+    let eL := LinearEquiv.ofBijective (a7ZeroIsoL n0 d0) (a7ZeroIsoL_bijective n0 d0)
+    let eR := LinearEquiv.ofBijective (a7ZeroIsoR n0 d0) (a7ZeroIsoR_bijective n0 d0)
+    change LinearMap.toMatrix'
+        (eL.symm.toLinearMap.comp
+          ((LinearMap.toMatrix'
+            ((a7ZeroIsoL n0 d0).comp (X.toLin'.comp (a7ZeroIsoR n0 d0)))).toLin'.comp
+            eR.symm.toLinearMap)) = X
+    rw [Matrix.toLin'_toMatrix']
+    have hcomp : eL.symm.toLinearMap.comp
+        (((a7ZeroIsoL n0 d0).comp (X.toLin'.comp (a7ZeroIsoR n0 d0))).comp
+          eR.symm.toLinearMap) = X.toLin' := by
+      ext v
+      simp [LinearMap.comp_apply, eL, eR, LinearEquiv.symm_apply_apply,
+        LinearEquiv.apply_symm_apply]
+    rw [hcomp, LinearMap.toMatrix'_toLin']
+  right_inv := fun Y => by
+    let eL := LinearEquiv.ofBijective (a7ZeroIsoL n0 d0) (a7ZeroIsoL_bijective n0 d0)
+    let eR := LinearEquiv.ofBijective (a7ZeroIsoR n0 d0) (a7ZeroIsoR_bijective n0 d0)
+    unfold a7ZeroChart
+    rw [Matrix.toLin'_toMatrix']
+    have hcomp : (a7ZeroIsoL n0 d0).comp
+        ((eL.symm.toLinearMap.comp (Y.toLin'.comp eR.symm.toLinearMap)).comp
+          (a7ZeroIsoR n0 d0)) = Y.toLin' := by
+      ext v
+      simp [LinearMap.comp_apply, eL, eR, LinearEquiv.apply_symm_apply,
+        LinearEquiv.symm_apply_apply]
+    rw [hcomp, LinearMap.toMatrix'_toLin']
+
+/-- The zero-parent chart preserves the squared `L2` energy, hence the
+zero-order pair share, even though the output index is the kernel/quotient
+shape of the zero matrix. -/
+theorem a7_zero_chart_zero_share {n0 d0 : Nat}
+    (g : BinaryMatrix n0 d0 → Complex) :
+    a7PairShare
+        (⊥ : Submodule F (V (Module.finrank F (V d0 ⧸ a7ZeroCout n0 d0))))
+        (⊤ : Submodule F (W (Module.finrank F (a7ZeroHout n0 d0))))
+        (fun X => g (a7ZeroChart X)) =
+      a7PairShare (⊥ : Submodule F (V d0)) (⊤ : Submodule F (W n0)) g := by
+  classical
+  unfold a7PairShare
+  rw [a7_zero_order_uniform, a7_zero_order_uniform]
+  congr 1
+  unfold uniformMean
+  have hsum :
+      (∑ X : BinaryMatrix (Module.finrank F (a7ZeroHout n0 d0))
+          (Module.finrank F (V d0 ⧸ a7ZeroCout n0 d0)),
+        Complex.normSq (g (a7ZeroChart X))) =
+        ∑ Y : BinaryMatrix n0 d0, Complex.normSq (g Y) :=
+    Equiv.sum_comp a7ZeroChartEquiv (fun Y => Complex.normSq (g Y))
+  have hcard :
+      (Fintype.card (BinaryMatrix (Module.finrank F (a7ZeroHout n0 d0))
+        (Module.finrank F (V d0 ⧸ a7ZeroCout n0 d0))) : ℝ) =
+        (Fintype.card (BinaryMatrix n0 d0) : ℝ) := by
+    exact_mod_cast Fintype.card_congr a7ZeroChartEquiv
+  rw [hsum, hcard]
+
+/-- At a zero pullback, the zero-order share of `a7OutputBinary` is the
+zero-order share of the mixed coordinate. The chart has been pushed through
+this pair share. Positive-order output pairs are not included, and a positive
+pullback is not included, so `e` stays. -/
+theorem a7_zero_pullback_output_zero_share {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) (hpull : t1PullbackMap t = 0) :
+    a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+        (a7OutputBinary t T f) =
+      a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+        (a7MixedCoordinate t T f) := by
+  classical
+  let n0 := Module.finrank F (t1AmbientH t.K)
+  let d0 := Module.finrank F (V d ⧸ t1AmbientC t.C)
+  let coord := a7MixedCoordinate t T f
+  let share {a b : Nat} (P : BinaryMatrix a b) (g : BinaryMatrix a b → ℂ) : ℝ :=
+    a7PairShare
+      (n := Module.finrank F (LinearMap.ker P.transpose.toLin'))
+      (d := Module.finrank F (V b ⧸ LinearMap.range P.transpose.toLin'))
+      (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+      (fun X => actualW6Derivative P (0 : V b →ₗ[F] W a) g
+        ((carrierMatrixEquiv
+          (LinearMap.range P.transpose.toLin')
+          (LinearMap.ker P.transpose.toLin')).symm X))
+  have hparent := a7_pullback_zero_parent t hpull
+  have hdef : a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+        (a7OutputBinary t T f) =
+      share (a7MixedCoordinateParent t) coord := by
+    unfold a7OutputBinary share
+    rfl
+  have hP : share (a7MixedCoordinateParent t) coord = share 0 coord :=
+    congrArg (fun P => share P coord) hparent
+  have hfun : (fun X =>
+        actualW6Derivative (0 : BinaryMatrix n0 d0) 0 coord
+          ((carrierMatrixEquiv (a7ZeroCout n0 d0) (a7ZeroHout n0 d0)).symm X)) =
+      fun X => coord (a7ZeroChart X) := by
+    funext X
+    exact a7_zero_derivative_chart coord X
+  have hread : share (0 : BinaryMatrix n0 d0) coord =
+      a7PairShare
+        (⊥ : Submodule F (V (Module.finrank F (V d0 ⧸ a7ZeroCout n0 d0))))
+        (⊤ : Submodule F (W (Module.finrank F (a7ZeroHout n0 d0))))
+        (fun X => coord (a7ZeroChart X)) := by
+    unfold share
+    rw [hfun]
+  rw [hdef, hP, hread, a7_zero_chart_zero_share]
+
+/-- Averaging the zero-order output share of a zero pullback returns the
+original carrier pair share. The factor is 1. -/
+theorem a7_zero_pullback_output_zero_share_avg {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)
+    (hpull : t1PullbackMap t = 0) :
+    typedUniformMean (fun T : V d →ₗ[F] W n =>
+      a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+        (a7OutputBinary t T f)) =
+      a7PairShare (t1AmbientC t.C) (t1AmbientH t.K) f := by
+  classical
+  have hpoint : ∀ T,
+      a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7OutputBinary t T f) =
+        a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7MixedCoordinate t T f) :=
+    fun T => a7_zero_pullback_output_zero_share t T f hpull
+  unfold typedUniformMean
+  have hsum :
+      (∑ T : V d →ₗ[F] W n,
+        a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7OutputBinary t T f)) =
+        ∑ T, a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7MixedCoordinate t T f) := by
+    refine Finset.sum_congr rfl (fun T _ => hpoint T)
+  rw [hsum]
+  have hbot : (⊥ : Submodule F (Fin (Module.finrank F (V d ⧸ t1AmbientC t.C)) → F)) =
+      ⊥ := rfl
+  simpa [typedUniformMean] using
+    a7_mixed_coordinate_pair_avg_eq_original t f ⊥ ⊤
+
 /-- One final pair above a preceding parent is a single nonnegative term of
 that parent's nested sum, hence at most the parent's output `Q`. -/
 theorem a7_preceding_one_pair_le_output {n d : Nat}
