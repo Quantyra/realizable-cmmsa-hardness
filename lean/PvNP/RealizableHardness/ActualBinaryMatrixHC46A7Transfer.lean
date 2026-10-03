@@ -4283,5 +4283,57 @@ theorem a7_rank38_character_q_exceeds_order_one {n d : Nat}
   rw [a7_character_hybrid_q, henergy, one_pow, mul_one]
   exact_mod_cast hnat
 
+theorem a7_precedes_zero {n d : Nat} (Y : BinaryMatrix n d) :
+    w6Precedes (0 : BinaryMatrix n d) Y := by
+  unfold w6Precedes
+  simp [Matrix.rank_zero, sub_zero]
+
+theorem a7_zero_filter {n d : Nat} (f : BinaryMatrix n d → Complex) :
+    w6PredecessorFilter (0 : BinaryMatrix n d) f = f := by
+  funext M
+  unfold w6PredecessorFilter
+  have hsum : (∑ Y : BinaryMatrix n d,
+      if w6Precedes (0 : BinaryMatrix n d) Y then
+        complexFourierCoeff f Y * (character Y M : Complex) else 0) =
+      ∑ Y : BinaryMatrix n d, complexFourierCoeff f Y * (character Y M : Complex) := by
+    refine Finset.sum_congr rfl ?_
+    intro Y _
+    simp [a7_precedes_zero]
+  rw [hsum]
+  exact complexFourierInversion f M
+
+theorem a7_zero_derivative_apply {n d : Nat} (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range ((0 : BinaryMatrix n d).transpose.toLin')) →ₗ[F]
+      LinearMap.ker ((0 : BinaryMatrix n d).transpose.toLin')) :
+    actualW6Derivative (0 : BinaryMatrix n d) 0 f M =
+      f (LinearMap.toMatrix'
+        ((LinearMap.ker ((0 : BinaryMatrix n d).transpose.toLin')).subtype.comp
+          (M.comp (LinearMap.range
+            ((0 : BinaryMatrix n d).transpose.toLin')).mkQ))) := by
+  unfold actualW6Derivative complexAmbientAffineRestrict
+  rw [a7_zero_filter]
+  simp
+
+theorem a7_pairing_trace {n d : Nat} (Y M : BinaryMatrix n d) :
+    pairing Y M = (Y.transpose * M).trace := by
+  classical
+  simp only [pairing, Matrix.trace, Matrix.diag, Matrix.mul_apply,
+    Matrix.transpose_apply]
+  exact Finset.sum_comm
+
+/-- Conjugation by a row matrix and a column matrix preserves the trace pairing. -/
+theorem a7_pairing_conj {n d : Nat}
+    (P : Matrix (Fin n) (Fin n) F) (Q : Matrix (Fin d) (Fin d) F)
+    (Z X : BinaryMatrix n d) :
+    pairing Z (P * X * Q) = pairing (P.transpose * Z * Q.transpose) X := by
+  rw [a7_pairing_trace, a7_pairing_trace]
+  simp only [Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.mul_assoc]
+  rw [Matrix.trace_mul_comm]
+  simp only [Matrix.mul_assoc]
+  rw [Matrix.trace_mul_comm]
+  simp only [Matrix.mul_assoc]
+  rw [Matrix.trace_mul_comm]
+  simp only [Matrix.mul_assoc]
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
