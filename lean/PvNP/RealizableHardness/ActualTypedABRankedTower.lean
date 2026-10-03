@@ -3,6 +3,7 @@ import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
 import PvNP.RealizableHardness.BinaryMatrixTypedA14Reduced
 import PvNP.RealizableHardness.BinaryMatrixTypedA14Hyperplane
 import PvNP.RealizableHardness.BinaryMatrixTypedA14HyperplaneReduced
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
 
 namespace PvNP.RealizableHardness.ActualTypedABRankedTower
 
@@ -10,6 +11,7 @@ open ActualTypedABMixedTower
 open BinaryMatrixA1NestedCarrier
 open BinaryMatrixTypedA15ReducedGlobal
 open BinaryMatrixTypedA15HyperplaneReducedGlobal
+open BinaryMatrixTypedA15Transport
 open BinaryMatrixTypedA14FixedBase
 open BinaryMatrixTypedA14HyperplaneFixedBase
 open BinaryMatrixTypedA14Line
@@ -56,10 +58,7 @@ inductive ActualTypedABRankedTower {n d : Nat} :
           ((Submodule.equivMapOfInjective B.subtype B.injective_subtype H).symm.toLinearMap.comp N)) r k) :
       ActualTypedABRankedTower A B f r (k + 1)
 
-structure RankedTerminalData {n d : Nat} {r k : Nat}
-    {A : Submodule F (V d)} {B : Submodule F (W n)}
-    {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
-    (tower : ActualTypedABRankedTower A B f r k) where
+structure RankedTerminalData (n d : Nat) where
   Aend : Submodule F (V d)
   Bend : Submodule F (W n)
   fend : ((V d ⧸ Aend) →ₗ[F] Bend) → Complex
@@ -67,7 +66,7 @@ structure RankedTerminalData {n d : Nat} {r k : Nat}
 def rankedTerminalData {n d : Nat} {r k : Nat}
     {A : Submodule F (V d)} {B : Submodule F (W n)}
     {f : ((V d ⧸ A) →ₗ[F] B) → Complex} :
-    (tower : ActualTypedABRankedTower A B f r k) → RankedTerminalData tower
+    (tower : ActualTypedABRankedTower A B f r k) → RankedTerminalData n d
   | .done f _ => ⟨A, B, f⟩
   | .line _ _ _ _ tail => rankedTerminalData tail
   | .hyperplane _ _ _ tail => rankedTerminalData tail
@@ -127,7 +126,7 @@ theorem rankedA15Loss_le_degree (r k D : Nat) (hlevel : r + k ≤ D) :
   have hk2 : k ^ 2 ≤ D ^ 2 := Nat.pow_le_pow_left hk 2
   have hexp : 4 * r * k + 2 * k ^ 2 + 4 * k ≤ 10 * D ^ 2 := by
     nlinarith
-  exact pow_le_pow_right' (by norm_num : 1 ≤ (2 : Real)) hexp
+  exact pow_le_pow_right₀ (by norm_num : (1 : Real) ≤ 2) hexp
 
 /-- Repeated A15 transitions preserve the genuine residual level `r` and
 bound its terminal typed globalness from the original function's bound
@@ -143,7 +142,7 @@ theorem ranked_tower_terminal_global {n d : Nat} {r k : Nat}
   induction tower with
   | @done A B f r =>
       intro eps heps hglobal
-      simpa [rankedTerminalData] using hglobal
+      simpa [rankedTerminalData, rankedA15Loss] using hglobal
   | @line A B A' hA hL r k T f tail ih =>
       intro eps heps hglobal
       have hglobal' : UpToTypedNormSqGlobal A B ((r + k) + 1) eps f := by
@@ -225,7 +224,7 @@ def HasRankedA14Semantics {n d : Nat} {r k : Nat}
     {f : ((V d ⧸ A) →ₗ[F] B) → Complex} :
     ActualTypedABRankedTower A B f r k → Prop
   | .done _ _ => True
-  | @ActualTypedABRankedTower.line A B A' hA hL r k T f tail =>
+  | @ActualTypedABRankedTower.line n d A B A' hA hL r k T f tail =>
       (∀ N : ((V d ⧸ A) ⧸ A'.map A.mkQ) →ₗ[F] B,
         reducedComplexRankProjection B (A'.map A.mkQ) (r + k)
           (typedLineReducedWitness (k := r + k) B
@@ -234,7 +233,7 @@ def HasRankedA14Semantics {n d : Nat} {r k : Nat}
           (typedComplexRankProjection A B (r + k + 1) f)
           (T + N.comp (A'.map A.mkQ).mkQ)) ∧
         HasRankedA14Semantics tail
-  | @ActualTypedABRankedTower.hyperplane A B H hH r k T f tail =>
+  | @ActualTypedABRankedTower.hyperplane n d A B H hH r k T f tail =>
       (∀ N : (V d ⧸ A) →ₗ[F] H,
         hyperplaneReducedComplexRankProjection B H hH (r + k)
           (typedHyperplaneReducedWitness (k := r + k) B H hH T f) N =

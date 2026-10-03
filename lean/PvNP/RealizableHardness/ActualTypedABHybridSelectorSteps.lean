@@ -14,6 +14,8 @@ private abbrev W (n : Nat) := Fin n → F
 
 open BinaryMatrixNestedSelectorA1
 open BinaryMatrixA1Phase
+open BinaryMatrixA1Complex
+open BinaryMatrixFourier
 open BinaryMatrixA15SelectedBridge
 open BinaryMatrixA15A1Carrier
 open BinaryMatrixA15NestedLine
@@ -74,7 +76,7 @@ theorem typed_line_A1_operator_step {n d : Nat}
     (hL : Module.finrank F (A'.map A.mkQ) = 1)
     (T : V d →ₗ[F] W n)
     (S : (V d ⧸ A) →ₗ[F] B)
-    (f : (Fin n →ₗ[F] (Fin d → F)) → C)
+    (f : BinaryMatrix n d → C)
     (N : ((V d ⧸ A) ⧸ A'.map A.mkQ) →ₗ[F] B) :
     typedComplexLineFilter B (A'.map A.mkQ) hL
       (fun M => complexAmbientAffineRestrict A B T
@@ -96,7 +98,7 @@ theorem typed_hyperplane_A1_operator_step {n d : Nat}
     (hH : Module.finrank F (B ⧸ H) = 1)
     (T : V d →ₗ[F] W n)
     (S : (V d ⧸ A) →ₗ[F] B)
-    (f : (Fin n →ₗ[F] (Fin d → F)) → C)
+    (f : BinaryMatrix n d → C)
     (N : (V d ⧸ A) →ₗ[F] H) :
     typedComplexHyperplaneFilter B H hH
       (fun M => complexAmbientAffineRestrict A B T
@@ -107,7 +109,7 @@ theorem typed_hyperplane_A1_operator_step {n d : Nat}
       (complexAmbientHybridFilter A (hyperplaneCanonicalCodomain B H) f)
       (hyperplaneCanonicalEquiv B H N) := by
   rw [typedHyperplaneFilter_eq_carrierHybrid A B H hH]
-  exact hyperplane_A1_selected_composition A B H hH T S f N
+  exact hyperplane_A1_selected_composition A B H T S f N
 
 end
 end PvNP.RealizableHardness.ActualTypedABHybridSelectorSteps

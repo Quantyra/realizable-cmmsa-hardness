@@ -36,8 +36,9 @@ noncomputable def quotientHomEquiv (A : Submodule K V) (B : Submodule K W) :
       · ext x
         change ((g (A.mkQ (x : V)) : B) : W) = 0
         have hx : A.mkQ (x : V) = 0 := by
-          rw [Submodule.mkQ_apply]
-          exact Submodule.Quotient.mk_eq_zero.mpr x.property
+          have hxker : (x : V) ∈ LinearMap.ker A.mkQ := by
+            simpa only [Submodule.ker_mkQ] using x.property
+          exact LinearMap.mem_ker.mp hxker
         simp [LinearMap.comp_apply, hx]
       · intro y hy
         rcases hy with ⟨x, hx⟩
@@ -46,7 +47,7 @@ noncomputable def quotientHomEquiv (A : Submodule K V) (B : Submodule K W) :
         exact (g (A.mkQ x)).property⟩
   invFun f := by
     let fB : V →ₗ[K] B := f.1.codRestrict B (fun x =>
-      f.2.2 ⟨f.1 x, ⟨x, rfl⟩⟩)
+      f.2.2 ⟨x, rfl⟩)
     have hk : A ≤ LinearMap.ker fB := by
       intro x hx
       apply LinearMap.mem_ker.mpr
@@ -57,15 +58,28 @@ noncomputable def quotientHomEquiv (A : Submodule K V) (B : Submodule K W) :
   left_inv g := by
     apply LinearMap.ext
     intro x
-    apply Quotient.inductionOn' x
+    refine Submodule.Quotient.induction_on _ x ?_
     intro y
-    simp [quotientHomEquiv]
+    let fB : V →ₗ[K] B := g.comp A.mkQ
+    have hk : A ≤ LinearMap.ker fB := by
+      intro z hz
+      apply LinearMap.mem_ker.mpr
+      apply Subtype.ext
+      have hq : A.mkQ (z : V) = 0 := by
+        have hqker : (z : V) ∈ LinearMap.ker A.mkQ := by
+          simpa only [Submodule.ker_mkQ] using hz
+        exact LinearMap.mem_ker.mp hqker
+      simp [fB, LinearMap.comp_apply, hq]
+    have hlift := A.liftQ_mkQ fB hk
+    have hy := congrArg (fun q : V →ₗ[K] B => q y) hlift
+    change (A.liftQ fB hk) (A.mkQ y) = g (A.mkQ y)
+    simpa [fB] using hy
   right_inv f := by
     apply Subtype.ext
     apply LinearMap.ext
     intro x
     let fB : V →ₗ[K] B := f.1.codRestrict B (fun y =>
-      f.2.2 ⟨f.1 y, ⟨y, rfl⟩⟩)
+      f.2.2 ⟨y, rfl⟩)
     have hk : A ≤ LinearMap.ker fB := by
         intro y hy
         apply LinearMap.mem_ker.mpr
@@ -85,19 +99,20 @@ theorem actualAffineDifference_iff {n d : ℕ}
   constructor
   · rintro ⟨hA, hB⟩
     constructor
-    · ext a
+    · ext a x
       have ha := congrArg (fun z => z a) hA
       simp only [LinearMap.comp_apply, Matrix.toLin'_apply] at ha
-      simp only [LinearMap.comp_apply, Matrix.toLin'_apply, Matrix.sub_mulVec]
-      exact sub_eq_zero.mpr ha
-    · intro y hy
+      change ((M - Q.base).mulVec (Q.domainFixed.subtype a)) x = 0
+      rw [Matrix.sub_mulVec]
+      exact sub_eq_zero.mpr (congrArg (fun z : Fin n → ZMod 2 => z x) ha)
+    · intro z hz
+      rcases hz with ⟨y, rfl⟩
       have hX := congrArg (fun z => z y) hB
       simp only [LinearMap.comp_apply] at hX
       have hz : actualLeftMap Q ((M - Q.base).mulVec y) = 0 := by
         rw [Matrix.sub_mulVec, map_sub]
         exact sub_eq_zero.mpr hX
-      rw [← ker_actualLeftMap Q]
-      exact hz
+      exact (ker_actualLeftMap Q) ▸ LinearMap.mem_ker.mpr hz
   · rintro ⟨hA, hB⟩
     constructor
     · apply LinearMap.ext
@@ -105,16 +120,16 @@ theorem actualAffineDifference_iff {n d : ℕ}
       have ha := congrArg
         (fun q : Q.domainFixed →ₗ[ZMod 2] (Fin n → ZMod 2) => q a) hA
       simp only [LinearMap.comp_apply, Matrix.toLin'_apply] at ha
-      rw [Matrix.sub_mulVec]
-      exact sub_eq_zero.mp ha
+      have ha' : Matrix.mulVec M (Q.domainFixed.subtype a) -
+          Matrix.mulVec Q.base (Q.domainFixed.subtype a) = 0 := by
+        simpa [Matrix.sub_mulVec] using ha
+      simpa only [LinearMap.comp_apply, Matrix.toLin'_apply] using
+        sub_eq_zero.mp ha'
     · apply LinearMap.ext
       intro y
-      have hy := hB ⟨Matrix.toLin' (M - Q.base) y, ⟨y, rfl⟩⟩
+      have hy := hB ⟨y, rfl⟩
       have hz : actualLeftMap Q ((M - Q.base).mulVec y) = 0 := by
-        have hy' : (M - Q.base).mulVec y ∈ LinearMap.ker (actualLeftMap Q) := by
-          rw [ker_actualLeftMap Q]
-          exact hy
-        exact LinearMap.mem_ker.mp hy'
+        exact LinearMap.mem_ker.mp ((ker_actualLeftMap Q).symm ▸ hy)
       simp only [LinearMap.comp_apply, Matrix.toLin'_apply]
       have hz' := hz
       rw [Matrix.sub_mulVec, map_sub] at hz'
@@ -149,13 +164,21 @@ noncomputable def actualFibreQuotientHomEquiv {n d : ℕ}
         exact sub_eq_zero.mpr h
       · intro z hz
         rcases hz with ⟨x, rfl⟩
-        rw [← ker_actualLeftMap Q]
-        have h := congrArg (fun q : (Fin d → ZMod 2) →ₗ[ZMod 2] (Fin n → ZMod 2) => q x) L.2.2
+        have h := congrArg
+          (fun q : (Fin d → ZMod 2) →ₗ[ZMod 2]
+            (Fin (Module.finrank (ZMod 2)
+              ((Fin n → ZMod 2) ⧸ Q.codomainVariation)) → ZMod 2) => q x)
+          L.2.2
         simp only [LinearMap.comp_apply] at h
         have hz : actualLeftMap Q ((L.1 - Matrix.toLin' Q.base) x) = 0 := by
+          change actualLeftMap Q (L.1 x - (Matrix.toLin' Q.base) x) = 0
           rw [map_sub]
           exact sub_eq_zero.mpr h
-        exact hz
+        have hzvar : (L.1 - Matrix.toLin' Q.base) x ∈ Q.codomainVariation := by
+          have hzker : (L.1 - Matrix.toLin' Q.base) x ∈
+              LinearMap.ker (actualLeftMap Q) := LinearMap.mem_ker.mpr hz
+          exact (le_of_eq (ker_actualLeftMap Q)) hzker
+        exact hzvar
     invFun := fun f => by
       refine ⟨f.1 + Matrix.toLin' Q.base, ?_⟩
       constructor
@@ -170,10 +193,12 @@ noncomputable def actualFibreQuotientHomEquiv {n d : ℕ}
         rw [hz, zero_add]
       · apply LinearMap.ext
         intro x
-        have hx := f.2.2 ⟨f.1 x, ⟨x, rfl⟩⟩
-        rw [← ker_actualLeftMap Q] at hx
-        have hz : actualLeftMap Q (f.1 x) = 0 := LinearMap.mem_ker.mp hx
+        have hx := f.2.2 ⟨x, rfl⟩
+        have hz : actualLeftMap Q (f.1 x) = 0 :=
+          LinearMap.mem_ker.mp ((ker_actualLeftMap Q).symm ▸ hx)
         simp only [LinearMap.comp_apply]
+        change actualLeftMap Q (f.1 x + (Matrix.toLin' Q.base) x) =
+          actualLeftMap Q ((Matrix.toLin' Q.base) x)
         rw [map_add, hz, zero_add]
     left_inv := fun L => by
       apply Subtype.ext
@@ -200,18 +225,31 @@ theorem actualFibreQuotientHomEquiv_energy {n d : ℕ}
   have hs : (∑ M ∈ Q.fibre, Complex.normSq (f M)) =
       ∑ M : {M : BinaryMatrix n d // M ∈ Q.fibre},
         Complex.normSq (f M.1) := by
-    simpa [ActualAffineRestriction.fibre] using
-      (Finset.sum_subtype_eq_sum_filter
-        (s := (Finset.univ : Finset (BinaryMatrix n d)))
-        (p := fun M => M ∈ Q.fibre)
-        (fun M => Complex.normSq (f M))).symm
+    have hfibre :
+        (Finset.univ.filter (fun M : BinaryMatrix n d => M ∈ Q.fibre)) =
+          Q.fibre := by
+      ext M
+      simp [ActualAffineRestriction.fibre]
+    calc
+      (∑ M ∈ Q.fibre, Complex.normSq (f M)) =
+          ∑ M ∈ Finset.univ.filter (fun M : BinaryMatrix n d => M ∈ Q.fibre),
+            Complex.normSq (f M) := by
+              conv_lhs => rw [← hfibre]
+      _ = ∑ M : {M : BinaryMatrix n d // M ∈ Q.fibre},
+            Complex.normSq (f M.1) := by
+              simpa only [Finset.subtype_univ] using
+                (Finset.sum_subtype_eq_sum_filter
+                  (s := (Finset.univ : Finset (BinaryMatrix n d)))
+                  (p := fun M => M ∈ Q.fibre)
+                  (fun M => Complex.normSq (f M))).symm
   rw [fibreEnergy, hs, ← hcard, hc]
   congr 1
   exact (Equiv.sum_comp e.symm
-    (fun g => Complex.normSq (f (e.symm g).1))).symm
+    (fun M => Complex.normSq (f M.1))).symm
 
 /-- Product coordinates for a codimension-one outside event. -/
 noncomputable def productOutsideEquiv {F W : Type*}
+    [AddCommGroup W] [Module (ZMod 2) W]
     (B : Submodule (ZMod 2) W) :
     {p : F × W // p.2 ∉ B} ≃ F × {w : W // w ∉ B} where
   toFun p := (p.1.1, ⟨p.1.2, p.2⟩)
@@ -220,7 +258,10 @@ noncomputable def productOutsideEquiv {F W : Type*}
     apply Subtype.ext
     exact Prod.ext rfl rfl
   right_inv p := by
-    apply Prod.ext rfl
+    apply Prod.ext
+    · rfl
+    · apply Subtype.ext
+      rfl
 
 /-- The outside event has exactly half of the product mass when B has
 codimension one in the binary codomain W. -/
@@ -233,17 +274,26 @@ theorem productOutside_card_bound {F W : Type*} [Fintype F]
   have htopdim : Module.finrank (ZMod 2) (⊤ : Submodule (ZMod 2) W) =
       Module.finrank (ZMod 2) B + 1 := by simpa using hdim
   have hcompTop := binary_submodule_complement_card_eq B ⊤ le_top htopdim
-  let eTop : {w : W // w ∉ B} ≃ {w : (⊤ : Submodule (ZMod 2) W) // (w : W) ∉ B} where
-    toFun w := ⟨⟨w.1, Submodule.mem_top⟩, w.2⟩
-    invFun w := ⟨w.1.1, w.2⟩
-    left_inv w := by apply Subtype.ext; rfl
-    right_inv w := by apply Subtype.ext; apply Subtype.ext; rfl
+  let eTop : {w : W // w ∉ B} ≃
+      {w : (⊤ : Submodule (ZMod 2) W) // (w : W) ∉ B} :=
+    { toFun := fun w => ⟨⟨w.1, Submodule.mem_top⟩, w.2⟩
+      invFun := fun w => ⟨w.1.1, w.2⟩
+      left_inv := by
+        intro w
+        apply Subtype.ext
+        rfl
+      right_inv := by
+        intro w
+        apply Subtype.ext
+        apply Subtype.ext
+        rfl }
   have hcomp : Fintype.card {w : W // w ∉ B} = Fintype.card B := by
     calc
       Fintype.card {w : W // w ∉ B} =
           Fintype.card {w : (⊤ : Submodule (ZMod 2) W) // (w : W) ∉ B} :=
         Fintype.card_congr eTop
-      _ = Fintype.card B := by simpa using hcompTop
+      _ = Fintype.card B := by
+        simpa only [Fintype.card_subtype] using hcompTop
   have hW : Fintype.card W = 2 * Fintype.card B := by
     have hWpow : Fintype.card W = 2 ^ Module.finrank (ZMod 2) W := by
       simpa using (Module.card_eq_pow_finrank (K := ZMod 2) (V := W))
@@ -254,8 +304,11 @@ theorem productOutside_card_bound {F W : Type*} [Fintype F]
   have hprod : Fintype.card {p : F × W // p.2 ∉ B} =
       Fintype.card F * Fintype.card B := by
     rw [Fintype.card_congr (productOutsideEquiv B), Fintype.card_prod, hcomp]
-  rw [Fintype.card_prod, hW, hprod]
-  omega
+  rw [Fintype.card_prod, hprod]
+  calc
+    Fintype.card F * Fintype.card W =
+        2 * (Fintype.card F * Fintype.card B) := by rw [hW]; ring
+    _ ≤ 2 * (Fintype.card F * Fintype.card B) := le_rfl
 
 /-- Conditioning a uniform full-space linear map on its new vector value
 lying outside a codimension-one binary subspace costs at most two. This is
@@ -276,14 +329,18 @@ theorem dualSupVectorOutside_mean_le_two {V W : Type*}
       2 * ((∑ f : spanExtensionSubmodule A w →ₗ[ZMod 2] W, g f) /
         (Fintype.card (spanExtensionSubmodule A w →ₗ[ZMod 2] W) : ℝ)) := by
   classical
-  let e := dualSupVectorCoordinateEquiv A hw
+  let e : (spanExtensionSubmodule A w →ₗ[ZMod 2] W) ≃ₗ[ZMod 2]
+      ((A →ₗ[ZMod 2] W) × W) := dualSupVectorCoordinateEquiv A hw
   let p : ((A →ₗ[ZMod 2] W) × W) → Prop := fun x => x.2 ∉ B
   let G : (A →ₗ[ZMod 2] W) × W → ℝ := fun x => g (e.symm x)
   have hprob := productOutside_card_bound (F := A →ₗ[ZMod 2] W) B hdim
+  have hprob' : Fintype.card ((A →ₗ[ZMod 2] W) × W) ≤
+      2 * Fintype.card {x : (A →ₗ[ZMod 2] W) × W // p x} :=
+    productOutside_card_bound (F := A →ₗ[ZMod 2] W) B hdim
   have hprobFilter :
       Fintype.card ((A →ₗ[ZMod 2] W) × W) ≤
         2 * (Finset.univ.filter p).card := by
-    simpa [p] using hprob
+    simpa only [Fintype.card_subtype] using hprob'
   have hαpos : 0 < Fintype.card ((A →ₗ[ZMod 2] W) × W) :=
     Fintype.card_pos_iff.mpr ⟨(0, 0)⟩
   have hfilterpos : 0 < Fintype.card {x : (A →ₗ[ZMod 2] W) × W // p x} := by
@@ -302,8 +359,8 @@ theorem dualSupVectorOutside_mean_le_two {V W : Type*}
   have hsumOutside := dualSupVectorOutside_sum A w hw B g
   have hcardOutside := Fintype.card_congr (dualSupVectorOutsideEquiv A w hw B)
   have hsumAll : (∑ f : spanExtensionSubmodule A w →ₗ[ZMod 2] W, g f) =
-      ∑ x : (A →ₗ[ZMod 2] W) × W, G x :=
-    (Equiv.sum_comp e.symm G).symm
+      ∑ x : (A →ₗ[ZMod 2] W) × W, G x := by
+    simpa [G] using (Equiv.sum_comp e.toEquiv G)
   have hcardAll : Fintype.card (spanExtensionSubmodule A w →ₗ[ZMod 2] W) =
       Fintype.card ((A →ₗ[ZMod 2] W) × W) := Fintype.card_congr e.toEquiv
   calc
@@ -313,7 +370,8 @@ theorem dualSupVectorOutside_mean_le_two {V W : Type*}
           dualSupVectorColumn A w f ∉ B} : ℝ) =
       (∑ x ∈ (Finset.univ : Finset ((A →ₗ[ZMod 2] W) × W)).filter p, G x) /
         ((Finset.univ.filter p).card : ℝ) := by
-          rw [← hsumFilter, ← hsumOutside, hcardOutside]
+          rw [hsumOutside, ← hsumFilter, hcardOutside,
+            Fintype.card_subtype]
     _ ≤ 2 * ((∑ x : (A →ₗ[ZMod 2] W) × W, G x) /
         (Fintype.card ((A →ₗ[ZMod 2] W) × W) : ℝ)) := hcond
     _ = 2 * ((∑ f : spanExtensionSubmodule A w →ₗ[ZMod 2] W, g f) /
