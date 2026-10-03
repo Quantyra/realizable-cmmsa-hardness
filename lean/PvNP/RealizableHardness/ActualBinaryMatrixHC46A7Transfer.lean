@@ -565,6 +565,146 @@ theorem a7_triple_exponent_fits (D t : Nat) (ht : 0 < t) (hle : t ≤ D) :
     _ = (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
       rw [hadd, hnatR]
 
+/-- Room for one triple to carry an extra `2^{9 D t}`. That factor is large
+enough for an A9 multiplicity `2^{3 D t}` and an A8 graph cost `2^{6 D k}`
+once `k ≤ t`. It is not a count of those graphs. -/
+theorem a7_triple_share_exponent_fits (D t : Nat) (ht : 0 < t) (hle : t ≤ D) :
+    (2 : ℝ) ^ (24 * D * t) *
+        ((2 : ℝ) ^ (100 * (D - t) * (D - t)) * (2 : ℝ) ^ (9 * D * t)) ≤
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
+  let L := 24 * D * t + 100 * (D - t) * (D - t) + 9 * D * t
+  have hL : (L : ℤ) ≤ (100 * D * D : ℤ) + 1 - 31 * (D : ℤ) := by
+    have hsub : ((D - t : ℕ) : ℤ) = (D : ℤ) - t := Nat.cast_sub hle
+    have hLexp : (L : ℤ) =
+        24 * (D : ℤ) * t + 100 * ((D : ℤ) - t) * ((D : ℤ) - t) +
+          9 * (D : ℤ) * t := by
+      simp [L, hsub, Nat.cast_add, Nat.cast_mul]
+    have ht1 : (1 : ℤ) ≤ t := by exact_mod_cast ht
+    have hle' : (t : ℤ) ≤ D := by exact_mod_cast hle
+    nlinarith [hLexp, ht1, hle']
+  have hflat : (2 : ℝ) ^ L =
+      (2 : ℝ) ^ (24 * D * t + 100 * (D - t) * (D - t)) * (2 : ℝ) ^ (9 * D * t) := by
+    rw [← pow_add]
+  have hsplit : (2 : ℝ) ^ (24 * D * t + 100 * (D - t) * (D - t)) =
+      (2 : ℝ) ^ (24 * D * t) * (2 : ℝ) ^ (100 * (D - t) * (D - t)) := by
+    rw [← pow_add]
+  have hpow : (2 : ℝ) ^ L =
+      (2 : ℝ) ^ (24 * D * t) *
+        ((2 : ℝ) ^ (100 * (D - t) * (D - t)) * (2 : ℝ) ^ (9 * D * t)) := by
+    rw [hflat, hsplit]
+    ring
+  rw [← hpow]
+  have hbase : (1 : ℝ) ≤ 2 := by norm_num
+  have hleR : (2 : ℝ) ^ L ≤ (2 : ℝ) ^ ((100 * D * D : ℤ) + 1 - 31 * (D : ℤ)) := by
+    rw [← zpow_natCast (2 : ℝ) L]
+    exact zpow_le_zpow_right₀ hbase hL
+  have hadd : (2 : ℝ) ^ ((100 * D * D : ℤ) + (1 - 31 * (D : ℤ))) =
+      (2 : ℝ) ^ (100 * D * D : ℤ) * (2 : ℝ) ^ (1 - 31 * (D : ℤ)) :=
+    zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0) _ _
+  have hnatR : (2 : ℝ) ^ (100 * D * D : ℤ) = (2 : ℝ) ^ (100 * D * D) :=
+    zpow_natCast (2 : ℝ) (100 * D * D)
+  have hexp : (100 * D * D : ℤ) + 1 - 31 * (D : ℤ) =
+      (100 * D * D : ℤ) + (1 - 31 * (D : ℤ)) := by ring
+  calc
+    (2 : ℝ) ^ L ≤ (2 : ℝ) ^ ((100 * D * D : ℤ) + 1 - 31 * (D : ℤ)) := hleR
+    _ = (2 : ℝ) ^ ((100 * D * D : ℤ) + (1 - 31 * (D : ℤ))) := by rw [hexp]
+    _ = (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
+      rw [hadd, hnatR]
+
+/-- The mixed sum follows from per-triple shares of unweighted `Q`. Each share
+may be zero. Orders above `D` contribute nothing, because their fourth moment
+is zero. This does not build the shares, and it does not remove the hypothesis
+from `a7_positive_of_mixed_bound`. -/
+theorem a7_mixed_sum_of_shares {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (c : Nat → ℝ)
+    (e : (p : dr6ActualNonzeroABPairs (n := n) (d := d)) →
+      T1IndexTriple p.1.1 p.1.2 → ℝ)
+    (hcoeff : ∀ t : Nat, 0 < t → t ≤ D →
+      (2 : ℝ) ^ (24 * D * t) * c t ≤
+        (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D))
+    (hfourth : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+        (t : T1IndexTriple p.1.1 p.1.2),
+        0 < a6Order t → a6Order t ≤ D →
+          a6DerivativeFourth p.1.1 p.1.2 t f ≤ c (a6Order t) * e p t)
+    (hnn : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+        (t : T1IndexTriple p.1.1 p.1.2), 0 ≤ e p t)
+    (hshare :
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if 0 < a6Order t ∧ a6Order t ≤ D then e p t else 0) ≤
+        a7HybridQ f) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if 0 < a6Order t then
+          (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+        else 0) ≤
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) * a7HybridQ f := by
+  classical
+  set allowance :=
+    (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D)
+  have hterm : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+      (t : T1IndexTriple p.1.1 p.1.2),
+      (if 0 < a6Order t then
+        (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+      else 0) ≤
+        allowance * (if 0 < a6Order t ∧ a6Order t ≤ D then e p t else 0) := by
+    intro p t
+    by_cases hspan : 0 < a6Order t ∧ a6Order t ≤ D
+    · rw [if_pos hspan.1, if_pos hspan]
+      have h4 := hfourth p t hspan.1 hspan.2
+      have hco := hcoeff (a6Order t) hspan.1 hspan.2
+      have hpow0 : (0 : ℝ) ≤ (2 : ℝ) ^ (24 * D * a6Order t) :=
+        pow_nonneg (by norm_num) _
+      calc
+        (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f ≤
+            (2 : ℝ) ^ (24 * D * a6Order t) * (c (a6Order t) * e p t) :=
+          mul_le_mul_of_nonneg_left h4 hpow0
+        _ = ((2 : ℝ) ^ (24 * D * a6Order t) * c (a6Order t)) * e p t := by ring
+        _ ≤ allowance * e p t := mul_le_mul_of_nonneg_right hco (hnn p t)
+    · rw [if_neg hspan]
+      by_cases ht0 : 0 < a6Order t
+      · have hgt : D < a6Order t := by
+          have hnot : ¬ a6Order t ≤ D := by
+            intro hle
+            exact hspan ⟨ht0, hle⟩
+          exact not_le.mp hnot
+        rw [if_pos ht0, a7_derivative_fourth_zero_of_high t f hsupport hgt]
+        simp
+      · rw [if_neg ht0]
+        simp
+  have hS :
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if 0 < a6Order t then
+            (2 : ℝ) ^ (24 * D * a6Order t) *
+              a6DerivativeFourth p.1.1 p.1.2 t f
+          else 0) ≤
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            allowance *
+              (if 0 < a6Order t ∧ a6Order t ≤ D then e p t else 0) :=
+    Finset.sum_le_sum (fun p _ => Finset.sum_le_sum (fun t _ => hterm p t))
+  have hpull :
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          allowance * (if 0 < a6Order t ∧ a6Order t ≤ D then e p t else 0)) =
+        allowance *
+          ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+            ∑ t : T1IndexTriple p.1.1 p.1.2,
+              if 0 < a6Order t ∧ a6Order t ≤ D then e p t else 0 := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro p _
+    rw [Finset.mul_sum]
+  have hallow : 0 ≤ allowance :=
+    mul_nonneg (pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) _)
+      (zpow_nonneg (by norm_num : (0 : ℝ) ≤ 2) _)
+  exact hS.trans (by
+    rw [hpull]
+    exact mul_le_mul_of_nonneg_left hshare hallow)
+
 /-- Positive-degree arithmetic closure. This is not manuscript A7: the mixed
 sum is an explicit hypothesis, and discharging it is the remaining induction
 step. -/
@@ -636,6 +776,43 @@ theorem a7_positive_of_mixed_bound {n d D : Nat}
   have hone : 1 * (p * Q) = p * Q := one_mul _
   rw [hprod] at hscale
   exact le_trans hscale (hle.trans (le_of_eq hone))
+
+/-- Positive-degree closure when each triple is charged a share `e` and the
+fourth moment absorbs an ambient-free overlap `2^{9 D t}`. The shares are
+still a hypothesis: their sum is at most unweighted `Q`, and this is not
+manuscript A7. -/
+theorem a7_positive_of_overlapping_shares {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) (hD : 0 < D)
+    (e : (p : dr6ActualNonzeroABPairs (n := n) (d := d)) →
+      T1IndexTriple p.1.1 p.1.2 → ℝ)
+    (hfourth : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+        (t : T1IndexTriple p.1.1 p.1.2),
+        0 < a6Order t → a6Order t ≤ D →
+          a6DerivativeFourth p.1.1 p.1.2 t f ≤
+            (2 : ℝ) ^ (100 * (D - a6Order t) * (D - a6Order t)) *
+              (2 : ℝ) ^ (9 * D * a6Order t) * e p t)
+    (hnn : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+        (t : T1IndexTriple p.1.1 p.1.2), 0 ≤ e p t)
+    (hshare :
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if 0 < a6Order t ∧ a6Order t ≤ D then e p t else 0) ≤
+        a7HybridQ f) :
+    uniformMean (fun M => Complex.normSq (f M) ^ 2) ≤
+      (2 : ℝ) ^ (100 * D * D) * a7HybridQ f := by
+  refine a7_positive_of_mixed_bound f hsupport hD ?_
+  let c : Nat → ℝ := fun t =>
+    (2 : ℝ) ^ (100 * (D - t) * (D - t)) * (2 : ℝ) ^ (9 * D * t)
+  have hfourth' : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+      (t : T1IndexTriple p.1.1 p.1.2),
+      0 < a6Order t → a6Order t ≤ D →
+        a6DerivativeFourth p.1.1 p.1.2 t f ≤ c (a6Order t) * e p t := by
+    intro p t ht0 hle
+    simpa [c, mul_assoc] using hfourth p t ht0 hle
+  exact a7_mixed_sum_of_shares f hsupport c e
+    (fun t ht hle => a7_triple_share_exponent_fits D t ht hle)
+    hfourth' hnn hshare
 
 /-- Fourth moment of one mixed derivative on the output carrier of its
 pullback. The original pair's Hom is not the output domain. -/

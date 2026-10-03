@@ -17,6 +17,9 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_positive_of_mixed_bound
 #check a7_derivative_fourth_zero_of_high
 #check a7_triple_exponent_fits
+#check a7_triple_share_exponent_fits
+#check a7_mixed_sum_of_shares
+#check a7_positive_of_overlapping_shares
 #check a7MixedOutputFourth
 #check a7_mixed_fourth_output
 #check a7_mixed_output_coordinate_support
@@ -33,5 +36,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_positive_of_mixed_bound
 #print axioms a7_derivative_fourth_zero_of_high
 #print axioms a7_triple_exponent_fits
+#print axioms a7_triple_share_exponent_fits
+#print axioms a7_mixed_sum_of_shares
+#print axioms a7_positive_of_overlapping_shares
 #print axioms a7_mixed_fourth_output
 #print axioms a7_mixed_output_coordinate_support
