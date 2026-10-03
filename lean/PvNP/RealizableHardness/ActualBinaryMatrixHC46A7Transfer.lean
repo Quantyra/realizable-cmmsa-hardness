@@ -5347,6 +5347,82 @@ theorem a7_nested_mass_sq_le_q {n d : Nat}
   intro p _
   exact a7_selected_mass_sq_le_pair_share p.1.1 p.1.2 f
 
+/-- The zero-order output share, averaged over the original base, is at most
+`2^{9Dt}` times the nested pair sum above the triple's carrier. The carrier
+pair is one term of that sum. Positive-order output shares are not included,
+the same-rank datum parent is not used, and the share hypothesis stays. -/
+theorem a7_output_zero_share_avg_le_nested {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t ≤ D) :
+    (∑ T : V d →ₗ[F] W n,
+        a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7OutputBinary t T f)) /
+      (Fintype.card (V d →ₗ[F] W n) : ℝ) ≤
+      (2 : ℝ) ^ (9 * D * a6Order t) *
+        (∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+            t1AmbientC t.C ≤ q.1 ∧ q.2 ≤ t1AmbientH t.K},
+          a7PairShare p.1.1 p.1.2 f) := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let N : ℝ := Fintype.card (V d →ₗ[F] W n)
+  have hNpos : 0 < N := by
+    simp only [N]
+    exact_mod_cast (Fintype.card_pos_iff.mpr ⟨(0 : V d →ₗ[F] W n)⟩)
+  have hN : N ≠ 0 := ne_of_gt hNpos
+  have hpoint : ∀ T : V d →ₗ[F] W n,
+      a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7OutputBinary t T f) ≤
+        (2 : ℝ) ^ (9 * D * a6Order t) *
+          typedW6QComponent C H T f :=
+    fun T => a7_output_zero_share_le_original_component t T f hsupport horder
+  have hsum := Finset.sum_le_sum (fun T (_ : T ∈ Finset.univ) => hpoint T)
+  have hfactor :
+      (∑ T : V d →ₗ[F] W n,
+          (2 : ℝ) ^ (9 * D * a6Order t) * typedW6QComponent C H T f) =
+        (2 : ℝ) ^ (9 * D * a6Order t) *
+          ∑ T : V d →ₗ[F] W n, typedW6QComponent C H T f :=
+    (Finset.mul_sum Finset.univ (fun T => typedW6QComponent C H T f) _).symm
+  have hcomp : (∑ T : V d →ₗ[F] W n, typedW6QComponent C H T f) =
+      N * a7PairShare C H f := by
+    unfold a7PairShare typedUniformMean
+    exact (mul_div_cancel₀ (∑ T : V d →ₗ[F] W n, typedW6QComponent C H T f) hN).symm
+  have havg :
+      (∑ T : V d →ₗ[F] W n,
+          a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+            (a7OutputBinary t T f)) / N ≤
+        (2 : ℝ) ^ (9 * D * a6Order t) * a7PairShare C H f := by
+    refine (div_le_iff₀ hNpos).mpr ?_
+    calc
+      (∑ T : V d →ₗ[F] W n,
+          a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+            (a7OutputBinary t T f)) ≤
+          ∑ T : V d →ₗ[F] W n,
+            (2 : ℝ) ^ (9 * D * a6Order t) * typedW6QComponent C H T f := hsum
+      _ = (2 : ℝ) ^ (9 * D * a6Order t) *
+            ∑ T : V d →ₗ[F] W n, typedW6QComponent C H T f := hfactor
+      _ = (2 : ℝ) ^ (9 * D * a6Order t) * (N * a7PairShare C H f) := by
+            rw [hcomp]
+      _ = (2 : ℝ) ^ (9 * D * a6Order t) * a7PairShare C H f * N := by ring
+  let q : {p : Submodule F (V d) × Submodule F (W n) //
+      C ≤ p.1 ∧ p.2 ≤ H} := ⟨(C, H), le_rfl, le_rfl⟩
+  have hone : a7PairShare C H f ≤
+      ∑ p : {r : Submodule F (V d) × Submodule F (W n) //
+          C ≤ r.1 ∧ r.2 ≤ H},
+        a7PairShare p.1.1 p.1.2 f :=
+    Finset.single_le_sum
+      (fun p _ => a7_pair_share_nonneg p.1.1 p.1.2 f) (Finset.mem_univ q)
+  have hnest : a7PairShare C H f ≤
+      ∑ p : {r : Submodule F (V d) × Submodule F (W n) //
+          t1AmbientC t.C ≤ r.1 ∧ r.2 ≤ t1AmbientH t.K},
+        a7PairShare p.1.1 p.1.2 f := by
+    simpa [C, H] using hone
+  have hpow : 0 ≤ (2 : ℝ) ^ (9 * D * a6Order t) := pow_nonneg (by norm_num) _
+  have hscale := mul_le_mul_of_nonneg_left hnest hpow
+  simpa [N, C, H] using le_trans havg hscale
+
 /-- One pair in that window is one nonnegative term of the nested sum, hence
 at most unweighted `Q`, for every complex input. -/
 theorem a7_one_nested_share_le_q {n d : Nat}
