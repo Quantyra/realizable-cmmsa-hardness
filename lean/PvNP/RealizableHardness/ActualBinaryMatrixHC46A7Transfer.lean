@@ -508,6 +508,59 @@ theorem a7_pair_shares_exhaust {n d : Nat} (f : BinaryMatrix n d → Complex) :
     Finset.sum_congr rfl (fun (p : Submodule F (V d) × Submodule F (W n)) _ => hg p)
   exact hsum.trans hQ
 
+/-- Every complex `Q` splits into the zero-order share and the positive-order
+shares. The zero-order output share averages into the nested pair sum. The
+positive-order sum is not yet bounded by that nested sum, so the share
+hypothesis stays. -/
+theorem a7_positive_share_sum {n d : Nat} (f : BinaryMatrix n d → Complex) :
+    a7HybridQ f =
+      a7PairShare (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) f +
+        ∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+            q.1 ≠ (⊥ : Submodule F (V d)) ∨
+              q.2 ≠ (⊤ : Submodule F (W n))},
+          a7PairShare p.1.1 p.1.2 f := by
+  classical
+  rw [← a7_pair_shares_exhaust f]
+  let bot : Submodule F (V d) × Submodule F (W n) := ⟨⊥, ⊤⟩
+  have hbot : bot ∈ (Finset.univ : Finset (Submodule F (V d) × Submodule F (W n))) :=
+    Finset.mem_univ _
+  have hadd := Finset.add_sum_erase (Finset.univ :
+      Finset (Submodule F (V d) × Submodule F (W n)))
+    (fun p => a7PairShare p.1 p.2 f) hbot
+  have hmem : ∀ x : Submodule F (V d) × Submodule F (W n),
+      x ∈ (Finset.univ.erase bot) ↔
+        x.1 ≠ (⊥ : Submodule F (V d)) ∨ x.2 ≠ (⊤ : Submodule F (W n)) := by
+    intro x
+    simp [Finset.mem_erase, Finset.mem_univ]
+    constructor
+    · intro hne
+      by_cases hA : x.1 = ⊥
+      · right
+        intro hB
+        apply hne
+        cases x with
+        | mk A B =>
+          apply Prod.ext
+          · exact hA
+          · exact hB
+      · left
+        exact hA
+    · intro hpos heq
+      cases hpos with
+      | inl hA => exact hA (congrArg Prod.fst heq)
+      | inr hB => exact hB (congrArg Prod.snd heq)
+  have hrest :
+      (∑ x ∈ Finset.univ.erase bot, a7PairShare x.1 x.2 f) =
+        ∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+            q.1 ≠ (⊥ : Submodule F (V d)) ∨
+              q.2 ≠ (⊤ : Submodule F (W n))},
+          a7PairShare p.1.1 p.1.2 f :=
+    (Finset.sum_subtype (s := Finset.univ.erase bot)
+      (p := fun x : Submodule F (V d) × Submodule F (W n) =>
+        x.1 ≠ (⊥ : Submodule F (V d)) ∨ x.2 ≠ (⊤ : Submodule F (W n)))
+      hmem (fun x => a7PairShare x.1 x.2 f))
+  rw [← hadd, hrest]
+
 theorem a7_q_ge_l2 {n d : Nat} (f : BinaryMatrix n d → Complex) :
     (uniformMean (fun M => Complex.normSq (f M))) ^ 2 ≤ a7HybridQ f := by
   classical
@@ -6136,6 +6189,50 @@ theorem a7_preceding_character_q_eq_nested {n d : Nat}
   have hnest := a7_character_nested_share_eq C H Z hsel
   rw [hfun, hq, hcard]
   exact hnest.symm
+
+/-- For a preceding selected character, the positive-order output shares are
+the nested original pair sum with the carrier pair removed. A general complex
+input remains open, and this does not delete the share hypothesis. -/
+theorem a7_preceding_positive_shares_eq_nested_rest {n d : Nat}
+    (X Z : BinaryMatrix n d) (hprec : w6Precedes X Z)
+    (hsel : Selected (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin') Z.transpose.toLin') :
+    a7HybridQ (fun Xout =>
+        actualW6Derivative X (0 : V d →ₗ[F] W n)
+          (fun K => (character Z K : ℂ))
+          ((carrierMatrixEquiv
+              (LinearMap.range X.transpose.toLin')
+              (LinearMap.ker X.transpose.toLin')).symm Xout)) -
+      a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+        (fun Xout =>
+          actualW6Derivative X (0 : V d →ₗ[F] W n)
+            (fun K => (character Z K : ℂ))
+            ((carrierMatrixEquiv
+                (LinearMap.range X.transpose.toLin')
+                (LinearMap.ker X.transpose.toLin')).symm Xout)) =
+      (∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+          LinearMap.range X.transpose.toLin' ≤ q.1 ∧
+            q.2 ≤ LinearMap.ker X.transpose.toLin'},
+        a7PairShare p.1.1 p.1.2 (fun M => (character Z M : ℂ))) -
+        a7PairShare (LinearMap.range X.transpose.toLin')
+          (LinearMap.ker X.transpose.toLin')
+          (fun M => (character Z M : ℂ)) := by
+  let C := LinearMap.range X.transpose.toLin'
+  let H := LinearMap.ker X.transpose.toLin'
+  have hq := a7_preceding_character_q_eq_nested X Z hprec hsel
+  have hzero :
+      a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+        (fun Xout =>
+          actualW6Derivative X (0 : V d →ₗ[F] W n)
+            (fun K => (character Z K : ℂ))
+            ((carrierMatrixEquiv
+                (LinearMap.range X.transpose.toLin')
+                (LinearMap.ker X.transpose.toLin')).symm Xout)) = 1 := by
+    rw [a7_preceding_derivative_coordinate X Z hprec]
+    rw [a7_character_pair_share, if_pos (a7_bot_top_selected _)]
+  have hcarrier : a7PairShare C H (fun M => (character Z M : ℂ)) = 1 := by
+    rw [a7_character_pair_share, if_pos hsel]
+  rw [hq, hzero, hcarrier]
 
 /-- One final pair above a preceding parent is a single nonnegative term of
 that parent's nested sum, hence at most the parent's output `Q`. -/
