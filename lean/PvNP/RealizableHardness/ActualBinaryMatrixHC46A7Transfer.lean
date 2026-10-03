@@ -1317,6 +1317,105 @@ theorem a7_saturated_output_le_pool {n d D : Nat}
   rw [← hX, hsum]
   exact hle
 
+/-- On one ordinary pair, the ambient carrier and the pullback determine the
+triple. Two saturated fourth moments on that pair cannot charge one parent
+twice. -/
+theorem a7_same_pair_parent_unique {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t s : T1IndexTriple A B)
+    (hC : t1AmbientC t.C = t1AmbientC s.C)
+    (hH : t1AmbientH t.K = t1AmbientH s.K)
+    (hX : ∀ h : t1AmbientH t.K,
+      t1PullbackMap t h =
+        hC.symm ▸ t1PullbackMap s ⟨h.1, by
+          rw [← hH]
+          exact h.2⟩) :
+    t = s := by
+  cases t with
+  | mk tC tK tXbar =>
+    cases s with
+    | mk sC sK sXbar =>
+      have hCint : tC = sC := by
+        ext a
+        constructor
+        · intro ha
+          have hmem : (a : V d) ∈ t1AmbientC sC := by
+            rw [← hC]
+            exact ⟨a, ha, rfl⟩
+          rcases hmem with ⟨a', ha', hval⟩
+          have haa : a = a' := Subtype.ext hval.symm
+          simpa [haa] using ha'
+        · intro ha
+          have hmem : (a : V d) ∈ t1AmbientC tC := by
+            rw [hC]
+            exact ⟨a, ha, rfl⟩
+          rcases hmem with ⟨a', ha', hval⟩
+          have haa : a = a' := Subtype.ext hval.symm
+          simpa [haa] using ha'
+      subst sC
+      have hKint : tK = sK := by
+        ext x
+        have ht := t1AmbientH_quotientRange B tK
+        have hs := t1AmbientH_quotientRange B sK
+        constructor
+        · intro hx
+          rw [← hs]
+          have hx' : x ∈ LinearMap.range
+              ((Submodule.mkQ B).comp (t1AmbientH tK).subtype) := by
+            rw [ht]
+            exact hx
+          rcases hx' with ⟨w, hw⟩
+          refine ⟨⟨w.1, ?_⟩, ?_⟩
+          · rw [← hH]
+            exact w.2
+          · simpa using hw
+        · intro hx
+          rw [← ht]
+          have hx' : x ∈ LinearMap.range
+              ((Submodule.mkQ B).comp (t1AmbientH sK).subtype) := by
+            rw [hs]
+            exact hx
+          rcases hx' with ⟨w, hw⟩
+          refine ⟨⟨w.1, ?_⟩, ?_⟩
+          · rw [hH]
+            exact w.2
+          · simpa using hw
+      subst sK
+      have hmap : t1TripleToMap ⟨tC, tK, tXbar⟩ =
+          t1TripleToMap ⟨tC, tK, sXbar⟩ := by
+        apply LinearMap.ext
+        intro a
+        let y : tK := tXbar.symm (tC.mkQ a)
+        let q := (t1AmbientHQuotientEquiv B tK).symm y
+        obtain ⟨h, hq⟩ := Submodule.mkQ_surjective
+          (B.comap (t1AmbientH tK).subtype) q
+        have hpullT : t1PullbackMap ⟨tC, tK, tXbar⟩ h =
+            Submodule.mkQ (t1AmbientC tC) a.val := by
+          have hy : t1AmbientHQuotientEquiv B tK
+              (Submodule.mkQ (B.comap (t1AmbientH tK).subtype) h) = y := by
+            rw [hq]
+            exact (t1AmbientHQuotientEquiv B tK).apply_symm_apply y
+          change t1AQuotientToAmbient tC
+              (tXbar (t1AmbientHQuotientEquiv B tK
+                (Submodule.mkQ _ h))) =
+            Submodule.mkQ (t1AmbientC tC) a.val
+          rw [hy]
+          rw [tXbar.apply_symm_apply]
+          exact t1AQuotientToAmbient_apply_mk tC a
+        have hmapT :=
+          (t1TripleToMap_pullback_iff ⟨tC, tK, tXbar⟩ a h).2 hpullT
+        have hpullS : t1PullbackMap ⟨tC, tK, sXbar⟩ h =
+            Submodule.mkQ (t1AmbientC tC) a.val := by
+          have htrans := hX h
+          simpa [hC, hpullT] using htrans.symm
+        have hmapS :=
+          (t1TripleToMap_pullback_iff ⟨tC, tK, sXbar⟩ a h).2 hpullS
+        calc
+          t1TripleToMap ⟨tC, tK, tXbar⟩ a = Submodule.mkQ B h.val := hmapT
+          _ = t1TripleToMap ⟨tC, tK, sXbar⟩ a := hmapS.symm
+      have htriple := t1TripleToMap_injective hmap
+      exact htriple
+
 /-- Every parent derivative on one carrier has squared energy adding to at
 most `2^{6 D^2 + 1}` times that carrier's `Q` component. High-rank parents
 vanish. This is the W6 pool on one pair; it does not inject triples into
