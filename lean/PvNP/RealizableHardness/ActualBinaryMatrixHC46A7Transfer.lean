@@ -5484,6 +5484,283 @@ theorem a7OrderOne_positive_output_eq_other_shares :
   rw [hsum, hzero, hsplit, hp0]
   ring
 
+/-- A zero parent matrix has full kernel. -/
+theorem a7_zero_matrix_parent_ker {n0 d0 : Nat} :
+    LinearMap.ker ((0 : BinaryMatrix n0 d0).transpose.toLin') = ⊤ := by
+  refine le_antisymm le_top ?_
+  intro w _
+  rw [LinearMap.mem_ker]
+  simp [Matrix.transpose_zero]
+
+/-- A zero parent matrix has zero range. -/
+theorem a7_zero_matrix_parent_range {n0 d0 : Nat} :
+    LinearMap.range ((0 : BinaryMatrix n0 d0).transpose.toLin') = ⊥ := by
+  rw [LinearMap.range_eq_bot]
+  ext w
+  simp [Matrix.transpose_zero]
+
+abbrev a7ZeroCout (n0 d0 : Nat) :=
+  LinearMap.range ((0 : BinaryMatrix n0 d0).transpose.toLin')
+
+abbrev a7ZeroHout (n0 d0 : Nat) :=
+  LinearMap.ker ((0 : BinaryMatrix n0 d0).transpose.toLin')
+
+theorem a7ZeroCout_bot (n0 d0 : Nat) : a7ZeroCout n0 d0 = ⊥ :=
+  a7_zero_matrix_parent_range
+
+theorem a7ZeroHout_top (n0 d0 : Nat) : a7ZeroHout n0 d0 = ⊤ :=
+  a7_zero_matrix_parent_ker
+
+def a7ZeroIsoL (n0 d0 : Nat) :=
+  (a7ZeroHout n0 d0).subtype.comp
+    (codomainBasis (a7ZeroHout n0 d0)).equivFun.symm.toLinearMap
+
+def a7ZeroIsoR (n0 d0 : Nat) :=
+  (domainBasis (a7ZeroCout n0 d0)).equivFun.toLinearMap.comp
+    (a7ZeroCout n0 d0).mkQ
+
+theorem a7ZeroIsoL_bijective (n0 d0 : Nat) : Function.Bijective (a7ZeroIsoL n0 d0) := by
+  have hsubSurj : Function.Surjective (a7ZeroHout n0 d0).subtype := by
+    intro w
+    have hw : w ∈ a7ZeroHout n0 d0 := by
+      rw [a7ZeroHout_top]
+      exact Submodule.mem_top
+    exact ⟨⟨w, hw⟩, rfl⟩
+  have hcomp : a7ZeroIsoL n0 d0 =
+      (a7ZeroHout n0 d0).subtype.comp
+        (codomainBasis (a7ZeroHout n0 d0)).equivFun.symm.toLinearMap := rfl
+  rw [hcomp, LinearMap.coe_comp]
+  exact Function.Bijective.comp
+    ⟨Submodule.injective_subtype (a7ZeroHout n0 d0), hsubSurj⟩
+    (codomainBasis (a7ZeroHout n0 d0)).equivFun.symm.bijective
+
+theorem a7ZeroIsoR_bijective (n0 d0 : Nat) : Function.Bijective (a7ZeroIsoR n0 d0) := by
+  have hinjQ : Function.Injective (a7ZeroCout n0 d0).mkQ := by
+    rw [← LinearMap.ker_eq_bot, Submodule.ker_mkQ, a7ZeroCout_bot]
+  have hsurjQ : Function.Surjective (a7ZeroCout n0 d0).mkQ := by
+    intro z
+    obtain ⟨v, hv⟩ := Quotient.exists_rep z
+    refine ⟨v, ?_⟩
+    rw [Submodule.mkQ_apply]
+    exact hv
+  have hcomp : a7ZeroIsoR n0 d0 =
+      (domainBasis (a7ZeroCout n0 d0)).equivFun.toLinearMap.comp
+        (a7ZeroCout n0 d0).mkQ := rfl
+  rw [hcomp, LinearMap.coe_comp]
+  exact Function.Bijective.comp
+    (domainBasis (a7ZeroCout n0 d0)).equivFun.bijective
+    ⟨hinjQ, hsurjQ⟩
+
+/-- The zero-parent output matrix is the carrier character conjugated by the
+output bases. -/
+def a7ZeroConjMatrix {n0 d0 : Nat} (Z : BinaryMatrix n0 d0) :=
+  (LinearMap.toMatrix' (a7ZeroIsoL n0 d0)).transpose * Z *
+    (LinearMap.toMatrix' (a7ZeroIsoR n0 d0)).transpose
+
+/-- Reading a character through the zero parent returns the conjugated character. -/
+theorem a7_zero_derivative_character {n0 d0 : Nat} (Z : BinaryMatrix n0 d0) :
+    (fun X =>
+      actualW6Derivative (0 : BinaryMatrix n0 d0) 0
+        (fun K => (character Z K : ℂ))
+        ((carrierMatrixEquiv (a7ZeroCout n0 d0) (a7ZeroHout n0 d0)).symm X)) =
+      fun X => (character (a7ZeroConjMatrix Z) X : ℂ) := by
+  funext X
+  let Cout := a7ZeroCout n0 d0
+  let Hout := a7ZeroHout n0 d0
+  have hderiv := a7_zero_derivative_apply (fun K => (character Z K : ℂ))
+    ((carrierMatrixEquiv Cout Hout).symm X)
+  rw [hderiv]
+  let M := (carrierMatrixEquiv Cout Hout).symm X
+  have hlin := carrierMatrix_toLin Cout Hout M
+  have hXM : carrierMatrixEquiv Cout Hout M = X :=
+    (carrierMatrixEquiv Cout Hout).apply_symm_apply X
+  rw [hXM] at hlin
+  have hM : M =
+      (codomainBasis Hout).equivFun.symm.toLinearMap.comp
+        (X.toLin'.comp (domainBasis Cout).equivFun.toLinearMap) := by
+    refine LinearMap.ext ?_
+    intro v
+    have hpt := congrFun (congrArg DFunLike.coe hlin)
+      ((domainBasis Cout).equivFun v)
+    simp only [LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+      LinearEquiv.symm_apply_apply] at hpt
+    exact ((LinearEquiv.symm_apply_eq ((codomainBasis Hout).equivFun)).mpr hpt).symm
+  have hmap : Hout.subtype.comp (M.comp Cout.mkQ) =
+      (a7ZeroIsoL n0 d0).comp (X.toLin'.comp (a7ZeroIsoR n0 d0)) := by
+    rw [hM]
+    rfl
+  have hmat : LinearMap.toMatrix' (Hout.subtype.comp
+      (((carrierMatrixEquiv Cout Hout).symm X).comp Cout.mkQ)) =
+      LinearMap.toMatrix' (a7ZeroIsoL n0 d0) * X *
+        LinearMap.toMatrix' (a7ZeroIsoR n0 d0) := by
+    have hMeq : (carrierMatrixEquiv Cout Hout).symm X = M := rfl
+    rw [hMeq, hmap, LinearMap.toMatrix'_comp, LinearMap.toMatrix'_comp,
+      LinearMap.toMatrix'_toLin', ← Matrix.mul_assoc]
+  rw [hmat]
+  unfold a7ZeroConjMatrix
+  exact congrFun (a7_character_conj_rect (LinearMap.toMatrix' (a7ZeroIsoL n0 d0))
+    (LinearMap.toMatrix' (a7ZeroIsoR n0 d0)) Z) X
+
+theorem a7_zero_conj_toLin {n0 d0 : Nat} (Z : BinaryMatrix n0 d0) :
+    (a7ZeroConjMatrix Z).transpose.toLin' =
+      (LinearEquiv.ofBijective (a7ZeroIsoR n0 d0) (a7ZeroIsoR_bijective n0 d0)).toLinearMap.comp
+        (Z.transpose.toLin'.comp
+          (LinearEquiv.ofBijective (a7ZeroIsoL n0 d0) (a7ZeroIsoL_bijective n0 d0)).toLinearMap) := by
+  let eL := LinearEquiv.ofBijective (a7ZeroIsoL n0 d0) (a7ZeroIsoL_bijective n0 d0)
+  let eR := LinearEquiv.ofBijective (a7ZeroIsoR n0 d0) (a7ZeroIsoR_bijective n0 d0)
+  have hEL : eL.toLinearMap = a7ZeroIsoL n0 d0 := by
+    ext x
+    simp [eL, LinearEquiv.ofBijective_apply]
+  have hER : eR.toLinearMap = a7ZeroIsoR n0 d0 := by
+    ext x
+    simp [eR, LinearEquiv.ofBijective_apply]
+  have hYt : (a7ZeroConjMatrix Z).transpose =
+      LinearMap.toMatrix' (a7ZeroIsoR n0 d0) * Z.transpose *
+        LinearMap.toMatrix' (a7ZeroIsoL n0 d0) := by
+    unfold a7ZeroConjMatrix
+    simp only [Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.mul_assoc]
+  rw [hEL, hER, hYt, Matrix.toLin'_mul, Matrix.toLin'_mul]
+  rw [Matrix.toLin'_toMatrix', Matrix.toLin'_toMatrix']
+  rw [LinearMap.comp_assoc]
+
+/-- A zero pullback has the zero coordinate parent. -/
+theorem a7_pullback_zero_parent {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (hpull : t1PullbackMap t = 0) :
+    a7MixedCoordinateParent t = 0 := by
+  unfold a7MixedCoordinateParent
+  rw [hpull]
+  exact map_zero _
+
+/-- At base zero, a selected character is the induced carrier character. -/
+theorem a7_rank_zero_mixed_character {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (Y : BinaryMatrix n d)
+    (hsel : Selected (t1AmbientC t.C) (t1AmbientH t.K) Y.transpose.toLin') :
+    a7MixedCoordinate t (0 : V d →ₗ[F] W n) (fun M => (character Y M : ℂ)) =
+      fun K => (character (carrierFrequencyEquiv (t1AmbientC t.C) (t1AmbientH t.K)
+        (induced (t1AmbientC t.C) (t1AmbientH t.K) Y.transpose.toLin')) K : ℂ) := by
+  funext K
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  unfold a7MixedCoordinate
+  rw [filteredCarrierFunction_character, if_pos hsel]
+  have hphase : traceCharacter Y.transpose.toLin' (0 : V d →ₗ[F] W n) = 1 := by
+    unfold traceCharacter tracePair
+    simp
+  rw [hphase, one_mul]
+  change (traceCharacter (induced C H Y.transpose.toLin')
+      ((carrierMatrixEquiv C H).symm K) : ℂ) =
+    (character (carrierFrequencyEquiv C H
+      (induced C H Y.transpose.toLin')) K : ℂ)
+  rw [carrierFrequency_character]
+  exact congrArg
+    (fun M => (character (carrierFrequencyEquiv C H
+      (induced C H Y.transpose.toLin')) M : ℂ))
+    ((carrierMatrixEquiv C H).apply_symm_apply K)
+
+/-- Selected-pair count is unchanged by the zero-parent conjugation. -/
+theorem a7_zero_conj_selected_card {n0 d0 : Nat} (Z : BinaryMatrix n0 d0) :
+    Fintype.card {p : Submodule F (V _) × Submodule F (W _) //
+        Selected p.1 p.2 (a7ZeroConjMatrix Z).transpose.toLin'} =
+      Fintype.card {p : Submodule F (V d0) × Submodule F (W n0) //
+        Selected p.1 p.2 Z.transpose.toLin'} := by
+  classical
+  let eL := LinearEquiv.ofBijective (a7ZeroIsoL n0 d0) (a7ZeroIsoL_bijective n0 d0)
+  let eR := LinearEquiv.ofBijective (a7ZeroIsoR n0 d0) (a7ZeroIsoR_bijective n0 d0)
+  have hto := a7_zero_conj_toLin Z
+  have hpre : eR.toLinearMap.comp
+      (Z.transpose.toLin'.comp eL.symm.symm.toLinearMap) =
+      eR.toLinearMap.comp (Z.transpose.toLin'.comp eL.toLinearMap) := by
+    rw [LinearEquiv.symm_symm]
+  exact
+    ((Fintype.card_congr
+      (a7SelectedTransport eL.symm eR Z.transpose.toLin')).trans
+      ((a7_selected_card_eq hpre).trans (a7_selected_card_eq hto.symm))).symm
+
+/-- The coordinate reading of an induced map has the same selected-pair count. -/
+theorem a7_induced_coordinate_selected_card {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (Y : H →ₗ[F] (V d ⧸ C)) :
+    Fintype.card {p : Submodule F (V _) × Submodule F (W _) //
+        Selected p.1 p.2
+          (carrierFrequencyEquiv C H Y).transpose.toLin'} =
+      Fintype.card {p : Submodule F (V d ⧸ C) × Submodule F H //
+        Selected p.1 p.2 Y} := by
+  classical
+  let eDom := (codomainBasis H).equivFun
+  let eCod := (domainBasis C).equivFun
+  have hcoord := carrierFrequency_toLin C H Y
+  have hcoord' : eCod.toLinearMap.comp (Y.comp eDom.symm.toLinearMap) =
+      (carrierFrequencyEquiv C H Y).transpose.toLin' := hcoord.symm
+  exact ((Fintype.card_congr (a7SelectedTransport eDom eCod Y)).trans
+    (a7_selected_card_eq hcoord')).symm
+
+/-- The zero-parent reading does not change the unweighted `Q` of a character. -/
+theorem a7_zero_derivative_q {n0 d0 : Nat} (Z : BinaryMatrix n0 d0) :
+    a7HybridQ (fun X =>
+        actualW6Derivative (0 : BinaryMatrix n0 d0) 0
+          (fun K => (character Z K : ℂ))
+          ((carrierMatrixEquiv (a7ZeroCout n0 d0) (a7ZeroHout n0 d0)).symm X)) =
+      a7HybridQ (fun K => (character Z K : ℂ)) := by
+  have hfun := a7_zero_derivative_character Z
+  rw [hfun]
+  have hleft := a7_character_hybrid_q (a7ZeroConjMatrix Z)
+  have hright := a7_character_hybrid_q Z
+  rw [hleft, a7_zero_conj_selected_card Z, hright]
+
+/-- Every rank-zero output of a selected character has unweighted `Q` equal to
+the sum of the original character's pair shares over the pairs above that
+carrier. The pullback rank is `0`, so the manuscript (A8) graph cost is `1`
+and each selected output pair lands in one of those original pairs. Positive
+pullback rank and a general complex input remain open, so this does not delete
+the share hypothesis. -/
+theorem a7_rank_zero_output_q_eq_nested {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (Y : BinaryMatrix n d)
+    (hpull : t1PullbackMap t = 0)
+    (hsel : Selected (t1AmbientC t.C) (t1AmbientH t.K) Y.transpose.toLin') :
+    a7HybridQ (a7OutputBinary t (0 : V d →ₗ[F] W n)
+        (fun M => (character Y M : ℂ))) =
+      ∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+          t1AmbientC t.C ≤ q.1 ∧ q.2 ≤ t1AmbientH t.K},
+        a7PairShare p.1.1 p.1.2 (fun M => (character Y M : ℂ)) := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let phi := induced C H Y.transpose.toLin'
+  let Z := carrierFrequencyEquiv C H phi
+  have hparent := a7_pullback_zero_parent t hpull
+  have hmixed := a7_rank_zero_mixed_character t Y hsel
+  let charY := fun M => (character Y M : ℂ)
+  let coord := a7MixedCoordinate t (0 : V d →ₗ[F] W n) charY
+  let evalQ {a b : Nat} (P : BinaryMatrix a b) (g : BinaryMatrix a b → ℂ) : ℝ :=
+    a7HybridQ
+      (n := Module.finrank F (LinearMap.ker P.transpose.toLin'))
+      (d := Module.finrank F (V b ⧸ LinearMap.range P.transpose.toLin'))
+      (fun X =>
+        actualW6Derivative (n := a) (d := b) P (0 : V b →ₗ[F] W a) g
+          ((carrierMatrixEquiv (n := a) (d := b)
+            (LinearMap.range P.transpose.toLin')
+            (LinearMap.ker P.transpose.toLin')).symm X))
+  have hdef : a7HybridQ (a7OutputBinary t (0 : V d →ₗ[F] W n) charY) =
+      evalQ (a7MixedCoordinateParent t) coord := by
+    unfold a7OutputBinary evalQ
+    rfl
+  have hP : evalQ (a7MixedCoordinateParent t) coord = evalQ 0 coord :=
+    congrArg (fun P => evalQ P coord) hparent
+  have hg : evalQ 0 coord = evalQ 0 (fun K => (character Z K : ℂ)) :=
+    congrArg (evalQ 0) hmixed
+  have hder : evalQ 0 (fun K => (character Z K : ℂ)) =
+      a7HybridQ (fun K => (character Z K : ℂ)) :=
+    a7_zero_derivative_q Z
+  have hlink : a7HybridQ (a7OutputBinary t (0 : V d →ₗ[F] W n) charY) =
+      a7HybridQ (fun K => (character Z K : ℂ)) :=
+    hdef.trans (hP.trans (hg.trans hder))
+  rw [hlink, a7_character_hybrid_q Z,
+    a7_induced_coordinate_selected_card C H phi]
+  exact (a7_character_nested_share_eq C H Y hsel).symm
+
 /-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
 noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
     [AddCommGroup M] [Module F M] [Module.Finite F M]
