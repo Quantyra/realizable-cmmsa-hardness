@@ -25,8 +25,11 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
 open PvNP.RealizableHardness.BinaryMatrixA1Complex
 open PvNP.RealizableHardness.BinaryMatrixA1Phase
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
 open PvNP.RealizableHardness.BinaryMatrixFourier
 open PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
 
 private abbrev F := ZMod 2
 private abbrev V (d : Nat) := Fin d -> F
@@ -1269,6 +1272,168 @@ theorem t2_left_derivative_expansion {n d : Nat}
               · rw [if_neg hprec, zero_mul]
             · rw [if_neg hsel]
   simpa [X, A1, B1, A12, B12] using hswap
+
+/-- A frequency rejected by the left selector is rejected by every right
+complement. -/
+theorem t2_rejected_right {n d : Nat}
+    (X Y : W n →ₗ[F] V d)
+    (A2 : Submodule F (V d)) (B2 : Submodule F (W n))
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (h : ¬ t2LeftSelected X Y A2 B2) :
+    ¬ t2RightSelected X Y A2 B2 C H := by
+  intro hr
+  exact h (t2_right_to_left X Y A2 B2 C H hr).1
+
+/-- The left-selector Fourier sum is the sum over right complements. A
+rejected frequency contributes zero on every complement, and an accepted
+frequency contributes on its canonical complement alone. -/
+theorem t2_right_fourier_sum {n d : Nat}
+    (X : W n →ₗ[F] V d)
+    (A2 : Submodule F (V d)) (B2 : Submodule F (W n))
+    (S : V d →ₗ[F] W n)
+    (M : (V d ⧸ LinearMap.range X) →ₗ[F] LinearMap.ker X)
+    (f : BinaryMatrix n d → Complex) :
+    (∑ Y : BinaryMatrix n d,
+      if t2LeftSelected X Y.transpose.toLin' A2 B2 then
+        complexFourierCoeff f Y *
+          (traceCharacter Y.transpose.toLin'
+            (S + (LinearMap.ker X).subtype.comp
+              (M.comp (LinearMap.range X).mkQ)) : Complex) else 0) =
+    ∑ p : Submodule F (V d) × Submodule F (W n),
+      ∑ Y : BinaryMatrix n d,
+        if t2RightSelected X Y.transpose.toLin' A2 B2 p.1 p.2 then
+          complexFourierCoeff f Y *
+            (traceCharacter Y.transpose.toLin'
+              (S + (LinearMap.ker X).subtype.comp
+                (M.comp (LinearMap.range X).mkQ)) : Complex) else 0 := by
+  classical
+  let scalar : BinaryMatrix n d → Complex := fun Y =>
+    complexFourierCoeff f Y *
+      (traceCharacter Y.transpose.toLin'
+        (S + (LinearMap.ker X).subtype.comp
+          (M.comp (LinearMap.range X).mkQ)) : Complex)
+  have hY : ∀ Y : BinaryMatrix n d,
+      (if t2LeftSelected X Y.transpose.toLin' A2 B2 then scalar Y else 0) =
+        ∑ p : Submodule F (V d) × Submodule F (W n),
+          if t2RightSelected X Y.transpose.toLin' A2 B2 p.1 p.2 then
+            scalar Y else 0 := by
+    intro Y
+    let Ymap := Y.transpose.toLin'
+    by_cases hleft : t2LeftSelected X Ymap A2 B2
+    · rw [if_pos hleft]
+      let pair : Submodule F (V d) × Submodule F (W n) :=
+        ⟨t2ComplementImage X Ymap A2, t2ComplementDomain X Ymap B2⟩
+      have hright : t2RightSelected X Ymap A2 B2 pair.1 pair.2 := by
+        simpa [pair] using t2_left_to_right X Ymap A2 B2 hleft
+      have hzero : ∀ p : Submodule F (V d) × Submodule F (W n),
+          p ≠ pair →
+            (if t2RightSelected X Ymap A2 B2 p.1 p.2 then scalar Y else 0) = 0 := by
+        intro p hp
+        by_cases hr : t2RightSelected X Ymap A2 B2 p.1 p.2
+        · have hcan := t2_right_to_left X Ymap A2 B2 p.1 p.2 hr
+          exact absurd (Prod.ext hcan.2.1 hcan.2.2) hp
+        · rw [if_neg hr]
+      rw [Finset.sum_eq_single pair]
+      · rw [if_pos hright]
+      · intro p _ hp
+        exact hzero p hp
+      · intro hmiss
+        exact absurd (Finset.mem_univ pair) hmiss
+    · rw [if_neg hleft]
+      symm
+      apply Finset.sum_eq_zero
+      intro p _
+      exact if_neg (t2_rejected_right X Ymap A2 B2 p.1 p.2 hleft)
+  calc
+    _ = ∑ Y : BinaryMatrix n d,
+        ∑ p : Submodule F (V d) × Submodule F (W n),
+          if t2RightSelected X Y.transpose.toLin' A2 B2 p.1 p.2 then
+            scalar Y else 0 := by
+      refine Finset.sum_congr rfl (fun Y _ => ?_)
+      simpa [scalar] using hY Y
+    _ = _ := Finset.sum_comm
+
+/-- The outer hybrid of `D_X f` is the Fourier sum over right complements.
+Rejected frequencies are absent. -/
+theorem t2_right_derivative_expansion {n d : Nat}
+    (Xmat : BinaryMatrix n d)
+    (A2 : Submodule F (V d)) (B2 : Submodule F (W n))
+    (hA : LinearMap.range Xmat.transpose.toLin' ≤ A2)
+    (hB : B2 ≤ LinearMap.ker Xmat.transpose.toLin')
+    (S : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range Xmat.transpose.toLin') →ₗ[F]
+      LinearMap.ker Xmat.transpose.toLin') :
+    complexCarrierHybridFilter
+      (LinearMap.range Xmat.transpose.toLin')
+      (LinearMap.ker Xmat.transpose.toLin')
+      (A2.map (LinearMap.range Xmat.transpose.toLin').mkQ)
+      (B2.comap (LinearMap.ker Xmat.transpose.toLin').subtype)
+      (actualW6Derivative Xmat S f) M =
+    ∑ p : Submodule F (V d) × Submodule F (W n),
+      ∑ Y : BinaryMatrix n d,
+        if t2RightSelected Xmat.transpose.toLin' Y.transpose.toLin' A2 B2
+            p.1 p.2 then
+          complexFourierCoeff f Y *
+            (traceCharacter Y.transpose.toLin'
+              (S + (LinearMap.ker Xmat.transpose.toLin').subtype.comp
+                (M.comp (LinearMap.range Xmat.transpose.toLin').mkQ)) : Complex)
+        else 0 := by
+  rw [t2_left_derivative_expansion Xmat A2 B2 hA hB S f M]
+  exact t2_right_fourier_sum Xmat.transpose.toLin' A2 B2 S M f
+
+/-- The squared carrier `L2` norm of one hybrid derivative is that pair's
+unweighted `Q` component. -/
+theorem t2_q_component_filtered {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex) :
+    typedW6QComponent C H T f =
+      (carrierMean C H (fun M =>
+        Complex.normSq (filteredCarrierFunction C H T f M))) ^ 2 := by
+  unfold typedW6QComponent
+  rfl
+
+/-- Every right complement is one pair in the unweighted all-hybrid sum. -/
+theorem t2_right_complement_energy {n d : Nat}
+    (X Y : W n →ₗ[F] V d)
+    (A2 C : Submodule F (V d)) (B2 H : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex)
+    (h : t2RightSelected X Y A2 B2 C H) :
+    typedUniformMean (fun T : V d →ₗ[F] W n => typedW6QComponent C H T f) ≤
+      ∑ p : Submodule F (V d) × Submodule F (W n),
+        typedUniformMean (fun T : V d →ₗ[F] W n =>
+          typedW6QComponent p.1 p.2 T f) := by
+  classical
+  have _hcan := t2_right_to_left X Y A2 B2 C H h
+  let pair : Submodule F (V d) × Submodule F (W n) := ⟨C, H⟩
+  let g : Submodule F (V d) × Submodule F (W n) → ℝ := fun p =>
+    typedUniformMean (fun T : V d →ₗ[F] W n => typedW6QComponent p.1 p.2 T f)
+  have hnn : ∀ p, 0 ≤ g p := by
+    intro p
+    unfold g typedUniformMean
+    refine div_nonneg ?_ (Nat.cast_nonneg _)
+    refine Finset.sum_nonneg (fun _ _ => ?_)
+    unfold typedW6QComponent
+    exact sq_nonneg _
+  have hadd : g pair + ∑ p ∈ Finset.univ.erase pair, g p = ∑ p, g p :=
+    Finset.add_sum_erase Finset.univ g (Finset.mem_univ pair)
+  have hrest : 0 ≤ ∑ p ∈ Finset.univ.erase pair, g p :=
+    Finset.sum_nonneg (fun p _ => hnn p)
+  have hle : g pair ≤ ∑ p, g p := by
+    rw [← hadd]
+    exact le_add_of_nonneg_right hrest
+  have hpair : g pair =
+      typedUniformMean (fun T : V d →ₗ[F] W n => typedW6QComponent C H T f) := by
+    unfold g pair
+    rfl
+  have hsum : (∑ p, g p) =
+      ∑ p : Submodule F (V d) × Submodule F (W n),
+        typedUniformMean (fun T : V d →ₗ[F] W n =>
+          typedW6QComponent p.1 p.2 T f) := by
+    unfold g
+    rfl
+  rw [← hpair, hsum]
+  exact hle
 
 /-- Both selector directions, uniqueness, and saturation of the restriction
 and quotient rank-loss bound. -/

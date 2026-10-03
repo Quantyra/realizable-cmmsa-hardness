@@ -13,6 +13,11 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
 #check t2_shifted_phase
 #check t2_matrix_precedes_iff
 #check t2_left_derivative_expansion
+#check t2_rejected_right
+#check t2_right_fourier_sum
+#check t2_right_derivative_expansion
+#check t2_q_component_filtered
+#check t2_right_complement_energy
 
 #print axioms t2_rank_loss
 #print axioms t2_rank_loss_saturated_iff
@@ -25,3 +30,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
 #print axioms t2_shifted_phase
 #print axioms t2_matrix_precedes_iff
 #print axioms t2_left_derivative_expansion
+#print axioms t2_rejected_right
+#print axioms t2_right_fourier_sum
+#print axioms t2_right_derivative_expansion
+#print axioms t2_q_component_filtered
+#print axioms t2_right_complement_energy
