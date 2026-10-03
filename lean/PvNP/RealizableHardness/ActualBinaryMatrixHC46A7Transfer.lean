@@ -4946,13 +4946,77 @@ noncomputable def a9TransportDatum {A B S : Type*}
     eS.toLinearMap.comp
       (d.kerGraph.comp (a9QuotientTransport eB d.B0.1).symm.toLinearMap)
 
-/-- Each graph datum of one fixed final `(A, W/B, range Y)` is sent to a
-positive-degree sum index by the coordinate transport. `a9FinalTheta_rank`
-keeps rank `k` on that image. Injectivity of the transport is not proved
-here; `a9EmbedSumFiber_injective` is the inverse on coordinate data. The
-multiplicity `2^{3D(i+j+k)}` remains `a9_final_inducing_multiplicity`.
-This does not bound `a7HybridQ` of an output, and it does not remove the
-share. -/
+theorem a9Transport_ker_cancel {B S : Type*}
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S]
+    {b k j : Nat}
+    (eB : B ≃ₗ[F] (V b)) (eS : S ≃ₗ[F] (V k))
+    (B0 : W6Grass B j) (ker : (B ⧸ B0.1) →ₗ[F] S)
+    (q : B ⧸ B0.1) :
+    (eS.toLinearMap.comp
+        (ker.comp (a9QuotientTransport eB B0.1).symm.toLinearMap))
+        ((a9QuotientTransport eB B0.1) q) = eS (ker q) := by
+  simp [LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+    LinearEquiv.symm_apply_apply]
+
+/-- Distinct graph data stay distinct after the coordinate transport.
+Each datum therefore charges one coordinate datum, and
+`a9EmbedSumFiber_injective` sends that datum to one sum fiber. -/
+theorem a9TransportDatum_injective {A B S : Type*}
+    [AddCommGroup A] [Module F A] [AddCommGroup B] [Module F B]
+    [AddCommGroup S] [Module F S]
+    {a b k i j : Nat}
+    (eA : A ≃ₗ[F] (V a)) (eB : B ≃ₗ[F] (V b)) (eS : S ≃ₗ[F] (V k)) :
+    Function.Injective (a9TransportDatum (i := i) (j := j) eA eB eS) := by
+  intro d₁ d₂ h
+  cases d₁ with
+  | mk A1 B1 im₁ ker₁ =>
+    cases d₂ with
+    | mk A2 B2 im₂ ker₂ =>
+      have hA0 : (a9TransportDatum eA eB eS ⟨A1, B1, im₁, ker₁⟩).A0 =
+          (a9TransportDatum eA eB eS ⟨A2, B2, im₂, ker₂⟩).A0 := by
+        rw [h]
+      have hB0 : (a9TransportDatum eA eB eS ⟨A1, B1, im₁, ker₁⟩).B0 =
+          (a9TransportDatum eA eB eS ⟨A2, B2, im₂, ker₂⟩).B0 := by
+        rw [h]
+      have hA : A1 = A2 := a9TransportGrass_injective eA
+        (by simpa [a9TransportDatum] using hA0)
+      have hB : B1 = B2 := a9TransportGrass_injective eB
+        (by simpa [a9TransportDatum] using hB0)
+      subst hA
+      subst hB
+      unfold a9TransportDatum at h
+      injection h with _hA0 _hB0 him hker
+      have him' : im₁ = im₂ := by
+        apply LinearMap.ext
+        intro s
+        have hpoint := congrFun (congrArg DFunLike.coe him) (eS s)
+        simp only [LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+          LinearEquiv.symm_apply_apply] at hpoint
+        exact (a9QuotientTransport eA A1.1).injective hpoint
+      have hker' : ker₁ = ker₂ := by
+        apply LinearMap.ext
+        intro q
+        have hpoint := congrFun (congrArg DFunLike.coe hker)
+          ((a9QuotientTransport eB B1.1) q)
+        change (eS.toLinearMap.comp
+            (ker₁.comp (a9QuotientTransport eB B1.1).symm.toLinearMap))
+            ((a9QuotientTransport eB B1.1) q) =
+          (eS.toLinearMap.comp
+            (ker₂.comp (a9QuotientTransport eB B1.1).symm.toLinearMap))
+            ((a9QuotientTransport eB B1.1) q) at hpoint
+        rw [a9Transport_ker_cancel eB eS B1 ker₁ q,
+          a9Transport_ker_cancel eB eS B1 ker₂ q] at hpoint
+        exact eS.injective hpoint
+      cases him'
+      cases hker'
+      rfl
+
+/-- Each graph datum of one fixed final `(A, W/B, range Y)` charges one
+sum fiber. The transport is injective, and `a9EmbedSumFiber_injective`
+keeps those fibers apart. `a9FinalTheta_rank` keeps rank `k`. The
+multiplicity `2^{3D(i+j+k)}` remains `a9_final_inducing_multiplicity`,
+and the graph cost remains `a9_final_inducing_graph_cost`. This does not
+bound `a7HybridQ` of an output, and it does not remove the share. -/
 noncomputable def a9FinalInducingTriple {n d a b k i j : Nat}
     (hk : 0 < k)
     (A : Submodule F (V d)) (B : Submodule F (W n))
@@ -4965,6 +5029,20 @@ noncomputable def a9FinalInducingTriple {n d a b k i j : Nat}
   a9EmbedSumFiber hk
     (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
       (a9ModuleToFin k hY) datum)
+
+theorem a9FinalInducingTriple_injective {n d a b k i j : Nat}
+    (hk : 0 < k)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k) :
+    Function.Injective (a9FinalInducingTriple (n := n) (d := d)
+      (a := a) (b := b) (k := k) (i := i) (j := j) hk A B Y hA hB hY) := by
+  intro d₁ d₂ h
+  exact a9TransportDatum_injective (a9ModuleToFin a hA) (a9ModuleToFin b hB)
+    (a9ModuleToFin k hY)
+    (a9EmbedSumFiber_injective hk (by simpa [a9FinalInducingTriple] using h))
 
 /-- The transported project-then-lift map still has rank `k`. -/
 theorem a9FinalInducingTriple_rank {n d a b k i j : Nat}
