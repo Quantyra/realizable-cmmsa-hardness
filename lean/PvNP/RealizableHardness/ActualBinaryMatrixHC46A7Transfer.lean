@@ -3372,6 +3372,95 @@ theorem a7_predecessor_fiber_le {n d D k : Nat} (Y : BinaryMatrix n d)
       rw [if_neg hk]
     simp [hzero]
 
+/-- Coordinate identification of a binary space with a rank-`k` factor times
+a complement. -/
+noncomputable def a9CoordEquiv (k m : Nat) :
+    (Fin (k + m) → F) ≃ₗ[F] ((Fin k → F) × (Fin m → F)) :=
+  (LinearEquiv.piCongrLeft F (fun _ => F) finSumFinEquiv.symm).trans
+    (LinearEquiv.sumArrowLequivProdArrow (Fin k) (Fin m) F F)
+
+/-- The rank-`k` graph map, transported onto `⊤ → (W / ⊥)`. -/
+noncomputable def a9SumTheta (k m r : Nat)
+    (psi : (Fin m → F) →ₗ[F] (Fin k → F))
+    (imGraph : (Fin k → F) →ₗ[F] (Fin r → F)) :
+    (⊤ : Submodule F (V (k + m))) →ₗ[F]
+      (W (k + r) ⧸ (⊥ : Submodule F (W (k + r)))) :=
+  (Submodule.mkQ (⊥ : Submodule F (W (k + r)))).comp
+    (((a9CoordEquiv k r).symm.toLinearMap.comp
+      ((a9Determined psi imGraph).comp (a9CoordEquiv k m).toLinearMap)).comp
+      (⊤ : Submodule F (V (k + m))).subtype)
+
+theorem a9_top_ne_bot {d : Nat} (hd : 0 < d) :
+    (⊤ : Submodule F (V d)) ≠ ⊥ := by
+  intro htop
+  let v : V d := fun i => if i = ⟨0, hd⟩ then 1 else 0
+  have hv : v ≠ 0 := by
+    intro h0
+    have hcoord := congrFun h0 ⟨0, hd⟩
+    simp [v] at hcoord
+  have hmem : v ∈ (⊤ : Submodule F (V d)) := Submodule.mem_top
+  rw [htop, Submodule.mem_bot] at hmem
+  exact hv hmem
+
+/-- One index of the positive-degree mixed sum on the coordinate pair
+`(⊤, ⊥)`. The side condition is exactly the nonzero-pair test. -/
+structure A7GraphSumTriple (k m r : Nat) where
+  triple : T1IndexTriple (⊤ : Submodule F (V (k + m)))
+    (⊥ : Submodule F (W (k + r)))
+  nonzero : (⊤ : Submodule F (V (k + m))) ≠ ⊥ ∨
+    (⊥ : Submodule F (W (k + r))) ≠ ⊤
+
+/-- A coordinate graph pair is one index of the positive-degree mixed sum:
+the pair `(⊤, ⊥)` is a nonzero pair, and the triple is the transported
+rank-`k` map. -/
+noncomputable def a9SumTriple (k m r : Nat) (hk : 0 < k)
+    (psi : (Fin m → F) →ₗ[F] (Fin k → F))
+    (imGraph : (Fin k → F) →ₗ[F] (Fin r → F)) :
+    A7GraphSumTriple k m r where
+  triple := t1MapToTriple (a9SumTheta k m r psi imGraph)
+  nonzero := Or.inl (a9_top_ne_bot (Nat.lt_of_lt_of_le hk (Nat.le_add_right k m)))
+
+theorem a9SumTheta_injective {k m r : Nat}
+    (psi₁ psi₂ : (Fin m → F) →ₗ[F] (Fin k → F))
+    (im₁ im₂ : (Fin k → F) →ₗ[F] (Fin r → F))
+    (h : a9SumTheta k m r psi₁ im₁ = a9SumTheta k m r psi₂ im₂) :
+    psi₁ = psi₂ ∧ im₁ = im₂ := by
+  have hdet : a9Determined psi₁ im₁ = a9Determined psi₂ im₂ := by
+    apply LinearMap.ext
+    intro p
+    let eDom := a9CoordEquiv k m
+    let eCod := a9CoordEquiv k r
+    let x : (⊤ : Submodule F (V (k + m))) := ⟨eDom.symm p, Submodule.mem_top⟩
+    have hx := congrFun (congrArg DFunLike.coe h) x
+    have hcalc : ∀ (psi : (Fin m → F) →ₗ[F] (Fin k → F))
+        (imGraph : (Fin k → F) →ₗ[F] (Fin r → F)),
+        a9SumTheta k m r psi imGraph x =
+          Submodule.mkQ (⊥ : Submodule F (W (k + r)))
+            (eCod.symm (a9Determined psi imGraph p)) := by
+      intro psi imGraph
+      simp [a9SumTheta, x, eDom, eCod, LinearMap.comp_apply]
+    rw [hcalc psi₁ im₁, hcalc psi₂ im₂] at hx
+    have hinjQ : Function.Injective
+        (Submodule.mkQ (⊥ : Submodule F (W (k + r)))) := by
+      rw [← Submodule.coe_quotEquivOfEqBot_symm
+        (⊥ : Submodule F (W (k + r))) rfl]
+      exact (Submodule.quotEquivOfEqBot
+        (⊥ : Submodule F (W (k + r))) rfl).symm.injective
+    exact eCod.symm.injective (hinjQ hx)
+  exact a9Determined_injective psi₁ psi₂ im₁ im₂ hdet
+
+theorem a9SumTriple_injective {k m r : Nat} (hk : 0 < k) :
+    Function.Injective (fun p : ((Fin m → F) →ₗ[F] (Fin k → F)) ×
+        ((Fin k → F) →ₗ[F] (Fin r → F)) =>
+      a9SumTriple k m r hk p.1 p.2) := by
+  rintro ⟨psi₁, im₁⟩ ⟨psi₂, im₂⟩ h
+  have htri := congrArg (fun s : A7GraphSumTriple k m r => s.triple) h
+  have htheta :
+      a9SumTheta k m r psi₁ im₁ = a9SumTheta k m r psi₂ im₂ := by
+    simpa [a9SumTriple, t1TripleToMap_mapToTriple] using congrArg t1TripleToMap htri
+  have hgraphs := a9SumTheta_injective psi₁ psi₂ im₁ im₂ htheta
+  exact Prod.ext hgraphs.1 hgraphs.2
+
 /-- `T1IndexTriple` is the indexed triple on the manuscript carriers
 `A` and `W/B`. The graph fiber `a9_fiber_triple` uses this same field
 package on the two graph subspaces. -/
@@ -3408,6 +3497,49 @@ theorem a9_fiber_multiplicity_le
       w6Gaussian a i * w6Gaussian b j * 2 ^ (k * (a - i)) *
         2 ^ (k * (b - j)) := by ring
     _ ≤ 2 ^ (3 * D * (i + j + k)) := hbound
+
+/-- The coordinate graph pairs at `i = j = 0` are at most `2^{3Dk}`.
+`a9SumTriple` sends those pairs into the positive-degree sum, and this
+bound is `a9_fiber_multiplicity_le` on that slice. It does not remove
+the share hypothesis. -/
+theorem a9_sum_triple_multiplicity_le (D k m r : Nat)
+    (hfin : m + r + k ≤ D) :
+    Fintype.card ((Fin m → F) →ₗ[F] (Fin k → F)) *
+        Fintype.card ((Fin k → F) →ₗ[F] (Fin r → F)) ≤
+      2 ^ (3 * D * k) := by
+  classical
+  have hfinrank_pi : ∀ n : Nat, Module.finrank F (Fin n → F) = n :=
+    fun n => by
+      simpa using (Module.finrank_fin_fun (n := n) F)
+  have hgauss : ∀ n : Nat, w6Gaussian n 0 = 1 := by
+    intro n
+    unfold w6Gaussian w6FrameProduct
+    rw [if_pos (Nat.zero_le n)]
+    simp
+  have hhom : ∀ (a b : Nat),
+      Fintype.card ((Fin a → F) →ₗ[F] (Fin b → F)) = 2 ^ (b * a) := by
+    intro a b
+    rw [Module.card_eq_pow_finrank (K := F)
+        (V := (Fin a → F) →ₗ[F] (Fin b → F)),
+      Module.finrank_linearMap, ZMod.card, hfinrank_pi a, hfinrank_pi b,
+      Nat.mul_comm]
+  have hpsi := hhom m k
+  have him : Fintype.card ((Fin k → F) →ₗ[F] (Fin r → F)) = 2 ^ (k * r) := by
+    rw [hhom k r, Nat.mul_comm]
+  have hsig := a9_inducing_card (A := Fin m → F) (B := Fin r → F)
+      (S := Fin k → F) 0 0 k m r (hfinrank_pi m) (hfinrank_pi r) (hfinrank_pi k)
+  have hbound := a9_fiber_multiplicity_le (A := Fin m → F) (B := Fin r → F)
+      (S := Fin k → F) D 0 0 k m r hfin (Nat.zero_le m) (Nat.zero_le r)
+      (hfinrank_pi m) (hfinrank_pi r) (hfinrank_pi k)
+  have hprod :
+      Fintype.card ((Fin m → F) →ₗ[F] (Fin k → F)) *
+          Fintype.card ((Fin k → F) →ₗ[F] (Fin r → F)) =
+        w6Gaussian m 0 * 2 ^ (k * (m - 0)) *
+          (w6Gaussian r 0 * 2 ^ (k * (r - 0))) := by
+    rw [hpsi, him, hgauss m, hgauss r, Nat.sub_zero, Nat.sub_zero]
+    simp
+  rw [hprod, ← hsig]
+  simpa [Nat.zero_add, Nat.add_zero] using hbound
 
 /-- Graph cost `2^{6Dk}` times the proved fiber multiplicity is at most the
 overlap room `2^{9Dt}` for `t = i+j+k`. The share function in

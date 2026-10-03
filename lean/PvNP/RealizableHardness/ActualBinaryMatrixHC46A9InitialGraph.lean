@@ -337,8 +337,72 @@ theorem a9_fiber_triple_rank {S Qd Qc : Type*}
   (@Submodule.topEquiv F (LinearMap.range (a9GraphIncl kerGraph)) _ _ _).finrank_eq.trans
     (a9_graph_finrank kerGraph)
 
-/-- The two graph carriers determine both graph maps, so distinct inducing
-data stay distinct as indexed triples on those carriers. -/
+/-- Read the rank-`k` coordinate along a kernel graph `psi : Qd → S`.
+At `(s, 0)` this is `s`; at `(0, q)` it is `psi q`. -/
+def a9ReadSection {S Qd : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Qd] [Module F Qd] (psi : Qd →ₗ[F] S) :
+    (S × Qd) →ₗ[F] S :=
+  LinearMap.fst F S Qd + psi.comp (LinearMap.snd F S Qd)
+
+/-- The rank-`k` predecessor determined by a kernel graph and an image graph.
+`Qd → S` is the opposite variance of the counted `S → Qd` graph; both have
+`2^{k * dim Qd}` elements. Applying the section and lifting the image is the
+manuscript's "project, then lift" map. -/
+def a9Determined {S Qd Qc : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Qd] [Module F Qd] [AddCommGroup Qc] [Module F Qc]
+    (psi : Qd →ₗ[F] S) (imGraph : S →ₗ[F] Qc) :
+    (S × Qd) →ₗ[F] (S × Qc) :=
+  (a9GraphIncl imGraph).comp (a9ReadSection psi)
+
+theorem a9Determined_inl {S Qd Qc : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Qd] [Module F Qd] [AddCommGroup Qc] [Module F Qc]
+    (psi : Qd →ₗ[F] S) (imGraph : S →ₗ[F] Qc) (s : S) :
+    a9Determined psi imGraph (s, 0) = (s, imGraph s) := by
+  simp [a9Determined, a9ReadSection, a9GraphIncl]
+
+theorem a9Determined_inr_fst {S Qd Qc : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Qd] [Module F Qd] [AddCommGroup Qc] [Module F Qc]
+    (psi : Qd →ₗ[F] S) (imGraph : S →ₗ[F] Qc) (q : Qd) :
+    (a9Determined psi imGraph (0, q)).1 = psi q := by
+  simp [a9Determined, a9ReadSection, a9GraphIncl]
+
+theorem a9Determined_injective {S Qd Qc : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Qd] [Module F Qd] [AddCommGroup Qc] [Module F Qc]
+    (psi₁ psi₂ : Qd →ₗ[F] S) (im₁ im₂ : S →ₗ[F] Qc)
+    (h : a9Determined psi₁ im₁ = a9Determined psi₂ im₂) :
+    psi₁ = psi₂ ∧ im₁ = im₂ := by
+  constructor
+  · ext q
+    have hpoint := congrFun (congrArg DFunLike.coe h) (0, q)
+    simpa [a9Determined, a9ReadSection, a9GraphIncl] using congrArg Prod.fst hpoint
+  · ext s
+    have hpoint := congrFun (congrArg DFunLike.coe h) (s, 0)
+    simpa [a9Determined, a9ReadSection, a9GraphIncl] using congrArg Prod.snd hpoint
+
+theorem a9Determined_range {S Qd Qc : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Qd] [Module F Qd] [AddCommGroup Qc] [Module F Qc]
+    (psi : Qd →ₗ[F] S) (imGraph : S →ₗ[F] Qc) :
+    LinearMap.range (a9Determined psi imGraph) =
+      LinearMap.range (a9GraphIncl imGraph) := by
+  apply le_antisymm
+  · intro z hz
+    rcases LinearMap.mem_range.mp hz with ⟨p, rfl⟩
+    exact LinearMap.mem_range_self (a9GraphIncl imGraph) (a9ReadSection psi p)
+  · intro z hz
+    rcases LinearMap.mem_range.mp hz with ⟨s, rfl⟩
+    refine LinearMap.mem_range.mpr ⟨(s, 0), ?_⟩
+    simp [a9Determined, a9ReadSection, a9GraphIncl]
+
+theorem a9Determined_rank {S Qd Qc : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Qd] [Module F Qd] [AddCommGroup Qc] [Module F Qc]
+    [Module.Finite F S] (psi : Qd →ₗ[F] S) (imGraph : S →ₗ[F] Qc) :
+    Module.finrank F (LinearMap.range (a9Determined psi imGraph)) =
+      Module.finrank F S := by
+  have hrange := a9Determined_range psi imGraph
+  have hgraph := a9_graph_finrank imGraph
+  rw [← hrange] at hgraph
+  exact hgraph
+
 theorem a9_graph_ranges_determine {S Qd Qc : Type*}
     [AddCommGroup S] [Module F S] [AddCommGroup Qd] [Module F Qd]
     [AddCommGroup Qc] [Module F Qc]
