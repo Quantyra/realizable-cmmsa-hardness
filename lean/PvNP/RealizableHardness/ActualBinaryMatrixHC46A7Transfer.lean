@@ -4439,5 +4439,103 @@ theorem a7_induced_rank :
   rw [hrange]
   omega
 
+/-- The matrix whose transpose realizes `a7Freq40`. -/
+noncomputable def a7FreqMatrix : BinaryMatrix 40 40 :=
+  (LinearMap.toMatrix' a7Freq40).transpose
+
+theorem a7FreqMatrix_toLin : a7FreqMatrix.transpose.toLin' = a7Freq40 := by
+  simp [a7FreqMatrix, Matrix.transpose_transpose, Matrix.toLin'_toMatrix']
+
+theorem a7FreqMatrix_rank : a7FreqMatrix.rank = 39 := by
+  rw [← Matrix.rank_transpose, a7FreqMatrix]
+  rw [Matrix.transpose_transpose]
+  rw [Matrix.rank_eq_finrank_range_toLin (LinearMap.toMatrix' a7Freq40)
+    (Pi.basisFun F _) (Pi.basisFun F _)]
+  rw [Matrix.toLin_eq_toLin', Matrix.toLin'_toMatrix']
+  exact a7Freq40_rank
+
+/-- The character of that rank-39 matrix. -/
+def a7Char (M : BinaryMatrix 40 40) : ℂ :=
+  (character a7FreqMatrix M : ℂ)
+
+theorem a7Char_supported : ComplexFourierSupportedThrough 40 a7Char := by
+  intro Y hY
+  have hne : Y ≠ a7FreqMatrix := by
+    intro h
+    rw [h, a7FreqMatrix_rank] at hY
+    omega
+  change complexFourierCoeff (fun M => (character a7FreqMatrix M : ℂ)) Y = 0
+  rw [complexFourierCoeff_character, if_neg hne]
+
+theorem a7Freq40_selected : Selected a7Line (⊤ : Submodule F (W 40)) a7Freq40 :=
+  ⟨a7Line_le_range, fun _ _ => Submodule.mem_top⟩
+
+/-- The zero map on the line, as a positive-order index triple over `(line, ⊤)`. -/
+noncomputable def a7OrderOneTriple :
+    T1IndexTriple a7Line (⊤ : Submodule F (W 40)) :=
+  t1MapToTriple (0 : a7Line →ₗ[F] (W 40 ⧸ (⊤ : Submodule F (W 40))))
+
+theorem a7OrderOne_C : t1AmbientC a7OrderOneTriple.C = a7Line := by
+  simp [a7OrderOneTriple, t1MapToTriple, t1AmbientC, LinearMap.ker_zero,
+    Submodule.map_top, Submodule.range_subtype]
+
+theorem a7OrderOne_K : a7OrderOneTriple.K = ⊥ := by
+  simp [a7OrderOneTriple, t1MapToTriple, LinearMap.range_zero]
+
+theorem a7OrderOne_H : t1AmbientH a7OrderOneTriple.K = ⊤ := by
+  rw [a7OrderOne_K]
+  ext w
+  simp [t1AmbientH, Submodule.mem_comap, Submodule.mem_bot, Submodule.mkQ_apply]
+
+theorem a7OrderOne_Ctop : a7OrderOneTriple.C = ⊤ := by
+  simp [a7OrderOneTriple, t1MapToTriple, LinearMap.ker_zero]
+
+/-- The pullback lands in the image of a map out of the zero quotient `line/⊤`,
+so its rank is zero. The order is therefore `1`. -/
+theorem a7OrderOne_pullback_rank :
+    Module.finrank F (LinearMap.range (t1PullbackMap a7OrderOneTriple)) = 0 := by
+  have hdom : Module.finrank F (a7Line ⧸ (⊤ : Submodule F a7Line)) = 0 := by
+    have hsum := (⊤ : Submodule F a7Line).finrank_quotient_add_finrank
+    rw [finrank_top] at hsum
+    omega
+  have hle : LinearMap.range (t1PullbackMap a7OrderOneTriple) ≤
+      LinearMap.range (t1AQuotientToAmbient a7OrderOneTriple.C) := by
+    rw [t1PullbackMap]
+    exact LinearMap.range_comp_le_range _ _
+  have hzero : Module.finrank F
+      (LinearMap.range (t1AQuotientToAmbient a7OrderOneTriple.C)) = 0 := by
+    rw [a7OrderOne_Ctop]
+    exact Nat.eq_zero_of_le_zero
+      (by simpa [hdom] using
+        (LinearMap.finrank_range_le (t1AQuotientToAmbient (⊤ : Submodule F a7Line))))
+  have hinj : Function.Injective (Submodule.inclusion hle) :=
+    Submodule.inclusion_injective hle
+  exact Nat.eq_zero_of_le_zero
+    (by simpa [hzero] using (LinearMap.finrank_le_finrank_of_injective hinj))
+
+theorem a7OrderOne_quot_finrank :
+    Module.finrank F (W 40 ⧸ (⊤ : Submodule F (W 40))) = 0 := by
+  have hsum := (⊤ : Submodule F (W 40)).finrank_quotient_add_finrank
+  rw [finrank_top] at hsum
+  omega
+
+theorem a7OrderOne_order : a6Order a7OrderOneTriple = 1 := by
+  have hpull : Module.finrank F (LinearMap.range (t1PullbackMap a7OrderOneTriple)) = 0 :=
+    a7OrderOne_pullback_rank
+  have hC : Module.finrank F (t1AmbientC a7OrderOneTriple.C) = 1 := by
+    rw [a7OrderOne_C, a7Line_finrank]
+  have hH : Module.finrank F (W 40 ⧸ t1AmbientH a7OrderOneTriple.K) = 0 := by
+    rw [a7OrderOne_H, a7OrderOne_quot_finrank]
+  unfold a6Order
+  rw [hC, hH, hpull]
+
+/-- The original component of this character on the order-one carrier is `1`. -/
+theorem a7OrderOne_component :
+    typedW6QComponent (t1AmbientC a7OrderOneTriple.C)
+      (t1AmbientH a7OrderOneTriple.K) (0 : V 40 →ₗ[F] W 40) a7Char = 1 := by
+  rw [a7OrderOne_C, a7OrderOne_H]
+  unfold a7Char
+  rw [a7_character_qComponent, a7FreqMatrix_toLin, if_pos a7Freq40_selected]
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
