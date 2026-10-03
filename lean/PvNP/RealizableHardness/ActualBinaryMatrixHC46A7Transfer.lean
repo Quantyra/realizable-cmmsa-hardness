@@ -3982,5 +3982,119 @@ theorem a7_selected_pairs_exceed_share_slack {n d : Nat}
   have hlt := a7_middle_grassmannian_exceeds_share_slack
   exact lt_of_lt_of_le hlt (by rw [← hgrass]; exact hcard)
 
+theorem a9_coord_quot_finrank {n i : Nat} (U : W6Grass (V n) i) :
+    Module.finrank F ((V n) ⧸ U.1) = n - i := by
+  have hsum := U.1.finrank_quotient_add_finrank
+  have hE : Module.finrank F (V n) = n := by
+    simpa using (Module.finrank_fin_fun (n := n) F)
+  rw [U.2, hE] at hsum
+  simpa [Nat.add_sub_cancel] using congrArg (fun t => t - i) hsum
+
+noncomputable def a9QuotToFin {n i : Nat} (U : W6Grass (V n) i) :
+    ((V n) ⧸ U.1) ≃ₗ[F] (Fin (n - i) → F) :=
+  haveI : Module.Finite F ((V n) ⧸ U.1) := inferInstance
+  haveI : Module.Free F ((V n) ⧸ U.1) :=
+    Module.Free.of_basis (Module.finBasis F ((V n) ⧸ U.1))
+  (Module.finBasis F ((V n) ⧸ U.1)).equivFun.trans
+    (LinearEquiv.piCongrLeft F (fun _ => F)
+      (Equiv.cast (congrArg Fin (a9_coord_quot_finrank U))))
+
+noncomputable def a9FinalDomEquiv {b j k : Nat} (B0 : W6Grass (V b) j) :
+    ((V k) × ((V b) ⧸ B0.1)) ≃ₗ[F] (V (k + (b - j))) :=
+  (LinearEquiv.prodCongr (LinearEquiv.refl F (V k)) (a9QuotToFin B0)).trans
+    (a9CoordEquiv k (b - j)).symm
+
+noncomputable def a9FinalCodEquiv {a i k : Nat} (A0 : W6Grass (V a) i) :
+    ((V k) × ((V a) ⧸ A0.1)) ≃ₗ[F] (V (k + (a - i))) :=
+  (LinearEquiv.prodCongr (LinearEquiv.refl F (V k)) (a9QuotToFin A0)).trans
+    (a9CoordEquiv k (a - i)).symm
+
+/-- The project-then-lift map of one coordinate datum, as a sum-index map
+`⊤ → W/⊥`. -/
+noncomputable def a9FinalTheta {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) :
+    (⊤ : Submodule F (V (k + (b - j)))) →ₗ[F]
+      (W (k + (a - i)) ⧸ (⊥ : Submodule F (W (k + (a - i))))) :=
+  (Submodule.mkQ (⊥ : Submodule F (W (k + (a - i))))).comp
+    ((a9FinalCodEquiv d.A0).toLinearMap.comp
+      ((a9InitialMap d).comp
+        ((a9FinalDomEquiv d.B0).symm.toLinearMap.comp
+          (⊤ : Submodule F (V (k + (b - j)))).subtype)))
+
+theorem a9FinalTheta_graphs_inverse {a b k i j : Nat}
+    (A0 : W6Grass (V a) i) (B0 : W6Grass (V b) j)
+    (im₁ im₂ : (V k) →ₗ[F] ((V a) ⧸ A0.1))
+    (ker₁ ker₂ : ((V b) ⧸ B0.1) →ₗ[F] (V k))
+    (h : a9FinalTheta ⟨A0, B0, im₁, ker₁⟩ =
+      a9FinalTheta ⟨A0, B0, im₂, ker₂⟩) :
+    ker₁ = ker₂ ∧ im₁ = im₂ := by
+  have hmap : a9InitialMap ⟨A0, B0, im₁, ker₁⟩ =
+      a9InitialMap ⟨A0, B0, im₂, ker₂⟩ := by
+    apply LinearMap.ext
+    intro p
+    let eDom := a9FinalDomEquiv (k := k) B0
+    let eCod := a9FinalCodEquiv (k := k) A0
+    let x : (⊤ : Submodule F (V (k + (b - j)))) := ⟨eDom p, Submodule.mem_top⟩
+    have hx := congrFun (congrArg DFunLike.coe h) x
+    have hcalc : ∀ (im : (V k) →ₗ[F] ((V a) ⧸ A0.1))
+        (ker : ((V b) ⧸ B0.1) →ₗ[F] (V k)),
+        a9FinalTheta ⟨A0, B0, im, ker⟩ x =
+          Submodule.mkQ (⊥ : Submodule F (W (k + (a - i))))
+            (eCod (a9InitialMap ⟨A0, B0, im, ker⟩ p)) := by
+      intro im ker
+      simp [a9FinalTheta, x, eDom, eCod, LinearMap.comp_apply]
+    rw [hcalc im₁ ker₁, hcalc im₂ ker₂] at hx
+    have hinjQ : Function.Injective
+        (Submodule.mkQ (⊥ : Submodule F (W (k + (a - i))))) := by
+      rw [← Submodule.coe_quotEquivOfEqBot_symm
+        (⊥ : Submodule F (W (k + (a - i)))) rfl]
+      exact (Submodule.quotEquivOfEqBot
+        (⊥ : Submodule F (W (k + (a - i)))) rfl).symm.injective
+    exact eCod.injective (hinjQ hx)
+  exact a9InitialMap_graphs_inverse A0 B0 im₁ im₂ ker₁ ker₂
+    (by simpa [a9InitialMap] using hmap)
+
+/-- One coordinate initial datum, as a nonzero pair plus a `T1IndexTriple`.
+`A7GraphSumTriple` is an index of the positive-degree mixed sum. The
+subspaces travel with the index, so distinct data stay distinct. This does
+not bound `a7HybridQ` of an output, and it does not remove the share. -/
+structure A9EmbeddedSumFiber (a b k i j : Nat) where
+  A0 : W6Grass (V a) i
+  B0 : W6Grass (V b) j
+  index : A7GraphSumTriple k (b - j) (a - i)
+
+noncomputable def a9EmbedSumFiber {a b k i j : Nat} (hk : 0 < k)
+    (d : A9InitialDatum (V a) (V b) (V k) i j) :
+    A9EmbeddedSumFiber a b k i j where
+  A0 := d.A0
+  B0 := d.B0
+  index := {
+    triple := t1MapToTriple (a9FinalTheta d)
+    nonzero := Or.inl (a9_top_ne_bot
+      (Nat.lt_of_lt_of_le hk (Nat.le_add_right k (b - j)))) }
+
+theorem a9EmbedSumFiber_injective {a b k i j : Nat} (hk : 0 < k) :
+    Function.Injective (a9EmbedSumFiber (a := a) (b := b) (k := k)
+      (i := i) (j := j) hk) := by
+  intro d₁ d₂ h
+  have hA : d₁.A0 = d₂.A0 := congrArg A9EmbeddedSumFiber.A0 h
+  have hB : d₁.B0 = d₂.B0 := congrArg A9EmbeddedSumFiber.B0 h
+  have hidx := congrArg A9EmbeddedSumFiber.index h
+  cases d₁ with
+  | mk A1 B1 im₁ ker₁ =>
+    cases d₂ with
+    | mk A2 B2 im₂ ker₂ =>
+      subst hA
+      subst hB
+      have htri := congrArg A7GraphSumTriple.triple hidx
+      have htheta : a9FinalTheta ⟨A1, B1, im₁, ker₁⟩ =
+          a9FinalTheta ⟨A1, B1, im₂, ker₂⟩ := by
+        simpa [a9EmbedSumFiber, t1TripleToMap_mapToTriple] using
+          congrArg t1TripleToMap htri
+      have hgraphs := a9FinalTheta_graphs_inverse A1 B1 im₁ im₂ ker₁ ker₂ htheta
+      cases hgraphs.1
+      cases hgraphs.2
+      rfl
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
