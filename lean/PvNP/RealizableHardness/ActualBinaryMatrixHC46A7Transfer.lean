@@ -4910,6 +4910,580 @@ theorem a7OrderOne_remaining_output_exceeds_leftover :
           (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) :=
   sub_lt_sub_right a7OrderOne_output_q_exceeds_component _
 
+/-- Equal submodules are the same module. The underlying vector is unchanged. -/
+noncomputable def a7SubCast {M : Type*} [AddCommGroup M] [Module F M]
+    {A B : Submodule F M} (h : A = B) : A ≃ₗ[F] B :=
+  LinearEquiv.ofLinear
+    (Submodule.inclusion (le_of_eq h))
+    (Submodule.inclusion (le_of_eq h.symm))
+    (by
+      apply LinearMap.ext
+      intro x
+      apply Subtype.ext
+      rw [LinearMap.comp_apply, Submodule.inclusion_apply, Submodule.inclusion_apply]
+      simp)
+    (by
+      apply LinearMap.ext
+      intro x
+      apply Subtype.ext
+      rw [LinearMap.comp_apply, Submodule.inclusion_apply, Submodule.inclusion_apply]
+      simp)
+
+/-- Conjugation by linear equivalences preserves hybrid selection. -/
+theorem a7_selected_conj_iff
+    {D C D' C' : Type*}
+    [AddCommGroup D] [Module F D] [AddCommGroup C] [Module F C]
+    [AddCommGroup D'] [Module F D'] [AddCommGroup C'] [Module F C']
+    (eD : D ≃ₗ[F] D') (eC : C ≃ₗ[F] C')
+    (Y : D →ₗ[F] C) (A : Submodule F C) (B : Submodule F D) :
+    Selected (A.map eC.toLinearMap) (B.map eD.toLinearMap)
+        (eC.toLinearMap.comp (Y.comp eD.symm.toLinearMap)) ↔
+      Selected A B Y := by
+  let Z := eC.toLinearMap.comp (Y.comp eD.symm.toLinearMap)
+  constructor
+  · intro h
+    constructor
+    · intro a ha
+      have hmem : eC a ∈ LinearMap.range Z :=
+        h.1 (Submodule.mem_map_of_mem ha)
+      rcases hmem with ⟨w', hw'⟩
+      have ha' : Y (eD.symm w') = a := by
+        apply eC.injective
+        simpa [Z, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap] using hw'
+      exact ⟨eD.symm w', ha'⟩
+    · intro w hw
+      have hZw : Z (eD w) ∈ A.map eC.toLinearMap := by
+        refine ⟨Y w, hw, ?_⟩
+        simp [Z, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+          LinearEquiv.apply_symm_apply]
+      rcases Submodule.mem_map.mp (h.2 (eD w) hZw) with ⟨b, hb, hbval⟩
+      have hbEq : b = w := by
+        apply eD.injective
+        simpa [LinearEquiv.coe_toLinearMap] using hbval
+      exact hbEq ▸ hb
+  · intro h
+    constructor
+    · intro z hz
+      rcases hz with ⟨a, ha, rfl⟩
+      rcases h.1 ha with ⟨w, hw⟩
+      refine ⟨eD w, ?_⟩
+      simp [Z, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap, hw]
+    · intro w' hw'
+      rcases Submodule.mem_map.mp hw' with ⟨a, ha, heq⟩
+      have hYa : Y (eD.symm w') = a := by
+        apply eC.injective
+        simpa [Z, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap] using heq.symm
+      have hw : eD.symm w' ∈ B := h.2 (eD.symm w') (by
+        rw [hYa]
+        exact ha)
+      exact Submodule.mem_map.mpr ⟨eD.symm w', hw, by
+        simp [LinearEquiv.coe_toLinearMap]⟩
+
+private theorem a7_map_symm_map
+    {D D' : Type*} [AddCommGroup D] [Module F D]
+    [AddCommGroup D'] [Module F D']
+    (e : D ≃ₗ[F] D') (B : Submodule F D) :
+    (B.map e.toLinearMap).map e.symm.toLinearMap = B := by
+  rw [← Submodule.map_comp]
+  have hid : e.symm.toLinearMap.comp e.toLinearMap = LinearMap.id := by
+    apply LinearMap.ext
+    intro x
+    simp [LinearEquiv.coe_toLinearMap]
+  rw [hid, Submodule.map_id]
+
+private theorem a7_map_map_symm
+    {D D' : Type*} [AddCommGroup D] [Module F D]
+    [AddCommGroup D'] [Module F D']
+    (e : D ≃ₗ[F] D') (B : Submodule F D') :
+    (B.map e.symm.toLinearMap).map e.toLinearMap = B := by
+  rw [← Submodule.map_comp]
+  have hid : e.toLinearMap.comp e.symm.toLinearMap = LinearMap.id := by
+    apply LinearMap.ext
+    intro x
+    simp [LinearEquiv.coe_toLinearMap]
+  rw [hid, Submodule.map_id]
+
+/-- Selected pairs travel with the conjugated map, in both directions. -/
+noncomputable def a7SelectedTransport
+    {D C D' C' : Type*}
+    [AddCommGroup D] [Module F D] [AddCommGroup C] [Module F C]
+    [AddCommGroup D'] [Module F D'] [AddCommGroup C'] [Module F C']
+    (eD : D ≃ₗ[F] D') (eC : C ≃ₗ[F] C') (Y : D →ₗ[F] C) :
+    {p : Submodule F C × Submodule F D // Selected p.1 p.2 Y} ≃
+      {p : Submodule F C' × Submodule F D' //
+        Selected p.1 p.2
+          (eC.toLinearMap.comp (Y.comp eD.symm.toLinearMap))} where
+  toFun p := ⟨(p.1.1.map eC.toLinearMap, p.1.2.map eD.toLinearMap),
+    (a7_selected_conj_iff eD eC Y p.1.1 p.1.2).2 p.2⟩
+  invFun p := ⟨(p.1.1.map eC.symm.toLinearMap, p.1.2.map eD.symm.toLinearMap), by
+    have himgA : (p.1.1.map eC.symm.toLinearMap).map eC.toLinearMap = p.1.1 :=
+      a7_map_map_symm eC p.1.1
+    have himgB : (p.1.2.map eD.symm.toLinearMap).map eD.toLinearMap = p.1.2 :=
+      a7_map_map_symm eD p.1.2
+    have hsel :=
+      (a7_selected_conj_iff eD eC Y
+        (p.1.1.map eC.symm.toLinearMap) (p.1.2.map eD.symm.toLinearMap)).1
+        (by
+          rw [himgA, himgB]
+          exact p.2)
+    exact hsel⟩
+  left_inv p := by
+    apply Subtype.ext
+    apply Prod.ext
+    · exact a7_map_symm_map eC p.1.1
+    · exact a7_map_symm_map eD p.1.2
+  right_inv p := by
+    apply Subtype.ext
+    apply Prod.ext
+    · exact a7_map_map_symm eC p.1.1
+    · exact a7_map_map_symm eD p.1.2
+
+private noncomputable def a7NestedLift {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (hsel : Selected A₂ B₂ Y)
+    (p : {p : Submodule F (V d ⧸ A₂) × Submodule F B₂ //
+        Selected p.1 p.2 (induced A₂ B₂ Y)}) :
+    {p : {q : Submodule F (V d) × Submodule F (W n) //
+        A₂ ≤ q.1 ∧ q.2 ≤ B₂} //
+      Selected p.1.1 p.1.2 Y} :=
+  let A₁ := Submodule.comap A₂.mkQ p.1.1
+  let B₁ := Submodule.map B₂.subtype p.1.2
+  let hA : A₂ ≤ A₁ := by
+    intro a ha
+    rw [Submodule.mem_comap, Submodule.mkQ_apply,
+      (Submodule.Quotient.mk_eq_zero A₂).mpr ha]
+    exact p.1.1.zero_mem
+  let hB : B₁ ≤ B₂ := by
+    intro x hx
+    rcases hx with ⟨b, -, rfl⟩
+    exact b.2
+  let hAmap : A₁.map A₂.mkQ = p.1.1 :=
+    Submodule.map_comap_eq_self (by
+      rw [Submodule.range_mkQ]
+      exact le_top)
+  let hBcom : B₁.comap B₂.subtype = p.1.2 :=
+    Submodule.comap_map_eq_of_injective (Submodule.injective_subtype B₂) p.1.2
+  have hinduced : Selected (A₁.map A₂.mkQ) (B₁.comap B₂.subtype)
+      (induced A₂ B₂ Y) := by
+    rw [hAmap, hBcom]
+    exact p.2
+  ⟨⟨(A₁, B₁), hA, hB⟩,
+    (selected_nested_iff A₂ A₁ B₁ B₂ hA hB Y).2 ⟨hsel, hinduced⟩⟩
+
+private noncomputable def a7NestedDrop {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (p : {p : {q : Submodule F (V d) × Submodule F (W n) //
+        A₂ ≤ q.1 ∧ q.2 ≤ B₂} //
+      Selected p.1.1 p.1.2 Y}) :
+    {p : Submodule F (V d ⧸ A₂) × Submodule F B₂ //
+        Selected p.1 p.2 (induced A₂ B₂ Y)} :=
+  ⟨(p.1.1.1.map A₂.mkQ, p.1.1.2.comap B₂.subtype),
+    ((selected_nested_iff A₂ p.1.1.1 p.1.1.2 B₂ p.1.2.1 p.1.2.2 Y).1 p.2).2⟩
+
+private theorem a7NestedDrop_lift {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (hsel : Selected A₂ B₂ Y)
+    (p : {p : Submodule F (V d ⧸ A₂) × Submodule F B₂ //
+        Selected p.1 p.2 (induced A₂ B₂ Y)}) :
+    a7NestedDrop A₂ B₂ Y (a7NestedLift A₂ B₂ Y hsel p) = p := by
+  unfold a7NestedLift a7NestedDrop
+  dsimp
+  apply Subtype.ext
+  apply Prod.ext
+  · exact Submodule.map_comap_eq_self (by
+      rw [Submodule.range_mkQ]
+      exact le_top)
+  · exact Submodule.comap_map_eq_of_injective
+      (Submodule.injective_subtype B₂) p.1.2
+
+private theorem a7NestedLift_drop {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (hsel : Selected A₂ B₂ Y)
+    (p : {p : {q : Submodule F (V d) × Submodule F (W n) //
+        A₂ ≤ q.1 ∧ q.2 ≤ B₂} //
+      Selected p.1.1 p.1.2 Y}) :
+    a7NestedLift A₂ B₂ Y hsel (a7NestedDrop A₂ B₂ Y p) = p := by
+  apply Subtype.ext
+  apply Subtype.ext
+  apply Prod.ext
+  · show Submodule.comap A₂.mkQ (p.1.1.1.map A₂.mkQ) = p.1.1.1
+    rw [Submodule.comap_map_eq, Submodule.ker_mkQ]
+    exact sup_eq_left.mpr p.1.2.1
+  · show Submodule.map B₂.subtype (p.1.1.2.comap B₂.subtype) = p.1.1.2
+    exact Submodule.map_comap_eq_self (by
+      rw [Submodule.range_subtype]
+      exact p.1.2.2)
+
+/-- A selected induced pair is one original pair above the carrier. -/
+noncomputable def a7NestedSelectedEquiv {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (hsel : Selected A₂ B₂ Y) :
+    {p : Submodule F (V d ⧸ A₂) × Submodule F B₂ //
+        Selected p.1 p.2 (induced A₂ B₂ Y)} ≃
+      {p : {q : Submodule F (V d) × Submodule F (W n) //
+          A₂ ≤ q.1 ∧ q.2 ≤ B₂} //
+        Selected p.1.1 p.1.2 Y} where
+  toFun := a7NestedLift A₂ B₂ Y hsel
+  invFun := a7NestedDrop A₂ B₂ Y
+  left_inv := a7NestedDrop_lift A₂ B₂ Y hsel
+  right_inv := a7NestedLift_drop A₂ B₂ Y hsel
+
+/-- Nested original pair shares of one character equal the number of selected
+induced pairs. Each selected induced pair lands in one original pair, and the
+zero-order carrier pair is the outer pair itself. -/
+theorem a7_character_nested_share_eq {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (Y : BinaryMatrix n d)
+    (hsel : Selected A₂ B₂ Y.transpose.toLin') :
+    (∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+        A₂ ≤ q.1 ∧ q.2 ≤ B₂},
+      a7PairShare p.1.1 p.1.2 (fun M => (character Y M : ℂ))) =
+      (Fintype.card {p : Submodule F (V d ⧸ A₂) × Submodule F B₂ //
+        Selected p.1 p.2 (induced A₂ B₂ Y.transpose.toLin')} : ℝ) := by
+  classical
+  let nested := {q : Submodule F (V d) × Submodule F (W n) //
+    A₂ ≤ q.1 ∧ q.2 ≤ B₂}
+  let inducedSel := {p : Submodule F (V d ⧸ A₂) × Submodule F B₂ //
+    Selected p.1 p.2 (induced A₂ B₂ Y.transpose.toLin')}
+  let nestedSel := {p : nested // Selected p.1.1 p.1.2 Y.transpose.toLin'}
+  have hpair : ∀ p : nested,
+      a7PairShare p.1.1 p.1.2 (fun M => (character Y M : ℂ)) =
+        if Selected p.1.1 p.1.2 Y.transpose.toLin' then 1 else 0 :=
+    fun p => a7_character_pair_share p.1.1 p.1.2 Y
+  simp_rw [hpair]
+  have hsum : (∑ p : nested,
+      if Selected p.1.1 p.1.2 Y.transpose.toLin' then (1 : ℝ) else 0) =
+      (Fintype.card nestedSel : ℝ) := by
+    have hfilter := Finset.sum_filter (s := Finset.univ)
+      (p := fun p : nested => Selected p.1.1 p.1.2 Y.transpose.toLin')
+      (f := fun _ => (1 : ℝ))
+    rw [← hfilter, Finset.sum_const, nsmul_eq_mul, mul_one]
+    exact congrArg (fun n : Nat => (n : ℝ))
+      (Fintype.card_subtype
+        (fun p : nested => Selected p.1.1 p.1.2 Y.transpose.toLin')).symm
+  have hcard : Fintype.card nestedSel = Fintype.card inducedSel :=
+    Fintype.card_congr (a7NestedSelectedEquiv A₂ B₂ Y.transpose.toLin' hsel).symm
+  rw [hsum, hcard]
+
+/-- Those nested shares are a subset of the original pair shares, so their sum
+is at most the character's unweighted `Q`. -/
+theorem a7_character_nested_share_le_q {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (Y : BinaryMatrix n d) :
+    (∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+        A₂ ≤ q.1 ∧ q.2 ≤ B₂},
+      a7PairShare p.1.1 p.1.2 (fun M => (character Y M : ℂ))) ≤
+      a7HybridQ (fun M => (character Y M : ℂ)) := by
+  classical
+  let nested := {q : Submodule F (V d) × Submodule F (W n) //
+    A₂ ≤ q.1 ∧ q.2 ≤ B₂}
+  let ambient := Submodule F (V d) × Submodule F (W n)
+  let emb : nested → ambient := fun p => p.1
+  have hinj : ∀ x ∈ (Finset.univ : Finset nested),
+      ∀ y ∈ (Finset.univ : Finset nested), emb x = emb y → x = y := by
+    intro x _ y _ h
+    exact Subtype.ext h
+  have himage : (∑ p : nested,
+      a7PairShare (emb p).1 (emb p).2 (fun M => (character Y M : ℂ))) =
+      ∑ q ∈ (Finset.univ : Finset nested).image emb,
+        a7PairShare q.1 q.2 (fun M => (character Y M : ℂ)) := by
+    symm
+    exact Finset.sum_image hinj
+  have hsub : (Finset.univ : Finset nested).image emb ⊆ Finset.univ :=
+    Finset.subset_univ _
+  have hnn : ∀ q : ambient, q ∈ Finset.univ →
+      q ∉ (Finset.univ : Finset nested).image emb →
+      0 ≤ a7PairShare q.1 q.2 (fun M => (character Y M : ℂ)) := by
+    intro q _ _
+    exact a7_pair_share_nonneg q.1 q.2 _
+  have hle : (∑ q ∈ (Finset.univ : Finset nested).image emb,
+      a7PairShare q.1 q.2 (fun M => (character Y M : ℂ))) ≤
+      ∑ q : ambient, a7PairShare q.1 q.2 (fun M => (character Y M : ℂ)) :=
+    Finset.sum_le_sum_of_subset_of_nonneg hsub hnn
+  have hexh := a7_pair_shares_exhaust (fun M => (character Y M : ℂ))
+  have hemb : ∀ p : nested, a7PairShare (emb p).1 (emb p).2
+      (fun M => (character Y M : ℂ)) =
+      a7PairShare p.1.1 p.1.2 (fun M => (character Y M : ℂ)) :=
+    fun _ => rfl
+  simp_rw [hemb] at himage
+  rw [himage]
+  exact hle.trans (le_of_eq hexh)
+
+theorem a7OrderIsoL_bijective : Function.Bijective a7OrderIsoL := by
+  have hsubSurj : Function.Surjective a7OrderHout.subtype := by
+    intro w
+    have hw : w ∈ a7OrderHout := by
+      unfold a7OrderHout
+      rw [a7OrderOne_output_ker]
+      exact Submodule.mem_top
+    exact ⟨⟨w, hw⟩, rfl⟩
+  have hcomp : a7OrderIsoL =
+      a7OrderHout.subtype.comp
+        (codomainBasis a7OrderHout).equivFun.symm.toLinearMap := by
+    unfold a7OrderIsoL
+    rfl
+  rw [hcomp, LinearMap.coe_comp]
+  exact Function.Bijective.comp
+    ⟨Submodule.injective_subtype a7OrderHout, hsubSurj⟩
+    (codomainBasis a7OrderHout).equivFun.symm.bijective
+
+theorem a7OrderIsoR_bijective : Function.Bijective a7OrderIsoR := by
+  have hinjQ : Function.Injective a7OrderCout.mkQ := by
+    rw [← LinearMap.ker_eq_bot, Submodule.ker_mkQ]
+    exact a7OrderCout_bot
+  have hsurjQ : Function.Surjective a7OrderCout.mkQ := by
+    intro z
+    obtain ⟨v, hv⟩ := Quotient.exists_rep z
+    refine ⟨v, ?_⟩
+    rw [Submodule.mkQ_apply]
+    exact hv
+  have hcomp : a7OrderIsoR =
+      (domainBasis a7OrderCout).equivFun.toLinearMap.comp a7OrderCout.mkQ := by
+    unfold a7OrderIsoR
+    rfl
+  rw [hcomp, LinearMap.coe_comp]
+  exact Function.Bijective.comp
+    (domainBasis a7OrderCout).equivFun.bijective
+    ⟨hinjQ, hsurjQ⟩
+
+/-- The output character is the rank-38 quotient map read through the output
+carrier bases. -/
+theorem a7OrderOne_output_toLin :
+    a7OrderOneOutputMatrix.transpose.toLin' =
+      (LinearEquiv.ofBijective a7OrderIsoR a7OrderIsoR_bijective).toLinearMap.comp
+        (a7OrderMatrix.transpose.toLin'.comp
+          (LinearEquiv.ofBijective a7OrderIsoL a7OrderIsoL_bijective).toLinearMap) := by
+  let eL := LinearEquiv.ofBijective a7OrderIsoL a7OrderIsoL_bijective
+  let eR := LinearEquiv.ofBijective a7OrderIsoR a7OrderIsoR_bijective
+  have hEL : eL.toLinearMap = a7OrderIsoL := by
+    ext x
+    simp [eL, LinearEquiv.ofBijective_apply]
+  have hER : eR.toLinearMap = a7OrderIsoR := by
+    ext x
+    simp [eR, LinearEquiv.ofBijective_apply]
+  have hYt : a7OrderOneOutputMatrix.transpose =
+      LinearMap.toMatrix' a7OrderIsoR * a7OrderMatrix.transpose *
+        LinearMap.toMatrix' a7OrderIsoL := by
+    unfold a7OrderOneOutputMatrix
+    simp only [Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.mul_assoc]
+  rw [hEL, hER, hYt, Matrix.toLin'_mul, Matrix.toLin'_mul]
+  rw [Matrix.toLin'_toMatrix', Matrix.toLin'_toMatrix']
+  rw [LinearMap.comp_assoc]
+
+/-- Equal maps have the same number of selected pairs. The cast does not
+unfold the maps. -/
+private theorem a7_selected_card_eq
+    {D C : Type*} [AddCommGroup D] [Module F D] [AddCommGroup C] [Module F C]
+    {Y Z : D →ₗ[F] C} (h : Y = Z)
+    [Fintype {p : Submodule F C × Submodule F D // Selected p.1 p.2 Y}]
+    [Fintype {p : Submodule F C × Submodule F D // Selected p.1 p.2 Z}] :
+    Fintype.card {p : Submodule F C × Submodule F D // Selected p.1 p.2 Y} =
+      Fintype.card {p : Submodule F C × Submodule F D // Selected p.1 p.2 Z} :=
+  Fintype.card_congr (Equiv.cast (congrArg
+    (fun f : D →ₗ[F] C =>
+      {p : Submodule F C × Submodule F D // Selected p.1 p.2 f}) h))
+
+/-- The order-one quotient map is the induced frequency of the rank-39
+character on `(line, ⊤)`. -/
+theorem a7OrderPhi_eq_induced_conj :
+    (Submodule.quotEquivOfEq (t1AmbientC a7OrderOneTriple.C) a7Line
+        a7OrderOne_C).toLinearMap.comp
+      (a7OrderPhi.comp (a7SubCast a7OrderOne_H).symm.toLinearMap) =
+      induced a7Line (⊤ : Submodule F (W 40)) a7Freq40 := by
+  let C := t1AmbientC a7OrderOneTriple.C
+  let H := t1AmbientH a7OrderOneTriple.K
+  let eH : H ≃ₗ[F] (⊤ : Submodule F (W 40)) := a7SubCast a7OrderOne_H
+  let eQ : (V 40 ⧸ C) ≃ₗ[F] (V 40 ⧸ a7Line) :=
+    Submodule.quotEquivOfEq C a7Line a7OrderOne_C
+  apply LinearMap.ext
+  intro w
+  simp only [LinearMap.comp_apply, LinearEquiv.coe_toLinearMap]
+  have hvec : (H.subtype (eH.symm w) : W 40) = w.1 := by
+    change (eH.symm w).1 = w.1
+    simp [eH, a7SubCast, LinearEquiv.symm_apply_eq, Submodule.inclusion_apply]
+  unfold a7OrderPhi induced
+  simp only [LinearMap.comp_apply]
+  rw [hvec]
+  have hsub : ((⊤ : Submodule F (W 40)).subtype w : W 40) = w.1 := rfl
+  rw [hsub]
+  rw [Submodule.mkQ_apply, Submodule.mkQ_apply]
+  exact Submodule.quotEquivOfEq_mk C a7Line a7OrderOne_C (a7Freq40 w.1)
+
+/-- Unweighted `Q` of the order-one output equals the sum of the original
+character's pair shares over every pair above `(line, ⊤)`. The pullback has
+rank `0`, so this is the manuscript sum in (A8) and the graph cost is `1`.
+Each selected output pair lands in one of those original pairs. The sum is at
+most the original unweighted `Q`. It is not the refuted bound by one
+component, and the share hypothesis remains for a general input. -/
+theorem a7OrderOne_nested_sum :
+    (∑ p : {q : Submodule F (V 40) × Submodule F (W 40) //
+        a7Line ≤ q.1 ∧ q.2 ≤ ⊤},
+      a7PairShare p.1.1 p.1.2 (fun M => (character a7FreqMatrix M : ℂ))) =
+      (Fintype.card {p : Submodule F (V 40 ⧸ a7Line) ×
+          Submodule F (⊤ : Submodule F (W 40)) //
+        Selected p.1 p.2 (induced a7Line ⊤ a7Freq40)} : ℝ) := by
+  have h := a7_character_nested_share_eq a7Line (⊤ : Submodule F (W 40)) a7FreqMatrix
+    (by rw [a7FreqMatrix_toLin]; exact a7Freq40_selected)
+  rw [a7FreqMatrix_toLin] at h
+  exact h
+
+theorem a7OrderOne_output_selected_card :
+    Fintype.card {p : Submodule F (V _) × Submodule F (W _) //
+        Selected p.1 p.2 a7OrderOneOutputMatrix.transpose.toLin'} =
+      Fintype.card {p : Submodule F (V 40 ⧸ a7Line) ×
+          Submodule F (⊤ : Submodule F (W 40)) //
+        Selected p.1 p.2 (induced a7Line ⊤ a7Freq40)} := by
+  classical
+  let C := t1AmbientC a7OrderOneTriple.C
+  let H := t1AmbientH a7OrderOneTriple.K
+  let eH : H ≃ₗ[F] (⊤ : Submodule F (W 40)) := a7SubCast a7OrderOne_H
+  let eQ : (V 40 ⧸ C) ≃ₗ[F] (V 40 ⧸ a7Line) :=
+    Submodule.quotEquivOfEq C a7Line a7OrderOne_C
+  let eDom := (codomainBasis H).equivFun
+  let eCod := (domainBasis C).equivFun
+  let eL := LinearEquiv.ofBijective a7OrderIsoL a7OrderIsoL_bijective
+  let eR := LinearEquiv.ofBijective a7OrderIsoR a7OrderIsoR_bijective
+  have hphi := a7OrderPhi_eq_induced_conj
+  have hcoord := carrierFrequency_toLin C H a7OrderPhi
+  have hto := a7OrderOne_output_toLin
+  have hinduced : Fintype.card {p : Submodule F (V 40 ⧸ C) × Submodule F H //
+      Selected p.1 p.2 a7OrderPhi} =
+      Fintype.card {p : Submodule F (V 40 ⧸ a7Line) ×
+          Submodule F (⊤ : Submodule F (W 40)) //
+        Selected p.1 p.2 (induced a7Line ⊤ a7Freq40)} := by
+    have htransport := Fintype.card_congr (a7SelectedTransport eH eQ a7OrderPhi)
+    exact htransport.trans (a7_selected_card_eq hphi)
+  have hcoord' : eCod.toLinearMap.comp (a7OrderPhi.comp eDom.symm.toLinearMap) =
+      a7OrderMatrix.transpose.toLin' := by
+    rw [a7OrderMatrix]
+    exact hcoord.symm
+  have hphiCoord : Fintype.card {p : Submodule F (V 40 ⧸ C) × Submodule F H //
+      Selected p.1 p.2 a7OrderPhi} =
+      Fintype.card {p : Submodule F (Fin (Module.finrank F (V 40 ⧸ C)) → F) ×
+          Submodule F (Fin (Module.finrank F H) → F) //
+        Selected p.1 p.2 a7OrderMatrix.transpose.toLin'} :=
+    (Fintype.card_congr (a7SelectedTransport eDom eCod a7OrderPhi)).trans
+      (a7_selected_card_eq hcoord')
+  have hpre : eR.toLinearMap.comp
+      (a7OrderMatrix.transpose.toLin'.comp eL.symm.symm.toLinearMap) =
+      eR.toLinearMap.comp
+        (a7OrderMatrix.transpose.toLin'.comp eL.toLinearMap) := by
+    rw [LinearEquiv.symm_symm]
+  have houtput : Fintype.card {p : Submodule F (Fin (Module.finrank F (V 40 ⧸ C)) → F) ×
+      Submodule F (Fin (Module.finrank F H) → F) //
+      Selected p.1 p.2 a7OrderMatrix.transpose.toLin'} =
+      Fintype.card {p : Submodule F (V _) × Submodule F (W _) //
+        Selected p.1 p.2 a7OrderOneOutputMatrix.transpose.toLin'} :=
+    (Fintype.card_congr
+      (a7SelectedTransport eL.symm eR a7OrderMatrix.transpose.toLin')).trans
+      ((a7_selected_card_eq hpre).trans (a7_selected_card_eq hto.symm))
+  exact (hinduced.symm.trans (hphiCoord.trans houtput)).symm
+
+theorem a7OrderOne_output_q_eq_nested_shares :
+    a7HybridQ (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) =
+      ∑ p : {q : Submodule F (V 40) × Submodule F (W 40) //
+          a7Line ≤ q.1 ∧ q.2 ≤ ⊤},
+        a7PairShare p.1.1 p.1.2 a7Char := by
+  have hfun : ∀ (A : Submodule F (V 40)) (B : Submodule F (W 40)),
+      a7PairShare A B a7Char =
+        a7PairShare A B (fun M => (character a7FreqMatrix M : ℂ)) := by
+    intro A B
+    rfl
+  have hsum : (∑ p : {q : Submodule F (V 40) × Submodule F (W 40) //
+      a7Line ≤ q.1 ∧ q.2 ≤ ⊤}, a7PairShare p.1.1 p.1.2 a7Char) =
+      ∑ p : {q : Submodule F (V 40) × Submodule F (W 40) //
+        a7Line ≤ q.1 ∧ q.2 ≤ ⊤},
+        a7PairShare p.1.1 p.1.2 (fun M => (character a7FreqMatrix M : ℂ)) := by
+    refine Finset.sum_congr rfl ?_
+    intro p _
+    exact hfun p.1.1 p.1.2
+  have hcard : a7HybridQ
+      (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) =
+      (Fintype.card {p : Submodule F (V _) × Submodule F (W _) //
+        Selected p.1 p.2 a7OrderOneOutputMatrix.transpose.toLin'} : ℝ) := by
+    rw [a7OrderOne_output_character, a7_character_hybrid_q]
+  rw [hcard, a7OrderOne_output_selected_card, ← a7OrderOne_nested_sum, hsum]
+
+/-- The same sum is at most the original character's unweighted `Q`. -/
+theorem a7OrderOne_output_q_le_original_q :
+    a7HybridQ (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) ≤
+      a7HybridQ a7Char := by
+  rw [a7OrderOne_output_q_eq_nested_shares]
+  have hsum : (∑ p : {q : Submodule F (V 40) × Submodule F (W 40) //
+      a7Line ≤ q.1 ∧ q.2 ≤ ⊤}, a7PairShare p.1.1 p.1.2 a7Char) =
+      ∑ p : {q : Submodule F (V 40) × Submodule F (W 40) //
+        a7Line ≤ q.1 ∧ q.2 ≤ ⊤},
+        a7PairShare p.1.1 p.1.2 (fun M => (character a7FreqMatrix M : ℂ)) := by
+    refine Finset.sum_congr rfl ?_
+    intro p _
+    rfl
+  rw [hsum]
+  exact a7_character_nested_share_le_q a7Line (⊤ : Submodule F (W 40)) a7FreqMatrix
+
+/-- The original pair `(line, ⊤)` contributes `1`, the zero-order output term. -/
+theorem a7OrderOne_line_share :
+    a7PairShare a7Line (⊤ : Submodule F (W 40)) a7Char = 1 := by
+  unfold a7Char
+  rw [a7_character_pair_share, a7FreqMatrix_toLin, if_pos a7Freq40_selected]
+
+/-- After the zero-order output term is removed, the remaining output mass
+equals the sum of the other original pair shares above `(line, ⊤)`. Those
+pairs are not the one component that the order-one excess already exhausts.
+The factor is `1`. The share hypothesis remains. -/
+theorem a7OrderOne_positive_output_eq_other_shares :
+    a7HybridQ (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) -
+        a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) =
+      ∑ p : {q : {r : Submodule F (V 40) × Submodule F (W 40) //
+          a7Line ≤ r.1 ∧ r.2 ≤ ⊤} // q.1 ≠ ⟨a7Line, ⊤⟩},
+        a7PairShare p.1.1.1 p.1.1.2 a7Char := by
+  classical
+  let nested := {r : Submodule F (V 40) × Submodule F (W 40) //
+    a7Line ≤ r.1 ∧ r.2 ≤ ⊤}
+  let p0 : nested := ⟨(a7Line, ⊤), le_rfl, le_top⟩
+  let f : nested → ℝ := fun p => a7PairShare p.1.1 p.1.2 a7Char
+  have hsum := a7OrderOne_output_q_eq_nested_shares
+  have hzero := a7OrderOne_zero_output_share_eq_one
+  have hline := a7OrderOne_line_share
+  have hsplit : (∑ p : nested, f p) =
+      f p0 + ∑ p : {p : nested // p.1 ≠ (a7Line, ⊤)}, f p.1 := by
+    let t : Finset nested := Finset.univ.filter (fun p => p.1 ≠ (a7Line, ⊤))
+    have hnot : p0 ∉ t := by
+      simp [t, p0]
+    have huniv : insert p0 t = Finset.univ := by
+      ext x
+      constructor
+      · intro _
+        exact Finset.mem_univ x
+      · intro _
+        by_cases hx : x.1 = (a7Line, ⊤)
+        · have hx0 : x = p0 := Subtype.ext hx
+          exact hx0 ▸ Finset.mem_insert_self p0 t
+        · exact Finset.mem_insert_of_mem
+            (Finset.mem_filter.mpr ⟨Finset.mem_univ x, hx⟩)
+    have hinsert := Finset.sum_insert (f := f) hnot
+    rw [← huniv, hinsert]
+    refine congrArg (fun s => f p0 + s) ?_
+    symm
+    refine Finset.sum_bij
+      (fun (p : {p : nested // p.1 ≠ (a7Line, ⊤)})
+        (_ : p ∈ Finset.univ) => p.1) ?_ ?_ ?_ ?_
+    · intro p _
+      simpa [t] using p.2
+    · intro p _ q _ h
+      exact Subtype.ext h
+    · intro b hb
+      have hb' : b.1 ≠ (a7Line, ⊤) := by
+        simpa [t] using hb
+      exact ⟨⟨b, hb'⟩, Finset.mem_univ _, rfl⟩
+    · intro p _
+      rfl
+  have hp0 : f p0 = 1 := by
+    simp [f, p0, hline]
+  rw [hsum, hzero, hsplit, hp0]
+  ring
+
 /-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
 noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
     [AddCommGroup M] [Module F M] [Module.Finite F M]
