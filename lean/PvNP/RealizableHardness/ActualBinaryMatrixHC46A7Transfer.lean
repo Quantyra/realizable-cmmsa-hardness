@@ -4096,5 +4096,53 @@ theorem a9EmbedSumFiber_injective {a b k i j : Nat} (hk : 0 < k) :
       cases hgraphs.2
       rfl
 
+/-- The transported sum-index map has rank `k`, the same rank as the
+coordinate project-then-lift map. The two outer arrows are linear
+equivalences, so they do not change the rank. This does not bound
+`a7HybridQ` of an output, and it does not remove the share. -/
+theorem a9FinalTheta_rank {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) :
+    Module.finrank F (LinearMap.range (a9FinalTheta d)) = k := by
+  classical
+  let eDom := a9FinalDomEquiv (k := k) d.B0
+  let eCod := a9FinalCodEquiv (k := k) d.A0
+  let right := eDom.symm.toLinearMap.comp
+    (⊤ : Submodule F (V (k + (b - j)))).subtype
+  let eQ : (W (k + (a - i))) ≃ₗ[F]
+      (W (k + (a - i)) ⧸ (⊥ : Submodule F (W (k + (a - i))))) :=
+    (Submodule.quotEquivOfEqBot
+      (⊥ : Submodule F (W (k + (a - i)))) rfl).symm
+  have hmk : eQ.toLinearMap =
+      Submodule.mkQ (⊥ : Submodule F (W (k + (a - i)))) :=
+    Submodule.coe_quotEquivOfEqBot_symm
+      (⊥ : Submodule F (W (k + (a - i)))) rfl
+  have hsurj : Function.Surjective right := by
+    intro y
+    obtain ⟨x, hx⟩ := eDom.symm.surjective y
+    use ⟨x, Submodule.mem_top⟩
+    simpa [right, LinearMap.comp_apply] using hx
+  have htheta : a9FinalTheta d =
+      eQ.toLinearMap.comp (eCod.toLinearMap.comp
+        ((a9InitialMap d).comp right)) := by
+    rw [hmk]
+    rfl
+  have hrangemid : LinearMap.range ((a9InitialMap d).comp right) =
+      LinearMap.range (a9InitialMap d) := by
+    rw [LinearMap.range_comp, LinearMap.range_eq_top.mpr hsurj, Submodule.map_top]
+  have hcod : LinearMap.range (eCod.toLinearMap.comp
+        ((a9InitialMap d).comp right)) =
+      Submodule.map eCod.toLinearMap (LinearMap.range (a9InitialMap d)) := by
+    rw [LinearMap.range_comp, hrangemid]
+  have hq : LinearMap.range (eQ.toLinearMap.comp (eCod.toLinearMap.comp
+        ((a9InitialMap d).comp right))) =
+      Submodule.map eQ.toLinearMap
+        (Submodule.map eCod.toLinearMap (LinearMap.range (a9InitialMap d))) := by
+    rw [LinearMap.range_comp, hcod]
+  rw [htheta, hq, LinearEquiv.finrank_map_eq eQ, LinearEquiv.finrank_map_eq eCod]
+  have hrank := a9InitialMap_rank d
+  have hk : Module.finrank F (V k) = k := by
+    simpa using (Module.finrank_fin_fun (n := k) F)
+  rw [hrank, hk]
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
