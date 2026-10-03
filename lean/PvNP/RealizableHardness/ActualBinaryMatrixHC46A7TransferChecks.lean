@@ -10,6 +10,11 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check manuscript_A7_degree_zero
 #check a7_l2_slack
 #check a7_terminal_factor
+#check a7_zero_order_component
+#check a7_zero_order_uniform
+#check a7_q_ge_l2
+#check a7HybridQ_nonneg
+#check a7_positive_of_mixed_bound
 
 #print axioms a7_constant_of_degree_zero
 #print axioms a7_q_eq_zero_order
@@ -17,3 +22,7 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms manuscript_A7_degree_zero
 #print axioms a7_l2_slack
 #print axioms a7_terminal_factor
+#print axioms a7_zero_order_component
+#print axioms a7_q_ge_l2
+#print axioms a7HybridQ_nonneg
+#print axioms a7_positive_of_mixed_bound

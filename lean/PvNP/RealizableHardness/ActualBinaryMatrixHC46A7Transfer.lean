@@ -1,3 +1,4 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
 import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
 import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
@@ -9,7 +10,9 @@ import PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
 uniform average in the affine base of the carrier `L2` fourth power. The pair
 set includes the zero-order pair `(⊥, ⊤)`. At Fourier degree zero the positive
 pairs vanish, the zero-order term equals the fourth moment, and that moment
-equals `2^(100*0*0) * Q(f)`.
+equals `2^(100*0*0) * Q(f)`. For every source, that same zero-order term is the
+squared `L2` energy, so it sits under `Q`. The positive-degree closure from A6
+is stated only under an explicit mixed-sum bound; that bound is not A7.
 -/
 
 namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
@@ -21,7 +24,10 @@ noncomputable section
 attribute [local instance] Classical.propDecidable
 attribute [local instance] Fintype.ofFinite
 
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
 open PvNP.RealizableHardness.BinaryMatrixA1Complex
@@ -324,6 +330,245 @@ theorem a7_terminal_factor (D : Nat) (hD : 0 < D) :
     positivity
   have hmul := mul_le_mul_of_nonneg_left hsum (by norm_num : (0 : ℝ) ≤ 162)
   exact lt_of_le_of_lt hmul hsmall
+
+set_option maxHeartbeats 1500000
+
+/-- Bottom/top carrier maps are the ambient linear maps. -/
+private def a7BotTopHomEquiv {n d : Nat} :
+    ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F] (⊤ : Submodule F (W n))) ≃ₗ[F]
+      (V d →ₗ[F] W n) :=
+  LinearEquiv.arrowCongr
+    ((⊥ : Submodule F (V d)).quotEquivOfEqBot rfl)
+    (Submodule.topEquiv)
+
+private theorem a7BotTopHomEquiv_apply {n d : Nat}
+    (M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F] (⊤ : Submodule F (W n))) :
+    a7BotTopHomEquiv (n := n) (d := d) M =
+      (⊤ : Submodule F (W n)).subtype.comp
+        (M.comp (Submodule.mkQ (⊥ : Submodule F (V d)))) := by
+  ext x
+  simp [a7BotTopHomEquiv, LinearEquiv.arrowCongr_apply]
+
+/-- Standard matrix coordinates of a bottom/top carrier map. -/
+private def a7BotTopMatrixEquiv {n d : Nat} :
+    ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F] (⊤ : Submodule F (W n))) ≃
+      BinaryMatrix n d :=
+  ((a7BotTopHomEquiv (n := n) (d := d)).trans LinearMap.toMatrix').toEquiv
+
+private theorem a7_addLeft_apply {n d : Nat}
+    (T M : BinaryMatrix n d) : Equiv.addLeft T M = T + M := rfl
+
+private theorem a7_filter_matrix {n d : Nat}
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F] (⊤ : Submodule F (W n))) :
+    filteredCarrierFunction (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) T f M =
+      f (LinearMap.toMatrix' T + a7BotTopMatrixEquiv M) := by
+  rw [filteredCarrierFunction_bot_top_base]
+  have hhom := a7BotTopHomEquiv_apply (n := n) (d := d) M
+  have hadd :
+      LinearMap.toMatrix' (T + a7BotTopHomEquiv (n := n) (d := d) M) =
+        LinearMap.toMatrix' T +
+          LinearMap.toMatrix' (a7BotTopHomEquiv (n := n) (d := d) M) :=
+    map_add LinearMap.toMatrix' T (a7BotTopHomEquiv (n := n) (d := d) M)
+  apply congrArg f
+  rw [← hhom, hadd]
+  simp [a7BotTopMatrixEquiv, LinearEquiv.trans_apply]
+
+/-- For every source, the zero-order hybrid component is the squared `L2`
+energy. The carrier is a translate of the ambient matrix space. -/
+theorem a7_zero_order_component {n d : Nat}
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex) :
+    typedW6QComponent (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) T f =
+      (uniformMean (fun M => Complex.normSq (f M))) ^ 2 := by
+  classical
+  let carrier :=
+    (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F] (⊤ : Submodule F (W n))
+  let e : carrier ≃ BinaryMatrix n d :=
+    (a7BotTopMatrixEquiv (n := n) (d := d)).trans
+      (Equiv.addLeft (LinearMap.toMatrix' T))
+  have hpoint : ∀ M : carrier,
+      Complex.normSq
+        (filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) T f M) =
+        Complex.normSq (f (e M)) := by
+    intro M
+    have he : e M = LinearMap.toMatrix' T + a7BotTopMatrixEquiv M := by
+      unfold e
+      rw [Equiv.trans_apply]
+      exact a7_addLeft_apply (LinearMap.toMatrix' T) (a7BotTopMatrixEquiv M)
+    rw [a7_filter_matrix T f M, he]
+  have hsum :
+      (∑ M : carrier,
+        Complex.normSq
+          (filteredCarrierFunction (⊥ : Submodule F (V d))
+            (⊤ : Submodule F (W n)) T f M)) =
+        ∑ X : BinaryMatrix n d, Complex.normSq (f X) := by
+    calc
+      _ = ∑ M : carrier, Complex.normSq (f (e M)) :=
+        Finset.sum_congr rfl (fun M _ => hpoint M)
+      _ = ∑ X : BinaryMatrix n d, Complex.normSq (f X) :=
+        Equiv.sum_comp e (fun X => Complex.normSq (f X))
+  have hcard : Fintype.card carrier = Fintype.card (BinaryMatrix n d) :=
+    Fintype.card_congr e
+  unfold typedW6QComponent
+  have hmean :
+      carrierMean (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n))
+        (fun M => Complex.normSq
+          (filteredCarrierFunction (⊥ : Submodule F (V d))
+            (⊤ : Submodule F (W n)) T f M)) =
+        uniformMean (fun M => Complex.normSq (f M)) := by
+    unfold carrierMean uniformMean
+    rw [hsum]
+    have hcardR : (Fintype.card carrier : ℝ) =
+        (Fintype.card (BinaryMatrix n d) : ℝ) := congrArg Nat.cast hcard
+    rw [hcardR]
+  rw [hmean]
+
+theorem a7HybridQ_nonneg {n d : Nat} (f : BinaryMatrix n d → Complex) :
+    0 ≤ a7HybridQ f := by
+  unfold a7HybridQ
+  refine Finset.sum_nonneg (fun p _ => ?_)
+  unfold typedUniformMean
+  refine div_nonneg ?_ (Nat.cast_nonneg _)
+  refine Finset.sum_nonneg (fun T _ => ?_)
+  unfold typedW6QComponent
+  exact sq_nonneg _
+
+/-- The zero-order pair is one nonnegative term of the unweighted all-hybrid
+`Q`, so the squared `L2` energy is at most `Q`. -/
+theorem a7_zero_order_uniform {n d : Nat} (f : BinaryMatrix n d → Complex) :
+    typedUniformMean (fun T : V d →ₗ[F] W n =>
+      typedW6QComponent (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) T f) =
+      (uniformMean (fun M => Complex.normSq (f M))) ^ 2 := by
+  classical
+  unfold typedUniformMean
+  have hconst : ∀ T : V d →ₗ[F] W n,
+      typedW6QComponent (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) T f =
+        (uniformMean (fun M => Complex.normSq (f M))) ^ 2 :=
+    fun T => a7_zero_order_component T f
+  have hfun :
+      (fun T : V d →ₗ[F] W n =>
+        typedW6QComponent (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) T f) =
+        fun _ => (uniformMean (fun M => Complex.normSq (f M))) ^ 2 :=
+    funext hconst
+  rw [hfun, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  exact mul_div_cancel_left₀ _
+    (by exact_mod_cast (Fintype.card_ne_zero : Fintype.card (V d →ₗ[F] W n) ≠ 0))
+
+theorem a7_qComponent_uniform_nonneg {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) :
+    0 ≤ typedUniformMean (fun T : V d →ₗ[F] W n => typedW6QComponent A B T f) := by
+  unfold typedUniformMean
+  refine div_nonneg ?_ (Nat.cast_nonneg _)
+  refine Finset.sum_nonneg (fun _ _ => ?_)
+  unfold typedW6QComponent
+  exact sq_nonneg _
+
+theorem a7_q_ge_l2 {n d : Nat} (f : BinaryMatrix n d → Complex) :
+    (uniformMean (fun M => Complex.normSq (f M))) ^ 2 ≤ a7HybridQ f := by
+  classical
+  let pair : Submodule F (V d) × Submodule F (W n) := ⟨⊥, ⊤⟩
+  let g : Submodule F (V d) × Submodule F (W n) → ℝ := fun p =>
+    typedUniformMean (fun T : V d →ₗ[F] W n => typedW6QComponent p.1 p.2 T f)
+  have hnn : ∀ p : Submodule F (V d) × Submodule F (W n), 0 ≤ g p := by
+    intro p
+    unfold g
+    exact a7_qComponent_uniform_nonneg p.1 p.2 f
+  have hadd : g pair + ∑ p ∈ Finset.univ.erase pair, g p = ∑ p, g p :=
+    Finset.add_sum_erase Finset.univ g (Finset.mem_univ pair)
+  have hrest : 0 ≤ ∑ p ∈ Finset.univ.erase pair, g p :=
+    Finset.sum_nonneg (fun p _ => hnn p)
+  have hle : g pair ≤ g pair + ∑ p ∈ Finset.univ.erase pair, g p :=
+    le_add_of_nonneg_right hrest
+  have hpair : g pair =
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        typedW6QComponent (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) T f) := by
+    unfold g pair
+    rfl
+  have hsum : g pair ≤ ∑ p, g p := by
+    rw [← hadd]
+    exact hle
+  have hQ : (∑ p, g p) = a7HybridQ f := by
+    unfold a7HybridQ g
+    rfl
+  have hL : (uniformMean (fun M => Complex.normSq (f M))) ^ 2 = g pair := by
+    rw [hpair]
+    exact (a7_zero_order_uniform f).symm
+  rw [hL, ← hQ]
+  exact hsum
+
+/-- Positive-degree arithmetic closure. This is not manuscript A7: the mixed
+sum is an explicit hypothesis, and discharging it is the remaining induction
+step. -/
+theorem a7_positive_of_mixed_bound {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) (hD : 0 < D)
+    (hS :
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if 0 < a6Order t then
+            (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+          else 0) ≤
+        (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) * a7HybridQ f) :
+    uniformMean (fun M => Complex.normSq (f M) ^ 2) ≤
+      (2 : ℝ) ^ (100 * D * D) * a7HybridQ f := by
+  have hA6 := manuscript_A6 f hsupport
+  have hL2 := a7_q_ge_l2 f
+  set Q := a7HybridQ f
+  set fourth := uniformMean (fun M => Complex.normSq (f M) ^ 2)
+  set l2 := (uniformMean (fun M => Complex.normSq (f M))) ^ 2
+  set S := ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+    ∑ t : T1IndexTriple p.1.1 p.1.2,
+      if 0 < a6Order t then
+        (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+      else 0
+  have hL : (2 : ℝ) ^ (6 * D * D) * l2 ≤ (2 : ℝ) ^ (6 * D * D) * Q :=
+    mul_le_mul_of_nonneg_left hL2 (pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) _)
+  have hsplit : fourth / 162 ≤ (2 : ℝ) ^ (6 * D * D) * Q +
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) * Q :=
+    le_trans hA6 (add_le_add hL hS)
+  have hpow : (2 : ℝ) ^ (6 * D * D) =
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ (-(94 * D * D : ℤ)) := by
+    have h6z : ((6 * D * D : ℕ) : ℤ) =
+        (100 * D * D : ℤ) + (-(94 * D * D : ℤ)) := by
+      push_cast
+      ring
+    calc
+      (2 : ℝ) ^ (6 * D * D) = (2 : ℝ) ^ ((6 * D * D : ℕ) : ℤ) :=
+        (zpow_natCast (2 : ℝ) (6 * D * D)).symm
+      _ = (2 : ℝ) ^ ((100 * D * D : ℤ) + (-(94 * D * D : ℤ))) := by rw [h6z]
+      _ = (2 : ℝ) ^ (100 * D * D : ℤ) * (2 : ℝ) ^ (-(94 * D * D : ℤ)) :=
+        zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0) _ _
+      _ = (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ (-(94 * D * D : ℤ)) := by
+        have hexp : (100 * (D : ℤ) * D) = ((100 * D * D : ℕ) : ℤ) := by
+          push_cast
+          ring
+        rw [hexp, zpow_natCast]
+  set c := (2 : ℝ) ^ (-(94 * D * D : ℤ)) + (2 : ℝ) ^ ((1 : ℤ) - 31 * D)
+  set p := (2 : ℝ) ^ (100 * D * D)
+  have hfac : (2 : ℝ) ^ (6 * D * D) * Q +
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) * Q =
+      p * c * Q := by
+    rw [hpow]
+    ring
+  have hfourth : fourth / 162 ≤ p * c * Q := by
+    rw [← hfac]
+    exact hsplit
+  have hback : fourth = 162 * (fourth / 162) := by
+    field_simp
+  have hscale : fourth ≤ 162 * (p * c * Q) := by
+    rw [hback]
+    exact mul_le_mul_of_nonneg_left hfourth (by norm_num : (0 : ℝ) ≤ 162)
+  have hprod : 162 * (p * c * Q) = (162 * c) * (p * Q) := by ring
+  have hQ : 0 ≤ Q := a7HybridQ_nonneg f
+  have hp : 0 ≤ p := pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) _
+  have htail := a7_terminal_factor D hD
+  have hle : (162 * c) * (p * Q) ≤ 1 * (p * Q) :=
+    mul_le_mul_of_nonneg_right (le_of_lt htail) (mul_nonneg hp hQ)
+  have hone : 1 * (p * Q) = p * Q := one_mul _
+  rw [hprod] at hscale
+  exact le_trans hscale (hle.trans (le_of_eq hone))
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
