@@ -21,6 +21,14 @@ attribute [local instance] Classical.propDecidable
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
 open PvNP.RealizableHardness.BinaryMatrixFourier
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Convolution
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Incidence
 
 private abbrev F := ZMod 2
 private abbrev V (d : Nat) := Fin d -> F
@@ -51,7 +59,7 @@ def t1MapToTriple {n d : Nat}
   K := LinearMap.range theta
   Xbar := theta.quotKerEquivRange.symm
 
-/-- The triple-to-map-to-triple direction recovers theta on every vector. -/
+/-- The map-to-triple-to-map direction recovers theta on every vector. -/
 theorem t1TripleToMap_mapToTriple {n d : Nat}
     (A : Submodule F (V d)) (B : Submodule F (W n))
     (theta : A →ₗ[F] (W n ⧸ B)) :
@@ -1250,5 +1258,707 @@ theorem t1SelectedTriple_unique {n d : Nat}
     _ = t1TripleToMap (t1SelectedTriple A B Y hY) :=
       (t1SelectedTriple_toMap A B Y hY).symm
 
+/-- An active triple forces ordinary selection and its encoded map is the
+actual inverse-frequency selector. Rank agreement supplies an H representative
+for every A value; the hybrid selector moves a C correction back into H. -/
+theorem t1ActiveTriple_forces_ordinary {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d) (t : T1IndexTriple A B)
+    (ht : t1ActiveTriple A B Y t) :
+    ∃ hY : DR6OrdinarySelected A B Y,
+      t1TripleToMap t = t1SelectedTheta A B Y hY := by
+  classical
+  dsimp [t1ActiveTriple] at ht
+  rcases ht with ⟨hsel, hRank⟩
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let R := t1OriginalRestriction Y C H
+  let L := Y.transpose.toLin'
+  have hdecomp := t1RankPrecedes_range_decomposition X R hRank
+  have hXR : LinearMap.range X ≤ LinearMap.range R := by
+    rw [hdecomp.1]
+    exact le_sup_left
+  have hpre : ∀ a : A, ∃ h : H, L h.val = a.val := by
+    intro a
+    let q := Submodule.mkQ C a.val
+    have hqX : q ∈ LinearMap.range X := by
+      rw [t1Pullback_range]
+      exact ⟨t.C.mkQ a, by
+        simpa [q, t1AQuotientToAmbient_apply_mk]⟩
+    obtain ⟨h, hh⟩ := hXR hqX
+    change Submodule.mkQ C (L h.val) = q at hh
+    have hc : L h.val - a.val ∈ C :=
+      (Submodule.Quotient.eq C).mp hh
+    obtain ⟨w, hw⟩ := hsel.1 hc
+    have hwH : w ∈ H := by
+      apply hsel.2 w
+      rw [hw]
+      exact hc
+    let h0 : H := ⟨h.val - w, H.sub_mem h.property hwH⟩
+    have hvalue : L h0.val = a.val := by
+      change L (h.val - w) = a.val
+      rw [map_sub, hw]
+      exact sub_sub_cancel (L h.val) a.val
+    exact ⟨h0, hvalue⟩
+  have hOrdRange : A ≤ LinearMap.range L := by
+    intro a ha
+    obtain ⟨h, hh⟩ := hpre ⟨a, ha⟩
+    exact ⟨h.val, hh⟩
+  have hOrdKer : LinearMap.ker L ≤ B := by
+    intro w hw
+    have hwH : w ∈ H := by
+      apply hsel.2 w
+      rw [hw]
+      exact C.zero_mem
+    let h : H := ⟨w, hwH⟩
+    have hRzero : R h = 0 := by
+      change Submodule.mkQ C (L w) = 0
+      rw [hw]
+      simp
+    have hqXzero : R h ∈ LinearMap.range X := by
+      rw [hRzero]
+      exact ⟨0, by simp⟩
+    have hXzero : X h = R h :=
+      t1RankPrecedes_agreement_on_preimage X R hRank h
+        hqXzero
+    have hker : h ∈ LinearMap.ker X := by
+      change X h = 0
+      rw [hXzero, hRzero]
+    rw [t1Pullback_ker] at hker
+    change w ∈ B at hker
+    exact hker
+  let hY : DR6OrdinarySelected A B Y := ⟨hOrdRange, hOrdKer⟩
+  refine ⟨hY, ?_⟩
+  apply LinearMap.ext
+  intro a
+  obtain ⟨h, hh⟩ := hpre a
+  let q := Submodule.mkQ C a.val
+  have hqX : q ∈ LinearMap.range X := by
+    rw [t1Pullback_range]
+    exact ⟨t.C.mkQ a, by
+      simpa [q, t1AQuotientToAmbient_apply_mk]⟩
+  have hR : R h = q := by
+    change Submodule.mkQ C (L h.val) = q
+    rw [hh]
+  have hqX' : R h ∈ LinearMap.range X := by
+    rw [hR]
+    exact hqX
+  have hX : X h = q :=
+      (t1RankPrecedes_agreement_on_preimage X R hRank h
+      hqX').trans hR
+  have hiff := (t1TripleToMap_pullback_iff t a h).2 hX
+  have ha : L h.val ∈ A := by rw [hh]; exact a.property
+  have hae : (⟨L h.val, ha⟩ : A) = a := by
+    apply Subtype.ext
+    exact hh
+  calc
+    t1TripleToMap t a = Submodule.mkQ B h.val := hiff
+    _ = t1SelectedTheta A B Y hY ⟨L h.val, ha⟩ :=
+      (t1SelectedTheta_on_preimage A B Y hY h.val ha).symm
+    _ = t1SelectedTheta A B Y hY a := congrArg _ hae
+
+/-- For a fixed frequency, the active index triple is forced to be the
+canonical triple of its ordinary selector. This is the unconditional reverse
+uniqueness direction, with ordinary selection derived from activity. -/
+theorem t1ActiveTriple_unique {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : BinaryMatrix n d) (t : T1IndexTriple A B)
+    (ht : t1ActiveTriple A B Y t) :
+    ∃ hY : DR6OrdinarySelected A B Y,
+      t = t1SelectedTriple A B Y hY := by
+  obtain ⟨hY, hmap⟩ := t1ActiveTriple_forces_ordinary A B Y t ht
+  exact ⟨hY, t1SelectedTriple_unique A B Y hY t hmap⟩
+
+/-- Ordinary-selected frequencies and active hybrid indices form equivalent
+finite index types. Each selected frequency supplies its canonical triple;
+activity recovers both the ordinary selector and the same triple. -/
+noncomputable def t1OrdinaryActiveEquiv {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) :
+    {Y : BinaryMatrix n d // DR6OrdinarySelected A B Y} ≃
+      {p : BinaryMatrix n d × T1IndexTriple A B //
+        t1ActiveTriple A B p.1 p.2} where
+  toFun y :=
+    ⟨(y.val, t1SelectedTriple A B y.val y.property),
+      t1SelectedTriple_active A B y.val y.property⟩
+  invFun p :=
+    ⟨p.val.1,
+      Classical.choose (t1ActiveTriple_forces_ordinary
+        A B p.val.1 p.val.2 p.property)⟩
+  left_inv y := by
+    apply Subtype.ext
+    rfl
+  right_inv p := by
+    obtain ⟨hY, ht⟩ := t1ActiveTriple_unique
+      A B p.val.1 p.val.2 p.property
+    apply Subtype.ext
+    apply Prod.ext
+    · rfl
+    · exact (congrArg (t1SelectedTriple A B p.val.1)
+        (Subsingleton.elim _ _)).trans ht.symm
+
+/-- Reindex any finite T1 summand along the exact ordinary/hybrid index
+bijection. No selector injectivity or frequency orthogonality is assumed. -/
+theorem t1OrdinaryActive_sum_equiv {n d : Nat} {R : Type}
+    [AddCommMonoid R] (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : {Y : BinaryMatrix n d // DR6OrdinarySelected A B Y} → R) :
+    (∑ y : {Y : BinaryMatrix n d // DR6OrdinarySelected A B Y}, g y) =
+      ∑ p : {p : BinaryMatrix n d × T1IndexTriple A B //
+        t1ActiveTriple A B p.1 p.2},
+        g ((t1OrdinaryActiveEquiv A B).symm p) := by
+  classical
+  apply Fintype.sum_equiv (t1OrdinaryActiveEquiv A B)
+  intro y
+  simp
+
+/-- The range of the actual quotient embedding A/C -> V/C is the image of
+A under the ambient quotient map. -/
+theorem t1AQuotientToAmbient_range {d : Nat}
+    {A : Submodule F (V d)} (C : Submodule F A) :
+    LinearMap.range (t1AQuotientToAmbient C) =
+      A.map (Submodule.mkQ (t1AmbientC C)) := by
+  apply Submodule.ext
+  intro z
+  constructor
+  · rintro ⟨q, hq⟩
+    obtain ⟨a, ha⟩ := Submodule.mkQ_surjective C q
+    refine ⟨a.val, a.property, ?_⟩
+    calc
+      Submodule.mkQ (t1AmbientC C) a.val =
+          t1AQuotientToAmbient C (Submodule.Quotient.mk a) :=
+        (t1AQuotientToAmbient_apply_mk C a).symm
+      _ = t1AQuotientToAmbient C q :=
+        congrArg (t1AQuotientToAmbient C) ha
+      _ = z := hq
+  · rintro ⟨a, ha, hz⟩
+    let a' : A := ⟨a, ha⟩
+    refine ⟨C.mkQ a', ?_⟩
+    calc
+      t1AQuotientToAmbient C (C.mkQ a') =
+          Submodule.mkQ (t1AmbientC C) a' :=
+        t1AQuotientToAmbient_apply_mk C a'
+      _ = z := hz
+
+/-- The quotient of V/C by the actual X image is identified with V/A via
+the quotient-of-a-quotient equivalence and the proved image equality. -/
+noncomputable def t1OutputDomainEquiv {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) :
+    ((V d ⧸ t1AmbientC t.C) ⧸ LinearMap.range (t1PullbackMap t)) ≃ₗ[F]
+      (V d ⧸ A) := by
+  let C := t1AmbientC t.C
+  let X := t1PullbackMap t
+  have hCA : C ≤ A := t1AmbientC_le_A t.C
+  have hRange : LinearMap.range X = A.map (Submodule.mkQ C) := by
+    rw [t1Pullback_range, t1AQuotientToAmbient_range]
+  exact (Submodule.quotEquivOfEq (LinearMap.range X)
+      (A.map (Submodule.mkQ C)) hRange).trans
+    (BinaryMatrixA1NestedCarrier.nestedDomainEquiv C A hCA)
+
+/-- The kernel of the actual pullback, as a subspace of H, is linearly
+identified with the original B by the H subtype. -/
+noncomputable def t1OutputKernelEquiv {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) :
+    LinearMap.ker (t1PullbackMap t) ≃ₗ[F] B := by
+  let H := t1AmbientH t.K
+  let P := B.comap H.subtype
+  have hBH : B ≤ H := t1AmbientH_containsB B t.K
+  have hker : LinearMap.ker (t1PullbackMap t) = P := t1Pullback_ker t
+  have hmap : P.map H.subtype = B := by
+    exact Submodule.map_comap_eq_self (by
+      rw [Submodule.range_subtype]
+      exact hBH)
+  exact (LinearEquiv.ofEq _ _ hker).trans
+    ((Submodule.equivMapOfInjective H.subtype H.injective_subtype P).trans
+      (LinearEquiv.ofEq _ _ hmap))
+
+/-- Actual output-carrier equivalence for the T1 triple. It identifies
+Hom(V/A,B) with Hom((V/C)/range(Xtilde),ker(Xtilde)) using the two quotient
+and subtype equivalences above. -/
+noncomputable def t1OutputEquiv {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) :
+    ((V d ⧸ A) →ₗ[F] B) ≃ₗ[F]
+      (((V d ⧸ t1AmbientC t.C) ⧸
+        LinearMap.range (t1PullbackMap t)) →ₗ[F]
+        LinearMap.ker (t1PullbackMap t)) :=
+  LinearEquiv.arrowCongr (t1OutputDomainEquiv t).symm
+    (t1OutputKernelEquiv t).symm
+
+/-- The output equivalence commutes with the actual affine embedding into
+Hom(V,H): quotient representatives and B-subtype values agree pointwise. -/
+theorem t1OutputEquiv_physicalSquare {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    (((t1AmbientH t.K).subtype.comp
+        ((LinearMap.ker (t1PullbackMap t)).subtype.comp
+          ((t1OutputEquiv t M).comp
+            (LinearMap.range (t1PullbackMap t)).mkQ))).comp
+      (Submodule.mkQ (t1AmbientC t.C))) =
+      B.subtype.comp (M.comp (Submodule.mkQ A)) := by
+  let C := t1AmbientC t.C
+  let X := t1PullbackMap t
+  let eD := t1OutputDomainEquiv t
+  let eK := t1OutputKernelEquiv t
+  have hdomain (v : V d) :
+      eD ((LinearMap.range X).mkQ (C.mkQ v)) = Submodule.mkQ A v := by
+    simp [eD, t1OutputDomainEquiv,
+      BinaryMatrixA1NestedCarrier.nestedDomainEquiv,
+      t1AQuotientToAmbient_range, t1Pullback_range,
+      Submodule.quotEquivOfEq_mk]
+    exact Submodule.quotientQuotientEquivQuotientAux_mk_mk
+      C A (t1AmbientC_le_A t.C) v
+  have hkernel (b : B) :
+      ((eK.symm b : LinearMap.ker X) : t1AmbientH t.K).val =
+        B.subtype b := by
+    unfold eK t1OutputKernelEquiv
+    simp only [LinearEquiv.trans_symm, LinearEquiv.trans_apply,
+      LinearEquiv.ofEq_symm, LinearEquiv.coe_ofEq_apply]
+    let H := t1AmbientH t.K
+    let P := B.comap H.subtype
+    have hval (x : P) : ((x : H) : W n) = H.subtype (x : H) := rfl
+    rw [hval]
+    rw [Submodule.map_equivMapOfInjective_symm_apply]
+    exact LinearEquiv.coe_ofEq_apply _ _
+  apply LinearMap.ext
+  intro v
+  simp only [LinearMap.comp_apply]
+  change ((eK.symm
+      (M (eD ((LinearMap.range X).mkQ (C.mkQ v))) : B) :
+        LinearMap.ker X) : t1AmbientH t.K).val =
+      B.subtype (M (Submodule.mkQ A v))
+  rw [hdomain v]
+  exact hkernel _
+
+/-- The arbitrary-base phase splits through the actual quotient/subtype
+carrier; this is the cyclic trace identity used for the T1 phase. -/
+theorem t1CarrierPhase_general {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (T : V d →ₗ[F] W n)
+    (M : (V d ⧸ C) →ₗ[F] H) :
+    BinaryMatrixA1Phase.traceCharacter Y
+      (T + H.subtype.comp (M.comp C.mkQ)) =
+    BinaryMatrixA1Phase.traceCharacter Y T *
+      BinaryMatrixA1Phase.traceCharacter
+        (C.mkQ.comp (Y.comp H.subtype)) M :=
+  BinaryMatrixA1Phase.traceCharacter_carrier_base_general C H Y T M
+/-- The phase in an arbitrary T1 triple is the same ambient chi_Y(T),
+followed by the typed output-frequency character on the physical output map. -/
+theorem t1OutputPhase {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (Y : BinaryMatrix n d)
+    (T : V d →ₗ[F] W n) (M : (V d ⧸ A) →ₗ[F] B) :
+    BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin'
+      (T + B.subtype.comp (M.comp (Submodule.mkQ A))) =
+    BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+      BinaryMatrixA1Phase.traceCharacter
+        ((t1AmbientC t.C).mkQ.comp
+          (Y.transpose.toLin'.comp (t1AmbientH t.K).subtype))
+        ((LinearMap.ker (t1PullbackMap t)).subtype.comp
+          ((t1OutputEquiv t M).comp
+            ((LinearMap.range (t1PullbackMap t)).mkQ))) := by
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let R := LinearMap.range X
+  let K := LinearMap.ker X
+  let N := t1OutputEquiv t M
+  let Mraw : (V d ⧸ C) →ₗ[F] H :=
+    K.subtype.comp (N.comp R.mkQ)
+  have hsquare : H.subtype.comp (Mraw.comp C.mkQ) =
+      B.subtype.comp (M.comp (Submodule.mkQ A)) := by
+    simpa [Mraw, C, H, X, R, K, LinearMap.comp_assoc] using
+      t1OutputEquiv_physicalSquare t M
+  calc
+    BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin'
+        (T + B.subtype.comp (M.comp (Submodule.mkQ A))) =
+      BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin'
+        (T + H.subtype.comp (Mraw.comp C.mkQ)) := by
+      congr 1
+      rw [← hsquare]
+    _ = BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+        BinaryMatrixA1Phase.traceCharacter
+          (C.mkQ.comp (Y.transpose.toLin'.comp H.subtype)) Mraw :=
+      t1CarrierPhase_general C H Y.transpose.toLin' T Mraw
+
+/-- The independently typed W6 Fourier operator for an arbitrary T1 triple
+is exactly the existing actual ambient-matrix derivative after the output
+carrier equivalence. -/
+theorem t1TypedW6_eq_actual {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B)
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    typedW6FourierDerivative (t1AmbientC t.C) (t1AmbientH t.K)
+      (t1PullbackMap t)
+      (filteredCarrierFunction (t1AmbientC t.C)
+        (t1AmbientH t.K) T f)
+      (t1OutputEquiv t M) =
+    actualW6Derivative
+      (carrierFrequencyEquiv (t1AmbientC t.C)
+        (t1AmbientH t.K) (t1PullbackMap t)) 0
+      (fun K => filteredCarrierFunction (t1AmbientC t.C)
+        (t1AmbientH t.K) T f
+          ((carrierMatrixEquiv (t1AmbientC t.C)
+            (t1AmbientH t.K)).symm K))
+      ((typedW6OutputCoordinateEquiv (t1AmbientC t.C)
+        (t1AmbientH t.K) (t1PullbackMap t)) (t1OutputEquiv t M)) := by
+  exact typedW6FourierDerivative_eq_actual
+    (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+    (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)
+    (t1OutputEquiv t M)
+/-- Full collision-preserving Fourier coefficient of the actual filtered
+carrier input. Every ambient hybrid frequency in the fiber of Z contributes;
+no injectivity of restriction Y -> q_C Y|H is asserted. -/
+theorem t1FilteredCarrierFunction_fourierCoeff {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (Z : H →ₗ[F] (V d ⧸ C)) :
+    complexCarrierFourierCoeff C H
+      (filteredCarrierFunction C H T f) Z =
+    ∑ Y : BinaryMatrix n d,
+      if BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin' then
+        if Z = C.mkQ.comp (Y.transpose.toLin'.comp H.subtype) then
+          complexFourierCoeff f Y *
+            (BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex)
+        else 0
+      else 0 := by
+  classical
+  let qY := fun Y : BinaryMatrix n d =>
+    C.mkQ.comp (Y.transpose.toLin'.comp H.subtype)
+  let cY := fun Y : BinaryMatrix n d =>
+    complexFourierCoeff f Y *
+      (BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex)
+  have hsignal : filteredCarrierFunction C H T f =
+      fun N => ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n d)),
+        if BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin' then
+          cY Y * (BinaryMatrixA1Phase.traceCharacter (qY Y) N : Complex)
+        else 0 := by
+    funext N
+    unfold filteredCarrierFunction complexAmbientAffineRestrict
+      complexAmbientHybridFilter
+    apply Finset.sum_congr rfl
+    intro Y hY
+    by_cases hsel :
+        BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin'
+    · simp only [if_pos hsel]
+      have hphase := t1CarrierPhase_general C H
+        Y.transpose.toLin' T N
+      have hchar :
+          character Y (LinearMap.toMatrix'
+            (T + H.subtype.comp (N.comp C.mkQ))) =
+        BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+          BinaryMatrixA1Phase.traceCharacter (qY Y) N := by
+        calc
+          character Y (LinearMap.toMatrix'
+              (T + H.subtype.comp (N.comp C.mkQ))) =
+            BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin'
+              ((LinearMap.toMatrix'
+                (T + H.subtype.comp (N.comp C.mkQ))).toLin') :=
+            (BinaryMatrixA1CharacterBridge.traceCharacter_eq_matrix_character
+              Y (LinearMap.toMatrix'
+                (T + H.subtype.comp (N.comp C.mkQ)))).symm
+          _ = BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin'
+                (T + H.subtype.comp (N.comp C.mkQ)) := by
+            simp only [Matrix.toLin'_toMatrix']
+          _ = _ := hphase
+      rw [hchar]
+      simp only [Complex.ofReal_mul]
+      ring
+    · simp [hsel]
+  rw [hsignal]
+  rw [ActualBinaryMatrixHC46A18DerivativeRankProjection.complexCarrierFourierCoeff_finset_sum]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  by_cases hsel :
+      BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin'
+  · simp only [if_pos hsel]
+    simp [qY, cY,
+      ActualBinaryMatrixHC46A18DerivativeRankProjection.complexCarrierFourierCoeff_smul,
+      ActualBinaryMatrixHC46A18DerivativeRankProjection.complexCarrierFourierCoeff_character]
+  · simp [hsel,
+      PvNP.RealizableHardness.BinaryMatrixA1Complex.complexCarrierFourierCoeff]
+
+/-- Substituting the full coefficient expansion into the independent typed W6
+sum keeps the complete ambient-frequency fiber for each typed parent
+frequency. The later T1 regrouping uses these explicit equalities rather than
+assuming the restriction map on frequencies is injective. -/
+theorem t1TypedW6_fullParentExpansion {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (N : ((V d ⧸ C) ⧸ LinearMap.range X) →ₗ[F] LinearMap.ker X) :
+    typedW6FourierDerivative C H X
+      (filteredCarrierFunction C H T f) N =
+    ∑ Z : H →ₗ[F] (V d ⧸ C),
+      if typedW6Precedes C H X Z then
+        (∑ Y : BinaryMatrix n d,
+          if BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin' then
+            if Z = C.mkQ.comp (Y.transpose.toLin'.comp H.subtype) then
+              complexFourierCoeff f Y *
+                (BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex)
+            else 0
+          else 0) *
+          (BinaryMatrixA1Phase.traceCharacter Z
+            ((LinearMap.ker X).subtype.comp
+              (N.comp (LinearMap.range X).mkQ)) : Complex)
+      else 0 := by
+  classical
+  simp_rw [typedW6FourierDerivative,
+    t1FilteredCarrierFunction_fourierCoeff]
+
+/-- After commuting the all-ambient-Y coefficient sum with the full typed
+parent-frequency sum, each Y contributes at its actual restricted parent
+frequency. Other ambient Y values in the same fiber remain separate summands. -/
+theorem t1TypedW6_collapse_parentFiber {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (N : ((V d ⧸ C) ⧸ LinearMap.range X) →ₗ[F] LinearMap.ker X) :
+    typedW6FourierDerivative C H X
+      (filteredCarrierFunction C H T f) N =
+    ∑ Y : BinaryMatrix n d,
+      if BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin' ∧
+          typedW6Precedes C H X
+            (C.mkQ.comp (Y.transpose.toLin'.comp H.subtype)) then
+        complexFourierCoeff f Y *
+          (BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex) *
+          (BinaryMatrixA1Phase.traceCharacter
+            (C.mkQ.comp (Y.transpose.toLin'.comp H.subtype))
+            ((LinearMap.ker X).subtype.comp
+              (N.comp (LinearMap.range X).mkQ)) : Complex)
+      else 0 := by
+  classical
+  rw [t1TypedW6_fullParentExpansion]
+  have hdistribute (Z : H →ₗ[F] (V d ⧸ C)) :
+      (if typedW6Precedes C H X Z then
+        (∑ Y : BinaryMatrix n d,
+          if BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin' then
+            if Z = C.mkQ.comp (Y.transpose.toLin'.comp H.subtype) then
+              complexFourierCoeff f Y *
+                (BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex)
+            else 0
+          else 0) *
+          (BinaryMatrixA1Phase.traceCharacter Z
+            ((LinearMap.ker X).subtype.comp
+              (N.comp (LinearMap.range X).mkQ)) : Complex)
+      else 0) =
+      ∑ Y : BinaryMatrix n d,
+        if typedW6Precedes C H X Z ∧
+            BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin' then
+          (if Z = C.mkQ.comp (Y.transpose.toLin'.comp H.subtype) then
+            complexFourierCoeff f Y *
+              (BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex)
+          else 0) *
+          (BinaryMatrixA1Phase.traceCharacter Z
+            ((LinearMap.ker X).subtype.comp
+              (N.comp (LinearMap.range X).mkQ)) : Complex)
+        else 0 := by
+    by_cases hpred : typedW6Precedes C H X Z
+    · simp only [if_pos hpred]
+      rw [Finset.sum_mul]
+      apply Finset.sum_congr rfl
+      intro Y _
+      by_cases hsel :
+          BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin'
+      · simp [hsel, hpred]
+      · simp [hsel]
+    · simp [hpred]
+  simp_rw [hdistribute]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  by_cases hsel :
+      BinaryMatrixNestedSelectorA1.Selected C H Y.transpose.toLin'
+  · simp only [hsel, and_true, true_and]
+    let qY := C.mkQ.comp (Y.transpose.toLin'.comp H.subtype)
+    rw [Finset.sum_eq_single qY]
+    · by_cases hpred : typedW6Precedes C H X qY
+      · simp [qY, hpred]
+      · simp [qY, hpred]
+    · intro Z hZ hne
+      by_cases hpredZ : typedW6Precedes C H X Z
+      · rw [if_pos hpredZ]
+        rw [if_neg hne]
+        simp
+      · rw [if_neg hpredZ]
+    · simp
+  · simp [hsel]
+
+/-- The full pointwise T1 decomposition on the actual affine carrier. The
+ordinary selected-frequency sum is reindexed by the exact ordinary/active
+equivalence; all ambient frequencies in every restricted-frequency fiber
+remain present until that bijection is applied. -/
+theorem t1OrdinaryProjection_affineExpansion {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    complexAmbientAffineRestrict A B T
+      (DR6ComplexOrdinaryFilter A B f) M =
+    ∑ Y : BinaryMatrix n d,
+      if DR6OrdinarySelected A B Y then
+        complexFourierCoeff f Y *
+          ((BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+            BinaryMatrixA1Phase.traceCharacter
+              (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+      else 0 := by
+  classical
+  unfold complexAmbientAffineRestrict DR6ComplexOrdinaryFilter
+  simp_rw [dr6_complexSelector_iff_actualOrdinary]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  by_cases hsel : DR6OrdinarySelected A B Y
+  · simp only [if_pos hsel]
+    have hchar :
+        character Y (LinearMap.toMatrix'
+          (T + B.subtype.comp (M.comp A.mkQ))) =
+        BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+          BinaryMatrixA1Phase.traceCharacter
+            (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M := by
+      calc
+        character Y (LinearMap.toMatrix'
+            (T + B.subtype.comp (M.comp A.mkQ))) =
+            BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin'
+              ((LinearMap.toMatrix'
+                (T + B.subtype.comp (M.comp A.mkQ))).toLin') :=
+          (BinaryMatrixA1CharacterBridge.traceCharacter_eq_matrix_character
+            Y (LinearMap.toMatrix'
+              (T + B.subtype.comp (M.comp A.mkQ)))).symm
+        _ = BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin'
+              (T + B.subtype.comp (M.comp A.mkQ)) := by
+          simp only [Matrix.toLin'_toMatrix']
+        _ = _ := t1CarrierPhase_general A B Y.transpose.toLin' T M
+    rw [hchar]
+  · simp [hsel]
+
+theorem t1PointwiseFull_fourierIdentity {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    complexAmbientAffineRestrict A B T
+      (DR6ComplexOrdinaryFilter A B f) M =
+      ∑ t : T1IndexTriple A B,
+        typedW6FourierDerivative (t1AmbientC t.C) (t1AmbientH t.K)
+          (t1PullbackMap t)
+          (filteredCarrierFunction (t1AmbientC t.C)
+            (t1AmbientH t.K) T f)
+          (t1OutputEquiv t M) := by
+  classical
+  rw [t1OrdinaryProjection_affineExpansion]
+  simp_rw [t1TypedW6_collapse_parentFiber]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  let ambientTerm := complexFourierCoeff f Y *
+    ((BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+      BinaryMatrixA1Phase.traceCharacter
+        (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+  have hactive_iff (t : T1IndexTriple A B) :
+      (BinaryMatrixNestedSelectorA1.Selected (t1AmbientC t.C)
+          (t1AmbientH t.K) Y.transpose.toLin' ∧
+        typedW6Precedes (t1AmbientC t.C) (t1AmbientH t.K)
+          (t1PullbackMap t)
+          ((t1AmbientC t.C).mkQ.comp
+            (Y.transpose.toLin'.comp (t1AmbientH t.K).subtype))) ↔
+        t1ActiveTriple A B Y t := by
+    unfold t1ActiveTriple typedW6Precedes t1RankPrecedes
+      t1OriginalRestriction
+    rfl
+  by_cases hordinary : DR6OrdinarySelected A B Y
+  · have hactive :
+        t1ActiveTriple A B Y (t1SelectedTriple A B Y hordinary) :=
+      t1SelectedTriple_active A B Y hordinary
+    have hterm : ∀ t : T1IndexTriple A B,
+        t1ActiveTriple A B Y t →
+          complexFourierCoeff f Y *
+            (BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex) *
+            (BinaryMatrixA1Phase.traceCharacter
+              ((t1AmbientC t.C).mkQ.comp
+                (Y.transpose.toLin'.comp (t1AmbientH t.K).subtype))
+              ((LinearMap.ker (t1PullbackMap t)).subtype.comp
+                ((t1OutputEquiv t M).comp
+                  (LinearMap.range (t1PullbackMap t)).mkQ)) : Complex) =
+          ambientTerm := by
+      intro t ht
+      let C := t1AmbientC t.C
+      let H := t1AmbientH t.K
+      let X := t1PullbackMap t
+      let R := LinearMap.range X
+      let K := LinearMap.ker X
+      let Mraw := K.subtype.comp
+        ((t1OutputEquiv t M).comp R.mkQ)
+      have hphaseT := t1OutputPhase t Y T M
+      have hphaseA := t1CarrierPhase_general A B
+        Y.transpose.toLin' T M
+      have hphase :
+          BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+              BinaryMatrixA1Phase.traceCharacter
+                (C.mkQ.comp (Y.transpose.toLin'.comp H.subtype)) Mraw =
+            BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+              BinaryMatrixA1Phase.traceCharacter
+                (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M :=
+        hphaseT.symm.trans hphaseA
+      change complexFourierCoeff f Y *
+          (BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex) *
+          (BinaryMatrixA1Phase.traceCharacter
+            (C.mkQ.comp (Y.transpose.toLin'.comp H.subtype)) Mraw : Complex) =
+        complexFourierCoeff f Y *
+          ((BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+            BinaryMatrixA1Phase.traceCharacter
+              (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M : ℝ) : Complex)
+      calc
+        _ = complexFourierCoeff f Y *
+            ((BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T : Complex) *
+              (BinaryMatrixA1Phase.traceCharacter
+                (C.mkQ.comp (Y.transpose.toLin'.comp H.subtype)) Mraw : Complex)) := by
+              ring
+        _ = complexFourierCoeff f Y *
+            (((BinaryMatrixA1Phase.traceCharacter Y.transpose.toLin' T *
+              BinaryMatrixA1Phase.traceCharacter
+                (C.mkQ.comp (Y.transpose.toLin'.comp H.subtype)) Mraw) : ℝ) : Complex) := by
+              rw [← Complex.ofReal_mul]
+        _ = _ := by rw [hphase]
+    rw [Finset.sum_eq_single (t1SelectedTriple A B Y hordinary)]
+    · have hguard := (hactive_iff
+          (t1SelectedTriple A B Y hordinary)).2 hactive
+      rw [if_pos hordinary, if_pos hguard]
+      rw [hterm _ hactive]
+    · intro t ht hne
+      by_cases hact : t1ActiveTriple A B Y t
+      · obtain ⟨hY', ht'⟩ := t1ActiveTriple_unique A B Y t hact
+        have hproof : hY' = hordinary := Subsingleton.elim _ _
+        have hteq : t = t1SelectedTriple A B Y hordinary := by
+          simpa [hproof] using ht'
+        exact False.elim (hne hteq)
+      · have hguard : ¬ (BinaryMatrixNestedSelectorA1.Selected
+            (t1AmbientC t.C) (t1AmbientH t.K) Y.transpose.toLin' ∧
+          typedW6Precedes (t1AmbientC t.C) (t1AmbientH t.K)
+            (t1PullbackMap t)
+            ((t1AmbientC t.C).mkQ.comp
+              (Y.transpose.toLin'.comp (t1AmbientH t.K).subtype))) := by
+          intro ht
+          exact hact ((hactive_iff t).1 ht)
+        rw [if_neg hguard]
+    · simp [t1ActiveTriple, hactive]
+  · have hnoactive : ∀ t : T1IndexTriple A B,
+        ¬ t1ActiveTriple A B Y t := by
+      intro t ht
+      obtain ⟨hY, _⟩ := t1ActiveTriple_forces_ordinary A B Y t ht
+      exact hordinary hY
+    rw [if_neg hordinary]
+    symm
+    apply Finset.sum_eq_zero
+    intro t ht
+    have hguard : ¬ (BinaryMatrixNestedSelectorA1.Selected
+          (t1AmbientC t.C) (t1AmbientH t.K) Y.transpose.toLin' ∧
+        typedW6Precedes (t1AmbientC t.C) (t1AmbientH t.K)
+          (t1PullbackMap t)
+          ((t1AmbientC t.C).mkQ.comp
+            (Y.transpose.toLin'.comp (t1AmbientH t.K).subtype))) := by
+      intro ht
+      exact hnoactive t ((hactive_iff t).1 ht)
+    rw [if_neg hguard]
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
