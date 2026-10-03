@@ -3822,6 +3822,77 @@ theorem a7_ambient_hybrid_energy_le {n d : Nat}
   · simp [hsel]
   · simp [hsel, sq_nonneg]
 
+/-- Initial graph data for one fixed final `(A, B, Y)`. The image graphs
+live in `A` and the kernel graphs live in `W/B`; the rank-`k` space is
+`range Y`. Reading `a9InitialMap` recovers both graphs, and its rank equals
+the rank of `Y`. -/
+theorem a9_final_inducing_rank {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (Y : W n →ₗ[F] V d) {i j : Nat}
+    (datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) :
+    Module.finrank F (LinearMap.range (a9InitialMap datum)) =
+      Module.finrank F (LinearMap.range Y) := by
+  haveI : Module.Finite F (LinearMap.range Y) := inferInstance
+  exact a9InitialMap_rank datum
+
+theorem a9_final_inducing_graphs_inverse {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (Y : W n →ₗ[F] V d) {i j : Nat}
+    (U : W6Grass A i) (V : W6Grass (W n ⧸ B) j)
+    (im₁ im₂ : (LinearMap.range Y) →ₗ[F] (A ⧸ U.1))
+    (ker₁ ker₂ : ((W n ⧸ B) ⧸ V.1) →ₗ[F] (LinearMap.range Y))
+    (h : a9Determined ker₁ im₁ = a9Determined ker₂ im₂) :
+    ker₁ = ker₂ ∧ im₁ = im₂ :=
+  a9InitialMap_graphs_inverse U V im₁ im₂ ker₁ ker₂ h
+
+/-- The initial graph fiber of one fixed final has the proved multiplicity
+`2^{3D(i+j+k)}` whenever `a+b+k ≤ D`. This cites
+`a9_initial_datum_multiplicity_le`. It does not remove the share hypothesis. -/
+theorem a9_final_inducing_multiplicity {n d : Nat}
+    (D i j k a b : Nat)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k) :
+    Fintype.card (A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) ≤
+      2 ^ (3 * D * (i + j + k)) := by
+  classical
+  haveI : Module.Finite F A := inferInstance
+  haveI : Module.Free F A := Module.Free.of_basis (Module.finBasis F A)
+  haveI : Module.Finite F (W n ⧸ B) := inferInstance
+  haveI : Module.Free F (W n ⧸ B) :=
+    Module.Free.of_basis (Module.finBasis F (W n ⧸ B))
+  haveI : Module.Finite F (LinearMap.range Y) := inferInstance
+  haveI : Module.Free F (LinearMap.range Y) :=
+    Module.Free.of_basis (Module.finBasis F (LinearMap.range Y))
+  exact a9_initial_datum_multiplicity_le D i j k a b hfin hi hj hA hB hY
+
+/-- Graph cost of that same final fiber is the proved bound
+`2^{6Dk}` times the multiplicity, which is at most `2^{9D(i+j+k)}`. -/
+theorem a9_final_inducing_graph_cost {n d : Nat}
+    (D i j k a b : Nat)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k) :
+    (Fintype.card (A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) : ℝ) *
+        (2 : ℝ) ^ (6 * D * k) ≤
+      (2 : ℝ) ^ (9 * D * (i + j + k)) := by
+  classical
+  haveI : Module.Finite F A := inferInstance
+  haveI : Module.Free F A := Module.Free.of_basis (Module.finBasis F A)
+  haveI : Module.Finite F (W n ⧸ B) := inferInstance
+  haveI : Module.Free F (W n ⧸ B) :=
+    Module.Free.of_basis (Module.finBasis F (W n ⧸ B))
+  haveI : Module.Finite F (LinearMap.range Y) := inferInstance
+  haveI : Module.Free F (LinearMap.range Y) :=
+    Module.Free.of_basis (Module.finBasis F (LinearMap.range Y))
+  exact a9_initial_datum_graph_cost_le D i j k a b hfin hi hj hA hB hY
+
 /-- Embed a subspace of `range Y` as the selected pair `(A, Y⁻¹(A))`. -/
 def a7RangeSubspaceAmbient {n d : Nat} (Y : W n →ₗ[F] V d)
     (A : Submodule F (LinearMap.range Y)) : Submodule F (V d) :=
