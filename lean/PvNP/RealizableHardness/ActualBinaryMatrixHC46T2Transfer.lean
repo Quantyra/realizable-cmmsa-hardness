@@ -1,4 +1,6 @@
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
+import PvNP.RealizableHardness.BinaryMatrixA1Complex
+import PvNP.RealizableHardness.BinaryMatrixA1Phase
 import PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
 
 /-! Manuscript T2 selector transport.
@@ -11,6 +13,8 @@ exactly when the hybrid selector accepts `(C, H)`.
 
 namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
 
+open scoped BigOperators
+
 set_option autoImplicit false
 noncomputable section
 attribute [local instance] Classical.propDecidable
@@ -18,6 +22,10 @@ attribute [local instance] Fintype.ofFinite
 set_option maxHeartbeats 1500000
 
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1Phase
+open PvNP.RealizableHardness.BinaryMatrixFourier
 open PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
 
 private abbrev F := ZMod 2
@@ -1069,6 +1077,198 @@ theorem t2_complement_unique {n d : Nat}
   have h1 := t2_right_to_left X Y A2 B2 C H h
   have h2 := t2_right_to_left X Y A2 B2 C' H' h'
   exact ⟨h1.2.1.trans h2.2.1.symm, h1.2.2.trans h2.2.2.symm⟩
+
+/-- The induced kernel frequency is the quotient of `Y` along `ker X`. -/
+theorem t2_induced_eq {n d : Nat} (X Y : W n →ₗ[F] V d) :
+    t2InducedOnKernel X Y =
+      (LinearMap.range X).mkQ.comp
+        (Y.comp (LinearMap.ker X).subtype) := by
+  ext w
+  simp [t2InducedOnKernel, LinearMap.domRestrict_apply]
+
+/-- Carrier character of the induced frequency is the ambient character of
+`Y` on the embedded carrier map. -/
+theorem t2_induced_phase {n d : Nat}
+    (X Y : W n →ₗ[F] V d)
+    (M : (V d ⧸ LinearMap.range X) →ₗ[F] LinearMap.ker X) :
+    traceCharacter (t2InducedOnKernel X Y) M =
+      traceCharacter Y
+        ((LinearMap.ker X).subtype.comp
+          (M.comp (LinearMap.range X).mkQ)) := by
+  have hpair := tracePair_carrier_general
+    (LinearMap.range X) (LinearMap.ker X) Y M
+  rw [t2_induced_eq]
+  unfold traceCharacter
+  rw [← hpair]
+
+/-- Base character times the induced carrier character is the character at
+the shifted base `S + j_{ker X} M q_{im X}`. -/
+theorem t2_shifted_phase {n d : Nat}
+    (X Y : W n →ₗ[F] V d)
+    (S : V d →ₗ[F] W n)
+    (M : (V d ⧸ LinearMap.range X) →ₗ[F] LinearMap.ker X) :
+    traceCharacter Y S * traceCharacter (t2InducedOnKernel X Y) M =
+      traceCharacter Y
+        (S + (LinearMap.ker X).subtype.comp
+          (M.comp (LinearMap.range X).mkQ)) := by
+  rw [t2_induced_phase]
+  exact (traceCharacter_add Y S _).symm
+
+theorem t2_matrix_rank {n d : Nat} (X : BinaryMatrix n d) :
+    X.rank = Module.finrank F (LinearMap.range X.transpose.toLin') := by
+  rw [← Matrix.rank_transpose X]
+  rw [Matrix.rank_eq_finrank_range_toLin X.transpose
+    (Pi.basisFun F _) (Pi.basisFun F _)]
+  rw [Matrix.toLin_eq_toLin']
+
+theorem t2_matrix_precedes_iff {n d : Nat} (X Y : BinaryMatrix n d) :
+    w6Precedes X Y ↔
+      t1RankPrecedes X.transpose.toLin' Y.transpose.toLin' := by
+  unfold w6Precedes t1RankPrecedes
+  rw [t2_matrix_rank Y, t2_matrix_rank X, t2_matrix_rank (Y - X)]
+  have hsub : (Y - X).transpose.toLin' =
+      Y.transpose.toLin' - X.transpose.toLin' := by
+    rw [Matrix.transpose_sub]
+    exact map_sub LinearMap.toMatrix'.symm Y.transpose X.transpose
+  rw [hsub]
+
+/-- The outer hybrid derivative of `D_X f` is the Fourier sum over ambient
+frequencies accepted by the left selector, evaluated at the shifted base. -/
+theorem t2_left_derivative_expansion {n d : Nat}
+    (Xmat : BinaryMatrix n d)
+    (A2 : Submodule F (V d)) (B2 : Submodule F (W n))
+    (hA : LinearMap.range Xmat.transpose.toLin' ≤ A2)
+    (hB : B2 ≤ LinearMap.ker Xmat.transpose.toLin')
+    (S : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range Xmat.transpose.toLin') →ₗ[F]
+      LinearMap.ker Xmat.transpose.toLin') :
+    complexCarrierHybridFilter
+      (LinearMap.range Xmat.transpose.toLin')
+      (LinearMap.ker Xmat.transpose.toLin')
+      (A2.map (LinearMap.range Xmat.transpose.toLin').mkQ)
+      (B2.comap (LinearMap.ker Xmat.transpose.toLin').subtype)
+      (actualW6Derivative Xmat S f) M =
+    ∑ Y : BinaryMatrix n d,
+      if t2LeftSelected Xmat.transpose.toLin' Y.transpose.toLin' A2 B2 then
+        complexFourierCoeff f Y *
+          (traceCharacter Y.transpose.toLin'
+            (S + (LinearMap.ker Xmat.transpose.toLin').subtype.comp
+              (M.comp (LinearMap.range Xmat.transpose.toLin').mkQ)) : Complex)
+      else 0 := by
+  classical
+  let X := Xmat.transpose.toLin'
+  let A1 := LinearMap.range X
+  let B1 := LinearMap.ker X
+  let A12 := A2.map A1.mkQ
+  let B12 := B2.comap B1.subtype
+  unfold complexCarrierHybridFilter
+  have hswap :
+      (∑ Z : B1 →ₗ[F] (V d ⧸ A1),
+        if Selected A12 B12 Z then
+          complexCarrierFourierCoeff A1 B1 (actualW6Derivative Xmat S f) Z *
+            (traceCharacter Z M : Complex) else 0) =
+      ∑ Y : BinaryMatrix n d,
+        if t2LeftSelected X Y.transpose.toLin' A2 B2 then
+          complexFourierCoeff f Y *
+            (traceCharacter Y.transpose.toLin'
+              (S + B1.subtype.comp (M.comp A1.mkQ)) : Complex) else 0 := by
+    calc
+      _ = ∑ Z : B1 →ₗ[F] (V d ⧸ A1), ∑ Y : BinaryMatrix n d,
+            if Selected A12 B12 Z then
+              (if w6Precedes Xmat Y then
+                if Z = A1.mkQ.comp (Y.transpose.toLin'.comp B1.subtype) then
+                  complexFourierCoeff f Y *
+                    (traceCharacter Y.transpose.toLin' S : Complex) else 0
+                else 0) * (traceCharacter Z M : Complex) else 0 := by
+          refine Finset.sum_congr rfl (fun Z _ => ?_)
+          by_cases hsel : Selected A12 B12 Z
+          · rw [if_pos hsel]
+            have hcoeff := actualW6Derivative_carrier_fourierCoeff Xmat S f Z
+            rw [hcoeff, Finset.sum_mul]
+            refine Finset.sum_congr rfl (fun Y _ => ?_)
+            by_cases hprec : w6Precedes Xmat Y
+            · rw [if_pos hprec]
+              by_cases hfreq : Z = A1.mkQ.comp
+                  (Y.transpose.toLin'.comp B1.subtype)
+              · rw [if_pos hfreq, if_pos hsel]
+              · rw [if_neg hfreq, if_pos hsel, zero_mul]
+            · rw [if_neg hprec, if_pos hsel, zero_mul]
+          · rw [if_neg hsel]
+            symm
+            apply Finset.sum_eq_zero
+            intro Y _
+            rw [if_neg hsel]
+      _ = ∑ Y : BinaryMatrix n d, ∑ Z : B1 →ₗ[F] (V d ⧸ A1),
+            if Selected A12 B12 Z then
+              (if w6Precedes Xmat Y then
+                if Z = A1.mkQ.comp (Y.transpose.toLin'.comp B1.subtype) then
+                  complexFourierCoeff f Y *
+                    (traceCharacter Y.transpose.toLin' S : Complex) else 0
+                else 0) * (traceCharacter Z M : Complex) else 0 := by
+          exact Finset.sum_comm
+      _ = _ := by
+          refine Finset.sum_congr rfl (fun Y _ => ?_)
+          let Ymap := Y.transpose.toLin'
+          have hinduced : A1.mkQ.comp (Ymap.comp B1.subtype) =
+              t2InducedOnKernel X Ymap := by
+            symm
+            simpa [X, A1, B1, Ymap] using t2_induced_eq X Ymap
+          by_cases hleft : t2LeftSelected X Ymap A2 B2
+          · have hprec : w6Precedes Xmat Y :=
+              (t2_matrix_precedes_iff Xmat Y).2 hleft.1
+            have hselZ : Selected A12 B12 (t2InducedOnKernel X Ymap) := hleft.2.2.2
+            rw [if_pos hleft]
+            have hsingle : (∑ Z : B1 →ₗ[F] (V d ⧸ A1),
+                if Selected A12 B12 Z then
+                  (if w6Precedes Xmat Y then
+                    if Z = A1.mkQ.comp (Ymap.comp B1.subtype) then
+                      complexFourierCoeff f Y *
+                        (traceCharacter Ymap S : Complex) else 0
+                    else 0) * (traceCharacter Z M : Complex) else 0) =
+                complexFourierCoeff f Y * (traceCharacter Ymap S : Complex) *
+                  (traceCharacter (t2InducedOnKernel X Ymap) M : Complex) := by
+              rw [Finset.sum_eq_single (t2InducedOnKernel X Ymap)]
+              · simp [hselZ, hprec, hinduced]
+              · intro Z _ hne
+                by_cases hsel : Selected A12 B12 Z
+                · rw [if_pos hsel, if_pos hprec]
+                  have hnot : Z ≠ A1.mkQ.comp (Ymap.comp B1.subtype) := by
+                    rw [← hinduced] at hne
+                    exact hne
+                  simp [hnot]
+                · simp [hsel]
+              · intro hmiss
+                exact absurd (Finset.mem_univ _) hmiss
+            rw [hsingle]
+            have hphase := t2_shifted_phase X Ymap S M
+            have hcast :
+                (traceCharacter Ymap S : Complex) *
+                    (traceCharacter (t2InducedOnKernel X Ymap) M : Complex) =
+                  (traceCharacter Ymap
+                    (S + B1.subtype.comp (M.comp A1.mkQ)) : Complex) := by
+              rw [← Complex.ofReal_mul, hphase]
+            rw [mul_assoc, hcast]
+          · rw [if_neg hleft]
+            apply Finset.sum_eq_zero
+            intro Z _
+            by_cases hsel : Selected A12 B12 Z
+            · rw [if_pos hsel]
+              by_cases hprec : w6Precedes Xmat Y
+              · rw [if_pos hprec]
+                by_cases hfreq : Z = A1.mkQ.comp (Ymap.comp B1.subtype)
+                · have hpreLin : t1RankPrecedes X Ymap :=
+                    (t2_matrix_precedes_iff Xmat Y).1 hprec
+                  have hselInd : Selected A12 B12 (t2InducedOnKernel X Ymap) := by
+                    rw [← hinduced]
+                    simpa [hfreq] using hsel
+                  have hleft' : t2LeftSelected X Ymap A2 B2 :=
+                    ⟨hpreLin, hA, hB, hselInd⟩
+                  exact absurd hleft' hleft
+                · rw [if_neg hfreq, zero_mul]
+              · rw [if_neg hprec, zero_mul]
+            · rw [if_neg hsel]
+  simpa [X, A1, B1, A12, B12] using hswap
 
 /-- Both selector directions, uniqueness, and saturation of the restriction
 and quotient rank-loss bound. -/
