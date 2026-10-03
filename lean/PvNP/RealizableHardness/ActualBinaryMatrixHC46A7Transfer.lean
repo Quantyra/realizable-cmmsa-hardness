@@ -4144,5 +4144,144 @@ theorem a9FinalTheta_rank {a b k i j : Nat}
     simpa using (Module.finrank_fin_fun (n := k) F)
   rw [hrank, hk]
 
+/-- The half-dimensional Grassmannian of a 38-dimensional binary space is
+larger than the order-one room `2^{9*40}`. -/
+theorem a7_gaussian_38_19_gt_order_one :
+    2 ^ (9 * 40) < w6Gaussian 38 19 := by
+  decide
+
+private lemma a7_carrierMean_const {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) (c : ℝ) :
+    carrierMean A B (fun _ : (V d ⧸ A) →ₗ[F] B => c) = c := by
+  unfold carrierMean
+  rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  have hpos : 0 < Fintype.card ((V d ⧸ A) →ₗ[F] B) :=
+    Fintype.card_pos_iff.mpr ⟨0⟩
+  exact mul_div_cancel_left₀ c (by exact_mod_cast (Nat.ne_of_gt hpos))
+
+private lemma a7_sign_normSq (x : ℝ) (hx : x = 1 ∨ x = -1) :
+    Complex.normSq (x : ℂ) = 1 := by
+  rcases hx with rfl | rfl <;> simp [Complex.normSq_ofReal]
+
+private lemma a7_sign_mul (a b : ℝ) (ha : a = 1 ∨ a = -1) (hb : b = 1 ∨ b = -1) :
+    a * b = 1 ∨ a * b = -1 := by
+  rcases ha with rfl | rfl <;> rcases hb with rfl | rfl <;> simp
+
+/-- One subspace pair contributes `1` to the unweighted `Q` of a character
+exactly when it selects that character, and contributes `0` otherwise. -/
+theorem a7_character_qComponent {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (Y : BinaryMatrix n d) :
+    typedW6QComponent A B T (fun M => (character Y M : ℂ)) =
+      if Selected A B Y.transpose.toLin' then 1 else 0 := by
+  classical
+  unfold typedW6QComponent
+  have hpt : ∀ M : (V d ⧸ A) →ₗ[F] B,
+      Complex.normSq (filteredCarrierFunction A B T
+        (fun X => (character Y X : ℂ)) M) =
+        if Selected A B Y.transpose.toLin' then 1 else 0 := by
+    intro M
+    rw [filteredCarrierFunction_character]
+    by_cases hsel : Selected A B Y.transpose.toLin'
+    · simp only [hsel, if_pos]
+      let phase := traceCharacter Y.transpose.toLin' T
+      let induced :=
+        traceCharacter (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M
+      have hphase : phase = 1 ∨ phase = -1 := by
+        unfold phase traceCharacter
+        by_cases h0 : tracePair Y.transpose.toLin' T = 0 <;> simp [h0]
+      have hind : induced = 1 ∨ induced = -1 := by
+        unfold induced traceCharacter
+        by_cases h0 :
+            tracePair (A.mkQ.comp (Y.transpose.toLin'.comp B.subtype)) M = 0 <;>
+          simp [h0]
+      exact a7_sign_normSq _ (a7_sign_mul _ _ hphase hind)
+    · simp [hsel, Complex.normSq_zero]
+  simp only [hpt]
+  rw [a7_carrierMean_const]
+  by_cases hsel : Selected A B Y.transpose.toLin'
+  · simp [hsel]
+  · simp [hsel]
+
+/-- Unweighted `Q` of one character equals the number of subspace pairs that
+select it. Each selecting pair contributes its full squared carrier energy. -/
+theorem a7_character_hybrid_q {n d : Nat} (Y : BinaryMatrix n d) :
+    a7HybridQ (fun M => (character Y M : ℂ)) =
+      (Fintype.card {p : Submodule F (V d) × Submodule F (W n) //
+        Selected p.1 p.2 Y.transpose.toLin'} : ℝ) := by
+  classical
+  unfold a7HybridQ
+  have hmean : ∀ p : Submodule F (V d) × Submodule F (W n),
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        typedW6QComponent p.1 p.2 T (fun M => (character Y M : ℂ))) =
+        if Selected p.1 p.2 Y.transpose.toLin' then 1 else 0 := by
+    intro p
+    unfold typedUniformMean
+    simp_rw [a7_character_qComponent]
+    rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+    have hpos : 0 < Fintype.card (V d →ₗ[F] W n) :=
+      Fintype.card_pos_iff.mpr ⟨0⟩
+    exact mul_div_cancel_left₀ _ (by exact_mod_cast (Nat.ne_of_gt hpos))
+  simp_rw [hmean]
+  rw [← Finset.sum_filter]
+  rw [Finset.sum_const, nsmul_eq_mul, mul_one, Fintype.card_subtype]
+
+/-- A squared character has mean `1`. -/
+theorem a7_character_energy {n d : Nat} (Y : BinaryMatrix n d) :
+    uniformMean (fun M => Complex.normSq ((character Y M : ℂ))) = 1 := by
+  have hpt : ∀ M, Complex.normSq ((character Y M : ℂ)) = 1 := by
+    intro M
+    unfold character
+    by_cases h : pairing Y M = 0
+    · simp [h, Complex.normSq_ofReal]
+    · simp [h, Complex.normSq_ofReal]
+  simp_rw [hpt]
+  exact uniformMean_const 1
+
+/-- Every `a`-plane of the image gives a distinct selected pair. -/
+theorem a7_selected_card_ge_grass {n d r a : Nat}
+    (Y : W n →ₗ[F] V d)
+    (hY : Module.finrank F (LinearMap.range Y) = r) :
+    w6Gaussian r a ≤
+      Fintype.card {p : Submodule F (V d) × Submodule F (W n) //
+        Selected p.1 p.2 Y} := by
+  classical
+  haveI : Fintype (LinearMap.range Y) := Fintype.ofFinite _
+  haveI : Module.Finite F (LinearMap.range Y) := inferInstance
+  haveI : Module.Free F (LinearMap.range Y) :=
+    Module.Free.of_basis (Module.finBasis F (LinearMap.range Y))
+  have hgrass : Fintype.card (W6Grass (LinearMap.range Y) a) =
+      w6Gaussian r a := by
+    rw [w6_card_grass, hY]
+  let emb : W6Grass (LinearMap.range Y) a →
+      {p : Submodule F (V d) × Submodule F (W n) // Selected p.1 p.2 Y} :=
+    fun A => a7SelectedOfRangeSubspace Y A.1
+  have hinj : Function.Injective emb := by
+    intro A₁ A₂ h
+    exact Subtype.ext (a7SelectedOfRangeSubspace_injective Y h)
+  have hle := Fintype.card_le_of_injective emb hinj
+  rwa [hgrass] at hle
+
+/-- A rank-38 character has unweighted `Q` larger than `2^{9*40}` times its
+squared `L2` energy. The energy is `1`, and `Q` equals the selected-pair
+count, which is at least the 19-planes of the image. This is an evaluation
+of `a7HybridQ`. It does not identify the character with `a7OutputBinary`,
+and it does not remove the share hypothesis. -/
+theorem a7_rank38_character_q_exceeds_order_one {n d : Nat}
+    (Y : BinaryMatrix n d)
+    (hY : Module.finrank F (LinearMap.range Y.transpose.toLin') = 38) :
+    (2 : ℝ) ^ (9 * 40) *
+        (uniformMean (fun M => Complex.normSq ((character Y M : ℂ)))) ^ 2 <
+      a7HybridQ (fun M => (character Y M : ℂ)) := by
+  have henergy := a7_character_energy Y
+  have hcard := a7_selected_card_ge_grass (a := 19) Y.transpose.toLin' hY
+  have hgauss := a7_gaussian_38_19_gt_order_one
+  have hnat : 2 ^ (9 * 40) <
+      Fintype.card {p : Submodule F (V d) × Submodule F (W n) //
+        Selected p.1 p.2 Y.transpose.toLin'} :=
+    lt_of_lt_of_le hgauss hcard
+  rw [a7_character_hybrid_q, henergy, one_pow, mul_one]
+  exact_mod_cast hnat
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
