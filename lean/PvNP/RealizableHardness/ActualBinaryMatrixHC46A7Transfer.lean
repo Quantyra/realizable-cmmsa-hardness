@@ -2459,5 +2459,396 @@ theorem a7_mixed_sum_le_allowance_add_lower {n d D : Nat}
   rw [hsplit]
   exact add_le_add hsat (le_refl _)
 
+/-- The squared `L2` energy of the output binary function is the squared W6
+energy of this triple's pullback. This is the zero-order summand of the
+output `Q`, for every mixed order. -/
+theorem a7_output_binary_l2_sq {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) :
+    (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2 =
+      (typedW6OutputEnergy (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+        (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)) ^ 2 := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let parent := a7MixedCoordinateParent t
+  let coord := a7MixedCoordinate t T f
+  let Cout := LinearMap.range parent.transpose.toLin'
+  let Hout := LinearMap.ker parent.transpose.toLin'
+  let deriv := actualW6Derivative parent 0 coord
+  have hE := typedW6OutputEnergy_coordinate C H X
+    (filteredCarrierFunction C H T f)
+  have henergy : typedW6OutputEnergy C H X (filteredCarrierFunction C H T f) =
+      carrierMean Cout Hout (fun M => Complex.normSq (deriv M)) := by
+    rw [hE]
+    rfl
+  have hL2 := carrierComplexEnergy_coordinate Cout Hout deriv
+  have hg : a7OutputBinary t T f =
+      fun M => deriv ((carrierMatrixEquiv Cout Hout).symm M) := by
+    unfold a7OutputBinary
+    rfl
+  have hmean : uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M)) =
+      typedW6OutputEnergy C H X (filteredCarrierFunction C H T f) := by
+    rw [hg, ← hL2, ← henergy]
+  exact congrArg (fun x => x ^ 2) hmean
+
+/-- The zero-order summand of the output `Q` is that squared `L2` energy. -/
+theorem a7_output_zero_share_eq_l2 {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) :
+    a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+        (a7OutputBinary t T f) =
+      (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2 := by
+  rw [a7PairShare]
+  exact a7_zero_order_uniform (a7OutputBinary t T f)
+
+/-- Squared pullback energies of every triple on one ambient carrier, from
+every ordinary pair, inject into that carrier's parent-energy pool. The
+order is unrestricted: this bounds squared `L2` energies, not fourth moments. -/
+theorem a7_ambient_energy_sq_sum_le {n d D : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+          (typedW6OutputEnergy (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+            (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)) ^ 2
+        else 0) ≤
+      (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent C H T f := by
+  classical
+  let S := Σ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+    T1IndexTriple p.1.1 p.1.2
+  let pred : S → Prop := fun u =>
+    t1AmbientC u.2.C = C ∧ t1AmbientH u.2.K = H
+  let ts : Finset S := Finset.univ.filter pred
+  have hcond : ∀ w : {u : S // u ∈ ts}, pred w.1 :=
+    fun w => (Finset.mem_filter.mp w.2).2
+  let φ : {u : S // u ∈ ts} → (H →ₗ[F] (V d ⧸ C)) :=
+    fun w => a7CarrierParent C H w.1.2 (hcond w).1 (hcond w).2
+  let genergy : (H →ₗ[F] (V d ⧸ C)) → ℝ := fun Z =>
+    (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)) ^ 2
+  have hinj : Function.Injective φ := by
+    intro w1 w2 hφ
+    have huniq := a7_carrier_parent_unique C H w1.1.2 w2.1.2
+      (hcond w1).1 (hcond w1).2 (hcond w2).1 (hcond w2).2 hφ
+    apply Subtype.ext
+    have hp : w1.1.1 = w2.1.1 := Subtype.ext (Prod.ext huniq.1 huniq.2.1)
+    cases w1 with
+    | mk u1 hu1 =>
+      cases w2 with
+      | mk u2 hu2 =>
+        cases u1 with
+        | mk p1 t1 =>
+          cases u2 with
+          | mk p2 t2 =>
+            subst hp
+            have ht : t1 = t2 := eq_of_heq huniq.2.2
+            subst ht
+            rfl
+  have hterm : ∀ w : {u : S // u ∈ ts},
+      (typedW6OutputEnergy (t1AmbientC w.1.2.C) (t1AmbientH w.1.2.K)
+        (t1PullbackMap w.1.2)
+        (filteredCarrierFunction (t1AmbientC w.1.2.C) (t1AmbientH w.1.2.K) T f)) ^ 2 =
+        genergy (φ w) := by
+    intro w
+    exact congrArg (fun x => x ^ 2)
+      (a7_output_energy_carrier_cast (t1AmbientC w.1.2.C) C
+        (t1AmbientH w.1.2.K) H (hcond w).1 (hcond w).2 (t1PullbackMap w.1.2)
+        (a7CarrierParent C H w.1.2 (hcond w).1 (hcond w).2)
+        (a7_carrier_parent_spec C H w.1.2 (hcond w).1 (hcond w).2) T f)
+  have hsumφ :
+      (∑ w ∈ ts.attach,
+        (typedW6OutputEnergy (t1AmbientC w.1.2.C) (t1AmbientH w.1.2.K)
+          (t1PullbackMap w.1.2)
+          (filteredCarrierFunction (t1AmbientC w.1.2.C) (t1AmbientH w.1.2.K) T f)) ^ 2) =
+        ∑ w ∈ ts.attach, genergy (φ w) :=
+    Finset.sum_congr rfl (fun w _ => hterm w)
+  have himage : (∑ Z ∈ ts.attach.image φ, genergy Z) =
+      ∑ w ∈ ts.attach, genergy (φ w) :=
+    Finset.sum_image (f := genergy) (hinj.injOn (s := (ts.attach : Set _)))
+  have hrest : (∑ Z ∈ ts.attach.image φ, genergy Z) ≤ ∑ Z, genergy Z :=
+    Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ _)
+      (fun Z _ _ => sq_nonneg
+        (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)))
+  have hfilter :
+      (∑ u ∈ ts,
+        (typedW6OutputEnergy (t1AmbientC u.2.C) (t1AmbientH u.2.K)
+          (t1PullbackMap u.2)
+          (filteredCarrierFunction (t1AmbientC u.2.C) (t1AmbientH u.2.K) T f)) ^ 2) =
+        ∑ u : S, if pred u then
+          (typedW6OutputEnergy (t1AmbientC u.2.C) (t1AmbientH u.2.K)
+            (t1PullbackMap u.2)
+            (filteredCarrierFunction (t1AmbientC u.2.C) (t1AmbientH u.2.K) T f)) ^ 2
+        else 0 :=
+    Finset.sum_filter (s := (Finset.univ : Finset S))
+      (f := fun u =>
+        (typedW6OutputEnergy (t1AmbientC u.2.C) (t1AmbientH u.2.K)
+          (t1PullbackMap u.2)
+          (filteredCarrierFunction (t1AmbientC u.2.C) (t1AmbientH u.2.K) T f)) ^ 2)
+      pred
+  have hsig :
+      ((Finset.univ : Finset (dr6ActualNonzeroABPairs (n := n) (d := d))).sigma
+        (fun _ => Finset.univ)) = (Finset.univ : Finset S) := by
+    ext u
+    simp
+  have hsigma :
+      (∑ u : S, if pred u then
+        (typedW6OutputEnergy (t1AmbientC u.2.C) (t1AmbientH u.2.K)
+          (t1PullbackMap u.2)
+          (filteredCarrierFunction (t1AmbientC u.2.C) (t1AmbientH u.2.K) T f)) ^ 2
+      else 0) =
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if pred ⟨p, t⟩ then
+              (typedW6OutputEnergy (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+                (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)) ^ 2
+            else 0 := by
+    have hsumσ := Finset.sum_sigma
+      (s := (Finset.univ : Finset (dr6ActualNonzeroABPairs (n := n) (d := d))))
+      (t := fun _ => (Finset.univ : Finset (T1IndexTriple _ _)))
+      (f := fun u : S => if pred u then
+        (typedW6OutputEnergy (t1AmbientC u.2.C) (t1AmbientH u.2.K)
+          (t1PullbackMap u.2)
+          (filteredCarrierFunction (t1AmbientC u.2.C) (t1AmbientH u.2.K) T f)) ^ 2
+      else 0)
+    rw [hsig] at hsumσ
+    exact hsumσ
+  have hattach :
+      (∑ u ∈ ts,
+        (typedW6OutputEnergy (t1AmbientC u.2.C) (t1AmbientH u.2.K)
+          (t1PullbackMap u.2)
+          (filteredCarrierFunction (t1AmbientC u.2.C) (t1AmbientH u.2.K) T f)) ^ 2) =
+        ∑ w ∈ ts.attach,
+          (typedW6OutputEnergy (t1AmbientC w.1.2.C) (t1AmbientH w.1.2.K)
+            (t1PullbackMap w.1.2)
+            (filteredCarrierFunction (t1AmbientC w.1.2.C) (t1AmbientH w.1.2.K) T f)) ^ 2 :=
+    (Finset.sum_attach (s := ts)
+      (f := fun u =>
+        (typedW6OutputEnergy (t1AmbientC u.2.C) (t1AmbientH u.2.K)
+          (t1PullbackMap u.2)
+          (filteredCarrierFunction (t1AmbientC u.2.C) (t1AmbientH u.2.K) T f)) ^ 2)).symm
+  have hsum :
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+            (typedW6OutputEnergy (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+              (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)) ^ 2
+          else 0) ≤
+        ∑ Z : H →ₗ[F] (V d ⧸ C), genergy Z := by
+    calc
+      _ = ∑ w ∈ ts.attach,
+            (typedW6OutputEnergy (t1AmbientC w.1.2.C) (t1AmbientH w.1.2.K)
+              (t1PullbackMap w.1.2)
+              (filteredCarrierFunction (t1AmbientC w.1.2.C) (t1AmbientH w.1.2.K) T f)) ^ 2 := by
+          have hpred : ∀ p (t : T1IndexTriple p.1.1 p.1.2), pred ⟨p, t⟩ =
+              (t1AmbientC t.C = C ∧ t1AmbientH t.K = H) := by
+            intro p t
+            rfl
+          rw [← hsigma, ← hfilter, hattach]
+      _ = ∑ w ∈ ts.attach, genergy (φ w) := hsumφ
+      _ = ∑ Z ∈ ts.attach.image φ, genergy Z := himage.symm
+      _ ≤ ∑ Z, genergy Z := hrest
+  exact le_trans hsum (a7_carrier_energy_sq_sum_le C H T f hsupport)
+
+/-- Averaging the injected energies puts every output zero-order summand on
+one carrier under the W6 pool factor times that carrier's original share. -/
+theorem a7_output_zero_summand_carrier_le {n d D : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    typedUniformMean (fun T : V d →ₗ[F] W n =>
+      ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+            (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+          else 0) ≤
+      (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare C H f := by
+  classical
+  have hT : ∀ T : V d →ₗ[F] W n,
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+            (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+          else 0) ≤
+        (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent C H T f := by
+    intro T
+    have hsum := a7_ambient_energy_sq_sum_le C H T f hsupport
+    have hrewrite :
+        (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+              (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+            else 0) =
+          ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+            ∑ t : T1IndexTriple p.1.1 p.1.2,
+              if t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+                (typedW6OutputEnergy (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+                  (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)) ^ 2
+              else 0 := by
+      refine Finset.sum_congr rfl ?_
+      intro p _
+      refine Finset.sum_congr rfl ?_
+      intro t _
+      by_cases hc : t1AmbientC t.C = C ∧ t1AmbientH t.K = H
+      · rw [if_pos hc, if_pos hc, a7_output_binary_l2_sq]
+      · rw [if_neg hc, if_neg hc]
+    rw [hrewrite]
+    exact hsum
+  have hcard : 0 < (Fintype.card (V d →ₗ[F] W n) : ℝ) := by
+    have hpos : 0 < Fintype.card (V d →ₗ[F] W n) := Fintype.card_pos_iff.mpr ⟨0⟩
+    exact_mod_cast hpos
+  unfold typedUniformMean a7PairShare
+  have hsumle :
+      (∑ T : V d →ₗ[F] W n,
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+              (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+            else 0) ≤
+        ∑ T : V d →ₗ[F] W n,
+          (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent C H T f :=
+    Finset.sum_le_sum (fun T _ => hT T)
+  calc
+    _ ≤ (∑ T : V d →ₗ[F] W n,
+          (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent C H T f) /
+        (Fintype.card (V d →ₗ[F] W n) : ℝ) :=
+      div_le_div_of_nonneg_right hsumle (le_of_lt hcard)
+    _ = (2 : ℝ) ^ (6 * D * D + 1) *
+          ((∑ T : V d →ₗ[F] W n, typedW6QComponent C H T f) /
+            (Fintype.card (V d →ₗ[F] W n) : ℝ)) := by
+      rw [← Finset.mul_sum, mul_div_assoc]
+
+/-- Summing carriers reindexes every output zero-order summand into the
+original unweighted `Q`, with the W6 pool factor and no double charge. The
+positive-order summands of an output `Q` are not included, and a
+positive-degree fourth moment is not this squared energy. -/
+theorem a7_output_zero_summand_le_q {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    typedUniformMean (fun T : V d →ₗ[F] W n =>
+      ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2) ≤
+      (2 : ℝ) ^ (6 * D * D + 1) * a7HybridQ f := by
+  classical
+  let Qpair := Submodule F (V d) × Submodule F (W n)
+  have hcarrier' : ∀ q : Qpair,
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+              (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+            else 0) ≤
+        (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare q.1 q.2 f :=
+    fun q => a7_output_zero_summand_carrier_le q.1 q.2 f hsupport
+  have hsumq :
+      (∑ q : Qpair,
+        typedUniformMean (fun T : V d →ₗ[F] W n =>
+          ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+            ∑ t : T1IndexTriple p.1.1 p.1.2,
+              if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+                (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+              else 0)) ≤
+        (2 : ℝ) ^ (6 * D * D + 1) *
+          ∑ q : Qpair, a7PairShare q.1 q.2 f := by
+    calc
+      _ ≤ ∑ q : Qpair, (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare q.1 q.2 f :=
+        Finset.sum_le_sum (fun q _ => hcarrier' q)
+      _ = (2 : ℝ) ^ (6 * D * D + 1) * ∑ q : Qpair, a7PairShare q.1 q.2 f := by
+        rw [← Finset.mul_sum]
+  have hexh := a7_pair_shares_exhaust f
+  have hsingle : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+      (t : T1IndexTriple p.1.1 p.1.2) (T : V d →ₗ[F] W n),
+      (∑ q : Qpair,
+        if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+          (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+        else 0) =
+        (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2 := by
+    intro p t T
+    let q0 : Qpair := ⟨t1AmbientC t.C, t1AmbientH t.K⟩
+    let val := (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+    have hrest : ∀ q ∈ Finset.univ, q ≠ q0 →
+        (if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then val else 0) = 0 := by
+      intro q _ hne
+      have hneg : ¬ (t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2) := by
+        intro h
+        exact hne (Prod.ext h.1.symm h.2.symm)
+      simp [hneg]
+    have hsum := Finset.sum_eq_single (s := Finset.univ) q0
+      (f := fun q : Qpair =>
+        if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then val else 0)
+      hrest (fun h => absurd (Finset.mem_univ q0) h)
+    have hq0 : (if t1AmbientC t.C = q0.1 ∧ t1AmbientH t.K = q0.2 then val else 0) = val := by
+      simp [q0]
+    rw [hsum, hq0]
+  have hgroup :
+      (∑ q : Qpair,
+        typedUniformMean (fun T : V d →ₗ[F] W n =>
+          ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+            ∑ t : T1IndexTriple p.1.1 p.1.2,
+              if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+                (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+              else 0)) =
+        typedUniformMean (fun T : V d →ₗ[F] W n =>
+          ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+            ∑ t : T1IndexTriple p.1.1 p.1.2,
+              (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2) := by
+    unfold typedUniformMean
+    have hnum :
+        (∑ q : Qpair,
+          ∑ T : V d →ₗ[F] W n,
+            ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+              ∑ t : T1IndexTriple p.1.1 p.1.2,
+                if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+                  (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+                else 0) =
+          ∑ T : V d →ₗ[F] W n,
+            ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+              ∑ t : T1IndexTriple p.1.1 p.1.2,
+                (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2 := by
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl ?_
+      intro T _
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl ?_
+      intro p _
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl ?_
+      intro t _
+      exact hsingle p t T
+    have hcard : (Fintype.card (V d →ₗ[F] W n) : ℝ) ≠ 0 := by
+      exact_mod_cast (Fintype.card_ne_zero : Fintype.card (V d →ₗ[F] W n) ≠ 0)
+    calc
+      (∑ q : Qpair,
+          (∑ T : V d →ₗ[F] W n,
+            ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+              ∑ t : T1IndexTriple p.1.1 p.1.2,
+                if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+                  (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+                else 0) /
+            (Fintype.card (V d →ₗ[F] W n) : ℝ)) =
+          (∑ q : Qpair,
+            ∑ T : V d →ₗ[F] W n,
+              ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+                ∑ t : T1IndexTriple p.1.1 p.1.2,
+                  if t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+                    (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2
+                  else 0) /
+            (Fintype.card (V d →ₗ[F] W n) : ℝ) := by
+        rw [Finset.sum_div]
+      _ = (∑ T : V d →ₗ[F] W n,
+            ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+              ∑ t : T1IndexTriple p.1.1 p.1.2,
+                (uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M))) ^ 2) /
+          (Fintype.card (V d →ₗ[F] W n) : ℝ) := by
+        rw [hnum]
+  rw [hexh] at hsumq
+  rw [hgroup] at hsumq
+  exact hsumq
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
