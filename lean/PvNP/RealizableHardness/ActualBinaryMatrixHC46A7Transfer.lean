@@ -27,6 +27,7 @@ attribute [local instance] Fintype.ofFinite
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
@@ -3071,6 +3072,229 @@ theorem a7_one_hybrid_filter_sq_le_component {n d D : Nat}
       exact hle
     exact sq_le_sq.mpr habs
   exact le_trans hsq hfull
+
+lemma a7_w6Gaussian_zero (n : Nat) : w6Gaussian n 0 = 1 := by
+  unfold w6Gaussian w6FrameProduct
+  simp
+
+lemma a7_w6Gaussian_self (n : Nat) : w6Gaussian n n = 1 := by
+  have hpos : 0 < w6FrameProduct n n := by
+    unfold w6FrameProduct
+    refine Finset.prod_pos ?_
+    intro i _
+    exact Nat.sub_pos_of_lt
+      (Nat.pow_lt_pow_right (by decide : 1 < 2) i.isLt)
+  unfold w6Gaussian
+  rw [if_pos le_rfl, Nat.div_self hpos]
+
+/-- One Gaussian factor times one graph power. The factor four appears only
+when the chosen subspace is a proper positive-dimensional subspace. -/
+lemma a7_gauss_graph_le (n m r : Nat) (hm : m ≤ n) :
+    w6Gaussian n m * 2 ^ (r * (n - m)) ≤
+      (if 0 < m ∧ m < n then 4 else 1) * 2 ^ ((m + r) * (n - m)) := by
+  by_cases h0 : m = 0
+  · subst m
+    rw [a7_w6Gaussian_zero, if_neg (by
+      intro h
+      exact Nat.not_lt_zero 0 h.1)]
+    simp
+  · by_cases hfull : m = n
+    · subst m
+      rw [a7_w6Gaussian_self, if_neg (by
+        intro h
+        exact (lt_irrefl n) h.2)]
+      simp
+    · have hmid : 0 < m ∧ m < n := by
+        constructor
+        · omega
+        · omega
+      rw [if_pos hmid]
+      have hg := w6_gaussian_le_four_pow hm
+      have hsplit : m * (n - m) + r * (n - m) = (m + r) * (n - m) := by ring
+      calc
+        w6Gaussian n m * 2 ^ (r * (n - m)) ≤
+            (4 * 2 ^ (m * (n - m))) * 2 ^ (r * (n - m)) :=
+          Nat.mul_le_mul_right _ hg
+        _ = 4 * (2 ^ (m * (n - m)) * 2 ^ (r * (n - m))) := by ring
+        _ = 4 * 2 ^ ((m + r) * (n - m)) := by
+          rw [← pow_add, hsplit]
+
+/-- Manuscript A9 choice product. For final dimensions `a+b+k ≤ D` and an
+initial subspace of dimensions `i ≤ a`, `j ≤ b`, the Gaussian-and-graph count
+is at most `2^{3D(i+j+k)}`. This is the numeric bound. It does not yet identify
+the product with a fiber of initial triples, so it does not charge `Q`. -/
+theorem a7_a9_multiplicity_le (D i j k a b : Nat)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b) :
+    w6Gaussian a i * w6Gaussian b j * 2 ^ (k * (a - i)) * 2 ^ (k * (b - j)) ≤
+      2 ^ (3 * D * (i + j + k)) := by
+  let t := i + j + k
+  have haD : a ≤ D := by omega
+  have hbD : b ≤ D := by omega
+  have hik : i + k ≤ t := by omega
+  have hjk : j + k ≤ t := by omega
+  have hai : a - i ≤ D := by omega
+  have hbj : b - j ≤ D := by omega
+  have he1 : (i + k) * (a - i) ≤ t * D := Nat.mul_le_mul hik hai
+  have he2 : (j + k) * (b - j) ≤ t * D := Nat.mul_le_mul hjk hbj
+  have hesum : (i + k) * (a - i) + (j + k) * (b - j) ≤ 2 * D * t := by
+    have hadd : (i + k) * (a - i) + (j + k) * (b - j) ≤ t * D + t * D :=
+      Nat.add_le_add he1 he2
+    have htwo : t * D + t * D = 2 * D * t := by ring
+    rwa [htwo] at hadd
+  have hgi := a7_gauss_graph_le a i k hi
+  have hgj := a7_gauss_graph_le b j k hj
+  have hprod :
+      w6Gaussian a i * 2 ^ (k * (a - i)) *
+          (w6Gaussian b j * 2 ^ (k * (b - j))) ≤
+        ((if 0 < i ∧ i < a then 4 else 1) * 2 ^ ((i + k) * (a - i))) *
+          ((if 0 < j ∧ j < b then 4 else 1) * 2 ^ ((j + k) * (b - j))) :=
+    Nat.mul_le_mul hgi hgj
+  have hreorder :
+      w6Gaussian a i * w6Gaussian b j * 2 ^ (k * (a - i)) * 2 ^ (k * (b - j)) =
+        w6Gaussian a i * 2 ^ (k * (a - i)) *
+          (w6Gaussian b j * 2 ^ (k * (b - j))) := by ring
+  rw [hreorder]
+  have hpow : 2 ^ ((i + k) * (a - i)) * 2 ^ ((j + k) * (b - j)) =
+      2 ^ ((i + k) * (a - i) + (j + k) * (b - j)) := by
+    rw [← pow_add]
+  by_cases hia : 0 < i ∧ i < a
+  · by_cases hjb : 0 < j ∧ j < b
+    · have hDt : 4 ≤ D * t := by
+        rcases hia with ⟨hi0, hia'⟩
+        rcases hjb with ⟨hj0, hjb'⟩
+        have ha2 : 2 ≤ a := by omega
+        have hb2 : 2 ≤ b := by omega
+        have ht2 : 2 ≤ t := by omega
+        have hD2 : 2 ≤ D := by
+          have hab : a + b ≤ D := by omega
+          exact le_trans ha2 (le_trans (Nat.le_add_right a b) hab)
+        simpa using Nat.mul_le_mul hD2 ht2
+      have hexp : 4 + 2 * D * t ≤ 3 * D * t := by
+        calc
+          4 + 2 * D * t ≤ D * t + 2 * D * t := Nat.add_le_add_right hDt _
+          _ = 3 * D * t := by ring
+      have h16 : (16 : Nat) * 2 ^ (2 * D * t) = 2 ^ (4 + 2 * D * t) := by
+        have htwo : (16 : Nat) = 2 ^ 4 := by norm_num
+        rw [htwo, ← pow_add]
+      calc
+        _ ≤ (4 * 2 ^ ((i + k) * (a - i))) *
+            (4 * 2 ^ ((j + k) * (b - j))) := by
+          simpa [hia, hjb] using hprod
+        _ = 16 * (2 ^ ((i + k) * (a - i)) * 2 ^ ((j + k) * (b - j))) := by ring
+        _ = 16 * 2 ^ ((i + k) * (a - i) + (j + k) * (b - j)) := by rw [hpow]
+        _ ≤ 16 * 2 ^ (2 * D * t) := by
+          exact Nat.mul_le_mul_left 16
+            (pow_le_pow_right₀ (by decide : 1 ≤ 2) hesum)
+        _ = 2 ^ (4 + 2 * D * t) := h16
+        _ ≤ 2 ^ (3 * D * t) := pow_le_pow_right₀ (by decide : 1 ≤ 2) hexp
+    · have hDt : 2 ≤ D * t := by
+        rcases hia with ⟨hi0, hia'⟩
+        have ha2 : 2 ≤ a := by omega
+        have ht1 : 1 ≤ t := by omega
+        have hD2 : 2 ≤ D := by
+          have haD' : a ≤ D := by omega
+          exact le_trans ha2 haD'
+        simpa using Nat.mul_le_mul hD2 ht1
+      have hexp : 2 + 2 * D * t ≤ 3 * D * t := by
+        calc
+          2 + 2 * D * t ≤ D * t + 2 * D * t := Nat.add_le_add_right hDt _
+          _ = 3 * D * t := by ring
+      have h4 : (4 : Nat) * 2 ^ (2 * D * t) = 2 ^ (2 + 2 * D * t) := by
+        have htwo : (4 : Nat) = 2 ^ 2 := by norm_num
+        rw [htwo, ← pow_add]
+      calc
+        _ ≤ (4 * 2 ^ ((i + k) * (a - i))) *
+            (1 * 2 ^ ((j + k) * (b - j))) := by
+          simpa [hia, hjb] using hprod
+        _ = 4 * (2 ^ ((i + k) * (a - i)) * 2 ^ ((j + k) * (b - j))) := by ring
+        _ = 4 * 2 ^ ((i + k) * (a - i) + (j + k) * (b - j)) := by rw [hpow]
+        _ ≤ 4 * 2 ^ (2 * D * t) :=
+          Nat.mul_le_mul_left 4 (pow_le_pow_right₀ (by decide : 1 ≤ 2) hesum)
+        _ = 2 ^ (2 + 2 * D * t) := h4
+        _ ≤ 2 ^ (3 * D * t) := pow_le_pow_right₀ (by decide : 1 ≤ 2) hexp
+  · by_cases hjb : 0 < j ∧ j < b
+    · have hDt : 2 ≤ D * t := by
+        rcases hjb with ⟨hj0, hjb'⟩
+        have hb2 : 2 ≤ b := by omega
+        have ht1 : 1 ≤ t := by omega
+        have hD2 : 2 ≤ D := by
+          have hbD' : b ≤ D := by omega
+          exact le_trans hb2 hbD'
+        simpa using Nat.mul_le_mul hD2 ht1
+      have hexp : 2 + 2 * D * t ≤ 3 * D * t := by
+        calc
+          2 + 2 * D * t ≤ D * t + 2 * D * t := Nat.add_le_add_right hDt _
+          _ = 3 * D * t := by ring
+      have h4 : (4 : Nat) * 2 ^ (2 * D * t) = 2 ^ (2 + 2 * D * t) := by
+        have htwo : (4 : Nat) = 2 ^ 2 := by norm_num
+        rw [htwo, ← pow_add]
+      calc
+        _ ≤ (1 * 2 ^ ((i + k) * (a - i))) *
+            (4 * 2 ^ ((j + k) * (b - j))) := by
+          simpa [hia, hjb] using hprod
+        _ = 4 * (2 ^ ((i + k) * (a - i)) * 2 ^ ((j + k) * (b - j))) := by ring
+        _ = 4 * 2 ^ ((i + k) * (a - i) + (j + k) * (b - j)) := by rw [hpow]
+        _ ≤ 4 * 2 ^ (2 * D * t) :=
+          Nat.mul_le_mul_left 4 (pow_le_pow_right₀ (by decide : 1 ≤ 2) hesum)
+        _ = 2 ^ (2 + 2 * D * t) := h4
+        _ ≤ 2 ^ (3 * D * t) := pow_le_pow_right₀ (by decide : 1 ≤ 2) hexp
+    · calc
+        _ ≤ (1 * 2 ^ ((i + k) * (a - i))) *
+            (1 * 2 ^ ((j + k) * (b - j))) := by
+          simpa [hia, hjb] using hprod
+        _ = 2 ^ ((i + k) * (a - i) + (j + k) * (b - j)) := by
+          rw [one_mul, one_mul, ← pow_add]
+        _ ≤ 2 ^ (2 * D * t) := pow_le_pow_right₀ (by decide : 1 ≤ 2) hesum
+        _ ≤ 2 ^ (3 * D * t) :=
+          pow_le_pow_right₀ (by decide : 1 ≤ 2) (by
+            have htwice : 2 * D * t ≤ 2 * D * t + D * t := Nat.le_add_right _ _
+            have hthree : 2 * D * t + D * t = 3 * D * t := by ring
+            rwa [hthree] at htwice)
+
+/-- The A8 graph cost `2^{6Dk}` and the A9 multiplicity `2^{3Dt}` fit in the
+overlap room `2^{9Dt}` once `k ≤ t`. -/
+theorem a7_a8_a9_room (D t k : Nat) (hk : k ≤ t) :
+    (2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t) ≤ (2 : ℝ) ^ (9 * D * t) := by
+  have h6 : 6 * D * k ≤ 6 * D * t := Nat.mul_le_mul_left (6 * D) hk
+  have hsum : 6 * D * k + 3 * D * t ≤ 9 * D * t := by
+    calc
+      6 * D * k + 3 * D * t ≤ 6 * D * t + 3 * D * t := Nat.add_le_add_right h6 _
+      _ = 9 * D * t := by ring
+  calc
+    (2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t) =
+        (2 : ℝ) ^ (6 * D * k + 3 * D * t) := by rw [← pow_add]
+    _ ≤ (2 : ℝ) ^ (9 * D * t) :=
+      pow_le_pow_right₀ (by norm_num : (1 : ℝ) ≤ 2) hsum
+
+/-- Weight, induction, A8, and A9 together stay under the terminal allowance.
+The factors are numeric. They do not build the transport or remove the share
+hypothesis. -/
+theorem a7_a8_a9_exponent_fits (D t k : Nat) (ht : 0 < t) (hle : t ≤ D)
+    (hk : k ≤ t) :
+    (2 : ℝ) ^ (24 * D * t) *
+        ((2 : ℝ) ^ (100 * (D - t) * (D - t)) *
+          ((2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t))) ≤
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
+  have hroom := a7_a8_a9_room D t k hk
+  have hshare := a7_triple_share_exponent_fits D t ht hle
+  have hle9 : (2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t) ≤
+      (2 : ℝ) ^ (9 * D * t) := hroom
+  have hnn : 0 ≤ (2 : ℝ) ^ (24 * D * t) *
+      (2 : ℝ) ^ (100 * (D - t) * (D - t)) :=
+    mul_nonneg (pow_nonneg (by norm_num) _) (pow_nonneg (by norm_num) _)
+  have hmul := mul_le_mul_of_nonneg_left hle9 hnn
+  have hassoc :
+      (2 : ℝ) ^ (24 * D * t) * ((2 : ℝ) ^ (100 * (D - t) * (D - t)) *
+        ((2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t))) =
+        (2 : ℝ) ^ (24 * D * t) * (2 : ℝ) ^ (100 * (D - t) * (D - t)) *
+          ((2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t)) := by ring
+  rw [hassoc]
+  have hshare' :
+      (2 : ℝ) ^ (24 * D * t) * (2 : ℝ) ^ (100 * (D - t) * (D - t)) *
+          (2 : ℝ) ^ (9 * D * t) ≤
+        (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
+    simpa [mul_assoc] using hshare
+  exact le_trans hmul hshare'
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
