@@ -5210,6 +5210,63 @@ theorem a7_character_nested_share_le_q {n d : Nat}
   rw [himage]
   exact hle.trans (le_of_eq hexh)
 
+/-- The same nested window is a subset of the pair shares of every complex
+input, so its sum is at most unweighted `Q`. This is the original side of a
+later injection. It does not bound an output `Q`, and the same-rank datum
+parent is not used. The share hypothesis stays. -/
+theorem a7_nested_share_le_q {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) :
+    (∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+        A₂ ≤ q.1 ∧ q.2 ≤ B₂},
+      a7PairShare p.1.1 p.1.2 f) ≤
+      a7HybridQ f := by
+  classical
+  let nested := {q : Submodule F (V d) × Submodule F (W n) //
+    A₂ ≤ q.1 ∧ q.2 ≤ B₂}
+  let ambient := Submodule F (V d) × Submodule F (W n)
+  let emb : nested → ambient := fun p => p.1
+  have hinj : ∀ x ∈ (Finset.univ : Finset nested),
+      ∀ y ∈ (Finset.univ : Finset nested), emb x = emb y → x = y := by
+    intro x _ y _ h
+    exact Subtype.ext h
+  have himage : (∑ p : nested, a7PairShare (emb p).1 (emb p).2 f) =
+      ∑ q ∈ (Finset.univ : Finset nested).image emb,
+        a7PairShare q.1 q.2 f := by
+    symm
+    exact Finset.sum_image hinj
+  have hsub : (Finset.univ : Finset nested).image emb ⊆ Finset.univ :=
+    Finset.subset_univ _
+  have hnn : ∀ q : ambient, q ∈ Finset.univ →
+      q ∉ (Finset.univ : Finset nested).image emb →
+      0 ≤ a7PairShare q.1 q.2 f := by
+    intro q _ _
+    exact a7_pair_share_nonneg q.1 q.2 _
+  have hle : (∑ q ∈ (Finset.univ : Finset nested).image emb,
+      a7PairShare q.1 q.2 f) ≤
+      ∑ q : ambient, a7PairShare q.1 q.2 f :=
+    Finset.sum_le_sum_of_subset_of_nonneg hsub hnn
+  have hexh := a7_pair_shares_exhaust f
+  have hemb : ∀ p : nested, a7PairShare (emb p).1 (emb p).2 f =
+      a7PairShare p.1.1 p.1.2 f :=
+    fun _ => rfl
+  simp_rw [hemb] at himage
+  rw [himage]
+  exact hle.trans (le_of_eq hexh)
+
+/-- One pair in that window is one nonnegative term of the nested sum, hence
+at most unweighted `Q`, for every complex input. -/
+theorem a7_one_nested_share_le_q {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex)
+    (q : {p : Submodule F (V d) × Submodule F (W n) //
+      A₂ ≤ p.1 ∧ p.2 ≤ B₂}) :
+    a7PairShare q.1.1 q.1.2 f ≤ a7HybridQ f := by
+  refine le_trans ?_ (a7_nested_share_le_q A₂ B₂ f)
+  exact Finset.single_le_sum
+    (fun p _ => a7_pair_share_nonneg p.1.1 p.1.2 f)
+    (Finset.mem_univ q)
+
 theorem a7OrderIsoL_bijective : Function.Bijective a7OrderIsoL := by
   have hsubSurj : Function.Surjective a7OrderHout.subtype := by
     intro w
