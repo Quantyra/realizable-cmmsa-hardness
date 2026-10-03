@@ -35,6 +35,7 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
 open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1Phase
 open PvNP.RealizableHardness.BinaryMatrixFourier
 open PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
 open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
@@ -2849,6 +2850,155 @@ theorem a7_output_zero_summand_le_q {n d D : Nat}
   rw [hexh] at hsumq
   rw [hgroup] at hsumq
   exact hsumq
+
+/-- Orthogonality on one carrier: a hybrid filter keeps the selected Fourier
+coefficients and drops the rest. This is the coefficient form of a positive-order
+filter of a carrier function. It does not reindex that filter into the original
+unweighted `Q`, and `a7_positive_of_overlapping_shares` still assumes `e`. -/
+theorem a7_hybrid_filter_coefficient {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (A₁₂ : Submodule F (V d ⧸ A₂)) (B₁₂ : Submodule F B₂)
+    (g : ((V d ⧸ A₂) →ₗ[F] B₂) → Complex)
+    (Y : B₂ →ₗ[F] (V d ⧸ A₂)) :
+    complexCarrierFourierCoeff A₂ B₂
+        (complexCarrierHybridFilter A₂ B₂ A₁₂ B₁₂ g) Y =
+      if Selected A₁₂ B₁₂ Y then complexCarrierFourierCoeff A₂ B₂ g Y else 0 := by
+  classical
+  set c : (B₂ →ₗ[F] (V d ⧸ A₂)) → Complex :=
+    fun Z => complexCarrierFourierCoeff A₂ B₂ g Z
+  have hfilter :
+      complexCarrierHybridFilter A₂ B₂ A₁₂ B₁₂ g =
+        fun M => ∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+          if Selected A₁₂ B₁₂ Z then c Z * (traceCharacter Z M : ℂ) else 0 := by
+    funext M
+    unfold complexCarrierHybridFilter
+    rfl
+  have hcardPos : 0 < Fintype.card ((V d ⧸ A₂) →ₗ[F] B₂) :=
+    Fintype.card_pos_iff.mpr ⟨0⟩
+  have hcardR : (Fintype.card ((V d ⧸ A₂) →ₗ[F] B₂) : ℝ) ≠ 0 := by
+    exact_mod_cast hcardPos.ne'
+  have hcardC : (Fintype.card ((V d ⧸ A₂) →ₗ[F] B₂) : ℂ) ≠ 0 := by
+    exact_mod_cast hcardPos.ne'
+  have horth (Z : B₂ →ₗ[F] (V d ⧸ A₂)) :
+      (∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+        (traceCharacter Z M : ℂ) * (traceCharacter Y M : ℂ)) =
+        if Z = Y then (Fintype.card ((V d ⧸ A₂) →ₗ[F] B₂) : ℂ) else 0 := by
+    have ho := carrierCharacter_orthogonality A₂ B₂ Z Y
+    unfold carrierMean at ho
+    have hsumR :
+        (∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+          traceCharacter Z M * traceCharacter Y M) =
+          (if Z = Y then (1 : ℝ) else 0) *
+            (Fintype.card ((V d ⧸ A₂) →ₗ[F] B₂) : ℝ) :=
+      (div_eq_iff hcardR).mp ho
+    have hcast := congrArg (fun x : ℝ => (x : ℂ)) hsumR
+    simp only [Complex.ofReal_sum, Complex.ofReal_mul, Complex.ofReal_natCast] at hcast
+    by_cases hZ : Z = Y
+    · simpa [hZ] using hcast
+    · simpa [hZ] using hcast
+  unfold complexCarrierFourierCoeff
+  rw [hfilter]
+  have hnum :
+      (∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+        (∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+          if Selected A₁₂ B₁₂ Z then c Z * (traceCharacter Z M : ℂ) else 0) *
+          (traceCharacter Y M : ℂ)) =
+        (if Selected A₁₂ B₁₂ Y then c Y else 0) *
+          (Fintype.card ((V d ⧸ A₂) →ₗ[F] B₂) : ℂ) := by
+    have hcomm :
+        (∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+          (∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+            if Selected A₁₂ B₁₂ Z then c Z * (traceCharacter Z M : ℂ) else 0) *
+            (traceCharacter Y M : ℂ)) =
+          ∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+            ∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+              (if Selected A₁₂ B₁₂ Z then c Z * (traceCharacter Z M : ℂ) else 0) *
+                (traceCharacter Y M : ℂ) := by
+      refine Finset.sum_congr rfl ?_
+      intro M _
+      exact Finset.sum_mul Finset.univ
+        (fun Z => if Selected A₁₂ B₁₂ Z then c Z * (traceCharacter Z M : ℂ) else 0)
+        (traceCharacter Y M : ℂ)
+    have hswap :
+        (∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+          ∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+            (if Selected A₁₂ B₁₂ Z then c Z * (traceCharacter Z M : ℂ) else 0) *
+              (traceCharacter Y M : ℂ)) =
+          ∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+            ∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+              (if Selected A₁₂ B₁₂ Z then c Z * (traceCharacter Z M : ℂ) else 0) *
+                (traceCharacter Y M : ℂ) :=
+      Finset.sum_comm
+    have hinner :
+        (∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+          ∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+            (if Selected A₁₂ B₁₂ Z then c Z * (traceCharacter Z M : ℂ) else 0) *
+              (traceCharacter Y M : ℂ)) =
+          ∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+            if Selected A₁₂ B₁₂ Z then
+              c Z * (∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+                (traceCharacter Z M : ℂ) * (traceCharacter Y M : ℂ))
+            else 0 := by
+      refine Finset.sum_congr rfl ?_
+      intro Z _
+      by_cases hsel : Selected A₁₂ B₁₂ Z
+      · simp only [if_pos hsel]
+        conv_lhs =>
+          arg 2
+          ext M
+          rw [mul_assoc]
+        exact (Finset.mul_sum Finset.univ
+          (fun M => (traceCharacter Z M : ℂ) * (traceCharacter Y M : ℂ)) (c Z)).symm
+      · simp only [if_neg hsel]
+        refine Finset.sum_eq_zero ?_
+        intro M _
+        exact zero_mul _
+    rw [hcomm, hswap, hinner]
+    have hsingle := Finset.sum_eq_single (s := Finset.univ) Y
+      (f := fun Z : B₂ →ₗ[F] (V d ⧸ A₂) =>
+        if Selected A₁₂ B₁₂ Z then
+          c Z * (∑ M : (V d ⧸ A₂) →ₗ[F] B₂,
+            (traceCharacter Z M : ℂ) * (traceCharacter Y M : ℂ))
+        else 0)
+      (fun Z _ hne => by
+        by_cases hsel : Selected A₁₂ B₁₂ Z
+        · rw [if_pos hsel, horth Z, if_neg hne]
+          exact mul_zero _
+        · rw [if_neg hsel])
+      (fun hmiss => absurd (Finset.mem_univ Y) hmiss)
+    rw [hsingle]
+    by_cases hsel : Selected A₁₂ B₁₂ Y
+    · rw [if_pos hsel, if_pos hsel, horth Y, if_pos rfl]
+    · rw [if_neg hsel, if_neg hsel]
+      exact (zero_mul _).symm
+  rw [hnum]
+  by_cases hsel : Selected A₁₂ B₁₂ Y
+  · rw [if_pos hsel, if_pos hsel]
+    exact mul_div_cancel_right₀ _ hcardC
+  · rw [if_neg hsel, if_neg hsel]
+    simp
+
+/-- The `L2` energy of one carrier hybrid filter is the sum of the selected
+squared coefficients. Squaring this sum is not an injection into original `Q`. -/
+theorem a7_hybrid_filter_energy {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (A₁₂ : Submodule F (V d ⧸ A₂)) (B₁₂ : Submodule F B₂)
+    (g : ((V d ⧸ A₂) →ₗ[F] B₂) → Complex) :
+    carrierMean A₂ B₂ (fun M =>
+      Complex.normSq (complexCarrierHybridFilter A₂ B₂ A₁₂ B₁₂ g M)) =
+      ∑ Z : B₂ →ₗ[F] (V d ⧸ A₂),
+        if Selected A₁₂ B₁₂ Z then
+          Complex.normSq (complexCarrierFourierCoeff A₂ B₂ g Z) else 0 := by
+  classical
+  rw [PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.complex_carrier_parseval
+    A₂ B₂ (complexCarrierHybridFilter A₂ B₂ A₁₂ B₁₂ g)]
+  refine Finset.sum_congr rfl ?_
+  intro Z _
+  rw [a7_hybrid_filter_coefficient]
+  by_cases hsel : Selected A₁₂ B₁₂ Z
+  · rw [if_pos hsel, if_pos hsel]
+  · rw [if_neg hsel, if_neg hsel]
+    simp [Complex.normSq_zero]
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
