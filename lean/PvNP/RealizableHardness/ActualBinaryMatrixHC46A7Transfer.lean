@@ -2,6 +2,7 @@ import PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction
 import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
 import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
 import PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
@@ -34,6 +35,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
 open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
@@ -7493,6 +7496,268 @@ theorem a7_nested_hybrid_share_eq {n d : Nat}
         ∑ T, typedW6QComponent A₁ B₁ T f :=
     mul_div_cancel_left₀ _ hHS
   rw [hcancel]
+
+/-- One coordinate pair share of the filtered readout, at one coordinate base,
+is the squared nested hybrid energy of that filtered function at the lifted
+base. The coordinate pair may be positive-order. The factor is 1, with no
+`(D - t)²` count. This readout is `a7MixedCoordinate`; `a7OutputBinary` is
+its zero-parent chart when the pullback is zero, and that chart is not yet
+pushed through `a7PairShare`. -/
+theorem a7_coordinate_component_eq_nested {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (P : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F))
+    (Q : Submodule F (Fin (Module.finrank F H) → F))
+    (R : (Fin (Module.finrank F (V d ⧸ C)) → F) →ₗ[F]
+      (Fin (Module.finrank F H) → F)) :
+    let A12 := P.map (domainBasis C).equivFun.symm.toLinearMap
+    let B12 := Q.map (codomainBasis H).equivFun.symm.toLinearMap
+    let A1 := A12.comap C.mkQ
+    let B1 := B12.map H.subtype
+    typedW6QComponent P Q R (actualDerivativeCoordinate C H T f) =
+      (a7NestedHybridEnergy C A1 B1 H (carrierCoordinateBaseLift C H R)
+        (fun M => filteredCarrierFunction C H T f M)) ^ 2 := by
+  classical
+  intro A12 B12 A1 B1
+  have hAmap : A1.map C.mkQ = A12 := by
+    dsimp [A1]
+    exact Submodule.map_comap_eq_self (by
+      rw [Submodule.range_mkQ]
+      exact le_top)
+  have hBcomap : B1.comap H.subtype = B12 := by
+    dsimp [B1]
+    exact Submodule.comap_map_eq_of_injective (Submodule.injective_subtype H) B12
+  unfold typedW6QComponent
+  have henergy :
+      a18UniformMean (fun N =>
+        Complex.normSq
+          (complexCarrierAffineRestrict C H
+            (P.map (domainBasis C).equivFun.symm.toLinearMap)
+            (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+            (carrierCoordinateBaseLift C H R)
+            (complexCarrierHybridFilter C H
+              (P.map (domainBasis C).equivFun.symm.toLinearMap)
+              (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+              (fun M => filteredCarrierFunction C H T f M)) N)) =
+        a7NestedHybridEnergy C A1 B1 H (carrierCoordinateBaseLift C H R)
+          (fun M => filteredCarrierFunction C H T f M) := by
+    unfold a18UniformMean a7NestedHybridEnergy
+    rw [show P.map (domainBasis C).equivFun.symm.toLinearMap = A1.map C.mkQ from
+      hAmap.symm]
+    rw [show Q.map (codomainBasis H).equivFun.symm.toLinearMap =
+      B1.comap H.subtype from hBcomap.symm]
+  let E := carrierCoordinateNestedHomEquiv C H P Q
+  have hcarrier :
+      carrierMean P Q (fun N =>
+        Complex.normSq
+          (filteredCarrierFunction P Q R
+            (actualDerivativeCoordinate C H T f) N)) =
+        a18UniformMean (fun N =>
+          Complex.normSq
+            (complexCarrierAffineRestrict C H
+              (P.map (domainBasis C).equivFun.symm.toLinearMap)
+              (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+              (carrierCoordinateBaseLift C H R)
+              (complexCarrierHybridFilter C H
+                (P.map (domainBasis C).equivFun.symm.toLinearMap)
+                (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+                (fun M => filteredCarrierFunction C H T f M)) N)) := by
+    unfold carrierMean a18UniformMean
+    have hpoint : ∀ N,
+        Complex.normSq
+          (filteredCarrierFunction P Q R
+            (actualDerivativeCoordinate C H T f) N) =
+          Complex.normSq
+            (complexCarrierAffineRestrict C H
+              (P.map (domainBasis C).equivFun.symm.toLinearMap)
+              (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+              (carrierCoordinateBaseLift C H R)
+              (complexCarrierHybridFilter C H
+                (P.map (domainBasis C).equivFun.symm.toLinearMap)
+                (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+                (fun M => filteredCarrierFunction C H T f M))
+              (E N)) := by
+      intro N
+      exact congrArg Complex.normSq
+        (actualDerivativeCoordinate_nestedFilter C H T f P Q R N)
+    have hcomp := Equiv.sum_comp E.toEquiv (fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C H
+          (P.map (domainBasis C).equivFun.symm.toLinearMap)
+          (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+          (carrierCoordinateBaseLift C H R)
+          (complexCarrierHybridFilter C H
+            (P.map (domainBasis C).equivFun.symm.toLinearMap)
+            (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+            (fun M => filteredCarrierFunction C H T f M)) N))
+    have hsum :
+        (∑ N, Complex.normSq
+          (filteredCarrierFunction P Q R
+            (actualDerivativeCoordinate C H T f) N)) =
+          ∑ N, Complex.normSq
+            (complexCarrierAffineRestrict C H
+              (P.map (domainBasis C).equivFun.symm.toLinearMap)
+              (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+              (carrierCoordinateBaseLift C H R)
+              (complexCarrierHybridFilter C H
+                (P.map (domainBasis C).equivFun.symm.toLinearMap)
+                (Q.map (codomainBasis H).equivFun.symm.toLinearMap)
+                (fun M => filteredCarrierFunction C H T f M)) N) := by
+      refine Eq.trans ?_ hcomp
+      refine Finset.sum_congr rfl (fun N _ => hpoint N)
+    have hcard :
+        (Fintype.card (((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ P) →ₗ[F] Q) : ℝ) =
+          (Fintype.card
+            (((V d ⧸ C) ⧸ P.map (domainBasis C).equivFun.symm.toLinearMap) →ₗ[F]
+              Q.map (codomainBasis H).equivFun.symm.toLinearMap) : ℝ) := by
+      exact_mod_cast Fintype.card_congr E.toEquiv
+    rw [hsum, hcard]
+  rw [hcarrier, henergy]
+
+/-- Averaging one coordinate pair share of the filtered readout over the
+original base returns exactly one original pair share. A coordinate pair
+other than bottom/top is a positive-order share of this readout. The factor
+is 1. `a7OutputBinary` still differs from this readout by the zero-parent
+chart, so the share hypothesis stays. -/
+theorem a7_coordinate_pair_avg_eq_original {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex)
+    (P : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F))
+    (Q : Submodule F (Fin (Module.finrank F H) → F)) :
+    let A12 := P.map (domainBasis C).equivFun.symm.toLinearMap
+    let B12 := Q.map (codomainBasis H).equivFun.symm.toLinearMap
+    let A1 := A12.comap C.mkQ
+    let B1 := B12.map H.subtype
+    typedUniformMean (fun T : V d →ₗ[F] W n =>
+      a7PairShare P Q (actualDerivativeCoordinate C H T f)) =
+      a7PairShare A1 B1 f := by
+  classical
+  intro A12 B12 A1 B1
+  have hA : C ≤ A1 := by
+    intro x hx
+    change C.mkQ x ∈ A12
+    have hxker : x ∈ LinearMap.ker C.mkQ := by
+      simpa only [Submodule.ker_mkQ] using hx
+    rw [LinearMap.mem_ker.mp hxker]
+    exact A12.zero_mem
+  have hB : B1 ≤ H := by
+    intro y hy
+    rcases Submodule.mem_map.mp hy with ⟨z, _, rfl⟩
+    exact z.property
+  let eHom : ((Fin (Module.finrank F (V d ⧸ C)) → F) →ₗ[F]
+      (Fin (Module.finrank F H) → F)) ≃ ((V d ⧸ C) →ₗ[F] H) := {
+    toFun := carrierCoordinateBaseLift C H
+    invFun := fun S =>
+      (codomainBasis H).equivFun.toLinearMap.comp
+        (S.comp (domainBasis C).equivFun.symm.toLinearMap)
+    left_inv := fun R => by
+      apply LinearMap.ext
+      intro x
+      rw [carrierCoordinateBaseLift]
+      simp only [LinearMap.comp_apply]
+      have hdom :
+          (domainBasis C).equivFun ((domainBasis C).equivFun.symm x) = x :=
+        LinearEquiv.apply_symm_apply _ _
+      have hcod :
+          (codomainBasis H).equivFun
+            ((codomainBasis H).equivFun.symm (R x)) = R x :=
+        LinearEquiv.apply_symm_apply _ _
+      erw [hdom, hcod]
+    right_inv := fun S => by
+      apply LinearMap.ext
+      intro v
+      rw [carrierCoordinateBaseLift]
+      simp only [LinearMap.comp_apply]
+      have hdom :
+          (domainBasis C).equivFun.symm ((domainBasis C).equivFun v) = v :=
+        LinearEquiv.symm_apply_apply _ _
+      have hcod :
+          (codomainBasis H).equivFun.symm
+            ((codomainBasis H).equivFun (S v)) = S v :=
+        LinearEquiv.symm_apply_apply _ _
+      erw [hdom, hcod]
+  }
+  have hpair : ∀ T,
+      a7PairShare P Q (actualDerivativeCoordinate C H T f) =
+        typedUniformMean (fun S : (V d ⧸ C) →ₗ[F] H =>
+          (a7NestedHybridEnergy C A1 B1 H S
+            (fun M => filteredCarrierFunction C H T f M)) ^ 2) := by
+    intro T
+    unfold a7PairShare typedUniformMean
+    have hterm : ∀ R,
+        typedW6QComponent P Q R (actualDerivativeCoordinate C H T f) =
+          (a7NestedHybridEnergy C A1 B1 H (eHom R)
+            (fun M => filteredCarrierFunction C H T f M)) ^ 2 := by
+      intro R
+      rw [a7_coordinate_component_eq_nested C H T f P Q R]
+      rfl
+    have hsum :
+        (∑ R : (Fin (Module.finrank F (V d ⧸ C)) → F) →ₗ[F]
+            (Fin (Module.finrank F H) → F),
+          typedW6QComponent P Q R (actualDerivativeCoordinate C H T f)) =
+          ∑ S : (V d ⧸ C) →ₗ[F] H,
+            (a7NestedHybridEnergy C A1 B1 H S
+              (fun M => filteredCarrierFunction C H T f M)) ^ 2 := by
+      have hcomp := Equiv.sum_comp eHom (fun S : (V d ⧸ C) →ₗ[F] H =>
+        (a7NestedHybridEnergy C A1 B1 H S
+          (fun M => filteredCarrierFunction C H T f M)) ^ 2)
+      refine Eq.trans ?_ hcomp
+      refine Finset.sum_congr rfl (fun R _ => hterm R)
+    have hcard :
+        (Fintype.card ((Fin (Module.finrank F (V d ⧸ C)) → F) →ₗ[F]
+          (Fin (Module.finrank F H) → F)) : ℝ) =
+          (Fintype.card ((V d ⧸ C) →ₗ[F] H) : ℝ) := by
+      exact_mod_cast Fintype.card_congr eHom
+    rw [hsum, hcard]
+  have hfun :
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        a7PairShare P Q (actualDerivativeCoordinate C H T f)) =
+        typedUniformMean (fun T : V d →ₗ[F] W n =>
+          typedUniformMean (fun S : (V d ⧸ C) →ₗ[F] H =>
+            (a7NestedHybridEnergy C A1 B1 H S
+              (fun M => filteredCarrierFunction C H T f M)) ^ 2)) := by
+    unfold typedUniformMean
+    refine congrArg (fun num => num / (Fintype.card (V d →ₗ[F] W n) : ℝ)) ?_
+    refine Finset.sum_congr rfl (fun T _ => hpair T)
+  rw [hfun]
+  exact a7_nested_hybrid_share_eq C A1 B1 H hA hB f
+
+/-- The mixed coordinate is the filtered readout, so each of its coordinate
+pair shares, including every positive-order pair, averages to one original
+pair share. -/
+theorem a7_mixed_coordinate_pair_avg_eq_original {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)
+    (P : Submodule F (Fin (Module.finrank F (V d ⧸ t1AmbientC t.C)) → F))
+    (Q : Submodule F (Fin (Module.finrank F (t1AmbientH t.K)) → F)) :
+    let C := t1AmbientC t.C
+    let H := t1AmbientH t.K
+    let A12 := P.map (domainBasis C).equivFun.symm.toLinearMap
+    let B12 := Q.map (codomainBasis H).equivFun.symm.toLinearMap
+    let A1 := A12.comap C.mkQ
+    let B1 := B12.map H.subtype
+    typedUniformMean (fun T : V d →ₗ[F] W n =>
+      a7PairShare P Q (a7MixedCoordinate t T f)) =
+      a7PairShare A1 B1 f := by
+  classical
+  intro C H A12 B12 A1 B1
+  have hfun : ∀ T, a7MixedCoordinate t T f =
+      actualDerivativeCoordinate C H T f := by
+    intro T
+    rfl
+  have hshare : ∀ T,
+      a7PairShare P Q (a7MixedCoordinate t T f) =
+        a7PairShare P Q (actualDerivativeCoordinate C H T f) := by
+    intro T
+    rw [hfun T]
+  unfold typedUniformMean
+  have hsum :
+      (∑ T : V d →ₗ[F] W n, a7PairShare P Q (a7MixedCoordinate t T f)) =
+        ∑ T, a7PairShare P Q (actualDerivativeCoordinate C H T f) := by
+    refine Finset.sum_congr rfl (fun T _ => hshare T)
+  rw [hsum]
+  simpa [typedUniformMean, C, H, A12, B12, A1, B1] using
+    a7_coordinate_pair_avg_eq_original C H f P Q
 
 /-- One final pair above a preceding parent is a single nonnegative term of
 that parent's nested sum, hence at most the parent's output `Q`. -/
