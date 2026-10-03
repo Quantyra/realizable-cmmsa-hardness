@@ -27,6 +27,9 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_mixed_output_fourth_typed
 #check a7_mixed_output_fourth_coordinate
 #check a7_mixed_output_coordinate_support
+#check a7_mixed_coordinate_support
+#check a7_saturated_output_le_component
+#check a7_saturated_fourth_le_share
 
 #print axioms a7_constant_of_degree_zero
 #print axioms a7_q_eq_zero_order
@@ -49,3 +52,6 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_mixed_output_fourth_typed
 #print axioms a7_mixed_output_fourth_coordinate
 #print axioms a7_mixed_output_coordinate_support
+#print axioms a7_mixed_coordinate_support
+#print axioms a7_saturated_output_le_component
+#print axioms a7_saturated_fourth_le_share

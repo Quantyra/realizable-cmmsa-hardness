@@ -989,5 +989,154 @@ theorem a7_mixed_output_coordinate_support {n d D : Nat}
     · simp [hfreq]
   · simp [hprec]
 
+/-- The mixed coordinate function loses the ambient carrier cost `s`. -/
+theorem a7_mixed_coordinate_support {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t ≤ D) :
+    ComplexFourierSupportedThrough
+      (D - (Module.finrank F (t1AmbientC t.C) +
+        Module.finrank F (W n ⧸ t1AmbientH t.K)))
+      (a7MixedCoordinate t T f) := by
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let s := Module.finrank F C + Module.finrank F (W n ⧸ H)
+  have hs : s ≤ D := by
+    have hk : Module.finrank F (LinearMap.range (t1PullbackMap t)) ≤ a6Order t := by
+      dsimp [a6Order]
+      exact Nat.le_add_left _ _
+    have hsplit : a6Order t =
+        s + Module.finrank F (LinearMap.range (t1PullbackMap t)) := by
+      simp [a6Order, C, H, s]
+    omega
+  have hdrop := filteredCarrierFunction_support_drop C H T f hsupport hs
+  exact (carrierFourier_support_iff_coordinate C H (D - s)
+    (filteredCarrierFunction C H T f)).mp (by simpa [C, H, s] using hdrop)
+
+/-- At mixed order `D`, the output derivative is constant. Its fourth moment
+is its squared carrier energy, and that energy is at most the ambient pair
+share. One triple uses one share; this does not sum shares across triples. -/
+theorem a7_saturated_output_le_component {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t = D) :
+    a7MixedOutputFourth t T f ≤
+      typedW6QComponent (t1AmbientC t.C) (t1AmbientH t.K) T f := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let s := Module.finrank F C + Module.finrank F (W n ⧸ H)
+  let k := Module.finrank F (LinearMap.range X)
+  let parent := a7MixedCoordinateParent t
+  let coord := a7MixedCoordinate t T f
+  have hsplit : a6Order t = s + k := by
+    simp [a6Order, C, H, X, s, k]
+  have hDk : D - s = k := by
+    have hsum : D = s + k := by rw [← horder, hsplit]
+    omega
+  have hparent : parent.rank = k := by
+    simpa [parent, a7MixedCoordinateParent, C, H, X, k] using
+      carrierFrequency_rank C H X
+  have hcoord := a7_mixed_coordinate_support t T f hsupport (le_of_eq horder)
+  have hcoordK : ComplexFourierSupportedThrough k coord := by
+    have hsdef : s = Module.finrank F C + Module.finrank F (W n ⧸ H) := rfl
+    rw [← hDk, hsdef]
+    simpa [coord] using hcoord
+  let Cout := LinearMap.range parent.transpose.toLin'
+  let Hout := LinearMap.ker parent.transpose.toLin'
+  let deriv := actualW6Derivative parent 0 coord
+  let hfun : BinaryMatrix (Module.finrank F Hout)
+      (Module.finrank F (V (Module.finrank F (V d ⧸ C)) ⧸ Cout)) → Complex :=
+    fun M => deriv ((carrierMatrixEquiv Cout Hout).symm M)
+  have hbin : ComplexFourierSupportedThrough 0
+      (fun M => deriv ((carrierMatrixEquiv Cout Hout).symm M)) :=
+    (carrierFourier_support_iff_coordinate Cout Hout 0 deriv).mp
+      (by simpa [deriv, parent, coord, horder] using
+        a7_mixed_output_coordinate_support t T f hsupport (le_of_eq horder))
+  have hfourthEq := a7_fourth_eq_l2_of_degree_zero
+    (fun M => deriv ((carrierMatrixEquiv Cout Hout).symm M)) hbin
+  have hL4 := carrierMean_coordinate Cout Hout
+    (fun M => Complex.normSq (deriv M) ^ 2)
+  have hL2 := carrierComplexEnergy_coordinate Cout Hout deriv
+  have hsq :=
+    ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_energy_sq_le_degree_predecessorFourierEnergy
+      (D := k) parent 0 coord hcoordK
+  have hexp0 : 4 * parent.rank * (k - parent.rank) = 0 := by
+    rw [hparent]
+    simp
+  have hpow0 : (2 : ℝ) ^ (4 * parent.rank * (k - parent.rank)) = 1 := by
+    rw [hexp0]
+    simp
+  let E := uniformMean (fun M => Complex.normSq (coord M))
+  let aEnergy :=
+    ActualBinaryMatrixHC46A7EnergyConsumer.w6PredecessorFourierEnergy parent coord
+  have ha : aEnergy ≤ E := by
+    simpa [aEnergy, E, coord] using
+      ActualBinaryMatrixHC46A7EnergyConsumer.w6PredecessorFourierEnergy_le_uniformMean
+        parent coord
+  have hE : 0 ≤ E := by
+    unfold E uniformMean
+    refine div_nonneg ?_ (Nat.cast_nonneg _)
+    exact Finset.sum_nonneg (fun _ _ => Complex.normSq_nonneg _)
+  have henergy : (carrierMean Cout Hout (fun M => Complex.normSq (deriv M))) ^ 2 ≤
+      E ^ 2 := by
+    have hbase :
+        (carrierMean Cout Hout (fun M => Complex.normSq (deriv M))) ^ 2 ≤
+          (2 : ℝ) ^ (4 * parent.rank * (k - parent.rank)) * E * aEnergy := by
+      simpa [Cout, Hout, deriv, E, aEnergy, parent, coord] using hsq
+    have hstep : (2 : ℝ) ^ (4 * parent.rank * (k - parent.rank)) * E * aEnergy ≤
+        E * aEnergy := by
+      rw [hpow0]
+      simp
+    have hmul : E * aEnergy ≤ E * E :=
+      mul_le_mul_of_nonneg_left ha hE
+    have hsquare : E * E = E ^ 2 := by ring
+    exact le_trans hbase (le_trans hstep (hsquare ▸ hmul))
+  have hEshare : E ^ 2 = typedW6QComponent C H T f := by
+    have hmean := carrierComplexEnergy_coordinate C H
+      (filteredCarrierFunction C H T f)
+    have hEq : E =
+        carrierMean C H (fun M => Complex.normSq (filteredCarrierFunction C H T f M)) := by
+      simpa [E, coord, a7MixedCoordinate, C, H] using hmean.symm
+    unfold typedW6QComponent
+    rw [← hEq]
+  have hfourMean : a7MixedOutputFourth t T f =
+      uniformMean (fun M =>
+        Complex.normSq (deriv ((carrierMatrixEquiv Cout Hout).symm M)) ^ 2) := by
+    rw [a7_mixed_output_fourth_coordinate]
+    change carrierMean Cout Hout (fun M => Complex.normSq (deriv M) ^ 2) =
+      uniformMean (fun M =>
+        Complex.normSq (deriv ((carrierMatrixEquiv Cout Hout).symm M)) ^ 2)
+    exact hL4
+  rw [hfourMean, hfourthEq]
+  have hL2eq : uniformMean (fun M =>
+      Complex.normSq (deriv ((carrierMatrixEquiv Cout Hout).symm M))) =
+      carrierMean Cout Hout (fun M => Complex.normSq (deriv M)) := hL2.symm
+  rw [hL2eq]
+  exact henergy.trans (le_of_eq hEshare)
+
+/-- Saturated mixed order charges at most the ambient pair share. -/
+theorem a7_saturated_fourth_le_share {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t = D) :
+    a6DerivativeFourth A B t f ≤
+      a7PairShare (t1AmbientC t.C) (t1AmbientH t.K) f := by
+  classical
+  rw [a7_mixed_fourth_output, a7PairShare]
+  unfold typedUniformMean
+  have hpt : ∀ T : V d →ₗ[F] W n,
+      a7MixedOutputFourth t T f ≤
+        typedW6QComponent (t1AmbientC t.C) (t1AmbientH t.K) T f :=
+    fun T => a7_saturated_output_le_component t T f hsupport horder
+  have hsum := Finset.sum_le_sum (fun T (_ : T ∈ Finset.univ) => hpt T)
+  exact div_le_div_of_nonneg_right hsum (Nat.cast_nonneg _)
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
