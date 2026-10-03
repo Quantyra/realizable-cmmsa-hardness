@@ -6210,6 +6210,84 @@ theorem a7_a9_theta_parent_sum_le {a b k i j : Nat} :
   classical
   exact Finset.sum_le_sum (fun d _ => a9ThetaParent_output_le d)
 
+/-- Every matrix precedes itself, because the difference is zero. -/
+theorem a7_precedes_self {n d : Nat} (X : BinaryMatrix n d) : w6Precedes X X := by
+  unfold w6Precedes
+  simp [sub_self, Matrix.rank_zero, add_zero]
+
+/-- A matrix selects its own transpose through its range and kernel exactly
+when the matrix is zero. -/
+theorem a7_selected_self_iff_zero {n d : Nat} (X : BinaryMatrix n d) :
+    Selected (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin')
+      X.transpose.toLin' ↔ X = 0 := by
+  constructor
+  · intro hsel
+    rcases hsel with ⟨_, hpre⟩
+    have hmap : X.transpose.toLin' = 0 := by
+      apply LinearMap.ext
+      intro w
+      exact LinearMap.mem_ker.mp (hpre w (LinearMap.mem_range_self _ w))
+    have hfin : Module.finrank F (LinearMap.range X.transpose.toLin') = 0 := by
+      rw [hmap, LinearMap.range_zero, finrank_bot]
+    have hrank : X.rank = 0 := by
+      rw [← a7_transpose_finrank X]
+      exact hfin
+    exact (rank_eq_zero_iff X).mp hrank
+  · rintro rfl
+    rw [a7_zero_matrix_range, a7_zero_matrix_ker]
+    exact a7_bot_top_selected _
+
+/-- Two matrices of equal rank form a predecessor pair only when they are
+equal. -/
+theorem a7_same_rank_precedes_eq {n d k : Nat} (X Y : BinaryMatrix n d)
+    (hX : X.rank = k) (hY : Y.rank = k) (hprec : w6Precedes X Y) : X = Y := by
+  unfold w6Precedes at hprec
+  rw [hX, hY] at hprec
+  rw [← Nat.add_zero k] at hprec
+  have hdiff : (Y - X).rank = 0 := (Nat.add_left_cancel hprec).symm
+  exact (eq_of_sub_eq_zero ((rank_eq_zero_iff (Y - X)).mp hdiff)).symm
+
+/-- A nonzero matrix of rank `k` cannot both precede and select another
+matrix of rank `k`. Precedence forces the two matrices to agree, and a
+nonzero matrix does not select itself. -/
+theorem a7_nonzero_same_rank_not_both {n d k : Nat}
+    (X Z : BinaryMatrix n d) (hX : X.rank = k) (hZ : Z.rank = k)
+    (hne : X ≠ 0) :
+    ¬ (w6Precedes X Z ∧
+        Selected (LinearMap.range X.transpose.toLin')
+          (LinearMap.ker X.transpose.toLin')
+          Z.transpose.toLin') := by
+  rintro ⟨hprec, hsel⟩
+  have heq : X = Z := a7_same_rank_precedes_eq X Z hX hZ hprec
+  subst heq
+  exact hne ((a7_selected_self_iff_zero X).mp hsel)
+
+/-- A datum parent of positive rank is nonzero, because its rank is `k`. -/
+theorem a9ThetaParentMatrix_ne_zero_of_pos {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) (hk : 0 < k) :
+    a9ThetaParentMatrix d ≠ 0 := by
+  intro hzero
+  have hrank : (a9ThetaParentMatrix d).rank = 0 :=
+    (rank_eq_zero_iff _).mpr hzero
+  have hk0 : k = 0 := (a9ThetaParentMatrix_rank d).symm.trans hrank
+  omega
+
+/-- The datum's own rank-`k` parent does not both precede and select a
+rank-`k` final on the same carrier. The zero matrix is the parent excluded
+here. The graphs are still read by `a9ThetaParentMatrix_graphs`. A general
+complex input remains open, so this does not delete the share hypothesis. -/
+theorem a9ThetaParent_not_both {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) (hk : 0 < k)
+    (Z : BinaryMatrix (k + (a - i)) (k + (b - j))) (hZ : Z.rank = k) :
+    ¬ (w6Precedes (a9ThetaParentMatrix d) Z ∧
+        Selected (LinearMap.range (a9ThetaParentMatrix d).transpose.toLin')
+          (LinearMap.ker (a9ThetaParentMatrix d).transpose.toLin')
+          Z.transpose.toLin') :=
+  a7_nonzero_same_rank_not_both (a9ThetaParentMatrix d) Z
+    (a9ThetaParentMatrix_rank d) hZ
+    (a9ThetaParentMatrix_ne_zero_of_pos d hk)
+
 /-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
 noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
     [AddCommGroup M] [Module F M] [Module.Finite F M]
@@ -6456,6 +6534,29 @@ theorem a9FinalParent_output_le {n d a b k i j : Nat}
   a9ThetaParent_output_le
     (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
       (a9ModuleToFin k hY) datum)
+
+/-- The transported parent of one fixed final has rank `k`. For `k > 0` it
+does not both precede and select any rank-`k` matrix on its carrier, including
+a coordinate form of that final. -/
+theorem a9FinalParent_not_both {n d a b k i j : Nat}
+    (hk : 0 < k)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k)
+    (datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j)
+    (Z : BinaryMatrix (k + (a - i)) (k + (b - j))) (hZ : Z.rank = k) :
+    ¬ (w6Precedes (a9FinalParentMatrix A B Y hA hB hY datum) Z ∧
+        Selected
+          (LinearMap.range
+            (a9FinalParentMatrix A B Y hA hB hY datum).transpose.toLin')
+          (LinearMap.ker
+            (a9FinalParentMatrix A B Y hA hB hY datum).transpose.toLin')
+          Z.transpose.toLin') :=
+  a9ThetaParent_not_both
+    (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
+      (a9ModuleToFin k hY) datum) hk Z hZ
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
