@@ -502,6 +502,69 @@ theorem a7_q_ge_l2 {n d : Nat} (f : BinaryMatrix n d → Complex) :
   rw [hL, ← hQ]
   exact hsum
 
+/-- A mixed derivative whose order exceeds the Fourier degree has fourth
+moment zero. -/
+theorem a7_derivative_fourth_zero_of_high {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (ht : D < a6Order t) :
+    a6DerivativeFourth A B t f = 0 := by
+  classical
+  unfold a6DerivativeFourth
+  have hzero : ∀ (T : V d →ₗ[F] W n) (M : (V d ⧸ A) →ₗ[F] B),
+      typedW6FourierDerivative (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+        (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)
+        (t1OutputEquiv t M) = 0 :=
+    fun T M => a6_mixed_zero_of_order_gt t f hsupport ht T M
+  have hsumM : ∀ T : V d →ₗ[F] W n,
+      (∑ M : (V d ⧸ A) →ₗ[F] B,
+        Complex.normSq (typedW6FourierDerivative (t1AmbientC t.C)
+          (t1AmbientH t.K) (t1PullbackMap t)
+          (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)
+          (t1OutputEquiv t M)) ^ 2) = 0 := by
+    intro T
+    apply Finset.sum_eq_zero
+    intro M _
+    rw [hzero T M, Complex.normSq_zero]
+    simp
+  simp [hsumM, zero_div]
+
+/-- One positive triple's A6 weight times the lower-degree A7 factor fits in
+the terminal allowance `2^{100 D^2} * 2^{1-31 D}`. -/
+theorem a7_triple_exponent_fits (D t : Nat) (ht : 0 < t) (hle : t ≤ D) :
+    (2 : ℝ) ^ (24 * D * t) * (2 : ℝ) ^ (100 * (D - t) * (D - t)) ≤
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
+  let L := 24 * D * t + 100 * (D - t) * (D - t)
+  have hL : (L : ℤ) ≤ (100 * D * D : ℤ) + 1 - 31 * (D : ℤ) := by
+    have hsub : ((D - t : ℕ) : ℤ) = (D : ℤ) - t := Nat.cast_sub hle
+    have hLexp : (L : ℤ) =
+        24 * (D : ℤ) * t + 100 * ((D : ℤ) - t) * ((D : ℤ) - t) := by
+      simp [L, hsub, Nat.cast_add, Nat.cast_mul]
+    have ht1 : (1 : ℤ) ≤ t := by exact_mod_cast ht
+    have hle' : (t : ℤ) ≤ D := by exact_mod_cast hle
+    nlinarith [hLexp, ht1, hle']
+  have hpow : (2 : ℝ) ^ L =
+      (2 : ℝ) ^ (24 * D * t) * (2 : ℝ) ^ (100 * (D - t) * (D - t)) := by
+    rw [← pow_add]
+  rw [← hpow]
+  have hbase : (1 : ℝ) ≤ 2 := by norm_num
+  have hleR : (2 : ℝ) ^ L ≤ (2 : ℝ) ^ ((100 * D * D : ℤ) + 1 - 31 * (D : ℤ)) := by
+    rw [← zpow_natCast (2 : ℝ) L]
+    exact zpow_le_zpow_right₀ hbase hL
+  have hadd : (2 : ℝ) ^ ((100 * D * D : ℤ) + (1 - 31 * (D : ℤ))) =
+      (2 : ℝ) ^ (100 * D * D : ℤ) * (2 : ℝ) ^ (1 - 31 * (D : ℤ)) :=
+    zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0) _ _
+  have hnatR : (2 : ℝ) ^ (100 * D * D : ℤ) = (2 : ℝ) ^ (100 * D * D) :=
+    zpow_natCast (2 : ℝ) (100 * D * D)
+  have hexp : (100 * D * D : ℤ) + 1 - 31 * (D : ℤ) =
+      (100 * D * D : ℤ) + (1 - 31 * (D : ℤ)) := by ring
+  calc
+    (2 : ℝ) ^ L ≤ (2 : ℝ) ^ ((100 * D * D : ℤ) + 1 - 31 * (D : ℤ)) := hleR
+    _ = (2 : ℝ) ^ ((100 * D * D : ℤ) + (1 - 31 * (D : ℤ))) := by rw [hexp]
+    _ = (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
+      rw [hadd, hnatR]
+
 /-- Positive-degree arithmetic closure. This is not manuscript A7: the mixed
 sum is an explicit hypothesis, and discharging it is the remaining induction
 step. -/
