@@ -138,6 +138,155 @@ theorem a9_lift_section_round {S Q : Type*} [AddCommGroup S] [Module F S]
   dsimp [a9_lift_of_map]
   exact hpoint.symm
 
+/-- Projection onto the graph along the quotient factor. The rank-`k`
+coordinate is fixed and the quotient coordinate is killed. -/
+def a9GraphProj {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] (phi : S →ₗ[F] Q) :
+    (S × Q) →ₗ[F] (S × Q) :=
+  LinearMap.prod (LinearMap.fst F S Q) (phi.comp (LinearMap.fst F S Q))
+
+theorem a9GraphProj_fst {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] (phi : S →ₗ[F] Q) :
+    LinearMap.fst F S Q ∘ₗ a9GraphProj phi = LinearMap.fst F S Q := by
+  apply LinearMap.ext
+  intro p
+  obtain ⟨s, q⟩ := p
+  simp [a9GraphProj]
+
+theorem a9GraphProj_inr {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] (phi : S →ₗ[F] Q) :
+    a9GraphProj phi ∘ₗ LinearMap.inr F S Q = 0 := by
+  apply LinearMap.ext
+  intro q
+  simp [a9GraphProj]
+
+theorem a9GraphProj_idempotent {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] (phi : S →ₗ[F] Q) :
+    IsIdempotentElem (a9GraphProj phi) := by
+  apply LinearMap.ext
+  intro p
+  obtain ⟨s, q⟩ := p
+  simp [a9GraphProj]
+
+/-- A projection which reads the rank-`k` coordinate and kills the quotient
+coordinate. These are exactly the graph maps. -/
+@[ext]
+structure A9GraphProjection (S Q : Type*) [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] where
+  toEnd : (S × Q) →ₗ[F] (S × Q)
+  reads : LinearMap.fst F S Q ∘ₗ toEnd = LinearMap.fst F S Q
+  kills : toEnd ∘ₗ LinearMap.inr F S Q = 0
+
+def a9_projection_of_map {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] (phi : S →ₗ[F] Q) : A9GraphProjection S Q where
+  toEnd := a9GraphProj phi
+  reads := a9GraphProj_fst phi
+  kills := a9GraphProj_inr phi
+
+def a9_map_of_projection {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] (P : A9GraphProjection S Q) : S →ₗ[F] Q :=
+  LinearMap.snd F S Q ∘ₗ P.toEnd ∘ₗ LinearMap.inl F S Q
+
+theorem a9_map_of_projection_of_map {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] (phi : S →ₗ[F] Q) :
+    a9_map_of_projection (a9_projection_of_map phi) = phi := by
+  ext s
+  simp [a9_map_of_projection, a9_projection_of_map, a9GraphProj]
+
+theorem a9_projection_of_map_of_projection {S Q : Type*} [AddCommGroup S]
+    [Module F S] [AddCommGroup Q] [Module F Q] (P : A9GraphProjection S Q) :
+    a9_projection_of_map (a9_map_of_projection P) = P := by
+  rcases P with ⟨q, hread, hkill⟩
+  apply A9GraphProjection.ext
+  apply LinearMap.ext
+  intro p
+  obtain ⟨s, r⟩ := p
+  change a9GraphProj (a9_map_of_projection ⟨q, hread, hkill⟩) (s, r) = q (s, r)
+  have hzero : q (LinearMap.inr F S Q r) = 0 := by
+    have hk := congrFun (congrArg DFunLike.coe hkill) r
+    simpa using hk
+  have hread_inl : (q (LinearMap.inl F S Q s)).1 = s := by
+    have hr := congrFun (congrArg DFunLike.coe hread)
+      (LinearMap.inl F S Q s)
+    simpa using hr
+  have hphi : a9_map_of_projection ⟨q, hread, hkill⟩ s =
+      (q (LinearMap.inl F S Q s)).2 := by
+    simp [a9_map_of_projection]
+  conv_rhs =>
+    rw [show (s, r) = LinearMap.inl F S Q s + LinearMap.inr F S Q r by simp]
+    rw [map_add, hzero, add_zero]
+  apply Prod.ext
+  · simpa [a9GraphProj] using hread_inl.symm
+  · simpa [a9GraphProj] using hphi
+
+/-- Graph maps and graph projections are inverse, and the image has the
+rank of the fixed final line. -/
+noncomputable def a9_graph_projection_equiv {S Q : Type*} [AddCommGroup S]
+    [Module F S] [AddCommGroup Q] [Module F Q] :
+    (S →ₗ[F] Q) ≃ A9GraphProjection S Q where
+  toFun := a9_projection_of_map
+  invFun := a9_map_of_projection
+  left_inv := a9_map_of_projection_of_map
+  right_inv := a9_projection_of_map_of_projection
+
+theorem a9_graphProj_rank {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] [Module.Finite F S] (phi : S →ₗ[F] Q) :
+    Module.finrank F (LinearMap.range (a9GraphProj phi)) =
+      Module.finrank F S := by
+  have hrange : LinearMap.range (a9GraphProj phi) =
+      LinearMap.range (a9GraphIncl phi) := by
+    apply Submodule.ext
+    intro z
+    constructor
+    · intro hz
+      rcases LinearMap.mem_range.mp hz with ⟨p, rfl⟩
+      rcases p with ⟨s, r⟩
+      refine LinearMap.mem_range.mpr ⟨s, ?_⟩
+      simp [a9GraphProj, a9GraphIncl]
+    · intro hz
+      rcases LinearMap.mem_range.mp hz with ⟨s, rfl⟩
+      refine LinearMap.mem_range.mpr ⟨(s, 0), ?_⟩
+      simp [a9GraphProj, a9GraphIncl]
+  rw [hrange]
+  exact a9_graph_finrank phi
+
+theorem a9_projection_rank {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] [Module.Finite F S] (phi : S →ₗ[F] Q) :
+    Module.finrank F (LinearMap.range (a9_projection_of_map phi).toEnd) =
+      Module.finrank F S :=
+  a9_graphProj_rank phi
+
+/-- The two graphs of one inducing datum determine the rank-`k` identification
+of their graph subspaces. Reading either section recovers that graph.
+This is the graph-coordinate predecessor of one final line. It does not
+identify `T1IndexTriple`, and it does not remove a share hypothesis. -/
+noncomputable def a9_graph_induced_equiv {S Qd Qc : Type*}
+    [AddCommGroup S] [Module F S] [AddCommGroup Qd] [Module F Qd]
+    [AddCommGroup Qc] [Module F Qc]
+    (kerGraph : S →ₗ[F] Qd) (imGraph : S →ₗ[F] Qc) :
+    LinearMap.range (a9GraphIncl kerGraph) ≃ₗ[F]
+      LinearMap.range (a9GraphIncl imGraph) :=
+  (a9_lift_of_map kerGraph).section_.symm.trans
+    (a9_lift_of_map imGraph).section_
+
+theorem a9_graph_induced_rank {S Qd Qc : Type*}
+    [AddCommGroup S] [Module F S] [AddCommGroup Qd] [Module F Qd]
+    [AddCommGroup Qc] [Module F Qc] [Module.Finite F S]
+    (kerGraph : S →ₗ[F] Qd) (imGraph : S →ₗ[F] Qc) :
+    Module.finrank F (LinearMap.range (a9GraphIncl kerGraph)) =
+      Module.finrank F S ∧
+    Module.finrank F (LinearMap.range (a9GraphIncl imGraph)) =
+      Module.finrank F S :=
+  ⟨a9_graph_finrank kerGraph, a9_graph_finrank imGraph⟩
+
+theorem a9_graph_induced_reads {S Qd Qc : Type*}
+    [AddCommGroup S] [Module F S] [AddCommGroup Qd] [Module F Qd]
+    [AddCommGroup Qc] [Module F Qc]
+    (kerGraph : S →ₗ[F] Qd) (imGraph : S →ₗ[F] Qc) :
+    a9_map_of_lift (a9_lift_of_map kerGraph) = kerGraph ∧
+      a9_map_of_lift (a9_lift_of_map imGraph) = imGraph :=
+  ⟨a9_map_of_lift_of_map kerGraph, a9_map_of_lift_of_map imGraph⟩
+
 noncomputable instance a9_quotientFintype {E : Type*} [AddCommGroup E]
     [Module F E] [Fintype E] (U : Submodule F E) : Fintype (E ⧸ U) :=
   Fintype.ofFinite _
