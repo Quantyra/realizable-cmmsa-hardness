@@ -6955,6 +6955,371 @@ theorem a7_outer_hybrid_energy_sq_le_complement_shares
             a7PairShare p.1.1 p.1.2 f := hassoc
   simpa [energy] using henergy
 
+/-- An internal complement, read inside `A`, is a module complement of `K`. -/
+theorem a7_internal_comap_isCompl
+    {V : Type*} [AddCommGroup V] [Module F V]
+    (A K C : Submodule F V) (hKA : K ≤ A)
+    (hdisj : C ⊓ K = ⊥) (hsup : K ⊔ C = A) :
+    IsCompl (K.comap A.subtype) (C.comap A.subtype) := by
+  rw [isCompl_iff]
+  constructor
+  · rw [disjoint_iff]
+    ext x
+    constructor
+    · intro hx
+      have hxK : (x : V) ∈ K :=
+        Submodule.mem_comap.mp (Submodule.mem_inf.mp hx).1
+      have hxC : (x : V) ∈ C :=
+        Submodule.mem_comap.mp (Submodule.mem_inf.mp hx).2
+      have hxbot : (x : V) ∈ C ⊓ K := ⟨hxC, hxK⟩
+      rw [hdisj] at hxbot
+      have h0 : (x : V) = 0 := by simpa [Submodule.mem_bot] using hxbot
+      have hx0 : x = 0 := Subtype.ext h0
+      simpa [Submodule.mem_bot] using hx0
+    · intro hx
+      have hx0 : x = 0 := by simpa [Submodule.mem_bot] using hx
+      rw [hx0]
+      exact Submodule.zero_mem _
+  · rw [codisjoint_iff]
+    ext a
+    constructor
+    · intro _
+      exact Submodule.mem_top
+    · intro _
+      have ha : (a : V) ∈ K ⊔ C := by
+        rw [hsup]
+        exact a.2
+      rcases Submodule.mem_sup.mp ha with ⟨k, hk, c, hc, hadd⟩
+      have hkA : k ∈ A := hKA hk
+      have hcA : c ∈ A := by
+        have hc_eq : c = (a : V) - k := by
+          rw [← hadd]
+          abel
+        rw [hc_eq]
+        exact A.sub_mem a.2 hkA
+      refine Submodule.mem_sup.mpr
+        ⟨⟨k, hkA⟩, Submodule.mem_comap.mpr hk,
+          ⟨c, hcA⟩, Submodule.mem_comap.mpr hc, ?_⟩
+      apply Subtype.ext
+      exact hadd
+
+/-- Image complements of `K` inside `A` number at most the graph count
+`2^{(dim A - dim K) dim K}`. -/
+theorem a7_image_complement_card
+    {V : Type*} [AddCommGroup V] [Module F V] [Finite V]
+    (A K : Submodule F V) (hKA : K ≤ A) :
+    Fintype.card {C : Submodule F V // K ⊓ C = ⊥ ∧ K ⊔ C = A} ≤
+      2 ^ ((Module.finrank F A - Module.finrank F K) * Module.finrank F K) := by
+  classical
+  let K0 : Submodule F A := K.comap A.subtype
+  have hfinK : Module.finrank F K0 = Module.finrank F K :=
+    LinearEquiv.finrank_eq (Submodule.comapSubtypeEquivOfLe hKA)
+  let Q : Submodule F A := Classical.choose (Submodule.exists_isCompl K0)
+  have hQ : IsCompl K0 Q := Classical.choose_spec (Submodule.exists_isCompl K0)
+  have hcardQ := a7_complement_card K0 Q hQ
+  have hdims := Submodule.finrank_sup_add_finrank_inf_eq K0 Q
+  have hsupQ : K0 ⊔ Q = ⊤ := hQ.sup_eq_top
+  have hinfQ : K0 ⊓ Q = ⊥ := hQ.inf_eq_bot
+  have hsum : Module.finrank F K0 + Module.finrank F Q = Module.finrank F A := by
+    rw [hsupQ, hinfQ, finrank_top, finrank_bot, Nat.add_zero] at hdims
+    exact hdims.symm
+  have hQdim : Module.finrank F Q =
+      Module.finrank F A - Module.finrank F K0 := by
+    omega
+  have hpow : Fintype.card {L : Submodule F A // IsCompl K0 L} =
+      2 ^ ((Module.finrank F A - Module.finrank F K) * Module.finrank F K) := by
+    rw [hcardQ, hQdim, hfinK, Nat.mul_comm]
+  let emb : {C : Submodule F V // K ⊓ C = ⊥ ∧ K ⊔ C = A} →
+      {L : Submodule F A // IsCompl K0 L} := fun C =>
+    ⟨C.1.comap A.subtype, by
+      have hdisj : C.1 ⊓ K = ⊥ := by
+        rw [inf_comm]
+        exact C.2.1
+      exact a7_internal_comap_isCompl A K C.1 hKA hdisj C.2.2⟩
+  have hinj : Function.Injective emb := by
+    intro C₁ C₂ h
+    apply Subtype.ext
+    have hle1 : C₁.1 ≤ A := le_trans le_sup_right (le_of_eq C₁.2.2)
+    have hle2 : C₂.1 ≤ A := le_trans le_sup_right (le_of_eq C₂.2.2)
+    have hmap1 : (C₁.1.comap A.subtype).map A.subtype = C₁.1 := by
+      apply Submodule.map_comap_eq_self
+      rw [Submodule.range_subtype]
+      exact hle1
+    have hmap2 : (C₂.1.comap A.subtype).map A.subtype = C₂.1 := by
+      apply Submodule.map_comap_eq_self
+      rw [Submodule.range_subtype]
+      exact hle2
+    have hcom : C₁.1.comap A.subtype = C₂.1.comap A.subtype :=
+      congrArg Subtype.val h
+    rw [← hmap1, ← hmap2, hcom]
+  exact (Fintype.card_le_of_injective emb hinj).trans (le_of_eq hpow)
+
+/-- Passing to `V/B` sends a domain complement of `K` to a complement of
+`K/B`. -/
+theorem a7_domain_map_isCompl
+    {V : Type*} [AddCommGroup V] [Module F V]
+    (K B H : Submodule F V) (hB : B ≤ K)
+    (hmeet : H ⊓ K = B) (hcover : H ⊔ K = ⊤) :
+    IsCompl (K.map B.mkQ) (H.map B.mkQ) := by
+  rw [isCompl_iff]
+  constructor
+  · rw [disjoint_iff]
+    ext x
+    constructor
+    · intro hx
+      rcases Submodule.mem_inf.mp hx with ⟨hxK, hxH⟩
+      rcases Submodule.mem_map.mp hxK with ⟨k, hk, hkq⟩
+      rcases Submodule.mem_map.mp hxH with ⟨h, hh, hhq⟩
+      have hdiff : k - h ∈ B :=
+        (Submodule.Quotient.eq B).mp (hkq.trans hhq.symm)
+      have hhK : h ∈ K := by
+        have hkB : k - h ∈ K := hB hdiff
+        have hrewrite : h = k - (k - h) := by abel
+        rw [hrewrite]
+        exact K.sub_mem hk hkB
+      have hhB : h ∈ B := by
+        have hmem : h ∈ H ⊓ K := ⟨hh, hhK⟩
+        rwa [hmeet] at hmem
+      rw [← hhq]
+      exact (Submodule.Quotient.mk_eq_zero B).mpr hhB
+    · intro hx
+      have hx0 : x = 0 := by simpa [Submodule.mem_bot] using hx
+      rw [hx0]
+      exact Submodule.zero_mem _
+  · rw [codisjoint_iff]
+    ext x
+    constructor
+    · intro _
+      exact Submodule.mem_top
+    · intro _
+      obtain ⟨v, hv⟩ := Submodule.Quotient.mk_surjective B x
+      have hvsup : v ∈ H ⊔ K := by
+        rw [hcover]
+        exact Submodule.mem_top
+      rcases Submodule.mem_sup.mp hvsup with ⟨h, hh, k, hk, hadd⟩
+      refine Submodule.mem_sup.mpr
+        ⟨B.mkQ k, Submodule.mem_map_of_mem hk,
+          B.mkQ h, Submodule.mem_map_of_mem hh, ?_⟩
+      rw [← LinearMap.map_add, add_comm, hadd]
+      exact hv
+
+/-- Domain complements with fixed intersection `B ≤ K` number at most the
+graph count `2^{(dim K - dim B)(dim V - dim K)}`. -/
+theorem a7_domain_complement_card
+    {V : Type*} [AddCommGroup V] [Module F V] [Finite V]
+    (K B : Submodule F V) (hB : B ≤ K) :
+    Fintype.card {H : Submodule F V // H ⊓ K = B ∧ H ⊔ K = ⊤} ≤
+      2 ^ ((Module.finrank F K - Module.finrank F B) *
+        (Module.finrank F V - Module.finrank F K)) := by
+  classical
+  let Q := V ⧸ B
+  let Kq : Submodule F Q := K.map B.mkQ
+  have hfinKq : Module.finrank F Kq =
+      Module.finrank F K - Module.finrank F B := by
+    have hkerEq : LinearMap.ker (B.mkQ.comp K.subtype) = B.comap K.subtype := by
+      ext x
+      simp [LinearMap.mem_ker, Submodule.mem_comap, Submodule.mkQ_apply]
+    have hrangeEq : LinearMap.range (B.mkQ.comp K.subtype) = Kq := by
+      rw [LinearMap.range_comp, Submodule.range_subtype]
+    have hrank := LinearMap.finrank_range_add_finrank_ker (B.mkQ.comp K.subtype)
+    have hcomap : Module.finrank F (B.comap K.subtype) = Module.finrank F B :=
+      LinearEquiv.finrank_eq (Submodule.comapSubtypeEquivOfLe hB)
+    have hEq : Module.finrank F Kq + Module.finrank F B = Module.finrank F K := by
+      calc
+        Module.finrank F Kq + Module.finrank F B =
+            Module.finrank F (LinearMap.range (B.mkQ.comp K.subtype)) +
+              Module.finrank F (B.comap K.subtype) := by
+          rw [← hrangeEq, hcomap]
+        _ = Module.finrank F (LinearMap.range (B.mkQ.comp K.subtype)) +
+              Module.finrank F (LinearMap.ker (B.mkQ.comp K.subtype)) := by
+          rw [← hkerEq]
+        _ = Module.finrank F K :=
+          LinearMap.finrank_range_add_finrank_ker (B.mkQ.comp K.subtype)
+    exact Nat.eq_sub_of_add_eq hEq
+  have hfinQ : Module.finrank F Q =
+      Module.finrank F V - Module.finrank F B := by
+    have hadd := B.finrank_quotient_add_finrank
+    change Module.finrank F Q + Module.finrank F B = Module.finrank F V at hadd
+    omega
+  let Cq : Submodule F Q := Classical.choose (Submodule.exists_isCompl Kq)
+  have hCq : IsCompl Kq Cq := Classical.choose_spec (Submodule.exists_isCompl Kq)
+  have hcardQ := a7_complement_card Kq Cq hCq
+  have hdims := Submodule.finrank_sup_add_finrank_inf_eq Kq Cq
+  have hsup : Kq ⊔ Cq = ⊤ := hCq.sup_eq_top
+  have hinf : Kq ⊓ Cq = ⊥ := hCq.inf_eq_bot
+  have hsum : Module.finrank F Kq + Module.finrank F Cq = Module.finrank F Q := by
+    rw [hsup, hinf, finrank_top, finrank_bot, Nat.add_zero] at hdims
+    exact hdims.symm
+  have hCdim : Module.finrank F Cq =
+      Module.finrank F V - Module.finrank F K := by
+    have hCsub : Module.finrank F Cq =
+        Module.finrank F Q - Module.finrank F Kq :=
+      Nat.eq_sub_of_add_eq (by
+        rw [add_comm]
+        exact hsum)
+    have hBK : Module.finrank F B ≤ Module.finrank F K :=
+      Submodule.finrank_mono hB
+    have hKV : Module.finrank F K ≤ Module.finrank F V :=
+      Submodule.finrank_le K
+    rw [hCsub, hfinQ, hfinKq]
+    omega
+  have hpow : Fintype.card {L : Submodule F Q // IsCompl Kq L} =
+      2 ^ ((Module.finrank F K - Module.finrank F B) *
+        (Module.finrank F V - Module.finrank F K)) := by
+    rw [hcardQ, hCdim, hfinKq, Nat.mul_comm]
+  let emb : {H : Submodule F V // H ⊓ K = B ∧ H ⊔ K = ⊤} →
+      {L : Submodule F Q // IsCompl Kq L} := fun H =>
+    ⟨H.1.map B.mkQ, a7_domain_map_isCompl K B H.1 hB H.2.1 H.2.2⟩
+  have hinj : Function.Injective emb := by
+    intro H₁ H₂ hEq
+    apply Subtype.ext
+    have hmemB (H : {H : Submodule F V // H ⊓ K = B ∧ H ⊔ K = ⊤}) :
+        B ≤ H.1 := by
+      intro b hb
+      have hb' : b ∈ H.1 ⊓ K := by
+        rw [H.2.1]
+        exact hb
+      exact (Submodule.mem_inf.mp hb').1
+    have hle (H H' : {H : Submodule F V // H ⊓ K = B ∧ H ⊔ K = ⊤})
+        (hmap : H.1.map B.mkQ = H'.1.map B.mkQ) : H.1 ≤ H'.1 := by
+      intro x hx
+      have hxQ : B.mkQ x ∈ H'.1.map B.mkQ := by
+        rw [← hmap]
+        exact Submodule.mem_map_of_mem hx
+      rcases Submodule.mem_map.mp hxQ with ⟨y, hy, hyq⟩
+      have hdiff : x - y ∈ B := (Submodule.Quotient.eq B).mp hyq.symm
+      have hxeq : x = (x - y) + y := by abel
+      rw [hxeq]
+      exact H'.1.add_mem (hmemB H' hdiff) hy
+    exact le_antisymm (hle H₁ H₂ (congrArg Subtype.val hEq))
+      (hle H₂ H₁ (congrArg Subtype.val hEq).symm)
+  exact (Fintype.card_le_of_injective emb hinj).trans (le_of_eq hpow)
+
+/-- The geometric T2 complements of one outer selector number at most the
+graph power `2^{k(u+v)}`. Here `u` is the extra image dimension and `v` is
+the extra kernel codimension. This count is not yet a pair share of
+`a7OutputBinary`. -/
+theorem a7_t2_complement_card_le {n d : Nat}
+    (X : BinaryMatrix n d)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (hA : LinearMap.range X.transpose.toLin' ≤ A₂)
+    (hB : B₂ ≤ LinearMap.ker X.transpose.toLin') :
+    Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) ≤
+      2 ^ (X.rank * ((Module.finrank F A₂ -
+          Module.finrank F (LinearMap.range X.transpose.toLin')) +
+        (Module.finrank F (LinearMap.ker X.transpose.toLin') -
+          Module.finrank F B₂))) := by
+  classical
+  let Xlin := X.transpose.toLin'
+  let u := Module.finrank F A₂ - Module.finrank F (LinearMap.range Xlin)
+  let v := Module.finrank F (LinearMap.ker Xlin) - Module.finrank F B₂
+  let k := X.rank
+  have hk : k = Module.finrank F (LinearMap.range Xlin) := t2_matrix_rank X
+  let Cset := {C : Submodule F (V d) //
+    LinearMap.range Xlin ⊓ C = ⊥ ∧ LinearMap.range Xlin ⊔ C = A₂}
+  let Hset := {H : Submodule F (W n) //
+    H ⊓ LinearMap.ker Xlin = B₂ ∧ H ⊔ LinearMap.ker Xlin = ⊤}
+  let e : a7T2ComplementPair Xlin A₂ B₂ ≃ Cset × Hset := {
+    toFun := fun p =>
+      (⟨p.1.1, p.2.1, p.2.2.1⟩, ⟨p.1.2, p.2.2.2.1, p.2.2.2.2⟩)
+    invFun := fun q =>
+      ⟨(q.1.1, q.2.1), q.1.2.1, q.1.2.2, q.2.2.1, q.2.2.2⟩
+    left_inv := fun _ => rfl
+    right_inv := fun _ => rfl
+  }
+  have hprod : Fintype.card (a7T2ComplementPair Xlin A₂ B₂) =
+      Fintype.card Cset * Fintype.card Hset := by
+    rw [Fintype.card_congr e, Fintype.card_prod]
+  have hC : Fintype.card Cset ≤ 2 ^ (u * k) := by
+    have hcard := a7_image_complement_card A₂ (LinearMap.range Xlin) hA
+    simpa [Cset, u, k, hk, Nat.mul_comm] using hcard
+  have hH : Fintype.card Hset ≤ 2 ^ (v * k) := by
+    have hdom := a7_domain_complement_card (LinearMap.ker Xlin) B₂ hB
+    have hcodim : Module.finrank F (W n) -
+        Module.finrank F (LinearMap.ker Xlin) = k := by
+      have hsum : Module.finrank F (LinearMap.range Xlin) +
+          Module.finrank F (LinearMap.ker Xlin) = Module.finrank F (W n) :=
+        LinearMap.finrank_range_add_finrank_ker Xlin
+      have hr : Module.finrank F (LinearMap.range Xlin) = k := hk.symm
+      rw [← hr]
+      exact (Nat.eq_sub_of_add_eq hsum).symm
+    have hv : Module.finrank F (LinearMap.ker Xlin) - Module.finrank F B₂ = v := rfl
+    have hexp : (Module.finrank F (LinearMap.ker Xlin) - Module.finrank F B₂) *
+        (Module.finrank F (W n) - Module.finrank F (LinearMap.ker Xlin)) =
+        v * k := by
+      rw [hcodim, hv]
+    rw [hexp] at hdom
+    exact hdom
+  have hmul : Fintype.card Cset * Fintype.card Hset ≤
+      2 ^ (u * k) * 2 ^ (v * k) := Nat.mul_le_mul hC hH
+  have hpow : 2 ^ (u * k) * 2 ^ (v * k) = 2 ^ (k * (u + v)) := by
+    rw [← pow_add]
+    have hexp : u * k + v * k = k * (u + v) := by
+      rw [Nat.mul_comm u k, Nat.mul_comm v k, ← Nat.mul_add]
+    rw [hexp]
+  rw [hprod]
+  exact hmul.trans (le_of_eq hpow)
+
+/-- The same selected-energy bound with the complement count replaced by the
+graph power. A positive-order `a7PairShare` of `a7OutputBinary` is not this
+energy, so the share hypothesis stays. -/
+theorem a7_outer_hybrid_energy_sq_le_graph_power
+    {n d D : Nat} (X : BinaryMatrix n d)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (hA : LinearMap.range X.transpose.toLin' ≤ A₂)
+    (hB : B₂ ≤ LinearMap.ker X.transpose.toLin')
+    (S : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    (carrierMean (LinearMap.range X.transpose.toLin')
+        (LinearMap.ker X.transpose.toLin')
+        (fun M => Complex.normSq
+          (complexCarrierHybridFilter
+            (LinearMap.range X.transpose.toLin')
+            (LinearMap.ker X.transpose.toLin')
+            (A₂.map (LinearMap.range X.transpose.toLin').mkQ)
+            (B₂.comap (LinearMap.ker X.transpose.toLin').subtype)
+            (actualW6Derivative X S f) M))) ^ 2 ≤
+      (2 : ℝ) ^ (4 * X.rank * (D - X.rank) +
+          X.rank * ((Module.finrank F A₂ -
+            Module.finrank F (LinearMap.range X.transpose.toLin')) +
+          (Module.finrank F (LinearMap.ker X.transpose.toLin') -
+            Module.finrank F B₂))) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f := by
+  let u := Module.finrank F A₂ -
+    Module.finrank F (LinearMap.range X.transpose.toLin')
+  let v := Module.finrank F (LinearMap.ker X.transpose.toLin') -
+    Module.finrank F B₂
+  have hcard := a7_t2_complement_card_le X A₂ B₂ hA hB
+  have henergy := a7_outer_hybrid_energy_sq_le_complement_shares
+    X A₂ B₂ hA hB S f hsupport
+  have hcardR : (Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) ≤
+      (2 : ℝ) ^ (X.rank * (u + v)) := by
+    simpa [u, v] using (show (Fintype.card
+      (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) ≤
+        ((2 ^ (X.rank * (u + v)) : ℕ) : ℝ) from by
+          exact_mod_cast hcard)
+  have hsharesNn : 0 ≤ ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+      a7PairShare p.1.1 p.1.2 f :=
+    Finset.sum_nonneg fun p _ => a7_pair_share_nonneg p.1.1 p.1.2 f
+  have hpowNn : 0 ≤ (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) := by positivity
+  calc
+    _ ≤ (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+        (Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f := henergy
+    _ ≤ (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+        ((2 : ℝ) ^ (X.rank * (u + v))) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f := by
+      refine mul_le_mul_of_nonneg_right ?_ hsharesNn
+      exact mul_le_mul_of_nonneg_left hcardR hpowNn
+    _ = (2 : ℝ) ^ (4 * X.rank * (D - X.rank) + X.rank * (u + v)) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f := by
+      rw [← pow_add]
+
 /-- One final pair above a preceding parent is a single nonnegative term of
 that parent's nested sum, hence at most the parent's output `Q`. -/
 theorem a7_preceding_one_pair_le_output {n d : Nat}
