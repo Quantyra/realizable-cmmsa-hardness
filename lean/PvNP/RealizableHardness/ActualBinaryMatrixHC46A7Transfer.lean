@@ -6067,6 +6067,149 @@ theorem a7_a9_preceding_output_graph_charge {n d : Nat}
   rw [hconst, hassoc]
   exact mul_le_mul_of_nonneg_right hcost hnn
 
+/-- The zero matrix has range zero and full kernel, so it selects every
+frequency through `(⊥, ⊤)`. -/
+theorem a7_zero_matrix_range {n d : Nat} :
+    LinearMap.range ((0 : BinaryMatrix n d).transpose.toLin') = ⊥ := by
+  rw [LinearMap.range_eq_bot]
+  ext w
+  simp [Matrix.transpose_zero]
+
+theorem a7_zero_matrix_ker {n d : Nat} :
+    LinearMap.ker ((0 : BinaryMatrix n d).transpose.toLin') = ⊤ := by
+  refine le_antisymm le_top ?_
+  intro w _
+  rw [LinearMap.mem_ker]
+  simp [Matrix.transpose_zero]
+
+theorem a7_zero_matrix_selected {n d : Nat} (Z : BinaryMatrix n d) :
+    Selected (LinearMap.range ((0 : BinaryMatrix n d).transpose.toLin'))
+      (LinearMap.ker ((0 : BinaryMatrix n d).transpose.toLin'))
+      Z.transpose.toLin' := by
+  rw [a7_zero_matrix_range, a7_zero_matrix_ker]
+  exact a7_bot_top_selected _
+
+/-- Every initial datum of one fixed final may be sent to the zero matrix.
+That matrix precedes `Z` and selects it, so this is an actual case of the
+hypothesized family. The zero matrix does not read the graphs. A general
+complex input remains open, so this does not delete the share hypothesis. -/
+theorem a7_a9_zero_parent_family_le {n d : Nat}
+    (D i j k a b : Nat)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (Z : BinaryMatrix n d)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k) :
+    (∑ _datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+        a7PrecedingOutputQ (0 : BinaryMatrix n d) Z) ≤
+      (2 : ℝ) ^ (3 * D * (i + j + k)) *
+        a7HybridQ (fun M => (character Z M : ℂ)) :=
+  a7_a9_preceding_output_sum_le D i j k a b A B Y Z
+    hfin hi hj hA hB hY
+    (fun _ => 0)
+    (fun _ => a7_precedes_zero Z)
+    (fun _ => a7_zero_matrix_selected Z)
+
+/-- The project-then-lift map of one coordinate datum, as a map of the
+coordinate spaces. -/
+noncomputable def a9ThetaCarrier {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) :
+    V (k + (b - j)) →ₗ[F] W (k + (a - i)) :=
+  ((⊥ : Submodule F (W (k + (a - i)))).quotEquivOfEqBot rfl).toLinearMap.comp
+    ((a9FinalTheta d).comp
+      (@Submodule.topEquiv F (V (k + (b - j))) _ _ _).symm.toLinearMap)
+
+/-- That map as a binary matrix. This is the parent matrix determined by the
+datum. -/
+noncomputable def a9ThetaParentMatrix {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) :
+    BinaryMatrix (k + (a - i)) (k + (b - j)) :=
+  LinearMap.toMatrix' (a9ThetaCarrier d)
+
+theorem a9ThetaCarrier_rank {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) :
+    Module.finrank F (LinearMap.range (a9ThetaCarrier d)) = k := by
+  classical
+  let eTop := @Submodule.topEquiv F (V (k + (b - j))) _ _ _
+  let eBot := (⊥ : Submodule F (W (k + (a - i)))).quotEquivOfEqBot rfl
+  have hr1 : LinearMap.range ((a9FinalTheta d).comp eTop.symm.toLinearMap) =
+      LinearMap.range (a9FinalTheta d) := by
+    rw [LinearMap.range_comp, LinearMap.range_eq_top.mpr eTop.symm.surjective,
+      Submodule.map_top]
+  have hr2 : LinearMap.range (a9ThetaCarrier d) =
+      Submodule.map eBot.toLinearMap (LinearMap.range (a9FinalTheta d)) := by
+    unfold a9ThetaCarrier
+    rw [LinearMap.range_comp, hr1]
+  rw [hr2, LinearEquiv.finrank_map_eq eBot]
+  exact a9FinalTheta_rank d
+
+/-- The datum's parent matrix has rank `k`. -/
+theorem a9ThetaParentMatrix_rank {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) :
+    (a9ThetaParentMatrix d).rank = k := by
+  have hlin : (a9ThetaParentMatrix d).toLin' = a9ThetaCarrier d := by
+    unfold a9ThetaParentMatrix
+    exact Matrix.toLin'_toMatrix' (a9ThetaCarrier d)
+  have hrank := Matrix.rank_eq_finrank_range_toLin (a9ThetaParentMatrix d)
+    (Pi.basisFun F _) (Pi.basisFun F _)
+  rw [Matrix.toLin_eq_toLin'] at hrank
+  rw [hrank, hlin]
+  exact a9ThetaCarrier_rank d
+
+/-- On one fixed subspace pair, the parent matrix determines both graphs. -/
+theorem a9ThetaParentMatrix_graphs {a b k i j : Nat}
+    (A0 : W6Grass (V a) i) (B0 : W6Grass (V b) j)
+    (im₁ im₂ : (V k) →ₗ[F] ((V a) ⧸ A0.1))
+    (ker₁ ker₂ : ((V b) ⧸ B0.1) →ₗ[F] (V k))
+    (h : a9ThetaParentMatrix ⟨A0, B0, im₁, ker₁⟩ =
+      a9ThetaParentMatrix ⟨A0, B0, im₂, ker₂⟩) :
+    ker₁ = ker₂ ∧ im₁ = im₂ := by
+  have hlin : a9ThetaCarrier ⟨A0, B0, im₁, ker₁⟩ =
+      a9ThetaCarrier ⟨A0, B0, im₂, ker₂⟩ := by
+    unfold a9ThetaParentMatrix at h
+    simpa [Matrix.toLin'_toMatrix'] using congrArg Matrix.toLin' h
+  have htheta : a9FinalTheta ⟨A0, B0, im₁, ker₁⟩ =
+      a9FinalTheta ⟨A0, B0, im₂, ker₂⟩ := by
+    apply LinearMap.ext
+    intro x
+    let eTop := @Submodule.topEquiv F (V (k + (b - j))) _ _ _
+    let eBot := (⊥ : Submodule F (W (k + (a - i)))).quotEquivOfEqBot rfl
+    have hpoint := congrFun (congrArg DFunLike.coe hlin) (eTop x)
+    simp only [a9ThetaCarrier, LinearMap.comp_apply,
+      LinearEquiv.symm_apply_apply] at hpoint
+    exact eBot.injective hpoint
+  exact a9FinalTheta_graphs_inverse A0 B0 im₁ im₂ ker₁ ker₂ htheta
+
+/-- The zero matrix is an actual preceding selected parent of the datum's
+own matrix, so the coordinate output `Q` is at most that matrix's character
+`Q`. A general complex input remains open, so this does not delete the share
+hypothesis. -/
+theorem a9ThetaParent_output_le {a b k i j : Nat}
+    (d : A9InitialDatum (V a) (V b) (V k) i j) :
+    a7PrecedingOutputQ
+        (0 : BinaryMatrix (k + (a - i)) (k + (b - j)))
+        (a9ThetaParentMatrix d) ≤
+      a7HybridQ (fun M => (character (a9ThetaParentMatrix d) M : ℂ)) :=
+  a7_preceding_character_q_le_original
+    (0 : BinaryMatrix (k + (a - i)) (k + (b - j)))
+    (a9ThetaParentMatrix d)
+    (a7_precedes_zero _)
+    (a7_zero_matrix_selected _)
+
+/-- Sum the zero-parent outputs of the matrices determined by one coordinate
+fiber. Each term is that matrix's own character `Q`. This does not charge
+one ambient component by the fiber. -/
+theorem a7_a9_theta_parent_sum_le {a b k i j : Nat} :
+    (∑ d : A9InitialDatum (V a) (V b) (V k) i j,
+        a7PrecedingOutputQ
+          (0 : BinaryMatrix (k + (a - i)) (k + (b - j)))
+          (a9ThetaParentMatrix d)) ≤
+      ∑ d : A9InitialDatum (V a) (V b) (V k) i j,
+        a7HybridQ (fun M => (character (a9ThetaParentMatrix d) M : ℂ)) := by
+  classical
+  exact Finset.sum_le_sum (fun d _ => a9ThetaParent_output_le d)
+
 /-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
 noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
     [AddCommGroup M] [Module F M] [Module.Finite F M]
@@ -6267,6 +6410,50 @@ theorem a9FinalInducingTriple_rank {n d a b k i j : Nat}
       (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
         (a9ModuleToFin k hY) datum))) = k :=
   a9FinalTheta_rank
+    (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
+      (a9ModuleToFin k hY) datum)
+
+/-- The parent matrix of one initial datum of a fixed final `(A, W/B, range Y)`.
+Transport to coordinates, then read the project-then-lift map. Its rank is `k`.
+The zero matrix precedes it. A general complex input remains open, so this
+does not delete the share hypothesis. -/
+noncomputable def a9FinalParentMatrix {n d a b k i j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k)
+    (datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) :
+    BinaryMatrix (k + (a - i)) (k + (b - j)) :=
+  a9ThetaParentMatrix
+    (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
+      (a9ModuleToFin k hY) datum)
+
+theorem a9FinalParentMatrix_rank {n d a b k i j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k)
+    (datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) :
+    (a9FinalParentMatrix A B Y hA hB hY datum).rank = k :=
+  a9ThetaParentMatrix_rank
+    (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
+      (a9ModuleToFin k hY) datum)
+
+theorem a9FinalParent_output_le {n d a b k i j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k)
+    (datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) :
+    a7PrecedingOutputQ
+        (0 : BinaryMatrix (k + (a - i)) (k + (b - j)))
+        (a9FinalParentMatrix A B Y hA hB hY datum) ≤
+      a7HybridQ (fun M =>
+        (character (a9FinalParentMatrix A B Y hA hB hY datum) M : ℂ)) :=
+  a9ThetaParent_output_le
     (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
       (a9ModuleToFin k hY) datum)
 
