@@ -258,8 +258,7 @@ theorem a9_projection_rank {S Q : Type*} [AddCommGroup S] [Module F S]
 
 /-- The two graphs of one inducing datum determine the rank-`k` identification
 of their graph subspaces. Reading either section recovers that graph.
-This is the graph-coordinate predecessor of one final line. It does not
-identify `T1IndexTriple`, and it does not remove a share hypothesis. -/
+This is the graph-coordinate predecessor of one final line. -/
 noncomputable def a9_graph_induced_equiv {S Qd Qc : Type*}
     [AddCommGroup S] [Module F S] [AddCommGroup Qd] [Module F Qd]
     [AddCommGroup Qc] [Module F Qc]
@@ -286,6 +285,71 @@ theorem a9_graph_induced_reads {S Qd Qc : Type*}
     a9_map_of_lift (a9_lift_of_map kerGraph) = kerGraph ∧
       a9_map_of_lift (a9_lift_of_map imGraph) = imGraph :=
   ⟨a9_map_of_lift_of_map kerGraph, a9_map_of_lift_of_map imGraph⟩
+
+/-- A graph subspace determines its graph map: the point with first
+coordinate `s` is `(s, phi s)`. -/
+theorem a9_incl_range_injective {S Q : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup Q] [Module F Q] (phi psi : S →ₗ[F] Q)
+    (h : LinearMap.range (a9GraphIncl phi) =
+      LinearMap.range (a9GraphIncl psi)) : phi = psi := by
+  ext s
+  have hmem : a9GraphIncl phi s ∈ LinearMap.range (a9GraphIncl psi) := by
+    rw [← h]
+    exact LinearMap.mem_range_self (a9GraphIncl phi) s
+  rcases LinearMap.mem_range.mp hmem with ⟨t, ht⟩
+  have hfst : t = s := by
+    have hcoord := congrArg Prod.fst ht
+    simpa [a9GraphIncl] using hcoord
+  have hsnd := congrArg Prod.snd ht
+  simpa [a9GraphIncl, hfst] using hsnd.symm
+
+/-- Initial triple in the field shape of `T1IndexTriple`: subspace `C`,
+subspace `K`, and isomorphism `K ≃ A/C`. -/
+structure A9IndexedTriple (A Qb : Type*) [AddCommGroup A] [Module F A]
+    [AddCommGroup Qb] [Module F Qb] where
+  C : Submodule F A
+  K : Submodule F Qb
+  xbar : K ≃ₗ[F] (A ⧸ C)
+
+/-- One inducing graph pair produces one indexed triple. `K` is the whole
+kernel graph and `C` is zero in the image graph, so `xbar` is the
+rank-`k` identification of those carriers. -/
+noncomputable def a9_fiber_triple {S Qd Qc : Type*}
+    [AddCommGroup S] [Module F S] [AddCommGroup Qd] [Module F Qd]
+    [AddCommGroup Qc] [Module F Qc]
+    (kerGraph : S →ₗ[F] Qd) (imGraph : S →ₗ[F] Qc) :
+    A9IndexedTriple (LinearMap.range (a9GraphIncl imGraph))
+      (LinearMap.range (a9GraphIncl kerGraph)) where
+  C := ⊥
+  K := ⊤
+  xbar :=
+    (Submodule.topEquiv).trans
+      ((a9_graph_induced_equiv kerGraph imGraph).trans
+        ((⊥ : Submodule F (LinearMap.range (a9GraphIncl imGraph))).quotEquivOfEqBot
+            rfl).symm)
+
+theorem a9_fiber_triple_rank {S Qd Qc : Type*}
+    [AddCommGroup S] [Module F S] [AddCommGroup Qd] [Module F Qd]
+    [AddCommGroup Qc] [Module F Qc] [Module.Finite F S]
+    (kerGraph : S →ₗ[F] Qd) (imGraph : S →ₗ[F] Qc) :
+    Module.finrank F (a9_fiber_triple kerGraph imGraph).K =
+      Module.finrank F S :=
+  (@Submodule.topEquiv F (LinearMap.range (a9GraphIncl kerGraph)) _ _ _).finrank_eq.trans
+    (a9_graph_finrank kerGraph)
+
+/-- The two graph carriers determine both graph maps, so distinct inducing
+data stay distinct as indexed triples on those carriers. -/
+theorem a9_graph_ranges_determine {S Qd Qc : Type*}
+    [AddCommGroup S] [Module F S] [AddCommGroup Qd] [Module F Qd]
+    [AddCommGroup Qc] [Module F Qc]
+    (ker₁ ker₂ : S →ₗ[F] Qd) (im₁ im₂ : S →ₗ[F] Qc)
+    (hker : LinearMap.range (a9GraphIncl ker₁) =
+      LinearMap.range (a9GraphIncl ker₂))
+    (him : LinearMap.range (a9GraphIncl im₁) =
+      LinearMap.range (a9GraphIncl im₂)) :
+    ker₁ = ker₂ ∧ im₁ = im₂ :=
+  ⟨a9_incl_range_injective ker₁ ker₂ hker,
+    a9_incl_range_injective im₁ im₂ him⟩
 
 noncomputable instance a9_quotientFintype {E : Type*} [AddCommGroup E]
     [Module F E] [Fintype E] (U : Submodule F E) : Fintype (E ⧸ U) :=

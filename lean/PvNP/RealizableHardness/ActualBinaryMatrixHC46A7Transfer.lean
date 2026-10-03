@@ -3372,6 +3372,17 @@ theorem a7_predecessor_fiber_le {n d D k : Nat} (Y : BinaryMatrix n d)
       rw [if_neg hk]
     simp [hzero]
 
+/-- `T1IndexTriple` is the indexed triple on the manuscript carriers
+`A` and `W/B`. The graph fiber `a9_fiber_triple` uses this same field
+package on the two graph subspaces. -/
+def a9Indexed_t1_equiv {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) :
+    A9IndexedTriple A (W n ⧸ B) ≃ T1IndexTriple A B where
+  toFun t := ⟨t.C, t.K, t.xbar⟩
+  invFun t := ⟨t.C, t.K, t.Xbar⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+
 /-- The proved A9 graph fiber has multiplicity at most `2^{3D(i+j+k)}`
 when the final datum satisfies `a+b+k ≤ D`. This is the fiber cardinality,
 not a fresh exponent estimate. It does not remove the share hypothesis. -/
