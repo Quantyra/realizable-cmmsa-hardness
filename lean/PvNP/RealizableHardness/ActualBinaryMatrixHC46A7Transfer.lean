@@ -6558,5 +6558,171 @@ theorem a9FinalParent_not_both {n d a b k i j : Nat}
     (a9TransportDatum (a9ModuleToFin a hA) (a9ModuleToFin b hB)
       (a9ModuleToFin k hY) datum) hk Z hZ
 
+/-- Fourier coefficients are additive on every complex input. -/
+theorem a7_fourierCoeff_add {n d : Nat}
+    (f g : BinaryMatrix n d → Complex) (Y : BinaryMatrix n d) :
+    complexFourierCoeff (fun M => f M + g M) Y =
+      complexFourierCoeff f Y + complexFourierCoeff g Y := by
+  unfold complexFourierCoeff
+  simp_rw [add_mul]
+  rw [Finset.sum_add_distrib, add_div]
+
+/-- The predecessor filter is additive on every complex input. -/
+theorem a7_predecessorFilter_add {n d : Nat}
+    (X : BinaryMatrix n d) (f g : BinaryMatrix n d → Complex) :
+    w6PredecessorFilter X (fun M => f M + g M) =
+      fun M => w6PredecessorFilter X f M + w6PredecessorFilter X g M := by
+  funext M
+  unfold w6PredecessorFilter
+  simp_rw [a7_fourierCoeff_add]
+  have hsplit : ∀ Y : BinaryMatrix n d,
+      (if w6Precedes X Y then
+          (complexFourierCoeff f Y + complexFourierCoeff g Y) *
+            (character Y M : Complex)
+        else 0) =
+        (if w6Precedes X Y then
+            complexFourierCoeff f Y * (character Y M : Complex) else 0) +
+          (if w6Precedes X Y then
+            complexFourierCoeff g Y * (character Y M : Complex) else 0) := by
+    intro Y
+    by_cases h : w6Precedes X Y
+    · rw [if_pos h, if_pos h, if_pos h, add_mul]
+    · rw [if_neg h, if_neg h, if_neg h, zero_add]
+  simp_rw [hsplit, Finset.sum_add_distrib]
+
+/-- The predecessor filter is homogeneous on every complex input. -/
+theorem a7_predecessorFilter_smul {n d : Nat}
+    (c : Complex) (X : BinaryMatrix n d) (f : BinaryMatrix n d → Complex) :
+    w6PredecessorFilter X (fun M => c * f M) =
+      fun M => c * w6PredecessorFilter X f M := by
+  funext M
+  unfold w6PredecessorFilter
+  simp_rw [complexFourierCoeff_smul]
+  have hpull : ∀ Y : BinaryMatrix n d,
+      (if w6Precedes X Y then
+          c * complexFourierCoeff f Y * (character Y M : Complex) else 0) =
+        c * (if w6Precedes X Y then
+          complexFourierCoeff f Y * (character Y M : Complex) else 0) := by
+    intro Y
+    by_cases h : w6Precedes X Y
+    · rw [if_pos h, if_pos h, mul_assoc]
+    · rw [if_neg h, if_neg h, mul_zero]
+  simp_rw [hpull]
+  rw [← Finset.mul_sum]
+
+/-- The W6 derivative is additive on every complex input. -/
+theorem a7_derivative_add {n d : Nat}
+    (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f g : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range X.transpose.toLin') →ₗ[F]
+      LinearMap.ker X.transpose.toLin') :
+    actualW6Derivative X T (fun K => f K + g K) M =
+      actualW6Derivative X T f M + actualW6Derivative X T g M := by
+  unfold actualW6Derivative complexAmbientAffineRestrict
+  rw [a7_predecessorFilter_add]
+
+/-- The W6 derivative is homogeneous on every complex input. -/
+theorem a7_derivative_smul {n d : Nat}
+    (c : Complex) (X : BinaryMatrix n d) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (M : (V d ⧸ LinearMap.range X.transpose.toLin') →ₗ[F]
+      LinearMap.ker X.transpose.toLin') :
+    actualW6Derivative X T (fun K => c * f K) M =
+      c * actualW6Derivative X T f M := by
+  unfold actualW6Derivative complexAmbientAffineRestrict
+  rw [a7_predecessorFilter_smul]
+
+/-- One hybrid filter is homogeneous on every complex input. -/
+theorem a7_hybridFilter_smul {n d : Nat}
+    (c : Complex) (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) :
+    complexAmbientHybridFilter A B (fun M => c * f M) =
+      fun M => c * complexAmbientHybridFilter A B f M := by
+  funext M
+  unfold complexAmbientHybridFilter
+  simp_rw [complexFourierCoeff_smul]
+  have hpull : ∀ Y : BinaryMatrix n d,
+      (if Selected A B Y.transpose.toLin' then
+          c * complexFourierCoeff f Y * (character Y M : Complex) else 0) =
+        c * (if Selected A B Y.transpose.toLin' then
+          complexFourierCoeff f Y * (character Y M : Complex) else 0) := by
+    intro Y
+    by_cases h : Selected A B Y.transpose.toLin'
+    · rw [if_pos h, if_pos h, mul_assoc]
+    · rw [if_neg h, if_neg h, mul_zero]
+  simp_rw [hpull]
+  rw [← Finset.mul_sum]
+
+theorem a7_filtered_smul {n d : Nat}
+    (c : Complex) (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex) :
+    filteredCarrierFunction A B T (fun M => c * f M) =
+      fun N => c * filteredCarrierFunction A B T f N := by
+  funext N
+  unfold filteredCarrierFunction complexAmbientAffineRestrict
+  rw [a7_hybridFilter_smul]
+
+theorem a7_carrierMean_normSq_smul {n d : Nat}
+    (c : Complex) (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : ((V d ⧸ A) →ₗ[F] B) → Complex) :
+    carrierMean A B (fun M => Complex.normSq (c * g M)) =
+      Complex.normSq c *
+        carrierMean A B (fun M => Complex.normSq (g M)) := by
+  unfold carrierMean
+  have hpoint : ∀ M, Complex.normSq (c * g M) =
+      Complex.normSq c * Complex.normSq (g M) :=
+    fun M => Complex.normSq_mul _ _
+  have hsum : (∑ M, Complex.normSq (c * g M)) =
+      Complex.normSq c * ∑ M, Complex.normSq (g M) := by
+    simp_rw [hpoint]
+    rw [Finset.mul_sum]
+  rw [hsum]
+  exact mul_div_assoc (Complex.normSq c) _ _
+
+/-- Scaling a complex input by `c` multiplies one pair share by
+`(Complex.normSq c)^2`. -/
+theorem a7_pairShare_smul {n d : Nat}
+    (c : Complex) (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) :
+    a7PairShare A B (fun M => c * f M) =
+      (Complex.normSq c) ^ 2 * a7PairShare A B f := by
+  unfold a7PairShare typedUniformMean typedW6QComponent
+  have hcomp : ∀ T : V d →ₗ[F] W n,
+      (carrierMean A B (fun M => Complex.normSq
+          (filteredCarrierFunction A B T (fun K => c * f K) M))) ^ 2 =
+        (Complex.normSq c) ^ 2 *
+          (carrierMean A B (fun M => Complex.normSq
+            (filteredCarrierFunction A B T f M))) ^ 2 := by
+    intro T
+    rw [a7_filtered_smul c A B T f,
+      a7_carrierMean_normSq_smul c A B (filteredCarrierFunction A B T f),
+      mul_pow]
+  have hsum :
+      (∑ T : V d →ₗ[F] W n,
+          (carrierMean A B (fun M => Complex.normSq
+            (filteredCarrierFunction A B T (fun K => c * f K) M))) ^ 2) =
+        (Complex.normSq c) ^ 2 *
+          ∑ T : V d →ₗ[F] W n,
+            (carrierMean A B (fun M => Complex.normSq
+              (filteredCarrierFunction A B T f M))) ^ 2 := by
+    refine Eq.trans (Finset.sum_congr rfl (fun T _ => hcomp T)) ?_
+    exact (Finset.mul_sum _ _ _).symm
+  rw [hsum]
+  exact mul_div_assoc ((Complex.normSq c) ^ 2) _ _
+
+/-- Scaling a complex input by `c` multiplies unweighted `Q` by
+`(Complex.normSq c)^2`. The derivative is additive, but `Q` is degree 4.
+`a9FinalParent_not_both` also says a positive-rank datum parent does not
+both precede and select a rank-`k` final, so the character injection does
+not apply at that parent. The share hypothesis stays. -/
+theorem a7_hybridQ_smul {n d : Nat}
+    (c : Complex) (f : BinaryMatrix n d → Complex) :
+    a7HybridQ (fun M => c * f M) =
+      (Complex.normSq c) ^ 2 * a7HybridQ f := by
+  classical
+  rw [← a7_pair_shares_exhaust (fun M => c * f M), ← a7_pair_shares_exhaust f]
+  simp_rw [a7_pairShare_smul c]
+  rw [← Finset.mul_sum]
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
