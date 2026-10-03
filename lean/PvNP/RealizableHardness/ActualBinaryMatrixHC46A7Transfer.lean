@@ -1416,6 +1416,132 @@ theorem a7_same_pair_parent_unique {n d : Nat}
       have htriple := t1TripleToMap_injective hmap
       exact htriple
 
+/-- Rewriting the ambient carrier does not change the pullback energy. -/
+theorem a7_output_energy_carrier_cast {n d : Nat}
+    (C1 C2 : Submodule F (V d)) (H1 H2 : Submodule F (W n))
+    (hC : C1 = C2) (hH : H1 = H2)
+    (Z : H1 →ₗ[F] (V d ⧸ C1)) (Z' : H2 →ₗ[F] (V d ⧸ C2))
+    (hZ : HEq Z Z') (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex) :
+    typedW6OutputEnergy C1 H1 Z (filteredCarrierFunction C1 H1 T f) =
+      typedW6OutputEnergy C2 H2 Z' (filteredCarrierFunction C2 H2 T f) := by
+  subst hC
+  subst hH
+  cases hZ
+  rfl
+
+/-- The ambient image of an internal subspace determines that subspace. -/
+theorem a7_ambientC_injective {d : Nat} {A : Submodule F (V d)}
+    {C1 C2 : Submodule F A} (h : t1AmbientC C1 = t1AmbientC C2) : C1 = C2 := by
+  ext a
+  constructor
+  · intro ha
+    have hmem : (a : V d) ∈ t1AmbientC C2 := by
+      rw [← h]
+      exact ⟨a, ha, rfl⟩
+    rcases hmem with ⟨a', ha', hval⟩
+    have haa : a = a' := Subtype.ext hval.symm
+    simpa [haa] using ha'
+  · intro ha
+    have hmem : (a : V d) ∈ t1AmbientC C1 := by
+      rw [h]
+      exact ⟨a, ha, rfl⟩
+    rcases hmem with ⟨a', ha', hval⟩
+    have haa : a = a' := Subtype.ext hval.symm
+    simpa [haa] using ha'
+
+/-- On one ordinary codomain, the ambient `H` determines the quotient
+subspace. -/
+theorem a7_ambientH_injective {n : Nat} {B : Submodule F (W n)}
+    {K1 K2 : Submodule F (W n ⧸ B)}
+    (h : t1AmbientH K1 = t1AmbientH K2) : K1 = K2 := by
+  ext x
+  have h1 := t1AmbientH_quotientRange B K1
+  have h2 := t1AmbientH_quotientRange B K2
+  constructor
+  · intro hx
+    rw [← h2]
+    have hx' : x ∈ LinearMap.range
+        ((Submodule.mkQ B).comp (t1AmbientH K1).subtype) := by
+      rw [h1]
+      exact hx
+    rcases hx' with ⟨w, hw⟩
+    refine ⟨⟨w.1, ?_⟩, ?_⟩
+    · rw [← h]
+      exact w.2
+    · simpa using hw
+  · intro hx
+    rw [← h1]
+    have hx' : x ∈ LinearMap.range
+        ((Submodule.mkQ B).comp (t1AmbientH K2).subtype) := by
+      rw [h2]
+      exact hx
+    rcases hx' with ⟨w, hw⟩
+    refine ⟨⟨w.1, ?_⟩, ?_⟩
+    · rw [h]
+      exact w.2
+    · simpa using hw
+
+/-- Move a pullback to the carrier named by field equalities.
+The body is `Eq.rec`. Unfold it only after those equalities are `rfl`. -/
+def a7PullbackAt {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (c0 : Submodule F A) (k0 : Submodule F (W n ⧸ B))
+    (t : T1IndexTriple A B) (hC : t.C = c0) (hK : t.K = k0) :
+    t1AmbientH k0 →ₗ[F] (V d ⧸ t1AmbientC c0) :=
+  hK ▸ hC ▸ t1PullbackMap t
+
+/-- At mixed order `D`, a triple's output fourth moment is the squared energy
+of its pullback on the carrier named by its internal fields. -/
+theorem a7_pullback_at_fourth {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (c0 : Submodule F A) (k0 : Submodule F (W n ⧸ B))
+    (t : T1IndexTriple A B) (hC : t.C = c0) (hK : t.K = k0)
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t = D) :
+    a7MixedOutputFourth t T f =
+      (typedW6OutputEnergy (t1AmbientC c0) (t1AmbientH k0)
+        (a7PullbackAt c0 k0 t hC hK)
+        (filteredCarrierFunction (t1AmbientC c0) (t1AmbientH k0) T f)) ^ 2 := by
+  cases t with
+  | mk tC tK tX =>
+    have hCf : tC = c0 := hC
+    have hKf : tK = k0 := hK
+    subst tC
+    subst tK
+    exact a7_saturated_output_eq_energy_sq ⟨c0, k0, tX⟩ T f hsupport horder
+
+/-- Equal transported pullbacks on one ordinary pair come from one triple. -/
+theorem a7_pullback_at_injective {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (c0 : Submodule F A) (k0 : Submodule F (W n ⧸ B))
+    (t s : T1IndexTriple A B)
+    (hCt : t.C = c0) (hCs : s.C = c0) (hKt : t.K = k0) (hKs : s.K = k0)
+    (hφ : a7PullbackAt c0 k0 t hCt hKt = a7PullbackAt c0 k0 s hCs hKs) :
+    t = s := by
+  cases t with
+  | mk tC tK tX =>
+    cases s with
+    | mk sC sK sX =>
+      have hCtf : tC = c0 := hCt
+      have hCsf : sC = c0 := hCs
+      have hKtf : tK = k0 := hKt
+      have hKsf : sK = k0 := hKs
+      subst tC
+      subst sC
+      subst tK
+      subst sK
+      have hmaps : t1PullbackMap ⟨c0, k0, tX⟩ =
+          t1PullbackMap ⟨c0, k0, sX⟩ := by
+        unfold a7PullbackAt at hφ
+        exact hφ
+      apply a7_same_pair_parent_unique ⟨c0, k0, tX⟩ ⟨c0, k0, sX⟩ rfl rfl
+      intro h
+      have hpoint : t1PullbackMap ⟨c0, k0, tX⟩ h =
+          t1PullbackMap ⟨c0, k0, sX⟩ h :=
+        DFunLike.congr_fun hmaps h
+      simpa using hpoint
+
 /-- Every parent derivative on one carrier has squared energy adding to at
 most `2^{6 D^2 + 1}` times that carrier's `Q` component. High-rank parents
 vanish. This is the W6 pool on one pair; it does not inject triples into
@@ -1503,6 +1629,142 @@ theorem a7_carrier_energy_sq_sum_le {n d D : Nat}
     (pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) (6 * D * D))
   rw [htwo] at hscaled
   exact le_trans hsum hscaled
+
+/-- On one ordinary pair, saturated triples with one internal carrier inject
+into distinct parents. Their output fourth moments at one base sum to at most
+that carrier's parent-energy pool. Orders below `D` are not included. -/
+theorem a7_saturated_same_field_output_sum_le {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (c0 : Submodule F A) (k0 : Submodule F (W n ⧸ B))
+    (ts : Finset (T1IndexTriple A B))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : ∀ t ∈ ts, a6Order t = D)
+    (hC : ∀ t ∈ ts, t.C = c0) (hK : ∀ t ∈ ts, t.K = k0) :
+    (∑ t ∈ ts, a7MixedOutputFourth t T f) ≤
+      ∑ Z : t1AmbientH k0 →ₗ[F] (V d ⧸ t1AmbientC c0),
+        (typedW6OutputEnergy (t1AmbientC c0) (t1AmbientH k0) Z
+          (filteredCarrierFunction (t1AmbientC c0) (t1AmbientH k0) T f)) ^ 2 := by
+  classical
+  let C := t1AmbientC c0
+  let H := t1AmbientH k0
+  let φ : {t : T1IndexTriple A B // t ∈ ts} → (H →ₗ[F] (V d ⧸ C)) :=
+    fun u => a7PullbackAt c0 k0 u.1 (hC u.1 u.2) (hK u.1 u.2)
+  let genergy : (H →ₗ[F] (V d ⧸ C)) → ℝ := fun Z =>
+    (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)) ^ 2
+  have hinj : Function.Injective φ := by
+    intro u v huv
+    apply Subtype.ext
+    exact a7_pullback_at_injective c0 k0 u.1 v.1
+      (hC u.1 u.2) (hC v.1 v.2) (hK u.1 u.2) (hK v.1 v.2) huv
+  have hterm : ∀ u : {t : T1IndexTriple A B // t ∈ ts},
+      a7MixedOutputFourth u.1 T f = genergy (φ u) := by
+    intro u
+    exact a7_pullback_at_fourth c0 k0 u.1 (hC u.1 u.2) (hK u.1 u.2)
+      T f hsupport (horder u.1 u.2)
+  have hsumφ : (∑ u ∈ ts.attach, a7MixedOutputFourth u.1 T f) =
+      ∑ u ∈ ts.attach, genergy (φ u) :=
+    Finset.sum_congr rfl (fun u _ => hterm u)
+  have himage : (∑ Z ∈ ts.attach.image φ, genergy Z) =
+      ∑ u ∈ ts.attach, genergy (φ u) :=
+    Finset.sum_image (f := genergy) (hinj.injOn (s := (ts.attach : Set _)))
+  have hrest : (∑ Z ∈ ts.attach.image φ, genergy Z) ≤ ∑ Z, genergy Z :=
+    Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ _)
+      (fun Z _ _ => sq_nonneg
+        (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)))
+  calc
+    (∑ t ∈ ts, a7MixedOutputFourth t T f)
+        = ∑ u ∈ ts.attach, a7MixedOutputFourth u.1 T f :=
+          (Finset.sum_attach (s := ts)
+            (f := fun t => a7MixedOutputFourth t T f)).symm
+    _ = ∑ u ∈ ts.attach, genergy (φ u) := hsumφ
+    _ = ∑ Z ∈ ts.attach.image φ, genergy Z := himage.symm
+    _ ≤ ∑ Z, genergy Z := hrest
+
+/-- Saturated fourth moments on one ordinary pair, for triples with one
+internal carrier, sum to at most the W6 pool factor times that carrier's pair
+share. This is one pair and order `D` only. It does not discharge the mixed
+sum, and it does not remove the share hypothesis. -/
+theorem a7_saturated_same_field_fourth_sum_le {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (c0 : Submodule F A) (k0 : Submodule F (W n ⧸ B))
+    (ts : Finset (T1IndexTriple A B))
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : ∀ t ∈ ts, a6Order t = D)
+    (hC : ∀ t ∈ ts, t.C = c0) (hK : ∀ t ∈ ts, t.K = k0) :
+    (∑ t ∈ ts, a6DerivativeFourth A B t f) ≤
+      (2 : ℝ) ^ (6 * D * D + 1) *
+        a7PairShare (t1AmbientC c0) (t1AmbientH k0) f := by
+  classical
+  let C := t1AmbientC c0
+  let H := t1AmbientH k0
+  let card : ℝ := Fintype.card (V d →ₗ[F] W n)
+  have hT : ∀ T : V d →ₗ[F] W n,
+      (∑ t ∈ ts, a7MixedOutputFourth t T f) ≤
+        (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent C H T f := by
+    intro T
+    exact le_trans
+      (a7_saturated_same_field_output_sum_le c0 k0 ts T f hsupport horder hC hK)
+      (a7_carrier_energy_sq_sum_le C H T f hsupport)
+  have hderiv : ∀ t ∈ ts, a6DerivativeFourth A B t f =
+      (∑ T : V d →ₗ[F] W n, a7MixedOutputFourth t T f) / card := by
+    intro t _
+    rw [a7_mixed_fourth_output]
+    rfl
+  calc
+    (∑ t ∈ ts, a6DerivativeFourth A B t f)
+        = ∑ t ∈ ts, (∑ T : V d →ₗ[F] W n, a7MixedOutputFourth t T f) / card := by
+          refine Finset.sum_congr rfl ?_
+          intro t ht
+          exact hderiv t ht
+    _ = (∑ t ∈ ts, ∑ T : V d →ₗ[F] W n, a7MixedOutputFourth t T f) / card := by
+          rw [Finset.sum_div]
+    _ = (∑ T : V d →ₗ[F] W n, ∑ t ∈ ts, a7MixedOutputFourth t T f) / card := by
+          rw [Finset.sum_comm]
+    _ ≤ (∑ T : V d →ₗ[F] W n,
+          (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent C H T f) / card := by
+          refine div_le_div_of_nonneg_right ?_ (Nat.cast_nonneg _)
+          refine Finset.sum_le_sum ?_
+          intro T _
+          exact hT T
+    _ = (2 : ℝ) ^ (6 * D * D + 1) *
+          ((∑ T : V d →ₗ[F] W n, typedW6QComponent C H T f) / card) := by
+          rw [← Finset.mul_sum, mul_div_assoc]
+    _ = (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare C H f := by
+          rw [a7PairShare, typedUniformMean]
+
+/-- Saturated fourth moments on one ordinary pair, for triples whose ambient
+carrier is one fixed pair, sum to at most the W6 pool factor times that pair
+share. Parents are not charged twice: `a7_same_pair_parent_unique` supplies
+the injection. Other ordinary pairs and orders below `D` stay outside this
+sum. -/
+theorem a7_saturated_carrier_fourth_sum_le {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (ts : Finset (T1IndexTriple A B))
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : ∀ t ∈ ts, a6Order t = D)
+    (hC : ∀ t ∈ ts, t1AmbientC t.C = C)
+    (hH : ∀ t ∈ ts, t1AmbientH t.K = H) :
+    (∑ t ∈ ts, a6DerivativeFourth A B t f) ≤
+      (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare C H f := by
+  classical
+  rcases Finset.eq_empty_or_nonempty ts with hempty | ⟨t0, ht0⟩
+  · rw [hempty, Finset.sum_empty]
+    exact mul_nonneg (pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) _)
+      (a7_pair_share_nonneg C H f)
+  · have hCfield : ∀ t ∈ ts, t.C = t0.C := by
+      intro t ht
+      exact a7_ambientC_injective ((hC t ht).trans (hC t0 ht0).symm)
+    have hKfield : ∀ t ∈ ts, t.K = t0.K := by
+      intro t ht
+      exact a7_ambientH_injective ((hH t ht).trans (hH t0 ht0).symm)
+    have hsum := a7_saturated_same_field_fourth_sum_le t0.C t0.K ts f
+      hsupport horder hCfield hKfield
+    rw [hC t0 ht0, hH t0 ht0] at hsum
+    exact hsum
 
 /-- The order-`D` A6 weight times the W6 pool factor fits in the terminal
 allowance. This is the numeric room for one carrier's parent-energy sum. It

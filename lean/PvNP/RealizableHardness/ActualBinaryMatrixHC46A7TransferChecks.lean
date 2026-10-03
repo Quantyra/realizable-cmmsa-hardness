@@ -34,7 +34,16 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_saturated_output_eq_energy_sq
 #check a7_saturated_output_le_pool
 #check a7_same_pair_parent_unique
+#check a7_output_energy_carrier_cast
+#check a7_ambientC_injective
+#check a7_ambientH_injective
+#check a7PullbackAt
+#check a7_pullback_at_fourth
+#check a7_pullback_at_injective
 #check a7_carrier_energy_sq_sum_le
+#check a7_saturated_same_field_output_sum_le
+#check a7_saturated_same_field_fourth_sum_le
+#check a7_saturated_carrier_fourth_sum_le
 #check a7_saturated_pool_exponent_fits
 
 #print axioms a7_constant_of_degree_zero
@@ -65,5 +74,13 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_saturated_output_eq_energy_sq
 #print axioms a7_saturated_output_le_pool
 #print axioms a7_same_pair_parent_unique
+#print axioms a7_output_energy_carrier_cast
+#print axioms a7_ambientC_injective
+#print axioms a7_ambientH_injective
+#print axioms a7_pullback_at_fourth
+#print axioms a7_pullback_at_injective
 #print axioms a7_carrier_energy_sq_sum_le
+#print axioms a7_saturated_same_field_output_sum_le
+#print axioms a7_saturated_same_field_fourth_sum_le
+#print axioms a7_saturated_carrier_fourth_sum_le
 #print axioms a7_saturated_pool_exponent_fits
