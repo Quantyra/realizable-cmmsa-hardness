@@ -38,6 +38,7 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
 open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixA1Composition
 open PvNP.RealizableHardness.BinaryMatrixA1Phase
 open PvNP.RealizableHardness.BinaryMatrixFourier
 open PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1
@@ -3708,6 +3709,118 @@ theorem a9ImageCarrier_injective (k a i : Nat) :
   have hphi := a9_preimage_graphs_inverse U₁.1 phi₁ phi₂ hpre
   cases hphi
   rfl
+
+/-- The ambient hybrid filter keeps the selected Fourier coefficients and
+drops the others. -/
+theorem a7_ambient_hybrid_fourierCoeff {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : BinaryMatrix n d → ℝ) (Y : BinaryMatrix n d) :
+    fourierCoeff (ambientHybridFilter A B g) Y =
+      if Selected A B Y.transpose.toLin' then fourierCoeff g Y else 0 := by
+  classical
+  have hcard : (Fintype.card (BinaryMatrix n d) : ℝ) ≠ 0 := by
+    exact_mod_cast (Fintype.card_ne_zero : Fintype.card (BinaryMatrix n d) ≠ 0)
+  have horth : ∀ Z : BinaryMatrix n d,
+      (∑ M : BinaryMatrix n d, character Z M * character Y M) =
+        (if Y = Z then (1 : ℝ) else 0) *
+          (Fintype.card (BinaryMatrix n d) : ℝ) := by
+    intro Z
+    have ho := character_orthogonality Y Z
+    unfold uniformMean at ho
+    have hcomm : (∑ M : BinaryMatrix n d, character Y M * character Z M) =
+        ∑ M : BinaryMatrix n d, character Z M * character Y M := by
+      apply Finset.sum_congr rfl
+      intro M _
+      ring
+    rw [hcomm] at ho
+    exact (div_eq_iff hcard).mp ho
+  change uniformMean (fun M => ambientHybridFilter A B g M * character Y M) =
+    if Selected A B Y.transpose.toLin' then fourierCoeff g Y else 0
+  unfold uniformMean ambientHybridFilter
+  have hnum :
+      (∑ M : BinaryMatrix n d,
+        (∑ Z : BinaryMatrix n d,
+          if Selected A B Z.transpose.toLin' then
+            fourierCoeff g Z * character Z M else 0) * character Y M) =
+        (if Selected A B Y.transpose.toLin' then fourierCoeff g Y else 0) *
+          (Fintype.card (BinaryMatrix n d) : ℝ) := by
+    have hcomm :
+        (∑ M : BinaryMatrix n d,
+          (∑ Z : BinaryMatrix n d,
+            if Selected A B Z.transpose.toLin' then
+              fourierCoeff g Z * character Z M else 0) * character Y M) =
+          ∑ Z : BinaryMatrix n d,
+            ∑ M : BinaryMatrix n d,
+              (if Selected A B Z.transpose.toLin' then
+                fourierCoeff g Z * character Z M else 0) * character Y M := by
+      simp_rw [Finset.sum_mul]
+      exact Finset.sum_comm
+    have hinner :
+        (∑ Z : BinaryMatrix n d,
+          ∑ M : BinaryMatrix n d,
+            (if Selected A B Z.transpose.toLin' then
+              fourierCoeff g Z * character Z M else 0) * character Y M) =
+          ∑ Z : BinaryMatrix n d,
+            if Selected A B Z.transpose.toLin' then
+              fourierCoeff g Z *
+                (∑ M : BinaryMatrix n d, character Z M * character Y M)
+            else 0 := by
+      refine Finset.sum_congr rfl ?_
+      intro Z _
+      by_cases hsel : Selected A B Z.transpose.toLin'
+      · simp only [if_pos hsel]
+        simp_rw [mul_assoc]
+        exact (Finset.mul_sum Finset.univ
+          (fun M => character Z M * character Y M) (fourierCoeff g Z)).symm
+      · simp only [if_neg hsel]
+        refine Finset.sum_eq_zero ?_
+        intro M _
+        exact zero_mul _
+    rw [hcomm, hinner]
+    have hsingle :
+        (∑ Z : BinaryMatrix n d,
+          if Selected A B Z.transpose.toLin' then
+            fourierCoeff g Z *
+              (∑ M : BinaryMatrix n d, character Z M * character Y M)
+          else 0) =
+          if Selected A B Y.transpose.toLin' then
+            fourierCoeff g Y *
+              (∑ M : BinaryMatrix n d, character Y M * character Y M)
+          else 0 := by
+      refine Finset.sum_eq_single Y ?_ ?_
+      · intro Z _ hne
+        by_cases hsel : Selected A B Z.transpose.toLin'
+        · rw [if_pos hsel, horth Z, if_neg (Ne.symm hne)]
+          simp
+        · rw [if_neg hsel]
+      · intro hmiss
+        exact absurd (Finset.mem_univ Y) hmiss
+    rw [hsingle]
+    by_cases hsel : Selected A B Y.transpose.toLin'
+    · rw [if_pos hsel, if_pos hsel, horth Y, if_pos rfl]
+      ring
+    · rw [if_neg hsel, if_neg hsel]
+      exact (zero_mul _).symm
+  rw [hnum]
+  exact mul_div_cancel_right₀ _ hcard
+
+/-- One ambient hybrid filter has `L2` energy at most the full energy,
+because it keeps a subset of the Fourier coefficients. This is one filter.
+`a7HybridQ` sums one square per subspace pair, so this does not remove the
+share hypothesis. -/
+theorem a7_ambient_hybrid_energy_le {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (g : BinaryMatrix n d → ℝ) :
+    uniformMean (fun M => (ambientHybridFilter A B g M) ^ 2) ≤
+      uniformMean (fun M => g M ^ 2) := by
+  classical
+  rw [fourier_parseval, fourier_parseval]
+  refine Finset.sum_le_sum ?_
+  intro Y _
+  rw [a7_ambient_hybrid_fourierCoeff]
+  by_cases hsel : Selected A B Y.transpose.toLin'
+  · simp [hsel]
+  · simp [hsel, sq_nonneg]
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
