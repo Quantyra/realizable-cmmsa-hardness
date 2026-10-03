@@ -1850,5 +1850,450 @@ theorem a7_saturated_pool_exponent_fits (D : Nat) (hD : 0 < D) :
     _ = (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
       rw [hadd, hnatR]
 
+/-- Move a pullback onto a named ambient carrier.
+The body is `Eq.rec`. Unfold it only after those equalities are `rfl`. -/
+def a7CarrierParent {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B)
+    (hC : t1AmbientC t.C = C) (hH : t1AmbientH t.K = H) :
+    H →ₗ[F] (V d ⧸ C) :=
+  hH ▸ hC ▸ t1PullbackMap t
+
+/-- The transported parent is heterogeneously equal to the original pullback. -/
+theorem a7_carrier_parent_spec {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B)
+    (hC : t1AmbientC t.C = C) (hH : t1AmbientH t.K = H) :
+    HEq (t1PullbackMap t) (a7CarrierParent C H t hC hH) := by
+  subst hC
+  subst hH
+  unfold a7CarrierParent
+  exact HEq.rfl
+
+/-- At mixed order `D`, the output fourth moment is the squared energy of the
+transported parent on the named carrier. -/
+theorem a7_carrier_parent_fourth {n d D : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B)
+    (hC : t1AmbientC t.C = C) (hH : t1AmbientH t.K = H)
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t = D) :
+    a7MixedOutputFourth t T f =
+      (typedW6OutputEnergy C H (a7CarrierParent C H t hC hH)
+        (filteredCarrierFunction C H T f)) ^ 2 := by
+  have hsq := a7_saturated_output_eq_energy_sq t T f hsupport horder
+  have hE := a7_output_energy_carrier_cast (t1AmbientC t.C) C
+    (t1AmbientH t.K) H hC hH (t1PullbackMap t)
+    (a7CarrierParent C H t hC hH) (a7_carrier_parent_spec C H t hC hH) T f
+  rw [hsq]
+  exact congrArg (fun x => x ^ 2) hE
+
+/-- Equal transported parents are one ordinary pair and one triple. -/
+theorem a7_carrier_parent_unique {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    {A A' : Submodule F (V d)} {B B' : Submodule F (W n)}
+    (t : T1IndexTriple A B) (s : T1IndexTriple A' B')
+    (hCt : t1AmbientC t.C = C) (hHt : t1AmbientH t.K = H)
+    (hCs : t1AmbientC s.C = C) (hHs : t1AmbientH s.K = H)
+    (hφ : a7CarrierParent C H t hCt hHt = a7CarrierParent C H s hCs hHs) :
+    A = A' ∧ B = B' ∧ HEq t s := by
+  have ht := a7_carrier_parent_spec C H t hCt hHt
+  have hs := a7_carrier_parent_spec C H s hCs hHs
+  have hpull : HEq (t1PullbackMap t) (t1PullbackMap s) :=
+    ht.trans ((heq_of_eq hφ).trans hs.symm)
+  exact a7_global_parent_unique t s (hCt.trans hCs.symm) (hHt.trans hHs.symm) hpull
+
+/-- Saturated output fourth moments from every ordinary pair, at one base and
+one ambient carrier, inject into that carrier's parent-energy pool. Orders
+below `D` are not included. -/
+theorem a7_saturated_carrier_all_pairs_output_sum_le {n d D : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if a6Order t = D ∧ t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+          a7MixedOutputFourth t T f
+        else 0) ≤
+      ∑ Z : H →ₗ[F] (V d ⧸ C),
+        (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)) ^ 2 := by
+  classical
+  let S := Σ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+    T1IndexTriple p.1.1 p.1.2
+  let pred : S → Prop := fun u =>
+    a6Order u.2 = D ∧ t1AmbientC u.2.C = C ∧ t1AmbientH u.2.K = H
+  let ts : Finset S := Finset.univ.filter pred
+  have hcond : ∀ w : {u : S // u ∈ ts}, pred w.1 :=
+    fun w => (Finset.mem_filter.mp w.2).2
+  let φ : {u : S // u ∈ ts} → (H →ₗ[F] (V d ⧸ C)) :=
+    fun w => a7CarrierParent C H w.1.2 (hcond w).2.1 (hcond w).2.2
+  let genergy : (H →ₗ[F] (V d ⧸ C)) → ℝ := fun Z =>
+    (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)) ^ 2
+  have hinj : Function.Injective φ := by
+    intro w1 w2 hφ
+    have huniq := a7_carrier_parent_unique C H w1.1.2 w2.1.2
+      (hcond w1).2.1 (hcond w1).2.2 (hcond w2).2.1 (hcond w2).2.2 hφ
+    apply Subtype.ext
+    have hp : w1.1.1 = w2.1.1 := Subtype.ext (Prod.ext huniq.1 huniq.2.1)
+    cases w1 with
+    | mk u1 hu1 =>
+      cases w2 with
+      | mk u2 hu2 =>
+        cases u1 with
+        | mk p1 t1 =>
+          cases u2 with
+          | mk p2 t2 =>
+            subst hp
+            have ht : t1 = t2 := eq_of_heq huniq.2.2
+            subst ht
+            rfl
+  have hterm : ∀ w : {u : S // u ∈ ts},
+      a7MixedOutputFourth w.1.2 T f = genergy (φ w) := by
+    intro w
+    exact a7_carrier_parent_fourth C H w.1.2 (hcond w).2.1 (hcond w).2.2
+      T f hsupport (hcond w).1
+  have hsumφ : (∑ w ∈ ts.attach, a7MixedOutputFourth w.1.2 T f) =
+      ∑ w ∈ ts.attach, genergy (φ w) :=
+    Finset.sum_congr rfl (fun w _ => hterm w)
+  have himage : (∑ Z ∈ ts.attach.image φ, genergy Z) =
+      ∑ w ∈ ts.attach, genergy (φ w) :=
+    Finset.sum_image (f := genergy) (hinj.injOn (s := (ts.attach : Set _)))
+  have hrest : (∑ Z ∈ ts.attach.image φ, genergy Z) ≤ ∑ Z, genergy Z :=
+    Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ _)
+      (fun Z _ _ => sq_nonneg
+        (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)))
+  have hfilter : (∑ u ∈ ts, a7MixedOutputFourth u.2 T f) =
+      ∑ u : S, if pred u then a7MixedOutputFourth u.2 T f else 0 :=
+    Finset.sum_filter (s := (Finset.univ : Finset S))
+      (f := fun u => a7MixedOutputFourth u.2 T f) pred
+  have hsig :
+      ((Finset.univ : Finset (dr6ActualNonzeroABPairs (n := n) (d := d))).sigma
+        (fun _ => Finset.univ)) = (Finset.univ : Finset S) := by
+    ext u
+    simp
+  have hsigma :
+      (∑ u : S, if pred u then a7MixedOutputFourth u.2 T f else 0) =
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if pred ⟨p, t⟩ then a7MixedOutputFourth t T f else 0 := by
+    have hsumσ := Finset.sum_sigma
+      (s := (Finset.univ : Finset (dr6ActualNonzeroABPairs (n := n) (d := d))))
+      (t := fun _ => (Finset.univ : Finset (T1IndexTriple _ _)))
+      (f := fun u : S => if pred u then a7MixedOutputFourth u.2 T f else 0)
+    rw [hsig] at hsumσ
+    exact hsumσ
+  have hattach : (∑ u ∈ ts, a7MixedOutputFourth u.2 T f) =
+      ∑ w ∈ ts.attach, a7MixedOutputFourth w.1.2 T f :=
+    (Finset.sum_attach (s := ts) (f := fun u => a7MixedOutputFourth u.2 T f)).symm
+  calc
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if a6Order t = D ∧ t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+            a7MixedOutputFourth t T f else 0)
+        = ∑ w ∈ ts.attach, a7MixedOutputFourth w.1.2 T f := by
+          have hpred : ∀ p t, pred ⟨p, t⟩ =
+              (a6Order t = D ∧ t1AmbientC t.C = C ∧ t1AmbientH t.K = H) := by
+            intro p t
+            rfl
+          rw [← hsigma, ← hfilter, hattach]
+    _ = ∑ w ∈ ts.attach, genergy (φ w) := hsumφ
+    _ = ∑ Z ∈ ts.attach.image φ, genergy Z := himage.symm
+    _ ≤ ∑ Z, genergy Z := hrest
+
+/-- Saturated fourth moments from every ordinary pair, on one ambient carrier,
+sum to at most the W6 pool factor times that carrier's pair share. -/
+theorem a7_saturated_carrier_all_pairs_fourth_sum_le {n d D : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if a6Order t = D ∧ t1AmbientC t.C = C ∧ t1AmbientH t.K = H then
+          a6DerivativeFourth p.1.1 p.1.2 t f
+        else 0) ≤
+      (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare C H f := by
+  classical
+  let card : ℝ := Fintype.card (V d →ₗ[F] W n)
+  let cond : (p : dr6ActualNonzeroABPairs (n := n) (d := d)) →
+      T1IndexTriple p.1.1 p.1.2 → Prop :=
+    fun _ t => a6Order t = D ∧ t1AmbientC t.C = C ∧ t1AmbientH t.K = H
+  have hT : ∀ T : V d →ₗ[F] W n,
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if cond p t then a7MixedOutputFourth t T f else 0) ≤
+        (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent C H T f := by
+    intro T
+    exact le_trans
+      (a7_saturated_carrier_all_pairs_output_sum_le C H T f hsupport)
+      (a7_carrier_energy_sq_sum_le C H T f hsupport)
+  have hif : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+      (t : T1IndexTriple p.1.1 p.1.2),
+      (if cond p t then
+        (∑ T : V d →ₗ[F] W n, a7MixedOutputFourth t T f) / card else 0) =
+        (∑ T : V d →ₗ[F] W n,
+          if cond p t then a7MixedOutputFourth t T f else 0) / card := by
+    intro p t
+    by_cases hc : cond p t
+    · simp [hc]
+    · simp [hc]
+  calc
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if cond p t then a6DerivativeFourth p.1.1 p.1.2 t f else 0)
+        = ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+            ∑ t : T1IndexTriple p.1.1 p.1.2,
+              if cond p t then
+                (∑ T : V d →ₗ[F] W n, a7MixedOutputFourth t T f) / card
+              else 0 := by
+          refine Finset.sum_congr rfl ?_
+          intro p _
+          refine Finset.sum_congr rfl ?_
+          intro t _
+          by_cases hc : cond p t
+          · rw [if_pos hc, if_pos hc, a7_mixed_fourth_output]
+            rfl
+          · rw [if_neg hc, if_neg hc]
+    _ = ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          (∑ t : T1IndexTriple p.1.1 p.1.2,
+            ∑ T : V d →ₗ[F] W n,
+              if cond p t then a7MixedOutputFourth t T f else 0) / card := by
+          refine Finset.sum_congr rfl ?_
+          intro p _
+          rw [Finset.sum_congr rfl (fun t _ => hif p t), Finset.sum_div]
+    _ = (∑ T : V d →ₗ[F] W n,
+          ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+            ∑ t : T1IndexTriple p.1.1 p.1.2,
+              if cond p t then a7MixedOutputFourth t T f else 0) / card := by
+          have hinner : ∀ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+              (∑ t : T1IndexTriple p.1.1 p.1.2,
+                ∑ T : V d →ₗ[F] W n,
+                  if cond p t then a7MixedOutputFourth t T f else 0) =
+                ∑ T : V d →ₗ[F] W n,
+                  ∑ t : T1IndexTriple p.1.1 p.1.2,
+                    if cond p t then a7MixedOutputFourth t T f else 0 :=
+            fun p => Finset.sum_comm
+          have houter :
+              (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+                ∑ t : T1IndexTriple p.1.1 p.1.2,
+                  ∑ T : V d →ₗ[F] W n,
+                    if cond p t then a7MixedOutputFourth t T f else 0) =
+                ∑ T : V d →ₗ[F] W n,
+                  ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+                    ∑ t : T1IndexTriple p.1.1 p.1.2,
+                      if cond p t then a7MixedOutputFourth t T f else 0 := by
+            rw [Finset.sum_congr rfl (fun p _ => hinner p)]
+            exact Finset.sum_comm
+          calc
+            (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+                (∑ t : T1IndexTriple p.1.1 p.1.2,
+                  ∑ T : V d →ₗ[F] W n,
+                    if cond p t then a7MixedOutputFourth t T f else 0) / card) =
+                (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+                  ∑ t : T1IndexTriple p.1.1 p.1.2,
+                    ∑ T : V d →ₗ[F] W n,
+                      if cond p t then a7MixedOutputFourth t T f else 0) / card := by
+                  rw [← Finset.sum_div]
+            _ = (∑ T : V d →ₗ[F] W n,
+                  ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+                    ∑ t : T1IndexTriple p.1.1 p.1.2,
+                      if cond p t then a7MixedOutputFourth t T f else 0) / card :=
+                congrArg (fun s => s / card) houter
+    _ ≤ (∑ T : V d →ₗ[F] W n,
+          (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent C H T f) / card := by
+          refine div_le_div_of_nonneg_right ?_ (Nat.cast_nonneg _)
+          refine Finset.sum_le_sum ?_
+          intro T _
+          exact hT T
+    _ = (2 : ℝ) ^ (6 * D * D + 1) *
+          ((∑ T : V d →ₗ[F] W n, typedW6QComponent C H T f) / card) := by
+          rw [← Finset.mul_sum, mul_div_assoc]
+    _ = (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare C H f := by
+          rw [a7PairShare, typedUniformMean]
+
+/-- Order-`D` fourth moments from every ordinary pair sum to at most the W6
+pool factor times unweighted `Q`. Each carrier is charged once. Orders below
+`D` are not in this sum. -/
+theorem a7_saturated_all_pairs_fourth_sum_le {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if a6Order t = D then a6DerivativeFourth p.1.1 p.1.2 t f else 0) ≤
+      (2 : ℝ) ^ (6 * D * D + 1) * a7HybridQ f := by
+  classical
+  let Qpair := Submodule F (V d) × Submodule F (W n)
+  have hcarrier : ∀ q : Qpair,
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if a6Order t = D ∧ t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+            a6DerivativeFourth p.1.1 p.1.2 t f else 0) ≤
+        (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare q.1 q.2 f :=
+    fun q => a7_saturated_carrier_all_pairs_fourth_sum_le q.1 q.2 f hsupport
+  have hsumq :
+      (∑ q : Qpair,
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if a6Order t = D ∧ t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+              a6DerivativeFourth p.1.1 p.1.2 t f else 0) ≤
+        (2 : ℝ) ^ (6 * D * D + 1) *
+          ∑ q : Qpair, a7PairShare q.1 q.2 f := by
+    calc
+      _ ≤ ∑ q : Qpair, (2 : ℝ) ^ (6 * D * D + 1) * a7PairShare q.1 q.2 f :=
+        Finset.sum_le_sum (fun q _ => hcarrier q)
+      _ = (2 : ℝ) ^ (6 * D * D + 1) * ∑ q : Qpair, a7PairShare q.1 q.2 f := by
+        rw [← Finset.mul_sum]
+  have hsingle : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+      (t : T1IndexTriple p.1.1 p.1.2),
+      (∑ q : Qpair,
+        if a6Order t = D ∧ t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+          a6DerivativeFourth p.1.1 p.1.2 t f else 0) =
+        if a6Order t = D then a6DerivativeFourth p.1.1 p.1.2 t f else 0 := by
+    intro p t
+    let q0 : Qpair := ⟨t1AmbientC t.C, t1AmbientH t.K⟩
+    have hrest : ∀ q ∈ Finset.univ, q ≠ q0 →
+        (if a6Order t = D ∧ t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+          a6DerivativeFourth p.1.1 p.1.2 t f else 0) = 0 := by
+      intro q _ hne
+      have hneg :
+          ¬ (a6Order t = D ∧ t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2) := by
+        intro h
+        exact hne (Prod.ext h.2.1.symm h.2.2.symm)
+      simp [hneg]
+    have hsum := Finset.sum_eq_single (s := Finset.univ) q0
+      (f := fun q : Qpair =>
+        if a6Order t = D ∧ t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+          a6DerivativeFourth p.1.1 p.1.2 t f else 0)
+      hrest (fun h => absurd (Finset.mem_univ q0) h)
+    have hq0 :
+        (if a6Order t = D ∧ t1AmbientC t.C = q0.1 ∧ t1AmbientH t.K = q0.2 then
+          a6DerivativeFourth p.1.1 p.1.2 t f else 0) =
+          if a6Order t = D then a6DerivativeFourth p.1.1 p.1.2 t f else 0 := by
+      simp [q0]
+    rw [hsum, hq0]
+  have hgroup :
+      (∑ q : Qpair,
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if a6Order t = D ∧ t1AmbientC t.C = q.1 ∧ t1AmbientH t.K = q.2 then
+              a6DerivativeFourth p.1.1 p.1.2 t f else 0) =
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if a6Order t = D then a6DerivativeFourth p.1.1 p.1.2 t f else 0 := by
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl ?_
+    intro p _
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl ?_
+    intro t _
+    exact hsingle p t
+  have hexh := a7_pair_shares_exhaust f
+  have hscaled := hsumq
+  rw [hgroup] at hscaled
+  rw [hexh] at hscaled
+  exact hscaled
+
+/-- The order-`D` part of the mixed sum is at most the terminal allowance
+times unweighted `Q`. Orders strictly below `D` are not estimated here, so
+this does not discharge `hS` when `D > 1`. -/
+theorem a7_saturated_weighted_all_pairs_le {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) (hD : 0 < D) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if a6Order t = D then
+          (2 : ℝ) ^ (24 * D * D) * a6DerivativeFourth p.1.1 p.1.2 t f
+        else 0) ≤
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) * a7HybridQ f := by
+  classical
+  have hsum := a7_saturated_all_pairs_fourth_sum_le f hsupport
+  have hmul := mul_le_mul_of_nonneg_left hsum
+    (pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) (24 * D * D))
+  have hpull :
+      (2 : ℝ) ^ (24 * D * D) *
+        (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if a6Order t = D then a6DerivativeFourth p.1.1 p.1.2 t f else 0) =
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if a6Order t = D then
+              (2 : ℝ) ^ (24 * D * D) * a6DerivativeFourth p.1.1 p.1.2 t f
+            else 0 := by
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl ?_
+    intro p _
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl ?_
+    intro t _
+    by_cases hord : a6Order t = D
+    · simp [hord]
+    · simp [hord]
+  rw [hpull] at hmul
+  rw [← mul_assoc] at hmul
+  have hfac := mul_le_mul_of_nonneg_right
+    (a7_saturated_pool_exponent_fits D hD) (a7HybridQ_nonneg f)
+  exact le_trans hmul hfac
+
+/-- At degree one every positive mixed order is the saturated order or has
+fourth moment zero. The share hypothesis is not used. -/
+theorem a7_mixed_sum_degree_one {n d : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough 1 f) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if 0 < a6Order t then
+          (2 : ℝ) ^ (24 * 1 * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+        else 0) ≤
+      (2 : ℝ) ^ (100 * 1 * 1) * (2 : ℝ) ^ ((1 : ℤ) - 31 * 1) * a7HybridQ f := by
+  classical
+  have hsat := a7_saturated_weighted_all_pairs_le (D := 1) f hsupport Nat.one_pos
+  have hterm : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+      (t : T1IndexTriple p.1.1 p.1.2),
+      (if 0 < a6Order t then
+        (2 : ℝ) ^ (24 * 1 * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+      else 0) =
+        if a6Order t = 1 then
+          (2 : ℝ) ^ (24 * 1 * 1) * a6DerivativeFourth p.1.1 p.1.2 t f
+        else 0 := by
+    intro p t
+    by_cases h1 : a6Order t = 1
+    · simp [h1]
+    · by_cases hpos : 0 < a6Order t
+      · have hgt : 1 < a6Order t := by omega
+        have hzero := a7_derivative_fourth_zero_of_high t f hsupport hgt
+        simp [h1, hpos, hzero]
+      · simp [h1, hpos]
+  have heq :
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if 0 < a6Order t then
+            (2 : ℝ) ^ (24 * 1 * a6Order t) *
+              a6DerivativeFourth p.1.1 p.1.2 t f else 0) =
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if a6Order t = 1 then
+              (2 : ℝ) ^ (24 * 1 * 1) * a6DerivativeFourth p.1.1 p.1.2 t f
+            else 0 := by
+    refine Finset.sum_congr rfl ?_
+    intro p _
+    refine Finset.sum_congr rfl ?_
+    intro t _
+    exact hterm p t
+  rw [heq]
+  exact hsat
+
+/-- Degree-one fourth moment bound. This is not manuscript A7 for a general
+cutoff: orders strictly below a larger `D` are still open. -/
+theorem a7_degree_one_fourth_bound {n d : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough 1 f) :
+    uniformMean (fun M => Complex.normSq (f M) ^ 2) ≤
+      (2 : ℝ) ^ (100 * 1 * 1) * a7HybridQ f :=
+  a7_positive_of_mixed_bound f hsupport Nat.one_pos
+    (a7_mixed_sum_degree_one f hsupport)
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer

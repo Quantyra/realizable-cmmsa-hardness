@@ -47,6 +47,16 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_saturated_same_field_fourth_sum_le
 #check a7_saturated_carrier_fourth_sum_le
 #check a7_saturated_pool_exponent_fits
+#check a7CarrierParent
+#check a7_carrier_parent_spec
+#check a7_carrier_parent_fourth
+#check a7_carrier_parent_unique
+#check a7_saturated_carrier_all_pairs_output_sum_le
+#check a7_saturated_carrier_all_pairs_fourth_sum_le
+#check a7_saturated_all_pairs_fourth_sum_le
+#check a7_saturated_weighted_all_pairs_le
+#check a7_mixed_sum_degree_one
+#check a7_degree_one_fourth_bound
 
 #print axioms a7_constant_of_degree_zero
 #print axioms a7_q_eq_zero_order
@@ -88,3 +98,12 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_saturated_same_field_fourth_sum_le
 #print axioms a7_saturated_carrier_fourth_sum_le
 #print axioms a7_saturated_pool_exponent_fits
+#print axioms a7_carrier_parent_spec
+#print axioms a7_carrier_parent_fourth
+#print axioms a7_carrier_parent_unique
+#print axioms a7_saturated_carrier_all_pairs_output_sum_le
+#print axioms a7_saturated_carrier_all_pairs_fourth_sum_le
+#print axioms a7_saturated_all_pairs_fourth_sum_le
+#print axioms a7_saturated_weighted_all_pairs_le
+#print axioms a7_mixed_sum_degree_one
+#print axioms a7_degree_one_fourth_bound
