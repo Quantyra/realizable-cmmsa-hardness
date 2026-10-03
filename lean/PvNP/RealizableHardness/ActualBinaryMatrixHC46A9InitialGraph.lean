@@ -479,5 +479,152 @@ theorem a9_inducing_card {A B S : Type*} [AddCommGroup A] [Module F A]
   rw [Fintype.card_prod, a9_one_side_card i k a hA hS,
     a9_one_side_card j k b hB hS]
 
+/-- Kernel side of one final datum. The graph is a map out of the quotient,
+the opposite variance of `S → quotient`. Both sides have
+`2^{k * (dim E - i)}` maps. -/
+theorem a9_opposite_side_card {E S : Type*} [AddCommGroup E] [Module F E]
+    [Module.Free F E] [Module.Finite F E] [Fintype E]
+    [AddCommGroup S] [Module F S] [Module.Free F S] [Module.Finite F S]
+    [Fintype S] (i k a : Nat)
+    (hE : Module.finrank F E = a) (hS : Module.finrank F S = k) :
+    Fintype.card (Σ U : W6Grass E i, (E ⧸ U.1) →ₗ[F] S) =
+      w6Gaussian a i * 2 ^ (k * (a - i)) := by
+  classical
+  have hquot : ∀ U : W6Grass E i,
+      Fintype.card ((E ⧸ U.1) →ₗ[F] S) = 2 ^ (k * (a - i)) := by
+    intro U
+    haveI : Module.Finite F (E ⧸ U.1) := inferInstance
+    haveI : Module.Free F (E ⧸ U.1) :=
+      Module.Free.of_basis (Module.finBasis F (E ⧸ U.1))
+    rw [Module.card_eq_pow_finrank (K := F) (V := (E ⧸ U.1) →ₗ[F] S),
+      Module.finrank_linearMap, ZMod.card]
+    have hdim : Module.finrank F (E ⧸ U.1) = a - i := by
+      have hsum := U.1.finrank_quotient_add_finrank
+      rw [U.2, hE] at hsum
+      simpa [Nat.add_sub_cancel] using congrArg (fun n => n - i) hsum
+    have hexp : (a - i) * k = k * (a - i) := Nat.mul_comm _ _
+    rw [hdim, hS, hexp]
+  rw [Fintype.card_sigma]
+  simp_rw [hquot, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  rw [w6_card_grass, hE]
+  simp
+
+/-- One initial graph datum inducing a fixed final rank-`k` space.
+`A0` has dimension `i` inside the final carrier `A`, and `imGraph` maps the
+rank-`k` space into `A/A0`. `B0` has dimension `j` inside the final carrier
+`B`, and `kerGraph` maps `B/B0` into the rank-`k` space. -/
+structure A9InitialDatum (A B S : Type*) [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S] (i j : Nat) where
+  A0 : W6Grass A i
+  B0 : W6Grass B j
+  imGraph : S →ₗ[F] (A ⧸ A0.1)
+  kerGraph : (B ⧸ B0.1) →ₗ[F] S
+
+/-- The datum is the image Grassmannian graph times the kernel Grassmannian
+graph. -/
+def a9InitialDatumEquiv {A B S : Type*} [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S] (i j : Nat) :
+    A9InitialDatum A B S i j ≃
+      ((Σ U : W6Grass A i, S →ₗ[F] (A ⧸ U.1)) ×
+        (Σ V : W6Grass B j, (B ⧸ V.1) →ₗ[F] S)) where
+  toFun d := (⟨d.A0, d.imGraph⟩, ⟨d.B0, d.kerGraph⟩)
+  invFun p := ⟨p.1.1, p.2.1, p.1.2, p.2.2⟩
+  left_inv := by
+    intro d
+    cases d
+    rfl
+  right_inv := by
+    intro p
+    rcases p with ⟨⟨U, imGraph⟩, ⟨V, kerGraph⟩⟩
+    rfl
+
+noncomputable instance a9InitialDatumFintype {A B S : Type*}
+    [AddCommGroup A] [Module F A] [Fintype A]
+    [AddCommGroup B] [Module F B] [Fintype B]
+    [AddCommGroup S] [Module F S] [Fintype S] (i j : Nat) :
+    Fintype (A9InitialDatum A B S i j) :=
+  Fintype.ofEquiv
+    ((Σ U : W6Grass A i, S →ₗ[F] (A ⧸ U.1)) ×
+      (Σ V : W6Grass B j, (B ⧸ V.1) →ₗ[F] S))
+    (a9InitialDatumEquiv (A := A) (B := B) (S := S) i j).symm
+
+/-- Cardinality of the initial datum. The kernel factor equals the counted
+`S → quotient` factor by `a9_opposite_side_card`. -/
+theorem a9_initial_datum_card {A B S : Type*} [AddCommGroup A] [Module F A]
+    [Module.Free F A] [Module.Finite F A] [Fintype A]
+    [AddCommGroup B] [Module F B] [Module.Free F B] [Module.Finite F B]
+    [Fintype B] [AddCommGroup S] [Module F S] [Module.Free F S]
+    [Module.Finite F S] [Fintype S]
+    (i j k a b : Nat)
+    (hA : Module.finrank F A = a) (hB : Module.finrank F B = b)
+    (hS : Module.finrank F S = k) :
+    Fintype.card (A9InitialDatum A B S i j) =
+      w6Gaussian a i * 2 ^ (k * (a - i)) *
+        (w6Gaussian b j * 2 ^ (k * (b - j))) := by
+  classical
+  rw [Fintype.card_congr (a9InitialDatumEquiv (A := A) (B := B) (S := S) i j),
+    Fintype.card_prod, a9_one_side_card i k a hA hS,
+    a9_opposite_side_card j k b hB hS]
+
+/-- Project along the kernel graph and lift the image graph. -/
+def a9InitialMap {A B S : Type*} [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S]
+    {i j : Nat} (d : A9InitialDatum A B S i j) :
+    (S × (B ⧸ d.B0.1)) →ₗ[F] (S × (A ⧸ d.A0.1)) :=
+  a9Determined d.kerGraph d.imGraph
+
+theorem a9InitialMap_rank {A B S : Type*} [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S]
+    [Module.Finite F S] {i j : Nat} (d : A9InitialDatum A B S i j) :
+    Module.finrank F (LinearMap.range (a9InitialMap d)) = Module.finrank F S :=
+  a9Determined_rank d.kerGraph d.imGraph
+
+/-- Reading the image coordinate at `(s, 0)` recovers `imGraph`. -/
+theorem a9InitialMap_extract_im {A B S : Type*} [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S]
+    {i j : Nat} (d : A9InitialDatum A B S i j) (s : S) :
+    (a9InitialMap d (s, 0)).2 = d.imGraph s := by
+  simpa [a9InitialMap] using congrArg Prod.snd (a9Determined_inl d.kerGraph d.imGraph s)
+
+/-- Reading the kernel coordinate at `(0, q)` recovers `kerGraph`. -/
+theorem a9InitialMap_extract_ker {A B S : Type*} [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S]
+    {i j : Nat} (d : A9InitialDatum A B S i j) (q : B ⧸ d.B0.1) :
+    (a9InitialMap d (0, q)).1 = d.kerGraph q := by
+  simpa [a9InitialMap] using a9Determined_inr_fst d.kerGraph d.imGraph q
+
+/-- On one fixed subspace pair, the project-then-lift map determines both
+graphs. -/
+theorem a9InitialMap_graphs_inverse {A B S : Type*} [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S]
+    {i j : Nat} (U : W6Grass A i) (V : W6Grass B j)
+    (im₁ im₂ : S →ₗ[F] (A ⧸ U.1))
+    (ker₁ ker₂ : (B ⧸ V.1) →ₗ[F] S)
+    (h : a9Determined ker₁ im₁ = a9Determined ker₂ im₂) :
+    ker₁ = ker₂ ∧ im₁ = im₂ :=
+  a9Determined_injective ker₁ ker₂ im₁ im₂ h
+
+/-- The project-then-lift map, packaged as an indexed triple on the product
+of the rank-`k` space with the two quotients. `K` is the range. -/
+noncomputable def a9IndexedOfMap {D C : Type*} [AddCommGroup D] [Module F D]
+    [AddCommGroup C] [Module F C] (theta : D →ₗ[F] C) : A9IndexedTriple D C where
+  C := LinearMap.ker theta
+  K := LinearMap.range theta
+  xbar := theta.quotKerEquivRange.symm
+
+noncomputable def a9InitialIndexed {A B S : Type*} [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S]
+    {i j : Nat} (d : A9InitialDatum A B S i j) :
+    A9IndexedTriple (S × (B ⧸ d.B0.1)) (S × (A ⧸ d.A0.1)) :=
+  a9IndexedOfMap (a9InitialMap d)
+
+/-- `K` is the range of the project-then-lift map, whose rank is
+`a9InitialMap_rank`. Rewriting that equality under `finrank` does not
+typecheck, so the rank statement stays on the map. -/
+theorem a9InitialIndexed_K {A B S : Type*} [AddCommGroup A] [Module F A]
+    [AddCommGroup B] [Module F B] [AddCommGroup S] [Module F S]
+    {i j : Nat} (d : A9InitialDatum A B S i j) :
+    (a9InitialIndexed d).K = LinearMap.range (a9InitialMap d) := rfl
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph

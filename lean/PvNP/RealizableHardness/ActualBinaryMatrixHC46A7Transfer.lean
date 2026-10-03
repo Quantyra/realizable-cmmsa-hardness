@@ -3578,6 +3578,47 @@ theorem a9_fiber_graph_cost_le
     _ = (2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t) := by ring
     _ ≤ (2 : ℝ) ^ (9 * D * t) := hroom
 
+/-- The general-subspace initial datum has the same cardinality as the
+counted same-variance fiber, so the proved multiplicity applies. The kernel
+graph runs out of the quotient. This does not remove the share hypothesis. -/
+theorem a9_initial_datum_multiplicity_le
+    {A B S : Type*} [AddCommGroup A] [Module F A]
+    [Module.Free F A] [Module.Finite F A] [Fintype A]
+    [AddCommGroup B] [Module F B] [Module.Free F B] [Module.Finite F B]
+    [Fintype B]
+    [AddCommGroup S] [Module F S] [Module.Free F S] [Module.Finite F S]
+    [Fintype S]
+    (D i j k a b : Nat)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a) (hB : Module.finrank F B = b)
+    (hS : Module.finrank F S = k) :
+    Fintype.card (A9InitialDatum A B S i j) ≤ 2 ^ (3 * D * (i + j + k)) := by
+  have hdatum := a9_initial_datum_card i j k a b hA hB hS
+  have hfiber := a9_fiber_multiplicity_le D i j k a b hfin hi hj hA hB hS
+  rw [a9_inducing_card i j k a b hA hB hS] at hfiber
+  rwa [hdatum]
+
+/-- Graph cost of the general-subspace datum is the proved fiber cost. -/
+theorem a9_initial_datum_graph_cost_le
+    {A B S : Type*} [AddCommGroup A] [Module F A]
+    [Module.Free F A] [Module.Finite F A] [Fintype A]
+    [AddCommGroup B] [Module F B] [Module.Free F B] [Module.Finite F B]
+    [Fintype B]
+    [AddCommGroup S] [Module F S] [Module.Free F S] [Module.Finite F S]
+    [Fintype S]
+    (D i j k a b : Nat)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a) (hB : Module.finrank F B = b)
+    (hS : Module.finrank F S = k) :
+    (Fintype.card (A9InitialDatum A B S i j) : ℝ) * (2 : ℝ) ^ (6 * D * k) ≤
+      (2 : ℝ) ^ (9 * D * (i + j + k)) := by
+  have hdatum := a9_initial_datum_card i j k a b hA hB hS
+  have hcost := a9_fiber_graph_cost_le D i j k a b hfin hi hj hA hB hS
+  have hfiber := a9_inducing_card i j k a b hA hB hS
+  rw [hdatum]
+  rw [hfiber] at hcost
+  exact hcost
+
 /-- The zero-order summand of one output `Q` injects into that triple's
 original hybrid component. The factor `2^{4k(D-t)}` fits in the fiber room
 `2^{9Dt}` because `k ≤ t`. Positive-order summands of the output `Q` are
