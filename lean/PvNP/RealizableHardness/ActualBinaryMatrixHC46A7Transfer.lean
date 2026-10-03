@@ -4599,6 +4599,43 @@ theorem a7_character_conj {n d : Nat}
   have h := a7_pairing_conj P Q Z X
   simp [character, h]
 
+/-- Rectangular row and column factors obey the same trace identity. -/
+theorem a7_pairing_conj_rect {n n' d d' : Nat}
+    (P : Matrix (Fin n) (Fin n') F) (Q : Matrix (Fin d') (Fin d) F)
+    (Z : BinaryMatrix n d) (X : BinaryMatrix n' d') :
+    pairing Z (P * X * Q) = pairing (P.transpose * Z * Q.transpose) X := by
+  rw [a7_pairing_trace, a7_pairing_trace]
+  have hright : (P.transpose * Z * Q.transpose).transpose * X =
+      Q * Z.transpose * P * X := by
+    simp [Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.mul_assoc]
+  rw [hright]
+  have hleft : Z.transpose * (P * X * Q) = Z.transpose * P * X * Q := by
+    simp [Matrix.mul_assoc]
+  rw [hleft]
+  have hcycle : (Z.transpose * P * X * Q).trace =
+      (Q * (Z.transpose * P * X)).trace := by
+    simpa [Matrix.mul_assoc] using
+      (Matrix.trace_mul_comm (Z.transpose * P * X) Q)
+  rw [hcycle]
+  simp [Matrix.mul_assoc]
+
+theorem a7_character_conj_rect {n n' d d' : Nat}
+    (P : Matrix (Fin n) (Fin n') F) (Q : Matrix (Fin d') (Fin d) F)
+    (Z : BinaryMatrix n d) :
+    (fun X : BinaryMatrix n' d' => (character Z (P * X * Q) : ℂ)) =
+      fun X => (character (P.transpose * Z * Q.transpose) X : ℂ) := by
+  funext X
+  have h := a7_pairing_conj_rect P Q Z X
+  simp [character, h]
+
+/-- Matrix rank is the dimension of the image of the transposed standard map. -/
+theorem a7_transpose_finrank {n d : Nat} (Y : BinaryMatrix n d) :
+    Module.finrank F (LinearMap.range Y.transpose.toLin') = Y.rank := by
+  rw [← Matrix.rank_transpose]
+  rw [Matrix.rank_eq_finrank_range_toLin Y.transpose
+    (Pi.basisFun F _) (Pi.basisFun F _)]
+  rw [Matrix.toLin_eq_toLin']
+
 /-- The mixed coordinate of the order-one character is the rank-38 quotient
 character. This is the carrier reading, before the zero-parent derivative. -/
 theorem a7OrderOne_mixed_character :
@@ -4623,6 +4660,201 @@ theorem a7OrderOne_mixed_character :
     ((carrierMatrixEquiv (t1AmbientC a7OrderOneTriple.C)
       (t1AmbientH a7OrderOneTriple.K)).symm K)
   simp [traceCharacter, character, htrace]
+
+/-- The zero parent's transpose is the zero map, so its kernel is the whole
+output coordinate space. -/
+theorem a7OrderOne_output_ker :
+    LinearMap.ker (a7MixedCoordinateParent a7OrderOneTriple).transpose.toLin' = ⊤ := by
+  rw [a7OrderOne_parent]
+  refine le_antisymm le_top ?_
+  intro w _
+  rw [LinearMap.mem_ker]
+  simp [Matrix.transpose_zero]
+
+/-- The zero parent's transpose is the zero map, so its range is zero. -/
+theorem a7OrderOne_output_range :
+    LinearMap.range (a7MixedCoordinateParent a7OrderOneTriple).transpose.toLin' = ⊥ := by
+  rw [a7OrderOne_parent]
+  rw [LinearMap.range_eq_bot]
+  ext w
+  simp [Matrix.transpose_zero]
+
+abbrev a7OrderCout :=
+  LinearMap.range (a7MixedCoordinateParent a7OrderOneTriple).transpose.toLin'
+
+abbrev a7OrderHout :=
+  LinearMap.ker (a7MixedCoordinateParent a7OrderOneTriple).transpose.toLin'
+
+theorem a7OrderCout_bot : a7OrderCout = ⊥ := by
+  unfold a7OrderCout
+  exact a7OrderOne_output_range
+
+theorem a7OrderHout_top : a7OrderHout = ⊤ := by
+  unfold a7OrderHout
+  exact a7OrderOne_output_ker
+
+/-- The zero parent makes the output the mixed character read on the standard
+matrix of the derivative carrier. -/
+theorem a7OrderOne_output_eval :
+    a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char =
+      fun X =>
+        a7MixedCoordinate a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char
+          (LinearMap.toMatrix'
+            (a7OrderHout.subtype.comp
+              (((carrierMatrixEquiv a7OrderCout a7OrderHout).symm X).comp
+                a7OrderCout.mkQ))) := by
+  funext X
+  simp only [a7OutputBinary]
+  unfold actualW6Derivative complexAmbientAffineRestrict
+  have hfilter :
+      w6PredecessorFilter (a7MixedCoordinateParent a7OrderOneTriple)
+        (a7MixedCoordinate a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) =
+      a7MixedCoordinate a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char := by
+    rw [a7OrderOne_parent]
+    exact a7_zero_filter _
+  rw [hfilter]
+  simp only [zero_add]
+
+def a7OrderIsoL :=
+  a7OrderHout.subtype.comp (codomainBasis a7OrderHout).equivFun.symm.toLinearMap
+
+def a7OrderIsoR :=
+  (domainBasis a7OrderCout).equivFun.toLinearMap.comp a7OrderCout.mkQ
+
+/-- The rank-38 quotient character, conjugated onto the zero-parent output
+coordinates. The factors are the fixed bases of that output carrier. -/
+def a7OrderOneOutputMatrix :=
+  (LinearMap.toMatrix' a7OrderIsoL).transpose * a7OrderMatrix *
+    (LinearMap.toMatrix' a7OrderIsoR).transpose
+
+/-- The order-one output is the character of that conjugated matrix. -/
+theorem a7OrderOne_output_character :
+    a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char =
+      fun X => (character a7OrderOneOutputMatrix X : ℂ) := by
+  funext X
+  rw [congrFun a7OrderOne_output_eval X, a7OrderOne_mixed_character]
+  let M := (carrierMatrixEquiv a7OrderCout a7OrderHout).symm X
+  have hlin := carrierMatrix_toLin a7OrderCout a7OrderHout M
+  have hXM : carrierMatrixEquiv a7OrderCout a7OrderHout M = X :=
+    (carrierMatrixEquiv a7OrderCout a7OrderHout).apply_symm_apply X
+  rw [hXM] at hlin
+  have hM : M =
+      (codomainBasis a7OrderHout).equivFun.symm.toLinearMap.comp
+        (X.toLin'.comp (domainBasis a7OrderCout).equivFun.toLinearMap) := by
+    refine LinearMap.ext ?_
+    intro v
+    have hpt := congrFun (congrArg DFunLike.coe hlin)
+      ((domainBasis a7OrderCout).equivFun v)
+    simp only [LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+      LinearEquiv.symm_apply_apply] at hpt
+    exact ((LinearEquiv.symm_apply_eq
+      ((codomainBasis a7OrderHout).equivFun)).mpr hpt).symm
+  have hmap : a7OrderHout.subtype.comp (M.comp a7OrderCout.mkQ) =
+      a7OrderIsoL.comp (X.toLin'.comp a7OrderIsoR) := by
+    rw [hM]
+    refine LinearMap.ext ?_
+    intro v
+    simp only [a7OrderIsoL, a7OrderIsoR, LinearMap.comp_apply,
+      LinearEquiv.coe_toLinearMap]
+  have hmat : LinearMap.toMatrix'
+      (a7OrderHout.subtype.comp
+        (((carrierMatrixEquiv a7OrderCout a7OrderHout).symm X).comp
+          a7OrderCout.mkQ)) =
+      LinearMap.toMatrix' a7OrderIsoL * X * LinearMap.toMatrix' a7OrderIsoR := by
+    have hMeq : (carrierMatrixEquiv a7OrderCout a7OrderHout).symm X = M := rfl
+    rw [hMeq, hmap]
+    rw [LinearMap.toMatrix'_comp]
+    rw [LinearMap.toMatrix'_comp]
+    rw [LinearMap.toMatrix'_toLin']
+    rw [← Matrix.mul_assoc]
+  rw [hmat]
+  unfold a7OrderOneOutputMatrix
+  exact congrFun (a7_character_conj_rect (LinearMap.toMatrix' a7OrderIsoL)
+    (LinearMap.toMatrix' a7OrderIsoR) a7OrderMatrix) X
+
+/-- Conjugation by the output-carrier bases preserves rank 38. -/
+theorem a7OrderOneOutputMatrix_rank :
+    Module.finrank F (LinearMap.range a7OrderOneOutputMatrix.transpose.toLin') = 38 := by
+  have hsubSurj : Function.Surjective a7OrderHout.subtype := by
+    intro w
+    have hw : w ∈ a7OrderHout := by
+      unfold a7OrderHout
+      rw [a7OrderOne_output_ker]
+      exact Submodule.mem_top
+    exact ⟨⟨w, hw⟩, rfl⟩
+  have hbijL : Function.Bijective a7OrderIsoL := by
+    have hcomp : a7OrderIsoL =
+        a7OrderHout.subtype.comp
+          (codomainBasis a7OrderHout).equivFun.symm.toLinearMap := by
+      unfold a7OrderIsoL
+      rfl
+    rw [hcomp, LinearMap.coe_comp]
+    exact Function.Bijective.comp
+      ⟨Submodule.injective_subtype a7OrderHout, hsubSurj⟩
+      (codomainBasis a7OrderHout).equivFun.symm.bijective
+  have hinjQ : Function.Injective a7OrderCout.mkQ := by
+    rw [← LinearMap.ker_eq_bot, Submodule.ker_mkQ]
+    exact a7OrderCout_bot
+  have hsurjQ : Function.Surjective a7OrderCout.mkQ := by
+    intro z
+    obtain ⟨v, hv⟩ := Quotient.exists_rep z
+    refine ⟨v, ?_⟩
+    rw [Submodule.mkQ_apply]
+    exact hv
+  have hbijR : Function.Bijective a7OrderIsoR := by
+    have hcomp : a7OrderIsoR =
+        (domainBasis a7OrderCout).equivFun.toLinearMap.comp a7OrderCout.mkQ := by
+      unfold a7OrderIsoR
+      rfl
+    rw [hcomp, LinearMap.coe_comp]
+    exact Function.Bijective.comp
+      (domainBasis a7OrderCout).equivFun.bijective
+      ⟨hinjQ, hsurjQ⟩
+  let eL := LinearEquiv.ofBijective a7OrderIsoL hbijL
+  let eR := LinearEquiv.ofBijective a7OrderIsoR hbijR
+  have hEL : eL.toLinearMap = a7OrderIsoL := by
+    ext x
+    simp [eL, LinearEquiv.ofBijective_apply]
+  have hER : eR.toLinearMap = a7OrderIsoR := by
+    ext x
+    simp [eR, LinearEquiv.ofBijective_apply]
+  have hYt : a7OrderOneOutputMatrix.transpose =
+      LinearMap.toMatrix' a7OrderIsoR * a7OrderMatrix.transpose *
+        LinearMap.toMatrix' a7OrderIsoL := by
+    unfold a7OrderOneOutputMatrix
+    simp only [Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.mul_assoc]
+  have hto : a7OrderOneOutputMatrix.transpose.toLin' =
+      eR.toLinearMap.comp
+        (a7OrderMatrix.transpose.toLin'.comp eL.toLinearMap) := by
+    rw [hEL, hER, hYt, Matrix.toLin'_mul, Matrix.toLin'_mul]
+    rw [Matrix.toLin'_toMatrix', Matrix.toLin'_toMatrix']
+    rw [LinearMap.comp_assoc]
+  have hsurjL : Function.Surjective eL.toLinearMap := eL.surjective
+  have hmid : LinearMap.range
+      (a7OrderMatrix.transpose.toLin'.comp eL.toLinearMap) =
+      LinearMap.range a7OrderMatrix.transpose.toLin' := by
+    rw [LinearMap.range_comp, LinearMap.range_eq_top.mpr hsurjL, Submodule.map_top]
+  have hr : LinearMap.range a7OrderOneOutputMatrix.transpose.toLin' =
+      Submodule.map eR.toLinearMap
+        (LinearMap.range a7OrderMatrix.transpose.toLin') := by
+    rw [hto, LinearMap.range_comp, hmid]
+  rw [hr, LinearEquiv.finrank_map_eq eR, a7_transpose_finrank, a7OrderMatrix_rank]
+
+/-- One original component does not absorb the order-one output. The output
+is a rank-38 character, its original component is `1`, and its unweighted `Q`
+is strictly larger than `2^{9*40*order}` times that component. The share
+hypothesis stays. -/
+theorem a7OrderOne_output_q_exceeds_component :
+    (2 : ℝ) ^ (9 * 40 * a6Order a7OrderOneTriple) *
+      typedW6QComponent (t1AmbientC a7OrderOneTriple.C)
+        (t1AmbientH a7OrderOneTriple.K) (0 : V 40 →ₗ[F] W 40) a7Char <
+    a7HybridQ (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) := by
+  have h := a7_rank38_character_q_exceeds_order_one a7OrderOneOutputMatrix
+    a7OrderOneOutputMatrix_rank
+  rw [a7_character_energy a7OrderOneOutputMatrix, one_pow, mul_one] at h
+  rw [a7OrderOne_order, Nat.mul_one, a7OrderOne_component, mul_one,
+    a7OrderOne_output_character]
+  exact h
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
