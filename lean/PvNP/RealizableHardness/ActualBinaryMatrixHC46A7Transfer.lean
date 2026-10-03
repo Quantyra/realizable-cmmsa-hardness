@@ -1542,6 +1542,56 @@ theorem a7_pullback_at_injective {n d : Nat}
         DFunLike.congr_fun hmaps h
       simpa using hpoint
 
+/-- A parent pullback, transported onto one carrier by `HEq`, reconstructs
+the ordinary pair. -/
+theorem a7_parent_reconstructs_pair {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (t : T1IndexTriple A B)
+    (hC : t1AmbientC t.C = C) (hH : t1AmbientH t.K = H)
+    (Z : H →ₗ[F] (V d ⧸ C)) (hZ : HEq (t1PullbackMap t) Z) :
+    Submodule.comap (Submodule.mkQ C) (LinearMap.range Z) = A ∧
+      Submodule.map H.subtype (LinearMap.ker Z) = B := by
+  subst hC
+  subst hH
+  cases hZ
+  exact a6_reconstruct_forward t
+
+/-- Equal ambient carriers and `HEq` pullbacks come from one ordinary pair and
+one triple. Pairs are not yet summed. -/
+theorem a7_global_parent_unique {n d : Nat}
+    {A A' : Submodule F (V d)} {B B' : Submodule F (W n)}
+    (t : T1IndexTriple A B) (s : T1IndexTriple A' B')
+    (hC : t1AmbientC t.C = t1AmbientC s.C)
+    (hH : t1AmbientH t.K = t1AmbientH s.K)
+    (hZ : HEq (t1PullbackMap t) (t1PullbackMap s)) :
+    A = A' ∧ B = B' ∧ HEq t s := by
+  have ht := a6_reconstruct_forward t
+  have hs := a7_parent_reconstructs_pair (t1AmbientC t.C) (t1AmbientH t.K) s
+    hC.symm hH.symm (t1PullbackMap t) hZ.symm
+  have hA : A = A' := ht.1.symm.trans hs.1
+  have hB : B = B' := ht.2.symm.trans hs.2
+  subst A'
+  subst B'
+  refine ⟨rfl, rfl, ?_⟩
+  cases t with
+  | mk tC tK tX =>
+    cases s with
+    | mk sC sK sX =>
+      have hCf : tC = sC := a7_ambientC_injective hC
+      have hKf : tK = sK := a7_ambientH_injective hH
+      subst sC
+      subst sK
+      have hmaps : t1PullbackMap ⟨tC, tK, tX⟩ =
+          t1PullbackMap ⟨tC, tK, sX⟩ := eq_of_heq hZ
+      apply heq_of_eq
+      apply a7_same_pair_parent_unique ⟨tC, tK, tX⟩ ⟨tC, tK, sX⟩ rfl rfl
+      intro h
+      have hpoint : t1PullbackMap ⟨tC, tK, tX⟩ h =
+          t1PullbackMap ⟨tC, tK, sX⟩ h :=
+        DFunLike.congr_fun hmaps h
+      simpa using hpoint
+
 /-- Every parent derivative on one carrier has squared energy adding to at
 most `2^{6 D^2 + 1}` times that carrier's `Q` component. High-rank parents
 vanish. This is the W6 pool on one pair; it does not inject triples into

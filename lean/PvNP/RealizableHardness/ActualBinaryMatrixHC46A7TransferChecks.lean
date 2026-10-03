@@ -40,6 +40,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7PullbackAt
 #check a7_pullback_at_fourth
 #check a7_pullback_at_injective
+#check a7_parent_reconstructs_pair
+#check a7_global_parent_unique
 #check a7_carrier_energy_sq_sum_le
 #check a7_saturated_same_field_output_sum_le
 #check a7_saturated_same_field_fourth_sum_le
@@ -79,6 +81,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_ambientH_injective
 #print axioms a7_pullback_at_fourth
 #print axioms a7_pullback_at_injective
+#print axioms a7_parent_reconstructs_pair
+#print axioms a7_global_parent_unique
 #print axioms a7_carrier_energy_sq_sum_le
 #print axioms a7_saturated_same_field_output_sum_le
 #print axioms a7_saturated_same_field_fourth_sum_le
