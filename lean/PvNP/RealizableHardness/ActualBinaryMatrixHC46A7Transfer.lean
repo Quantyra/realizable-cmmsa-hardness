@@ -1015,6 +1015,96 @@ theorem a7_mixed_coordinate_support {n d D : Nat}
   exact (carrierFourier_support_iff_coordinate C H (D - s)
     (filteredCarrierFunction C H T f)).mp (by simpa [C, H, s] using hdrop)
 
+/-- Squared output carrier energy is at most `2^{4 k (D - order)}` times the
+ambient pair's `Q` component. This bounds the squared `L2` energy, not the
+fourth moment, except at order `D` where the derivative is constant. -/
+theorem a7_output_energy_sq_le_component {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t ≤ D) :
+    (carrierMean
+        (LinearMap.range (a7MixedCoordinateParent t).transpose.toLin')
+        (LinearMap.ker (a7MixedCoordinateParent t).transpose.toLin')
+        (fun M => Complex.normSq
+          (actualW6Derivative (a7MixedCoordinateParent t) 0
+            (a7MixedCoordinate t T f) M))) ^ 2 ≤
+      (2 : ℝ) ^ (4 * Module.finrank F (LinearMap.range (t1PullbackMap t)) *
+        (D - a6Order t)) *
+        typedW6QComponent (t1AmbientC t.C) (t1AmbientH t.K) T f := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let s := Module.finrank F C + Module.finrank F (W n ⧸ H)
+  let k := Module.finrank F (LinearMap.range X)
+  let parent := a7MixedCoordinateParent t
+  let coord := a7MixedCoordinate t T f
+  have hsplit : a6Order t = s + k := by
+    simp [a6Order, C, H, X, s, k]
+  have hsle : s + k ≤ D := by rwa [← hsplit]
+  have hparent : parent.rank = k := by
+    simpa [parent, a7MixedCoordinateParent, C, H, X, k] using
+      carrierFrequency_rank C H X
+  have hcoord := a7_mixed_coordinate_support t T f hsupport horder
+  have hsq :=
+    ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_energy_sq_le_degree_predecessorFourierEnergy
+      (D := D - s) parent 0 coord (by
+        have hsdef : s = Module.finrank F C + Module.finrank F (W n ⧸ H) := rfl
+        simpa [coord, hsdef] using hcoord)
+  let E := uniformMean (fun M => Complex.normSq (coord M))
+  let aEnergy :=
+    ActualBinaryMatrixHC46A7EnergyConsumer.w6PredecessorFourierEnergy parent coord
+  have ha : aEnergy ≤ E := by
+    simpa [aEnergy, E, coord] using
+      ActualBinaryMatrixHC46A7EnergyConsumer.w6PredecessorFourierEnergy_le_uniformMean
+        parent coord
+  have hE : 0 ≤ E := by
+    unfold E uniformMean
+    refine div_nonneg ?_ (Nat.cast_nonneg _)
+    exact Finset.sum_nonneg (fun _ _ => Complex.normSq_nonneg _)
+  have hexp : 4 * parent.rank * ((D - s) - parent.rank) =
+      4 * k * (D - a6Order t) := by
+    rw [hparent]
+    have hsub : (D - s) - k = D - (s + k) := by
+      have hk : k ≤ D - s := by omega
+      omega
+    rw [hsub, hsplit]
+  have hbase :
+      (carrierMean (LinearMap.range parent.transpose.toLin')
+          (LinearMap.ker parent.transpose.toLin')
+          (fun M => Complex.normSq (actualW6Derivative parent 0 coord M))) ^ 2 ≤
+        (2 : ℝ) ^ (4 * parent.rank * ((D - s) - parent.rank)) * E * aEnergy := by
+    simpa [E, aEnergy, parent, coord] using hsq
+  have hEa : E * aEnergy ≤ E * E := mul_le_mul_of_nonneg_left ha hE
+  have hfactor :
+      (2 : ℝ) ^ (4 * parent.rank * ((D - s) - parent.rank)) * E * aEnergy ≤
+        (2 : ℝ) ^ (4 * k * (D - a6Order t)) * (E * E) := by
+    rw [hexp]
+    have hleft :
+        (2 : ℝ) ^ (4 * k * (D - a6Order t)) * E * aEnergy =
+          (2 : ℝ) ^ (4 * k * (D - a6Order t)) * (E * aEnergy) := by ring
+    have hright :
+        (2 : ℝ) ^ (4 * k * (D - a6Order t)) * (E * E) =
+          (2 : ℝ) ^ (4 * k * (D - a6Order t)) * (E * E) := rfl
+    rw [hleft]
+    exact mul_le_mul_of_nonneg_left hEa
+      (pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) _)
+  have hEshare : E ^ 2 = typedW6QComponent C H T f := by
+    have hmean := carrierComplexEnergy_coordinate C H
+      (filteredCarrierFunction C H T f)
+    have hEq : E =
+        carrierMean C H (fun M =>
+          Complex.normSq (filteredCarrierFunction C H T f M)) := by
+      simpa [E, coord, a7MixedCoordinate, C, H] using hmean.symm
+    unfold typedW6QComponent
+    rw [← hEq]
+  have hsquare : E * E = E ^ 2 := by ring
+  have hle := le_trans hbase hfactor
+  rw [hsquare, hEshare] at hle
+  simpa [parent, coord, C, H, X, k] using hle
+
 /-- At mixed order `D`, the output derivative is constant. Its fourth moment
 is its squared carrier energy, and that energy is at most the ambient pair
 share. One triple uses one share; this does not sum shares across triples. -/
