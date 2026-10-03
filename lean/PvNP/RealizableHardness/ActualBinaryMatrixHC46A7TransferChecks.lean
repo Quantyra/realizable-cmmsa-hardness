@@ -142,3 +142,359 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_a9_multiplicity_le
 #print axioms a7_a8_a9_room
 #print axioms a7_a8_a9_exponent_fits
+
+-- A7 ingredients committed on 2026-10-03.
+#check a7_positive_share_sum
+#check a9_top_ne_bot
+#check a9SumTheta_injective
+#check a9SumTriple_injective
+#check a9_fiber_multiplicity_le
+#check a9_sum_triple_multiplicity_le
+#check a9_fiber_graph_cost_le
+#check a9_initial_datum_multiplicity_le
+#check a9_initial_datum_graph_cost_le
+#check a7_output_zero_share_le_original_component
+#check a9ImageCarrier_preimage
+#check a9ImageCarrier_injective
+#check a7_ambient_hybrid_fourierCoeff
+#check a7_ambient_hybrid_energy_le
+#check a9_final_inducing_rank
+#check a9_final_inducing_graphs_inverse
+#check a9_final_inducing_multiplicity
+#check a9_final_inducing_graph_cost
+#check a7_range_subspace_selected
+#check a7_range_subspace_ambient_injective
+#check a7SelectedOfRangeSubspace_injective
+#check a7_middle_grassmannian_exceeds_share_slack
+#check a7_selected_pairs_exceed_share_slack
+#check a9_coord_quot_finrank
+#check a9FinalTheta_graphs_inverse
+#check a9EmbedSumFiber_injective
+#check a9FinalTheta_rank
+#check a7_gaussian_38_19_gt_order_one
+#check a7_character_qComponent
+#check a7_character_hybrid_q
+#check a7_character_energy
+#check a7_selected_card_ge_grass
+#check a7_rank38_character_q_exceeds_order_one
+#check a7_precedes_zero
+#check a7_zero_filter
+#check a7_zero_derivative_apply
+#check a7_pairing_trace
+#check a7_pairing_conj
+#check a7BasisVec_ne_zero
+#check a7Line_finrank
+#check a7_proj_incl
+#check a7Freq40_rank
+#check a7Line_le_range
+#check a7_induced_rank
+#check a7FreqMatrix_toLin
+#check a7FreqMatrix_rank
+#check a7Char_supported
+#check a7Freq40_selected
+#check a7OrderOne_C
+#check a7OrderOne_K
+#check a7OrderOne_H
+#check a7OrderOne_Ctop
+#check a7OrderOne_pullback_rank
+#check a7OrderOne_quot_finrank
+#check a7OrderOne_order
+#check a7OrderOne_component
+#check a7OrderOne_pullback_bot
+#check a7OrderOne_parent
+#check a7OrderPhi_rank
+#check a7OrderMatrix_rank
+#check a7_character_of_pairing
+#check a7_character_conj
+#check a7_pairing_conj_rect
+#check a7_character_conj_rect
+#check a7_transpose_finrank
+#check a7OrderOne_mixed_character
+#check a7OrderOne_output_ker
+#check a7OrderOne_output_range
+#check a7OrderCout_bot
+#check a7OrderHout_top
+#check a7OrderOne_output_eval
+#check a7OrderOne_output_character
+#check a7OrderOneOutputMatrix_rank
+#check a7OrderOne_output_q_exceeds_component
+#check a7_bot_top_selected
+#check a7_character_pair_share
+#check a7OrderOne_zero_output_share_eq_one
+#check a7OrderOne_zero_output_share_lands
+#check a7OrderOne_remaining_output_exceeds_leftover
+#check a7_selected_conj_iff
+#check a7_character_nested_share_eq
+#check a7_character_nested_share_le_q
+#check a7_nested_share_le_q
+#check a7_selected_mass_sq_le_pair_share
+#check a7_nested_mass_sq_le_q
+#check a7_output_zero_share_avg_le_nested
+#check a7_one_nested_share_le_q
+#check a7OrderIsoL_bijective
+#check a7OrderIsoR_bijective
+#check a7OrderOne_output_toLin
+#check a7OrderPhi_eq_induced_conj
+#check a7OrderOne_nested_sum
+#check a7OrderOne_output_selected_card
+#check a7OrderOne_output_q_eq_nested_shares
+#check a7OrderOne_output_q_le_original_q
+#check a7OrderOne_line_share
+#check a7OrderOne_positive_output_eq_other_shares
+#check a7_zero_matrix_parent_ker
+#check a7_zero_matrix_parent_range
+#check a7ZeroCout_bot
+#check a7ZeroHout_top
+#check a7ZeroIsoL_bijective
+#check a7ZeroIsoR_bijective
+#check a7_zero_derivative_character
+#check a7_zero_conj_toLin
+#check a7_pullback_zero_parent
+#check a7_rank_zero_mixed_character
+#check a7_zero_conj_selected_card
+#check a7_induced_coordinate_selected_card
+#check a7_zero_derivative_q
+#check a7_rank_zero_output_q_eq_nested
+#check a7_predecessor_filter_character
+#check a7_derivative_character_apply
+#check a7_tracePair_induced
+#check a7_derivative_character_induced
+#check a7_preceding_derivative_coordinate
+#check a7_preceding_character_q_eq_nested
+#check a7_preceding_positive_shares_eq_nested_rest
+#check a7_complement_card
+#check a7_carrier_hybrid_fourierCoeff
+#check a7_selected_fiber_energy_eq_left_mass
+#check a7_outer_hybrid_energy_le_left_mass
+#check a7_left_mass_eq_complement_sum
+#check a7_outer_hybrid_energy_sq_le_complement_shares
+#check a7_internal_comap_isCompl
+#check a7_image_complement_card
+#check a7_domain_map_isCompl
+#check a7_domain_complement_card
+#check a7_t2_complement_card_le
+#check a7_outer_hybrid_energy_sq_le_graph_power
+#check a7_base_translate_mean
+#check a7_nested_hybrid_energy_eq_shifted
+#check a7_nested_hybrid_share_eq
+#check a7_coordinate_component_eq_nested
+#check a7_coordinate_pair_avg_eq_original
+#check a7_mixed_coordinate_pair_avg_eq_original
+#check a7_zero_derivative_chart
+#check a7_zero_chart_zero_share
+#check a7_zero_pullback_output_zero_share
+#check a7_zero_pullback_output_zero_share_avg
+#check a7_preceding_one_pair_le_output
+#check a7_preceding_character_q_le_original
+#check a7_a9_preceding_output_sum_le
+#check a7_a9_preceding_output_graph_charge
+#check a7_zero_matrix_range
+#check a7_zero_matrix_ker
+#check a7_zero_matrix_selected
+#check a7_a9_zero_parent_family_le
+#check a9ThetaCarrier_rank
+#check a9ThetaParentMatrix_rank
+#check a9ThetaParentMatrix_graphs
+#check a9ThetaParent_output_le
+#check a7_a9_theta_parent_sum_le
+#check a7_precedes_self
+#check a7_selected_self_iff_zero
+#check a7_same_rank_precedes_eq
+#check a7_nonzero_same_rank_not_both
+#check a9ThetaParentMatrix_ne_zero_of_pos
+#check a9ThetaParent_not_both
+#check a9TransportGrass_injective
+#check a9Transport_ker_cancel
+#check a9TransportDatum_injective
+#check a9FinalInducingTriple_injective
+#check a9FinalInducingTriple_rank
+#check a9FinalParentMatrix_rank
+#check a9FinalParent_output_le
+#check a9FinalParent_not_both
+#check a7_fourierCoeff_add
+#check a7_predecessorFilter_add
+#check a7_predecessorFilter_smul
+#check a7_derivative_add
+#check a7_derivative_smul
+#check a7_hybridFilter_smul
+#check a7_filtered_smul
+#check a7_carrierMean_normSq_smul
+#check a7_pairShare_smul
+#check a7_hybridQ_smul
+#print axioms a7_positive_share_sum
+#print axioms a9_top_ne_bot
+#print axioms a9SumTheta_injective
+#print axioms a9SumTriple_injective
+#print axioms a9_fiber_multiplicity_le
+#print axioms a9_sum_triple_multiplicity_le
+#print axioms a9_fiber_graph_cost_le
+#print axioms a9_initial_datum_multiplicity_le
+#print axioms a9_initial_datum_graph_cost_le
+#print axioms a7_output_zero_share_le_original_component
+#print axioms a9ImageCarrier_preimage
+#print axioms a9ImageCarrier_injective
+#print axioms a7_ambient_hybrid_fourierCoeff
+#print axioms a7_ambient_hybrid_energy_le
+#print axioms a9_final_inducing_rank
+#print axioms a9_final_inducing_graphs_inverse
+#print axioms a9_final_inducing_multiplicity
+#print axioms a9_final_inducing_graph_cost
+#print axioms a7_range_subspace_selected
+#print axioms a7_range_subspace_ambient_injective
+#print axioms a7SelectedOfRangeSubspace_injective
+#print axioms a7_middle_grassmannian_exceeds_share_slack
+#print axioms a7_selected_pairs_exceed_share_slack
+#print axioms a9_coord_quot_finrank
+#print axioms a9FinalTheta_graphs_inverse
+#print axioms a9EmbedSumFiber_injective
+#print axioms a9FinalTheta_rank
+#print axioms a7_gaussian_38_19_gt_order_one
+#print axioms a7_character_qComponent
+#print axioms a7_character_hybrid_q
+#print axioms a7_character_energy
+#print axioms a7_selected_card_ge_grass
+#print axioms a7_rank38_character_q_exceeds_order_one
+#print axioms a7_precedes_zero
+#print axioms a7_zero_filter
+#print axioms a7_zero_derivative_apply
+#print axioms a7_pairing_trace
+#print axioms a7_pairing_conj
+#print axioms a7BasisVec_ne_zero
+#print axioms a7Line_finrank
+#print axioms a7_proj_incl
+#print axioms a7Freq40_rank
+#print axioms a7Line_le_range
+#print axioms a7_induced_rank
+#print axioms a7FreqMatrix_toLin
+#print axioms a7FreqMatrix_rank
+#print axioms a7Char_supported
+#print axioms a7Freq40_selected
+#print axioms a7OrderOne_C
+#print axioms a7OrderOne_K
+#print axioms a7OrderOne_H
+#print axioms a7OrderOne_Ctop
+#print axioms a7OrderOne_pullback_rank
+#print axioms a7OrderOne_quot_finrank
+#print axioms a7OrderOne_order
+#print axioms a7OrderOne_component
+#print axioms a7OrderOne_pullback_bot
+#print axioms a7OrderOne_parent
+#print axioms a7OrderPhi_rank
+#print axioms a7OrderMatrix_rank
+#print axioms a7_character_of_pairing
+#print axioms a7_character_conj
+#print axioms a7_pairing_conj_rect
+#print axioms a7_character_conj_rect
+#print axioms a7_transpose_finrank
+#print axioms a7OrderOne_mixed_character
+#print axioms a7OrderOne_output_ker
+#print axioms a7OrderOne_output_range
+#print axioms a7OrderCout_bot
+#print axioms a7OrderHout_top
+#print axioms a7OrderOne_output_eval
+#print axioms a7OrderOne_output_character
+#print axioms a7OrderOneOutputMatrix_rank
+#print axioms a7OrderOne_output_q_exceeds_component
+#print axioms a7_bot_top_selected
+#print axioms a7_character_pair_share
+#print axioms a7OrderOne_zero_output_share_eq_one
+#print axioms a7OrderOne_zero_output_share_lands
+#print axioms a7OrderOne_remaining_output_exceeds_leftover
+#print axioms a7_selected_conj_iff
+#print axioms a7_character_nested_share_eq
+#print axioms a7_character_nested_share_le_q
+#print axioms a7_nested_share_le_q
+#print axioms a7_selected_mass_sq_le_pair_share
+#print axioms a7_nested_mass_sq_le_q
+#print axioms a7_output_zero_share_avg_le_nested
+#print axioms a7_one_nested_share_le_q
+#print axioms a7OrderIsoL_bijective
+#print axioms a7OrderIsoR_bijective
+#print axioms a7OrderOne_output_toLin
+#print axioms a7OrderPhi_eq_induced_conj
+#print axioms a7OrderOne_nested_sum
+#print axioms a7OrderOne_output_selected_card
+#print axioms a7OrderOne_output_q_eq_nested_shares
+#print axioms a7OrderOne_output_q_le_original_q
+#print axioms a7OrderOne_line_share
+#print axioms a7OrderOne_positive_output_eq_other_shares
+#print axioms a7_zero_matrix_parent_ker
+#print axioms a7_zero_matrix_parent_range
+#print axioms a7ZeroCout_bot
+#print axioms a7ZeroHout_top
+#print axioms a7ZeroIsoL_bijective
+#print axioms a7ZeroIsoR_bijective
+#print axioms a7_zero_derivative_character
+#print axioms a7_zero_conj_toLin
+#print axioms a7_pullback_zero_parent
+#print axioms a7_rank_zero_mixed_character
+#print axioms a7_zero_conj_selected_card
+#print axioms a7_induced_coordinate_selected_card
+#print axioms a7_zero_derivative_q
+#print axioms a7_rank_zero_output_q_eq_nested
+#print axioms a7_predecessor_filter_character
+#print axioms a7_derivative_character_apply
+#print axioms a7_tracePair_induced
+#print axioms a7_derivative_character_induced
+#print axioms a7_preceding_derivative_coordinate
+#print axioms a7_preceding_character_q_eq_nested
+#print axioms a7_preceding_positive_shares_eq_nested_rest
+#print axioms a7_complement_card
+#print axioms a7_carrier_hybrid_fourierCoeff
+#print axioms a7_selected_fiber_energy_eq_left_mass
+#print axioms a7_outer_hybrid_energy_le_left_mass
+#print axioms a7_left_mass_eq_complement_sum
+#print axioms a7_outer_hybrid_energy_sq_le_complement_shares
+#print axioms a7_internal_comap_isCompl
+#print axioms a7_image_complement_card
+#print axioms a7_domain_map_isCompl
+#print axioms a7_domain_complement_card
+#print axioms a7_t2_complement_card_le
+#print axioms a7_outer_hybrid_energy_sq_le_graph_power
+#print axioms a7_base_translate_mean
+#print axioms a7_nested_hybrid_energy_eq_shifted
+#print axioms a7_nested_hybrid_share_eq
+#print axioms a7_coordinate_component_eq_nested
+#print axioms a7_coordinate_pair_avg_eq_original
+#print axioms a7_mixed_coordinate_pair_avg_eq_original
+#print axioms a7_zero_derivative_chart
+#print axioms a7_zero_chart_zero_share
+#print axioms a7_zero_pullback_output_zero_share
+#print axioms a7_zero_pullback_output_zero_share_avg
+#print axioms a7_preceding_one_pair_le_output
+#print axioms a7_preceding_character_q_le_original
+#print axioms a7_a9_preceding_output_sum_le
+#print axioms a7_a9_preceding_output_graph_charge
+#print axioms a7_zero_matrix_range
+#print axioms a7_zero_matrix_ker
+#print axioms a7_zero_matrix_selected
+#print axioms a7_a9_zero_parent_family_le
+#print axioms a9ThetaCarrier_rank
+#print axioms a9ThetaParentMatrix_rank
+#print axioms a9ThetaParentMatrix_graphs
+#print axioms a9ThetaParent_output_le
+#print axioms a7_a9_theta_parent_sum_le
+#print axioms a7_precedes_self
+#print axioms a7_selected_self_iff_zero
+#print axioms a7_same_rank_precedes_eq
+#print axioms a7_nonzero_same_rank_not_both
+#print axioms a9ThetaParentMatrix_ne_zero_of_pos
+#print axioms a9ThetaParent_not_both
+#print axioms a9TransportGrass_injective
+#print axioms a9Transport_ker_cancel
+#print axioms a9TransportDatum_injective
+#print axioms a9FinalInducingTriple_injective
+#print axioms a9FinalInducingTriple_rank
+#print axioms a9FinalParentMatrix_rank
+#print axioms a9FinalParent_output_le
+#print axioms a9FinalParent_not_both
+#print axioms a7_fourierCoeff_add
+#print axioms a7_predecessorFilter_add
+#print axioms a7_predecessorFilter_smul
+#print axioms a7_derivative_add
+#print axioms a7_derivative_smul
+#print axioms a7_hybridFilter_smul
+#print axioms a7_filtered_smul
+#print axioms a7_carrierMean_normSq_smul
+#print axioms a7_pairShare_smul
+#print axioms a7_hybridQ_smul
