@@ -3435,5 +3435,59 @@ theorem a9_fiber_graph_cost_le
     _ = (2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t) := by ring
     _ ≤ (2 : ℝ) ^ (9 * D * t) := hroom
 
+/-- The zero-order summand of one output `Q` injects into that triple's
+original hybrid component. The factor `2^{4k(D-t)}` fits in the fiber room
+`2^{9Dt}` because `k ≤ t`. Positive-order summands of the output `Q` are
+not included, so this does not remove the share hypothesis. -/
+theorem a7_output_zero_share_le_original_component {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t ≤ D) :
+    a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+        (a7OutputBinary t T f) ≤
+      (2 : ℝ) ^ (9 * D * a6Order t) *
+        typedW6QComponent (t1AmbientC t.C) (t1AmbientH t.K) T f := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let parent := a7MixedCoordinateParent t
+  let coord := a7MixedCoordinate t T f
+  let Cout := LinearMap.range parent.transpose.toLin'
+  let Hout := LinearMap.ker parent.transpose.toLin'
+  let deriv := actualW6Derivative parent 0 coord
+  have hE := typedW6OutputEnergy_coordinate C H X
+    (filteredCarrierFunction C H T f)
+  have henergy : typedW6OutputEnergy C H X (filteredCarrierFunction C H T f) =
+      carrierMean Cout Hout (fun M => Complex.normSq (deriv M)) := by
+    rw [hE]
+    rfl
+  have hsq := a7_output_energy_sq_le_component t T f hsupport horder
+  have hexp : 4 * Module.finrank F (LinearMap.range X) * (D - a6Order t) ≤
+      9 * D * a6Order t := by
+    let k := Module.finrank F (LinearMap.range X)
+    let ord := a6Order t
+    have hk : k ≤ ord := by
+      dsimp [k, ord, a6Order, C, H, X]
+      exact Nat.le_add_left _ _
+    have hsub : D - ord ≤ D := Nat.sub_le D ord
+    calc
+      4 * k * (D - ord) ≤ 4 * ord * (D - ord) :=
+        Nat.mul_le_mul_right (D - ord) (Nat.mul_le_mul_left 4 hk)
+      _ ≤ 4 * ord * D := Nat.mul_le_mul_left (4 * ord) hsub
+      _ = 4 * (D * ord) := by ring
+      _ ≤ 9 * (D * ord) := Nat.mul_le_mul_right (D * ord) (by decide : (4 : Nat) ≤ 9)
+      _ = 9 * D * ord := by ring
+  have hcomp : 0 ≤ typedW6QComponent C H T f := by
+    unfold typedW6QComponent
+    exact sq_nonneg _
+  have hpow : (2 : ℝ) ^ (4 * Module.finrank F (LinearMap.range X) *
+      (D - a6Order t)) ≤ (2 : ℝ) ^ (9 * D * a6Order t) :=
+    pow_le_pow_right₀ (by norm_num : (1 : ℝ) ≤ 2) hexp
+  rw [a7_output_zero_share_eq_l2, a7_output_binary_l2_sq, henergy]
+  exact le_trans hsq (mul_le_mul_of_nonneg_right hpow hcomp)
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
