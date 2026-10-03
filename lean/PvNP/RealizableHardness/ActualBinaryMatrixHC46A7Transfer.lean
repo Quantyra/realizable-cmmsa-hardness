@@ -1228,6 +1228,95 @@ theorem a7_saturated_fourth_le_share {n d D : Nat}
   have hsum := Finset.sum_le_sum (fun T (_ : T ∈ Finset.univ) => hpt T)
   exact div_le_div_of_nonneg_right hsum (Nat.cast_nonneg _)
 
+/-- At mixed order `D`, the output fourth moment is the squared W6 energy of
+this triple's pullback parent. -/
+theorem a7_saturated_output_eq_energy_sq {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t = D) :
+    a7MixedOutputFourth t T f =
+      (typedW6OutputEnergy (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+        (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)) ^ 2 := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let parent := a7MixedCoordinateParent t
+  let coord := a7MixedCoordinate t T f
+  let Cout := LinearMap.range parent.transpose.toLin'
+  let Hout := LinearMap.ker parent.transpose.toLin'
+  let deriv := actualW6Derivative parent 0 coord
+  have hbin : ComplexFourierSupportedThrough 0
+      (fun M => deriv ((carrierMatrixEquiv Cout Hout).symm M)) :=
+    (carrierFourier_support_iff_coordinate Cout Hout 0 deriv).mp
+      (by simpa [deriv, parent, coord, horder] using
+        a7_mixed_output_coordinate_support t T f hsupport (le_of_eq horder))
+  have hfourthEq := a7_fourth_eq_l2_of_degree_zero
+    (fun M => deriv ((carrierMatrixEquiv Cout Hout).symm M)) hbin
+  have hL4 := carrierMean_coordinate Cout Hout
+    (fun M => Complex.normSq (deriv M) ^ 2)
+  have hL2 := carrierComplexEnergy_coordinate Cout Hout deriv
+  have hfourMean : a7MixedOutputFourth t T f =
+      uniformMean (fun M =>
+        Complex.normSq (deriv ((carrierMatrixEquiv Cout Hout).symm M)) ^ 2) := by
+    rw [a7_mixed_output_fourth_coordinate]
+    change carrierMean Cout Hout (fun M => Complex.normSq (deriv M) ^ 2) =
+      uniformMean (fun M =>
+        Complex.normSq (deriv ((carrierMatrixEquiv Cout Hout).symm M)) ^ 2)
+    exact hL4
+  have hL2eq : uniformMean (fun M =>
+      Complex.normSq (deriv ((carrierMatrixEquiv Cout Hout).symm M))) =
+      carrierMean Cout Hout (fun M => Complex.normSq (deriv M)) := hL2.symm
+  have hsqMean : a7MixedOutputFourth t T f =
+      (carrierMean Cout Hout (fun M => Complex.normSq (deriv M))) ^ 2 := by
+    rw [hfourMean, hfourthEq, hL2eq]
+  have hE := typedW6OutputEnergy_coordinate C H X
+    (filteredCarrierFunction C H T f)
+  have hcarrier : typedW6OutputEnergy C H X (filteredCarrierFunction C H T f) =
+      carrierMean Cout Hout (fun M => Complex.normSq (deriv M)) := by
+    rw [hE]
+    rfl
+  rw [hsqMean, hcarrier]
+
+/-- One saturated output fourth moment is one nonnegative term of that
+carrier's parent-energy pool. -/
+theorem a7_saturated_output_le_pool {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t = D) :
+    a7MixedOutputFourth t T f ≤
+      ∑ Z : (t1AmbientH t.K) →ₗ[F] (V d ⧸ t1AmbientC t.C),
+        (typedW6OutputEnergy (t1AmbientC t.C) (t1AmbientH t.K) Z
+          (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)) ^ 2 := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let g : (H →ₗ[F] (V d ⧸ C)) → ℝ := fun Z =>
+    (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)) ^ 2
+  have hnn : ∀ Z : H →ₗ[F] (V d ⧸ C), 0 ≤ g Z := fun _ => sq_nonneg _
+  have hadd : g X + ∑ Z ∈ Finset.univ.erase X, g Z = ∑ Z, g Z :=
+    Finset.add_sum_erase Finset.univ g (Finset.mem_univ X)
+  have hrest : 0 ≤ ∑ Z ∈ Finset.univ.erase X, g Z :=
+    Finset.sum_nonneg (fun Z _ => hnn Z)
+  have hle : g X ≤ ∑ Z, g Z := by
+    rw [← hadd]
+    exact le_add_of_nonneg_right hrest
+  have hX : g X = a7MixedOutputFourth t T f := by
+    unfold g
+    exact (a7_saturated_output_eq_energy_sq t T f hsupport horder).symm
+  have hsum : (∑ Z, g Z) =
+      ∑ Z : H →ₗ[F] (V d ⧸ C),
+        (typedW6OutputEnergy C H Z (filteredCarrierFunction C H T f)) ^ 2 := by
+    unfold g
+    rfl
+  rw [← hX, hsum]
+  exact hle
+
 /-- Every parent derivative on one carrier has squared energy adding to at
 most `2^{6 D^2 + 1}` times that carrier's `Q` component. High-rank parents
 vanish. This is the W6 pool on one pair; it does not inject triples into
