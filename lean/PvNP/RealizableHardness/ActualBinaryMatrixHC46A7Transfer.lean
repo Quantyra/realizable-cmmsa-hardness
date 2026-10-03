@@ -7320,6 +7320,180 @@ theorem a7_outer_hybrid_energy_sq_le_graph_power
           a7PairShare p.1.1 p.1.2 f := by
       rw [← pow_add]
 
+/-- Translation on the original affine base preserves a uniform mean. Adding
+one fixed carrier embedding is a bijection of the finite Hom group. -/
+theorem a7_base_translate_mean {n d : Nat}
+    (shift : V d →ₗ[F] W n) (h : (V d →ₗ[F] W n) → ℝ) :
+    typedUniformMean (fun T => h (T + shift)) = typedUniformMean h := by
+  classical
+  unfold typedUniformMean
+  have hsum : (∑ T : V d →ₗ[F] W n, h (T + shift)) = ∑ T, h T :=
+    Equiv.sum_comp (Equiv.addRight shift) h
+  rw [hsum]
+
+/-- Carrier energy of one nested hybrid slice. The inner variable runs over
+the quotient carrier, so this is not an ambient `carrierMean`. -/
+def a7NestedHybridEnergy {n d : Nat}
+    (A₂ A₁ : Submodule F (V d)) (B₁ B₂ : Submodule F (W n))
+    (S : (V d ⧸ A₂) →ₗ[F] B₂)
+    (g : ((V d ⧸ A₂) →ₗ[F] B₂) → Complex) : ℝ :=
+  (∑ N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F] B₁.comap B₂.subtype,
+      Complex.normSq
+        (complexCarrierAffineRestrict A₂ B₂
+          (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+          (complexCarrierHybridFilter A₂ B₂
+            (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) g) N)) /
+    (Fintype.card (((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+      B₁.comap B₂.subtype) : ℝ)
+
+/-- One nested hybrid slice of `filteredCarrierFunction` has the same carrier
+energy as the original pair at the shifted base. Manuscript A1 identifies the
+two functions along `nestedCarrierEquiv`, so the normalized sums agree. This
+is not a slice of `a7OutputBinary`. -/
+theorem a7_nested_hybrid_energy_eq_shifted {n d : Nat}
+    (A₂ A₁ : Submodule F (V d)) (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (T : V d →ₗ[F] W n)
+    (S : (V d ⧸ A₂) →ₗ[F] B₂)
+    (f : BinaryMatrix n d → Complex) :
+    a7NestedHybridEnergy A₂ A₁ B₁ B₂ S
+        (fun M => filteredCarrierFunction A₂ B₂ T f M) =
+      carrierMean A₁ B₁ (fun M => Complex.normSq
+        (filteredCarrierFunction A₁ B₁
+          (T + B₂.subtype.comp (S.comp A₂.mkQ)) f M)) := by
+  classical
+  let e := BinaryMatrixA1NestedCarrier.nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB
+  have hpoint : ∀ N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F] B₁.comap B₂.subtype,
+      complexCarrierAffineRestrict A₂ B₂
+          (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+          (complexCarrierHybridFilter A₂ B₂
+            (A₁.map A₂.mkQ) (B₁.comap B₂.subtype)
+            (fun M => filteredCarrierFunction A₂ B₂ T f M)) N =
+        filteredCarrierFunction A₁ B₁
+          (T + B₂.subtype.comp (S.comp A₂.mkQ)) f (e N) := by
+    intro N
+    simpa [filteredCarrierFunction, e] using
+      manuscript_A1_complex A₂ A₁ B₁ B₂ hA hB T S f N
+  unfold a7NestedHybridEnergy carrierMean
+  have hsum :
+      (∑ N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F] B₁.comap B₂.subtype,
+        Complex.normSq
+          (complexCarrierAffineRestrict A₂ B₂
+            (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+            (complexCarrierHybridFilter A₂ B₂
+              (A₁.map A₂.mkQ) (B₁.comap B₂.subtype)
+              (fun M => filteredCarrierFunction A₂ B₂ T f M)) N)) =
+        ∑ M : (V d ⧸ A₁) →ₗ[F] B₁,
+          Complex.normSq
+            (filteredCarrierFunction A₁ B₁
+              (T + B₂.subtype.comp (S.comp A₂.mkQ)) f M) := by
+    have hcomp := Equiv.sum_comp e.toEquiv (fun M : (V d ⧸ A₁) →ₗ[F] B₁ =>
+      Complex.normSq
+        (filteredCarrierFunction A₁ B₁
+          (T + B₂.subtype.comp (S.comp A₂.mkQ)) f M))
+    refine Eq.trans ?_ hcomp
+    refine Finset.sum_congr rfl (fun N _ => ?_)
+    exact congrArg Complex.normSq (hpoint N)
+  have hcard :
+      (Fintype.card (((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+        B₁.comap B₂.subtype) : ℝ) =
+        (Fintype.card ((V d ⧸ A₁) →ₗ[F] B₁) : ℝ) := by
+    exact_mod_cast Fintype.card_congr e.toEquiv
+  rw [hsum, hcard]
+
+/-- Averaging the nested hybrid slice over the original base and over the
+carrier base returns exactly one original pair share. For each fixed carrier
+displacement the original base remains uniform, so Fubini contributes no
+cardinality factor. The slice is a hybrid of `filteredCarrierFunction`, not a
+positive-order `a7PairShare` of `a7OutputBinary`, and the share hypothesis
+stays. -/
+theorem a7_nested_hybrid_share_eq {n d : Nat}
+    (A₂ A₁ : Submodule F (V d)) (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (f : BinaryMatrix n d → Complex) :
+    typedUniformMean (fun T : V d →ₗ[F] W n =>
+      typedUniformMean (fun S : (V d ⧸ A₂) →ₗ[F] B₂ =>
+        (a7NestedHybridEnergy A₂ A₁ B₁ B₂ S
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) ^ 2)) =
+      a7PairShare A₁ B₁ f := by
+  classical
+  let shift (S : (V d ⧸ A₂) →ₗ[F] B₂) : V d →ₗ[F] W n :=
+    B₂.subtype.comp (S.comp A₂.mkQ)
+  have hsq : ∀ (T : V d →ₗ[F] W n) (S : (V d ⧸ A₂) →ₗ[F] B₂),
+      (a7NestedHybridEnergy A₂ A₁ B₁ B₂ S
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) ^ 2 =
+        typedW6QComponent A₁ B₁ (T + shift S) f := by
+    intro T S
+    rw [a7_nested_hybrid_energy_eq_shifted A₂ A₁ B₁ B₂ hA hB T S f]
+    rfl
+  have hrewrite :
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        typedUniformMean (fun S : (V d ⧸ A₂) →ₗ[F] B₂ =>
+          (a7NestedHybridEnergy A₂ A₁ B₁ B₂ S
+            (fun M => filteredCarrierFunction A₂ B₂ T f M)) ^ 2)) =
+        typedUniformMean (fun T : V d →ₗ[F] W n =>
+          typedUniformMean (fun S : (V d ⧸ A₂) →ₗ[F] B₂ =>
+            typedW6QComponent A₁ B₁ (T + shift S) f)) := by
+    congr 1
+    funext T
+    congr 1
+    funext S
+    exact hsq T S
+  rw [hrewrite]
+  unfold a7PairShare typedUniformMean
+  let cardS : ℝ := Fintype.card ((V d ⧸ A₂) →ₗ[F] B₂)
+  let cardT : ℝ := Fintype.card (V d →ₗ[F] W n)
+  have hHS : cardS ≠ 0 := by
+    dsimp [cardS]
+    have hpos : 0 < Fintype.card ((V d ⧸ A₂) →ₗ[F] B₂) :=
+      Fintype.card_pos_iff.mpr ⟨0⟩
+    exact_mod_cast hpos.ne'
+  have hslice : ∀ S : (V d ⧸ A₂) →ₗ[F] B₂,
+      (∑ T : V d →ₗ[F] W n, typedW6QComponent A₁ B₁ (T + shift S) f) =
+        ∑ T, typedW6QComponent A₁ B₁ T f := by
+    intro S
+    exact Equiv.sum_comp (Equiv.addRight (shift S))
+      (fun T => typedW6QComponent A₁ B₁ T f)
+  have hinner :
+      (∑ T : V d →ₗ[F] W n,
+        (∑ S : (V d ⧸ A₂) →ₗ[F] B₂,
+          typedW6QComponent A₁ B₁ (T + shift S) f) / cardS) =
+        (∑ T : V d →ₗ[F] W n,
+          ∑ S : (V d ⧸ A₂) →ₗ[F] B₂,
+            typedW6QComponent A₁ B₁ (T + shift S) f) / cardS :=
+    (Finset.sum_div (s := (Finset.univ : Finset (V d →ₗ[F] W n)))
+      (fun T => ∑ S : (V d ⧸ A₂) →ₗ[F] B₂,
+        typedW6QComponent A₁ B₁ (T + shift S) f)
+      cardS).symm
+  rw [hinner]
+  have hswap :
+      (∑ T : V d →ₗ[F] W n,
+        ∑ S : (V d ⧸ A₂) →ₗ[F] B₂,
+          typedW6QComponent A₁ B₁ (T + shift S) f) =
+        ∑ S : (V d ⧸ A₂) →ₗ[F] B₂,
+          ∑ T : V d →ₗ[F] W n,
+            typedW6QComponent A₁ B₁ (T + shift S) f := Finset.sum_comm
+  rw [hswap]
+  have hS :
+      (∑ S : (V d ⧸ A₂) →ₗ[F] B₂,
+        ∑ T : V d →ₗ[F] W n,
+          typedW6QComponent A₁ B₁ (T + shift S) f) =
+        ∑ S : (V d ⧸ A₂) →ₗ[F] B₂,
+          ∑ T : V d →ₗ[F] W n, typedW6QComponent A₁ B₁ T f := by
+    refine Finset.sum_congr rfl (fun S _ => hslice S)
+  rw [hS]
+  have hconst :
+      (∑ S : (V d ⧸ A₂) →ₗ[F] B₂,
+        ∑ T : V d →ₗ[F] W n, typedW6QComponent A₁ B₁ T f) =
+        cardS * ∑ T : V d →ₗ[F] W n, typedW6QComponent A₁ B₁ T f := by
+    simp [cardS, Finset.sum_const, nsmul_eq_mul]
+  rw [hconst]
+  have hcancel :
+      (cardS * ∑ T : V d →ₗ[F] W n, typedW6QComponent A₁ B₁ T f) / cardS =
+        ∑ T, typedW6QComponent A₁ B₁ T f :=
+    mul_div_cancel_left₀ _ hHS
+  rw [hcancel]
+
 /-- One final pair above a preceding parent is a single nonnegative term of
 that parent's nested sum, hence at most the parent's output `Q`. -/
 theorem a7_preceding_one_pair_le_output {n d : Nat}
