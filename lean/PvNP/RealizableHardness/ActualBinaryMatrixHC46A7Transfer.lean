@@ -1228,5 +1228,127 @@ theorem a7_saturated_fourth_le_share {n d D : Nat}
   have hsum := Finset.sum_le_sum (fun T (_ : T ∈ Finset.univ) => hpt T)
   exact div_le_div_of_nonneg_right hsum (Nat.cast_nonneg _)
 
+/-- Every parent derivative on one carrier has squared energy adding to at
+most `2^{6 D^2 + 1}` times that carrier's `Q` component. High-rank parents
+vanish. This is the W6 pool on one pair; it does not inject triples into
+parents, so it does not discharge the mixed sum. -/
+theorem a7_carrier_energy_sq_sum_le {n d D : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : V d →ₗ[F] W n) (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    (∑ Z : B →ₗ[F] (V d ⧸ A),
+        (typedW6OutputEnergy A B Z (filteredCarrierFunction A B T f)) ^ 2) ≤
+      (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent A B T f := by
+  classical
+  let g := filteredCarrierFunction A B T f
+  have hW6 := typedW6FilteredCarrierFunction_le_two A B T f hsupport
+  have hcomp : (carrierMean A B (fun M => Complex.normSq (g M))) ^ 2 =
+      typedW6QComponent A B T f := by
+    unfold typedW6QComponent g
+    rfl
+  have hweighted :
+      (∑ Z : B →ₗ[F] (V d ⧸ A),
+          (typedW6OutputEnergy A B Z g) ^ 2 /
+            (2 : ℝ) ^ (6 * D * (carrierFrequencyEquiv A B Z).rank)) ≤
+        2 * typedW6QComponent A B T f := by
+    rw [← hcomp]
+    simpa [g] using hW6
+  have hterm : ∀ Z : B →ₗ[F] (V d ⧸ A),
+      (typedW6OutputEnergy A B Z g) ^ 2 ≤
+        (2 : ℝ) ^ (6 * D * D) *
+          ((typedW6OutputEnergy A B Z g) ^ 2 /
+            (2 : ℝ) ^ (6 * D * (carrierFrequencyEquiv A B Z).rank)) := by
+    intro Z
+    let r := (carrierFrequencyEquiv A B Z).rank
+    by_cases hr : r ≤ D
+    · have hpow : (2 : ℝ) ^ (6 * D * r) ≤ (2 : ℝ) ^ (6 * D * D) := by
+        exact pow_le_pow_right₀ (by norm_num : (1 : ℝ) ≤ 2)
+          (Nat.mul_le_mul_left (6 * D) hr)
+      have hden : (0 : ℝ) < (2 : ℝ) ^ (6 * D * r) := by positivity
+      have hident : (typedW6OutputEnergy A B Z g) ^ 2 =
+          (2 : ℝ) ^ (6 * D * r) *
+            ((typedW6OutputEnergy A B Z g) ^ 2 / (2 : ℝ) ^ (6 * D * r)) := by
+        rw [mul_div_cancel₀ _ (ne_of_gt hden)]
+      have hnn : 0 ≤ (typedW6OutputEnergy A B Z g) ^ 2 /
+          (2 : ℝ) ^ (6 * D * r) :=
+        div_nonneg (sq_nonneg _) (le_of_lt hden)
+      conv_lhs => rw [hident]
+      exact mul_le_mul_of_nonneg_right hpow hnn
+    · have hgt : D < r := not_le.mp hr
+      have hsup :=
+        ActualBinaryMatrixHC46A20SquareSupport.filteredCarrierFunction_supportedThrough
+          A B T f hsupport
+      have hg : ComplexFourierSupportedThrough D
+          (fun K => g ((carrierMatrixEquiv A B).symm K)) :=
+        (carrierFourier_support_iff_coordinate A B D g).mp hsup
+      have hE0 :=
+        ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_energy_eq_zero_of_rank_gt
+          (carrierFrequencyEquiv A B Z) 0
+          (fun K => g ((carrierMatrixEquiv A B).symm K)) hg hgt
+      have hcoord := typedW6OutputEnergy_coordinate A B Z g
+      have hzero : typedW6OutputEnergy A B Z g = 0 := by
+        rw [hcoord]
+        simpa [g] using hE0
+      rw [hzero]
+      simp
+  have hsum : (∑ Z : B →ₗ[F] (V d ⧸ A), (typedW6OutputEnergy A B Z g) ^ 2) ≤
+      (2 : ℝ) ^ (6 * D * D) *
+        ∑ Z : B →ₗ[F] (V d ⧸ A),
+          (typedW6OutputEnergy A B Z g) ^ 2 /
+            (2 : ℝ) ^ (6 * D * (carrierFrequencyEquiv A B Z).rank) := by
+    calc
+      _ ≤ ∑ Z : B →ₗ[F] (V d ⧸ A),
+            (2 : ℝ) ^ (6 * D * D) *
+              ((typedW6OutputEnergy A B Z g) ^ 2 /
+                (2 : ℝ) ^ (6 * D * (carrierFrequencyEquiv A B Z).rank)) :=
+          Finset.sum_le_sum (fun Z _ => hterm Z)
+      _ = (2 : ℝ) ^ (6 * D * D) *
+            ∑ Z : B →ₗ[F] (V d ⧸ A),
+              (typedW6OutputEnergy A B Z g) ^ 2 /
+                (2 : ℝ) ^ (6 * D * (carrierFrequencyEquiv A B Z).rank) := by
+          rw [Finset.mul_sum]
+  have htwo : (2 : ℝ) ^ (6 * D * D) * (2 * typedW6QComponent A B T f) =
+      (2 : ℝ) ^ (6 * D * D + 1) * typedW6QComponent A B T f := by
+    rw [pow_succ]
+    ring
+  have hscaled := mul_le_mul_of_nonneg_left hweighted
+    (pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) (6 * D * D))
+  rw [htwo] at hscaled
+  exact le_trans hsum hscaled
+
+/-- The order-`D` A6 weight times the W6 pool factor fits in the terminal
+allowance. This is the numeric room for one carrier's parent-energy sum. It
+does not identify mixed fourth moments with those parents. -/
+theorem a7_saturated_pool_exponent_fits (D : Nat) (hD : 0 < D) :
+    (2 : ℝ) ^ (24 * D * D) * (2 : ℝ) ^ (6 * D * D + 1) ≤
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
+  let L := 24 * D * D + (6 * D * D + 1)
+  have hL : (L : ℤ) ≤ (100 * D * D : ℤ) + 1 - 31 * (D : ℤ) := by
+    have hLexp : (L : ℤ) = 30 * (D : ℤ) * D + 1 := by
+      simp [L, Nat.cast_add, Nat.cast_mul]
+      ring
+    have hD1 : (1 : ℤ) ≤ D := by exact_mod_cast hD
+    nlinarith [hLexp, hD1]
+  have hflat : (2 : ℝ) ^ L =
+      (2 : ℝ) ^ (24 * D * D) * (2 : ℝ) ^ (6 * D * D + 1) := by
+    rw [← pow_add]
+  rw [← hflat]
+  have hbase : (1 : ℝ) ≤ 2 := by norm_num
+  have hleR : (2 : ℝ) ^ L ≤ (2 : ℝ) ^ ((100 * D * D : ℤ) + 1 - 31 * (D : ℤ)) := by
+    rw [← zpow_natCast (2 : ℝ) L]
+    exact zpow_le_zpow_right₀ hbase hL
+  have hadd : (2 : ℝ) ^ ((100 * D * D : ℤ) + (1 - 31 * (D : ℤ))) =
+      (2 : ℝ) ^ (100 * D * D : ℤ) * (2 : ℝ) ^ (1 - 31 * (D : ℤ)) :=
+    zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0) _ _
+  have hnatR : (2 : ℝ) ^ (100 * D * D : ℤ) = (2 : ℝ) ^ (100 * D * D) :=
+    zpow_natCast (2 : ℝ) (100 * D * D)
+  have hexp : (100 * D * D : ℤ) + 1 - 31 * (D : ℤ) =
+      (100 * D * D : ℤ) + (1 - 31 * (D : ℤ)) := by ring
+  calc
+    (2 : ℝ) ^ L ≤ (2 : ℝ) ^ ((100 * D * D : ℤ) + 1 - 31 * (D : ℤ)) := hleR
+    _ = (2 : ℝ) ^ ((100 * D * D : ℤ) + (1 - 31 * (D : ℤ))) := by rw [hexp]
+    _ = (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
+      rw [hadd, hnatR]
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer

@@ -31,6 +31,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_output_energy_sq_le_component
 #check a7_saturated_output_le_component
 #check a7_saturated_fourth_le_share
+#check a7_carrier_energy_sq_sum_le
+#check a7_saturated_pool_exponent_fits
 
 #print axioms a7_constant_of_degree_zero
 #print axioms a7_q_eq_zero_order
@@ -57,3 +59,5 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_output_energy_sq_le_component
 #print axioms a7_saturated_output_le_component
 #print axioms a7_saturated_fourth_le_share
+#print axioms a7_carrier_energy_sq_sum_le
+#print axioms a7_saturated_pool_exponent_fits
