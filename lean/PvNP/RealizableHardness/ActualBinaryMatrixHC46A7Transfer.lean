@@ -1,6 +1,7 @@
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
 import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
 import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
 import PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
@@ -31,6 +32,7 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
 open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
@@ -6233,6 +6235,725 @@ theorem a7_preceding_positive_shares_eq_nested_rest {n d : Nat}
   have hcarrier : a7PairShare C H (fun M => (character Z M : ℂ)) = 1 := by
     rw [a7_character_pair_share, if_pos hsel]
   rw [hq, hzero, hcarrier]
+
+/-- Complements of a fixed subspace are graphs of maps out of one chosen
+complement. The count depends only on the two dimensions. -/
+noncomputable def a7ComplementGraphEquiv
+    {V : Type*} [AddCommGroup V] [Module F V]
+    (H C : Submodule F V) (h : IsCompl H C) :
+    {L : Submodule F V // IsCompl H L} ≃ (C →ₗ[F] H) where
+  toFun L := (H.isComplEquivProj L).1.comp C.subtype
+  invFun f := H.isComplEquivProj.symm
+    ⟨LinearMap.ofIsCompl h LinearMap.id f, by
+      intro x
+      exact LinearMap.ofIsCompl_apply_left h x⟩
+  left_inv L := by
+    apply H.isComplEquivProj.injective
+    change H.isComplEquivProj
+      (H.isComplEquivProj.symm
+        ⟨LinearMap.ofIsCompl h LinearMap.id
+          ((H.isComplEquivProj L).1.comp C.subtype), by
+          intro x
+          exact LinearMap.ofIsCompl_apply_left h x⟩) =
+        H.isComplEquivProj L
+    rw [Equiv.apply_symm_apply]
+    apply Subtype.ext
+    exact LinearMap.ofIsCompl_eq h
+      (fun x => ((H.isComplEquivProj L).2 x).symm)
+      (fun _ => rfl)
+  right_inv f := by
+    change ((H.isComplEquivProj
+      (H.isComplEquivProj.symm
+        ⟨LinearMap.ofIsCompl h LinearMap.id f, by
+          intro x
+          exact LinearMap.ofIsCompl_apply_left h x⟩)).1).comp C.subtype = f
+    rw [Equiv.apply_symm_apply]
+    change (LinearMap.ofIsCompl h LinearMap.id f).comp C.subtype = f
+    apply LinearMap.ext
+    intro x
+    exact LinearMap.ofIsCompl_apply_right h x
+
+theorem a7_complement_card
+    {V : Type*} [AddCommGroup V] [Module F V] [Finite V]
+    (H C : Submodule F V) (h : IsCompl H C) :
+    Fintype.card {L : Submodule F V // IsCompl H L} =
+      2 ^ (Module.finrank F C * Module.finrank F H) := by
+  classical
+  letI : Finite C := Finite.of_injective Subtype.val Subtype.val_injective
+  letI : Finite H := Finite.of_injective Subtype.val Subtype.val_injective
+  letI : Finite (C →ₗ[F] H) :=
+    Finite.of_injective (fun f : C →ₗ[F] H => (f : C → H)) (by
+      intro f g hfg
+      apply LinearMap.ext
+      intro x
+      exact congrFun hfg x)
+  letI : Fintype (C →ₗ[F] H) := Fintype.ofFinite _
+  calc
+    Fintype.card {L : Submodule F V // IsCompl H L} =
+        Fintype.card (C →ₗ[F] H) :=
+      Fintype.card_congr (a7ComplementGraphEquiv H C h)
+    _ = 2 ^ (Module.finrank F C * Module.finrank F H) := by
+      rw [Module.card_eq_pow_finrank (K := F) (V := C →ₗ[F] H),
+        Module.finrank_linearMap (R := F) (S := F) (M := C) (N := H)]
+      norm_num
+
+/-- A carrier hybrid filter keeps exactly the selected carrier frequencies. -/
+theorem a7_carrier_hybrid_fourierCoeff {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (A₁₂ : Submodule F (V d ⧸ A)) (B₁₂ : Submodule F B)
+    (g : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (Wfreq : B →ₗ[F] (V d ⧸ A)) :
+    complexCarrierFourierCoeff A B
+        (complexCarrierHybridFilter A B A₁₂ B₁₂ g) Wfreq =
+      if Selected A₁₂ B₁₂ Wfreq then
+        complexCarrierFourierCoeff A B g Wfreq else 0 := by
+  classical
+  unfold complexCarrierHybridFilter
+  rw [complexCarrierFourierCoeff_finset_sum]
+  have hterm : ∀ Z : B →ₗ[F] (V d ⧸ A),
+      complexCarrierFourierCoeff A B
+        (fun M => if Selected A₁₂ B₁₂ Z then
+          complexCarrierFourierCoeff A B g Z *
+            (traceCharacter Z M : Complex) else 0) Wfreq =
+        if Z = Wfreq ∧ Selected A₁₂ B₁₂ Wfreq then
+          complexCarrierFourierCoeff A B g Wfreq else 0 := by
+    intro Z
+    by_cases hsel : Selected A₁₂ B₁₂ Z
+    · have hfun : (fun M => if Selected A₁₂ B₁₂ Z then
+          complexCarrierFourierCoeff A B g Z *
+            (traceCharacter Z M : Complex) else 0) =
+          fun M => complexCarrierFourierCoeff A B g Z *
+            (traceCharacter Z M : Complex) := by
+        funext M
+        simp [hsel]
+      rw [hfun, complexCarrierFourierCoeff_smul,
+        complexCarrierFourierCoeff_character]
+      by_cases hZW : Z = Wfreq
+      · subst hZW
+        simp [hsel]
+      · have hcomm : Wfreq ≠ Z := fun h => hZW h.symm
+        simp [hsel, hZW, hcomm]
+    · have hfun : (fun M => if Selected A₁₂ B₁₂ Z then
+          complexCarrierFourierCoeff A B g Z *
+            (traceCharacter Z M : Complex) else 0) =
+          fun _ => 0 := by
+        funext M
+        simp [hsel]
+      rw [hfun]
+      have hzero : complexCarrierFourierCoeff A B (fun _ => (0 : Complex)) Wfreq = 0 := by
+        simp [complexCarrierFourierCoeff]
+      rw [hzero]
+      have hnot : ¬ (Z = Wfreq ∧ Selected A₁₂ B₁₂ Wfreq) := by
+        intro h
+        exact hsel (by
+          have hZ : Z = Wfreq := h.1
+          subst hZ
+          exact h.2)
+      simp [hnot]
+  simp_rw [hterm]
+  have hsingle :
+      (∑ Z : B →ₗ[F] (V d ⧸ A),
+        if Z = Wfreq ∧ Selected A₁₂ B₁₂ Wfreq then
+          complexCarrierFourierCoeff A B g Wfreq else 0) =
+        (if Wfreq = Wfreq ∧ Selected A₁₂ B₁₂ Wfreq then
+          complexCarrierFourierCoeff A B g Wfreq else 0) := by
+    refine Finset.sum_eq_single Wfreq ?_ ?_
+    · intro Z _ hne
+      have hnot : ¬ (Z = Wfreq ∧ Selected A₁₂ B₁₂ Wfreq) := fun h => hne h.1
+      simp [hnot]
+    · intro hmiss
+      exact absurd (Finset.mem_univ Wfreq) hmiss
+  rw [hsingle]
+  simp
+
+/-- Original Fourier mass accepted by one left selector. -/
+def a7LeftSelectedMass {n d : Nat}
+    (X : BinaryMatrix n d)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) : ℝ :=
+  ∑ Y : BinaryMatrix n d,
+    if t2LeftSelected X.transpose.toLin' Y.transpose.toLin' A₂ B₂ then
+      Complex.normSq (complexFourierCoeff f Y) else 0
+
+/-- Squares of the predecessor fibers that meet one outer selector add up to
+the left-selected mass. A non-selected fiber is absent. -/
+theorem a7_selected_fiber_energy_eq_left_mass {n d : Nat}
+    (X : BinaryMatrix n d)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (hA : LinearMap.range X.transpose.toLin' ≤ A₂)
+    (hB : B₂ ≤ LinearMap.ker X.transpose.toLin')
+    (f : BinaryMatrix n d → Complex) :
+    (∑ Z : LinearMap.ker X.transpose.toLin' →ₗ[F]
+        (V d ⧸ LinearMap.range X.transpose.toLin'),
+      if Selected (A₂.map (LinearMap.range X.transpose.toLin').mkQ)
+          (B₂.comap (LinearMap.ker X.transpose.toLin').subtype) Z then
+        ∑ Y : w6ActualPredecessorFrequencyFiber X Z,
+          Complex.normSq (complexFourierCoeff f Y.1)
+      else 0) =
+      a7LeftSelectedMass X A₂ B₂ f := by
+  classical
+  let A1 := LinearMap.range X.transpose.toLin'
+  let B1 := LinearMap.ker X.transpose.toLin'
+  let A12 := A₂.map A1.mkQ
+  let B12 := B₂.comap B1.subtype
+  let Freq := B1 →ₗ[F] (V d ⧸ A1)
+  let Sel := {Z : Freq // Selected A12 B12 Z}
+  let FiberSum := Σ Z : Sel, w6ActualPredecessorFrequencyFiber X Z.1
+  let LeftY := {Y : BinaryMatrix n d //
+    t2LeftSelected X.transpose.toLin' Y.transpose.toLin' A₂ B₂}
+  have hinduced (Y : BinaryMatrix n d) :
+      t2InducedOnKernel X.transpose.toLin' Y.transpose.toLin' =
+        w6ActualCarrierFrequency X Y := by
+    rw [t2_induced_eq]
+    rfl
+  let e : FiberSum ≃ LeftY := {
+    toFun := fun z => ⟨z.2.1, by
+      refine ⟨(t2_matrix_precedes_iff X z.2.1).1 z.2.2.1, hA, hB, ?_⟩
+      rw [hinduced z.2.1, z.2.2.2]
+      exact z.1.2⟩
+    invFun := fun Y => ⟨⟨w6ActualCarrierFrequency X Y.1, by
+      have hleft := Y.2
+      rw [← hinduced Y.1]
+      exact hleft.2.2.2⟩, ⟨Y.1, (t2_matrix_precedes_iff X Y.1).2 Y.2.1, rfl⟩⟩
+    left_inv := by
+      rintro ⟨⟨Z, hsel⟩, ⟨Y, hprec, hfreq⟩⟩
+      cases hfreq
+      rfl
+    right_inv := by
+      intro Y
+      apply Subtype.ext
+      rfl
+  }
+  have hsigma :
+      (∑ Z : Sel, ∑ Y : w6ActualPredecessorFrequencyFiber X Z.1,
+        Complex.normSq (complexFourierCoeff f Y.1)) =
+        ∑ z : FiberSum, Complex.normSq (complexFourierCoeff f z.2.1) :=
+    (Fintype.sum_sigma (fun z : FiberSum =>
+      Complex.normSq (complexFourierCoeff f z.2.1))).symm
+  have hequiv :
+      (∑ z : FiberSum, Complex.normSq (complexFourierCoeff f z.2.1)) =
+        ∑ Y : LeftY, Complex.normSq (complexFourierCoeff f Y.1) := by
+    apply Fintype.sum_equiv e
+    intro z
+    rfl
+  have hselSum :
+      (∑ Z : Freq,
+        if Selected A12 B12 Z then
+          ∑ Y : w6ActualPredecessorFrequencyFiber X Z,
+            Complex.normSq (complexFourierCoeff f Y.1)
+        else 0) =
+        ∑ Z : Sel, ∑ Y : w6ActualPredecessorFrequencyFiber X Z.1,
+          Complex.normSq (complexFourierCoeff f Y.1) := by
+    let fiber := fun Z : Freq =>
+      ∑ Y : w6ActualPredecessorFrequencyFiber X Z,
+        Complex.normSq (complexFourierCoeff f Y.1)
+    have hfilter :
+        (∑ Z : Freq, if Selected A12 B12 Z then fiber Z else 0) =
+          ∑ Z ∈ (Finset.univ : Finset Freq).filter (fun Z => Selected A12 B12 Z),
+            fiber Z := by
+      rw [Finset.sum_filter]
+    have hbij :
+        (∑ Z ∈ (Finset.univ : Finset Freq).filter (fun Z => Selected A12 B12 Z),
+          fiber Z) =
+          ∑ Z : Sel, fiber Z.1 := by
+      refine Finset.sum_bij
+        (fun Z (hZ : Z ∈ (Finset.univ : Finset Freq).filter
+          (fun W => Selected A12 B12 W)) =>
+          (⟨Z, (Finset.mem_filter.mp hZ).2⟩ : Sel))
+        (fun Z hZ => Finset.mem_univ _)
+        (fun Z₁ h₁ Z₂ h₂ hEq => congrArg Subtype.val hEq)
+        (fun W _ => ⟨W.1, by simp [Finset.mem_filter, W.2], Subtype.ext rfl⟩)
+        (fun _ _ => rfl)
+    exact hfilter.trans hbij
+  have hleft :
+      (∑ Y : LeftY, Complex.normSq (complexFourierCoeff f Y.1)) =
+        a7LeftSelectedMass X A₂ B₂ f := by
+    let p : BinaryMatrix n d → Prop := fun Y =>
+      t2LeftSelected X.transpose.toLin' Y.transpose.toLin' A₂ B₂
+    have huniv : (Finset.univ : Finset LeftY) =
+        (Finset.univ : Finset (BinaryMatrix n d)).subtype p := by
+      ext Y
+      simp [LeftY, p]
+    have hsub :
+        (∑ Y : LeftY, Complex.normSq (complexFourierCoeff f Y.1)) =
+          ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n d)).subtype p,
+            Complex.normSq (complexFourierCoeff f Y.1) := by
+      change (∑ Y ∈ (Finset.univ : Finset LeftY), _) = _
+      rw [huniv]
+    have hfilter := Finset.sum_subtype_eq_sum_filter
+      (s := (Finset.univ : Finset (BinaryMatrix n d))) (p := p)
+      (fun Y => Complex.normSq (complexFourierCoeff f Y))
+    unfold a7LeftSelectedMass
+    rw [hsub, hfilter, Finset.sum_filter]
+  rw [hselSum, hsigma, hequiv, hleft]
+
+/-- One outer hybrid filter of a degree-`D` derivative has carrier energy at
+most the predecessor-fiber factor times the left-selected mass. The bound
+holds at every base because each phase has squared magnitude one. This is
+the selected energy of that filter, not a positive-order pair share. -/
+theorem a7_outer_hybrid_energy_le_left_mass
+    {n d D : Nat} (X : BinaryMatrix n d)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (hA : LinearMap.range X.transpose.toLin' ≤ A₂)
+    (hB : B₂ ≤ LinearMap.ker X.transpose.toLin')
+    (S : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    carrierMean (LinearMap.range X.transpose.toLin')
+        (LinearMap.ker X.transpose.toLin')
+        (fun M => Complex.normSq
+          (complexCarrierHybridFilter
+            (LinearMap.range X.transpose.toLin')
+            (LinearMap.ker X.transpose.toLin')
+            (A₂.map (LinearMap.range X.transpose.toLin').mkQ)
+            (B₂.comap (LinearMap.ker X.transpose.toLin').subtype)
+            (actualW6Derivative X S f) M)) ≤
+      (2 : ℝ) ^ (2 * X.rank * (D - X.rank)) *
+        a7LeftSelectedMass X A₂ B₂ f := by
+  classical
+  let A1 := LinearMap.range X.transpose.toLin'
+  let B1 := LinearMap.ker X.transpose.toLin'
+  let A12 := A₂.map A1.mkQ
+  let B12 := B₂.comap B1.subtype
+  let Freq := B1 →ₗ[F] (V d ⧸ A1)
+  have hparse :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7CarrierParseval.complex_carrier_parseval
+      A1 B1 (complexCarrierHybridFilter A1 B1 A12 B12 (actualW6Derivative X S f))
+  have hcoeff : ∀ Z : Freq,
+      Complex.normSq (complexCarrierFourierCoeff A1 B1
+        (complexCarrierHybridFilter A1 B1 A12 B12 (actualW6Derivative X S f)) Z) =
+      if Selected A12 B12 Z then
+        Complex.normSq (complexCarrierFourierCoeff A1 B1
+          (actualW6Derivative X S f) Z) else 0 := by
+    intro Z
+    rw [a7_carrier_hybrid_fourierCoeff]
+    by_cases hsel : Selected A12 B12 Z
+    · simp [hsel]
+    · simp [hsel]
+  rw [hparse]
+  simp_rw [hcoeff]
+  by_cases hXD : X.rank ≤ D
+  · let cap : ℝ := (2 : ℝ) ^ (2 * X.rank * (D - X.rank))
+    let fiberEnergy := fun Z : Freq =>
+      ∑ Y : w6ActualPredecessorFrequencyFiber X Z,
+        Complex.normSq (complexFourierCoeff f Y.1)
+    have hterm : ∀ Z : Freq,
+        (if Selected A12 B12 Z then
+          Complex.normSq (complexCarrierFourierCoeff A1 B1
+            (actualW6Derivative X S f) Z) else 0) ≤
+        if Selected A12 B12 Z then
+          (Fintype.card (w6ActualPredecessorFrequencyFiber X Z) : ℝ) *
+            fiberEnergy Z else 0 := by
+      intro Z
+      by_cases hsel : Selected A12 B12 Z
+      · simp only [hsel, if_pos]
+        simpa [fiberEnergy] using
+          ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_carrierCoeff_normSq_le_fiberEnergy
+            X S f Z
+      · simp [hsel]
+    have hcardLe : ∀ Z : Freq,
+        (if Selected A12 B12 Z then
+          (Fintype.card (w6ActualPredecessorFrequencyFiber X Z) : ℝ) *
+            fiberEnergy Z else 0) ≤
+        if Selected A12 B12 Z then cap * fiberEnergy Z else 0 := by
+      intro Z
+      by_cases hsel : Selected A12 B12 Z
+      · simp only [hsel, if_pos]
+        by_cases hZ : Module.finrank F (LinearMap.range Z) ≤ D - X.rank
+        · let l := Module.finrank F (LinearMap.range Z)
+          have hcard := w6_actual_predecessor_frequency_fiber_card X Z
+            (l := l) rfl
+          have hexp : 2 * X.rank * l ≤ 2 * X.rank * (D - X.rank) :=
+            Nat.mul_le_mul_left (2 * X.rank) hZ
+          have hpow : (2 : ℝ) ^ (2 * X.rank * l) ≤ cap := by
+            simpa [cap] using
+              (pow_le_pow_right₀ (by norm_num : (1 : ℝ) ≤ 2) hexp)
+          have hcardR :
+              (Fintype.card (w6ActualPredecessorFrequencyFiber X Z) : ℝ) ≤ cap := by
+            calc
+              (Fintype.card (w6ActualPredecessorFrequencyFiber X Z) : ℝ) =
+                  (2 ^ (2 * X.rank * l) : ℕ) := by exact_mod_cast hcard
+              _ = (2 : ℝ) ^ (2 * X.rank * l) := by norm_num
+              _ ≤ cap := hpow
+          exact mul_le_mul_of_nonneg_right hcardR
+            (Finset.sum_nonneg fun Y _ => Complex.normSq_nonneg _)
+        · have hZlarge : D - X.rank < Module.finrank F (LinearMap.range Z) :=
+            Nat.lt_of_not_ge hZ
+          have hzero : fiberEnergy Z = 0 := by
+            unfold fiberEnergy
+            apply Finset.sum_eq_zero
+            intro Y _
+            have hpred : w6Precedes X Y.1 := Y.2.1
+            have hfreq := w6_precedes_actual_carrier_frequency_rank X Y.1 hpred
+            rw [Y.2.2] at hfreq
+            have hYrank : Y.1.rank = X.rank +
+                Module.finrank F (LinearMap.range Z) := by
+              unfold w6Precedes at hpred
+              rw [hfreq.symm] at hpred
+              exact hpred
+            have hYlarge : D < Y.1.rank := by omega
+            simp [hsupport Y.1 hYlarge]
+          simp [hzero]
+      · simp [hsel]
+    have hsum1 := Finset.sum_le_sum (fun Z (_ : Z ∈ Finset.univ) => hterm Z)
+    have hsum2 := Finset.sum_le_sum (fun Z (_ : Z ∈ Finset.univ) => hcardLe Z)
+    have hfactor :
+        (∑ Z : Freq, if Selected A12 B12 Z then cap * fiberEnergy Z else 0) =
+          cap * ∑ Z : Freq, if Selected A12 B12 Z then fiberEnergy Z else 0 := by
+      have hfun : ∀ Z : Freq,
+          (if Selected A12 B12 Z then cap * fiberEnergy Z else 0) =
+            cap * (if Selected A12 B12 Z then fiberEnergy Z else 0) := by
+        intro Z
+        by_cases hsel : Selected A12 B12 Z <;> simp [hsel]
+      simp_rw [hfun]
+      exact (Finset.mul_sum Finset.univ
+        (fun Z => if Selected A12 B12 Z then fiberEnergy Z else 0) cap).symm
+    have hmass := a7_selected_fiber_energy_eq_left_mass X A₂ B₂ hA hB f
+    calc
+      (∑ Z : Freq, if Selected A12 B12 Z then
+          Complex.normSq (complexCarrierFourierCoeff A1 B1
+            (actualW6Derivative X S f) Z) else 0) ≤
+          ∑ Z : Freq, if Selected A12 B12 Z then
+            (Fintype.card (w6ActualPredecessorFrequencyFiber X Z) : ℝ) *
+              fiberEnergy Z else 0 := hsum1
+      _ ≤ ∑ Z : Freq, if Selected A12 B12 Z then cap * fiberEnergy Z else 0 :=
+        hsum2
+      _ = cap * ∑ Z : Freq, if Selected A12 B12 Z then fiberEnergy Z else 0 :=
+        hfactor
+      _ = cap * a7LeftSelectedMass X A₂ B₂ f := by
+        rw [hmass]
+  · have hDX : D < X.rank := Nat.lt_of_not_ge hXD
+    have hzero : ∀ Z : Freq,
+        Complex.normSq (complexCarrierFourierCoeff A1 B1
+          (actualW6Derivative X S f) Z) = 0 := by
+      intro Z
+      rw [ActualBinaryMatrixHC46A7EnergyConsumer.actualW6Derivative_carrierCoeff_fiberSum]
+      have hsum :
+          (∑ Y : w6ActualPredecessorFrequencyFiber X Z,
+            complexFourierCoeff f Y.1 *
+              (traceCharacter Y.1.transpose.toLin' S : Complex)) = 0 := by
+        apply Finset.sum_eq_zero
+        intro Y _
+        have hXY : X.rank ≤ Y.1.rank := by
+          have hpred : w6Precedes X Y.1 := Y.2.1
+          unfold w6Precedes at hpred
+          omega
+        simp [hsupport Y.1 (lt_of_lt_of_le hDX hXY)]
+      simp [hsum]
+    have hif : ∀ Z : Freq,
+        (if Selected A12 B12 Z then
+          Complex.normSq (complexCarrierFourierCoeff A1 B1
+            (actualW6Derivative X S f) Z) else 0) = 0 := by
+      intro Z
+      by_cases hsel : Selected A12 B12 Z <;> simp [hsel, hzero Z]
+    simp_rw [hif]
+    simp only [Finset.sum_const_zero]
+    refine mul_nonneg (by positivity) ?_
+    unfold a7LeftSelectedMass
+    exact Finset.sum_nonneg fun _ _ => by
+      split_ifs
+      · exact Complex.normSq_nonneg _
+      · exact le_rfl
+
+/-- Geometric T2 complement of one outer selector. Image complements meet the
+parent range trivially and cover `A₂`; domain complements meet the parent
+kernel in `B₂` and cover the codomain. -/
+abbrev a7T2ComplementPair {n d : Nat}
+    (X : W n →ₗ[F] V d)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n)) :=
+  {p : Submodule F (V d) × Submodule F (W n) //
+    LinearMap.range X ⊓ p.1 = ⊥ ∧
+    LinearMap.range X ⊔ p.1 = A₂ ∧
+    p.2 ⊓ LinearMap.ker X = B₂ ∧
+    p.2 ⊔ LinearMap.ker X = ⊤}
+
+/-- The left-selected mass is the sum of the right-selected masses. Each
+accepted frequency sits on its canonical complement and on no other pair. -/
+theorem a7_left_mass_eq_complement_sum {n d : Nat}
+    (X : BinaryMatrix n d)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) :
+    a7LeftSelectedMass X A₂ B₂ f =
+      ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+        ∑ Y : BinaryMatrix n d,
+          if t2RightSelected X.transpose.toLin' Y.transpose.toLin' A₂ B₂
+              p.1.1 p.1.2 then
+            Complex.normSq (complexFourierCoeff f Y) else 0 := by
+  classical
+  let Xlin := X.transpose.toLin'
+  let scalar : BinaryMatrix n d → ℝ := fun Y =>
+    Complex.normSq (complexFourierCoeff f Y)
+  have hY : ∀ Y : BinaryMatrix n d,
+      (if t2LeftSelected Xlin Y.transpose.toLin' A₂ B₂ then scalar Y else 0) =
+        ∑ p : Submodule F (V d) × Submodule F (W n),
+          if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+            scalar Y else 0 := by
+    intro Y
+    let Ymap := Y.transpose.toLin'
+    by_cases hleft : t2LeftSelected Xlin Ymap A₂ B₂
+    · rw [if_pos hleft]
+      let pair : Submodule F (V d) × Submodule F (W n) :=
+        ⟨t2ComplementImage Xlin Ymap A₂, t2ComplementDomain Xlin Ymap B₂⟩
+      have hright : t2RightSelected Xlin Ymap A₂ B₂ pair.1 pair.2 := by
+        simpa [pair] using t2_left_to_right Xlin Ymap A₂ B₂ hleft
+      have hzero : ∀ p : Submodule F (V d) × Submodule F (W n),
+          p ≠ pair →
+            (if t2RightSelected Xlin Ymap A₂ B₂ p.1 p.2 then scalar Y else 0) = 0 := by
+        intro p hp
+        by_cases hr : t2RightSelected Xlin Ymap A₂ B₂ p.1 p.2
+        · have hcan := t2_right_to_left Xlin Ymap A₂ B₂ p.1 p.2 hr
+          exact absurd (Prod.ext hcan.2.1 hcan.2.2) hp
+        · rw [if_neg hr]
+      rw [Finset.sum_eq_single pair]
+      · rw [if_pos hright]
+      · intro p _ hp
+        exact hzero p hp
+      · intro hmiss
+        exact absurd (Finset.mem_univ pair) hmiss
+    · rw [if_neg hleft]
+      symm
+      apply Finset.sum_eq_zero
+      intro p _
+      exact if_neg (t2_rejected_right Xlin Ymap A₂ B₂ p.1 p.2 hleft)
+  have hall :
+      a7LeftSelectedMass X A₂ B₂ f =
+        ∑ p : Submodule F (V d) × Submodule F (W n),
+          ∑ Y : BinaryMatrix n d,
+            if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+              scalar Y else 0 := by
+    unfold a7LeftSelectedMass
+    calc
+      _ = ∑ Y : BinaryMatrix n d,
+          ∑ p : Submodule F (V d) × Submodule F (W n),
+            if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+              scalar Y else 0 := by
+        refine Finset.sum_congr rfl (fun Y _ => ?_)
+        simpa [scalar, Xlin] using hY Y
+      _ = _ := Finset.sum_comm
+  let geom : Submodule F (V d) × Submodule F (W n) → Prop := fun p =>
+    LinearMap.range Xlin ⊓ p.1 = ⊥ ∧
+      LinearMap.range Xlin ⊔ p.1 = A₂ ∧
+      p.2 ⊓ LinearMap.ker Xlin = B₂ ∧
+      p.2 ⊔ LinearMap.ker Xlin = ⊤
+  have houtside : ∀ p : Submodule F (V d) × Submodule F (W n),
+      ¬ geom p →
+        (∑ Y : BinaryMatrix n d,
+          if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+            scalar Y else 0) = 0 := by
+    intro p hp
+    apply Finset.sum_eq_zero
+    intro Y _
+    have hnot : ¬ t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 := by
+      intro hr
+      exact hp ⟨hr.2.2.1, hr.2.2.2.1, hr.2.2.2.2.2.1, hr.2.2.2.2.1⟩
+    rw [if_neg hnot]
+  have hif :
+      (∑ p : Submodule F (V d) × Submodule F (W n),
+        ∑ Y : BinaryMatrix n d,
+          if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+            scalar Y else 0) =
+        ∑ p : Submodule F (V d) × Submodule F (W n),
+          if geom p then
+            ∑ Y : BinaryMatrix n d,
+              if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+                scalar Y else 0
+          else 0 := by
+    refine Finset.sum_congr rfl (fun p _ => ?_)
+    by_cases hg : geom p
+    · simp [hg]
+    · simp [hg, houtside p hg]
+  have hmem : ∀ p : Submodule F (V d) × Submodule F (W n),
+      p ∈ (Finset.univ : Finset (Submodule F (V d) × Submodule F (W n))).filter geom ↔
+        geom p := by
+    intro p
+    simp
+  have hsubtype :
+      (∑ p ∈ (Finset.univ :
+          Finset (Submodule F (V d) × Submodule F (W n))).filter geom,
+        ∑ Y : BinaryMatrix n d,
+          if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+            scalar Y else 0) =
+        ∑ p : a7T2ComplementPair Xlin A₂ B₂,
+          ∑ Y : BinaryMatrix n d,
+            if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1.1 p.1.2 then
+              scalar Y else 0 := by
+    have hpred : ∀ x : Submodule F (V d) × Submodule F (W n),
+        x ∈ (Finset.univ.filter geom) ↔ geom x := hmem
+    exact Finset.sum_subtype (s := Finset.univ.filter geom) (p := geom) hpred
+      (fun p => ∑ Y : BinaryMatrix n d,
+        if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+          scalar Y else 0)
+  have hfilter :
+      (∑ p : Submodule F (V d) × Submodule F (W n),
+        if geom p then
+          ∑ Y : BinaryMatrix n d,
+            if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+              scalar Y else 0
+        else 0) =
+        ∑ p ∈ (Finset.univ :
+            Finset (Submodule F (V d) × Submodule F (W n))).filter geom,
+          ∑ Y : BinaryMatrix n d,
+            if t2RightSelected Xlin Y.transpose.toLin' A₂ B₂ p.1 p.2 then
+              scalar Y else 0 := by
+    rw [Finset.sum_filter]
+  rw [hall, hif, hfilter, hsubtype]
+
+/-- The squared selected energy of one outer hybrid filter is at most the
+predecessor-fiber factor times the number of its T2 complements times the
+sum of those complements' original pair shares. This is the selected energy
+of one filter, not a positive-order pair share of `a7OutputBinary`. The
+share hypothesis stays. -/
+theorem a7_outer_hybrid_energy_sq_le_complement_shares
+    {n d D : Nat} (X : BinaryMatrix n d)
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (hA : LinearMap.range X.transpose.toLin' ≤ A₂)
+    (hB : B₂ ≤ LinearMap.ker X.transpose.toLin')
+    (S : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) :
+    (carrierMean (LinearMap.range X.transpose.toLin')
+        (LinearMap.ker X.transpose.toLin')
+        (fun M => Complex.normSq
+          (complexCarrierHybridFilter
+            (LinearMap.range X.transpose.toLin')
+            (LinearMap.ker X.transpose.toLin')
+            (A₂.map (LinearMap.range X.transpose.toLin').mkQ)
+            (B₂.comap (LinearMap.ker X.transpose.toLin').subtype)
+            (actualW6Derivative X S f) M))) ^ 2 ≤
+      (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+        (Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f := by
+  classical
+  let energy := carrierMean (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin')
+      (fun M => Complex.normSq
+        (complexCarrierHybridFilter
+          (LinearMap.range X.transpose.toLin')
+          (LinearMap.ker X.transpose.toLin')
+          (A₂.map (LinearMap.range X.transpose.toLin').mkQ)
+          (B₂.comap (LinearMap.ker X.transpose.toLin').subtype)
+          (actualW6Derivative X S f) M))
+  have hle := a7_outer_hybrid_energy_le_left_mass X A₂ B₂ hA hB S f hsupport
+  have hnn : 0 ≤ energy := by
+    unfold energy carrierMean
+    exact div_nonneg (Finset.sum_nonneg fun _ _ => Complex.normSq_nonneg _)
+      (Nat.cast_nonneg _)
+  have hmassNn : 0 ≤ a7LeftSelectedMass X A₂ B₂ f := by
+    unfold a7LeftSelectedMass
+    exact Finset.sum_nonneg fun _ _ => by
+      split_ifs
+      · exact Complex.normSq_nonneg _
+      · exact le_rfl
+  have hsq : energy ^ 2 ≤
+      ((2 : ℝ) ^ (2 * X.rank * (D - X.rank)) *
+        a7LeftSelectedMass X A₂ B₂ f) ^ 2 := by
+    have hpow : 0 ≤ (2 : ℝ) ^ (2 * X.rank * (D - X.rank)) := by positivity
+    have hprod : 0 ≤ (2 : ℝ) ^ (2 * X.rank * (D - X.rank)) *
+        a7LeftSelectedMass X A₂ B₂ f := mul_nonneg hpow hmassNn
+    nlinarith [mul_nonneg (add_nonneg hnn hprod) (sub_nonneg.mpr hle)]
+  have hsquare :
+      ((2 : ℝ) ^ (2 * X.rank * (D - X.rank)) *
+        a7LeftSelectedMass X A₂ B₂ f) ^ 2 =
+        (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+          (a7LeftSelectedMass X A₂ B₂ f) ^ 2 := by
+    rw [mul_pow, ← pow_mul]
+    have hexp : (2 * X.rank * (D - X.rank)) * 2 =
+        4 * X.rank * (D - X.rank) := by ring
+    rw [hexp]
+  let rightMass : a7T2ComplementPair X.transpose.toLin' A₂ B₂ → ℝ := fun p =>
+    ∑ Y : BinaryMatrix n d,
+      if t2RightSelected X.transpose.toLin' Y.transpose.toLin' A₂ B₂
+          p.1.1 p.1.2 then
+        Complex.normSq (complexFourierCoeff f Y) else 0
+  have hsplit := a7_left_mass_eq_complement_sum X A₂ B₂ f
+  have hcs := Finset.sum_mul_sq_le_sq_mul_sq
+    (Finset.univ : Finset (a7T2ComplementPair X.transpose.toLin' A₂ B₂))
+    (fun _ => (1 : ℝ)) rightMass
+  have hnum : (∑ p, rightMass p) ^ 2 ≤
+      (Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+        ∑ p, (rightMass p) ^ 2 := by
+    simpa using hcs
+  have hone : ∀ p, (rightMass p) ^ 2 ≤ a7PairShare p.1.1 p.1.2 f := by
+    intro p
+    have hleMass : rightMass p ≤ a7SelectedFourierMass p.1.1 p.1.2 f := by
+      unfold rightMass a7SelectedFourierMass
+      refine Finset.sum_le_sum ?_
+      intro Y _
+      by_cases hr : t2RightSelected X.transpose.toLin' Y.transpose.toLin'
+          A₂ B₂ p.1.1 p.1.2
+      · have hsel : Selected p.1.1 p.1.2 Y.transpose.toLin' :=
+          hr.2.2.2.2.2.2.1
+        simp [hr, hsel]
+      · rw [if_neg hr]
+        by_cases hs : Selected p.1.1 p.1.2 Y.transpose.toLin'
+        · simp [hs]
+          exact Complex.normSq_nonneg _
+        · simp [hs]
+    have hrNn : 0 ≤ rightMass p := by
+      unfold rightMass
+      exact Finset.sum_nonneg fun _ _ => by
+        split_ifs
+        · exact Complex.normSq_nonneg _
+        · exact le_rfl
+    have hsNn : 0 ≤ a7SelectedFourierMass p.1.1 p.1.2 f := by
+      unfold a7SelectedFourierMass
+      exact Finset.sum_nonneg fun _ _ => by
+        split_ifs
+        · exact Complex.normSq_nonneg _
+        · exact le_rfl
+    have hsqMass : (rightMass p) ^ 2 ≤
+        (a7SelectedFourierMass p.1.1 p.1.2 f) ^ 2 := by
+      nlinarith
+    exact hsqMass.trans (a7_selected_mass_sq_le_pair_share p.1.1 p.1.2 f)
+  have hshares : (∑ p, (rightMass p) ^ 2) ≤
+      ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+        a7PairShare p.1.1 p.1.2 f :=
+    Finset.sum_le_sum fun p _ => hone p
+  have hcardNn : (0 : ℝ) ≤
+      Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) :=
+    Nat.cast_nonneg _
+  have hmassSq : (a7LeftSelectedMass X A₂ B₂ f) ^ 2 ≤
+      (Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f := by
+    rw [hsplit]
+    exact le_trans hnum (mul_le_mul_of_nonneg_left hshares hcardNn)
+  have hpowNn : 0 ≤ (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) := by positivity
+  have hbound : (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+      (a7LeftSelectedMass X A₂ B₂ f) ^ 2 ≤
+      (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+        ((Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+          ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+            a7PairShare p.1.1 p.1.2 f) :=
+    mul_le_mul_of_nonneg_left hmassSq hpowNn
+  have hassoc : (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+      ((Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f) =
+      (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+        (Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f := by ring
+  have henergy : energy ^ 2 ≤
+      (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+        (Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+        ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+          a7PairShare p.1.1 p.1.2 f := by
+    calc
+      energy ^ 2 ≤ ((2 : ℝ) ^ (2 * X.rank * (D - X.rank)) *
+          a7LeftSelectedMass X A₂ B₂ f) ^ 2 := hsq
+      _ = (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+          (a7LeftSelectedMass X A₂ B₂ f) ^ 2 := hsquare
+      _ ≤ (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+          ((Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+            ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+              a7PairShare p.1.1 p.1.2 f) := hbound
+      _ = (2 : ℝ) ^ (4 * X.rank * (D - X.rank)) *
+          (Fintype.card (a7T2ComplementPair X.transpose.toLin' A₂ B₂) : ℝ) *
+          ∑ p : a7T2ComplementPair X.transpose.toLin' A₂ B₂,
+            a7PairShare p.1.1 p.1.2 f := hassoc
+  simpa [energy] using henergy
 
 /-- One final pair above a preceding parent is a single nonnegative term of
 that parent's nested sum, hence at most the parent's output `Q`. -/
