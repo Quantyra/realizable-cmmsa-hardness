@@ -5254,6 +5254,81 @@ theorem a7_nested_share_le_q {n d : Nat}
   rw [himage]
   exact hle.trans (le_of_eq hexh)
 
+/-- Sum of the squared Fourier coefficients selected by one pair. -/
+def a7SelectedFourierMass {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) : ℝ :=
+  ∑ Y : BinaryMatrix n d,
+    if Selected A B Y.transpose.toLin' then
+      Complex.normSq (complexFourierCoeff f Y) else 0
+
+/-- Matrices and linear maps are the same finite index for an affine base. -/
+def a7MatrixLinEquiv (n d : Nat) : BinaryMatrix n d ≃ (V d →ₗ[F] W n) where
+  toFun := Matrix.toLin'
+  invFun := LinearMap.toMatrix'
+  left_inv M := by
+    ext i j
+    simp [LinearMap.toMatrix'_apply, Matrix.toLin'_apply, Finset.sum_pi_single]
+  right_inv := Matrix.toLin'_toMatrix'
+
+/-- For every complex input, the square of one pair's selected Fourier mass
+is at most that pair's share. The share is an average of squares, and the
+mass is the average of the unsquared energies. This does not bound an output
+share, it does not use the same-rank datum parent, and it does not remove
+the share hypothesis. -/
+theorem a7_selected_mass_sq_le_pair_share {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) :
+    (a7SelectedFourierMass A B f) ^ 2 ≤ a7PairShare A B f := by
+  classical
+  let x : (V d →ₗ[F] W n) → ℝ := fun T =>
+    carrierMean A B (fun M =>
+      Complex.normSq (filteredCarrierFunction A B T f M))
+  let e := a7MatrixLinEquiv n d
+  have hmass :=
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A12FourthMoment.actual_affine_derivative_energy_eq_selected_fourier_mass
+      A B f
+  have hsum : (∑ M : BinaryMatrix n d, x (e M)) = ∑ T : V d →ₗ[F] W n, x T :=
+    e.sum_comp x
+  have hcard : (Fintype.card (BinaryMatrix n d) : ℝ) =
+      (Fintype.card (V d →ₗ[F] W n) : ℝ) := by
+    exact_mod_cast Fintype.card_congr e
+  have havg : typedUniformMean x = a7SelectedFourierMass A B f := by
+    unfold typedUniformMean a7SelectedFourierMass
+    rw [← hmass]
+    unfold uniformMean
+    rw [← hsum, hcard]
+    apply congrArg (fun s : ℝ => s / (Fintype.card (V d →ₗ[F] W n) : ℝ))
+    refine Finset.sum_congr rfl ?_
+    intro M _
+    rfl
+  have hpair : a7PairShare A B f =
+      typedUniformMean (fun T => (x T) ^ 2) := by
+    unfold a7PairShare typedW6QComponent x
+    rfl
+  let N : ℝ := Fintype.card (V d →ₗ[F] W n)
+  have hN : 0 < N := by
+    simp only [N]
+    exact_mod_cast (Fintype.card_pos_iff.mpr ⟨(0 : V d →ₗ[F] W n)⟩)
+  have hcs := Finset.sum_mul_sq_le_sq_mul_sq
+    (Finset.univ : Finset (V d →ₗ[F] W n))
+    (fun _ => (1 : ℝ)) x
+  have hnum : (∑ T, x T) ^ 2 ≤ N * ∑ T, (x T) ^ 2 := by
+    simpa using hcs
+  have hjensen : (typedUniformMean x) ^ 2 ≤
+      typedUniformMean (fun T => (x T) ^ 2) := by
+    unfold typedUniformMean
+    have hdiv : ((∑ T, x T) / N) ^ 2 ≤ (∑ T, (x T) ^ 2) / N := by
+      rw [div_pow, pow_two N]
+      refine (div_le_div_iff₀ (mul_pos hN hN) hN).mpr ?_
+      calc
+        (∑ T, x T) ^ 2 * N ≤ (N * ∑ T, (x T) ^ 2) * N :=
+          mul_le_mul_of_nonneg_right hnum hN.le
+        _ = (∑ T, (x T) ^ 2) * (N * N) := by ring
+    simpa [N] using hdiv
+  rw [← havg, hpair]
+  exact hjensen
+
 /-- One pair in that window is one nonnegative term of the nested sum, hence
 at most unweighted `Q`, for every complex input. -/
 theorem a7_one_nested_share_le_q {n d : Nat}
