@@ -459,6 +459,13 @@ theorem a7_zero_order_uniform {n d : Nat} (f : BinaryMatrix n d → Complex) :
   exact mul_div_cancel_left₀ _
     (by exact_mod_cast (Fintype.card_ne_zero : Fintype.card (V d →ₗ[F] W n) ≠ 0))
 
+/-- One subspace pair's summand in unweighted `Q`. These summands are the
+concrete disjoint shares of `Q`. -/
+def a7PairShare {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) : ℝ :=
+  typedUniformMean (fun T : V d →ₗ[F] W n => typedW6QComponent A B T f)
+
 theorem a7_qComponent_uniform_nonneg {n d : Nat}
     (A : Submodule F (V d)) (B : Submodule F (W n))
     (f : BinaryMatrix n d → Complex) :
@@ -468,6 +475,33 @@ theorem a7_qComponent_uniform_nonneg {n d : Nat}
   refine Finset.sum_nonneg (fun _ _ => ?_)
   unfold typedW6QComponent
   exact sq_nonneg _
+
+theorem a7_pair_share_nonneg {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) :
+    0 ≤ a7PairShare A B f := by
+  simpa [a7PairShare] using a7_qComponent_uniform_nonneg A B f
+
+/-- The pair shares are exactly the summands of unweighted `Q`. -/
+theorem a7_pair_shares_exhaust {n d : Nat} (f : BinaryMatrix n d → Complex) :
+    (∑ p : Submodule F (V d) × Submodule F (W n), a7PairShare p.1 p.2 f) =
+      a7HybridQ f := by
+  classical
+  let g : Submodule F (V d) × Submodule F (W n) → ℝ :=
+    fun p => typedUniformMean (fun T : V d →ₗ[F] W n =>
+      typedW6QComponent p.1 p.2 T f)
+  have hg : ∀ p, a7PairShare p.1 p.2 f = g p := by
+    intro p
+    unfold a7PairShare g
+    rfl
+  have hQ : (∑ p, g p) = a7HybridQ f := by
+    unfold a7HybridQ g
+    rfl
+  have hsum :
+      (∑ p : Submodule F (V d) × Submodule F (W n), a7PairShare p.1 p.2 f) =
+        ∑ p, g p :=
+    Finset.sum_congr rfl (fun (p : Submodule F (V d) × Submodule F (W n)) _ => hg p)
+  exact hsum.trans hQ
 
 theorem a7_q_ge_l2 {n d : Nat} (f : BinaryMatrix n d → Complex) :
     (uniformMean (fun M => Complex.normSq (f M))) ^ 2 ≤ a7HybridQ f := by
@@ -831,6 +865,39 @@ theorem a7_mixed_fourth_output {n d : Nat}
     a6DerivativeFourth A B t f =
       typedUniformMean (fun T : V d →ₗ[F] W n => a7MixedOutputFourth t T f) := by
   simpa [a7MixedOutputFourth] using a6_mixed_fourth_output t f
+
+/-- The mixed output fourth moment is the typed W6 fourth moment of the
+filtered carrier. -/
+theorem a7_mixed_output_fourth_typed {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) :
+    a7MixedOutputFourth t T f =
+      typedW6OutputFourth (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+        (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f) := by
+  unfold a7MixedOutputFourth a6MixedOutputFourth typedW6OutputFourth
+  rfl
+
+/-- That typed fourth moment is the coordinate mean of `|actual W6 derivative|^4`. -/
+theorem a7_mixed_output_fourth_coordinate {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) :
+    a7MixedOutputFourth t T f =
+      carrierMean
+        (LinearMap.range (carrierFrequencyEquiv (t1AmbientC t.C) (t1AmbientH t.K)
+          (t1PullbackMap t)).transpose.toLin')
+        (LinearMap.ker (carrierFrequencyEquiv (t1AmbientC t.C) (t1AmbientH t.K)
+          (t1PullbackMap t)).transpose.toLin')
+        (fun M => Complex.normSq
+          (actualW6Derivative (carrierFrequencyEquiv (t1AmbientC t.C)
+            (t1AmbientH t.K) (t1PullbackMap t)) 0
+            (fun K => filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f
+              ((carrierMatrixEquiv (t1AmbientC t.C) (t1AmbientH t.K)).symm K)) M) ^ 2) := by
+  rw [a7_mixed_output_fourth_typed]
+  exact typedW6OutputFourth_coordinate (t1AmbientC t.C) (t1AmbientH t.K)
+    (t1PullbackMap t)
+    (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)
 
 /-- Coordinate source of one mixed derivative. Its degree is the ambient
 degree minus the carrier cost of the triple. -/

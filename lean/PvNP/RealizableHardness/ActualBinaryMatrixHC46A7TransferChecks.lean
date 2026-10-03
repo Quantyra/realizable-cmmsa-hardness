@@ -12,6 +12,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_terminal_factor
 #check a7_zero_order_component
 #check a7_zero_order_uniform
+#check a7_pair_share_nonneg
+#check a7_pair_shares_exhaust
 #check a7_q_ge_l2
 #check a7HybridQ_nonneg
 #check a7_positive_of_mixed_bound
@@ -22,6 +24,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_positive_of_overlapping_shares
 #check a7MixedOutputFourth
 #check a7_mixed_fourth_output
+#check a7_mixed_output_fourth_typed
+#check a7_mixed_output_fourth_coordinate
 #check a7_mixed_output_coordinate_support
 
 #print axioms a7_constant_of_degree_zero
@@ -31,6 +35,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_l2_slack
 #print axioms a7_terminal_factor
 #print axioms a7_zero_order_component
+#print axioms a7_pair_share_nonneg
+#print axioms a7_pair_shares_exhaust
 #print axioms a7_q_ge_l2
 #print axioms a7HybridQ_nonneg
 #print axioms a7_positive_of_mixed_bound
@@ -40,4 +46,6 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_mixed_sum_of_shares
 #print axioms a7_positive_of_overlapping_shares
 #print axioms a7_mixed_fourth_output
+#print axioms a7_mixed_output_fourth_typed
+#print axioms a7_mixed_output_fourth_coordinate
 #print axioms a7_mixed_output_coordinate_support

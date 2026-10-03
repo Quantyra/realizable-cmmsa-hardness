@@ -326,6 +326,53 @@ theorem typedW6OutputEnergy_coordinate {n d : Nat}
       Fintype.card (((Fin (Module.finrank F (V d ⧸ A)) → F) ⧸ C) →ₗ[F] D) :=
     Fintype.card_congr e.toEquiv
   rw [hsum, hcard]
+
+/-- Fourth moment on the typed output carrier: the average of
+`|typed W6 derivative|^4`. -/
+def typedW6OutputFourth {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Z : B →ₗ[F] (V d ⧸ A))
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) : Real :=
+  (∑ N : ((V d ⧸ A) ⧸ LinearMap.range Z) →ₗ[F] LinearMap.ker Z,
+      Complex.normSq (typedW6FourierDerivative A B Z f N) ^ 2) /
+    (Fintype.card (((V d ⧸ A) ⧸ LinearMap.range Z) →ₗ[F]
+      LinearMap.ker Z) : Real)
+
+/-- The typed output fourth moment is the coordinate carrier mean of
+`|actual W6 derivative|^4`. The output equivalence contributes no factor. -/
+theorem typedW6OutputFourth_coordinate {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Z : B →ₗ[F] (V d ⧸ A))
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) :
+    typedW6OutputFourth A B Z f =
+      carrierMean
+        (LinearMap.range (carrierFrequencyEquiv A B Z).transpose.toLin')
+        (LinearMap.ker (carrierFrequencyEquiv A B Z).transpose.toLin')
+        (fun M => Complex.normSq
+          (actualW6Derivative (carrierFrequencyEquiv A B Z) 0
+            (fun K => f ((carrierMatrixEquiv A B).symm K)) M) ^ 2) := by
+  classical
+  let e := typedW6OutputCoordinateEquiv A B Z
+  let C := LinearMap.range (carrierFrequencyEquiv A B Z).transpose.toLin'
+  let D := LinearMap.ker (carrierFrequencyEquiv A B Z).transpose.toLin'
+  unfold typedW6OutputFourth carrierMean
+  have hsum :
+      (∑ N : ((V d ⧸ A) ⧸ LinearMap.range Z) →ₗ[F] LinearMap.ker Z,
+        Complex.normSq (typedW6FourierDerivative A B Z f N) ^ 2) =
+      ∑ M : ((Fin (Module.finrank F (V d ⧸ A)) → F) ⧸ C) →ₗ[F] D,
+        Complex.normSq
+          (actualW6Derivative (carrierFrequencyEquiv A B Z) 0
+            (fun K => f ((carrierMatrixEquiv A B).symm K)) M) ^ 2 := by
+    apply Fintype.sum_equiv e.toEquiv
+    intro N
+    rw [typedW6FourierDerivative_eq_actual A B Z f N]
+    rfl
+  have hcard :
+      Fintype.card (((V d ⧸ A) ⧸ LinearMap.range Z) →ₗ[F] LinearMap.ker Z) =
+      Fintype.card (((Fin (Module.finrank F (V d ⧸ A)) → F) ⧸ C) →ₗ[F] D) :=
+    Fintype.card_congr e.toEquiv
+  rw [hsum, hcard]
+
 /-- The normalized typed W6 fourth-moment sum over the full parent frequency
 carrier. The outer index includes zero, the support degree D is common to all
 terms, and each typed output mean is normalized by its actual finite carrier. -/

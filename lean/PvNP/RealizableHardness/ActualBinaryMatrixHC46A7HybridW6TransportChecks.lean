@@ -38,6 +38,10 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
 #print axioms typedW6OutputEnergy
 #check typedW6OutputEnergy_coordinate
 #print axioms typedW6OutputEnergy_coordinate
+#check typedW6OutputFourth
+#print axioms typedW6OutputFourth
+#check typedW6OutputFourth_coordinate
+#print axioms typedW6OutputFourth_coordinate
 #check typedW6WeightedFourthMoment_le_two
 #print axioms typedW6WeightedFourthMoment_le_two
 #check typedW6FilteredCarrierFunction_le_two
