@@ -4856,6 +4856,60 @@ theorem a7OrderOne_output_q_exceeds_component :
     a7OrderOne_output_character]
   exact h
 
+/-- Every frequency is selected by the zero-order pair `(⊥, ⊤)`. -/
+theorem a7_bot_top_selected {n d : Nat} (Y : W n →ₗ[F] V d) :
+    Selected (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) Y :=
+  ⟨bot_le, fun _ _ => Submodule.mem_top⟩
+
+/-- One subspace pair contributes `1` or `0` to the pair share of a character. -/
+theorem a7_character_pair_share {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n)) (Y : BinaryMatrix n d) :
+    a7PairShare A B (fun M => (character Y M : ℂ)) =
+      if Selected A B Y.transpose.toLin' then 1 else 0 := by
+  classical
+  unfold a7PairShare typedUniformMean
+  simp_rw [a7_character_qComponent]
+  by_cases hsel : Selected A B Y.transpose.toLin'
+  · simp only [hsel, if_pos]
+    rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+    have hpos : 0 < Fintype.card (V d →ₗ[F] W n) :=
+      Fintype.card_pos_iff.mpr ⟨0⟩
+    exact mul_div_cancel_left₀ _ (by exact_mod_cast (Nat.ne_of_gt hpos))
+  · simp [hsel, Finset.sum_const_zero, zero_div]
+
+/-- The zero-order output term of the order-one triple is `1`. -/
+theorem a7OrderOne_zero_output_share_eq_one :
+    a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+      (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) = 1 := by
+  rw [a7OrderOne_output_character, a7_character_pair_share,
+    if_pos (a7_bot_top_selected _)]
+
+/-- That one output term lands in the original component. The factor is the
+room already proved for the zero-order output share. -/
+theorem a7OrderOne_zero_output_share_lands :
+    a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+      (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) ≤
+      (2 : ℝ) ^ (9 * 40 * a6Order a7OrderOneTriple) *
+        typedW6QComponent (t1AmbientC a7OrderOneTriple.C)
+          (t1AmbientH a7OrderOneTriple.K) (0 : V 40 →ₗ[F] W 40) a7Char :=
+  a7_output_zero_share_le_original_component a7OrderOneTriple
+    (0 : V 40 →ₗ[F] W 40) a7Char a7Char_supported
+    (by rw [a7OrderOne_order]; decide)
+
+/-- After that zero-order term is paid, the other output terms still exceed
+what the same original component has left. Those terms are not injected.
+The share hypothesis stays. -/
+theorem a7OrderOne_remaining_output_exceeds_leftover :
+    a7HybridQ (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) -
+        a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) >
+      (2 : ℝ) ^ (9 * 40 * a6Order a7OrderOneTriple) *
+        typedW6QComponent (t1AmbientC a7OrderOneTriple.C)
+          (t1AmbientH a7OrderOneTriple.K) (0 : V 40 →ₗ[F] W 40) a7Char -
+        a7PairShare (⊥ : Submodule F (V _)) (⊤ : Submodule F (W _))
+          (a7OutputBinary a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char) :=
+  sub_lt_sub_right a7OrderOne_output_q_exceeds_component _
+
 /-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
 noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
     [AddCommGroup M] [Module F M] [Module.Finite F M]
