@@ -3673,5 +3673,41 @@ theorem a7_output_zero_share_le_original_component {n d D : Nat}
   rw [a7_output_zero_share_eq_l2, a7_output_binary_l2_sq, henergy]
   exact le_trans hsq (mul_le_mul_of_nonneg_right hpow hcomp)
 
+/-- One image graph, as a submodule of the coordinate carrier `V(k+a)`.
+Transport uses the coordinate equivalence, not a chosen complement. This is
+not a `T1IndexTriple` in the positive-degree sum, and it does not remove
+the share hypothesis. -/
+noncomputable def a9ImageCarrier (k a : Nat) {i : Nat}
+    (g : Σ U : W6Grass (V a) i, (Fin k → F) →ₗ[F] ((V a) ⧸ U.1)) :
+    Submodule F (V (k + a)) :=
+  Submodule.map (a9CoordEquiv k a).symm.toLinearMap (a9GraphPreimage g.1.1 g.2)
+
+theorem a9ImageCarrier_preimage (k a : Nat) {i : Nat}
+    (g : Σ U : W6Grass (V a) i, (Fin k → F) →ₗ[F] ((V a) ⧸ U.1)) :
+    Submodule.map (a9CoordEquiv k a).toLinearMap (a9ImageCarrier k a g) =
+      a9GraphPreimage g.1.1 g.2 := by
+  unfold a9ImageCarrier
+  rw [← Submodule.map_comp]
+  have hid : (a9CoordEquiv k a).toLinearMap.comp
+      (a9CoordEquiv k a).symm.toLinearMap = LinearMap.id := by
+    apply LinearMap.ext
+    intro x
+    exact (a9CoordEquiv k a).apply_symm_apply x
+  rw [hid, Submodule.map_id]
+
+theorem a9ImageCarrier_injective (k a i : Nat) :
+    Function.Injective (a9ImageCarrier (k := k) (a := a) (i := i)) := by
+  intro g₁ g₂ h
+  have hpre : a9GraphPreimage g₁.1.1 g₁.2 = a9GraphPreimage g₂.1.1 g₂.2 := by
+    rw [← a9ImageCarrier_preimage k a g₁, ← a9ImageCarrier_preimage k a g₂, h]
+  have hU := a9_preimage_subspace_inverse g₁.1.1 g₂.1.1 g₁.2 g₂.2 hpre
+  rcases g₁ with ⟨U₁, phi₁⟩
+  rcases g₂ with ⟨U₂, phi₂⟩
+  have hUs : U₁ = U₂ := Subtype.ext hU
+  subst hUs
+  have hphi := a9_preimage_graphs_inverse U₁.1 phi₁ phi₂ hpre
+  cases hphi
+  rfl
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer

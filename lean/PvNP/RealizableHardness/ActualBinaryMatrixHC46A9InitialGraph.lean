@@ -626,5 +626,89 @@ theorem a9InitialIndexed_K {A B S : Type*} [AddCommGroup A] [Module F A]
     {i j : Nat} (d : A9InitialDatum A B S i j) :
     (a9InitialIndexed d).K = LinearMap.range (a9InitialMap d) := rfl
 
+/-- In characteristic two, every vector is its own inverse. -/
+theorem a9_self_zero {E : Type*} [AddCommGroup E] [Module F E] (x : E) :
+    x + x = 0 := by
+  have htwo : (2 : F) = 0 := by decide
+  rw [← two_smul F x, htwo, zero_smul]
+
+/-- The image graph, pulled back to `S × E`. A point `(s, e)` lies in the
+kernel exactly when `phi s` is the class of `e`. -/
+def a9PreimageMap {S E : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup E] [Module F E] (U : Submodule F E) (phi : S →ₗ[F] (E ⧸ U)) :
+    (S × E) →ₗ[F] (E ⧸ U) :=
+  phi.comp (LinearMap.fst F S E) + (U.mkQ).comp (LinearMap.snd F S E)
+
+def a9GraphPreimage {S E : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup E] [Module F E] (U : Submodule F E) (phi : S →ₗ[F] (E ⧸ U)) :
+    Submodule F (S × E) :=
+  LinearMap.ker (a9PreimageMap U phi)
+
+theorem a9PreimageMap_surjective {S E : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup E] [Module F E] (U : Submodule F E) (phi : S →ₗ[F] (E ⧸ U)) :
+    Function.Surjective (a9PreimageMap U phi) := by
+  intro q
+  obtain ⟨e, he⟩ := Submodule.mkQ_surjective U q
+  refine ⟨(0, e), ?_⟩
+  simp [a9PreimageMap, he]
+
+theorem a9GraphPreimage_vertical {S E : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup E] [Module F E] (U : Submodule F E) (phi : S →ₗ[F] (E ⧸ U))
+    (e : E) :
+    ((0 : S), e) ∈ a9GraphPreimage U phi ↔ e ∈ U := by
+  constructor
+  · intro h
+    have hker := LinearMap.mem_ker.mp h
+    simp only [a9GraphPreimage, a9PreimageMap, LinearMap.add_apply,
+      LinearMap.comp_apply, LinearMap.fst_apply, LinearMap.snd_apply,
+      map_zero, zero_add] at hker
+    exact (Submodule.Quotient.mk_eq_zero _).mp hker
+  · intro he
+    apply LinearMap.mem_ker.mpr
+    simp [a9PreimageMap, he]
+
+theorem a9GraphPreimage_coord {S E : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup E] [Module F E] (U : Submodule F E) (phi : S →ₗ[F] (E ⧸ U))
+    {s : S} {e : E} (h : ((s, e) : S × E) ∈ a9GraphPreimage U phi) :
+    phi s = U.mkQ e := by
+  have hker : phi s + U.mkQ e = 0 := by
+    simpa [a9PreimageMap, LinearMap.add_apply, LinearMap.comp_apply,
+      LinearMap.fst_apply, LinearMap.snd_apply] using LinearMap.mem_ker.mp h
+  have hself := a9_self_zero (U.mkQ e)
+  calc
+    phi s = phi s + 0 := (add_zero _).symm
+    _ = phi s + (U.mkQ e + U.mkQ e) := by rw [← hself]
+    _ = (phi s + U.mkQ e) + U.mkQ e := by abel
+    _ = 0 + U.mkQ e := by rw [hker]
+    _ = U.mkQ e := zero_add _
+
+/-- On one fixed subspace, equal preimages determine the graph. -/
+theorem a9_preimage_graphs_inverse {S E : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup E] [Module F E] (U : Submodule F E)
+    (phi₁ phi₂ : S →ₗ[F] (E ⧸ U))
+    (h : a9GraphPreimage U phi₁ = a9GraphPreimage U phi₂) :
+    phi₁ = phi₂ := by
+  ext s
+  obtain ⟨e, he⟩ := Submodule.mkQ_surjective U (phi₁ s)
+  have hmem : ((s, e) : S × E) ∈ a9GraphPreimage U phi₁ := by
+    apply LinearMap.mem_ker.mpr
+    show phi₁ s + U.mkQ e = 0
+    rw [he]
+    exact a9_self_zero (phi₁ s)
+  have hmem₂ : ((s, e) : S × E) ∈ a9GraphPreimage U phi₂ := by
+    rw [← h]
+    exact hmem
+  have hphi := a9GraphPreimage_coord U phi₂ hmem₂
+  rw [hphi, he]
+
+theorem a9_preimage_subspace_inverse {S E : Type*} [AddCommGroup S] [Module F S]
+    [AddCommGroup E] [Module F E] (U₁ U₂ : Submodule F E)
+    (phi₁ : S →ₗ[F] (E ⧸ U₁)) (phi₂ : S →ₗ[F] (E ⧸ U₂))
+    (h : a9GraphPreimage U₁ phi₁ = a9GraphPreimage U₂ phi₂) :
+    U₁ = U₂ := by
+  ext e
+  rw [← a9GraphPreimage_vertical U₁ phi₁ e, h,
+    a9GraphPreimage_vertical U₂ phi₂ e]
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph
