@@ -3822,5 +3822,94 @@ theorem a7_ambient_hybrid_energy_le {n d : Nat}
   · simp [hsel]
   · simp [hsel, sq_nonneg]
 
+/-- Embed a subspace of `range Y` as the selected pair `(A, Y⁻¹(A))`. -/
+def a7RangeSubspaceAmbient {n d : Nat} (Y : W n →ₗ[F] V d)
+    (A : Submodule F (LinearMap.range Y)) : Submodule F (V d) :=
+  A.map (LinearMap.range Y).subtype
+
+def a7RangeSubspaceKernel {n d : Nat} (Y : W n →ₗ[F] V d)
+    (A : Submodule F (LinearMap.range Y)) : Submodule F (W n) :=
+  Submodule.comap Y (a7RangeSubspaceAmbient Y A)
+
+theorem a7_range_subspace_selected {n d : Nat} (Y : W n →ₗ[F] V d)
+    (A : Submodule F (LinearMap.range Y)) :
+    Selected (a7RangeSubspaceAmbient Y A) (a7RangeSubspaceKernel Y A) Y := by
+  constructor
+  · intro v hv
+    rcases hv with ⟨a, _, rfl⟩
+    exact a.property
+  · intro w hw
+    simpa [a7RangeSubspaceKernel, a7RangeSubspaceAmbient] using hw
+
+theorem a7_range_subspace_ambient_injective {n d : Nat} (Y : W n →ₗ[F] V d) :
+    Function.Injective (a7RangeSubspaceAmbient Y) := by
+  intro A₁ A₂ h
+  ext x
+  constructor
+  · intro hx
+    have hmem : (x : V d) ∈ a7RangeSubspaceAmbient Y A₂ := by
+      rw [← h]
+      exact ⟨x, hx, rfl⟩
+    rcases hmem with ⟨y, hy, heq⟩
+    have hxy : x = y := Subtype.ext heq.symm
+    simpa [hxy] using hy
+  · intro hx
+    have hmem : (x : V d) ∈ a7RangeSubspaceAmbient Y A₁ := by
+      rw [h]
+      exact ⟨x, hx, rfl⟩
+    rcases hmem with ⟨y, hy, heq⟩
+    have hxy : x = y := Subtype.ext heq.symm
+    simpa [hxy] using hy
+
+/-- Distinct subspaces of the image give distinct selected pairs. -/
+def a7SelectedOfRangeSubspace {n d : Nat} (Y : W n →ₗ[F] V d)
+    (A : Submodule F (LinearMap.range Y)) :
+    {p : Submodule F (V d) × Submodule F (W n) // Selected p.1 p.2 Y} :=
+  ⟨(a7RangeSubspaceAmbient Y A, a7RangeSubspaceKernel Y A),
+    a7_range_subspace_selected Y A⟩
+
+theorem a7SelectedOfRangeSubspace_injective {n d : Nat} (Y : W n →ₗ[F] V d) :
+    Function.Injective (a7SelectedOfRangeSubspace Y) := by
+  intro A₁ A₂ h
+  have hamb := congrArg (fun p => p.1.1) h
+  exact a7_range_subspace_ambient_injective Y hamb
+
+/-- The 12-planes in a 24-dimensional image already outnumber the slack
+`2^{9*25 - 4*24}` left after the zero-order factor `2^{4k(D-t)}` at
+`D = 25`, `t = 1`, `k = 1`. Charging every selected pair the full
+zero-order share does not fit in `2^{9Dt}`. This does not evaluate
+`a7HybridQ` of `a7OutputBinary`, and it does not remove the share. -/
+theorem a7_middle_grassmannian_exceeds_share_slack :
+    2 ^ (9 * 25 - 4 * 24) < w6Gaussian 24 12 := by
+  decide
+
+theorem a7_selected_pairs_exceed_share_slack {n d : Nat}
+    (Y : W n →ₗ[F] V d)
+    (hY : Module.finrank F (LinearMap.range Y) = 24) :
+    2 ^ (9 * 25 - 4 * 24) <
+      Fintype.card {p : Submodule F (V d) × Submodule F (W n) //
+        Selected p.1 p.2 Y} := by
+  classical
+  haveI : Fintype (LinearMap.range Y) := Fintype.ofFinite _
+  haveI : Module.Finite F (LinearMap.range Y) := inferInstance
+  haveI : Module.Free F (LinearMap.range Y) :=
+    Module.Free.of_basis (Module.finBasis F (LinearMap.range Y))
+  have hgrass : Fintype.card (W6Grass (LinearMap.range Y) 12) =
+      w6Gaussian 24 12 := by
+    rw [w6_card_grass, hY]
+  let emb : W6Grass (LinearMap.range Y) 12 →
+      {p : Submodule F (V d) × Submodule F (W n) // Selected p.1 p.2 Y} :=
+    fun A => a7SelectedOfRangeSubspace Y A.1
+  have hinj : Function.Injective emb := by
+    intro A₁ A₂ h
+    have hA := a7SelectedOfRangeSubspace_injective Y h
+    exact Subtype.ext hA
+  have hcard : Fintype.card (W6Grass (LinearMap.range Y) 12) ≤
+      Fintype.card {p : Submodule F (V d) × Submodule F (W n) //
+        Selected p.1 p.2 Y} :=
+    Fintype.card_le_of_injective emb hinj
+  have hlt := a7_middle_grassmannian_exceeds_share_slack
+  exact lt_of_lt_of_le hlt (by rw [← hgrass]; exact hcard)
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
