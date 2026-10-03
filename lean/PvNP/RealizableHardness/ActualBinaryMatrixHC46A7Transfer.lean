@@ -1,4 +1,5 @@
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph
 import PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
 import PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
 import PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
@@ -28,6 +29,7 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
@@ -3295,6 +3297,143 @@ theorem a7_a8_a9_exponent_fits (D t k : Nat) (ht : 0 < t) (hle : t ≤ D)
         (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) := by
     simpa [mul_assoc] using hshare
   exact le_trans hmul hshare'
+
+/-- Rank-k predecessors of one final frequency are exactly the idempotent
+graphs on its image. This is the injection of that fiber into the choice set. -/
+theorem a7_predecessor_choice_injective {n d : Nat}
+    (Y : BinaryMatrix n d) (k : Nat) :
+    Function.Injective (w6_rank_k_predecessor_equiv Y k) :=
+  (w6_rank_k_predecessor_equiv Y k).injective
+
+/-- The rank-k predecessor fiber of a frequency of rank at most `D` has size
+at most `2^{3 D k}`. This is the fiber of one final frequency, not the set of
+all initial triples, and it does not remove the share hypothesis. -/
+theorem a7_predecessor_fiber_le {n d D k : Nat} (Y : BinaryMatrix n d)
+    (hr : Y.rank ≤ D) :
+    Fintype.card (W6RankKPredecessor Y k) ≤ 2 ^ (3 * D * k) := by
+  rw [w6_card_rank_k_predecessors]
+  by_cases hk : k ≤ Y.rank
+  · by_cases hk0 : k = 0
+    · subst hk0
+      simp [a7_w6Gaussian_zero]
+    · have hg := w6_gaussian_le_four_pow hk
+      have hmul : w6Gaussian Y.rank k * 2 ^ (k * (Y.rank - k)) ≤
+          (4 * 2 ^ (k * (Y.rank - k))) * 2 ^ (k * (Y.rank - k)) :=
+        Nat.mul_le_mul_right _ hg
+      have hfour : (4 * 2 ^ (k * (Y.rank - k))) * 2 ^ (k * (Y.rank - k)) =
+          4 * 2 ^ (2 * (k * (Y.rank - k))) := by
+        rw [mul_assoc, ← pow_add]
+        congr 1
+        rw [two_mul]
+      have hpow4 : 4 * 2 ^ (2 * (k * (Y.rank - k))) =
+          2 ^ (2 + 2 * (k * (Y.rank - k))) := by
+        have htwo : (4 : Nat) = 2 ^ 2 := by norm_num
+        rw [htwo, ← pow_add]
+      have hk1 : 1 ≤ k := Nat.one_le_iff_ne_zero.mpr hk0
+      have hsub : Y.rank - k ≤ D - k := Nat.sub_le_sub_right hr k
+      have hkr : k * (Y.rank - k) ≤ k * (D - k) := Nat.mul_le_mul_left k hsub
+      have h2 : 2 * (k * (Y.rank - k)) ≤ 2 * (k * (D - k)) :=
+        Nat.mul_le_mul_left 2 hkr
+      have htwo_k : 2 ≤ 2 * k := by
+        calc
+          2 = 2 * 1 := by ring
+          _ ≤ 2 * k := Nat.mul_le_mul_left 2 hk1
+      have hDk : k * (D - k) + k ≤ k * D := by
+        have hstep : D - k + 1 ≤ D := by omega
+        have hmul : k * (D - k + 1) ≤ k * D := Nat.mul_le_mul_left k hstep
+        have hident : k * (D - k) + k = k * (D - k + 1) := by ring
+        rwa [hident]
+      have hpack : 2 * (k * (D - k)) + 2 * k ≤ 2 * (k * D) := by
+        simpa [Nat.mul_add] using Nat.mul_le_mul_left 2 hDk
+      have hexp : 2 + 2 * (k * (Y.rank - k)) ≤ 3 * D * k := by
+        have hleft : 2 + 2 * (k * (Y.rank - k)) ≤ 2 + 2 * (k * (D - k)) :=
+          Nat.add_le_add_left h2 2
+        have hmid : 2 + 2 * (k * (D - k)) ≤ 2 * k + 2 * (k * (D - k)) :=
+          Nat.add_le_add_right htwo_k _
+        have hswap : 2 * k + 2 * (k * (D - k)) =
+            2 * (k * (D - k)) + 2 * k := by ring
+        have hmid' : 2 + 2 * (k * (D - k)) ≤ 2 * (k * (D - k)) + 2 * k := by
+          rwa [hswap] at hmid
+        have htoD : 2 * (k * (D - k)) + 2 * k ≤ 2 * (D * k) := by
+          simpa [Nat.mul_comm] using hpack
+        have h3 : 2 * (D * k) ≤ 3 * D * k := by
+          have h23 : (2 : Nat) ≤ 3 := by decide
+          have hmul := Nat.mul_le_mul_right (D * k) h23
+          simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hmul
+        exact le_trans hleft (le_trans hmid' (le_trans htoD h3))
+      calc
+        w6Gaussian Y.rank k * 2 ^ (k * (Y.rank - k)) ≤
+            (4 * 2 ^ (k * (Y.rank - k))) * 2 ^ (k * (Y.rank - k)) := hmul
+        _ = 4 * 2 ^ (2 * (k * (Y.rank - k))) := hfour
+        _ = 2 ^ (2 + 2 * (k * (Y.rank - k))) := hpow4
+        _ ≤ 2 ^ (3 * D * k) := pow_le_pow_right₀ (by decide : 1 ≤ 2) hexp
+  · have hzero : w6Gaussian Y.rank k = 0 := by
+      unfold w6Gaussian
+      rw [if_neg hk]
+    simp [hzero]
+
+/-- The proved A9 graph fiber has multiplicity at most `2^{3D(i+j+k)}`
+when the final datum satisfies `a+b+k ≤ D`. This is the fiber cardinality,
+not a fresh exponent estimate. It does not remove the share hypothesis. -/
+theorem a9_fiber_multiplicity_le
+    {A B S : Type*} [AddCommGroup A] [Module F A]
+    [Module.Free F A] [Module.Finite F A] [Fintype A]
+    [AddCommGroup B] [Module F B] [Module.Free F B] [Module.Finite F B]
+    [Fintype B]
+    [AddCommGroup S] [Module F S] [Module.Free F S] [Module.Finite F S]
+    [Fintype S]
+    (D i j k a b : Nat)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a) (hB : Module.finrank F B = b)
+    (hS : Module.finrank F S = k) :
+    Fintype.card ((Σ U : W6Grass A i, S →ₗ[F] (A ⧸ U.1)) ×
+        (Σ V : W6Grass B j, S →ₗ[F] (B ⧸ V.1))) ≤
+      2 ^ (3 * D * (i + j + k)) := by
+  rw [a9_inducing_card i j k a b hA hB hS]
+  have hbound := a7_a9_multiplicity_le D i j k a b hfin hi hj
+  calc
+    w6Gaussian a i * 2 ^ (k * (a - i)) *
+        (w6Gaussian b j * 2 ^ (k * (b - j))) =
+      w6Gaussian a i * w6Gaussian b j * 2 ^ (k * (a - i)) *
+        2 ^ (k * (b - j)) := by ring
+    _ ≤ 2 ^ (3 * D * (i + j + k)) := hbound
+
+/-- Graph cost `2^{6Dk}` times the proved fiber multiplicity is at most the
+overlap room `2^{9Dt}` for `t = i+j+k`. The share function in
+`a7_positive_of_overlapping_shares` is still required: this does not bound
+an output `Q` by one original component. -/
+theorem a9_fiber_graph_cost_le
+    {A B S : Type*} [AddCommGroup A] [Module F A]
+    [Module.Free F A] [Module.Finite F A] [Fintype A]
+    [AddCommGroup B] [Module F B] [Module.Free F B] [Module.Finite F B]
+    [Fintype B]
+    [AddCommGroup S] [Module F S] [Module.Free F S] [Module.Finite F S]
+    [Fintype S]
+    (D i j k a b : Nat)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a) (hB : Module.finrank F B = b)
+    (hS : Module.finrank F S = k) :
+    (Fintype.card ((Σ U : W6Grass A i, S →ₗ[F] (A ⧸ U.1)) ×
+        (Σ V : W6Grass B j, S →ₗ[F] (B ⧸ V.1))) : ℝ) *
+      (2 : ℝ) ^ (6 * D * k) ≤
+      (2 : ℝ) ^ (9 * D * (i + j + k)) := by
+  let t := i + j + k
+  have hcard := a9_fiber_multiplicity_le D i j k a b hfin hi hj hA hB hS
+  have hpow : (Fintype.card ((Σ U : W6Grass A i, S →ₗ[F] (A ⧸ U.1)) ×
+        (Σ V : W6Grass B j, S →ₗ[F] (B ⧸ V.1))) : ℝ) ≤
+      (2 : ℝ) ^ (3 * D * t) := by
+    exact_mod_cast hcard
+  have hk : k ≤ t := Nat.le_add_left k (i + j)
+  have hroom := a7_a8_a9_room D t k hk
+  have hnn : 0 ≤ (2 : ℝ) ^ (6 * D * k) := pow_nonneg (by norm_num) _
+  calc
+    (Fintype.card ((Σ U : W6Grass A i, S →ₗ[F] (A ⧸ U.1)) ×
+        (Σ V : W6Grass B j, S →ₗ[F] (B ⧸ V.1))) : ℝ) *
+        (2 : ℝ) ^ (6 * D * k) ≤
+      (2 : ℝ) ^ (3 * D * t) * (2 : ℝ) ^ (6 * D * k) :=
+        mul_le_mul_of_nonneg_right hpow hnn
+    _ = (2 : ℝ) ^ (6 * D * k) * (2 : ℝ) ^ (3 * D * t) := by ring
+    _ ≤ (2 : ℝ) ^ (9 * D * t) := hroom
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
