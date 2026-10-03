@@ -27,6 +27,10 @@ attribute [local instance] Fintype.ofFinite
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierProduct
 open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
@@ -587,6 +591,96 @@ theorem a7_mixed_fourth_output {n d : Nat}
     a6DerivativeFourth A B t f =
       typedUniformMean (fun T : V d →ₗ[F] W n => a7MixedOutputFourth t T f) := by
   simpa [a7MixedOutputFourth] using a6_mixed_fourth_output t f
+
+/-- Coordinate source of one mixed derivative. Its degree is the ambient
+degree minus the carrier cost of the triple. -/
+def a7MixedCoordinate {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) :
+    BinaryMatrix
+      (Module.finrank F (t1AmbientH t.K))
+      (Module.finrank F (V d ⧸ t1AmbientC t.C)) → Complex :=
+  fun K => filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f
+    ((carrierMatrixEquiv (t1AmbientC t.C) (t1AmbientH t.K)).symm K)
+
+/-- Matrix representative of the triple's pullback on that coordinate space. -/
+def a7MixedCoordinateParent {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) :
+    BinaryMatrix
+      (Module.finrank F (t1AmbientH t.K))
+      (Module.finrank F (V d ⧸ t1AmbientC t.C)) :=
+  carrierFrequencyEquiv (t1AmbientC t.C) (t1AmbientH t.K) (t1PullbackMap t)
+
+/-- The coordinate W6 derivative of a mixed triple has Fourier support through
+`D` minus the mixed order. Frequencies above that rank are collisions of
+ambient predecessors whose own rank exceeds the carrier support. -/
+theorem a7_mixed_output_coordinate_support {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t ≤ D) :
+    CarrierComplexFourierSupportedThrough
+      (LinearMap.range (a7MixedCoordinateParent t).transpose.toLin')
+      (LinearMap.ker (a7MixedCoordinateParent t).transpose.toLin')
+      (D - a6Order t)
+      (actualW6Derivative (a7MixedCoordinateParent t) 0
+        (a7MixedCoordinate t T f)) := by
+  classical
+  let C := t1AmbientC t.C
+  let H := t1AmbientH t.K
+  let X := t1PullbackMap t
+  let s := Module.finrank F C + Module.finrank F (W n ⧸ H)
+  let k := Module.finrank F (LinearMap.range X)
+  have horder_add : a6Order t = s + k := by
+    simp [a6Order, C, H, X, s, k]
+  have hs : s ≤ D := by
+    have hk : k ≤ s + k := Nat.le_add_left k s
+    omega
+  have hdrop := filteredCarrierFunction_support_drop C H T f hsupport hs
+  have hcoord : ComplexFourierSupportedThrough (D - s)
+      (a7MixedCoordinate t T f) :=
+    (carrierFourier_support_iff_coordinate C H (D - s)
+      (filteredCarrierFunction C H T f)).mp (by simpa [C, H] using hdrop)
+  have hparent : (a7MixedCoordinateParent t).rank = k := by
+    simpa [a7MixedCoordinateParent, C, H, X, k] using
+      carrierFrequency_rank C H X
+  have hgap : D - a6Order t = (D - s) - k := by
+    omega
+  intro Z hZ
+  have hcoeff := actualW6Derivative_carrier_fourierCoeff
+    (a7MixedCoordinateParent t) 0 (a7MixedCoordinate t T f) Z
+  rw [hcoeff]
+  apply Finset.sum_eq_zero
+  intro Y _
+  by_cases hprec : w6Precedes (a7MixedCoordinateParent t) Y
+  · rw [if_pos hprec]
+    by_cases hfreq : Z =
+        (LinearMap.range (a7MixedCoordinateParent t).transpose.toLin').mkQ.comp
+          (Y.transpose.toLin'.comp
+            (LinearMap.ker (a7MixedCoordinateParent t).transpose.toLin').subtype)
+    · rw [if_pos hfreq]
+      have hth := w6_precedes_actual_carrier_frequency_rank
+        (a7MixedCoordinateParent t) Y hprec
+      have hfreqId : w6ActualCarrierFrequency (a7MixedCoordinateParent t) Y = Z := by
+        simpa [w6ActualCarrierFrequency] using hfreq.symm
+      have hgt : (D - s) - k < (Y - a7MixedCoordinateParent t).rank := by
+        rw [hgap] at hZ
+        rw [← hth, hfreqId]
+        exact hZ
+      have hY : D - s < Y.rank := by
+        have hprecRank : Y.rank =
+            (a7MixedCoordinateParent t).rank +
+              (Y - a7MixedCoordinateParent t).rank := hprec
+        rw [hprecRank, hparent]
+        omega
+      have hzero : complexFourierCoeff (a7MixedCoordinate t T f) Y = 0 :=
+        hcoord Y hY
+      simp [hzero]
+    · simp [hfreq]
+  · simp [hprec]
 
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
