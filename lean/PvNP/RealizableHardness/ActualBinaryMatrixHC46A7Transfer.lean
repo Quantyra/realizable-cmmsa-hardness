@@ -5911,6 +5911,162 @@ theorem a7_preceding_character_q_eq_nested {n d : Nat}
   rw [hfun, hq, hcard]
   exact hnest.symm
 
+/-- One final pair above a preceding parent is a single nonnegative term of
+that parent's nested sum, hence at most the parent's output `Q`. -/
+theorem a7_preceding_one_pair_le_output {n d : Nat}
+    (X Z : BinaryMatrix n d) (hprec : w6Precedes X Z)
+    (hsel : Selected (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin') Z.transpose.toLin')
+    (q : {p : Submodule F (V d) × Submodule F (W n) //
+      LinearMap.range X.transpose.toLin' ≤ p.1 ∧
+        p.2 ≤ LinearMap.ker X.transpose.toLin'}) :
+    a7PairShare q.1.1 q.1.2 (fun M => (character Z M : ℂ)) ≤
+      a7HybridQ (fun Xout =>
+        actualW6Derivative X (0 : V d →ₗ[F] W n)
+          (fun K => (character Z K : ℂ))
+          ((carrierMatrixEquiv
+              (LinearMap.range X.transpose.toLin')
+              (LinearMap.ker X.transpose.toLin')).symm Xout)) := by
+  have hsum := a7_preceding_character_q_eq_nested X Z hprec hsel
+  refine le_trans ?_ (le_of_eq hsum.symm)
+  exact Finset.single_le_sum
+    (fun p _ => a7_pair_share_nonneg p.1.1 p.1.2 (fun M => (character Z M : ℂ)))
+    (Finset.mem_univ q)
+
+/-- Coordinate output `Q` of one parent acting on one character. -/
+def a7PrecedingOutputQ {n d : Nat} (X Z : BinaryMatrix n d) : ℝ :=
+  a7HybridQ (fun Xout =>
+    actualW6Derivative X (0 : V d →ₗ[F] W n)
+      (fun K => (character Z K : ℂ))
+      ((carrierMatrixEquiv
+          (LinearMap.range X.transpose.toLin')
+          (LinearMap.ker X.transpose.toLin')).symm Xout))
+
+/-- One preceding selected character has coordinate output `Q` at most the
+original character `Q`. The factor is `1`: the output equals the nested pair
+sum, and that sum is a subset of the original pair shares. A general complex
+input remains open, so this does not delete the share hypothesis. -/
+theorem a7_preceding_character_q_le_original {n d : Nat}
+    (X Z : BinaryMatrix n d) (hprec : w6Precedes X Z)
+    (hsel : Selected (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin') Z.transpose.toLin') :
+    a7PrecedingOutputQ X Z ≤
+      a7HybridQ (fun M => (character Z M : ℂ)) := by
+  unfold a7PrecedingOutputQ
+  exact le_trans
+    (le_of_eq (a7_preceding_character_q_eq_nested X Z hprec hsel))
+    (a7_character_nested_share_le_q
+      (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin') Z)
+
+/-- Sum the coordinate output `Q` of a family of preceding selected parents,
+indexed by the initial graphs of one fixed final with `a+b+k ≤ D`. The A9
+fiber has cardinality at most `2^{3D(i+j+k)}`, and each output is at most the
+original character `Q`, so the sum is at most that multiplicity times the
+original `Q`. The family is a hypothesis: an `A9InitialDatum` is not yet a
+parent matrix. A general complex input remains open, so this does not delete
+the share hypothesis. -/
+theorem a7_a9_preceding_output_sum_le {n d : Nat}
+    (D i j k a b : Nat)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (Z : BinaryMatrix n d)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k)
+    (parent : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j →
+      BinaryMatrix n d)
+    (hprec : ∀ datum, w6Precedes (parent datum) Z)
+    (hsel : ∀ datum, Selected
+      (LinearMap.range (parent datum).transpose.toLin')
+      (LinearMap.ker (parent datum).transpose.toLin')
+      Z.transpose.toLin') :
+    (∑ datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+        a7PrecedingOutputQ (parent datum) Z) ≤
+      (2 : ℝ) ^ (3 * D * (i + j + k)) *
+        a7HybridQ (fun M => (character Z M : ℂ)) := by
+  classical
+  let Qorig := a7HybridQ (fun M => (character Z M : ℂ))
+  have hnn : 0 ≤ Qorig := a7HybridQ_nonneg _
+  have hcard := a9_final_inducing_multiplicity D i j k a b A B Y
+    hfin hi hj hA hB hY
+  have hle : ∀ datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+      a7PrecedingOutputQ (parent datum) Z ≤ Qorig :=
+    fun datum => a7_preceding_character_q_le_original
+      (parent datum) Z (hprec datum) (hsel datum)
+  have hsum :
+      (∑ datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+          a7PrecedingOutputQ (parent datum) Z) ≤
+        ∑ _ : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j, Qorig :=
+    Finset.sum_le_sum (fun datum _ => hle datum)
+  have hconst :
+      (∑ _ : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j, Qorig) =
+        (Fintype.card (A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) : ℝ) *
+          Qorig := by
+    rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  refine le_trans hsum ?_
+  rw [hconst]
+  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard) hnn
+
+/-- The same family with the A8 graph weight `2^{6Dk}` on every output stays
+under `2^{9D(i+j+k)}` times the original character `Q`. The weight is the
+proved graph cost, not a new exponent. The parent family remains a hypothesis,
+and a general complex input remains open. -/
+theorem a7_a9_preceding_output_graph_charge {n d : Nat}
+    (D i j k a b : Nat)
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (Z : BinaryMatrix n d)
+    (hfin : a + b + k ≤ D) (hi : i ≤ a) (hj : j ≤ b)
+    (hA : Module.finrank F A = a)
+    (hB : Module.finrank F (W n ⧸ B) = b)
+    (hY : Module.finrank F (LinearMap.range Y) = k)
+    (parent : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j →
+      BinaryMatrix n d)
+    (hprec : ∀ datum, w6Precedes (parent datum) Z)
+    (hsel : ∀ datum, Selected
+      (LinearMap.range (parent datum).transpose.toLin')
+      (LinearMap.ker (parent datum).transpose.toLin')
+      Z.transpose.toLin') :
+    (∑ datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+        (2 : ℝ) ^ (6 * D * k) * a7PrecedingOutputQ (parent datum) Z) ≤
+      (2 : ℝ) ^ (9 * D * (i + j + k)) *
+        a7HybridQ (fun M => (character Z M : ℂ)) := by
+  classical
+  let Qorig := a7HybridQ (fun M => (character Z M : ℂ))
+  have hnn : 0 ≤ Qorig := a7HybridQ_nonneg _
+  have hcost := a9_final_inducing_graph_cost D i j k a b A B Y
+    hfin hi hj hA hB hY
+  have hle : ∀ datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+      (2 : ℝ) ^ (6 * D * k) * a7PrecedingOutputQ (parent datum) Z ≤
+        (2 : ℝ) ^ (6 * D * k) * Qorig :=
+    fun datum => mul_le_mul_of_nonneg_left
+      (a7_preceding_character_q_le_original
+        (parent datum) Z (hprec datum) (hsel datum))
+      (pow_nonneg (by norm_num : (0 : ℝ) ≤ 2) _)
+  have hsum :
+      (∑ datum : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+          (2 : ℝ) ^ (6 * D * k) * a7PrecedingOutputQ (parent datum) Z) ≤
+        ∑ _ : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+          (2 : ℝ) ^ (6 * D * k) * Qorig :=
+    Finset.sum_le_sum (fun datum _ => hle datum)
+  have hconst :
+      (∑ _ : A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j,
+          (2 : ℝ) ^ (6 * D * k) * Qorig) =
+        (Fintype.card (A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) : ℝ) *
+          ((2 : ℝ) ^ (6 * D * k) * Qorig) := by
+    rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  have hassoc :
+      (Fintype.card (A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) : ℝ) *
+          ((2 : ℝ) ^ (6 * D * k) * Qorig) =
+        ((Fintype.card (A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) : ℝ) *
+          (2 : ℝ) ^ (6 * D * k)) * Qorig :=
+    (mul_assoc
+      ((Fintype.card (A9InitialDatum A (W n ⧸ B) (LinearMap.range Y) i j) : ℝ))
+      ((2 : ℝ) ^ (6 * D * k)) Qorig).symm
+  refine le_trans hsum ?_
+  rw [hconst, hassoc]
+  exact mul_le_mul_of_nonneg_right hcost hnn
+
 /-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
 noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
     [AddCommGroup M] [Module F M] [Module.Finite F M]
