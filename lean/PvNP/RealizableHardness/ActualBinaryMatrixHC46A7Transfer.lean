@@ -5761,6 +5761,98 @@ theorem a7_rank_zero_output_q_eq_nested {n d : Nat}
     a7_induced_coordinate_selected_card C H phi]
   exact (a7_character_nested_share_eq C H Y hsel).symm
 
+/-- The predecessor filter of one character keeps that character exactly when
+the parent precedes it. -/
+theorem a7_predecessor_filter_character {n d : Nat}
+    (X Z : BinaryMatrix n d) :
+    w6PredecessorFilter X (fun M => (character Z M : ℂ)) =
+      if w6Precedes X Z then fun M => (character Z M : ℂ) else 0 := by
+  classical
+  funext M
+  unfold w6PredecessorFilter
+  simp_rw [complexFourierCoeff_character]
+  by_cases h : w6Precedes X Z
+  · simp only [h, if_true]
+    have hterm : ∀ Y : BinaryMatrix n d,
+        (if w6Precedes X Y then
+          (if Y = Z then (1 : ℂ) else 0) * (character Y M : ℂ) else 0) =
+          if Y = Z then (character Z M : ℂ) else 0 := by
+      intro Y
+      by_cases hY : Y = Z
+      · simp [hY, h]
+      · simp [hY]
+    simp_rw [hterm]
+    simp
+  · simp only [h, if_false]
+    apply Finset.sum_eq_zero
+    intro Y _
+    by_cases hY : Y = Z
+    · simp [hY, h]
+    · simp [hY]
+
+/-- At base zero, the derivative of a character is that character on the
+parent's affine slice when the parent precedes it, and is zero otherwise. -/
+theorem a7_derivative_character_apply {n d : Nat}
+    (X Z : BinaryMatrix n d)
+    (M : (V d ⧸ LinearMap.range X.transpose.toLin') →ₗ[F]
+      LinearMap.ker X.transpose.toLin') :
+    actualW6Derivative X (0 : V d →ₗ[F] W n)
+        (fun K => (character Z K : ℂ)) M =
+      if w6Precedes X Z then
+        (character Z (LinearMap.toMatrix'
+          ((LinearMap.ker X.transpose.toLin').subtype.comp
+            (M.comp (LinearMap.range X.transpose.toLin').mkQ))) : ℂ)
+      else 0 := by
+  unfold actualW6Derivative complexAmbientAffineRestrict
+  rw [a7_predecessor_filter_character]
+  by_cases h : w6Precedes X Z
+  · simp [h, zero_add]
+  · simp [h]
+
+/-- The trace pairing of a map against an affine slice is the pairing of the
+induced carrier map. This is the positive-rank form of the rank-zero
+character transport. -/
+theorem a7_tracePair_induced {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (Y : W n →ₗ[F] V d) (M : (V d ⧸ C) →ₗ[F] H) :
+    tracePair Y (H.subtype.comp (M.comp C.mkQ)) =
+      tracePair (C.mkQ.comp (Y.comp H.subtype)) M :=
+  tracePair_carrier C H Y M
+
+/-- A preceding selected character, read on the parent's affine slice, is the
+induced carrier character. -/
+theorem a7_derivative_character_induced {n d : Nat}
+    (X Z : BinaryMatrix n d)
+    (hprec : w6Precedes X Z)
+    (M : (V d ⧸ LinearMap.range X.transpose.toLin') →ₗ[F]
+      LinearMap.ker X.transpose.toLin') :
+    actualW6Derivative X (0 : V d →ₗ[F] W n)
+        (fun K => (character Z K : ℂ)) M =
+      (traceCharacter (induced (LinearMap.range X.transpose.toLin')
+        (LinearMap.ker X.transpose.toLin') Z.transpose.toLin') M : ℂ) := by
+  rw [a7_derivative_character_apply, if_pos hprec]
+  let affine := (LinearMap.ker X.transpose.toLin').subtype.comp
+    (M.comp (LinearMap.range X.transpose.toLin').mkQ)
+  have hlin : (LinearMap.toMatrix' affine).toLin' = affine :=
+    Matrix.toLin'_toMatrix' affine
+  have hchar : character Z (LinearMap.toMatrix' affine) =
+      traceCharacter Z.transpose.toLin' affine := by
+    have h :=
+      (PvNP.RealizableHardness.BinaryMatrixA1CharacterBridge.traceCharacter_eq_matrix_character
+        Z (LinearMap.toMatrix' affine)).symm
+    rw [hlin] at h
+    exact h
+  rw [hchar]
+  have htrace := a7_tracePair_induced
+    (LinearMap.range X.transpose.toLin')
+    (LinearMap.ker X.transpose.toLin')
+    Z.transpose.toLin' M
+  unfold traceCharacter
+  rw [show tracePair Z.transpose.toLin' affine =
+      tracePair (induced (LinearMap.range X.transpose.toLin')
+        (LinearMap.ker X.transpose.toLin') Z.transpose.toLin') M from by
+    simpa [affine, induced] using htrace]
+
 /-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
 noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
     [AddCommGroup M] [Module F M] [Module.Finite F M]
