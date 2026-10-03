@@ -740,5 +740,93 @@ theorem manuscript_A6 {n d D : Nat} (f : BinaryMatrix n d → Complex)
     refine Finset.sum_le_sum (fun p _ => a6_one_pair_energy_le f hsupport p)
   exact le_trans hDR6 (add_le_add_right henergy _)
 
+/-- Fourth moment of one mixed derivative on the output carrier of its
+pullback. -/
+def a6MixedOutputFourth {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) : ℝ :=
+  (∑ N : ((V d ⧸ t1AmbientC t.C) ⧸ LinearMap.range (t1PullbackMap t)) →ₗ[F]
+      LinearMap.ker (t1PullbackMap t),
+    Complex.normSq (typedW6FourierDerivative (t1AmbientC t.C) (t1AmbientH t.K)
+      (t1PullbackMap t)
+      (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f) N) ^ 2) /
+    (Fintype.card (((V d ⧸ t1AmbientC t.C) ⧸
+      LinearMap.range (t1PullbackMap t)) →ₗ[F]
+        LinearMap.ker (t1PullbackMap t)) : ℝ)
+
+/-- The mixed fourth moment is the base average of the output-carrier fourth
+moment. `t1OutputEquiv` contributes no cardinality factor. -/
+theorem a6_mixed_fourth_output {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex) :
+    a6DerivativeFourth A B t f =
+      typedUniformMean (fun T : V d →ₗ[F] W n => a6MixedOutputFourth t T f) := by
+  classical
+  unfold a6DerivativeFourth a6MixedOutputFourth typedUniformMean
+  let e := (t1OutputEquiv t).toEquiv
+  have hinner : ∀ T : V d →ₗ[F] W n,
+      (∑ M : (V d ⧸ A) →ₗ[F] B,
+        Complex.normSq (typedW6FourierDerivative (t1AmbientC t.C)
+          (t1AmbientH t.K) (t1PullbackMap t)
+          (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)
+          (t1OutputEquiv t M)) ^ 2) =
+        ∑ N : ((V d ⧸ t1AmbientC t.C) ⧸ LinearMap.range (t1PullbackMap t)) →ₗ[F]
+            LinearMap.ker (t1PullbackMap t),
+          Complex.normSq (typedW6FourierDerivative (t1AmbientC t.C)
+            (t1AmbientH t.K) (t1PullbackMap t)
+            (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)
+            N) ^ 2 := by
+    intro T
+    exact Equiv.sum_comp e (fun N =>
+      Complex.normSq (typedW6FourierDerivative (t1AmbientC t.C)
+        (t1AmbientH t.K) (t1PullbackMap t)
+        (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f) N) ^ 2)
+  have hnum :
+      (∑ T : V d →ₗ[F] W n, ∑ M : (V d ⧸ A) →ₗ[F] B,
+        Complex.normSq (typedW6FourierDerivative (t1AmbientC t.C)
+          (t1AmbientH t.K) (t1PullbackMap t)
+          (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)
+          (t1OutputEquiv t M)) ^ 2) =
+        ∑ T : V d →ₗ[F] W n,
+          ∑ N : ((V d ⧸ t1AmbientC t.C) ⧸ LinearMap.range (t1PullbackMap t)) →ₗ[F]
+              LinearMap.ker (t1PullbackMap t),
+            Complex.normSq (typedW6FourierDerivative (t1AmbientC t.C)
+              (t1AmbientH t.K) (t1PullbackMap t)
+              (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f)
+              N) ^ 2 :=
+    Finset.sum_congr rfl (fun T _ => hinner T)
+  have hcard :
+      (Fintype.card ((V d ⧸ A) →ₗ[F] B) : ℝ) =
+        (Fintype.card (((V d ⧸ t1AmbientC t.C) ⧸
+          LinearMap.range (t1PullbackMap t)) →ₗ[F]
+            LinearMap.ker (t1PullbackMap t)) : ℝ) := by
+    exact_mod_cast Fintype.card_congr e
+  rw [hnum]
+  have hden :
+      ((Fintype.card (V d →ₗ[F] W n) : ℝ) *
+        (Fintype.card ((V d ⧸ A) →ₗ[F] B) : ℝ)) =
+        (Fintype.card (V d →ₗ[F] W n) : ℝ) *
+          (Fintype.card (((V d ⧸ t1AmbientC t.C) ⧸
+            LinearMap.range (t1PullbackMap t)) →ₗ[F]
+              LinearMap.ker (t1PullbackMap t)) : ℝ) := by
+    rw [hcard]
+  rw [hden]
+  set cT : ℝ := (Fintype.card (V d →ₗ[F] W n) : ℝ)
+  set cN : ℝ := (Fintype.card (((V d ⧸ t1AmbientC t.C) ⧸
+    LinearMap.range (t1PullbackMap t)) →ₗ[F] LinearMap.ker (t1PullbackMap t)) : ℝ)
+  have hdiv : ∀ s : ℝ, s / (cT * cN) = (s / cN) / cT := by
+    intro s
+    rw [mul_comm cT cN]
+    exact div_mul_eq_div_div s cN cT
+  rw [hdiv]
+  rw [Finset.sum_div Finset.univ (fun T : V d →ₗ[F] W n =>
+    ∑ N : ((V d ⧸ t1AmbientC t.C) ⧸ LinearMap.range (t1PullbackMap t)) →ₗ[F]
+        LinearMap.ker (t1PullbackMap t),
+      Complex.normSq (typedW6FourierDerivative (t1AmbientC t.C)
+        (t1AmbientH t.K) (t1PullbackMap t)
+        (filteredCarrierFunction (t1AmbientC t.C) (t1AmbientH t.K) T f) N) ^ 2)
+    cN]
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer

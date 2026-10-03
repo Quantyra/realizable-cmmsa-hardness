@@ -570,5 +570,23 @@ theorem a7_positive_of_mixed_bound {n d D : Nat}
   rw [hprod] at hscale
   exact le_trans hscale (hle.trans (le_of_eq hone))
 
+/-- Fourth moment of one mixed derivative on the output carrier of its
+pullback. The original pair's Hom is not the output domain. -/
+def a7MixedOutputFourth {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) : ℝ :=
+  a6MixedOutputFourth t T f
+
+/-- A6's mixed fourth moment is the uniform average, over the affine base, of
+the fourth moment on the actual output carrier. `t1OutputEquiv` is a bijection,
+so the original Hom contributes no extra factor. -/
+theorem a7_mixed_fourth_output {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex) :
+    a6DerivativeFourth A B t f =
+      typedUniformMean (fun T : V d →ₗ[F] W n => a7MixedOutputFourth t T f) := by
+  simpa [a7MixedOutputFourth] using a6_mixed_fourth_output t f
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer

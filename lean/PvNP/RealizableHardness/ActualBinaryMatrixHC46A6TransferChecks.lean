@@ -13,6 +13,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 #check a6_mixed_zero_of_order_gt
 #check a6_order_pos
 #check manuscript_A6
+#check a6MixedOutputFourth
+#check a6_mixed_fourth_output
 
 #print axioms a6_holder_fourth_sum
 #print axioms a6_exponent_le
@@ -25,3 +27,4 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
 #print axioms a6_mixed_zero_of_order_gt
 #print axioms a6_order_pos
 #print axioms manuscript_A6
+#print axioms a6_mixed_fourth_output
