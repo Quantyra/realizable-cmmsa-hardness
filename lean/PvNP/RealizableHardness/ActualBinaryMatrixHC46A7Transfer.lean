@@ -5853,6 +5853,64 @@ theorem a7_derivative_character_induced {n d : Nat}
         (LinearMap.ker X.transpose.toLin') Z.transpose.toLin') M from by
     simpa [affine, induced] using htrace]
 
+/-- The coordinate reading of a preceding character derivative is the induced
+carrier character. -/
+theorem a7_preceding_derivative_coordinate {n d : Nat}
+    (X Z : BinaryMatrix n d) (hprec : w6Precedes X Z) :
+    (fun Xout =>
+      actualW6Derivative X (0 : V d →ₗ[F] W n)
+        (fun K => (character Z K : ℂ))
+        ((carrierMatrixEquiv
+            (LinearMap.range X.transpose.toLin')
+            (LinearMap.ker X.transpose.toLin')).symm Xout)) =
+      fun Xout =>
+        (character (carrierFrequencyEquiv
+            (LinearMap.range X.transpose.toLin')
+            (LinearMap.ker X.transpose.toLin')
+            (induced (LinearMap.range X.transpose.toLin')
+              (LinearMap.ker X.transpose.toLin') Z.transpose.toLin')) Xout : ℂ) := by
+  funext Xout
+  let C := LinearMap.range X.transpose.toLin'
+  let H := LinearMap.ker X.transpose.toLin'
+  let phi := induced C H Z.transpose.toLin'
+  rw [a7_derivative_character_induced X Z hprec]
+  have htrace := carrierFrequency_character C H phi
+    ((carrierMatrixEquiv C H).symm Xout)
+  have happ := (carrierMatrixEquiv C H).apply_symm_apply Xout
+  exact congrArg (fun r : ℝ => (r : ℂ))
+    (htrace.trans (congrArg (character (carrierFrequencyEquiv C H phi)) happ))
+
+/-- At positive or zero parent rank, a preceding selected character has output
+`Q` equal to the sum of its original pair shares above the parent's
+range and kernel. Each selected output pair is one of those original pairs.
+A general complex input remains open, and summing the equality over every
+triple still needs the A9 overlap, so this does not delete the share
+hypothesis. -/
+theorem a7_preceding_character_q_eq_nested {n d : Nat}
+    (X Z : BinaryMatrix n d) (hprec : w6Precedes X Z)
+    (hsel : Selected (LinearMap.range X.transpose.toLin')
+      (LinearMap.ker X.transpose.toLin') Z.transpose.toLin') :
+    a7HybridQ (fun Xout =>
+        actualW6Derivative X (0 : V d →ₗ[F] W n)
+          (fun K => (character Z K : ℂ))
+          ((carrierMatrixEquiv
+              (LinearMap.range X.transpose.toLin')
+              (LinearMap.ker X.transpose.toLin')).symm Xout)) =
+      ∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+          LinearMap.range X.transpose.toLin' ≤ q.1 ∧
+            q.2 ≤ LinearMap.ker X.transpose.toLin'},
+        a7PairShare p.1.1 p.1.2 (fun M => (character Z M : ℂ)) := by
+  let C := LinearMap.range X.transpose.toLin'
+  let H := LinearMap.ker X.transpose.toLin'
+  let phi := induced C H Z.transpose.toLin'
+  have hfun := a7_preceding_derivative_coordinate X Z hprec
+  have hq := a7_character_hybrid_q
+    (carrierFrequencyEquiv C H phi)
+  have hcard := a7_induced_coordinate_selected_card C H phi
+  have hnest := a7_character_nested_share_eq C H Z hsel
+  rw [hfun, hq, hcard]
+  exact hnest.symm
+
 /-- Identify a finite module of rank `n` with the coordinate space `V n`. -/
 noncomputable def a9ModuleToFin (n : Nat) {M : Type*}
     [AddCommGroup M] [Module F M] [Module.Finite F M]
