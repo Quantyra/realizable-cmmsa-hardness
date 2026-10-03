@@ -5329,6 +5329,24 @@ theorem a7_selected_mass_sq_le_pair_share {n d : Nat}
   rw [← havg, hpair]
   exact hjensen
 
+/-- Over the pairs above one carrier, the squared selected masses sum to at
+most the nested pair sum, hence at most unweighted `Q`, for every complex
+input. This is the original side that an output term would have to meet.
+One component cannot receive the whole output, the same-rank datum parent
+is not used, and the share hypothesis stays. -/
+theorem a7_nested_mass_sq_le_q {n d : Nat}
+    (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
+    (f : BinaryMatrix n d → Complex) :
+    (∑ p : {q : Submodule F (V d) × Submodule F (W n) //
+        A₂ ≤ q.1 ∧ q.2 ≤ B₂},
+      (a7SelectedFourierMass p.1.1 p.1.2 f) ^ 2) ≤
+      a7HybridQ f := by
+  classical
+  refine le_trans ?_ (a7_nested_share_le_q A₂ B₂ f)
+  refine Finset.sum_le_sum ?_
+  intro p _
+  exact a7_selected_mass_sq_le_pair_share p.1.1 p.1.2 f
+
 /-- One pair in that window is one nonnegative term of the nested sum, hence
 at most unweighted `Q`, for every complex input. -/
 theorem a7_one_nested_share_le_q {n d : Nat}
