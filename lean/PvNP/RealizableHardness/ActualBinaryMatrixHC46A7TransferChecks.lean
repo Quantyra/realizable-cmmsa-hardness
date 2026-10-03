@@ -57,6 +57,12 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_saturated_weighted_all_pairs_le
 #check a7_mixed_sum_degree_one
 #check a7_degree_one_fourth_bound
+#check a7_support_mono
+#check a7OutputBinary
+#check a7_output_binary_fourth
+#check a7_low_output_fourth_le_output_q
+#check a7_mixed_sum_order_split
+#check a7_mixed_sum_le_allowance_add_lower
 
 #print axioms a7_constant_of_degree_zero
 #print axioms a7_q_eq_zero_order
@@ -107,3 +113,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_saturated_weighted_all_pairs_le
 #print axioms a7_mixed_sum_degree_one
 #print axioms a7_degree_one_fourth_bound
+#print axioms a7_support_mono
+#print axioms a7_output_binary_fourth
+#print axioms a7_low_output_fourth_le_output_q
+#print axioms a7_mixed_sum_order_split
+#print axioms a7_mixed_sum_le_allowance_add_lower

@@ -2295,5 +2295,169 @@ theorem a7_degree_one_fourth_bound {n d : Nat}
   a7_positive_of_mixed_bound f hsupport Nat.one_pos
     (a7_mixed_sum_degree_one f hsupport)
 
+/-- Rank support through `r` remains support through every larger cutoff. -/
+theorem a7_support_mono {n d r D : Nat} (f : BinaryMatrix n d → Complex)
+    (hr : r ≤ D) (hf : ComplexFourierSupportedThrough r f) :
+    ComplexFourierSupportedThrough D f := by
+  intro Y hY
+  exact hf Y (lt_of_le_of_lt hr hY)
+
+/-- The mixed derivative, read on the binary coordinates of its output carrier. -/
+def a7OutputBinary {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex) :=
+  let parent := a7MixedCoordinateParent t
+  let coord := a7MixedCoordinate t T f
+  let Cout := LinearMap.range parent.transpose.toLin'
+  let Hout := LinearMap.ker parent.transpose.toLin'
+  fun X =>
+    actualW6Derivative parent 0 coord ((carrierMatrixEquiv Cout Hout).symm X)
+
+/-- One base of a mixed fourth moment is the fourth moment of the output
+binary function, and that function is supported through `D` minus the order. -/
+theorem a7_output_binary_fourth {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t ≤ D) :
+    a7MixedOutputFourth t T f =
+        uniformMean (fun M => Complex.normSq (a7OutputBinary t T f M) ^ 2) ∧
+      ComplexFourierSupportedThrough (D - a6Order t) (a7OutputBinary t T f) := by
+  classical
+  let parent := a7MixedCoordinateParent t
+  let coord := a7MixedCoordinate t T f
+  let Cout := LinearMap.range parent.transpose.toLin'
+  let Hout := LinearMap.ker parent.transpose.toLin'
+  let deriv := actualW6Derivative parent 0 coord
+  have hL4 := carrierMean_coordinate Cout Hout
+    (fun M => Complex.normSq (deriv M) ^ 2)
+  have hfour : a7MixedOutputFourth t T f =
+      uniformMean (fun M =>
+        Complex.normSq (deriv ((carrierMatrixEquiv Cout Hout).symm M)) ^ 2) := by
+    rw [a7_mixed_output_fourth_coordinate]
+    change carrierMean Cout Hout (fun M => Complex.normSq (deriv M) ^ 2) =
+      uniformMean (fun M =>
+        Complex.normSq (deriv ((carrierMatrixEquiv Cout Hout).symm M)) ^ 2)
+    exact hL4
+  have hg : a7OutputBinary t T f =
+      fun M => deriv ((carrierMatrixEquiv Cout Hout).symm M) := by
+    unfold a7OutputBinary
+    rfl
+  have hsup :=
+    (carrierFourier_support_iff_coordinate Cout Hout (D - a6Order t) deriv).mp
+      (a7_mixed_output_coordinate_support t T f hsupport horder)
+  refine ⟨?_, ?_⟩
+  · rw [hfour, hg]
+  · rw [hg]
+    exact hsup
+
+/-- If the remaining degree is at most one, the output fourth moment is at
+most `2^{100}` times the output carrier's own unweighted `Q`. That output `Q`
+is not a summand of the original `Q`. -/
+theorem a7_low_output_fourth_le_output_q {n d D : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (t : T1IndexTriple A B) (T : V d →ₗ[F] W n)
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f)
+    (horder : a6Order t ≤ D) (hdeg : D - a6Order t ≤ 1) :
+    a7MixedOutputFourth t T f ≤
+      (2 : ℝ) ^ (100 * 1 * 1) * a7HybridQ (a7OutputBinary t T f) := by
+  obtain ⟨heq, hsup⟩ := a7_output_binary_fourth t T f hsupport horder
+  rw [heq]
+  exact a7_degree_one_fourth_bound (a7OutputBinary t T f)
+    (a7_support_mono (a7OutputBinary t T f) hdeg hsup)
+
+/-- The positive mixed sum is the order-`D` sum plus the strict lower-order
+sum. Orders above `D` contribute zero. -/
+theorem a7_mixed_sum_order_split {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) (hD : 0 < D) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if 0 < a6Order t then
+          (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+        else 0) =
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if a6Order t = D then
+            (2 : ℝ) ^ (24 * D * D) * a6DerivativeFourth p.1.1 p.1.2 t f
+          else 0) +
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if 0 < a6Order t ∧ a6Order t < D then
+            (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+          else 0) := by
+  classical
+  have hterm : ∀ (p : dr6ActualNonzeroABPairs (n := n) (d := d))
+      (t : T1IndexTriple p.1.1 p.1.2),
+      (if 0 < a6Order t then
+        (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+      else 0) =
+        (if a6Order t = D then
+          (2 : ℝ) ^ (24 * D * D) * a6DerivativeFourth p.1.1 p.1.2 t f else 0) +
+        (if 0 < a6Order t ∧ a6Order t < D then
+          (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+        else 0) := by
+    intro p t
+    by_cases hEq : a6Order t = D
+    · rw [hEq]
+      have hlt : ¬ (0 < D ∧ D < D) := by
+        intro h
+        exact Nat.lt_irrefl D h.2
+      rw [if_pos hD, if_pos rfl, if_neg hlt]
+      exact (add_zero _).symm
+    · by_cases hpos : 0 < a6Order t
+      · by_cases hlt : a6Order t < D
+        · simp [hEq, hpos, hlt]
+        · have hgt : D < a6Order t := by omega
+          have hzero := a7_derivative_fourth_zero_of_high t f hsupport hgt
+          simp [hEq, hpos, hlt, hzero]
+      · simp [hEq, hpos]
+  have hsum :
+      (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+        ∑ t : T1IndexTriple p.1.1 p.1.2,
+          if 0 < a6Order t then
+            (2 : ℝ) ^ (24 * D * a6Order t) *
+              a6DerivativeFourth p.1.1 p.1.2 t f else 0) =
+        ∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            ((if a6Order t = D then
+              (2 : ℝ) ^ (24 * D * D) * a6DerivativeFourth p.1.1 p.1.2 t f else 0) +
+            (if 0 < a6Order t ∧ a6Order t < D then
+              (2 : ℝ) ^ (24 * D * a6Order t) *
+                a6DerivativeFourth p.1.1 p.1.2 t f else 0)) := by
+    refine Finset.sum_congr rfl ?_
+    intro p _
+    refine Finset.sum_congr rfl ?_
+    intro t _
+    exact hterm p t
+  rw [hsum]
+  simp_rw [Finset.sum_add_distrib]
+
+/-- The mixed sum is at most the terminal allowance times `Q`, plus the
+strict lower-order sum. The lower-order sum is not bounded here: its output
+degree is still positive, and its fourth moment is not a squared parent
+energy. -/
+theorem a7_mixed_sum_le_allowance_add_lower {n d D : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (hsupport : ComplexFourierSupportedThrough D f) (hD : 0 < D) :
+    (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+      ∑ t : T1IndexTriple p.1.1 p.1.2,
+        if 0 < a6Order t then
+          (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+        else 0) ≤
+      (2 : ℝ) ^ (100 * D * D) * (2 : ℝ) ^ ((1 : ℤ) - 31 * D) * a7HybridQ f +
+        (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),
+          ∑ t : T1IndexTriple p.1.1 p.1.2,
+            if 0 < a6Order t ∧ a6Order t < D then
+              (2 : ℝ) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f
+            else 0) := by
+  have hsplit := a7_mixed_sum_order_split f hsupport hD
+  have hsat := a7_saturated_weighted_all_pairs_le f hsupport hD
+  rw [hsplit]
+  exact add_le_add hsat (le_refl _)
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
