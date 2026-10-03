@@ -4335,5 +4335,109 @@ theorem a7_pairing_conj {n d : Nat}
   rw [Matrix.trace_mul_comm]
   simp only [Matrix.mul_assoc]
 
+def a7BasisVec (i : Fin 40) : V 40 :=
+  fun j => if j = i then 1 else 0
+
+theorem a7BasisVec_ne_zero (i : Fin 40) : a7BasisVec i ≠ 0 := by
+  intro h
+  have hc := congrFun h i
+  simp [a7BasisVec] at hc
+
+def a7Line : Submodule F (V 40) := F ∙ a7BasisVec 0
+
+theorem a7Line_finrank : Module.finrank F a7Line = 1 :=
+  finrank_span_singleton (a7BasisVec_ne_zero 0)
+
+noncomputable def a7Incl39 : (Fin 39 → F) →ₗ[F] (V 40) where
+  toFun v i := if h : i.val < 39 then v ⟨i.val, h⟩ else 0
+  map_add' x y := by
+    ext i
+    by_cases h : i.val < 39 <;> simp [h]
+  map_smul' c x := by
+    ext i
+    by_cases h : i.val < 39 <;> simp [h]
+
+noncomputable def a7Proj39 : (V 40) →ₗ[F] (Fin 39 → F) :=
+  LinearMap.pi fun i : Fin 39 =>
+    LinearMap.proj (Fin.castLE (by decide : 39 ≤ 40) i)
+
+theorem a7_proj_incl : a7Proj39.comp a7Incl39 = LinearMap.id := by
+  ext v i
+  simp [a7Proj39, a7Incl39, LinearMap.pi_apply, Fin.castLE]
+
+/-- A rank-39 coordinate projection on a 40-dimensional binary space. -/
+noncomputable def a7Freq40 : (W 40) →ₗ[F] (V 40) :=
+  a7Incl39.comp a7Proj39
+
+theorem a7Freq40_rank : Module.finrank F (LinearMap.range a7Freq40) = 39 := by
+  have hsurj : Function.Surjective a7Proj39 := by
+    intro v
+    refine ⟨a7Incl39 v, ?_⟩
+    have h := congrFun (congrArg DFunLike.coe a7_proj_incl) v
+    simpa [LinearMap.comp_apply] using h
+  have hinj : Function.Injective a7Incl39 := by
+    intro x y hxy
+    ext i
+    have hc := congrFun hxy ⟨i.val, Nat.lt_trans i.isLt (by decide)⟩
+    simp [a7Incl39] at hc
+    exact hc
+  have hrange : LinearMap.range a7Freq40 = LinearMap.range a7Incl39 := by
+    unfold a7Freq40
+    rw [LinearMap.range_comp, LinearMap.range_eq_top.mpr hsurj, Submodule.map_top]
+  rw [hrange, LinearMap.finrank_range_of_inj hinj]
+  simpa using (Module.finrank_fin_fun (n := 39) F)
+
+theorem a7Line_le_range : a7Line ≤ LinearMap.range a7Freq40 := by
+  rw [a7Line]
+  refine Submodule.span_le.mpr ?_
+  intro v hv
+  have hv' : v = a7BasisVec 0 := by simpa using hv
+  rw [hv']
+  refine ⟨a7BasisVec 0, ?_⟩
+  ext i
+  by_cases hi : i.val < 39
+  · simp [a7Freq40, a7Incl39, a7Proj39, a7BasisVec, LinearMap.pi_apply,
+      Fin.castLE, hi]
+  · have hne : i ≠ 0 := by
+      intro heq
+      have : i.val = 0 := by simp [heq]
+      omega
+    simp [a7Freq40, a7Incl39, a7Proj39, a7BasisVec, LinearMap.pi_apply, hi, hne]
+
+/-- Quotienting the rank-39 image by the line drops the rank by one. -/
+theorem a7_induced_rank :
+    Module.finrank F (LinearMap.range (a7Line.mkQ.comp a7Freq40)) = 38 := by
+  classical
+  let S := LinearMap.range a7Freq40
+  let f := a7Line.mkQ.comp S.subtype
+  have hle : a7Line ≤ S := a7Line_le_range
+  have hrange : LinearMap.range (a7Line.mkQ.comp a7Freq40) = LinearMap.range f := by
+    apply le_antisymm
+    · rintro _ ⟨w, rfl⟩
+      exact ⟨⟨a7Freq40 w, LinearMap.mem_range_self _ w⟩, rfl⟩
+    · rintro _ ⟨⟨_, hy⟩, rfl⟩
+      rcases hy with ⟨w, rfl⟩
+      exact ⟨w, rfl⟩
+  have hmap : Submodule.map S.subtype (LinearMap.ker f) = a7Line := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      have hzero : a7Line.mkQ (S.subtype y) = 0 := by
+        simpa [f] using hy
+      exact (Submodule.Quotient.mk_eq_zero a7Line).mp hzero
+    · intro hx
+      refine ⟨⟨x, hle hx⟩, ?_, rfl⟩
+      simp [f, hx]
+  have hkerFin : Module.finrank F (LinearMap.ker f) = 1 := by
+    rw [← Submodule.finrank_map_subtype_eq S (LinearMap.ker f), hmap]
+    exact a7Line_finrank
+  have hadd := LinearMap.finrank_range_add_finrank_ker f
+  have hS : Module.finrank F S = 39 := by
+    simpa [S] using a7Freq40_rank
+  have hsum : Module.finrank F (LinearMap.range f) + 1 = 39 := by
+    simpa [hkerFin, hS] using hadd
+  rw [hrange]
+  omega
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
