@@ -4537,5 +4537,92 @@ theorem a7OrderOne_component :
   unfold a7Char
   rw [a7_character_qComponent, a7FreqMatrix_toLin, if_pos a7Freq40_selected]
 
+theorem a7OrderOne_pullback_bot : t1PullbackMap a7OrderOneTriple = 0 := by
+  have hbot : LinearMap.range (t1PullbackMap a7OrderOneTriple) = ⊥ := by
+    refine (Submodule.eq_of_le_of_finrank_eq bot_le ?_).symm
+    rw [finrank_bot, a7OrderOne_pullback_rank]
+  ext x
+  have hmem := LinearMap.mem_range_self (t1PullbackMap a7OrderOneTriple) x
+  rw [hbot, Submodule.mem_bot] at hmem
+  exact hmem
+
+theorem a7OrderOne_parent : a7MixedCoordinateParent a7OrderOneTriple = 0 := by
+  unfold a7MixedCoordinateParent
+  rw [a7OrderOne_pullback_bot, map_zero]
+
+/-- The quotient of the rank-39 map by the line, on the order-one carrier. -/
+noncomputable def a7OrderPhi :
+    (t1AmbientH a7OrderOneTriple.K) →ₗ[F]
+      (V 40 ⧸ t1AmbientC a7OrderOneTriple.C) :=
+  (t1AmbientC a7OrderOneTriple.C).mkQ.comp
+    (a7Freq40.comp (t1AmbientH a7OrderOneTriple.K).subtype)
+
+theorem a7OrderPhi_rank : Module.finrank F (LinearMap.range a7OrderPhi) = 38 := by
+  have hsurj : Function.Surjective (⊤ : Submodule F (W 40)).subtype := by
+    intro w
+    exact ⟨⟨w, Submodule.mem_top⟩, rfl⟩
+  have hinduced : Module.finrank F (LinearMap.range
+      (a7Line.mkQ.comp (a7Freq40.comp (⊤ : Submodule F (W 40)).subtype))) = 38 := by
+    have hrange : LinearMap.range
+        (a7Line.mkQ.comp (a7Freq40.comp (⊤ : Submodule F (W 40)).subtype)) =
+        LinearMap.range (a7Line.mkQ.comp a7Freq40) := by
+      have hsub : LinearMap.range
+          (a7Freq40.comp (⊤ : Submodule F (W 40)).subtype) =
+          LinearMap.range a7Freq40 := by
+        rw [LinearMap.range_comp, LinearMap.range_eq_top.mpr hsurj, Submodule.map_top]
+      rw [LinearMap.range_comp, hsub, ← LinearMap.range_comp]
+    rw [hrange, a7_induced_rank]
+  unfold a7OrderPhi
+  rw [a7OrderOne_C, a7OrderOne_H]
+  exact hinduced
+
+noncomputable def a7OrderMatrix :=
+  carrierFrequencyEquiv (t1AmbientC a7OrderOneTriple.C)
+    (t1AmbientH a7OrderOneTriple.K) a7OrderPhi
+
+theorem a7OrderMatrix_rank : a7OrderMatrix.rank = 38 := by
+  rw [a7OrderMatrix, carrierFrequency_rank, a7OrderPhi_rank]
+
+/-- Characters agree when their trace pairings agree. -/
+theorem a7_character_of_pairing {n d : Nat} {Y Z : BinaryMatrix n d}
+    (h : ∀ M, pairing Y M = pairing Z M) :
+    (fun M => (character Y M : ℂ)) = fun M => (character Z M : ℂ) := by
+  funext M
+  simp [character, h M]
+
+theorem a7_character_conj {n d : Nat}
+    (P : Matrix (Fin n) (Fin n) F) (Q : Matrix (Fin d) (Fin d) F)
+    (Z : BinaryMatrix n d) :
+    (fun X => (character Z (P * X * Q) : ℂ)) =
+      fun X => (character (P.transpose * Z * Q.transpose) X : ℂ) := by
+  funext X
+  have h := a7_pairing_conj P Q Z X
+  simp [character, h]
+
+/-- The mixed coordinate of the order-one character is the rank-38 quotient
+character. This is the carrier reading, before the zero-parent derivative. -/
+theorem a7OrderOne_mixed_character :
+    a7MixedCoordinate a7OrderOneTriple (0 : V 40 →ₗ[F] W 40) a7Char =
+      fun K => (character a7OrderMatrix K : ℂ) := by
+  funext K
+  unfold a7MixedCoordinate a7OrderMatrix a7OrderPhi
+  rw [show a7Char = fun M => (character a7FreqMatrix M : ℂ) from rfl]
+  have hsel : Selected (t1AmbientC a7OrderOneTriple.C)
+      (t1AmbientH a7OrderOneTriple.K) a7Freq40 := by
+    rw [a7OrderOne_C, a7OrderOne_H]
+    exact a7Freq40_selected
+  rw [filteredCarrierFunction_character, a7FreqMatrix_toLin, if_pos hsel]
+  have hphase : traceCharacter a7Freq40 (0 : V 40 →ₗ[F] W 40) = 1 := by
+    unfold traceCharacter tracePair
+    simp
+  rw [hphase, one_mul]
+  have htrace := carrierFrequency_tracePair
+    (t1AmbientC a7OrderOneTriple.C) (t1AmbientH a7OrderOneTriple.K)
+    ((t1AmbientC a7OrderOneTriple.C).mkQ.comp
+      (a7Freq40.comp (t1AmbientH a7OrderOneTriple.K).subtype))
+    ((carrierMatrixEquiv (t1AmbientC a7OrderOneTriple.C)
+      (t1AmbientH a7OrderOneTriple.K)).symm K)
+  simp [traceCharacter, character, htrace]
+
 end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
