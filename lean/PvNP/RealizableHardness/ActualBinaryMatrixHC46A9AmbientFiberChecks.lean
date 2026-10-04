@@ -1,0 +1,52 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber
+
+#check A9AmbientA0
+#check A9AmbientB0
+#check a9AmbientQuotientMap
+#check a9AmbientBIncl
+#check A9AmbientInitialDatum
+#check A9AmbientFixedFinalFiber
+#check A9AmbientSectionLift
+#check A9AmbientExtension
+#check A9AmbientSectionExtensionCarrier
+#check a9AmbientSectionTranslationEquiv
+#check a9AmbientExtensionTranslationEquiv
+#check a9AmbientImageLift
+#check a9AmbientKernelInW
+#check a9AmbientA8SideConditions
+#check a9AmbientFinalMap
+#check a9Ambient_section_existsUnique
+#check a9AmbientForwardExtension
+#check a9AmbientForward
+#check a9AmbientInverse
+#check a9AmbientFiberEquiv
+#check a9Ambient_forward_factorization
+#check a9AmbientInverse_map
+#check a9Ambient_forward_inverse_carrier
+#check a9AmbientInverse_factorization
+#check a9Ambient_left_inverse_law
+#check a9Ambient_right_inverse_law
+#check a9Ambient_restriction_rank
+#check a9Ambient_restriction_range
+#check a9Ambient_quotient_range
+#check a9Ambient_A_side_iff_quotient_injective
+#check a9Ambient_B_side_iff_restriction_range
+#check a9Ambient_A8_sideConditions_iff_rank_preservation
+#check a9Ambient_fiber_A8_sideConditions
+#check a9Ambient_section_fiber_card
+#check a9Ambient_extension_fiber_card
+#check a9AmbientNestedB0Equiv
+#check a9Ambient_nested_B0_card
+#check a9Ambient_w6Gaussian_symm
+#check a9Ambient_linearMap_card
+#check a9_ambient_fiber_card
+
+#print axioms a9AmbientFiberEquiv
+#print axioms a9Ambient_section_fiber_card
+#print axioms a9Ambient_extension_fiber_card
+#print axioms a9Ambient_nested_B0_card
+#print axioms a9_ambient_fiber_card
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber
