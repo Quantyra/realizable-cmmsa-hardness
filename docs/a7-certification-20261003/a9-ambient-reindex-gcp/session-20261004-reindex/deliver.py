@@ -59,7 +59,7 @@ with (p/'report.txt').open('a',encoding='utf-8') as f:
     f.write(f'\nImplementation commit {commit}; pushed and verified on origin/main. Delivery receipt commit follows.\n')
 inventory={str(f.relative_to(p)):file_sha(f) for f in p.rglob('*') if f.is_file() and f.name!='evidence-files.sha256.json' and '__pycache__' not in f.parts}
 (p/'evidence-files.sha256.json').write_text(json.dumps(inventory,indent=2)+'\n',encoding='utf-8')
-receipt_paths=[str((p/name).relative_to(REPO)) for name in ['git-delivery-result.json','report.json','report.txt','evidence-files.sha256.json']]
+receipt_paths=[(p/name).relative_to(REPO).as_posix() for name in ['git-delivery-result.json','report.json','report.txt','evidence-files.sha256.json']]
 subprocess.run(['git','-c','core.longpaths=true','add','--',*receipt_paths],cwd=REPO,check=True,creationflags=flags)
 assert set(git('diff','--cached','--name-only','-z').decode().strip('\0').split('\0'))==set(receipt_paths)
 subprocess.run(['git','-c','core.longpaths=true','commit','-m','Record bounded A9 compiler delivery receipts'],cwd=REPO,check=True,capture_output=True,creationflags=flags)
