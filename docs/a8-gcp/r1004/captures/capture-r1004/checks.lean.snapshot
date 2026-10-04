@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport
+
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport
+
+#check a8_carrier_coordinate_nested_filter
+#print axioms a8_carrier_coordinate_nested_filter
+#check a8_carrier_coordinate_nested_mean
+#print axioms a8_carrier_coordinate_nested_mean
+#check a8_output_coordinate_eq
+#print axioms a8_output_coordinate_eq
+#check a8_output_pair_component_nested_mean
+#print axioms a8_output_pair_component_nested_mean

@@ -1,0 +1,32 @@
+{
+  "utc": "2026-10-04T22:35:47+00:00",
+  "capture": "capture-r1004",
+  "offered_hashes_match": true,
+  "offered_identities": {
+    "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8OutputCoordinateTransport.lean": "071A4D1D34B17E065FCD7421F3C544AA00029983C75E26A231DD3E60E3FCED10",
+    "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8OutputCoordinateTransportChecks.lean": "31BDCB4F891A449222FC812A5447439474ECAC5F00AB22DD802B6BDB137C1078",
+    "docs/a8-gcp/r1004/statement-fidelity.md": "6EDE9E20236D85ADE183442E8C34D0946E695B0C62C1704A735BC27FDE6C35F3"
+  },
+  "initial_frozen_identities_match": true,
+  "repair_basis": null,
+  "project_source_modules": 199,
+  "baseline_sources": {
+    "package": 11574,
+    "core": 2520
+  },
+  "manifest_sha256": "BC11FB87C6EB47DF3F92BDE09CCC0C3B966B13DCCE2B402FDF6253EBAF4CF7C1",
+  "local_process_check_after": {
+    "utc": "2026-10-04T22:35:47+00:00",
+    "command": [
+      "powershell.exe",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "ConvertTo-Json -InputObject @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match '^(lean|lake)(\\.exe)?$' } | Select-Object Id,ProcessName,Path) -Compress"
+    ],
+    "processes": [],
+    "native_exit": 0
+  },
+  "certified": false,
+  "claims_boundary": "Unchanged output-coordinate/nested-mean specialization feeding analytic A8; not complete output-pair sum or a8_output_q_le_actual_predecessor_sum. Replay gives zero helper credit. S3132 partial; S3137 incomplete; reviews pending."
+}
