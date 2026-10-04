@@ -1,5 +1,15 @@
 # Derivation and review disclosure
 
+> **Certification status — INCOMPLETE.** Full manuscript certification
+> (S3137) is incomplete. The current GCP replay certifies only these four
+> output-coordinate/nested-mean helper exports:
+> `a8_carrier_coordinate_nested_filter`,
+> `a8_carrier_coordinate_nested_mean`, `a8_output_coordinate_eq`, and
+> `a8_output_pair_component_nested_mean`. It does not certify complete
+> output-Q transport, `a8_output_q_le_actual_predecessor_sum`, analytic A8,
+> S3132, or full hardness/learning certification. The helper exports do not
+> establish the manuscript's claimed theorem targets.
+
 This is an informal mathematical research artifact developed using AI
 agents under Quantyra Research. It is not Lean-verified and has not received
 independent human peer review. Corporate authorship does not imply that
@@ -72,7 +82,7 @@ independent human peer review is claimed by any of these outcomes.
 The external theorem proofs were not completely reproved or machine-checked.
 The inaccessible MZ STOC publisher full text limits comparisons to that
 version; the inspected arXiv version and exact HN revision are identified
-in [SOURCES.md](SOURCES.md). The result is a fixed-parameter randomized
-hardness theorem, with no uniform polynomial exponent for growing L,
+in [SOURCES.md](SOURCES.md). The manuscript proposes a fixed-parameter
+randomized hardness theorem, with no uniform polynomial exponent for growing L,
 linear-factor threshold, one-way-function construction, or P-versus-NP
 resolution. No optional deterministic-sampling extension is included.

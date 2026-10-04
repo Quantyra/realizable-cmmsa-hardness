@@ -4,19 +4,30 @@ Quantyra Research | 12 September 2026 | Version 0.1.0
 
 ## Abstract
 
-For every sufficiently large fixed leaf bound L, we prove randomized
-polynomial-time many-one NP-hardness of realizable Collection Minimum
-Monotone Satisfying Assignment with weight gap L^(1-o(1)) and NO
-satisfaction threshold o(1). The corresponding bounded-advice learning
-statement follows through Hirahara--Nanashima's transfer. This establishes
-the epsilon=0 strengthening asked in Section 7 of their June 23, 2026
-revision. We combine their star-projection compilation with
+For every sufficiently large fixed leaf bound L, this archived manuscript
+presents a proposed, informal argument targeting randomized polynomial-time
+many-one NP-hardness of realizable Collection Minimum Monotone Satisfying
+Assignment with weight gap L^(1-o(1)) and NO satisfaction threshold o(1).
+The corresponding bounded-advice learning statement is also a claimed
+target via Hirahara--Nanashima's transfer. This targets the epsilon=0
+strengthening asked in Section 7 of their June 23, 2026 revision. We combine
+their star-projection compilation with
 Minzer--Zheng's Grassmann PCP machinery, an altered repetition parameter
 order, explicit advice-posterior and zoom-out estimates, a maximal-extension
 threshold ladder, and finite-list completeness repair. Every leaf/advice
 bound is fixed independently of input length; the polynomial exponent may
 depend on it. The contribution is the nearlinear exponent in the realizable
 regime, with earlier realizable hardness explicitly credited below.
+
+> **Certification status — INCOMPLETE.** Full manuscript certification
+> (S3137) is incomplete. The current GCP replay certifies only these four
+> output-coordinate/nested-mean helper exports:
+> `a8_carrier_coordinate_nested_filter`,
+> `a8_carrier_coordinate_nested_mean`, `a8_output_coordinate_eq`, and
+> `a8_output_pair_component_nested_mean`. It does not certify complete
+> output-Q transport, `a8_output_q_le_actual_predecessor_sum`, analytic A8,
+> S3132, or full hardness/learning certification. These helpers do not
+> establish the theorem statements claimed here.
 
 ## Problems, conventions, and results
 
@@ -774,7 +785,8 @@ when using ln 12 in the least-power-of-two list size. Corollary 2 follows
 from the stated HN transfer with its residual error made at most 1/6; the
 combined success is at least 2/3. The exact sampler and complete repaired
 YES witness ensure that the learning error parameter is exactly zero.
-This completes both proofs.
+This completes the manuscript's informal arguments for both claimed
+theorem targets; it does not complete their formal certification.
 
 ## Research and review disclosure
 
