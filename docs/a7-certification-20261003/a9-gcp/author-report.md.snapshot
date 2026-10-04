@@ -1,0 +1,50 @@
+﻿# A9 author report — 2026-10-03
+
+## Increment
+
+Added `a9_fixed_final_graph_census` in `ActualBinaryMatrixHC46A9FiberCount.lean`. For finite binary vector spaces `A`, `B`, and `S` of dimensions `a`, `b`, and `k`, and fixed initial dimensions `i,j`, it states
+
+\[
+|\mathrm{A9InitialDatum}(A,B,S,i,j)|
+= {a\brack i}_2 2^{k(a-i)} {b\brack j}_2 2^{k(b-j)},
+\]
+
+in the exact `w6Gaussian` notation used by the repository. It also states that every associated `a9InitialMap` has rank `k`. The cardinality is derived from `a9_initial_datum_card`; rank preservation is derived from `a9InitialMap_rank` and the dimension hypothesis on `S`.
+
+## Dependencies and exact scope
+
+The new theorem depends on the graph/lift/index parameterization in `ActualBinaryMatrixHC46A9InitialGraph.lean` and the Gaussian Grassmannian count in `ActualBinaryMatrixHC46A7PredecessorCount.lean`. Its data are the existing `A9InitialDatum`: a choice of `A0 ≤ A`, `B0 ≤ B` with the specified dimensions, a map `S → A/A0`, and a map `B/B0 → S`. The project-then-lift map is the existing `a9InitialMap`.
+
+This establishes the exact count and rank preservation for that abstract graph datum. It does not assert that this type is the actual A8 predecessor fiber over a fixed final `(A,B,Y)`.
+
+## Blocker for analytic reindexing
+
+The A8-to-A9 analytic sum rewrite remains blocked by the missing actual-fiber equivalence/cardinality lemma. Current sources inspected do not provide a map in both directions between the manuscript's actual predecessor triples (with their actual subspaces, quotient frequency, and induced restriction) and `A9InitialDatum`, nor prove that the map preserves the final datum and reconstructs every initial triple uniquely. In particular, the present graph census alone cannot justify replacing the summed A8 charge by a final-data sum with this multiplicity.
+
+Required dependency: define the actual fixed-final predecessor fiber using the existing T1/A6/T2 index and quotient structures, then prove an equivalence with the appropriate A9 graph datum (or directly prove its cardinality), including rank preservation. Only after that equivalence can the finite-sum reindexing theorem and A11 aggregate charge be stated without an ungrounded identification.
+
+## Untouched gaps and claims boundary
+
+- No A8 induction-plus-T2 analytic bound was added.
+- No actual fixed-final predecessor/fiber equivalence or analytic reindexing theorem was added.
+- No A11 aggregate charge, positive-share discharge, or positive-degree manuscript theorem was established.
+- Exact GCP-certified A7 source/check coverage does not certify the positive-degree manuscript theorem. The aggregate A8–A11 charge remains missing.
+- No local Lean/Lake/compiler command was run. No Git operation was run. No existing dirty work was intentionally changed.
+
+## Files edited
+
+- `lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9FiberCount.lean` (new)
+- `docs/a7-certification-20261003/a9-author-report.md` (new)
+
+## Proposed GCP compile targets for Sol
+
+Compile the new source module:
+
+- `PvNP.RealizableHardness.ActualBinaryMatrixHC46A9FiberCount`
+
+Dependency closure expected from imports:
+
+- `PvNP.RealizableHardness.ActualBinaryMatrixHC46A9InitialGraph`
+- `PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount`
+
+Suggested capture-level check target: compile the new module with its exact captured dependency sources on GCP and include its declarations in the axiom audit. This is a proposed target only; no compilation was performed by the author.
