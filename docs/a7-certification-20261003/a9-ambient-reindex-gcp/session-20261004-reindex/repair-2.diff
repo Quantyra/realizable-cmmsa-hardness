@@ -1,0 +1,37 @@
+--- frozen-second-attempt
++++ compiler-repair-2
+@@ -67,6 +67,7 @@
+   · rintro ⟨A0, B0, X, hX, hA8A, hA8B⟩
+     rfl
+   · rintro ⟨⟨Y, hY⟩, ⟨⟨A0, B0, X, hInduces⟩, hX⟩⟩
++    change a9AmbientFinalMap A B A0 B0 X = Y at hInduces
+     subst Y
+     rfl
+ 
+@@ -107,7 +108,7 @@
+   classical
+   apply Fintype.sum_equiv
+     (a9AmbientA8PartitionEquiv (n := n) (d := d) (i := i) (j := j) (k := k) A B)
+-  intro z
++  rintro ⟨A0, B0, X, hX, hA8A, hA8B⟩
+   rfl
+ 
+ /-- Exact graph-factor charge of one actual fixed-final fiber. -/
+@@ -119,7 +120,7 @@
+     (hY : Module.finrank F (LinearMap.range Y) = k)
+     (hi : i ≤ a) (hj : j ≤ b) :
+     (2 : Real) ^ (6 * D * k) *
+-      (∑ x : A9AmbientFixedFinalFiber (V d) (W n) A B Y i j k,
++      (∑ _x : A9AmbientFixedFinalFiber (V d) (W n) A B Y i j k,
+         a9AmbientA8Energy A B f Y) =
+       (w6Gaussian a i * w6Gaussian b j *
+         2 ^ (k * (a - i)) * 2 ^ (k * (b - j)) : Nat) *
+@@ -140,7 +141,7 @@
+     (hY : Module.finrank F (LinearMap.range Y) = k)
+     (hi : i ≤ a) (hj : j ≤ b) (hfin : a + b + k ≤ D) :
+     (2 : Real) ^ (6 * D * k) *
+-      (∑ x : A9AmbientFixedFinalFiber (V d) (W n) A B Y i j k,
++      (∑ _x : A9AmbientFixedFinalFiber (V d) (W n) A B Y i j k,
+         a9AmbientA8Energy A B f Y) ≤
+       (2 : Real) ^ (3 * D * (i + j + k) + 6 * D * k) *
+         a9AmbientA8Energy A B f Y := by

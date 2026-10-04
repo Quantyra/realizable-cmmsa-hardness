@@ -1,0 +1,174 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.A9AmbientA0.{u_1} (V : Type u_1) [AddCommGroup V]
+  [Module F V] (A : Submodule F V) (i : ℕ) : Type u_1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.A9AmbientB0.{u_1} (W : Type u_1) [AddCommGroup W]
+  [Module F W] (B : Submodule F W) (j : ℕ) : Type u_1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientQuotientMap.{u_1} {V : Type u_1} [AddCommGroup V]
+  [Module F V] (A : Submodule F V) {i : ℕ} (A0 : A9AmbientA0 V A i) : V ⧸ ↑A0 →ₗ[F] V ⧸ A
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientBIncl.{u_1} {W : Type u_1} [AddCommGroup W]
+  [Module F W] (B : Submodule F W) {j : ℕ} (B0 : A9AmbientB0 W B j) : ↥B →ₗ[F] ↥↑B0
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.A9AmbientInitialDatum.{u_1, u_2} (V : Type u_1)
+  (W : Type u_2) [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] (A : Submodule F V) (B : Submodule F W)
+  (Y : ↥B →ₗ[F] V ⧸ A) (i j : ℕ) : Type (max u_1 u_2)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.A9AmbientFixedFinalFiber.{u_1, u_2} (V : Type u_1)
+  (W : Type u_2) [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] (A : Submodule F V) (B : Submodule F W)
+  (Y : ↥B →ₗ[F] V ⧸ A) (i j k : ℕ) : Type (max 0 u_1 u_2)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.A9AmbientSectionLift.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] (A : Submodule F V) (B : Submodule F W)
+  (Y : ↥B →ₗ[F] V ⧸ A) {i : ℕ} (A0 : A9AmbientA0 V A i) : Type u_1
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.A9AmbientExtension.{u_1, u_2} {V : Type u_1} {W : Type u_2}
+  [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] (A : Submodule F V) (B : Submodule F W)
+  (Y : ↥B →ₗ[F] V ⧸ A) {j : ℕ} (B0 : A9AmbientB0 W B j) : Type (max 0 u_1 u_2)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.A9AmbientSectionExtensionCarrier.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  (A : Submodule F V) (B : Submodule F W) (Y : ↥B →ₗ[F] V ⧸ A) (i j : ℕ) : Type (max u_1 u_2 u_1)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientSectionTranslationEquiv.{u_1, u_2} {C : Type u_1}
+  {E : Type u_2} [AddCommGroup C] [Module F C] [AddCommGroup E] [Module F E] (q : C →ₗ[F] E) (S : Submodule F E)
+  (ell0 : ↥S →ₗ[F] C) (hell0 : q ∘ₗ ell0 = S.subtype) : { ell // q ∘ₗ ell = S.subtype } ≃ (↥S →ₗ[F] ↥q.ker)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientExtensionTranslationEquiv.{u_1, u_2}
+  {V : Type u_1} {W : Type u_2} [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] (A : Submodule F V)
+  (B : Submodule F W) (Y : ↥B →ₗ[F] V ⧸ A) {j : ℕ} (B0 : A9AmbientB0 W B j) (psi0 : ↥↑B0 →ₗ[F] ↥Y.range)
+  (hpsi0 : psi0 ∘ₗ a9AmbientBIncl B B0 = Y.rangeRestrict) :
+  A9AmbientExtension A B Y B0 ≃ (↥↑B0 ⧸ Submodule.comap (↑B0).subtype B →ₗ[F] ↥Y.range)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientImageLift.{u_1, u_2} {V : Type u_1} {W : Type u_2}
+  [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] {A : Submodule F V} {B : Submodule F W}
+  {Y : ↥B →ₗ[F] V ⧸ A} {i j : ℕ} (x : A9AmbientInitialDatum V W A B Y i j) : Submodule F V
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientKernelInW.{u_1, u_2} {V : Type u_1} {W : Type u_2}
+  [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] {A : Submodule F V} {B : Submodule F W}
+  {Y : ↥B →ₗ[F] V ⧸ A} {i j : ℕ} (x : A9AmbientInitialDatum V W A B Y i j) : Submodule F W
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientA8SideConditions.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] {A : Submodule F V} {B : Submodule F W}
+  {Y : ↥B →ₗ[F] V ⧸ A} {i j : ℕ} (x : A9AmbientInitialDatum V W A B Y i j) : Prop
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientFinalMap.{u_1, u_2} {V : Type u_1} {W : Type u_2}
+  [AddCommGroup V] [Module F V] [AddCommGroup W] [Module F W] (A : Submodule F V) (B : Submodule F W) {i j : ℕ}
+  (A0 : A9AmbientA0 V A i) (B0 : A9AmbientB0 W B j) (X : ↥↑B0 →ₗ[F] V ⧸ ↑A0) : ↥B →ₗ[F] V ⧸ A
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_section_existsUnique.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientInitialDatum V W A B Y i j) (hX : Module.finrank F ↥x.X.range = k) :
+  ∃! ell, a9AmbientQuotientMap A x.A0 ∘ₗ ell = Y.range.subtype ∧ ell ∘ₗ Y.rangeRestrict = x.X ∘ₗ a9AmbientBIncl B x.B0
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientForwardExtension.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientInitialDatum V W A B Y i j) (hX : Module.finrank F ↥x.X.range = k) : A9AmbientExtension A B Y x.B0
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientForward.{u_1, u_2} {V : Type u_1} {W : Type u_2}
+  [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientFixedFinalFiber V W A B Y i j k) : A9AmbientSectionExtensionCarrier A B Y i j
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientInverse.{u_1, u_2} {V : Type u_1} {W : Type u_2}
+  [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (c : A9AmbientSectionExtensionCarrier A B Y i j) : A9AmbientFixedFinalFiber V W A B Y i j k
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientFiberEquiv.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k) :
+  A9AmbientFixedFinalFiber V W A B Y i j k ≃ A9AmbientSectionExtensionCarrier A B Y i j
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_forward_factorization.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientInitialDatum V W A B Y i j) (hX : Module.finrank F ↥x.X.range = k) :
+  Classical.choose ⋯ ∘ₗ ↑(a9AmbientForwardExtension hY x hX) = x.X
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientInverse_map.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (c : A9AmbientSectionExtensionCarrier A B Y i j) : (↑(a9AmbientInverse hY c)).X = ↑c.snd.snd.1 ∘ₗ ↑c.snd.snd.2
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_forward_inverse_carrier.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (c : A9AmbientSectionExtensionCarrier A B Y i j) : a9AmbientForward hY (a9AmbientInverse hY c) = c
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientInverse_factorization.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (c : A9AmbientSectionExtensionCarrier A B Y i j) :
+  a9AmbientFinalMap A B (↑(a9AmbientInverse hY c)).A0 (↑(a9AmbientInverse hY c)).B0 (↑(a9AmbientInverse hY c)).X = Y
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_left_inverse_law.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientFixedFinalFiber V W A B Y i j k) : a9AmbientInverse hY (a9AmbientForward hY x) = x
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_right_inverse_law.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (c : A9AmbientSectionExtensionCarrier A B Y i j) : a9AmbientForward hY (a9AmbientInverse hY c) = c
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_restriction_rank.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientInitialDatum V W A B Y i j) (hX : Module.finrank F ↥x.X.range = k) :
+  Module.finrank F ↥(x.X ∘ₗ a9AmbientBIncl B x.B0).range = k
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_restriction_range.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientInitialDatum V W A B Y i j) (hX : Module.finrank F ↥x.X.range = k) :
+  (x.X ∘ₗ a9AmbientBIncl B x.B0).range = x.X.range
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_quotient_range.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientInitialDatum V W A B Y i j) (hX : Module.finrank F ↥x.X.range = k) :
+  (a9AmbientQuotientMap A x.A0 ∘ₗ x.X).range = Y.range
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_A_side_iff_quotient_injective.{u_1, u_2}
+  {V : Type u_1} {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W]
+  [Module.Finite F W] {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j : ℕ}
+  (x : A9AmbientInitialDatum V W A B Y i j) :
+  A ⊓ a9AmbientImageLift x = ↑x.A0 ↔ Function.Injective ⇑((a9AmbientQuotientMap A x.A0).domRestrict x.X.range)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_B_side_iff_restriction_range.{u_1, u_2}
+  {V : Type u_1} {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W]
+  [Module.Finite F W] {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j : ℕ}
+  (x : A9AmbientInitialDatum V W A B Y i j) :
+  B ⊔ a9AmbientKernelInW x = ↑x.B0 ↔ (x.X ∘ₗ a9AmbientBIncl B x.B0).range = x.X.range
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_A8_sideConditions_iff_rank_preservation.{u_1,
+    u_2}
+  {V : Type u_1} {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W]
+  [Module.Finite F W] {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j : ℕ}
+  (x : A9AmbientInitialDatum V W A B Y i j) :
+  a9AmbientA8SideConditions x ↔ Module.finrank F ↥Y.range = Module.finrank F ↥x.X.range
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_fiber_A8_sideConditions.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [AddCommGroup W] [Module F W] [Module.Finite F W]
+  {A : Submodule F V} {B : Submodule F W} {Y : ↥B →ₗ[F] V ⧸ A} {i j k : ℕ} (hY : Module.finrank F ↥Y.range = k)
+  (x : A9AmbientFixedFinalFiber V W A B Y i j k) : a9AmbientA8SideConditions ↑x
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_section_fiber_card.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [Fintype V] [AddCommGroup W] [Module F W] [Fintype W]
+  (A : Submodule F V) (B : Submodule F W) (Y : ↥B →ₗ[F] V ⧸ A) {i k a : ℕ} (hA : Module.finrank F ↥A = a)
+  (hY : Module.finrank F ↥Y.range = k) (A0 : A9AmbientA0 V A i) (hi : i ≤ a) :
+  Fintype.card (A9AmbientSectionLift A B Y A0) = 2 ^ (k * (a - i))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_extension_fiber_card.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Finite F V] [Fintype V] [AddCommGroup W] [Module F W]
+  [Module.Finite F W] [Fintype W] (A : Submodule F V) (B : Submodule F W) (Y : ↥B →ₗ[F] V ⧸ A) {j k b : ℕ}
+  (hB : Module.finrank F (W ⧸ B) = b) (hY : Module.finrank F ↥Y.range = k) (B0 : A9AmbientB0 W B j) (hj : j ≤ b) :
+  Fintype.card (A9AmbientExtension A B Y B0) = 2 ^ (k * (b - j))
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientNestedB0Equiv.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module F W] [Module.Finite F W] [Fintype W] (B : Submodule F W) {b j : ℕ}
+  (hB : Module.finrank F (W ⧸ B) = b) (hj : j ≤ b) :
+  A9AmbientB0 W B j ≃ ActualBinaryMatrixHC46A7PredecessorCount.W6Grass (W ⧸ B) (b - j)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_nested_B0_card.{u_1} {W : Type u_1}
+  [AddCommGroup W] [Module F W] [Module.Finite F W] [Module.Free F W] [Fintype W] (B : Submodule F W) {b j : ℕ}
+  (hB : Module.finrank F (W ⧸ B) = b) (hj : j ≤ b) :
+  Fintype.card (A9AmbientB0 W B j) = ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian b j
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_w6Gaussian_symm (b j : ℕ) (hj : j ≤ b) :
+  ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian b (b - j) =
+    ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian b j
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_linearMap_card.{u_1, u_2} {P : Type u_1}
+  {Q : Type u_2} [AddCommGroup P] [Module F P] [Module.Free F P] [Module.Finite F P] [Fintype P] [AddCommGroup Q]
+  [Module F Q] [Module.Free F Q] [Module.Finite F Q] [Fintype Q] (m n : ℕ) (hP : Module.finrank F P = m)
+  (hQ : Module.finrank F Q = n) : Fintype.card (P →ₗ[F] Q) = 2 ^ (m * n)
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9_ambient_fiber_card.{u_1, u_2} {V : Type u_1}
+  {W : Type u_2} [AddCommGroup V] [Module F V] [Module.Free F V] [Module.Finite F V] [Fintype V] [AddCommGroup W]
+  [Module F W] [Module.Free F W] [Module.Finite F W] [Fintype W] (A : Submodule F V) (B : Submodule F W)
+  (Y : ↥B →ₗ[F] V ⧸ A) {i j k a b : ℕ} (hA : Module.finrank F ↥A = a) (hB : Module.finrank F (W ⧸ B) = b)
+  (hY : Module.finrank F ↥Y.range = k) (hi : i ≤ a) (hj : j ≤ b) :
+  Fintype.card (A9AmbientFixedFinalFiber V W A B Y i j k) =
+    ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian a i * ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian b j *
+        2 ^ (k * (a - i)) *
+      2 ^ (k * (b - j))
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientFiberEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_section_fiber_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_extension_fiber_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9Ambient_nested_B0_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9_ambient_fiber_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,18 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex
+
+#check a9AmbientA8Energy_nonneg
+#print axioms a9AmbientA8Energy_nonneg
+
+#check a9AmbientA8PartitionEquiv
+#print axioms a9AmbientA8PartitionEquiv
+
+#check a9Ambient_A8_sum_partition
+#print axioms a9Ambient_A8_sum_partition
+
+#check a9Ambient_fixed_fiber_exact_charge
+#print axioms a9Ambient_fixed_fiber_exact_charge
+
+#check a9Ambient_fixed_fiber_coarse_charge
+#print axioms a9Ambient_fixed_fiber_coarse_charge

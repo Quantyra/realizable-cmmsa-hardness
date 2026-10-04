@@ -1,0 +1,60 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:59:51: Application type mismatch: The argument
+  hX
+has type
+  Module.finrank F { x : V d ⧸ ↑A0 // x ∈ X.range } = k
+but is expected to have type
+  Module.finrank ActualBinaryMatrixHC46A9AmbientFiber.F { x : V d ⧸ A // x ∈ Y.range } = ?m.120
+in the application
+  Eq.trans (Eq.symm hpres) hX
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:61:11: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+n d i j k : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+z : A9AmbientA8Target A B
+⊢ A9AmbientA8Source A B
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:84:9: Unknown identifier `BinaryMatrix`
+
+Note: It is not possible to treat `BinaryMatrix` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:88:7: Unknown identifier `filteredCarrierFunction`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:94:9: Unknown identifier `BinaryMatrix`
+
+Note: It is not possible to treat `BinaryMatrix` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:110:9: Unknown identifier `BinaryMatrix`
+
+Note: It is not possible to treat `BinaryMatrix` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:125:43: Application type mismatch: The argument
+  (↑p.snd).induces
+has type
+  a9AmbientFinalMap A B (↑p.snd).A0 (↑p.snd).B0 (↑p.snd).X = ↑p.fst
+but is expected to have type
+  a9AmbientFinalMap A B z.fst z.snd.fst ↑z.snd.snd = ↑p.fst
+in the application
+  congrArg (a9AmbientA8Energy A B f) (↑p.snd).induces
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:130:33: Unknown identifier `BinaryMatrix`
+
+Note: It is not possible to treat `BinaryMatrix` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:151:33: Unknown identifier `BinaryMatrix`
+
+Note: It is not possible to treat `BinaryMatrix` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean:160:37: unsolved goals
+n d i j k a b D : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+Y : ↥B →ₗ[F] V d ⧸ A
+f : sorry → ℂ
+hA : Module.finrank F ↥A = a
+hB : Module.finrank F (W n ⧸ B) = b
+hY : Module.finrank F ↥Y.range = k
+hi : i ≤ a
+hj : j ≤ b
+hfin : a + b + k ≤ D
+hmul hmulR : w6Gaussian a i * w6Gaussian b j * 2 ^ (k * (a - i)) * 2 ^ (k * (b - j)) ≤ 2 ^ (3 * D * (i + j + k))
+hnonneg : 0 ≤ a9AmbientA8Energy A B f Y
+hreal : ↑(w6Gaussian a i * w6Gaussian b j * 2 ^ (k * (a - i)) * 2 ^ (k * (b - j))) ≤ 2 ^ (3 * D * (i + j + k))
+⊢ ↑(w6Gaussian a i * w6Gaussian b j * 2 ^ (k * (a - i)) * 2 ^ (k * (b - j))) * 2 ^ (6 * D * k) *
+      a9AmbientA8Energy A B f Y ≤
+    2 ^ (3 * D * (i + j + k) + 6 * D * k) * a9AmbientA8Energy A B f Y
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex

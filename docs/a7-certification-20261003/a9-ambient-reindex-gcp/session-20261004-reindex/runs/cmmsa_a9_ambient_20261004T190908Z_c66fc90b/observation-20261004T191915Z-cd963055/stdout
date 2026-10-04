@@ -1,0 +1,88 @@
+-rw-rw-r-- 1 dfredriksen_quantyra_org dfredriksen_quantyra_org  728 Oct  4 19:18 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a9_ambient_20261004T190908Z_c66fc90b-evidence/stage-0.command.json
+-rw-rw-r-- 1 dfredriksen_quantyra_org dfredriksen_quantyra_org    2 Oct  4 19:18 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a9_ambient_20261004T190908Z_c66fc90b-evidence/stage-0.native-exit
+-rw-rw-r-- 1 dfredriksen_quantyra_org dfredriksen_quantyra_org  142 Oct  4 19:12 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a9_ambient_20261004T190908Z_c66fc90b-evidence/stage-0.stderr
+-rw-rw-r-- 1 dfredriksen_quantyra_org dfredriksen_quantyra_org 211K Oct  4 19:18 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a9_ambient_20261004T190908Z_c66fc90b-evidence/stage-0.stdout
+-rw-rw-r-- 1 dfredriksen_quantyra_org dfredriksen_quantyra_org  142 Oct  4 19:18 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a9_ambient_20261004T190908Z_c66fc90b-evidence/stage-1.stderr
+-rw-rw-r-- 1 dfredriksen_quantyra_org dfredriksen_quantyra_org 240K Oct  4 19:19 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a9_ambient_20261004T190908Z_c66fc90b-evidence/stage-1.stdout
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+Build completed successfully (3352 jobs).
+0
+    [kernel] HMul.hMul ↦ 229
+    [kernel] AddCommMonoid.toAddMonoid ↦ 151
+    [kernel] instHAdd ↦ 120
+    [kernel] AddMonoid.toAdd ↦ 104
+    [kernel] Semiring.toAddCommMonoid ↦ 104
+    [kernel] SubNegMonoid.toAddMonoid ↦ 100
+    [kernel] AddSemigroup.toAdd ↦ 92
+    [kernel] Ring.toSemiring ↦ 68
+    [kernel] NatCast.natCast ↦ 66
+    [kernel] AddGroup.toSubNegMonoid ↦ 64
+    [kernel] AddCommGroup.toAddGroup ↦ 63
+    [kernel] CommSemiring.toSemiring ↦ 60
+    [kernel] Ring.toAddCommGroup ↦ 59
+    [kernel] OfNat.ofNat ↦ 54
+    [kernel] DivisionSemiring.toSemiring ↦ 48
+    [kernel] AddCommSemigroup.toAddSemigroup ↦ 46
+    [kernel] AddCommGroup.toAddCommMonoid ↦ 38
+    [kernel] HSMul.hSMul ↦ 38
+    [kernel] SMul.smul ↦ 38
+    [kernel] AddMonoid.toAddSemigroup ↦ 36
+    [kernel] Semiring.toMonoid ↦ 36
+    [kernel] AddMonoid.toZero ↦ 35
+    [kernel] Monoid.toMul ↦ 35
+    [kernel] AddCommMonoid.toAddCommSemigroup ↦ 32
+    [kernel] ZSMul.zsmul ↦ 30
+    [kernel] Semiring.toNatCast ↦ 29
+    [kernel] Pi.instAdd ↦ 28
+    [kernel] SemigroupAction.toSMul ↦ 28
+    [kernel] Semiring.toNonAssocSemiring ↦ 27
+    [kernel] Neg.neg ↦ 24
+    [kernel] Monoid.toOne ↦ 22
+    [kernel] Pi.addSemigroup ↦ 22
+  use `set_option diagnostics.threshold <num>` to control threshold for reporting counters
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A17DomainFrequencyCovariance.lean:266:33: This simp argument is unused:
+  domainPullMatrix
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [emap, mapReindexEquiv, Matrix.toLin'_toMatrix']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A17DomainFrequencyCovariance.lean:266:51: This simp argument is unused:
+  Matrix.toLin'_toMatrix'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [emap, mapReindexEquiv, domainPullMatrix]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [3383/3394] Built PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment (4.9s)
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DR6Moment.lean:226:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DR6Moment.lean:341:15: This simp argument is unused:
+  dr6ActualWeightedOrdinaryFilterEnergy
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [dr6DGradeCarrierToNonzeroAB]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46DR6Moment.lean:354:9: Variable name `D` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _D
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [3384/3394] Built PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DomainBranch (2.7s)
+warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A17DomainBranch.lean:54:5: Variable name `hDpos` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hDpos
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`

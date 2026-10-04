@@ -1,0 +1,47 @@
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy_nonneg {n d : ℕ}
+  (A : Submodule F (V d)) (B : Submodule F (W n)) (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ)
+  (Y : ↥B →ₗ[F] V d ⧸ A) : 0 ≤ PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy✝ A B f Y
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy_nonneg' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8PartitionEquiv {n d i j k : ℕ}
+  (A : Submodule F (V d)) (B : Submodule F (W n)) : A9AmbientA8Source A B ≃ A9AmbientA8Target A B
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8PartitionEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9Ambient_A8_sum_partition {n d i j k : ℕ}
+  (A : Submodule F (V d)) (B : Submodule F (W n))
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) :
+  ∑ z,
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy✝ A B f
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientFinalMap A B z.fst z.snd.fst
+          ↑z.snd.snd) =
+    ∑ z, PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy✝ A B f ↑z.fst
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9Ambient_A8_sum_partition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9Ambient_fixed_fiber_exact_charge {n d i j k a b D : ℕ}
+  (A : Submodule F (V d)) (B : Submodule F (W n)) (Y : ↥B →ₗ[F] V d ⧸ A)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) (hA : Module.finrank F ↥A = a)
+  (hB : Module.finrank F (W n ⧸ B) = b) (hY : Module.finrank F ↥Y.range = k) (hi : i ≤ a) (hj : j ≤ b) :
+  2 ^ (6 * D * k) * ∑ _x, PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy✝ A B f Y =
+    ↑(PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian a i *
+                PvNP.RealizableHardness.ActualBinaryMatrixHC46A7PredecessorCount.w6Gaussian b j *
+              2 ^ (k * (a - i)) *
+            2 ^ (k * (b - j))) *
+        2 ^ (6 * D * k) *
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy✝ A B f Y
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9Ambient_fixed_fiber_exact_charge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9Ambient_fixed_fiber_coarse_charge {n d i j k a b D : ℕ}
+  (A : Submodule F (V d)) (B : Submodule F (W n)) (Y : ↥B →ₗ[F] V d ⧸ A)
+  (f : PvNP.RealizableHardness.BinaryMatrixFourier.BinaryMatrix n d → ℂ) (hA : Module.finrank F ↥A = a)
+  (hB : Module.finrank F (W n ⧸ B) = b) (hY : Module.finrank F ↥Y.range = k) (hi : i ≤ a) (hj : j ≤ b)
+  (hfin : a + b + k ≤ D) :
+  2 ^ (6 * D * k) * ∑ _x, PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy✝ A B f Y ≤
+    2 ^ (3 * D * (i + j + k) + 6 * D * k) *
+      PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9AmbientA8Energy✝ A B f Y
+'PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex.a9Ambient_fixed_fiber_coarse_charge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
