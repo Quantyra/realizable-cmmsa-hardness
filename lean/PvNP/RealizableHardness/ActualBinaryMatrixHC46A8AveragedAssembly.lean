@@ -204,10 +204,13 @@ theorem a8_two_base_actual_averaged_transport {n d : Nat}
         (mul_nonneg (show 0 ≤ (Fintype.card ΩS : Real) by positivity) hnonneg)
     _ = graph ^ 3 * ∑ p : P,
         (∑ T : ΩT, (energy p T) ^ 2) / (Fintype.card ΩT : Real) := by
-      rw [Finset.sum_div]
+      rw [← Finset.sum_div]
       field_simp [ne_of_gt hcardT, ne_of_gt hcardS]
       <;> ring
-
+    _ ≤ _ := by
+      dsimp only [graph, energy, P, ΩT, X]
+      apply le_of_eq
+      congr <;> first | rfl | exact Subsingleton.elim _ _
 
 /-- The unsupported A9 window vanishes for the original ambient function.
 This is the complementary-vanishing step of the integrated A8 endpoint;

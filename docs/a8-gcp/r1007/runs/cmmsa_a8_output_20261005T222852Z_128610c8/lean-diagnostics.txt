@@ -1,0 +1,186 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:207:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (∑ i ∈ ?s, ?f i) / ?a
+in the target expression
+  graph ^ 3 * (↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2) / (↑(Fintype.card ΩT) * ↑(Fintype.card ΩS)) =
+    graph ^ 3 * ∑ p, (∑ T, energy p T ^ 2) / ↑(Fintype.card ΩT)
+
+n d : ℕ
+Xmat : BinaryMatrix n d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2
+hB : B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker
+g : BinaryMatrix n d → ℂ
+X : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose Xmat)
+R : Submodule (ZMod 2) (Fin d → ZMod 2) := X.range
+K : Submodule (ZMod 2) (Fin n → ZMod 2) := X.ker
+A12 : Submodule (ZMod 2) ((Fin d → ZMod 2) ⧸ R) := Submodule.map R.mkQ A2
+B12 : Submodule (ZMod 2) ↥K := Submodule.comap K.subtype B2
+ΩT : Type := V d →ₗ[F] W n
+ΩS : Type := V d ⧸ R →ₗ[F] ↥K
+Ω : Type := (V d ⧸ R) ⧸ A12 →ₗ[F] ↥B12
+P : Type := a7T2ComplementPair X A2 B2
+shift : ΩS → ΩT := fun S0 => K.subtype ∘ₗ S0 ∘ₗ R.mkQ
+energy : P → ΩT → ℝ :=
+  fun p T =>
+    typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X) (filteredCarrierFunction (↑p).1 (↑p).2 T g)
+cubic : ℝ := ↑(Fintype.card P) ^ 3
+graph : ℝ :=
+  2 ^
+    (Matrix.rank Xmat *
+      (Module.finrank F ↥A2 - Module.finrank F ↥X.range + (Module.finrank F ↥X.ker - Module.finrank F ↥B2)))
+x✝¹ : Nonempty Ω := Nonempty.intro 0
+x✝ : Nonempty ΩS := Nonempty.intro 0
+hpoint :
+  ∀ (T : ΩT) (S0 : ΩS),
+    ((∑ N,
+            Complex.normSq
+              (complexCarrierHybridFilter R K A12 B12 (actualW6Derivative Xmat T g)
+                (S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ))) /
+          ↑(Fintype.card Ω)) ^
+        2 ≤
+      cubic * ∑ p, energy p (T + shift S0) ^ 2
+hsum :
+  ∑ T,
+      ∑ S0,
+        ((∑ N,
+              Complex.normSq
+                (complexCarrierHybridFilter R K A12 B12 (actualW6Derivative Xmat T g)
+                  (S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ))) /
+            ↑(Fintype.card Ω)) ^
+          2 ≤
+    cubic * (↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2)
+hcard :
+  Fintype.card (a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) A2 B2) ≤
+    2 ^
+      (Matrix.rank Xmat *
+        (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝ ↥A2 -
+            Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+              ↥(Matrix.toLin' (Matrix.transpose Xmat)).range +
+          (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+              ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker -
+            Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝ ↥B2)))
+hcardR : ↑(Fintype.card P) ≤ graph
+hnonneg : 0 ≤ ∑ p, ∑ T, energy p T ^ 2
+hcubic : cubic ≤ graph ^ 3
+hden : 0 < ↑(Fintype.card ΩT) * ↑(Fintype.card ΩS)
+hnormalized :
+  (∑ T,
+        ∑ S0,
+          ((∑ N,
+                Complex.normSq
+                  (complexCarrierHybridFilter R K A12 B12 (actualW6Derivative Xmat T g)
+                    (S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ))) /
+              ↑(Fintype.card Ω)) ^
+            2) /
+      (↑(Fintype.card ΩT) * ↑(Fintype.card ΩS)) ≤
+    cubic * (↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2) / (↑(Fintype.card ΩT) * ↑(Fintype.card ΩS))
+hcardS : 0 < ↑(Fintype.card ΩS)
+hcardT : 0 < ↑(Fintype.card ΩT)
+⊢ graph ^ 3 * (↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2) / (↑(Fintype.card ΩT) * ↑(Fintype.card ΩS)) =
+    graph ^ 3 * ∑ p, (∑ T, energy p T ^ 2) / ↑(Fintype.card ΩT)
+
+Candidate context:
+205:     _ = graph ^ 3 * ∑ p : P,
+206:         (∑ T : ΩT, (energy p T) ^ 2) / (Fintype.card ΩT : Real) := by
+207:       rw [Finset.sum_div]
+208:       field_simp [ne_of_gt hcardT, ne_of_gt hcardS]
+209:       <;> ring
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:74:42: unsolved goals
+case calc.step
+n d : ℕ
+Xmat : BinaryMatrix n d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2
+hB : B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker
+g : BinaryMatrix n d → ℂ
+X : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose Xmat)
+R : Submodule (ZMod 2) (Fin d → ZMod 2) := X.range
+K : Submodule (ZMod 2) (Fin n → ZMod 2) := X.ker
+A12 : Submodule (ZMod 2) ((Fin d → ZMod 2) ⧸ R) := Submodule.map R.mkQ A2
+B12 : Submodule (ZMod 2) ↥K := Submodule.comap K.subtype B2
+ΩT : Type := V d →ₗ[F] W n
+ΩS : Type := V d ⧸ R →ₗ[F] ↥K
+Ω : Type := (V d ⧸ R) ⧸ A12 →ₗ[F] ↥B12
+P : Type := a7T2ComplementPair X A2 B2
+shift : ΩS → ΩT := fun S0 => K.subtype ∘ₗ S0 ∘ₗ R.mkQ
+energy : P → ΩT → ℝ :=
+  fun p T =>
+    typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X) (filteredCarrierFunction (↑p).1 (↑p).2 T g)
+cubic : ℝ := ↑(Fintype.card P) ^ 3
+graph : ℝ :=
+  2 ^
+    (Matrix.rank Xmat *
+      (Module.finrank F ↥A2 - Module.finrank F ↥X.range + (Module.finrank F ↥X.ker - Module.finrank F ↥B2)))
+x✝¹ : Nonempty Ω := Nonempty.intro 0
+x✝ : Nonempty ΩS := Nonempty.intro 0
+hpoint :
+  ∀ (T : ΩT) (S0 : ΩS),
+    ((∑ N,
+            Complex.normSq
+              (complexCarrierHybridFilter R K A12 B12 (actualW6Derivative Xmat T g)
+                (S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ))) /
+          ↑(Fintype.card Ω)) ^
+        2 ≤
+      cubic * ∑ p, energy p (T + shift S0) ^ 2
+hsum :
+  ∑ T,
+      ∑ S0,
+        ((∑ N,
+              Complex.normSq
+                (complexCarrierHybridFilter R K A12 B12 (actualW6Derivative Xmat T g)
+                  (S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ))) /
+            ↑(Fintype.card Ω)) ^
+          2 ≤
+    cubic * (↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2)
+hcard :
+  Fintype.card (a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) A2 B2) ≤
+    2 ^
+      (Matrix.rank Xmat *
+        (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝ ↥A2 -
+            Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+              ↥(Matrix.toLin' (Matrix.transpose Xmat)).range +
+          (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+              ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker -
+            Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝ ↥B2)))
+hcardR : ↑(Fintype.card P) ≤ graph
+hnonneg : 0 ≤ ∑ p, ∑ T, energy p T ^ 2
+hcubic : cubic ≤ graph ^ 3
+hden : 0 < ↑(Fintype.card ΩT) * ↑(Fintype.card ΩS)
+hnormalized :
+  (∑ T,
+        ∑ S0,
+          ((∑ N,
+                Complex.normSq
+                  (complexCarrierHybridFilter R K A12 B12 (actualW6Derivative Xmat T g)
+                    (S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ))) /
+              ↑(Fintype.card Ω)) ^
+            2) /
+      (↑(Fintype.card ΩT) * ↑(Fintype.card ΩS)) ≤
+    cubic * (↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2) / (↑(Fintype.card ΩT) * ↑(Fintype.card ΩS))
+hcardS : 0 < ↑(Fintype.card ΩS)
+hcardT : 0 < ↑(Fintype.card ΩT)
+⊢ graph ^ 3 * ∑ p, (∑ T, energy p T ^ 2) / ↑(Fintype.card ΩT) ≤
+    2 ^
+        (Matrix.rank Xmat *
+            (Module.finrank F ↥A2 - Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Xmat)).range +
+              (Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker - Module.finrank F ↥B2))) ^
+          3 *
+      ∑ p,
+        (∑ T,
+            typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose Xmat)))
+                (filteredCarrierFunction (↑p).1 (↑p).2 T g) ^
+              2) /
+          ↑(Fintype.card (V d →ₗ[F] W n))
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
+
+
+Candidate context:
+72:               (t2QuotientRestrict p.1.1 p.1.2 X)
+73:               (filteredCarrierFunction p.1.1 p.1.2 T g)) ^ 2) /
+74:               (Fintype.card ΩT : Real) := by
+75:   classical
+76:   dsimp
