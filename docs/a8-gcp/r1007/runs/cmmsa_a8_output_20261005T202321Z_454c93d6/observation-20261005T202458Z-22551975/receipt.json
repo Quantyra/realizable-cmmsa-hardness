@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+    "compute",
+    "ssh",
+    "quantyra-lean-builder-01",
+    "--tunnel-through-iap",
+    "--command=ls -lh /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T202321Z_454c93d6-evidence/stage-*; tail -n 6 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T202321Z_454c93d6-evidence/stage-0.stdout; grep 'Built' /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T202321Z_454c93d6-evidence/stage-0.stdout | tail -n 3; grep '^error:' /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T202321Z_454c93d6-evidence/stage-0.stdout | head -n 6; grep '^error:' /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T202321Z_454c93d6-evidence/stage-1.stdout 2>/dev/null | head -n 10; for f in /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T202321Z_454c93d6-evidence/stage-*.native-exit; do test ! -f \"$f\" || cat \"$f\"; done; tail -n 60 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T202321Z_454c93d6-evidence/stage-3.stdout 2>/dev/null; tail -n 8 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T202321Z_454c93d6-evidence/setup.stderr 2>/dev/null",
+    "--quiet",
+    "--project=quantyra-lean-cert-20260915",
+    "--zone=us-central1-a",
+    "--account=dfredriksen@quantyra.org"
+  ],
+  "native_exit": 0,
+  "utc": "2026-10-05T20:25:05.614673+00:00",
+  "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+  "stderr_sha256": "F12C4583E48440E8322A8FBAF94E4560C0BCEEFE2B76717478FD56074ECF3828"
+}
