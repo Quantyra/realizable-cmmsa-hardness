@@ -1,0 +1,107 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 197,
+    "column": 23,
+    "message": "synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:197:23: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized\n  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype\ninferred\n  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝",
+    "candidate_context": [
+      "195:   apply congrArg₂ (fun (x : ℝ) (y : ℕ) => x / (y : ℝ))",
+      "196:   · refine Finset.sum_bij (fun N _ => e.symm N) ?_ ?_ ?_ ?_",
+      "197:     · intro N _; exact @Finset.mem_univ _ _ _",
+      "198:     · intro N _ M _ hNM; exact e.symm.injective hNM",
+      "199:     · intro N _; exact ⟨e N, by exact @Finset.mem_univ _ _ _, e.symm_apply_apply N⟩"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 199,
+    "column": 38,
+    "message": "synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:199:38: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized\n  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype\ninferred\n  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝",
+    "candidate_context": [
+      "197:     · intro N _; exact @Finset.mem_univ _ _ _",
+      "198:     · intro N _ M _ hNM; exact e.symm.injective hNM",
+      "199:     · intro N _; exact ⟨e N, by exact @Finset.mem_univ _ _ _, e.symm_apply_apply N⟩",
+      "200:     · intro N _",
+      "201:       have h := a8_whole_typed_w6_derivative_naturality A₁ B₁ A₂ B₂ eD eB Z g (e.symm N)"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 207,
+    "column": 23,
+    "message": "synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:207:23: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized\n  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype\ninferred\n  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝",
+    "candidate_context": [
+      "205:   · unfold Fintype.card",
+      "206:     refine Finset.card_bij (fun N _ => e.symm N) ?_ ?_ ?_",
+      "207:     · intro N _; exact @Finset.mem_univ _ _ _",
+      "208:     · intro N _ M _ hNM; exact e.symm.injective hNM",
+      "209:     · intro N _; exact ⟨e N, by exact @Finset.mem_univ _ _ _, e.symm_apply_apply N⟩"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 209,
+    "column": 38,
+    "message": "synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:209:38: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized\n  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype\ninferred\n  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝",
+    "candidate_context": [
+      "207:     · intro N _; exact @Finset.mem_univ _ _ _",
+      "208:     · intro N _ M _ hNM; exact e.symm.injective hNM",
+      "209:     · intro N _; exact ⟨e N, by exact @Finset.mem_univ _ _ _, e.symm_apply_apply N⟩",
+      "210: end Transport",
+      "211: "
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 290,
+    "column": 26,
+    "message": "`simp` made no progress",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:290:26: `simp` made no progress\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    Submodule.map_id (Submodule.map (↑(domainBasis C).equivFun.symm) c)\n  has type\n    @Eq (Submodule F (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ C))\n      (Submodule.map LinearMap.id (Submodule.map (↑(domainBasis C).equivFun.symm) c))\n      (Submodule.map (↑(domainBasis C).equivFun.symm) c)\n  but is expected to have type\n    @Eq (Submodule F (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ C))\n      (Submodule.map (↑(LinearEquiv.refl F (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ C)))\n        (Submodule.map (↑(domainBasis C).equivFun.symm) c))\n      (Submodule.map (↑(domainBasis C).equivFun.symm) c)\n  in the application\n    congrArg Eq (Submodule.map_id (Submodule.map (↑(domainBasis C).equivFun.symm) c))",
+    "candidate_context": [
+      "288:     nestedCarrierEquiv, nestedCodomainEquiv, carrierCoordinateNestedHomEquiv,",
+      "289:     carrierCoordinateCodomainEquiv, LinearEquiv.arrowCongr_apply, Module.Basis.equivFun_symm_apply, Submodule.coe_equivMapOfInjective_apply, LinearEquiv.trans_apply]",
+      "290:   all_goals first | rfl | simp [LinearEquiv.trans_apply, Submodule.coe_equivMapOfInjective_apply, Module.Basis.equivFun_symm_apply]",
+      "291: ",
+      "292: /-- Exact physical filtered-function compatibility, before taking the W6"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean",
+    "line": 429,
+    "column": 38,
+    "message": "synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:429:38: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized\n  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype\ninferred\n  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝",
+    "candidate_context": [
+      "427:     · intro N _; exact @Finset.mem_univ _ _ _",
+      "428:     · intro N _ M _ hNM; exact e.symm.injective hNM",
+      "429:     · intro N _; exact ⟨e N, by exact @Finset.mem_univ _ _ _, e.symm_apply_apply N⟩",
+      "430:     · intro N _; simp [e]",
+      "431:   · unfold Fintype.card"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean",
+    "line": 435,
+    "column": 38,
+    "message": "synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:435:38: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized\n  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype\ninferred\n  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedTransport\n",
+    "candidate_context": [
+      "433:     · intro N _; exact @Finset.mem_univ _ _ _",
+      "434:     · intro N _ M _ hNM; exact e.symm.injective hNM",
+      "435:     · intro N _; exact ⟨e N, by exact @Finset.mem_univ _ _ _, e.symm_apply_apply N⟩",
+      "436: ",
+      "437: /-- Whole-function reconstruction on the common nested carrier. Each selected"
+    ]
+  }
+]

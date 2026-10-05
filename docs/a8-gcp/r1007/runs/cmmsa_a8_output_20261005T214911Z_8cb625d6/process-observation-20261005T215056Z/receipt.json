@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-05T21:51:03.492363+00:00",
+  "argv": [
+    "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+    "compute",
+    "ssh",
+    "quantyra-lean-builder-01",
+    "--tunnel-through-iap",
+    "--command=date -u; ps -eo pid,ppid,etimes,stat,args | grep -E 'cmmsa_a8_output_20261005T214911Z_8cb625d6|[l]ake build|[/]lean |[c]loud_capture.py'; ls -lh /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T214911Z_8cb625d6-evidence; tail -n 8 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T214911Z_8cb625d6-evidence/setup.stderr 2>/dev/null; tail -n 4 /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T214911Z_8cb625d6-evidence/stage-0.stdout 2>/dev/null; grep '^error:' /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261005T214911Z_8cb625d6-evidence/stage-1.stdout 2>/dev/null | head -n 12",
+    "--quiet",
+    "--project=quantyra-lean-cert-20260915",
+    "--zone=us-central1-a",
+    "--account=dfredriksen@quantyra.org"
+  ],
+  "native_exit": 0,
+  "read_only": true
+}
