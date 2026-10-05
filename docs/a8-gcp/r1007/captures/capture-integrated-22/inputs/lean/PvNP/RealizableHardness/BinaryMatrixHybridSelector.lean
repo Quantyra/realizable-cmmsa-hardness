@@ -1,0 +1,243 @@
+import PvNP.RealizableHardness.BinaryMatrixFirstDerivative
+
+namespace PvNP.RealizableHardness.BinaryMatrixHybridSelector
+
+open BinaryMatrixFourier BinaryMatrixFirstDerivative
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private def dropCoordinate (d : ℕ) :
+    (Fin (d + 1) → ZMod 2) →ₗ[ZMod 2] (Fin d → ZMod 2) where
+  toFun v j := v (Fin.castSucc j)
+  map_add' _ _ := rfl
+  map_smul' _ _ := rfl
+
+private def lastBasis (d : ℕ) : Fin (d + 1) → ZMod 2 :=
+  Pi.single (Fin.last d) 1
+
+private theorem dropCoordinate_ker_iff {d : ℕ} (v : Fin (d + 1) → ZMod 2) :
+    v ∈ LinearMap.ker (dropCoordinate d) ↔
+      ∃ c : ZMod 2, v = c • lastBasis d := by
+  constructor
+  · intro hv
+    refine ⟨v (Fin.last d), ?_⟩
+    funext j
+    induction j using Fin.lastCases with
+    | last => simp [lastBasis]
+    | cast j =>
+      have hj := congrFun (show dropCoordinate d v = 0 from hv) j
+      simpa [dropCoordinate, lastBasis] using hj
+  · rintro ⟨c, rfl⟩
+    ext j
+    simp [dropCoordinate, lastBasis]
+
+private theorem lastBasis_ne_zero (d : ℕ) : lastBasis d ≠ 0 := by
+  intro h
+  have hh := congrFun h (Fin.last d)
+  simp [lastBasis] at hh
+
+private theorem dropCoordinate_range_matrix {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) :
+    (dropCoordinate d).comp Y.transpose.mulVecLin =
+      (dropLastFrequency Y).transpose.mulVecLin := by
+  ext x j
+  simp [dropCoordinate, dropLastFrequency, Matrix.mulVecLin]
+
+private theorem dropCoordinate_restrict_ker_finrank (d : ℕ)
+    (W : Submodule (ZMod 2) (Fin (d + 1) → ZMod 2)) :
+    Module.finrank (ZMod 2) ↥((dropCoordinate d).domRestrict W).ker =
+      if lastBasis d ∈ W then 1 else 0 := by
+  classical
+  by_cases he : lastBasis d ∈ W
+  · let ew : W := ⟨lastBasis d, he⟩
+    have hne : ew ≠ 0 := by
+      intro hh
+      exact lastBasis_ne_zero d (congrArg Subtype.val hh)
+    have hk : ((dropCoordinate d).domRestrict W).ker =
+        Submodule.span (ZMod 2) {ew} := by
+      ext x
+      simp only [LinearMap.mem_ker, LinearMap.domRestrict_apply,
+        Submodule.mem_span_singleton]
+      constructor
+      · intro hx
+        obtain ⟨c, hc⟩ := (dropCoordinate_ker_iff x.val).mp hx
+        refine ⟨c, ?_⟩
+        apply Subtype.ext
+        simpa [ew] using hc.symm
+      · rintro ⟨c, rfl⟩
+        apply (dropCoordinate_ker_iff _).mpr
+        exact ⟨c, by simp [ew]⟩
+    rw [if_pos he, hk]
+    exact finrank_span_singleton hne
+  · have hk : ((dropCoordinate d).domRestrict W).ker = ⊥ := by
+      ext x
+      simp only [LinearMap.mem_ker, LinearMap.domRestrict_apply,
+        Submodule.mem_bot]
+      constructor
+      · intro hx
+        obtain ⟨c, hc⟩ := (dropCoordinate_ker_iff x.val).mp hx
+        by_cases hc0 : c = 0
+        · apply Subtype.ext
+          simpa [hc0] using hc
+        · have hxmem : c • lastBasis d ∈ W := hc ▸ x.property
+          have hb := W.smul_mem c⁻¹ hxmem
+          have hcancel : c⁻¹ * c = 1 := inv_mul_cancel₀ hc0
+          simp [smul_smul, hcancel] at hb
+          exact False.elim (he hb)
+      · rintro rfl
+        simp
+    rw [if_neg he, hk]
+    simp
+
+theorem rank_eq_drop_add_hybrid_indicator {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) :
+    Y.rank = (dropLastFrequency Y).rank +
+      if Pi.single (Fin.last d) (1 : ZMod 2) ∈
+          LinearMap.range Y.transpose.mulVecLin then 1 else 0 := by
+  let F := Y.transpose.mulVecLin
+  let P := dropCoordinate d
+  let W := LinearMap.range F
+  let H := P.domRestrict W
+  have hR : H.range = (P.comp F).range := by
+    ext v
+    constructor
+    · rintro ⟨w, rfl⟩
+      obtain ⟨x, hx⟩ := w.property
+      exact ⟨x, congrArg P hx⟩
+    · rintro ⟨x, rfl⟩
+      exact ⟨⟨F x, ⟨x, rfl⟩⟩, rfl⟩
+  have hmatrix : P.comp F = (dropLastFrequency Y).transpose.mulVecLin :=
+    dropCoordinate_range_matrix Y
+  have hdim := H.finrank_range_add_finrank_ker
+  rw [hR, hmatrix, dropCoordinate_restrict_ker_finrank d W] at hdim
+  have hrank : Y.rank = (dropLastFrequency Y).rank +
+      if lastBasis d ∈ W then 1 else 0 := by
+    calc
+      Y.rank = Y.transpose.rank := (Matrix.rank_transpose Y).symm
+      _ = Module.finrank (ZMod 2) W := rfl
+      _ = Module.finrank (ZMod 2)
+            (LinearMap.range (dropLastFrequency Y).transpose.mulVecLin) +
+            (if lastBasis d ∈ W then 1 else 0) := by omega
+      _ = (dropLastFrequency Y).rank +
+            (if lastBasis d ∈ W then 1 else 0) := by
+              rw [← Matrix.rank_transpose (dropLastFrequency Y)]
+              rfl
+  exact hrank
+
+theorem selectedLastColumn_iff_hybrid {n d : ℕ}
+    (Y : BinaryMatrix n (d + 1)) :
+    selectedLastColumn Y ↔
+      Pi.single (Fin.last d) (1 : ZMod 2) ∈
+        LinearMap.range Y.transpose.mulVecLin := by
+  unfold selectedLastColumn
+  rw [rank_eq_drop_add_hybrid_indicator]
+  by_cases he : Pi.single (Fin.last d) (1 : ZMod 2) ∈
+    LinearMap.range Y.transpose.mulVecLin <;> simp_all
+
+/-- The manuscript's order-one hybrid selector for the line generated by
+the final codomain basis vector and full domain `B`.  Its preimage
+condition is automatic because `B` is the whole domain. -/
+def hybridLineSelected {n d : ℕ} (Y : BinaryMatrix n (d + 1)) : Prop :=
+  Pi.single (Fin.last d) (1 : ZMod 2) ∈
+    LinearMap.range Y.transpose.mulVecLin
+
+def hybridLineFilter {n d : ℕ} (f : BinaryMatrix n (d + 1) → ℝ)
+    (N : BinaryMatrix n (d + 1)) : ℝ :=
+  ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter hybridLineSelected,
+    fourierCoeff f Y * character Y N
+
+theorem fourierCoeff_hybridLineFilter {n d : ℕ}
+    (f : BinaryMatrix n (d + 1) → ℝ) (Z : BinaryMatrix n (d + 1)) :
+    fourierCoeff (hybridLineFilter f) Z =
+      if hybridLineSelected Z then fourierCoeff f Z else 0 := by
+  let s : Finset (BinaryMatrix n (d + 1)) := Finset.univ.filter hybridLineSelected
+  have hs : (∑ Y ∈ s, fourierCoeff f Y *
+      (if Y = Z then (1 : ℝ) else 0)) =
+        if hybridLineSelected Z then fourierCoeff f Z else 0 := by
+    by_cases hz : hybridLineSelected Z
+    · simp [s, hz]
+    · simp [s, hz]
+  rw [← hs]
+  unfold fourierCoeff hybridLineFilter uniformMean
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  rw [div_eq_mul_inv, Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro Y hY
+  have ho := character_orthogonality Y Z
+  unfold uniformMean at ho
+  have hcard : (Fintype.card (BinaryMatrix n (d + 1)) : ℝ) ≠ 0 := by
+    exact_mod_cast (Fintype.card_pos : 0 < Fintype.card (BinaryMatrix n (d + 1))).ne'
+  have ho' := (div_eq_iff hcard).mp ho
+  calc
+    (∑ M : BinaryMatrix n (d + 1),
+      fourierCoeff f Y * character Y M * character Z M) *
+        (Fintype.card (BinaryMatrix n (d + 1)) : ℝ)⁻¹
+      = fourierCoeff f Y *
+          ((∑ M : BinaryMatrix n (d + 1),
+            character Y M * character Z M) /
+              (Fintype.card (BinaryMatrix n (d + 1)) : ℝ)) := by
+                have hsum :
+                    (∑ M : BinaryMatrix n (d + 1),
+                      fourierCoeff f Y * character Y M * character Z M) =
+                    fourierCoeff f Y *
+                      (∑ M : BinaryMatrix n (d + 1),
+                        character Y M * character Z M) := by
+                  rw [Finset.mul_sum]
+                  apply Finset.sum_congr rfl
+                  intro M _
+                  ring
+                rw [hsum]
+                simp only [div_eq_mul_inv]
+                ring
+    _ = fourierCoeff f Y * (if Y = Z then 1 else 0) := by rw [ho]
+
+def rawLastColumnRestrict {n d : ℕ} (t : Fin n → ZMod 2)
+    (f : BinaryMatrix n (d + 1) → ℝ) (M : BinaryMatrix n d) : ℝ :=
+  f (rawLastColumn M t)
+
+def hybridLineDerivative {n d : ℕ} (t : Fin n → ZMod 2)
+    (f : BinaryMatrix n (d + 1) → ℝ) (M : BinaryMatrix n d) : ℝ :=
+  rawLastColumnRestrict t (hybridLineFilter f) M
+
+theorem hybridLineDerivative_eq_restrict_filter {n d : ℕ}
+    (t : Fin n → ZMod 2) (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n d) :
+    hybridLineDerivative t f M =
+      rawLastColumnRestrict t (hybridLineFilter f) M := rfl
+
+/-- The existing coordinate derivative is exactly the full-domain,
+one-line manuscript hybrid derivative, for every base and function. -/
+theorem lastColumnDerivative_eq_hybridLineDerivative {n d : ℕ}
+    (t : Fin n → ZMod 2) (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n d) :
+    lastColumnDerivative t f M = hybridLineDerivative t f M := by
+  unfold lastColumnDerivative hybridLineDerivative
+    rawLastColumnRestrict hybridLineFilter
+  congr 1
+  ext Y
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  exact selectedLastColumn_iff_hybrid Y
+
+/-- At input rank `j`, the manuscript hybrid filter selects exactly the
+same induced rank-`j-1` characters and base phases as the coordinate
+derivative. This is the explicit frequencywise A14 input. -/
+theorem hybridLineDerivative_rankProjection {n d j : ℕ}
+    (t : Fin n → ZMod 2) (f : BinaryMatrix n (d + 1) → ℝ)
+    (M : BinaryMatrix n d) :
+    hybridLineDerivative t (rankProjection j f) M =
+      ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n (d + 1))).filter
+          (fun Y => hybridLineSelected Y ∧ Y.rank = j),
+        fourierCoeff f Y * lastColumnPhase Y t *
+          character (dropLastFrequency Y) M := by
+  rw [← lastColumnDerivative_eq_hybridLineDerivative]
+  rw [lastColumnDerivative_rankProjection]
+  congr 1
+  ext Y
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  rw [selectedLastColumn_iff_hybrid]
+  rfl
+
+end
+end PvNP.RealizableHardness.BinaryMatrixHybridSelector
