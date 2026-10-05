@@ -1,0 +1,17 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean",
+    "line": 445,
+    "column": 70,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:445:70: unsolved goals\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nh : Submodule F (Fin (Module.finrank F ↥H) → F)\nheq :\n  a8NestedAmbientRange H h ⊔ Submodule.map H.subtype X.ker =\n    Submodule.map H.subtype\n      (Submodule.map (↑(codomainBasis H).equivFun.symm)\n        (h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker))\nht : Submodule.map H.subtype ⊤ = H\n⊢ h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker = ⊤ ↔\n    Submodule.map (↑(codomainBasis H).equivFun.symm) h ⊔\n        Submodule.map (↑(codomainBasis H).equivFun.symm)\n          (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker =\n      ⊤",
+    "candidate_context": [
+      "443:     (h : Submodule F (Fin (Module.finrank F H) → F)) :",
+      "444:     h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin' = ⊤ ↔",
+      "445:     a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype = H := by",
+      "446:   have heq : a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype =",
+      "447:       ((h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin').map"
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:445:70: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+h : Submodule F (Fin (Module.finrank F ↥H) → F)
+heq :
+  a8NestedAmbientRange H h ⊔ Submodule.map H.subtype X.ker =
+    Submodule.map H.subtype
+      (Submodule.map (↑(codomainBasis H).equivFun.symm)
+        (h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker))
+ht : Submodule.map H.subtype ⊤ = H
+⊢ h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker = ⊤ ↔
+    Submodule.map (↑(codomainBasis H).equivFun.symm) h ⊔
+        Submodule.map (↑(codomainBasis H).equivFun.symm)
+          (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker =
+      ⊤
+
+Candidate context:
+443:     (h : Submodule F (Fin (Module.finrank F H) → F)) :
+444:     h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin' = ⊤ ↔
+445:     a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype = H := by
+446:   have heq : a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype =
+447:       ((h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin').map
