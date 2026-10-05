@@ -210,7 +210,10 @@ theorem a8_two_base_actual_averaged_transport {n d : Nat}
     _ ≤ _ := by
       dsimp only [graph, energy, P, ΩT, X]
       apply le_of_eq
-      congr <;> first | rfl | exact Subsingleton.elim _ _
+      congr
+      set_option pp.explicit true in
+        set_option pp.fullNames true in
+          all_goals trace_state
 
 /-- The unsupported A9 window vanishes for the original ambient function.
 This is the complementary-vanishing step of the integrated A8 endpoint;
