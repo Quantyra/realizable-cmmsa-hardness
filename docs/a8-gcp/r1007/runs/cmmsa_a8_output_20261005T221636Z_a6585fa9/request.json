@@ -1,0 +1,23 @@
+{
+  "run": "cmmsa_a8_output_20261005T221636Z_a6585fa9",
+  "capture": "capture-integrated-27",
+  "started_utc": "2026-10-05T22:16:36+00:00",
+  "manifest_sha256": "33A8D59FC8AB9CC0646C1B67035EFB3C7100434806343AD64111CF66DAF654BD",
+  "archive_sha256": "E0F84805D133FD94B06C3CA8420DCF5CE1229390F1531500CD0B79DA36AA116A",
+  "remote_script_sha256": "23756C51C2E219AA03166598EEFB03129BEE152EEBA34FCB894B4A83B054833D",
+  "local_process_check_before": {
+    "utc": "2026-10-05T22:16:33+00:00",
+    "command": [
+      "powershell.exe",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "ConvertTo-Json -InputObject @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match '^(lean|lake)(\\.exe)?$' } | Select-Object Id,ProcessName,Path) -Compress"
+    ],
+    "processes": [],
+    "native_exit": 0
+  },
+  "compile_host": "GCP VM only",
+  "created_resources": [],
+  "automatic_git_writes": false
+}

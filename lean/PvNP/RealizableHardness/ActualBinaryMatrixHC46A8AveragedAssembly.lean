@@ -157,7 +157,8 @@ theorem a8_two_base_actual_averaged_transport {n d : Nat}
               exact hshift
           _ = (Fintype.card ΩS : Real) *
                 ∑ p : P, ∑ T : ΩT, (energy p T) ^ 2 := by
-              rw [← Finset.mul_sum]
+              simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ]
+              rw [Finset.mul_sum]
   have hcard := a7_t2_complement_card_le Xmat A2 B2 hA hB
   have hcardR : (Fintype.card P : Real) ≤ graph := by
     dsimp [P, graph]
@@ -175,7 +176,6 @@ theorem a8_two_base_actual_averaged_transport {n d : Nat}
   have hcubic : cubic ≤ graph ^ 3 := by
     dsimp [cubic]
     exact pow_le_pow_left₀ (by positivity) hcardR 3
-  have hscaled := mul_le_mul_of_nonneg_right hcubic hnonneg
   have hden : 0 < (Fintype.card ΩT : Real) * (Fintype.card ΩS : Real) := by
     positivity
   have hnormalized :
@@ -200,9 +200,8 @@ theorem a8_two_base_actual_averaged_transport {n d : Nat}
         ∑ p : P, ∑ T : ΩT, (energy p T) ^ 2) /
           ((Fintype.card ΩT : Real) * (Fintype.card ΩS : Real)) := by
       apply div_le_div_of_nonneg_right _ (le_of_lt hden)
-      simpa only [mul_assoc, mul_comm, mul_left_comm] using
-        (mul_le_mul_of_nonneg_right hscaled
-          (show 0 ≤ (Fintype.card ΩS : Real) by positivity))
+      exact mul_le_mul_of_nonneg_right hcubic
+        (mul_nonneg (show 0 ≤ (Fintype.card ΩS : Real) by positivity) hnonneg)
     _ = graph ^ 3 * ∑ p : P,
         (∑ T : ΩT, (energy p T) ^ 2) / (Fintype.card ΩT : Real) := by
       rw [Finset.sum_div]
@@ -229,8 +228,8 @@ theorem a8_actual_energy_zero_outside_supported_window {n d D : Nat}
     intro Z hYZ
     have hrank : Module.finrank F (LinearMap.range Y) ≤
         Module.finrank F (LinearMap.range Z) := by
-      change Module.finrank F (LinearMap.range Y) +
-        Module.finrank F (LinearMap.range (Z - Y)) = Module.finrank F (LinearMap.range Z) at hYZ
+      change Module.finrank F (LinearMap.range Z) =
+        Module.finrank F (LinearMap.range Y) + Module.finrank F (LinearMap.range (Z - Y)) at hYZ
       omega
     by_cases hc : c ≤ D
     · have hdrop :=

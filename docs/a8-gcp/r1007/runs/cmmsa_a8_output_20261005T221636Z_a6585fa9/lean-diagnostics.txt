@@ -1,0 +1,91 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:160:18: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i ∈ ?s, ?a * ?f i
+in the target expression
+  ∑ p, ∑ S0, ∑ T, energy p T ^ 2 = ↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2
+
+n d : ℕ
+Xmat : BinaryMatrix n d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2
+hB : B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker
+g : BinaryMatrix n d → ℂ
+X : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose Xmat)
+R : Submodule (ZMod 2) (Fin d → ZMod 2) := X.range
+K : Submodule (ZMod 2) (Fin n → ZMod 2) := X.ker
+A12 : Submodule (ZMod 2) ((Fin d → ZMod 2) ⧸ R) := Submodule.map R.mkQ A2
+B12 : Submodule (ZMod 2) ↥K := Submodule.comap K.subtype B2
+ΩT : Type := V d →ₗ[F] W n
+ΩS : Type := V d ⧸ R →ₗ[F] ↥K
+Ω : Type := (V d ⧸ R) ⧸ A12 →ₗ[F] ↥B12
+P : Type := a7T2ComplementPair X A2 B2
+shift : ΩS → ΩT := fun S0 => K.subtype ∘ₗ S0 ∘ₗ R.mkQ
+energy : P → ΩT → ℝ :=
+  fun p T =>
+    typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X) (filteredCarrierFunction (↑p).1 (↑p).2 T g)
+cubic : ℝ := ↑(Fintype.card P) ^ 3
+graph : ℝ :=
+  2 ^
+    (Matrix.rank Xmat *
+      (Module.finrank F ↥A2 - Module.finrank F ↥X.range + (Module.finrank F ↥X.ker - Module.finrank F ↥B2)))
+x✝¹ : Nonempty Ω := Nonempty.intro 0
+x✝ : Nonempty ΩS := Nonempty.intro 0
+hpoint :
+  ∀ (T : ΩT) (S0 : ΩS),
+    ((∑ N,
+            Complex.normSq
+              (complexCarrierHybridFilter R K A12 B12 (actualW6Derivative Xmat T g)
+                (S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ))) /
+          ↑(Fintype.card Ω)) ^
+        2 ≤
+      cubic * ∑ p, energy p (T + shift S0) ^ 2
+⊢ ∑ p, ∑ S0, ∑ T, energy p T ^ 2 = ↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2
+
+Candidate context:
+158:           _ = (Fintype.card ΩS : Real) *
+159:                 ∑ p : P, ∑ T : ΩT, (energy p T) ^ 2 := by
+160:               rw [← Finset.mul_sum]
+161:   have hcard := a7_t2_complement_card_le Xmat A2 B2 hA hB
+162:   have hcardR : (Fintype.card P : Real) ≤ graph := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:203:6: Tactic `simp` failed with a nested error:
+(deterministic) timeout at `«Lean.Meta.acLt»`, maximum number of heartbeats (1600000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+Candidate context:
+201:           ((Fintype.card ΩT : Real) * (Fintype.card ΩS : Real)) := by
+202:       apply div_le_div_of_nonneg_right _ (le_of_lt hden)
+203:       simpa only [mul_assoc, mul_comm, mul_left_comm] using
+204:         (mul_le_mul_of_nonneg_right hscaled
+205:           (show 0 ≤ (Fintype.card ΩS : Real) by positivity))
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:39:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (1600000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+Candidate context:
+37: 
+38: set_option maxHeartbeats 1600000 in
+39: /-- Two-base averaged transport for arbitrary complex `g`, using the actual
+40: normalized typed W6 output energy. The squared normalized N-energy is averaged
+41: over T and S0, with the square inside both means. The corrected graph count is
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:232:6: 'change' tactic failed, pattern
+  Module.finrank F ↥Y.range + Module.finrank F ↥(Z - Y).range = Module.finrank F ↥Z.range
+is not definitionally equal to target
+  typedW6Precedes A B Y Z
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
+
+
+Candidate context:
+230:     have hrank : Module.finrank F (LinearMap.range Y) ≤
+231:         Module.finrank F (LinearMap.range Z) := by
+232:       change Module.finrank F (LinearMap.range Y) +
+233:         Module.finrank F (LinearMap.range (Z - Y)) = Module.finrank F (LinearMap.range Z) at hYZ
+234:       omega
