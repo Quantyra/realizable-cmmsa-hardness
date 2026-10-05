@@ -1,0 +1,477 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality
+
+/-! Internal all-pair reindexing for the integrated S3132 A8 endpoint.
+No rank or positivity restriction occurs in either carrier. -/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+open scoped BigOperators
+attribute [local instance] Fintype.ofFinite
+set_option autoImplicit false
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+abbrev a8T2AllPairs {n d : Nat} (X : W n →ₗ[F] V d) :=
+  {p : Submodule F (V d) × Submodule F (W n) //
+    LinearMap.range X ⊓ p.1 = ⊥ ∧ p.2 ⊔ LinearMap.ker X = ⊤}
+
+abbrev a8T2HybridComplementPairs {n d : Nat} (X : W n →ₗ[F] V d) :=
+  Σ A2 : {A2 : Submodule F (V d) // LinearMap.range X ≤ A2},
+  Σ B2 : {B2 : Submodule F (W n) // B2 ≤ LinearMap.ker X},
+    a7T2ComplementPair X A2.1 B2.1
+
+/-- Forgetting the hybrid carrier loses no data: its two subspaces are
+uniquely recovered by join with the range and meet with the kernel. -/
+noncomputable def a8T2AllPairEquiv {n d : Nat} (X : W n →ₗ[F] V d) :
+    a8T2HybridComplementPairs X ≃ a8T2AllPairs X where
+  toFun p := ⟨p.2.2.1, p.2.2.2.1, p.2.2.2.2.2.2⟩
+  invFun p :=
+    ⟨⟨LinearMap.range X ⊔ p.1.1, le_sup_left⟩,
+      ⟨p.1.2 ⊓ LinearMap.ker X, inf_le_right⟩,
+      ⟨p.1, p.2.1, rfl, rfl, p.2.2⟩⟩
+  left_inv := by
+    rintro ⟨⟨A2, hA⟩, ⟨B2, hB⟩, ⟨⟨C, H⟩, hdis, hsup, hinf, hcover⟩⟩
+    have hAeq : LinearMap.range X ⊔ C = A2 := hsup
+    have hBeq : H ⊓ LinearMap.ker X = B2 := hinf
+    subst A2
+    subst B2
+    rfl
+  right_inv := by
+    intro p
+    rfl
+
+/-- Exact finite reindexing of all output-hybrid complements, retaining
+any actual contribution indexed by the geometric final carrier. -/
+theorem a8_all_pair_sum_reindex {n d : Nat} (X : W n →ₗ[F] V d)
+    (energy : a8T2AllPairs X → Real) :
+    (∑ p : a8T2HybridComplementPairs X, energy (a8T2AllPairEquiv X p)) =
+      ∑ p : a8T2AllPairs X, energy p := by
+  classical
+  apply Fintype.sum_equiv (a8T2AllPairEquiv X)
+  intro p
+  rfl
+
+/-- The actual squared W6 energies reindex over the complete complement
+carrier, with their induced quotient/restriction map unchanged. -/
+theorem a8_all_pair_actual_energy_reindex {n d : Nat}
+    (X : W n →ₗ[F] V d) (g : BinaryMatrix n d → Complex) :
+    (∑ p : a8T2HybridComplementPairs X,
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        (typedW6OutputEnergy p.2.2.1.1 p.2.2.1.2
+          (t2QuotientRestrict p.2.2.1.1 p.2.2.1.2 X)
+          (filteredCarrierFunction p.2.2.1.1 p.2.2.1.2 T g)) ^ 2)) =
+    ∑ p : a8T2AllPairs X,
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        (typedW6OutputEnergy p.1.1 p.1.2
+          (t2QuotientRestrict p.1.1 p.1.2 X)
+          (filteredCarrierFunction p.1.1 p.1.2 T g)) ^ 2) := by
+  classical
+  exact a8_all_pair_sum_reindex X _
+
+/-- Every quotient subspace lifts to exactly one ambient subspace containing
+the original domain carrier. -/
+noncomputable def a8QuotientSubspaceEquiv
+    {U : Type*} [AddCommGroup U] [Module F U] (C0 : Submodule F U) :
+    Submodule F (U ⧸ C0) ≃ {A : Submodule F U // C0 ≤ A} where
+  toFun c := ⟨c.comap C0.mkQ, Submodule.le_comap_mkQ C0 c⟩
+  invFun A := A.1.map C0.mkQ
+  left_inv c := Submodule.map_comap_eq_self (by simp)
+  right_inv A := by
+    apply Subtype.ext
+    exact Submodule.comap_map_eq_self (by simpa using A.2)
+
+/-- Every subspace of the original range carrier lifts to exactly one ambient
+subspace below that carrier. -/
+noncomputable def a8SubtypeSubspaceEquiv
+    {U : Type*} [AddCommGroup U] [Module F U] (H0 : Submodule F U) :
+    Submodule F H0 ≃ {B : Submodule F U // B ≤ H0} where
+  toFun h := ⟨h.map H0.subtype, Submodule.map_subtype_le H0 h⟩
+  invFun B := B.1.comap H0.subtype
+  left_inv h := Submodule.comap_map_eq_self (by simp)
+  right_inv B := by
+    apply Subtype.ext
+    ext w
+    constructor
+    · rintro ⟨v, hv, rfl⟩
+      exact hv
+    · intro hw
+      exact ⟨⟨w, B.2 hw⟩, hw, rfl⟩
+
+/-- Coordinate changes transport all subspaces bijectively; used only with
+the manuscript's fixed domain and codomain basis maps. -/
+noncomputable def a8CoordinateSubspaceEquiv
+    {U Q : Type*} [AddCommGroup U] [Module F U]
+    [AddCommGroup Q] [Module F Q] (e : U ≃ₗ[F] Q) :
+    Submodule F U ≃ Submodule F Q where
+  toFun c := c.map e.toLinearMap
+  invFun c := c.map e.symm.toLinearMap
+  left_inv c := by
+    rw [← Submodule.map_comp]
+    simp only [LinearEquiv.symm_comp, Submodule.map_id]
+  right_inv c := by
+    rw [← Submodule.map_comp]
+    simp only [LinearEquiv.comp_symm, Submodule.map_id]
+
+/-- All local domain-coordinate subspaces correspond to all ambient final
+domain subspaces above the fixed original domain carrier. -/
+noncomputable def a8NestedDomainSubspaceEquiv {d : Nat}
+    (C : Submodule F (V d)) :
+    Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F) ≃
+      {A : Submodule F (V d) // C ≤ A} :=
+  (a8CoordinateSubspaceEquiv (domainBasis C).equivFun.symm).trans
+    (a8QuotientSubspaceEquiv C)
+
+/-- All local range-coordinate subspaces correspond to all ambient final
+range subspaces below the fixed original range carrier. -/
+noncomputable def a8NestedRangeSubspaceEquiv {n : Nat}
+    (H : Submodule F (W n)) :
+    Submodule F (Fin (Module.finrank F H) → F) ≃
+      {B : Submodule F (W n) // B ≤ H} :=
+  (a8CoordinateSubspaceEquiv (codomainBasis H).equivFun.symm).trans
+    (a8SubtypeSubspaceEquiv H)
+
+theorem a8_nested_domain_subspace_equiv_apply {d : Nat}
+    (C : Submodule F (V d))
+    (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)) :
+    (a8NestedDomainSubspaceEquiv C c).1 = a8NestedAmbientDomain C c := rfl
+
+theorem a8_nested_range_subspace_equiv_apply {n : Nat}
+    (H : Submodule F (W n))
+    (h : Submodule F (Fin (Module.finrank F H) → F)) :
+    (a8NestedRangeSubspaceEquiv H h).1 = a8NestedAmbientRange H h := rfl
+
+/-- Exhaustive pair correspondence at the original ambient carrier. -/
+noncomputable def a8NestedPairEquiv {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n)) :
+    (Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F) ×
+      Submodule F (Fin (Module.finrank F H) → F)) ≃
+    ({A : Submodule F (V d) // C ≤ A} ×
+      {B : Submodule F (W n) // B ≤ H}) :=
+  Equiv.prodCongr (a8NestedDomainSubspaceEquiv C) (a8NestedRangeSubspaceEquiv H)
+
+/-- Every ambient final pair occurs exactly once after the fixed coordinate
+lift; this reindexing includes the zero and one-sided output classes. -/
+theorem a8_nested_pair_sum_reindex {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (energy : ({A : Submodule F (V d) // C ≤ A} ×
+      {B : Submodule F (W n) // B ≤ H}) → Real) :
+    (∑ p : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F) ×
+      Submodule F (Fin (Module.finrank F H) → F),
+      energy (a8NestedPairEquiv C H p)) = ∑ p, energy p := by
+  classical
+  apply Fintype.sum_equiv (a8NestedPairEquiv C H)
+  intro p
+  rfl
+
+/-- The physical quotient equivalence commutes with the actual A9 quotient
+map at the fixed original carrier. -/
+theorem a8_nested_final_domain_square {d : Nat}
+    (C : Submodule F (V d))
+    (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)) :
+    (a8NestedDomainEquiv C c).toLinearMap.comp
+      (c.mkQ.comp (domainBasis C).equivFun.toLinearMap) =
+    a9AmbientQuotientMap (a8NestedAmbientDomain C c)
+      ⟨C, a8_nested_domain_contains C c, rfl⟩ := by
+  ext x
+  rcases C.mkQ_surjective x with ⟨v, rfl⟩
+  change (Submodule.quotientQuotientEquivQuotient C
+    (a8NestedAmbientDomain C c) (a8_nested_domain_contains C c))
+    (((a8NestedAmbientDomain C c).map C.mkQ).mkQ
+      ((domainBasis C).equivFun.symm ((domainBasis C).equivFun (C.mkQ v)))) =
+    (a8NestedAmbientDomain C c).mkQ v
+  rw [LinearEquiv.symm_apply_apply]
+  exact Submodule.quotientQuotientEquivQuotientAux_mk_mk C
+    (a8NestedAmbientDomain C c) (a8_nested_domain_contains C c) v
+
+/-- The physical range equivalence commutes with the actual A9 inclusion. -/
+theorem a8_nested_final_range_square {n : Nat}
+    (H : Submodule F (W n))
+    (h : Submodule F (Fin (Module.finrank F H) → F)) :
+    (codomainBasis H).equivFun.symm.toLinearMap.comp
+      (h.subtype.comp (a8NestedRangeEquiv H h).symm.toLinearMap) =
+    a9AmbientBIncl (a8NestedAmbientRange H h)
+      ⟨H, a8_nested_range_contained H h, rfl⟩ := by
+  ext b
+  apply Subtype.ext
+  change ((codomainBasis H).equivFun.symm
+    (((a8NestedRangeEquiv H h).symm b) : Fin (Module.finrank F H) → F) : W n) =
+      (b : W n)
+  conv_rhs => rw [← (a8NestedRangeEquiv H h).apply_symm_apply b]
+  rfl
+
+/-- The induced map is the original actual A9 final map, rather than merely
+a map of equal rank or a coordinate proxy. -/
+theorem a8_nested_frequency_eq_actual_final {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F))
+    (h : Submodule F (Fin (Module.finrank F H) → F))
+    (X : H →ₗ[F] (V d ⧸ C)) :
+    a8NestedFrequency C H c h
+      (t2QuotientRestrict c h (carrierFrequencyEquiv C H X).transpose.toLin') =
+    a9AmbientFinalMap (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+      ⟨C, a8_nested_domain_contains C c, rfl⟩
+      ⟨H, a8_nested_range_contained H h, rfl⟩ X := by
+  rw [carrierFrequency_toLin]
+  change (a8NestedDomainEquiv C c).toLinearMap.comp
+    (c.mkQ.comp ((domainBasis C).equivFun.toLinearMap.comp
+      (X.comp ((codomainBasis H).equivFun.symm.toLinearMap.comp
+        (h.subtype.comp (a8NestedRangeEquiv H h).symm.toLinearMap))))) = _
+  rw [a8_nested_final_range_square]
+  rw [← LinearMap.comp_assoc, ← LinearMap.comp_assoc,
+    a8_nested_final_domain_square]
+  rfl
+
+/-- Complement disjointness and cover alone preserve the parent rank.
+No selected frequency, positivity class, or extra hypothesis is needed. -/
+theorem a8_complement_quotient_rank {n d : Nat}
+    (X : W n →ₗ[F] V d) (C : Submodule F (V d))
+    (H : Submodule F (W n))
+    (hdisjC : LinearMap.range X ⊓ C = ⊥)
+    (htop : H ⊔ LinearMap.ker X = ⊤) :
+    Module.finrank F (LinearMap.range (t2QuotientRestrict C H X)) =
+      Module.finrank F (LinearMap.range X) := by
+  have hXH : LinearMap.range (X.domRestrict H) = LinearMap.range X := by
+    apply le_antisymm
+    · intro v hv
+      rcases hv with ⟨h0, rfl⟩
+      exact ⟨h0.1, rfl⟩
+    · intro v hv
+      rcases hv with ⟨w, rfl⟩
+      have hw : w ∈ H ⊔ LinearMap.ker X := by rw [htop]; exact Submodule.mem_top
+      rcases Submodule.mem_sup.mp hw with ⟨h0, hh0, b, hb, hwsum⟩
+      refine ⟨⟨h0, hh0⟩, ?_⟩
+      simp only [LinearMap.domRestrict_apply]
+      have hb0 : X b = 0 := LinearMap.mem_ker.mp hb
+      have hsumW : X w = X h0 + X b := by rw [← map_add, hwsum]
+      have hback : X h0 = X h0 + X b := by rw [hb0, add_zero]
+      exact hback.trans hsumW.symm
+  have hinj : Function.Injective ((C.mkQ).domRestrict (LinearMap.range X)) := by
+    rw [← LinearMap.ker_eq_bot]
+    ext x
+    constructor
+    · intro hx
+      have hxC : x.1 ∈ C := by
+        have h0 : C.mkQ x.1 = 0 := by
+          simpa [LinearMap.domRestrict_apply, LinearMap.mem_ker] using hx
+        exact (Submodule.Quotient.mk_eq_zero C).mp (by
+          simpa [Submodule.mkQ_apply] using h0)
+      have hbot : x.1 ∈ LinearMap.range X ⊓ C := ⟨x.2, hxC⟩
+      rw [hdisjC] at hbot
+      apply Subtype.ext
+      simpa [Submodule.mem_bot] using hbot
+    · intro hx
+      apply LinearMap.mem_ker.mpr
+      have h0 : (x : V d) = 0 := congrArg Subtype.val hx
+      simp [LinearMap.domRestrict_apply, Submodule.mkQ_apply, h0]
+  have hfin : Module.finrank F (LinearMap.range
+      ((C.mkQ).domRestrict (LinearMap.range X))) =
+      Module.finrank F (LinearMap.range X) := by
+    have hkerBot : LinearMap.ker ((C.mkQ).domRestrict (LinearMap.range X)) = ⊥ :=
+      (LinearMap.ker_eq_bot).mpr hinj
+    have hnull := LinearMap.finrank_range_add_finrank_ker
+      ((C.mkQ).domRestrict (LinearMap.range X))
+    simpa [hkerBot] using hnull
+  have hmap : LinearMap.range ((C.mkQ).domRestrict (LinearMap.range X)) =
+      (LinearMap.range X).map C.mkQ := by
+    ext q
+    constructor
+    · intro hq
+      rcases hq with ⟨x, rfl⟩
+      exact ⟨x.1, x.2, rfl⟩
+    · intro hq
+      rcases hq with ⟨v, hv, rfl⟩
+      exact ⟨⟨v, hv⟩, rfl⟩
+  have hrange : LinearMap.range (t2QuotientRestrict C H X) =
+      (LinearMap.range X).map C.mkQ := by
+    ext q
+    constructor
+    · intro hq
+      rcases hq with ⟨h0, rfl⟩
+      exact ⟨X h0.1, ⟨h0.1, rfl⟩, rfl⟩
+    · intro hq
+      rcases hq with ⟨v, hv, rfl⟩
+      have hvH : v ∈ LinearMap.range (X.domRestrict H) := by rw [hXH]; exact hv
+      rcases hvH with ⟨h0, hh0⟩
+      refine ⟨h0, ?_⟩
+      simp only [t2QuotientRestrict, LinearMap.domRestrict_apply, LinearMap.comp_apply,
+        Submodule.mkQ_apply]
+      simp only [LinearMap.domRestrict_apply] at hh0
+      rw [hh0]
+  rw [hrange, ← hmap]
+  simpa using hfin
+
+/-- The output hybrid's two excess dimensions are exactly the geometric
+complement cost, including zero and one-sided cases. -/
+theorem a8_complement_dimension_cost {n d : Nat}
+    (X : W n →ₗ[F] V d) (A2 : Submodule F (V d))
+    (B2 : Submodule F (W n)) (p : a7T2ComplementPair X A2 B2) :
+    (Module.finrank F A2 - Module.finrank F (LinearMap.range X)) +
+      (Module.finrank F (LinearMap.ker X) - Module.finrank F B2) =
+    Module.finrank F p.1.1 + Module.finrank F (W n ⧸ p.1.2) := by
+  have hA := Submodule.finrank_sup_add_finrank_inf_eq (LinearMap.range X) p.1.1
+  rw [p.2.2.1, p.2.1] at hA
+  simp only [Submodule.finrank_bot, add_zero] at hA
+  have hH := Submodule.finrank_sup_add_finrank_inf_eq p.1.2 (LinearMap.ker X)
+  rw [p.2.2.2.2, p.2.2.2.1] at hH
+  simp only [Submodule.finrank_top] at hH
+  have hQ := p.1.2.finrank_quotient_add_finrank
+  omega
+
+/-- Nested ambient carrier cost adds precisely the local final carrier
+cost to the fixed original carrier cost. -/
+theorem a8_nested_ambient_cost {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F))
+    (h : Submodule F (Fin (Module.finrank F H) → F)) :
+    Module.finrank F (a8NestedAmbientDomain C c) +
+      Module.finrank F (W n ⧸ a8NestedAmbientRange H h) =
+    Module.finrank F C + Module.finrank F (W n ⧸ H) +
+      Module.finrank F c +
+      Module.finrank F ((Fin (Module.finrank F H) → F) ⧸ h) := by
+  have hD := (a8NestedDomainEquiv C c).finrank_eq
+  have hB := (a8NestedRangeEquiv H h).finrank_eq
+  have hC := C.finrank_quotient_add_finrank
+  have hH := H.finrank_quotient_add_finrank
+  have hA := (a8NestedAmbientDomain C c).finrank_quotient_add_finrank
+  have hBq := (a8NestedAmbientRange H h).finrank_quotient_add_finrank
+  have hc := c.finrank_quotient_add_finrank
+  have hh := h.finrank_quotient_add_finrank
+  have hdl : Module.finrank F (Fin (Module.finrank F (V d ⧸ C)) → F) =
+      Module.finrank F (V d ⧸ C) := by simpa using
+        (Module.finrank_fin_fun (n := Module.finrank F (V d ⧸ C)) F)
+  have hhl : Module.finrank F (Fin (Module.finrank F H) → F) =
+      Module.finrank F H := by simpa using
+        (Module.finrank_fin_fun (n := Module.finrank F H) F)
+  omega
+
+theorem a8_coordinate_parent_range {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C)) :
+    (LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin').map
+      (domainBasis C).equivFun.symm.toLinearMap = LinearMap.range X := by
+  rw [carrierFrequency_toLin]
+  ext x
+  constructor
+  · rintro ⟨y, ⟨z, rfl⟩, rfl⟩
+    exact ⟨(codomainBasis H).equivFun.symm z, by simp⟩
+  · rintro ⟨z, rfl⟩
+    refine ⟨(domainBasis C).equivFun (X z), ?_, by simp⟩
+    exact ⟨(codomainBasis H).equivFun z, by simp⟩
+
+theorem a8_coordinate_parent_kernel {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C)) :
+    (LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin').map
+      (codomainBasis H).equivFun.symm.toLinearMap = LinearMap.ker X := by
+  rw [carrierFrequency_toLin]
+  ext x
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    apply LinearMap.mem_ker.mpr
+    have hz := congrArg (domainBasis C).equivFun.symm (LinearMap.mem_ker.mp hy)
+    simpa using hz
+  · intro hx
+    refine ⟨(codomainBasis H).equivFun x, ?_, by simp⟩
+    apply LinearMap.mem_ker.mpr
+    simp [LinearMap.mem_ker.mp hx]
+
+/-- The local complement incidence is precisely the original ambient A8
+domain incidence, with the original carrier retained. -/
+theorem a8_nested_domain_incidence_iff {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C))
+    (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)) :
+    LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin' ⊓ c = ⊥ ↔
+    a8NestedAmbientDomain C c ⊓ (LinearMap.range X).comap C.mkQ = C := by
+  have heq : a8NestedAmbientDomain C c ⊓ (LinearMap.range X).comap C.mkQ =
+      ((LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin' ⊓ c).map
+        (domainBasis C).equivFun.symm.toLinearMap).comap C.mkQ := by
+    rw [Submodule.map_inf _ (domainBasis C).equivFun.symm.injective,
+      a8_coordinate_parent_range, Submodule.comap_inf]
+    exact inf_comm _ _
+  have hb : (⊥ : Submodule F (V d ⧸ C)).comap C.mkQ = C := by simp
+  rw [heq, ← hb,
+    (Submodule.comap_injective_of_surjective C.mkQ C.mkQ_surjective).eq_iff]
+  simp
+
+/-- The local complement cover is precisely the original ambient A8 range
+incidence; no final pair is discarded by changing coordinates. -/
+theorem a8_nested_range_incidence_iff {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C))
+    (h : Submodule F (Fin (Module.finrank F H) → F)) :
+    h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin' = ⊤ ↔
+    a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype = H := by
+  have heq : a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype =
+      ((h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin').map
+        (codomainBasis H).equivFun.symm.toLinearMap).map H.subtype := by
+    rw [Submodule.map_sup, a8_coordinate_parent_kernel, Submodule.map_sup]
+    rfl
+  have ht : (⊤ : Submodule F H).map H.subtype = H := by simp
+  rw [heq, ← ht,
+    (Submodule.map_injective_of_injective H.subtype H.injective_subtype).eq_iff]
+  simp
+
+/-- The actual ambient final pairs for one unchanged initial carrier/map. -/
+abbrev a8AmbientFinalPairs {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C)) :=
+  {p : {A : Submodule F (V d) // C ≤ A} ×
+      {B : Submodule F (W n) // B ≤ H} //
+    p.1.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧
+      p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H}
+
+/-- The complete local geometric final carrier corresponds bijectively to
+the actual original ambient final carrier, preserving both incidences. -/
+noncomputable def a8AmbientFinalPairEquiv {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C)) :
+    a8T2AllPairs (carrierFrequencyEquiv C H X).transpose.toLin' ≃
+      a8AmbientFinalPairs C H X :=
+  (a8NestedPairEquiv C H).subtypeEquiv (fun p => by
+    change (LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin' ⊓ p.1 = ⊥ ∧
+      p.2 ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin' = ⊤) ↔
+      (a8NestedAmbientDomain C p.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧
+        a8NestedAmbientRange H p.2 ⊔ (LinearMap.ker X).map H.subtype = H)
+    exact and_congr (a8_nested_domain_incidence_iff C H X p.1)
+      (a8_nested_range_incidence_iff C H X p.2))
+
+/-- Exact all-complement reindex to the actual A9 map at the original base;
+the squared energy stays inside the normalized ambient mean. -/
+theorem a8_all_pair_actual_ambient_energy_reindex {n d : Nat}
+    (C : Submodule F (V d)) (H : Submodule F (W n))
+    (X : H →ₗ[F] (V d ⧸ C)) (f : BinaryMatrix n d → Complex) :
+    (∑ p : a8T2AllPairs (carrierFrequencyEquiv C H X).transpose.toLin',
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        (typedW6OutputEnergy (a8NestedAmbientDomain C p.1.1)
+          (a8NestedAmbientRange H p.1.2)
+          (a8NestedFrequency C H p.1.1 p.1.2
+            (t2QuotientRestrict p.1.1 p.1.2
+              (carrierFrequencyEquiv C H X).transpose.toLin'))
+          (filteredCarrierFunction (a8NestedAmbientDomain C p.1.1)
+            (a8NestedAmbientRange H p.1.2) T f)) ^ 2)) =
+    ∑ p : a8AmbientFinalPairs C H X,
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        (typedW6OutputEnergy p.1.1.1 p.1.2.1
+          (a9AmbientFinalMap p.1.1.1 p.1.2.1
+            ⟨C, p.1.1.2, rfl⟩ ⟨H, p.1.2.2, rfl⟩ X)
+          (filteredCarrierFunction p.1.1.1 p.1.2.1 T f)) ^ 2) := by
+  classical
+  apply Fintype.sum_equiv (a8AmbientFinalPairEquiv C H X)
+  intro p
+  change typedUniformMean _ = typedUniformMean _
+  congr 1
+  funext T
+  rw [a8_nested_frequency_eq_actual_final]
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly

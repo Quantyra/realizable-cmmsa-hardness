@@ -1,0 +1,54 @@
+﻿import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
+
+/-! Internal all-pair reindexing for the integrated S3132 A8 endpoint.
+No rank or positivity restriction occurs in either carrier. -/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
+open scoped BigOperators
+set_option autoImplicit false
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+abbrev a8T2AllPairs {n d : Nat} (X : W n →ₗ[F] V d) :=
+  {p : Submodule F (V d) × Submodule F (W n) //
+    LinearMap.range X ⊓ p.1 = ⊥ ∧ p.2 ⊔ LinearMap.ker X = ⊤}
+
+abbrev a8T2HybridComplementPairs {n d : Nat} (X : W n →ₗ[F] V d) :=
+  (A2 : {A2 : Submodule F (V d) // LinearMap.range X ≤ A2}) ×
+  (B2 : {B2 : Submodule F (W n) // B2 ≤ LinearMap.ker X}) ×
+    a7T2ComplementPair X A2.1 B2.1
+
+/-- Forgetting the hybrid carrier loses no data: its two subspaces are
+uniquely recovered by join with the range and meet with the kernel. -/
+noncomputable def a8T2AllPairEquiv {n d : Nat} (X : W n →ₗ[F] V d) :
+    a8T2HybridComplementPairs X ≃ a8T2AllPairs X where
+  toFun p := ⟨p.2.2.1, p.2.2.2.1, p.2.2.2.2.2.2⟩
+  invFun p :=
+    ⟨⟨LinearMap.range X ⊔ p.1.1, le_sup_left⟩,
+      ⟨p.1.2 ⊓ LinearMap.ker X, inf_le_right⟩,
+      ⟨p.1, p.2.1, rfl, rfl, p.2.2⟩⟩
+  left_inv := by
+    rintro ⟨⟨A2, hA⟩, ⟨B2, hB⟩, ⟨⟨C, H⟩, hdis, hsup, hinf, hcover⟩⟩
+    have hAeq : LinearMap.range X ⊔ C = A2 := hsup
+    have hBeq : H ⊓ LinearMap.ker X = B2 := hinf
+    subst A2
+    subst B2
+    rfl
+  right_inv := by
+    intro p
+    rfl
+
+/-- Exact finite reindexing of all output-hybrid complements, retaining
+any actual contribution indexed by the geometric final carrier. -/
+theorem a8_all_pair_sum_reindex {n d : Nat} (X : W n →ₗ[F] V d)
+    (energy : a8T2AllPairs X → Real) :
+    (∑ p : a8T2HybridComplementPairs X, energy (a8T2AllPairEquiv X p)) =
+      ∑ p : a8T2AllPairs X, energy p := by
+  classical
+  apply Fintype.sum_equiv (a8T2AllPairEquiv X)
+  intro p
+  rfl
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly

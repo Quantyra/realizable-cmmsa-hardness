@@ -1,0 +1,288 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:76:8: failed to synthesize instance of type class
+  Decidable (t2RightSelected (Matrix.toLin' (Matrix.transpose Xmat)) (Matrix.toLin' (Matrix.transpose Y)) A2 B2 p.1 p.2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+74:     ∑ p : Submodule F (V d) × Submodule F (W n),
+75:       ∑ Y : BinaryMatrix n d,
+76:         if t2RightSelected Xmat.transpose.toLin' Y.transpose.toLin'
+77:             A2 B2 p.1 p.2 then
+78:           complexFourierCoeff g Y *
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:94:8: failed to synthesize instance of type class
+  Decidable (t2RightSelected X (Matrix.toLin' (Matrix.transpose Y)) A2 B2 p.1 p.2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+92:     (∑ p : Submodule F (V d) × Submodule F (W n),
+93:       ∑ Y : BinaryMatrix n d,
+94:         if t2RightSelected X Y.transpose.toLin' A2 B2 p.1 p.2 then
+95:           weight Y else 0) =
+96:     ∑ p : a7T2ComplementPair X A2 B2,
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:98:8: failed to synthesize instance of type class
+  Decidable (t2RightSelected X (Matrix.toLin' (Matrix.transpose Y)) A2 B2 (↑p).1 (↑p).2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+96:     ∑ p : a7T2ComplementPair X A2 B2,
+97:       ∑ Y : BinaryMatrix n d,
+98:         if t2RightSelected X Y.transpose.toLin' A2 B2 p.1.1 p.1.2 then
+99:           weight Y else 0 := by
+100:   classical
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:202:40: Unknown identifier `filteredCarrierFunction`
+
+Candidate context:
+200:   let qD := a8T2ComplementDomainMap X A2 C H hA hCA
+201:   let qK := a8T2ComplementKernelMap X B2 C H hBH hB
+202:   exact typedW6FourierDerivative C H Z (filteredCarrierFunction C H base g)
+203:     (qK.comp (N.comp qD))
+204: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:238:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  h + k
+in the target expression
+  X (H.subtype ⟨h, hh⟩) = X w
+
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+p : a7T2ComplementPair X A2 B2
+C : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) :=
+  (↑p).1
+H : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n) :=
+  (↑p).2
+Z : ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ C :=
+  t2QuotientRestrict C H X
+y : PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ (↑p).1
+hy : y ∈ Submodule.map (↑p).1.mkQ A2
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+hv : v ∈ A2
+hvy : (↑p).1.mkQ v = y
+hvsup : v ∈ X.range ⊔ C
+c : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+hc : c ∈ C
+w : W n
+hx : X w ∈ X.range
+hadd : X w + c = v
+hwsup : w ∈ H ⊔ X.ker
+h : W n
+hh : h ∈ H
+k : W n
+hk : k ∈ X.ker
+hdecomp : h + k = w
+⊢ X (H.subtype ⟨h, hh⟩) = X w
+
+Candidate context:
+236:     rcases Submodule.mem_sup.mp hwsup with ⟨h, hh, k, hk, hdecomp⟩
+237:     have hXeq : X (H.subtype ⟨h, hh⟩) = X w := by
+238:       rw [hdecomp]
+239:       simp [LinearMap.map_add, LinearMap.mem_ker.mp hk]
+240:     have himage : C.mkQ (X (H.subtype ⟨h, hh⟩)) = y := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:244:14: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  X w + c
+in the target expression
+  C.mkQ (X w) = C.mkQ v
+
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+p : a7T2ComplementPair X A2 B2
+C : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) :=
+  (↑p).1
+H : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n) :=
+  (↑p).2
+Z : ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ C :=
+  t2QuotientRestrict C H X
+y : PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ (↑p).1
+hy : y ∈ Submodule.map (↑p).1.mkQ A2
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+hv : v ∈ A2
+hvy : (↑p).1.mkQ v = y
+hvsup : v ∈ X.range ⊔ C
+c : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+hc : c ∈ C
+w : W n
+hx : X w ∈ X.range
+hadd : X w + c = v
+hwsup : w ∈ H ⊔ X.ker
+h : W n
+hh : h ∈ H
+k : W n
+hk : k ∈ X.ker
+hdecomp : h + k = w
+hXeq : X (H.subtype ⟨h, hh⟩) = X w
+⊢ C.mkQ (X w) = C.mkQ v
+
+Candidate context:
+242:         C.mkQ (X (H.subtype ⟨h, hh⟩)) = C.mkQ (X w) := congrArg C.mkQ hXeq
+243:         _ = C.mkQ v := by
+244:           rw [hadd]
+245:           simp [LinearMap.map_add, Submodule.Quotient.mk_eq_zero.mpr hc]
+246:         _ = y := hvy
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:295:49: unsolved goals
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : X.range ≤ A2
+p : a7T2ComplementPair X A2 B2
+C : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) :=
+  (↑p).1
+H : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n) :=
+  (↑p).2
+Z : ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ C :=
+  t2QuotientRestrict C H X
+hCA : C ≤ A2 := le_trans le_sup_right (le_of_eq p.property.right.left)
+eX : ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2) ≃ₗ[F] V d ⧸ A2 := X.range.quotientQuotientEquivQuotient A2 hA
+eC : ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ C) ⧸
+    Submodule.map C.mkQ A2) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ A2 :=
+  C.quotientQuotientEquivQuotient A2 hCA
+hRange : (t2QuotientRestrict (↑p).1 (↑p).2 X).range = Submodule.map (↑p).1.mkQ A2 := a8_t2_complement_range_eq X A2 B2 p
+eZ : ((V d ⧸ C) ⧸ Z.range) ≃ₗ[F] V d ⧸ A2 := Z.range.quotEquivOfEq (Submodule.map C.mkQ A2) hRange ≪≫ₗ eC
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+hmk : eX ((Submodule.map X.range.mkQ A2).mkQ (X.range.mkQ v)) = A2.mkQ v
+⊢ Submodule.Quotient.mk (Submodule.Quotient.mk v) =
+    (a8T2ComplementDomainMap X A2 C H hA hCA) (Submodule.Quotient.mk (Submodule.Quotient.mk v))
+
+Candidate context:
+293:     (Submodule.quotEquivOfEq (LinearMap.range Z) (A2.map C.mkQ) hRange).trans eC
+294:   let hcomp : (eZ.trans eX.symm).toLinearMap =
+295:       a8T2ComplementDomainMap X A2 C H hA hCA := by
+296:     apply LinearMap.ext
+297:     intro x
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:318:40: Unknown identifier `z`
+
+Candidate context:
+316:   change eX.symm (A2.mkQ v) = _
+317:   rw [← he]
+318:   change (eZ.trans eX.symm).toLinearMap z = _
+319:   rw [hcomp]
+320:   rfl
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:415:7: Unknown identifier `filteredCarrierFunction`
+
+Note: It is not possible to treat `filteredCarrierFunction` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+413:     typedW6OutputEnergy p.1.1 p.1.2
+414:       (t2QuotientRestrict p.1.1 p.1.2 X)
+415:       (filteredCarrierFunction p.1.1 p.1.2 base g) =
+416:     (∑ N : (((V d ⧸ LinearMap.range X) ⧸ A2.map (LinearMap.range X).mkQ) →ₗ[F]
+417:         B2.comap (LinearMap.ker X).subtype),
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:421:11: Unknown identifier `filteredCarrierFunction`
+
+Note: It is not possible to treat `filteredCarrierFunction` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+419:         (typedW6FourierDerivative p.1.1 p.1.2
+420:           (t2QuotientRestrict p.1.1 p.1.2 X)
+421:           (filteredCarrierFunction p.1.1 p.1.2 base g)
+422:           ((a8_t2_complement_hom_equiv X A2 B2 hA hB p) N))) /
+423:       (Fintype.card ((((V d ⧸ LinearMap.range X) ⧸
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:434:13: Unknown identifier `filteredCarrierFunction`
+
+Candidate context:
+432:           (typedW6FourierDerivative p.1.1 p.1.2
+433:             (t2QuotientRestrict p.1.1 p.1.2 X)
+434:             (filteredCarrierFunction p.1.1 p.1.2 base g) (e N))) =
+435:       ∑ M : (((V d ⧸ p.1.1) ⧸
+436:           LinearMap.range (t2QuotientRestrict p.1.1 p.1.2 X)) →ₗ[F]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:441:13: Unknown identifier `filteredCarrierFunction`
+
+Candidate context:
+439:           (typedW6FourierDerivative p.1.1 p.1.2
+440:             (t2QuotientRestrict p.1.1 p.1.2 X)
+441:             (filteredCarrierFunction p.1.1 p.1.2 base g) M) := by
+442:     apply Fintype.sum_equiv e
+443:     intro N
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:541:2: No goals to be solved
+
+Candidate context:
+539:   rw [a8_actual_T2_whole_function_expansion Xmat A2 B2 hA hB base g Mleft,
+540:     a8_actual_T2_whole_function_expansion Xmat A2 B2 hA hB b' g Mright]
+541:   have hsum :
+542:       (∑ p : Submodule F (V d) × Submodule F (W n),
+543:         ∑ Y : BinaryMatrix n d,
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:631:2: `dsimp` made no progress
+
+Candidate context:
+629:       (Finset.univ : Finset ι) (fun _ => (1 : Real)) e
+630:     simpa using hcs
+631:   dsimp [E, e, m, den]
+632:   calc
+633:     _ ≤ ((Fintype.card ι : Real) * ∑ i : ι,
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:681:13: Unknown identifier `filteredCarrierFunction`
+
+Note: It is not possible to treat `filteredCarrierFunction` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+679:           (typedW6OutputEnergy p.1.1 p.1.2
+680:             (t2QuotientRestrict p.1.1 p.1.2 X)
+681:             (filteredCarrierFunction p.1.1 p.1.2 b' g)) ^ 2 := by
+682:   classical
+683:   dsimp
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:704:4: No goals to be solved
+
+Candidate context:
+702:     rw [a8_common_S0_filter_shift Xmat A2 B2 hA hB base g S0 N]
+703:     rw [hrec N]
+704:     simp [fcomp]
+705:   have hmean :
+706:       (∑ N : Ω, Complex.normSq (complexCarrierHybridFilter R K A12 B12
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:718:11: Unknown identifier `filteredCarrierFunction`
+
+Candidate context:
+716:         typedW6OutputEnergy p.1.1 p.1.2
+717:           (t2QuotientRestrict p.1.1 p.1.2 X)
+718:           (filteredCarrierFunction p.1.1 p.1.2 b' g) := by
+719:     intro p
+720:     simpa [fcomp, Ω] using
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:733:13: Unknown identifier `filteredCarrierFunction`
+
+Candidate context:
+731:           (typedW6OutputEnergy p.1.1 p.1.2
+732:             (t2QuotientRestrict p.1.1 p.1.2 X)
+733:             (filteredCarrierFunction p.1.1 p.1.2 b' g)) ^ 2 := by
+734:       congr 1
+735:       apply Finset.sum_congr rfl
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:774:74: unexpected token ':='; expected ')', ',' or ':'
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedTransport
+
+
+Candidate context:
+772:                 Complex.normSq (f i T S omega)) /
+773:                 (Fintype.card NBase : Real)) ^ 2))) /
+774:               ((Fintype.card TBase : Real) * (Fintype.card SBase : Real))) := by
+775:   classical
+776:   let denBase : Real :=

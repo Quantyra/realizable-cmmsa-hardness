@@ -1,0 +1,121 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
+
+/-! Internal all-pair reindexing for the integrated S3132 A8 endpoint.
+No rank or positivity restriction occurs in either carrier. -/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
+open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
+open PvNP.RealizableHardness.BinaryMatrixA1Complex
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+open scoped BigOperators
+attribute [local instance] Fintype.ofFinite
+set_option autoImplicit false
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+abbrev a8T2AllPairs {n d : Nat} (X : W n →ₗ[F] V d) :=
+  {p : Submodule F (V d) × Submodule F (W n) //
+    LinearMap.range X ⊓ p.1 = ⊥ ∧ p.2 ⊔ LinearMap.ker X = ⊤}
+
+abbrev a8T2HybridComplementPairs {n d : Nat} (X : W n →ₗ[F] V d) :=
+  Σ A2 : {A2 : Submodule F (V d) // LinearMap.range X ≤ A2},
+  Σ B2 : {B2 : Submodule F (W n) // B2 ≤ LinearMap.ker X},
+    a7T2ComplementPair X A2.1 B2.1
+
+/-- Forgetting the hybrid carrier loses no data: its two subspaces are
+uniquely recovered by join with the range and meet with the kernel. -/
+noncomputable def a8T2AllPairEquiv {n d : Nat} (X : W n →ₗ[F] V d) :
+    a8T2HybridComplementPairs X ≃ a8T2AllPairs X where
+  toFun p := ⟨p.2.2.1, p.2.2.2.1, p.2.2.2.2.2.2⟩
+  invFun p :=
+    ⟨⟨LinearMap.range X ⊔ p.1.1, le_sup_left⟩,
+      ⟨p.1.2 ⊓ LinearMap.ker X, inf_le_right⟩,
+      ⟨p.1, p.2.1, rfl, rfl, p.2.2⟩⟩
+  left_inv := by
+    rintro ⟨⟨A2, hA⟩, ⟨B2, hB⟩, ⟨⟨C, H⟩, hdis, hsup, hinf, hcover⟩⟩
+    have hAeq : LinearMap.range X ⊔ C = A2 := hsup
+    have hBeq : H ⊓ LinearMap.ker X = B2 := hinf
+    subst A2
+    subst B2
+    rfl
+  right_inv := by
+    intro p
+    rfl
+
+/-- Exact finite reindexing of all output-hybrid complements, retaining
+any actual contribution indexed by the geometric final carrier. -/
+theorem a8_all_pair_sum_reindex {n d : Nat} (X : W n →ₗ[F] V d)
+    (energy : a8T2AllPairs X → Real) :
+    (∑ p : a8T2HybridComplementPairs X, energy (a8T2AllPairEquiv X p)) =
+      ∑ p : a8T2AllPairs X, energy p := by
+  classical
+  apply Fintype.sum_equiv (a8T2AllPairEquiv X)
+  intro p
+  rfl
+
+/-- The actual squared W6 energies reindex over the complete complement
+carrier, with their induced quotient/restriction map unchanged. -/
+theorem a8_all_pair_actual_energy_reindex {n d : Nat}
+    (X : W n →ₗ[F] V d) (g : BinaryMatrix n d → Complex) :
+    (∑ p : a8T2HybridComplementPairs X,
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        (typedW6OutputEnergy p.2.2.1.1 p.2.2.1.2
+          (t2QuotientRestrict p.2.2.1.1 p.2.2.1.2 X)
+          (filteredCarrierFunction p.2.2.1.1 p.2.2.1.2 T g)) ^ 2)) =
+    ∑ p : a8T2AllPairs X,
+      typedUniformMean (fun T : V d →ₗ[F] W n =>
+        (typedW6OutputEnergy p.1.1 p.1.2
+          (t2QuotientRestrict p.1.1 p.1.2 X)
+          (filteredCarrierFunction p.1.1 p.1.2 T g)) ^ 2) := by
+  classical
+  exact a8_all_pair_sum_reindex X _
+
+/-- Every quotient subspace lifts to exactly one ambient subspace containing
+the original domain carrier. -/
+noncomputable def a8QuotientSubspaceEquiv
+    {U : Type*} [AddCommGroup U] [Module F U] (C0 : Submodule F U) :
+    Submodule F (U ⧸ C0) ≃ {A : Submodule F U // C0 ≤ A} where
+  toFun c := ⟨c.comap C0.mkQ, Submodule.le_comap_mkQ C0 c⟩
+  invFun A := A.1.map C0.mkQ
+  left_inv c := Submodule.map_comap_eq_self (by simp)
+  right_inv A := by
+    apply Subtype.ext
+    exact Submodule.comap_map_eq_self (by simpa using A.2)
+
+/-- Every subspace of the original range carrier lifts to exactly one ambient
+subspace below that carrier. -/
+noncomputable def a8SubtypeSubspaceEquiv
+    {U : Type*} [AddCommGroup U] [Module F U] (H0 : Submodule F U) :
+    Submodule F H0 ≃ {B : Submodule F U // B ≤ H0} where
+  toFun h := ⟨h.map H0.subtype, Submodule.map_subtype_le H0 h⟩
+  invFun B := B.1.comap H0.subtype
+  left_inv h := Submodule.comap_map_eq_self (by simp)
+  right_inv B := by
+    apply Subtype.ext
+    ext w
+    constructor
+    · rintro ⟨v, hv, rfl⟩
+      exact hv
+    · intro hw
+      exact ⟨⟨w, B.2 hw⟩, hw, rfl⟩
+
+/-- Coordinate changes transport all subspaces bijectively; used only with
+the manuscript's fixed domain and codomain basis maps. -/
+noncomputable def a8CoordinateSubspaceEquiv
+    {U Q : Type*} [AddCommGroup U] [Module F U]
+    [AddCommGroup Q] [Module F Q] (e : U ≃ₗ[F] Q) :
+    Submodule F U ≃ Submodule F Q where
+  toFun c := c.map e.toLinearMap
+  invFun c := c.map e.symm.toLinearMap
+  left_inv c := by
+    rw [← Submodule.map_comp]
+    simp only [LinearEquiv.symm_comp, Submodule.map_id]
+  right_inv c := by
+    rw [← Submodule.map_comp]
+    simp only [LinearEquiv.comp_symm, Submodule.map_id]
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly
