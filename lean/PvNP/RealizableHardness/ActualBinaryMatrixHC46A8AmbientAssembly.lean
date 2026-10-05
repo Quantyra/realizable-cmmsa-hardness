@@ -25,9 +25,13 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
 open PvNP.RealizableHardness.BinaryMatrixA1Complex
 open PvNP.RealizableHardness.BinaryMatrixA1TypedFourier
 open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
 open scoped BigOperators
 
 set_option autoImplicit false
+set_option backward.isDefEq.respectTransparency false
 noncomputable section
 attribute [local instance] Classical.propDecidable
 attribute [local instance] Fintype.ofFinite
@@ -349,6 +353,11 @@ private theorem a8_supported_graph_charge {n d D : Nat}
   by_cases hc : cost ≤ D
   · have hdim := a8_complement_dimension_cost Xmat.transpose.toLin' A2 B2 p
     have hcost := a8_nested_ambient_cost C H p.1.1 p.1.2
+    change (Module.finrank F A2 - Module.finrank F (LinearMap.range Xmat.transpose.toLin')) +
+      (Module.finrank F (LinearMap.ker Xmat.transpose.toLin') - Module.finrank F B2) =
+        Module.finrank F p.1.1 + Module.finrank F ((Fin (Module.finrank F H) → F) ⧸ p.1.2) at hdim
+    change cost = Module.finrank F C + Module.finrank F (W n ⧸ H) +
+      Module.finrank F p.1.1 + Module.finrank F ((Fin (Module.finrank F H) → F) ⧸ p.1.2) at hcost
     have huv : (Module.finrank F A2 - Module.finrank F (LinearMap.range Xmat.transpose.toLin')) +
         (Module.finrank F (LinearMap.ker Xmat.transpose.toLin') - Module.finrank F B2) ≤ D := by
       dsimp [cost, A, B] at hc
@@ -412,7 +421,7 @@ theorem a8_ambient_output_pair_le_supported_complement_sum {n d D : Nat}
   apply Finset.sum_le_sum
   intro p _
   unfold typedUniformMean
-  rw [mul_div_assoc, mul_div_assoc, Finset.mul_sum, Finset.mul_sum]
+  rw [← mul_div_assoc, ← mul_div_assoc, Finset.mul_sum, Finset.mul_sum]
   apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)
   apply Finset.sum_le_sum
   intro T _
