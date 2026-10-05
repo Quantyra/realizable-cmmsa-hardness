@@ -1,0 +1,136 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex
+
+/-! Internal canonical initial-data geometry for the original weighted A11
+consumer. This module is not an independent acceptance target. The weighted
+aggregate, strict lower-degree induction and tail/W6 composition are still
+required; the declarations below assert no aggregate estimate. -/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A11WeightedAggregate
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex
+open scoped BigOperators
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Fintype.ofFinite
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+section Canonical
+variable {n d : Nat} (C : Submodule F (V d)) (H : Submodule F (W n))
+variable (X : H →ₗ[F] (V d ⧸ C))
+
+def a11OriginalA : Submodule F (V d) := (LinearMap.range X).comap C.mkQ
+
+def a11OriginalB : Submodule F (W n) := (LinearMap.ker X).map H.subtype
+
+def a11OriginalInternalC : Submodule F (a11OriginalA C H X) :=
+  C.comap (a11OriginalA C H X).subtype
+
+def a11OriginalK : Submodule F (W n ⧸ a11OriginalB C H X) :=
+  H.map (a11OriginalB C H X).mkQ
+
+theorem a11_original_C_le_A : C ≤ a11OriginalA C H X :=
+  Submodule.le_comap_mkQ C (LinearMap.range X)
+
+theorem a11_original_B_le_H : a11OriginalB C H X ≤ H :=
+  Submodule.map_subtype_le H (LinearMap.ker X)
+
+/-- Actual domain quotient, codomain-restricted to the parent range. -/
+def a11DomainRangeMap : a11OriginalA C H X →ₗ[F] LinearMap.range X where
+  toFun a := ⟨C.mkQ a.val, a.property⟩
+  map_add' a b := Subtype.ext (map_add C.mkQ a.val b.val)
+  map_smul' r a := Subtype.ext (map_smul C.mkQ r a.val)
+
+theorem a11_domain_range_surjective : Function.Surjective (a11DomainRangeMap C H X) := by
+  intro y
+  rcases C.mkQ_surjective y.val with ⟨a, ha⟩
+  refine ⟨⟨a, ?_⟩, ?_⟩
+  · change C.mkQ a ∈ LinearMap.range X
+    rw [ha]
+    exact y.property
+  · apply Subtype.ext
+    exact ha
+
+theorem a11_domain_range_kernel : LinearMap.ker (a11DomainRangeMap C H X) =
+    a11OriginalInternalC C H X := by
+  ext a
+  change a11DomainRangeMap C H X a = 0 ↔ a.val ∈ C
+  rw [← Subtype.val_injective.eq_iff]
+  exact Submodule.Quotient.mk_eq_zero C
+
+/-- Actual range quotient, codomain-restricted to its image K=H/B. -/
+def a11RangeQuotientMap : H →ₗ[F] a11OriginalK C H X where
+  toFun h := ⟨(a11OriginalB C H X).mkQ h.val,
+    ⟨h.val, h.property, rfl⟩⟩
+  map_add' a b := Subtype.ext (map_add (a11OriginalB C H X).mkQ a.val b.val)
+  map_smul' r a := Subtype.ext (map_smul (a11OriginalB C H X).mkQ r a.val)
+
+theorem a11_range_quotient_surjective : Function.Surjective (a11RangeQuotientMap C H X) := by
+  rintro ⟨y, ⟨h, hh, rfl⟩⟩
+  exact ⟨⟨h, hh⟩, rfl⟩
+
+theorem a11_range_quotient_kernel : LinearMap.ker (a11RangeQuotientMap C H X) =
+    LinearMap.ker X := by
+  have hB : (a11OriginalB C H X).comap H.subtype = LinearMap.ker X := by
+    exact Submodule.comap_map_eq_of_injective (Submodule.injective_subtype H) _
+  ext h
+  change a11RangeQuotientMap C H X h = 0 ↔ h ∈ LinearMap.ker X
+  rw [← Subtype.val_injective.eq_iff]
+  change (a11OriginalB C H X).mkQ h.val = 0 ↔ h ∈ LinearMap.ker X
+  rw [Submodule.Quotient.mk_eq_zero]
+  exact SetLike.ext_iff.mp hB h
+
+/-- Canonical A/C' identification with the parent range. -/
+def a11DomainRangeEquiv :
+    (a11OriginalA C H X ⧸ a11OriginalInternalC C H X) ≃ₗ[F] LinearMap.range X :=
+  (Submodule.quotEquivOfEq _ _ (a11_domain_range_kernel C H X).symm).trans
+    ((a11DomainRangeMap C H X).quotKerEquivOfSurjective (a11_domain_range_surjective C H X))
+
+/-- Canonical K identification with H/ker X. -/
+def a11RangeQuotientEquiv :
+    a11OriginalK C H X ≃ₗ[F] (H ⧸ LinearMap.ker X) :=
+  ((a11RangeQuotientMap C H X).quotKerEquivOfSurjective
+    (a11_range_quotient_surjective C H X)).symm.trans
+    (Submodule.quotEquivOfEq _ _ (a11_range_quotient_kernel C H X))
+
+/-- The manuscript Xbar uses only canonical quotient/image maps. -/
+def a11CanonicalXbar :
+    a11OriginalK C H X ≃ₗ[F]
+      (a11OriginalA C H X ⧸ a11OriginalInternalC C H X) :=
+  (a11RangeQuotientEquiv C H X).trans
+    (X.quotKerEquivRange.trans (a11DomainRangeEquiv C H X).symm)
+
+def a11CanonicalTriple : T1IndexTriple (a11OriginalA C H X) (a11OriginalB C H X) where
+  C := a11OriginalInternalC C H X
+  K := a11OriginalK C H X
+  Xbar := a11CanonicalXbar C H X
+
+/-- Exact representative square through the canonical Xbar. -/
+theorem a11_canonical_Xbar_square (h : H) :
+    a11DomainRangeEquiv C H X
+      (a11CanonicalXbar C H X (a11RangeQuotientMap C H X h)) =
+      ⟨X h, ⟨h, rfl⟩⟩ := by
+  simp [a11CanonicalXbar, a11RangeQuotientEquiv,
+    LinearEquiv.trans_apply, Submodule.quotEquivOfEq_mk,
+    LinearMap.quotKerEquivOfSurjective_symm_apply]
+
+/-- The canonical inverse recovers the exact original domain carrier. -/
+theorem a11_canonical_ambient_C : t1AmbientC (a11CanonicalTriple C H X).C = C := by
+  change (C.comap (a11OriginalA C H X).subtype).map (a11OriginalA C H X).subtype = C
+  exact Submodule.map_comap_eq_self (by
+    rw [Submodule.range_subtype]
+    exact a11_original_C_le_A C H X)
+
+/-- The canonical inverse recovers the exact original range carrier. -/
+theorem a11_canonical_ambient_H : t1AmbientH (a11CanonicalTriple C H X).K = H := by
+  change (H.map (a11OriginalB C H X).mkQ).comap (a11OriginalB C H X).mkQ = H
+  rw [Submodule.comap_map_eq, Submodule.ker_mkQ]
+  exact sup_eq_left.mpr (a11_original_B_le_H C H X)
+
+end Canonical
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A11WeightedAggregate

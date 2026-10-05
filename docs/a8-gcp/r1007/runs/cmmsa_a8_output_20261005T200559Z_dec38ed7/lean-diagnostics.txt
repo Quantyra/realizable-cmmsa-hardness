@@ -1,0 +1,992 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:249:35: Unknown constant `Submodule.Quotient.mk_eq_zero.mpr`
+
+Candidate context:
+247:         _ = C.mkQ v := by
+248:           rw [← hadd]
+249:           simp [LinearMap.map_add, Submodule.Quotient.mk_eq_zero.mpr hc]
+250:         _ = y := hvy
+251:     apply LinearMap.mem_range.mpr
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:247:23: unsolved goals
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+p : a7T2ComplementPair X A2 B2
+C : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) :=
+  (↑p).1
+H : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n) :=
+  (↑p).2
+Z : ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ C :=
+  t2QuotientRestrict C H X
+y : PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ (↑p).1
+hy : y ∈ Submodule.map (↑p).1.mkQ A2
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+hv : v ∈ A2
+hvy : (↑p).1.mkQ v = y
+hvsup : v ∈ X.range ⊔ C
+c : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+hc : c ∈ C
+w : W n
+hx : X w ∈ X.range
+hadd : X w + c = v
+hwsup : w ∈ H ⊔ X.ker
+h : W n
+hh : h ∈ H
+k : W n
+hk : k ∈ X.ker
+hdecomp : h + k = w
+hXeq : X (H.subtype ⟨h, hh⟩) = X w
+⊢ c ∈ C
+
+Candidate context:
+245:       calc
+246:         C.mkQ (X (H.subtype ⟨h, hh⟩)) = C.mkQ (X w) := congrArg C.mkQ hXeq
+247:         _ = C.mkQ v := by
+248:           rw [← hadd]
+249:           simp [LinearMap.map_add, Submodule.Quotient.mk_eq_zero.mpr hc]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:299:49: unsolved goals
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : X.range ≤ A2
+p : a7T2ComplementPair X A2 B2
+C : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) :=
+  (↑p).1
+H : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n) :=
+  (↑p).2
+Z : ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ C :=
+  t2QuotientRestrict C H X
+hCA : C ≤ A2 := le_trans le_sup_right (le_of_eq p.property.right.left)
+eX : ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2) ≃ₗ[F] V d ⧸ A2 := X.range.quotientQuotientEquivQuotient A2 hA
+eC : ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ C) ⧸
+    Submodule.map C.mkQ A2) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ A2 :=
+  C.quotientQuotientEquivQuotient A2 hCA
+hRange : (t2QuotientRestrict (↑p).1 (↑p).2 X).range = Submodule.map (↑p).1.mkQ A2 := a8_t2_complement_range_eq X A2 B2 p
+eZ : ((V d ⧸ C) ⧸ Z.range) ≃ₗ[F] V d ⧸ A2 := Z.range.quotEquivOfEq (Submodule.map C.mkQ A2) hRange ≪≫ₗ eC
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+⊢ eX.symm (Submodule.Quotient.mk v) =
+    (X.range.quotientQuotientEquivQuotient A2 hA).symm ((C.liftQ A2.mkQ ⋯) (Submodule.Quotient.mk v))
+
+Candidate context:
+297:     (Submodule.quotEquivOfEq (LinearMap.range Z) (A2.map C.mkQ) hRange).trans eC
+298:   let hcomp : (eZ.trans eX.symm).toLinearMap =
+299:       a8T2ComplementDomainMap X A2 C H hA hCA := by
+300:     apply LinearMap.ext
+301:     intro x
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:433:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ M,
+    Complex.normSq
+      (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+        (filteredCarrierFunction (↑p).1 (↑p).2 base g) M)
+in the target expression
+  (∑ N,
+        Complex.normSq
+          (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+            (filteredCarrierFunction (↑p).1 (↑p).2 base g) N)) /
+      ↑(Fintype.card
+          ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.V✝ d ⧸ (↑p).1) ⧸
+              (t2QuotientRestrict (↑p).1 (↑p).2
+                  X).range →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.F✝]
+            ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker)) =
+    (∑ N,
+        Complex.normSq
+          (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+            (filteredCarrierFunction (↑p).1 (↑p).2 base g) ((a8_t2_complement_hom_equiv X A2 B2 hA hB p) N))) /
+      ↑(Fintype.card ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2)))
+
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : X.range ≤ A2
+hB : B2 ≤ X.ker
+p : a7T2ComplementPair X A2 B2
+base : V d →ₗ[F] W n
+g : BinaryMatrix n d → ℂ
+e : ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2)) ≃
+  ((V d ⧸ (↑p).1) ⧸ (t2QuotientRestrict (↑p).1 (↑p).2 X).range →ₗ[F] ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker) :=
+  a8_t2_complement_hom_equiv X A2 B2 hA hB p
+hsum :
+  ∑ N,
+      Complex.normSq
+        (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+          (filteredCarrierFunction (↑p).1 (↑p).2 base g) (e N)) =
+    ∑ M,
+      Complex.normSq
+        (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+          (filteredCarrierFunction (↑p).1 (↑p).2 base g) M)
+hcard :
+  Fintype.card ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2)) =
+    Fintype.card
+      ((V d ⧸ (↑p).1) ⧸ (t2QuotientRestrict (↑p).1 (↑p).2 X).range →ₗ[F] ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker)
+⊢ (∑ N,
+        Complex.normSq
+          (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+            (filteredCarrierFunction (↑p).1 (↑p).2 base g) N)) /
+      ↑(Fintype.card
+          ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.V✝ d ⧸ (↑p).1) ⧸
+              (t2QuotientRestrict (↑p).1 (↑p).2
+                  X).range →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.F✝]
+            ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker)) =
+    (∑ N,
+        Complex.normSq
+          (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+            (filteredCarrierFunction (↑p).1 (↑p).2 base g) ((a8_t2_complement_hom_equiv X A2 B2 hA hB p) N))) /
+      ↑(Fintype.card ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2)))
+
+Candidate context:
+431:   have hcard := Fintype.card_congr e
+432:   unfold typedW6OutputEnergy
+433:   rw [← hsum, ← hcard]
+434: 
+435: /-- Whole-function reconstruction on the common nested carrier. Each selected
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:473:2: Type mismatch: After simplification, term
+  hbridge
+ has type
+  @Eq ℂ
+    (∑ Y,
+      if
+          t2RightSelected (Matrix.toLin' (Matrix.transpose Xmat)) (Matrix.toLin' (Matrix.transpose Y)) A2 B2 (↑p).1
+            (↑p).2 then
+        complexFourierCoeff g Y *
+          ↑(BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose Y))
+              (base +
+                (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype ∘ₗ
+                  (Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype B2).subtype ∘ₗ
+                    N ∘ₗ
+                      (Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ A2).mkQ ∘ₗ
+                        (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ))
+      else 0)
+    (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose Xmat)))
+      (filteredCarrierFunction (↑p).1 (↑p).2 base g)
+      (a8T2ComplementKernelMap (Matrix.toLin' (Matrix.transpose Xmat)) B2 (↑p).1 (↑p).2 ⋯ hB ∘ₗ
+        N ∘ₗ a8T2ComplementDomainMap (Matrix.toLin' (Matrix.transpose Xmat)) A2 (↑p).1 (↑p).2 hA ⋯))
+but is expected to have type
+  @Eq ℂ
+    (∑ x,
+      if
+          t2RightSelected (Matrix.toLin' (Matrix.transpose Xmat)) (Matrix.toLin' (Matrix.transpose x)) A2 B2 (↑p).1
+            (↑p).2 then
+        complexFourierCoeff g x *
+          ↑(BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose x))
+              (base +
+                (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype ∘ₗ
+                  ((Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype B2).subtype ∘ₗ
+                      N ∘ₗ (Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ A2).mkQ) ∘ₗ
+                    (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ))
+      else 0)
+    (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose Xmat)))
+      (filteredCarrierFunction (↑p).1 (↑p).2 base g)
+      (a8T2ComplementKernelMap (Matrix.toLin' (Matrix.transpose Xmat)) B2 (↑p).1 (↑p).2 ⋯ hB ∘ₗ
+        N ∘ₗ a8T2ComplementDomainMap (Matrix.toLin' (Matrix.transpose Xmat)) A2 (↑p).1 (↑p).2 hA ⋯))
+
+Candidate context:
+471:   have hbridge := a8_fixed_complement_t2_typed_fourier
+472:     Xmat A2 B2 hA hB p base g N
+473:   simpa [weight, X, A12, B12, M, a8_t2_actual_complement_contribution] using hbridge
+474: 
+475: /-- Moving the common S0 map from the evaluation point into the affine base
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:516:12: `simp` made no progress
+
+Candidate context:
+514:   rw [a8_actual_T2_whole_function_expansion Xmat A2 B2 hA hB base g Mleft,
+515:     a8_actual_T2_whole_function_expansion Xmat A2 B2 hA hB b' g Mright]
+516:   all_goals simp only [← hphase]
+517: 
+518: /-- Fixed-outer-base finite normalized-mean Cauchy bound. The first complex
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:684:4: Type mismatch: After simplification, term
+  Eq.symm (a8_t2_complement_mean_transport X A2 B2 hA hB p b' g)
+ has type
+  @Eq ℝ
+    ((∑ N,
+        Complex.normSq
+          (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+            (filteredCarrierFunction (↑p).1 (↑p).2 b' g) ((a8_t2_complement_hom_equiv X A2 B2 hA hB p) N))) /
+      ↑(Fintype.card ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2))))
+    (typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+      (filteredCarrierFunction (↑p).1 (↑p).2 b' g))
+but is expected to have type
+  @Eq ℝ
+    ((∑ x, Complex.normSq (a8_t2_actual_complement_contribution Xmat A2 B2 hA hB b' g x p)) /
+      ↑(Fintype.card ((V d ⧸ R) ⧸ A12 →ₗ[F] ↥B12)))
+    (typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+      (filteredCarrierFunction (↑p).1 (↑p).2 b' g))
+
+Candidate context:
+682:           (filteredCarrierFunction p.1.1 p.1.2 b' g) := by
+683:     intro p
+684:     simpa [fcomp, Ω] using
+685:       (a8_t2_complement_mean_transport X A2 B2 hA hB p b' g).symm
+686:   calc
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:40:28: typeclass instance problem is stuck
+  RingHomCompTriple ?m.104 (RingHom.id F) ?m.105
+
+Note: Lean will not try to resolve this typeclass instance problem because the seventh type argument to `RingHomCompTriple` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+
+Candidate context:
+38: 
+39: /-- Forward and dual Hom maps use opposite domain/codomain equivalences. -/
+40: def a8EnergyForwardEquiv := LinearEquiv.arrowCongr eD eB
+41: def a8EnergyFrequencyEquiv := LinearEquiv.arrowCongr eB eD
+42: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:41:30: typeclass instance problem is stuck
+  RingHomCompTriple ?m.104 (RingHom.id F) ?m.105
+
+Note: Lean will not try to resolve this typeclass instance problem because the seventh type argument to `RingHomCompTriple` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+
+Candidate context:
+39: /-- Forward and dual Hom maps use opposite domain/codomain equivalences. -/
+40: def a8EnergyForwardEquiv := LinearEquiv.arrowCongr eD eB
+41: def a8EnergyFrequencyEquiv := LinearEquiv.arrowCongr eB eD
+42: 
+43: theorem a8_energy_trace_transport
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:45:15: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+43: theorem a8_energy_trace_transport
+44:     (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) (M : (V d₁ ⧸ A₁) →ₗ[F] B₁) :
+45:     tracePair (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+46:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = tracePair Z M := by
+47:   have hc : (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z).comp
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:46:7: Unknown identifier `a8EnergyForwardEquiv`
+
+Note: It is not possible to treat `a8EnergyForwardEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+44:     (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) (M : (V d₁ ⧸ A₁) →ₗ[F] B₁) :
+45:     tracePair (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+46:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = tracePair Z M := by
+47:   have hc : (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z).comp
+48:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = eD.conj (Z.comp M) := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:48:51: Unknown identifier `eD.conj`
+
+Candidate context:
+46:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = tracePair Z M := by
+47:   have hc : (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z).comp
+48:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = eD.conj (Z.comp M) := by
+49:     ext u
+50:     simp [a8EnergyFrequencyEquiv, a8EnergyForwardEquiv,
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:47:13: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Candidate context:
+45:     tracePair (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+46:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = tracePair Z M := by
+47:   have hc : (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z).comp
+48:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = eD.conj (Z.comp M) := by
+49:     ext u
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:46:68: unsolved goals
+n₁ d₁ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+M : V d₁ ⧸ A₁ →ₗ[F] ↥B₁
+⊢ tracePair sorry sorry = tracePair Z M
+
+Candidate context:
+44:     (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) (M : (V d₁ ⧸ A₁) →ₗ[F] B₁) :
+45:     tracePair (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+46:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = tracePair Z M := by
+47:   have hc : (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z).comp
+48:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = eD.conj (Z.comp M) := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:57:20: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+55: theorem a8_energy_character_transport
+56:     (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) (M : (V d₁ ⧸ A₁) →ₗ[F] B₁) :
+57:     traceCharacter (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+58:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = traceCharacter Z M := by
+59:   simp [traceCharacter, a8_energy_trace_transport]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:58:7: Unknown identifier `a8EnergyForwardEquiv`
+
+Note: It is not possible to treat `a8EnergyForwardEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+56:     (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) (M : (V d₁ ⧸ A₁) →ₗ[F] B₁) :
+57:     traceCharacter (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+58:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = traceCharacter Z M := by
+59:   simp [traceCharacter, a8_energy_trace_transport]
+60: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:59:24: Unknown identifier `a8_energy_trace_transport`
+
+Candidate context:
+57:     traceCharacter (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+58:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = traceCharacter Z M := by
+59:   simp [traceCharacter, a8_energy_trace_transport]
+60: 
+61: theorem a8_energy_fourier_transport
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:58:73: unsolved goals
+n₁ d₁ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+M : V d₁ ⧸ A₁ →ₗ[F] ↥B₁
+⊢ (if tracePair (sorry ()) (sorry ()) = 0 then 1 else -1) = if tracePair Z M = 0 then 1 else -1
+
+Candidate context:
+56:     (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) (M : (V d₁ ⧸ A₁) →ₗ[F] B₁) :
+57:     traceCharacter (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+58:       (a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB M) = traceCharacter Z M := by
+59:   simp [traceCharacter, a8_energy_trace_transport]
+60: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:66:7: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+64:     complexCarrierFourierCoeff A₂ B₂
+65:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M))
+66:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z) =
+67:       complexCarrierFourierCoeff A₁ B₁ g Z := by
+68:   let e := a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:65:20: Unknown identifier `a8EnergyForwardEquiv`
+
+Note: It is not possible to treat `a8EnergyForwardEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+63:     (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) :
+64:     complexCarrierFourierCoeff A₂ B₂
+65:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M))
+66:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z) =
+67:       complexCarrierFourierCoeff A₁ B₁ g Z := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:68:11: Unknown identifier `a8EnergyForwardEquiv`
+
+Candidate context:
+66:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z) =
+67:       complexCarrierFourierCoeff A₁ B₁ g Z := by
+68:   let e := a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB
+69:   unfold complexCarrierFourierCoeff
+70:   have hs : (∑ M : (V d₂ ⧸ A₂) →ₗ[F] B₂,
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:67:46: unsolved goals
+n₁ d₁ n₂ d₂ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+A₂ : Submodule F (V d₂)
+B₂ : Submodule F (W n₂)
+g : (V d₁ ⧸ A₁ →ₗ[F] ↥B₁) → ℂ
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+⊢ complexCarrierFourierCoeff A₂ B₂ (fun M => g sorry) sorry = complexCarrierFourierCoeff A₁ B₁ g Z
+
+Candidate context:
+65:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M))
+66:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z) =
+67:       complexCarrierFourierCoeff A₁ B₁ g Z := by
+68:   let e := a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB
+69:   unfold complexCarrierFourierCoeff
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:85:23: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+83: theorem a8_energy_range_transport (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) :
+84:     (LinearMap.range Z).map eD.toLinearMap =
+85:       LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z) := by
+86:   ext u
+87:   constructor
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:86:2: No applicable extensionality theorem found for type
+  Submodule F (V d₂ ⧸ A₂)
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+
+Candidate context:
+84:     (LinearMap.range Z).map eD.toLinearMap =
+85:       LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z) := by
+86:   ext u
+87:   constructor
+88:   · rintro ⟨v, ⟨b, rfl⟩, rfl⟩
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:96:21: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+94: theorem a8_energy_kernel_transport (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) :
+95:     (LinearMap.ker Z).map eB.toLinearMap =
+96:       LinearMap.ker (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z) := by
+97:   ext b
+98:   constructor
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:97:2: No applicable extensionality theorem found for type
+  Submodule F ↥B₂
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+
+Candidate context:
+95:     (LinearMap.ker Z).map eB.toLinearMap =
+96:       LinearMap.ker (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z) := by
+97:   ext b
+98:   constructor
+99:   · rintro ⟨a, ha, rfl⟩
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:111:39: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+109: 
+110: theorem a8_energy_rank_transport (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) :
+111:     Module.finrank F (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) =
+112:       Module.finrank F (LinearMap.range Z) := by
+113:   rw [← a8_energy_range_transport A₁ B₁ A₂ B₂ eD eB Z]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:113:8: Unknown identifier `a8_energy_range_transport`
+
+Candidate context:
+111:     Module.finrank F (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) =
+112:       Module.finrank F (LinearMap.range Z) := by
+113:   rw [← a8_energy_range_transport A₁ B₁ A₂ B₂ eD eB Z]
+114:   exact eD.finrank_map_eq (LinearMap.range Z)
+115: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:112:46: unsolved goals
+n₁ d₁ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+⊢ Module.finrank F ↥sorry.range = Module.finrank F ↥Z.range
+
+Candidate context:
+110: theorem a8_energy_rank_transport (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁)) :
+111:     Module.finrank F (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) =
+112:       Module.finrank F (LinearMap.range Z) := by
+113:   rw [← a8_energy_range_transport A₁ B₁ A₂ B₂ eD eB Z]
+114:   exact eD.finrank_map_eq (LinearMap.range Z)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:119:7: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+117:     (Z Z' : B₁ →ₗ[F] (V d₁ ⧸ A₁)) :
+118:     typedW6Precedes A₂ B₂
+119:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+120:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z') ↔
+121:       typedW6Precedes A₁ B₁ Z Z' := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:120:7: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+118:     typedW6Precedes A₂ B₂
+119:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+120:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z') ↔
+121:       typedW6Precedes A₁ B₁ Z Z' := by
+122:   unfold typedW6Precedes
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:131:9: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+129:     (((V d₁ ⧸ A₁) ⧸ LinearMap.range Z) →ₗ[F] LinearMap.ker Z) ≃ₗ[F]
+130:       (((V d₂ ⧸ A₂) ⧸ LinearMap.range
+131:         (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) →ₗ[F]
+132:         LinearMap.ker (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) := by
+133:   let eQ := Submodule.Quotient.equiv (LinearMap.range Z)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:132:23: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+130:       (((V d₂ ⧸ A₂) ⧸ LinearMap.range
+131:         (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) →ₗ[F]
+132:         LinearMap.ker (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) := by
+133:   let eQ := Submodule.Quotient.equiv (LinearMap.range Z)
+134:     (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) eD
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:134:22: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Candidate context:
+132:         LinearMap.ker (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) := by
+133:   let eQ := Submodule.Quotient.equiv (LinearMap.range Z)
+134:     (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) eD
+135:     (a8_energy_range_transport A₁ B₁ A₂ B₂ eD eB Z)
+136:   let eK₀ := Submodule.equivMapOfInjective eB.toLinearMap eB.injective (LinearMap.ker Z)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:135:5: Unknown identifier `a8_energy_range_transport`
+
+Candidate context:
+133:   let eQ := Submodule.Quotient.equiv (LinearMap.range Z)
+134:     (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) eD
+135:     (a8_energy_range_transport A₁ B₁ A₂ B₂ eD eB Z)
+136:   let eK₀ := Submodule.equivMapOfInjective eB.toLinearMap eB.injective (LinearMap.ker Z)
+137:   let eK := eK₀.trans (LinearEquiv.ofEq _ _
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:132:71: unsolved goals
+n₁ d₁ n₂ d₂ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+A₂ : Submodule F (V d₂)
+B₂ : Submodule F (W n₂)
+eD : (V d₁ ⧸ A₁) ≃ₗ[F] V d₂ ⧸ A₂
+eB : ↥B₁ ≃ₗ[F] ↥B₂
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+⊢ ((V d₁ ⧸ A₁) ⧸ Z.range →ₗ[F] ↥Z.ker) ≃ₗ[F] (V d₂ ⧸ A₂) ⧸ sorry.range →ₗ[F] ↥sorry.ker
+
+Candidate context:
+130:       (((V d₂ ⧸ A₂) ⧸ LinearMap.range
+131:         (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) →ₗ[F]
+132:         LinearMap.ker (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) := by
+133:   let eQ := Submodule.Quotient.equiv (LinearMap.range Z)
+134:     (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)) eD
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:143:20: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+141: theorem a8_energy_output_square (Z : B₁ →ₗ[F] (V d₁ ⧸ A₁))
+142:     (N : ((V d₁ ⧸ A₁) ⧸ LinearMap.range Z) →ₗ[F] LinearMap.ker Z) :
+143:     (LinearMap.ker (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)).subtype.comp
+144:       ((a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z N).comp
+145:         (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)).mkQ) =
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:146:4: Unknown identifier `a8EnergyForwardEquiv`
+
+Note: It is not possible to treat `a8EnergyForwardEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+144:       ((a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z N).comp
+145:         (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)).mkQ) =
+146:     a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB
+147:       ((LinearMap.ker Z).subtype.comp (N.comp (LinearMap.range Z).mkQ)) := by
+148:   ext u
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:144:8: Unknown identifier `a8EnergyOutputEquiv`
+
+Note: It is not possible to treat `a8EnergyOutputEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+142:     (N : ((V d₁ ⧸ A₁) ⧸ LinearMap.range Z) →ₗ[F] LinearMap.ker Z) :
+143:     (LinearMap.ker (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)).subtype.comp
+144:       ((a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z N).comp
+145:         (LinearMap.range (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)).mkQ) =
+146:     a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:148:2: No applicable extensionality theorem found for type
+  ?m.132 Z N →ₛₗ[?m.131 Z N] ?m.133 Z N
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+
+Candidate context:
+146:     a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB
+147:       ((LinearMap.ker Z).subtype.comp (N.comp (LinearMap.range Z).mkQ)) := by
+148:   ext u
+149:   simp [a8EnergyOutputEquiv, a8EnergyForwardEquiv, LinearEquiv.arrowCongr_apply,
+150:     Submodule.Quotient.equiv]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:157:7: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+155:     (N : ((V d₁ ⧸ A₁) ⧸ LinearMap.range Z) →ₗ[F] LinearMap.ker Z) :
+156:     typedW6FourierDerivative A₂ B₂
+157:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+158:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M))
+159:       (a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z N) =
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:159:7: Unknown identifier `a8EnergyOutputEquiv`
+
+Note: It is not possible to treat `a8EnergyOutputEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+157:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+158:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M))
+159:       (a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z N) =
+160:       typedW6FourierDerivative A₁ B₁ Z g N := by
+161:   unfold typedW6FourierDerivative
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:158:20: Unknown identifier `a8EnergyForwardEquiv`
+
+Note: It is not possible to treat `a8EnergyForwardEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+156:     typedW6FourierDerivative A₂ B₂
+157:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+158:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M))
+159:       (a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z N) =
+160:       typedW6FourierDerivative A₁ B₁ Z g N := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:162:27: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Candidate context:
+160:       typedW6FourierDerivative A₁ B₁ Z g N := by
+161:   unfold typedW6FourierDerivative
+162:   apply Fintype.sum_equiv (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv
+163:   intro Z'
+164:   let e := a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:164:11: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Candidate context:
+162:   apply Fintype.sum_equiv (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv
+163:   intro Z'
+164:   let e := a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB
+165:   have hp := a8_energy_precedes_transport A₁ B₁ A₂ B₂ eD eB Z (e.symm Z')
+166:   simp only [LinearEquiv.apply_symm_apply] at hp
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:160:46: unsolved goals
+n₁ d₁ n₂ d₂ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+A₂ : Submodule F (V d₂)
+B₂ : Submodule F (W n₂)
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+g : (V d₁ ⧸ A₁ →ₗ[F] ↥B₁) → ℂ
+N : (V d₁ ⧸ A₁) ⧸ Z.range →ₗ[F] ↥Z.ker
+Z' :
+  ↥B₂ →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.F✝]
+    PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.V✝ d₂ ⧸ A₂
+⊢ (if typedW6Precedes A₂ B₂ sorry Z' then
+      complexCarrierFourierCoeff A₂ B₂ (fun M => g sorry) Z' *
+        ↑(traceCharacter Z' (sorry.ker.subtype ∘ₗ sorry ∘ₗ sorry.range.mkQ))
+    else 0) =
+    if typedW6Precedes A₁ B₁ Z (sorry Z') then
+      complexCarrierFourierCoeff A₁ B₁ g (sorry Z') * ↑(traceCharacter (sorry Z') (Z.ker.subtype ∘ₗ N ∘ₗ Z.range.mkQ))
+    else 0
+
+Candidate context:
+158:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M))
+159:       (a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z N) =
+160:       typedW6FourierDerivative A₁ B₁ Z g N := by
+161:   unfold typedW6FourierDerivative
+162:   apply Fintype.sum_equiv (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:184:7: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Note: It is not possible to treat `a8EnergyFrequencyEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+182:     (g : ((V d₁ ⧸ A₁) →ₗ[F] B₁) → Complex) :
+183:     typedW6OutputEnergy A₂ B₂
+184:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+185:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M)) =
+186:       typedW6OutputEnergy A₁ B₁ Z g := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:185:20: Unknown identifier `a8EnergyForwardEquiv`
+
+Note: It is not possible to treat `a8EnergyForwardEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+183:     typedW6OutputEnergy A₂ B₂
+184:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+185:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M)) =
+186:       typedW6OutputEnergy A₁ B₁ Z g := by
+187:   let e := a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:187:11: Unknown identifier `a8EnergyOutputEquiv`
+
+Candidate context:
+185:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M)) =
+186:       typedW6OutputEnergy A₁ B₁ Z g := by
+187:   let e := a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z
+188:   unfold typedW6OutputEnergy
+189:   have hs : (∑ N, Complex.normSq
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:186:39: unsolved goals
+n₁ d₁ n₂ d₂ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+A₂ : Submodule F (V d₂)
+B₂ : Submodule F (W n₂)
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+g : (V d₁ ⧸ A₁ →ₗ[F] ↥B₁) → ℂ
+⊢ (typedW6OutputEnergy A₂ B₂ sorry fun M => g sorry) = typedW6OutputEnergy A₁ B₁ Z g
+
+Candidate context:
+184:       (a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB Z)
+185:       (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M)) =
+186:       typedW6OutputEnergy A₁ B₁ Z g := by
+187:   let e := a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z
+188:   unfold typedW6OutputEnergy
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:212:10: Unknown identifier `domainBasis`
+
+Candidate context:
+210: 
+211: def a8NestedAmbientDomain : Submodule F (V d) :=
+212:   (c.map (domainBasis C).equivFun.symm.toLinearMap).comap C.mkQ
+213: 
+214: def a8NestedAmbientRange : Submodule F (W n) :=
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:215:10: Unknown identifier `codomainBasis`
+
+Candidate context:
+213: 
+214: def a8NestedAmbientRange : Submodule F (W n) :=
+215:   (h.map (codomainBasis H).equivFun.symm.toLinearMap).map H.subtype
+216: 
+217: theorem a8_nested_domain_contains : C ≤ a8NestedAmbientDomain C c := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:219:26: Unknown identifier `domainBasis`
+
+Candidate context:
+217: theorem a8_nested_domain_contains : C ≤ a8NestedAmbientDomain C c := by
+218:   intro x hx
+219:   change C.mkQ x ∈ c.map (domainBasis C).equivFun.symm.toLinearMap
+220:   rw [(Submodule.Quotient.mk_eq_zero C).mpr hx]
+221:   exact Submodule.zero_mem _
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:224:11: Tactic `rcases` failed: `a✝ : (a8NestedAmbientRange H h).toAddSubsemigroup.1 x` is not an inductive datatype
+
+Candidate context:
+222: 
+223: theorem a8_nested_range_contained : a8NestedAmbientRange H h ≤ H := by
+224:   rintro x ⟨y, hy, rfl⟩
+225:   exact y.property
+226: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:228:11: Unknown identifier `domainBasis`
+
+Note: It is not possible to treat `domainBasis` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+226: 
+227: theorem a8_nested_domain_map : (a8NestedAmbientDomain C c).map C.mkQ =
+228:     c.map (domainBasis C).equivFun.symm.toLinearMap := by
+229:   unfold a8NestedAmbientDomain
+230:   exact Submodule.map_comap_eq_self (by rw [Submodule.range_mkQ]; exact le_top)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:230:66: Type mismatch
+  le_top
+has type
+  ?m.84 ≤ ⊤
+of sort `Prop` but is expected to have type
+  Submodule ?m.71 ?m.72
+of sort `Type ?u.42`
+
+Candidate context:
+228:     c.map (domainBasis C).equivFun.symm.toLinearMap := by
+229:   unfold a8NestedAmbientDomain
+230:   exact Submodule.map_comap_eq_self (by rw [Submodule.range_mkQ]; exact le_top)
+231: 
+232: theorem a8_nested_range_comap : (a8NestedAmbientRange H h).comap H.subtype =
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:233:11: Unknown identifier `codomainBasis`
+
+Note: It is not possible to treat `codomainBasis` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+231: 
+232: theorem a8_nested_range_comap : (a8NestedAmbientRange H h).comap H.subtype =
+233:     h.map (codomainBasis H).equivFun.symm.toLinearMap := by
+234:   unfold a8NestedAmbientRange
+235:   exact Submodule.comap_map_eq_of_injective (Submodule.injective_subtype H) _
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:250:14: Unknown identifier `codomainBasis`
+
+Candidate context:
+248:   (carrierCoordinateCodomainEquiv (n := n) (d := 0) H h).trans
+249:     (Submodule.equivMapOfInjective H.subtype (Submodule.injective_subtype H)
+250:       (h.map (codomainBasis H).equivFun.symm.toLinearMap))
+251: 
+252: def a8NestedFrequency
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:249:4: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+Candidate context:
+247: def a8NestedRangeEquiv : h ≃ₗ[F] a8NestedAmbientRange H h :=
+248:   (carrierCoordinateCodomainEquiv (n := n) (d := 0) H h).trans
+249:     (Submodule.equivMapOfInjective H.subtype (Submodule.injective_subtype H)
+250:       (h.map (codomainBasis H).equivFun.symm.toLinearMap))
+251: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:255:2: Unknown identifier `a8EnergyFrequencyEquiv`
+
+Candidate context:
+253:     (Z : h →ₗ[F] ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ c)) :
+254:     a8NestedAmbientRange H h →ₗ[F] (V d ⧸ a8NestedAmbientDomain C c) :=
+255:   a8EnergyFrequencyEquiv c h (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+256:     (a8NestedDomainEquiv C c) (a8NestedRangeEquiv H h) Z
+257: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:267:4: Unknown identifier `a8EnergyForwardEquiv`
+
+Note: It is not possible to treat `a8EnergyForwardEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+265: theorem a8_nested_forward_square
+266:     (N : ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ c) →ₗ[F] h) :
+267:     a8EnergyForwardEquiv c h (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+268:       (a8NestedDomainEquiv C c) (a8NestedRangeEquiv H h) N =
+269:     nestedCarrierEquiv C (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) H
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:291:9: Unknown identifier `a8EnergyForwardEquiv`
+
+Note: It is not possible to treat `a8EnergyForwardEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+289:       filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+290:         (T + a8NestedAmbientShift C H L) f
+291:         (a8EnergyForwardEquiv c h (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+292:           (a8NestedDomainEquiv C c) (a8NestedRangeEquiv H h) N) := by
+293:   rw [show actualDerivativeCoordinate C H T f =
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:296:6: Unknown identifier `a8_nested_forward_square`
+
+Candidate context:
+294:     carrierFunctionCoordinate C H (filteredCarrierFunction C H T f) from rfl]
+295:   rw [a8_carrier_coordinate_nested_filter]
+296:   rw [a8_nested_forward_square]
+297:   have hA1 := manuscript_A1_complex C (a8NestedAmbientDomain C c)
+298:     (a8NestedAmbientRange H h) H
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:292:67: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)
+h : Submodule F (Fin (Module.finrank F ↥H) → F)
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+L : (Fin (Module.finrank F (V d ⧸ C)) → F) →ₗ[F] Fin (Module.finrank F ↥H) → F
+N : (Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ c →ₗ[F] ↥h
+⊢ complexCarrierAffineRestrict C H (Submodule.map (↑(BinaryMatrixTypedA15Transport.domainBasis C).equivFun.symm) c)
+      (Submodule.map (↑(BinaryMatrixTypedA15Transport.codomainBasis H).equivFun.symm) h)
+      (carrierCoordinateBaseLift C H L)
+      (complexCarrierHybridFilter C H (Submodule.map (↑(BinaryMatrixTypedA15Transport.domainBasis C).equivFun.symm) c)
+        (Submodule.map (↑(BinaryMatrixTypedA15Transport.codomainBasis H).equivFun.symm) h)
+        (filteredCarrierFunction C H T f))
+      ((carrierCoordinateNestedHomEquiv C H c h) N) =
+    filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) (T + a8NestedAmbientShift C H L) f
+      sorry
+
+Candidate context:
+290:         (T + a8NestedAmbientShift C H L) f
+291:         (a8EnergyForwardEquiv c h (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+292:           (a8NestedDomainEquiv C c) (a8NestedRangeEquiv H h) N) := by
+293:   rw [show actualDerivativeCoordinate C H T f =
+294:     carrierFunctionCoordinate C H (filteredCarrierFunction C H T f) from rfl]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:324:8: Unknown identifier `a8EnergyForwardEquiv`
+
+Candidate context:
+322:         (T + a8NestedAmbientShift C H L) f) := by
+323:   have hfun : (fun M => filteredCarrierFunction c h L (actualDerivativeCoordinate C H T f)
+324:       ((a8EnergyForwardEquiv c h (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+325:         (a8NestedDomainEquiv C c) (a8NestedRangeEquiv H h)).symm M)) =
+326:       filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:327:46: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)
+h : Submodule F (Fin (Module.finrank F ↥H) → F)
+Z : ↥h →ₗ[F] (Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ c
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+L : (Fin (Module.finrank F (V d ⧸ C)) → F) →ₗ[F] Fin (Module.finrank F ↥H) → F
+M :
+  PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      a8NestedAmbientDomain C c →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥(a8NestedAmbientRange H h)
+⊢ filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) (T + a8NestedAmbientShift C H L) f
+      (sorry ()) =
+    filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) (T + a8NestedAmbientShift C H L) f M
+
+Candidate context:
+325:         (a8NestedDomainEquiv C c) (a8NestedRangeEquiv H h)).symm M)) =
+326:       filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+327:         (T + a8NestedAmbientShift C H L) f := by
+328:     funext M
+329:     rw [a8_nested_filtered_function]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:333:4: Application type mismatch: The argument
+  a8NestedDomainEquiv C c
+has type
+  ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ c) ≃ₗ[F] V d ⧸ a8NestedAmbientDomain C c
+but is expected to have type
+  ↥h →ₗ[F] V (Module.finrank F (V d ⧸ C)) ⧸ c
+in the application
+  a8_typed_w6_energy_naturality c h (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) (a8NestedDomainEquiv C c)
+
+Candidate context:
+331:   have h := a8_typed_w6_energy_naturality c h
+332:     (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+333:     (a8NestedDomainEquiv C c) (a8NestedRangeEquiv H h) Z
+334:     (filteredCarrierFunction c h L (actualDerivativeCoordinate C H T f))
+335:   rw [hfun] at h
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:333:31: Unknown identifier `a8NestedRangeEquiv`
+
+Candidate context:
+331:   have h := a8_typed_w6_energy_naturality c h
+332:     (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+333:     (a8NestedDomainEquiv C c) (a8NestedRangeEquiv H h) Z
+334:     (filteredCarrierFunction c h L (actualDerivativeCoordinate C H T f))
+335:   rw [hfun] at h
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:322:47: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)
+h : Submodule F (Fin (Module.finrank F ↥H) → F)
+Z : ↥h →ₗ[F] (Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ c
+T : V d →ₗ[F] W n
+f : BinaryMatrix n d → ℂ
+L : (Fin (Module.finrank F (V d ⧸ C)) → F) →ₗ[F] Fin (Module.finrank F ↥H) → F
+hfun :
+  (fun M => filteredCarrierFunction c h L (actualDerivativeCoordinate C H T f) sorry) =
+    filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) (T + a8NestedAmbientShift C H L) f
+⊢ typedW6OutputEnergy c h Z (filteredCarrierFunction c h L (actualDerivativeCoordinate C H T f)) =
+    typedW6OutputEnergy (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) (a8NestedFrequency C H c h Z)
+      (filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) (T + a8NestedAmbientShift C H L)
+        f)
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedTransport
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality
+
+
+Candidate context:
+320:       (a8NestedFrequency C H c h Z)
+321:       (filteredCarrierFunction (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+322:         (T + a8NestedAmbientShift C H L) f) := by
+323:   have hfun : (fun M => filteredCarrierFunction c h L (actualDerivativeCoordinate C H T f)
+324:       ((a8EnergyForwardEquiv c h (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)

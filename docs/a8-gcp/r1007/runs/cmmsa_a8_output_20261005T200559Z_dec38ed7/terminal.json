@@ -1,0 +1,27 @@
+{
+  "run": "cmmsa_a8_output_20261005T200559Z_dec38ed7",
+  "capture": "capture-integrated-18",
+  "finished_utc": "2026-10-05T20:14:24+00:00",
+  "start_attempted": true,
+  "compiler_attempted": true,
+  "created_resources": [],
+  "vm_terminal_receipt": null,
+  "evidence_archive_sha256": "6E98C2A11D00BA53925584EE31F691F0CBA17AF424877ECABB91E2B043AEFC77",
+  "failure": "Traceback (most recent call last):\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\runner.py\", line 204, in execute\n    control.cloud([\"compute\", \"ssh\", VM, \"--tunnel-through-iap\",\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                   \"--command=bash /tmp/\" + script.name], timeout=4350)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-18\\controller.py\", line 35, in cloud\n    return original_cloud(self,args,**kwargs)\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-15\\controller.py\", line 42, in cloud\n    return original_cloud(self,args,**kwargs)\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-14\\controller.py\", line 105, in cloud\n    result=original(self,args,**kwargs)\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\runner.py\", line 111, in cloud\n    raise RuntimeError(\"GCP command failed; raw control receipt \" + prefix)\nRuntimeError: GCP command failed; raw control receipt control/005\n\nEvidence preservation:\nTraceback (most recent call last):\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\runner.py\", line 224, in execute\n    _, chunk, _ = control.cloud([\"compute\", \"ssh\", VM, \"--tunnel-through-iap\", \"--command=\" + command], timeout=120)\n                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-18\\controller.py\", line 35, in cloud\n    return original_cloud(self,args,**kwargs)\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-15\\controller.py\", line 42, in cloud\n    return original_cloud(self,args,**kwargs)\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-14\\controller.py\", line 105, in cloud\n    result=original(self,args,**kwargs)\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\runner.py\", line 111, in cloud\n    raise RuntimeError(\"GCP command failed; raw control receipt \" + prefix)\nRuntimeError: GCP command failed; raw control receipt control/016\n\nResource settlement:\nTraceback (most recent call last):\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\runner.py\", line 238, in execute\n    terminal_state = control.settle()\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-14\\controller.py\", line 113, in settle\n    branch=settlement_branch(attempted,self.records,custody)\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-14\\controller.py\", line 92, in settlement_branch\n    verify_custody(custody); return 'full-archive-custody'\n    ~~~~~~~~~~~~~~^^^^^^^^^\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-14\\controller.py\", line 46, in verify_custody\n    assert c and c['before_stop'] is True\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+  "local_process_check_after": {
+    "utc": "2026-10-05T20:14:24+00:00",
+    "command": [
+      "powershell.exe",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "ConvertTo-Json -InputObject @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match '^(lean|lake)(\\.exe)?$' } | Select-Object Id,ProcessName,Path) -Compress"
+    ],
+    "processes": [],
+    "native_exit": 0
+  },
+  "inherited_dirt_preserved": false,
+  "inherited_preservation_scope": "All tracked modified/deleted file hashes, all untracked Lean file hashes, complete tracked diff, and directory-level untracked Git status. Other inherited untracked contents are outside every write operation; they are not exhaustively hashed.",
+  "local_compilation": false,
+  "automatic_git_writes": false
+}
