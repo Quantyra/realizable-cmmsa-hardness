@@ -1,0 +1,3 @@
+# Full original A8 and A11/A7 native successor
+
+Exact native21 API repairs ED94F463/49C3548D reindex normalized sums on actual Finset univs and reduce exact denominators to Nat.card_congr. No mathematical statement, mean, carrier or premise changes. Same054/F981 original A11/A7 consumer, full fourteen owned modules and49 fresh axiom requests. AcceptedA9 exact5B4958 rebuilt after own lib/ir invalidation; all400 unchanged cached dependency objects tracked. Strict decoded archive lengths and full remote/short/repository SHA custody, nonzero raw transport receipts preserved separately. No local Lean or helper acceptance.

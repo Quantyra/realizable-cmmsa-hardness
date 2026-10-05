@@ -1,0 +1,197 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 78,
+    "column": 15,
+    "message": "Invalid `←` modifier: `e` is a let-declaration name to be unfolded",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:78:15: Invalid `←` modifier: `e` is a let-declaration name to be unfolded\n\nNote: The simplifier cannot \"refold\" local declarations by name",
+    "candidate_context": [
+      "76:     intro M",
+      "77:     have hc := a8_energy_character_transport A₁ B₁ A₂ B₂ eD eB Z (e.symm M)",
+      "78:     simp only [← e, LinearEquiv.apply_symm_apply] at hc",
+      "79:     rw [hc]",
+      "80:   convert congrArg₂ (fun (x : ℂ) (y : ℕ) => x / (y : ℂ)) hs (Fintype.card_congr e.symm.toEquiv) using 1 <;> congr 1"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 78,
+    "column": 4,
+    "message": "`simp` made no progress",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:78:4: `simp` made no progress",
+    "candidate_context": [
+      "76:     intro M",
+      "77:     have hc := a8_energy_character_transport A₁ B₁ A₂ B₂ eD eB Z (e.symm M)",
+      "78:     simp only [← e, LinearEquiv.apply_symm_apply] at hc",
+      "79:     rw [hc]",
+      "80:   convert congrArg₂ (fun (x : ℂ) (y : ℕ) => x / (y : ℂ)) hs (Fintype.card_congr e.symm.toEquiv) using 1 <;> congr 1"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 165,
+    "column": 13,
+    "message": "Invalid `←` modifier: `e` is a let-declaration name to be unfolded",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:165:13: Invalid `←` modifier: `e` is a let-declaration name to be unfolded\n\nNote: The simplifier cannot \"refold\" local declarations by name",
+    "candidate_context": [
+      "163:   let e := a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB",
+      "164:   have hp := a8_energy_precedes_transport A₁ B₁ A₂ B₂ eD eB Z (e.symm Z')",
+      "165:   simp only [← e, LinearEquiv.apply_symm_apply] at hp",
+      "166:   rw [hp]",
+      "167:   split_ifs with h"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 165,
+    "column": 2,
+    "message": "`simp` made no progress",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:165:2: `simp` made no progress",
+    "candidate_context": [
+      "163:   let e := a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB",
+      "164:   have hp := a8_energy_precedes_transport A₁ B₁ A₂ B₂ eD eB Z (e.symm Z')",
+      "165:   simp only [← e, LinearEquiv.apply_symm_apply] at hp",
+      "166:   rw [hp]",
+      "167:   split_ifs with h"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 189,
+    "column": 11,
+    "message": "typeclass instance problem is stuck",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:189:11: typeclass instance problem is stuck\n  AddCommMonoid ?m.117\n\nNote: Lean will not try to resolve this typeclass instance problem because the type argument to `AddCommMonoid` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.\n\nHint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.",
+    "candidate_context": [
+      "187:   unfold typedW6OutputEnergy",
+      "188:   apply congrArg₂ (fun (x : ℝ) (y : ℕ) => x / (y : ℝ))",
+      "189:   · refine @Fintype.sum_equiv _ _ _ _ _ _ e.symm.toEquiv _ _ ?_",
+      "190:     intro N",
+      "191:     have h := a8_whole_typed_w6_derivative_naturality A₁ B₁ A₂ B₂ eD eB Z g (e.symm N)"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 193,
+    "column": 10,
+    "message": "synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:193:10: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized\n  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype\ninferred\n  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝",
+    "candidate_context": [
+      "191:     have h := a8_whole_typed_w6_derivative_naturality A₁ B₁ A₂ B₂ eD eB Z g (e.symm N)",
+      "192:     simpa [e] using congrArg Complex.normSq h",
+      "193:   · exact @Fintype.card_congr _ _ _ _ e.symm.toEquiv",
+      "194: end Transport",
+      "195: "
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 267,
+    "column": 56,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:267:56: unsolved goals\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nc : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)\nh : Submodule F (Fin (Module.finrank F ↥H) → F)\nN : (Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ c →ₗ[F] ↥h\nu : Fin d\nx✝ : Fin n\n⊢ ↑(((Submodule.equivMapOfInjective ↑(codomainBasis H).equivFun.symm ⋯ h).trans\n            (Submodule.equivMapOfInjective H.subtype ⋯ (Submodule.map (↑(codomainBasis H).equivFun.symm) h)))\n          (N\n            ((carrierCoordinateDomainQuotientEquiv C c).symm\n              (((Submodule.map (↑(domainBasis C).equivFun.symm) c).quotEquivOfEq\n                    (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) ⋯).symm\n                ((nestedDomainEquiv C (a8NestedAmbientDomain C c) ⋯).symm (Submodule.Quotient.mk (Pi.single u 1)))))))\n      x✝ =\n    ∑ x,\n      ↑(N\n              ((carrierCoordinateDomainQuotientEquiv C c).symm\n                (((Submodule.map (↑(domainBasis C).equivFun.symm) c).quotEquivOfEq\n                      (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) ⋯).symm\n                  ((nestedDomainEquiv C (a8NestedAmbientDomain C c) ⋯).symm (Submodule.Quotient.mk (Pi.single u 1))))))\n          x *\n        ↑((codomainBasis H) x) x✝",
+    "candidate_context": [
+      "265:           (by simpa using (a8_nested_domain_map C c).symm))",
+      "266:         (LinearEquiv.ofEq _ _ (a8_nested_range_comap H h).symm))",
+      "267:         (carrierCoordinateNestedHomEquiv C H c h N)) := by",
+      "268:   ext u",
+      "269:   simp [a8EnergyForwardEquiv, a8NestedDomainEquiv, a8NestedRangeEquiv,"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean",
+    "line": 300,
+    "column": 2,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:300:2: Type mismatch: After simplification, term\n  hA1\n has type\n  @Eq ℂ\n    (complexCarrierHybridFilter C H (Submodule.map (↑(domainBasis C).equivFun.symm) c)\n      (Submodule.map (↑(codomainBasis H).equivFun.symm) h)\n      (fun M => complexAmbientAffineRestrict C H T (complexAmbientHybridFilter C H f) M)\n      (carrierCoordinateBaseLift C H L +\n        (Submodule.comap H.subtype (a8NestedAmbientRange H h)).subtype ∘ₗ\n          ({\n                    toLinearMap :=\n                      (Submodule.map (↑(domainBasis C).equivFun.symm) c).mapQ\n                        (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) LinearMap.id ⋯,\n                    invFun :=\n                      ⇑((Submodule.map C.mkQ (a8NestedAmbientDomain C c)).mapQ\n                          (Submodule.map (↑(domainBasis C).equivFun.symm) c) LinearMap.id ⋯),\n                    left_inv := ⋯, right_inv := ⋯ }.arrowCongr\n                (LinearEquiv.ofEq (Submodule.map (↑(codomainBasis H).equivFun.symm) h)\n                  (Submodule.comap H.subtype (a8NestedAmbientRange H h)) ⋯))\n              ((carrierCoordinateNestedHomEquiv C H c h) N) ∘ₗ\n            (Submodule.map C.mkQ (a8NestedAmbientDomain C c)).mkQ))\n    (complexAmbientAffineRestrict (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)\n      (T + H.subtype ∘ₗ carrierCoordinateBaseLift C H L ∘ₗ C.mkQ)\n      (complexAmbientHybridFilter (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) f)\n      ((nestedCarrierEquiv C (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) H ⋯ ⋯)\n        (({\n                toLinearMap :=\n                  (Submodule.map (↑(domainBasis C).equivFun.symm) c).mapQ\n                    (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) LinearMap.id ⋯,\n                invFun :=\n                  ⇑((Submodule.map C.mkQ (a8NestedAmbientDomain C c)).mapQ\n                      (Submodule.map (↑(domainBasis C).equivFun.symm) c) LinearMap.id ⋯),\n                left_inv := ⋯, right_inv := ⋯ }.arrowCongr\n            (LinearEquiv.ofEq (Submodule.map (↑(codomainBasis H).equivFun.symm) h)\n              (Submodule.comap H.subtype (a8NestedAmbientRange H h)) ⋯))\n          ((carrierCoordinateNestedHomEquiv C H c h) N))))\nbut is expected to have type\n  @Eq ℂ\n    (complexCarrierHybridFilter C H (Submodule.map (↑(domainBasis C).equivFun.symm) c)\n      (Submodule.map (↑(codomainBasis H).equivFun.symm) h) (filteredCarrierFunction C H T f)\n      (carrierCoordinateBaseLift C H L +\n        (Submodule.map (↑(codomainBasis H).equivFun.symm) h).subtype ∘ₗ\n          (carrierCoordinateNestedHomEquiv C H c h) N ∘ₗ (Submodule.map (↑(domainBasis C).equivFun.symm) c).mkQ))\n    (complexAmbientAffineRestrict (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)\n      (T + H.subtype ∘ₗ carrierCoordinateBaseLift C H L ∘ₗ C.mkQ)\n      (complexAmbientHybridFilter (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) f)\n      ((nestedCarrierEquiv C (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) H ⋯ ⋯)\n        (({\n                toLinearMap :=\n                  (Submodule.map (↑(domainBasis C).equivFun.symm) c).mapQ\n                    (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) LinearMap.id ⋯,\n                invFun :=\n                  ⇑((Submodule.map C.mkQ (a8NestedAmbientDomain C c)).mapQ\n                      (Submodule.map (↑(domainBasis C).equivFun.symm) c) LinearMap.id ⋯),\n                left_inv := ⋯, right_inv := ⋯ }.arrowCongr\n            (LinearEquiv.ofEq (Submodule.map (↑(codomainBasis H).equivFun.symm) h)\n              (Submodule.comap H.subtype (a8NestedAmbientRange H h)) ⋯))\n          ((carrierCoordinateNestedHomEquiv C H c h) N))))",
+    "candidate_context": [
+      "298:   dsimp only [Submodule.Quotient.equiv] at hA1",
+      "299:   simp_rw [a8_nested_domain_map, a8_nested_range_comap] at hA1",
+      "300:   simpa [filteredCarrierFunction, a8NestedAmbientShift,",
+      "301:     a8_nested_domain_map, a8_nested_range_comap,",
+      "302:     complexCarrierAffineRestrict, Submodule.Quotient.equiv, Submodule.mapQ_id, LinearEquiv.arrowCongr_apply, LinearMap.comp_assoc] using hA1"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean",
+    "line": 306,
+    "column": 8,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:306:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (Submodule.liftQ ?p ?f ?h) (Submodule.Quotient.mk ?x)\nin the target expression\n  eX.symm (A2.mkQ v) = eX.symm ((C.liftQ A2.mkQ ⋯) (C.mkQ v))\n\nn d : ℕ\nX : W n →ₗ[F] V d\nA2 : Submodule F (V d)\nB2 : Submodule F (W n)\nhA : X.range ≤ A2\np : a7T2ComplementPair X A2 B2\nC : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) :=\n  (↑p).1\nH : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n) :=\n  (↑p).2\nZ : ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.F✝]\n  PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ C :=\n  t2QuotientRestrict C H X\nhCA : C ≤ A2 := le_trans le_sup_right (le_of_eq p.property.right.left)\neX : ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2) ≃ₗ[F] V d ⧸ A2 := X.range.quotientQuotientEquivQuotient A2 hA\neC : ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ C) ⧸\n    Submodule.map C.mkQ A2) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]\n  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ A2 :=\n  C.quotientQuotientEquivQuotient A2 hCA\nhRange : (t2QuotientRestrict (↑p).1 (↑p).2 X).range = Submodule.map (↑p).1.mkQ A2 := a8_t2_complement_range_eq X A2 B2 p\neZ : ((V d ⧸ C) ⧸ Z.range) ≃ₗ[F] V d ⧸ A2 := Z.range.quotEquivOfEq (Submodule.map C.mkQ A2) hRange ≪≫ₗ eC\nv : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d\n⊢ eX.symm (A2.mkQ v) = eX.symm ((C.liftQ A2.mkQ ⋯) (C.mkQ v))",
+    "candidate_context": [
+      "304:     change eX.symm (A2.mkQ v) = _",
+      "305:     change eX.symm (A2.mkQ v) = eX.symm (C.liftQ A2.mkQ (by simpa only [Submodule.ker_mkQ] using hCA) (C.mkQ v))",
+      "306:     rw [Submodule.liftQ_apply]",
+      "307:   exact hcomp",
+      "308: "
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean",
+    "line": 435,
+    "column": 11,
+    "message": "typeclass instance problem is stuck",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:435:11: typeclass instance problem is stuck\n  AddCommMonoid ?m.553\n\nNote: Lean will not try to resolve this typeclass instance problem because the type argument to `AddCommMonoid` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.\n\nHint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.",
+    "candidate_context": [
+      "433:   unfold typedW6OutputEnergy",
+      "434:   apply congrArg₂ (fun (x : ℝ) (y : ℕ) => x / (y : ℝ))",
+      "435:   · refine @Fintype.sum_equiv _ _ _ _ _ _ e.symm _ _ ?_",
+      "436:     intro N",
+      "437:     simp [e]"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean",
+    "line": 438,
+    "column": 10,
+    "message": "synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:438:10: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized\n  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype\ninferred\n  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝",
+    "candidate_context": [
+      "436:     intro N",
+      "437:     simp [e]",
+      "438:   · exact @Fintype.card_congr _ _ _ _ e.symm",
+      "439: ",
+      "440: /-- Whole-function reconstruction on the common nested carrier. Each selected"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean",
+    "line": 523,
+    "column": 2,
+    "message": "`simp` made no progress",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:523:2: `simp` made no progress",
+    "candidate_context": [
+      "521:     a8_actual_T2_whole_function_expansion Xmat A2 B2 hA hB b' g Mright]",
+      "522:   dsimp only [X, R, K] at hphase",
+      "523:   simp only [LinearMap.comp_assoc] at hphase ⊢",
+      "524:   rw [hphase]",
+      "525: "
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean",
+    "line": 692,
+    "column": 4,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:692:4: Type mismatch: After simplification, term\n  Eq.symm (a8_t2_complement_mean_transport X A2 B2 hA hB p b' g)\n has type\n  @Eq ℝ\n    ((∑ x,\n        Complex.normSq\n          (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)\n            (filteredCarrierFunction (↑p).1 (↑p).2 b' g)\n            ({\n                toFun := fun N =>\n                  ↑(LinearEquiv.ofBijective (a8T2ComplementKernelMap X B2 (↑p).1 (↑p).2 ⋯ hB) ⋯) ∘ₗ\n                    N ∘ₗ a8T2ComplementDomainMap X A2 (↑p).1 (↑p).2 hA ⋯,\n                invFun := fun M =>\n                  ↑(LinearEquiv.ofBijective (a8T2ComplementKernelMap X B2 (↑p).1 (↑p).2 ⋯ hB) ⋯).symm ∘ₗ\n                    M ∘ₗ ↑(a8_t2_complement_domain_equiv X A2 B2 hA p).symm,\n                left_inv := ⋯, right_inv := ⋯ }\n              x))) /\n      ↑(Fintype.card ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2))))\n    (typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)\n      (filteredCarrierFunction (↑p).1 (↑p).2 b' g))\nbut is expected to have type\n  @Eq ℝ\n    ((∑ N,\n        Complex.normSq\n          (typedW6FourierDerivative (↑p).1 (↑p).2\n            (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose Xmat)))\n            (filteredCarrierFunction (↑p).1 (↑p).2 b' g)\n            (a8T2ComplementKernelMap (Matrix.toLin' (Matrix.transpose Xmat)) B2 (↑p).1 (↑p).2 ⋯ hB ∘ₗ\n              N ∘ₗ a8T2ComplementDomainMap (Matrix.toLin' (Matrix.transpose Xmat)) A2 (↑p).1 (↑p).2 hA ⋯))) /\n      ↑(Fintype.card ((V d ⧸ R) ⧸ A12 →ₗ[F] ↥B12)))\n    (typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)\n      (filteredCarrierFunction (↑p).1 (↑p).2 b' g))\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedTransport\n",
+    "candidate_context": [
+      "690:           (filteredCarrierFunction p.1.1 p.1.2 b' g) := by",
+      "691:     intro p",
+      "692:     simpa only [fcomp, Ω, a8_t2_actual_complement_contribution, a8_t2_complement_hom_equiv, a8_t2_complement_domain_equiv_apply, a8_t2_complement_kernel_equiv] using",
+      "693:       (a8_t2_complement_mean_transport X A2 B2 hA hB p b' g).symm",
+      "694:   calc"
+    ]
+  }
+]
