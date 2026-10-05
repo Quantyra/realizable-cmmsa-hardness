@@ -1,0 +1,655 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:60:2: Tactic `apply` failed: could not unify the conclusion of `Fintype.sum_equiv (a8T2AllPairEquiv X)`
+  ∑
+      x ∈
+        @Finset.univ (a8T2HybridComplementPairs X)
+          (@Sigma.instFintype { A2 // X.range ≤ A2 }
+            (fun A2 => (B2 : { B2 // B2 ≤ X.ker }) × a7T2ComplementPair X ↑A2 ↑B2)
+            (fun i =>
+              @Sigma.instFintype { B2 // B2 ≤ X.ker } (fun B2 => a7T2ComplementPair X ↑i ↑B2)
+                (fun i_1 =>
+                  Subtype.fintype fun p =>
+                    X.range ⊓ p.1 = ⊥ ∧ X.range ⊔ p.1 = ↑i ∧ p.2 ⊓ X.ker = ↑i_1 ∧ p.2 ⊔ X.ker = ⊤)
+                (Subtype.fintype fun B2 => B2 ≤ X.ker))
+            (Subtype.fintype (LE.le X.range))),
+      ?f x =
+    ∑ x, ?g x
+with the goal
+  ∑
+      p ∈
+        @Finset.univ (a8T2HybridComplementPairs X)
+          (@Sigma.instFintype { A2 // X.range ≤ A2 }
+            (fun A2 => (B2 : { B2 // B2 ≤ X.ker }) × a7T2ComplementPair X ↑A2 ↑B2)
+            (fun i =>
+              @Sigma.instFintype { B2 // B2 ≤ X.ker } (fun B2 => a7T2ComplementPair X ↑i ↑B2)
+                (fun i_1 =>
+                  Subtype.fintype fun p =>
+                    X.range ⊓ p.1 = ⊥ ∧ X.range ⊔ p.1 = ↑i ∧ p.2 ⊓ X.ker = ↑i_1 ∧ p.2 ⊔ X.ker = ⊤)
+                (Fintype.ofFinite { B2 // B2 ≤ X.ker }))
+            (Fintype.ofFinite { A2 // X.range ≤ A2 })),
+      energy ((a8T2AllPairEquiv X) p) =
+    ∑ p, energy p
+
+Note: The full type of `Fintype.sum_equiv (a8T2AllPairEquiv X)` is
+  ∀ (f : a8T2HybridComplementPairs X → ?m.36) (g : a8T2AllPairs X → ?m.36),
+    (∀ (x : a8T2HybridComplementPairs X), f x = g ((a8T2AllPairEquiv X) x)) → ∑ x, f x = ∑ x, g x
+
+n d : ℕ
+X : W n →ₗ[F] V d
+energy : a8T2AllPairs X → ℝ
+⊢ ∑ p, energy ((a8T2AllPairEquiv X) p) = ∑ p, energy p
+
+Candidate context:
+58:       ∑ p : a8T2AllPairs X, energy p := by
+59:   classical
+60:   apply Fintype.sum_equiv (a8T2AllPairEquiv X)
+61:   intro p
+62:   rfl
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:79:2: Type mismatch
+  a8_all_pair_sum_reindex X ?m.181
+has type
+  ∑ p, ?m.181 ((a8T2AllPairEquiv X) p) = ∑ p, ?m.181 p
+but is expected to have type
+  (∑ p,
+      typedUniformMean fun T =>
+        typedW6OutputEnergy (↑p.snd.snd).1 (↑p.snd.snd).2 (t2QuotientRestrict (↑p.snd.snd).1 (↑p.snd.snd).2 X)
+            (filteredCarrierFunction (↑p.snd.snd).1 (↑p.snd.snd).2 T g) ^
+          2) =
+    ∑ p,
+      typedUniformMean fun T =>
+        typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+            (filteredCarrierFunction (↑p).1 (↑p).2 T g) ^
+          2
+
+Candidate context:
+77:           (filteredCarrierFunction p.1.1 p.1.2 T g)) ^ 2) := by
+78:   classical
+79:   exact a8_all_pair_sum_reindex X _
+80: 
+81: /-- Every quotient subspace lifts to exactly one ambient subspace containing
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:119:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Submodule.map ?g (Submodule.map ?f ?p)
+in the target expression
+  (fun c => Submodule.map (↑e.symm) c) ((fun c => Submodule.map (↑e) c) c) = c
+
+U : Type u_1
+Q : Type u_2
+inst✝³ : AddCommGroup U
+inst✝² : Module F U
+inst✝¹ : AddCommGroup Q
+inst✝ : Module F Q
+e : U ≃ₗ[F] Q
+c : Submodule F U
+⊢ (fun c => Submodule.map (↑e.symm) c) ((fun c => Submodule.map (↑e) c) c) = c
+
+Candidate context:
+117:   invFun c := c.map e.symm.toLinearMap
+118:   left_inv c := by
+119:     rw [← Submodule.map_comp]
+120:     simp only [LinearEquiv.symm_comp, Submodule.map_id]
+121:   right_inv c := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:122:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Submodule.map ?g (Submodule.map ?f ?p)
+in the target expression
+  (fun c => Submodule.map (↑e) c) ((fun c => Submodule.map (↑e.symm) c) c) = c
+
+U : Type u_1
+Q : Type u_2
+inst✝³ : AddCommGroup U
+inst✝² : Module F U
+inst✝¹ : AddCommGroup Q
+inst✝ : Module F Q
+e : U ≃ₗ[F] Q
+c : Submodule F Q
+⊢ (fun c => Submodule.map (↑e) c) ((fun c => Submodule.map (↑e.symm) c) c) = c
+
+Candidate context:
+120:     simp only [LinearEquiv.symm_comp, Submodule.map_id]
+121:   right_inv c := by
+122:     rw [← Submodule.map_comp]
+123:     simp only [LinearEquiv.comp_symm, Submodule.map_id]
+124: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:131:30: Unknown identifier `domainBasis`
+
+Candidate context:
+129:     Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F) ≃
+130:       {A : Submodule F (V d) // C ≤ A} :=
+131:   (a8CoordinateSubspaceEquiv (domainBasis C).equivFun.symm).trans
+132:     (a8QuotientSubspaceEquiv C)
+133: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:140:30: Unknown identifier `codomainBasis`
+
+Candidate context:
+138:     Submodule F (Fin (Module.finrank F H) → F) ≃
+139:       {B : Submodule F (W n) // B ≤ H} :=
+140:   (a8CoordinateSubspaceEquiv (codomainBasis H).equivFun.symm).trans
+141:     (a8SubtypeSubspaceEquiv H)
+142: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:143:0: Not a definitional equality: the left-hand side
+  ↑((a8NestedDomainSubspaceEquiv C) c)
+is not definitionally equal to the right-hand side
+  a8NestedAmbientDomain C c
+
+Candidate context:
+141:     (a8SubtypeSubspaceEquiv H)
+142: 
+143: theorem a8_nested_domain_subspace_equiv_apply {d : Nat}
+144:     (C : Submodule F (V d))
+145:     (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)) :
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:146:71: Type mismatch
+  rfl
+has type
+  ?m.19 = ?m.19
+but is expected to have type
+  ↑((a8NestedDomainSubspaceEquiv C) c) = a8NestedAmbientDomain C c
+
+Candidate context:
+144:     (C : Submodule F (V d))
+145:     (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)) :
+146:     (a8NestedDomainSubspaceEquiv C c).1 = a8NestedAmbientDomain C c := rfl
+147: 
+148: theorem a8_nested_range_subspace_equiv_apply {n : Nat}
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:148:0: Not a definitional equality: the left-hand side
+  ↑((a8NestedRangeSubspaceEquiv H) h)
+is not definitionally equal to the right-hand side
+  a8NestedAmbientRange H h
+
+Candidate context:
+146:     (a8NestedDomainSubspaceEquiv C c).1 = a8NestedAmbientDomain C c := rfl
+147: 
+148: theorem a8_nested_range_subspace_equiv_apply {n : Nat}
+149:     (H : Submodule F (W n))
+150:     (h : Submodule F (Fin (Module.finrank F H) → F)) :
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:151:69: Type mismatch
+  rfl
+has type
+  ?m.17 = ?m.17
+but is expected to have type
+  ↑((a8NestedRangeSubspaceEquiv H) h) = a8NestedAmbientRange H h
+
+Candidate context:
+149:     (H : Submodule F (W n))
+150:     (h : Submodule F (Fin (Module.finrank F H) → F)) :
+151:     (a8NestedRangeSubspaceEquiv H h).1 = a8NestedAmbientRange H h := rfl
+152: 
+153: /-- Exhaustive pair correspondence at the original ambient carrier. -/
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:172:2: Tactic `apply` failed: could not unify the conclusion of `Fintype.sum_equiv (a8NestedPairEquiv C H)`
+  ∑ x, ?f x =
+    ∑
+      x ∈
+        @Finset.univ ({ A // C ≤ A } × { B // B ≤ H })
+          (@instFintypeProd { A // C ≤ A } { B // B ≤ H } (Subtype.fintype (LE.le C)) (Subtype.fintype fun B => B ≤ H)),
+      ?g x
+with the goal
+  ∑ p, energy ((a8NestedPairEquiv C H) p) =
+    ∑
+      p ∈
+        @Finset.univ ({ A // C ≤ A } × { B // B ≤ H })
+          (@instFintypeProd { A // C ≤ A } { B // B ≤ H } (Fintype.ofFinite { A // C ≤ A })
+            (Fintype.ofFinite { B // B ≤ H })),
+      energy p
+
+Note: The full type of `Fintype.sum_equiv (a8NestedPairEquiv C H)` is
+  ∀ (f : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F) × Submodule F (Fin (Module.finrank F ↥H) → F) → ?m.53)
+    (g : { A // C ≤ A } × { B // B ≤ H } → ?m.53),
+    (∀ (x : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F) × Submodule F (Fin (Module.finrank F ↥H) → F)),
+        f x = g ((a8NestedPairEquiv C H) x)) →
+      ∑ x, f x = ∑ x, g x
+
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+energy : { A // C ≤ A } × { B // B ≤ H } → ℝ
+⊢ ∑ p, energy ((a8NestedPairEquiv C H) p) = ∑ p, energy p
+
+Candidate context:
+170:       energy (a8NestedPairEquiv C H p)) = ∑ p, energy p := by
+171:   classical
+172:   apply Fintype.sum_equiv (a8NestedPairEquiv C H)
+173:   intro p
+174:   rfl
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:182:19: Unknown identifier `domainBasis`
+
+Note: It is not possible to treat `domainBasis` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+180:     (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)) :
+181:     (a8NestedDomainEquiv C c).toLinearMap.comp
+182:       (c.mkQ.comp (domainBasis C).equivFun.toLinearMap) =
+183:     a9AmbientQuotientMap (a8NestedAmbientDomain C c)
+184:       ⟨C, a8_nested_domain_contains C c, rfl⟩ := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:186:26: Application type mismatch: The argument
+  x
+has type
+  Fin d
+but is expected to have type
+  V d ⧸ C
+in the application
+  Submodule.mkQ_surjective C x
+
+Candidate context:
+184:       ⟨C, a8_nested_domain_contains C c, rfl⟩ := by
+185:   ext x
+186:   rcases C.mkQ_surjective x with ⟨v, rfl⟩
+187:   change (Submodule.quotientQuotientEquivQuotient C
+188:     (a8NestedAmbientDomain C c) (a8_nested_domain_contains C c))
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:200:5: Unknown identifier `codomainBasis`
+
+Note: It is not possible to treat `codomainBasis` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+198:     (H : Submodule F (W n))
+199:     (h : Submodule F (Fin (Module.finrank F H) → F)) :
+200:     (codomainBasis H).equivFun.symm.toLinearMap.comp
+201:       (h.subtype.comp (a8NestedRangeEquiv H h).symm.toLinearMap) =
+202:     a9AmbientBIncl (a8NestedAmbientRange H h)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:225:2: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+Candidate context:
+223:       ⟨H, a8_nested_range_contained H h, rfl⟩ X := by
+224:   rw [carrierFrequency_toLin]
+225:   change (a8NestedDomainEquiv C c).toLinearMap.comp
+226:     (c.mkQ.comp ((domainBasis C).equivFun.toLinearMap.comp
+227:       (X.comp ((codomainBasis H).equivFun.symm.toLinearMap.comp
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:285:4: Type mismatch: After simplification, term
+  hnull
+ has type
+  Module.finrank F ↥(C.mkQ.domRestrict X.range).range + Module.finrank F ↥(C.mkQ.domRestrict X.range).ker =
+    Module.finrank F ↥X.range
+but is expected to have type
+  Module.finrank F ↥(C.mkQ.domRestrict X.range).range = Module.finrank F ↥X.range
+
+Candidate context:
+283:     have hnull := LinearMap.finrank_range_add_finrank_ker
+284:       ((C.mkQ).domRestrict (LinearMap.range X))
+285:     simpa [hkerBot] using hnull
+286:   have hmap : LinearMap.range ((C.mkQ).domRestrict (LinearMap.range X)) =
+287:       (LinearMap.range X).map C.mkQ := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:330:2: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  j ≥ 0
+  i ≥ 0
+  i - j ≥ 0
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f + g - h - i + j ≥ 1
+  e ≥ 0
+  c ≥ 0
+  c - e ≥ 0
+  b ≥ 0
+  b + e ≥ 0
+  a ≥ 0
+  a + h ≥ 0
+where
+ a := ↑(Module.finrank F ↥X.range)
+ b := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝ ↥(↑p).2)
+ c := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝ ↥X.ker)
+ e := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n ⧸ (↑p).2))
+ f := ↑(Module.finrank F ↥(↑p).1)
+ g := ↑(Module.finrank F (W n ⧸ (↑p).2))
+ h := ↑(Module.finrank F ↥A2 - Module.finrank F ↥X.range)
+ i := ↑(Module.finrank F ↥X.ker)
+ j := ↑(Module.finrank F ↥B2)
+
+Candidate context:
+328:   simp only [finrank_top] at hH
+329:   have hQ := p.1.2.finrank_quotient_add_finrank
+330:   omega
+331: 
+332: /-- Nested ambient carrier cost adds precisely the local final carrier
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:357:2: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  p ≥ 0
+  o ≥ 0
+  m ≥ 0
+  l ≥ 0
+  l - m ≤ 0
+  k ≥ 0
+  j ≥ 0
+  j - k ≤ 0
+  i ≥ 0
+  g ≥ 0
+  g - i ≤ 0
+  f ≥ 0
+  e ≥ 0
+  e - f ≤ 0
+  b ≥ 0
+  b - m ≥ 0
+  a ≥ 0
+  a - k ≥ 0
+  a + b + j - k - l - o - p ≥ 1
+where
+ a := ↑(Module.finrank F (V d))
+ b := ↑(Module.finrank F (W n))
+ e := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality.F✝ ↥(a8NestedAmbientDomain C c))
+ f := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality.V✝ d))
+ g := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality.W✝ n ⧸ a8NestedAmbientRange H h))
+ i := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality.W✝ n))
+ j := ↑(Module.finrank F ↥c)
+ k := ↑(Module.finrank F (Fin (Module.finrank F (V d ⧸ C)) → F))
+ l := ↑(Module.finrank F ↥h)
+ m := ↑(Module.finrank F (Fin (Module.finrank F ↥H) → F))
+ o := ↑(Module.finrank F ↥(a8NestedAmbientDomain C c))
+ p := ↑(Module.finrank F (W n ⧸ a8NestedAmbientRange H h))
+
+Candidate context:
+355:       Module.finrank F H := by simpa using
+356:         (Module.finrank_fin_fun (n := Module.finrank F H) F)
+357:   omega
+358: 
+359: theorem a8_coordinate_parent_range {n d : Nat}
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:363:7: Unknown identifier `domainBasis`
+
+Note: It is not possible to treat `domainBasis` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+361:     (X : H →ₗ[F] (V d ⧸ C)) :
+362:     (LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin').map
+363:       (domainBasis C).equivFun.symm.toLinearMap = LinearMap.range X := by
+364:   rw [carrierFrequency_toLin]
+365:   ext x
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:368:12: Unknown identifier `codomainBasis`
+
+Candidate context:
+366:   constructor
+367:   · rintro ⟨y, ⟨z, rfl⟩, rfl⟩
+368:     exact ⟨(codomainBasis H).equivFun.symm z, by simp⟩
+369:   · rintro ⟨z, rfl⟩
+370:     refine ⟨(domainBasis C).equivFun (X z), ?_, by simp⟩
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:368:46: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+z : Fin (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H) → ZMod 2
+⊢ X (sorry ()) =
+    ∑ x,
+      (?m.70 C H X) (z x) •
+        (sorry ())
+          ⇑((BinaryMatrixTypedA15Transport.domainBasis C).repr (X ((BinaryMatrixTypedA15Transport.codomainBasis H) x)))
+
+Candidate context:
+366:   constructor
+367:   · rintro ⟨y, ⟨z, rfl⟩, rfl⟩
+368:     exact ⟨(codomainBasis H).equivFun.symm z, by simp⟩
+369:   · rintro ⟨z, rfl⟩
+370:     refine ⟨(domainBasis C).equivFun (X z), ?_, by simp⟩
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:370:13: Unknown identifier `domainBasis`
+
+Candidate context:
+368:     exact ⟨(codomainBasis H).equivFun.symm z, by simp⟩
+369:   · rintro ⟨z, rfl⟩
+370:     refine ⟨(domainBasis C).equivFun (X z), ?_, by simp⟩
+371:     exact ⟨(codomainBasis H).equivFun z, by simp⟩
+372: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:370:48: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+z : ↥H
+⊢ (sorry ()) (sorry ()) = X z
+
+Candidate context:
+368:     exact ⟨(codomainBasis H).equivFun.symm z, by simp⟩
+369:   · rintro ⟨z, rfl⟩
+370:     refine ⟨(domainBasis C).equivFun (X z), ?_, by simp⟩
+371:     exact ⟨(codomainBasis H).equivFun z, by simp⟩
+372: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:371:12: Unknown identifier `codomainBasis`
+
+Candidate context:
+369:   · rintro ⟨z, rfl⟩
+370:     refine ⟨(domainBasis C).equivFun (X z), ?_, by simp⟩
+371:     exact ⟨(codomainBasis H).equivFun z, by simp⟩
+372: 
+373: theorem a8_coordinate_parent_kernel {n d : Nat}
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:371:41: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+z : ↥H
+⊢ ∑ x,
+      sorry () x •
+        ⇑((BinaryMatrixTypedA15Transport.domainBasis C).repr (X ((BinaryMatrixTypedA15Transport.codomainBasis H) x))) =
+    sorry ()
+
+Candidate context:
+369:   · rintro ⟨z, rfl⟩
+370:     refine ⟨(domainBasis C).equivFun (X z), ?_, by simp⟩
+371:     exact ⟨(codomainBasis H).equivFun z, by simp⟩
+372: 
+373: theorem a8_coordinate_parent_kernel {n d : Nat}
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:377:7: Unknown identifier `codomainBasis`
+
+Note: It is not possible to treat `codomainBasis` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+375:     (X : H →ₗ[F] (V d ⧸ C)) :
+376:     (LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin').map
+377:       (codomainBasis H).equivFun.symm.toLinearMap = LinearMap.ker X := by
+378:   rw [carrierFrequency_toLin]
+379:   ext x
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:383:25: Unknown identifier `domainBasis`
+
+Candidate context:
+381:   · rintro ⟨y, hy, rfl⟩
+382:     apply LinearMap.mem_ker.mpr
+383:     have hz := congrArg (domainBasis C).equivFun.symm (LinearMap.mem_ker.mp hy)
+384:     simpa using hz
+385:   · intro hx
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:386:13: Unknown identifier `codomainBasis`
+
+Candidate context:
+384:     simpa using hz
+385:   · intro hx
+386:     refine ⟨(codomainBasis H).equivFun x, ?_, by simp⟩
+387:     apply LinearMap.mem_ker.mpr
+388:     simp [LinearMap.mem_ker.mp hx]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:386:46: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+x : ↥H
+hx : x ∈ X.ker
+⊢ (sorry ()) (sorry ()) = x
+
+Candidate context:
+384:     simpa using hz
+385:   · intro hx
+386:     refine ⟨(codomainBasis H).equivFun x, ?_, by simp⟩
+387:     apply LinearMap.mem_ker.mpr
+388:     simp [LinearMap.mem_ker.mp hx]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:385:2: unsolved goals
+case mpr
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+x : ↥H
+hx : x ∈ X.ker
+⊢ ∑ x,
+      sorry () x •
+        ⇑((BinaryMatrixTypedA15Transport.domainBasis C).repr (X ((BinaryMatrixTypedA15Transport.codomainBasis H) x))) =
+    0
+
+Candidate context:
+383:     have hz := congrArg (domainBasis C).equivFun.symm (LinearMap.mem_ker.mp hy)
+384:     simpa using hz
+385:   · intro hx
+386:     refine ⟨(codomainBasis H).equivFun x, ?_, by simp⟩
+387:     apply LinearMap.mem_ker.mpr
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:400:9: Unknown identifier `domainBasis`
+
+Candidate context:
+398:   have heq : a8NestedAmbientDomain C c ⊓ (LinearMap.range X).comap C.mkQ =
+399:       ((LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin' ⊓ c).map
+400:         (domainBasis C).equivFun.symm.toLinearMap).comap C.mkQ := by
+401:     rw [Submodule.map_inf _ (domainBasis C).equivFun.symm.injective,
+402:       a8_coordinate_parent_range, Submodule.comap_inf]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:397:71: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)
+⊢ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).range ⊓ c = ⊥ ↔
+    a8NestedAmbientDomain C c ⊓ Submodule.comap C.mkQ X.range = C
+
+Candidate context:
+395:     (c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)) :
+396:     LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin' ⊓ c = ⊥ ↔
+397:     a8NestedAmbientDomain C c ⊓ (LinearMap.range X).comap C.mkQ = C := by
+398:   have heq : a8NestedAmbientDomain C c ⊓ (LinearMap.range X).comap C.mkQ =
+399:       ((LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin' ⊓ c).map
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:419:9: Unknown identifier `codomainBasis`
+
+Candidate context:
+417:   have heq : a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype =
+418:       ((h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin').map
+419:         (codomainBasis H).equivFun.symm.toLinearMap).map H.subtype := by
+420:     rw [Submodule.map_sup, a8_coordinate_parent_kernel, Submodule.map_sup]
+421:     rfl
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:416:70: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+h : Submodule F (Fin (Module.finrank F ↥H) → F)
+⊢ h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker = ⊤ ↔
+    a8NestedAmbientRange H h ⊔ Submodule.map H.subtype X.ker = H
+
+Candidate context:
+414:     (h : Submodule F (Fin (Module.finrank F H) → F)) :
+415:     h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin' = ⊤ ↔
+416:     a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype = H := by
+417:   have heq : a8NestedAmbientRange H h ⊔ (LinearMap.ker X).map H.subtype =
+418:       ((h ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin').map
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:444:4: 'change' tactic failed, pattern
+  (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).range ⊓ p.1 = ⊥ ∧
+      p.2 ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker = ⊤ ↔
+    a8NestedAmbientDomain C p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧
+      a8NestedAmbientRange H p.2 ⊔ Submodule.map H.subtype X.ker = H
+is not definitionally equal to target
+  (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).range ⊓ p.1 = ⊥ ∧
+      p.2 ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker = ⊤ ↔
+    ↑((a8NestedPairEquiv C H) p).1 ⊓ Submodule.comap C.mkQ X.range = C ∧
+      ↑((a8NestedPairEquiv C H) p).2 ⊔ Submodule.map H.subtype X.ker = H
+
+Candidate context:
+442:       a8AmbientFinalPairs C H X :=
+443:   (a8NestedPairEquiv C H).subtypeEquiv (fun p => by
+444:     change (LinearMap.range (carrierFrequencyEquiv C H X).transpose.toLin' ⊓ p.1 = ⊥ ∧
+445:       p.2 ⊔ LinearMap.ker (carrierFrequencyEquiv C H X).transpose.toLin' = ⊤) ↔
+446:       (a8NestedAmbientDomain C p.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:472:2: Tactic `apply` failed: could not unify the conclusion of `Fintype.sum_equiv (a8AmbientFinalPairEquiv C H X)`
+  ∑ x, ?f x =
+    ∑
+      x ∈
+        @Finset.univ (a8AmbientFinalPairs C H X)
+          (@Subtype.fintype ({ A // C ≤ A } × { B // B ≤ H })
+            (fun p => ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H)
+            (fun a => instDecidableAnd)
+            (@instFintypeProd { A // C ≤ A } { B // B ≤ H } (Subtype.fintype (LE.le C))
+              (Subtype.fintype fun B => B ≤ H))),
+      ?g x
+with the goal
+  (∑ p,
+      typedUniformMean fun T =>
+        typedW6OutputEnergy (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2)
+            (a8NestedFrequency C H (↑p).1 (↑p).2
+              (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X)))))
+            (filteredCarrierFunction (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2) T f) ^
+          2) =
+    ∑
+      p ∈
+        @Finset.univ (a8AmbientFinalPairs C H X)
+          (@Subtype.fintype ({ A // C ≤ A } × { B // B ≤ H })
+            (fun p => ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H)
+            (fun a => instDecidableAnd)
+            (@instFintypeProd { A // C ≤ A } { B // B ≤ H } (Fintype.ofFinite { A // C ≤ A })
+              (Fintype.ofFinite { B // B ≤ H }))),
+      typedUniformMean fun T =>
+        typedW6OutputEnergy (↑(↑p).1) (↑(↑p).2) (a9AmbientFinalMap ↑(↑p).1 ↑(↑p).2 ⟨C, ⋯⟩ ⟨H, ⋯⟩ X)
+            (filteredCarrierFunction (↑(↑p).1) (↑(↑p).2) T f) ^
+          2
+
+Note: The full type of `Fintype.sum_equiv (a8AmbientFinalPairEquiv C H X)` is
+  ∀ (f : a8T2AllPairs (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))) → ?m.247)
+    (g : a8AmbientFinalPairs C H X → ?m.247),
+    (∀ (x : a8T2AllPairs (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X)))),
+        f x = g ((a8AmbientFinalPairEquiv C H X) x)) →
+      ∑ x, f x = ∑ x, g x
+
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+f : BinaryMatrix n d → ℂ
+⊢ (∑ p,
+      typedUniformMean fun T =>
+        typedW6OutputEnergy (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2)
+            (a8NestedFrequency C H (↑p).1 (↑p).2
+              (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X)))))
+            (filteredCarrierFunction (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2) T f) ^
+          2) =
+    ∑ p,
+      typedUniformMean fun T =>
+        typedW6OutputEnergy (↑(↑p).1) (↑(↑p).2) (a9AmbientFinalMap ↑(↑p).1 ↑(↑p).2 ⟨C, ⋯⟩ ⟨H, ⋯⟩ X)
+            (filteredCarrierFunction (↑(↑p).1) (↑(↑p).2) T f) ^
+          2
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly
+
+
+Candidate context:
+470:           (filteredCarrierFunction p.1.1.1 p.1.2.1 T f)) ^ 2) := by
+471:   classical
+472:   apply Fintype.sum_equiv (a8AmbientFinalPairEquiv C H X)
+473:   intro p
+474:   change typedUniformMean _ = typedUniformMean _

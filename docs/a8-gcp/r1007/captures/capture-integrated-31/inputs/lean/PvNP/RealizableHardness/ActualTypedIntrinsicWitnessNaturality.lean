@@ -1,0 +1,516 @@
+import PvNP.RealizableHardness.ActualTypedFourierEquivNaturality
+import PvNP.RealizableHardness.BinaryMatrixTypedA15OneStep
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+import PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+
+namespace PvNP.RealizableHardness.ActualTypedIntrinsicWitnessNaturality
+
+open ActualTypedFourierEquivNaturality
+open BinaryMatrixTypedA15OneStep
+open BinaryMatrixTypedA15ReducedGlobal BinaryMatrixTypedA14Line
+open BinaryMatrixA1NestedCarrier
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+
+private theorem zmod_two_eq_one_of_ne_zero (z : ZMod 2) (hz : z ≠ 0) :
+    z = 1 := by
+  fin_cases z
+  · exact (hz rfl).elim
+  · rfl
+
+private noncomputable instance localSubmoduleFintype {D : Type*}
+    [Finite D] [AddCommGroup D] [Module F D]
+    (S : Submodule F D) : Fintype S := Fintype.ofFinite S
+
+private noncomputable instance localLinearMapFintype {D C : Type*}
+    [Finite D] [Finite C] [AddCommGroup D] [Module F D]
+    [AddCommGroup C] [Module F C] : Fintype (D →ₗ[F] C) := by
+  classical
+  letI : Fintype D := Fintype.ofFinite D
+  letI : Fintype C := Fintype.ofFinite C
+  exact FunLike.fintype _
+
+private noncomputable instance localDecidableEqOfFintype {α : Type*}
+    [Fintype α] : DecidableEq α := Classical.decEq α
+
+/-- The intrinsic finite-carrier line average.  The point `v` is the chosen
+nonzero vector on the line; the summation ranges over all functionals taking
+value one there and every codomain increment. -/
+def intrinsicLineAverage {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (v : D) (f : (D →ₗ[F] C) → Complex) (M : D →ₗ[F] C) : Complex :=
+  (∑ p : {φ : D →ₗ[F] F // φ v = 1} × C,
+      f (M + p.1.1.smulRight p.2)) /
+    (Fintype.card ({φ : D →ₗ[F] F // φ v = 1} × C) : Complex)
+
+def intrinsicLineIminusE {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (v : D) (a : Real) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) : Complex :=
+  f M - (a : Complex) * intrinsicLineAverage v f M
+
+def intrinsicLineP {D C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (v : D) (j : Nat) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) : Complex :=
+  intrinsicLineIminusE v (2 ^ (j + 1))
+    (intrinsicLineIminusE v (2 ^ j) f) M
+
+/-- Reindex the actual conditional line law through arbitrary finite F2
+linear equivalences.  The translated matrix is transported by the same
+domain and codomain equivalences as the affine function. -/
+theorem intrinsicLineAverage_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (v : D) (f : (D →ₗ[F] C) → Complex) (M : D →ₗ[F] C) :
+    intrinsicLineAverage (eD.symm v)
+      (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+      (mapReindexEquiv eD eC M) = intrinsicLineAverage v f M := by
+  classical
+  unfold intrinsicLineAverage
+  let φMap : {φ : D →ₗ[F] F // φ v = 1} →
+      {φ : D' →ₗ[F] F // φ (eD.symm v) = 1} := fun φ =>
+    ⟨φ.1.comp eD.toLinearMap,
+      by simpa [LinearMap.comp_apply] using φ.2⟩
+  have hφMap : Function.Bijective φMap := by
+    constructor
+    · intro x y h
+      apply Subtype.ext
+      apply LinearMap.ext
+      intro z
+      have hz := congrArg
+        (fun q : {φ : D' →ₗ[F] F // φ (eD.symm v) = 1} => q.1 (eD.symm z)) h
+      simpa [φMap] using hz
+    · intro y
+      refine ⟨⟨y.1.comp eD.symm.toLinearMap, ?_⟩, ?_⟩
+      · simpa using y.2
+      · apply Subtype.ext
+        apply LinearMap.ext
+        intro z
+        simp [φMap]
+  let eIndex : ({φ : D →ₗ[F] F // φ v = 1} × C) ≃
+      ({φ : D' →ₗ[F] F // φ (eD.symm v) = 1} × C') :=
+    (Equiv.ofBijective φMap hφMap).prodCongr eC.symm.toEquiv
+  have hsum :
+      (∑ p : {φ : D' →ₗ[F] F // φ (eD.symm v) = 1} × C',
+        f ((mapReindexEquiv eD eC).symm
+            (mapReindexEquiv eD eC M + p.1.1.smulRight p.2))) =
+      ∑ p : {φ : D →ₗ[F] F // φ v = 1} × C,
+        f (M + p.1.1.smulRight p.2) := by
+    symm
+    apply Fintype.sum_equiv eIndex
+    intro p
+    apply congrArg f
+    apply (mapReindexEquiv eD eC).injective
+    apply LinearMap.ext
+    intro x'
+    simp [eIndex, φMap, mapReindexEquiv, LinearEquiv.arrowCongr_apply,
+      LinearMap.smulRight_apply, LinearMap.comp_apply, map_smul]
+  rw [hsum]
+  congr 1
+  exact_mod_cast (Fintype.card_congr eIndex).symm
+
+theorem intrinsicLineIminusE_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (v : D) (a : Real) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) :
+    intrinsicLineIminusE (eD.symm v) a
+      (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+      (mapReindexEquiv eD eC M) = intrinsicLineIminusE v a f M := by
+  unfold intrinsicLineIminusE
+  rw [intrinsicLineAverage_reindex]
+  simp [mapReindexEquiv]
+
+theorem intrinsicLineP_reindex {D D' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eC : C' ≃ₗ[F] C)
+    (v : D) (j : Nat) (f : (D →ₗ[F] C) → Complex)
+    (M : D →ₗ[F] C) :
+    intrinsicLineP (eD.symm v) j
+      (fun M' => f ((mapReindexEquiv eD eC).symm M'))
+      (mapReindexEquiv eD eC M) = intrinsicLineP v j f M := by
+  unfold intrinsicLineP
+  have hinner : intrinsicLineIminusE (eD.symm v) (2 ^ j)
+        (fun X => f ((mapReindexEquiv eD eC).symm X)) =
+      (fun M' => intrinsicLineIminusE v (2 ^ j) f
+        ((mapReindexEquiv eD eC).symm M')) := by
+    funext M'
+    simpa only [LinearEquiv.apply_symm_apply] using
+      intrinsicLineIminusE_reindex eD eC v (2 ^ j) f
+        ((mapReindexEquiv eD eC).symm M')
+  rw [hinner]
+  exact intrinsicLineIminusE_reindex eD eC v (2 ^ (j + 1))
+    (intrinsicLineIminusE v (2 ^ j) f) M
+
+/-- The reduced witness is natural for a commuting quotient square.  This is
+the reusable arbitrary-carrier form: the source function, affine base, and
+conditional line law are transported together, while `hq` is the actual
+quotient-map identity induced by the domain equivalence. -/
+def intrinsicReducedLineWitness {D Q C : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup Q] [Module F Q]
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    (v : D) (j : Nat) (q : D →ₗ[F] Q)
+    (T : D →ₗ[F] C) (f : (D →ₗ[F] C) → Complex)
+    (N : Q →ₗ[F] C) : Complex :=
+  intrinsicLineP v j f (T + N.comp q)
+
+theorem intrinsicReducedLineWitness_reindex {D D' Q Q' C C' : Type*}
+    [AddCommGroup D] [Module F D] [Fintype D]
+    [AddCommGroup D'] [Module F D'] [Fintype D']
+    [AddCommGroup Q] [Module F Q]
+    [AddCommGroup Q'] [Module F Q']
+    [AddCommGroup C] [Module F C] [Fintype C]
+    [AddCommGroup C'] [Module F C'] [Fintype C']
+    [Fintype (D →ₗ[F] F)] [DecidableEq (D →ₗ[F] F)]
+    [Fintype (D' →ₗ[F] F)] [DecidableEq (D' →ₗ[F] F)]
+    [Fintype (D →ₗ[F] C)] [DecidableEq (D →ₗ[F] C)]
+    [Fintype (D' →ₗ[F] C')] [DecidableEq (D' →ₗ[F] C')]
+    (eD : D' ≃ₗ[F] D) (eQ : Q' ≃ₗ[F] Q) (eC : C' ≃ₗ[F] C)
+    (v : D) (j : Nat) (q : D →ₗ[F] Q) (q' : D' →ₗ[F] Q')
+    (hq : ∀ x', eQ (q' x') = q (eD x'))
+    (T : D →ₗ[F] C) (f : (D →ₗ[F] C) → Complex)
+    (N' : Q' →ₗ[F] C') :
+    intrinsicReducedLineWitness (eD.symm v) j q'
+        (mapReindexEquiv eD eC T)
+        (fun M' => f ((mapReindexEquiv eD eC).symm M')) N' =
+      intrinsicReducedLineWitness v j q T f
+        ((mapReindexEquiv eQ eC).symm N') := by
+  let eM := mapReindexEquiv eD eC
+  let eN := mapReindexEquiv eQ eC
+  have hbase :
+      eM (T + ((eN.symm N').comp q)) = eM T + N'.comp q' := by
+    apply LinearMap.ext
+    intro x'
+    change eC.symm (T (eD x') + eN.symm N' (q (eD x'))) =
+      eC.symm (T (eD x')) + N' (q' x')
+    rw [← hq x']
+    simp [eN, mapReindexEquiv, LinearEquiv.arrowCongr_apply,
+      LinearMap.comp_apply]
+  unfold intrinsicReducedLineWitness
+  rw [← hbase]
+  exact intrinsicLineP_reindex eD eC v j f (T + (eN.symm N').comp q)
+
+/-- Quotient equivalence induced by a linear equivalence carrying one
+subspace exactly onto the other. -/
+def quotientLineEquiv {D D' : Type*}
+    [AddCommGroup D] [Module F D] [AddCommGroup D'] [Module F D']
+    (e : D' ≃ₗ[F] D) (L : Submodule F D) (L' : Submodule F D')
+    (hL : L'.map e.toLinearMap = L) : (D' ⧸ L') ≃ₗ[F] (D ⧸ L) where
+  toFun := L'.liftQ (L.mkQ.comp e.toLinearMap) (by
+    intro x hx
+    apply LinearMap.mem_ker.mpr
+    change L.mkQ (e x) = 0
+    apply (Submodule.Quotient.mk_eq_zero L).2
+    have hxmap : e x ∈ L'.map e.toLinearMap :=
+      Submodule.mem_map.mpr ⟨x, hx, rfl⟩
+    rw [← hL]
+    exact hxmap)
+  invFun := L.liftQ (L'.mkQ.comp e.symm.toLinearMap) (by
+    intro x hx
+    apply LinearMap.mem_ker.mpr
+    change L'.mkQ (e.symm x) = 0
+    apply (Submodule.Quotient.mk_eq_zero L').2
+    have hxmap : x ∈ L'.map e.toLinearMap := by rw [hL]; exact hx
+    rcases Submodule.mem_map.mp hxmap with ⟨y, hy, hxy⟩
+    have hy' : e.symm x = y := by
+      calc
+        e.symm x = e.symm (e y) := by
+          rw [← hxy]
+          rfl
+        _ = y := e.symm_apply_apply y
+    change e.symm x ∈ L'
+    rw [hy']
+    exact hy)
+  left_inv := by
+    intro x
+    refine Submodule.Quotient.induction_on L' x ?_
+    intro x
+    simp
+  right_inv := by
+    intro x
+    refine Submodule.Quotient.induction_on L x ?_
+    intro x
+    simp
+  map_add' := by
+    intro x y
+    simp
+  map_smul' := by
+    intro a x
+    simp
+
+@[simp] theorem quotientLineEquiv_mk {D D' : Type*}
+    [AddCommGroup D] [Module F D] [AddCommGroup D'] [Module F D']
+    (e : D' ≃ₗ[F] D) (L : Submodule F D) (L' : Submodule F D')
+    (hL : L'.map e.toLinearMap = L) (x : D') :
+    quotientLineEquiv e L L' hL (L'.mkQ x) = L.mkQ (e x) := rfl
+
+theorem nestedQuotientLineMap_eq {d : Nat}
+    (A₂ A₁ : Submodule F (Fin d → F)) (hA : A₂ ≤ A₁)
+    (L : Submodule F ((Fin d → F) ⧸ A₁)) :
+    (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap).map
+        (nestedDomainEquiv A₂ A₁ hA).toLinearMap = L := by
+  apply le_antisymm
+  · intro x hx
+    rcases Submodule.mem_map.mp hx with ⟨y, hy, rfl⟩
+    rcases Submodule.mem_map.mp hy with ⟨z, hz, hzy⟩
+    rw [← hzy]
+    simpa using hz
+  · intro x hx
+    exact Submodule.mem_map.mpr ⟨(nestedDomainEquiv A₂ A₁ hA).symm x,
+      Submodule.mem_map.mpr ⟨x, hx, rfl⟩, by simp⟩
+
+/-- Over F₂, the canonical nonzero generator selected by `lineScalarEquiv`
+is carried to the canonical generator of the transported line. -/
+noncomputable def intrinsicLineScalarEquiv {D : Type*}
+    [AddCommGroup D] [Module F D] [FiniteDimensional F D]
+    (L : Submodule F D) (hL : Module.finrank F L = 1) : L ≃ₗ[F] F := by
+  haveI : Nontrivial L := Module.finrank_pos_iff.mp (by omega : 0 < Module.finrank F L)
+  let v : L := Classical.choose (exists_ne (0 : L))
+  have hv : v ≠ 0 := Classical.choose_spec (exists_ne (0 : L))
+  let b := FiniteDimensional.basisSingleton Unit hL v hv
+  exact b.equivFun.trans (LinearEquiv.funUnique Unit F F)
+
+/-- The manuscript's coordinate-specific scalar equivalence selects the same
+ambient nonzero F₂ point as the carrier-generic scalar equivalence. -/
+theorem typedLineScalarVector_eq_intrinsic {d : Nat}
+    {A : Submodule F (Fin d → F)}
+    (L : Submodule F ((Fin d → F) ⧸ A))
+    (hL : Module.finrank F L = 1) :
+    (↑((lineScalarEquiv L hL).symm 1 : L) : (Fin d → F) ⧸ A) =
+      (↑((intrinsicLineScalarEquiv L hL).symm 1 : L) : (Fin d → F) ⧸ A) := by
+  have hne : ((lineScalarEquiv L hL).symm 1 : L) ≠ 0 := by
+    intro hz
+    have hz' := congrArg (lineScalarEquiv L hL) hz
+    simp at hz'
+  have hscalarne : intrinsicLineScalarEquiv L hL
+      ((lineScalarEquiv L hL).symm 1) ≠ 0 := by
+    intro hz
+    apply hne
+    apply (intrinsicLineScalarEquiv L hL).injective
+    simpa using hz
+  have hscalar : intrinsicLineScalarEquiv L hL
+      ((lineScalarEquiv L hL).symm 1) = 1 := by
+    exact zmod_two_eq_one_of_ne_zero _ hscalarne
+  have hsub : ((lineScalarEquiv L hL).symm 1 : L) =
+      ((intrinsicLineScalarEquiv L hL).symm 1 : L) := by
+    apply (intrinsicLineScalarEquiv L hL).injective
+    simpa using hscalar
+  simpa using congrArg Subtype.val hsub
+
+theorem lineCanonicalVector_reindex {D D' : Type*}
+    [AddCommGroup D] [Module F D] [FiniteDimensional F D]
+    [AddCommGroup D'] [Module F D'] [FiniteDimensional F D']
+    (eD : D' ≃ₗ[F] D)
+    (L : Submodule F D) (hL : Module.finrank F L = 1)
+    (L' : Submodule F D') (hL' : Module.finrank F L' = 1)
+    (hmap : L' = L.map eD.symm.toLinearMap) :
+    (⟨eD.symm ((intrinsicLineScalarEquiv L hL).symm 1 : L), by
+      rw [hmap]
+      exact Submodule.mem_map.mpr
+        ⟨(intrinsicLineScalarEquiv L hL).symm 1,
+          ((intrinsicLineScalarEquiv L hL).symm 1).property, rfl⟩⟩ : L') =
+      ((intrinsicLineScalarEquiv L' hL').symm 1 : L') := by
+  let v : L := (intrinsicLineScalarEquiv L hL).symm 1
+  let v' : L' := ⟨eD.symm (v : D), by
+    rw [hmap]
+    exact Submodule.mem_map.mpr ⟨v, v.property, rfl⟩⟩
+  have hv : v ≠ 0 := by
+    intro h
+    have h' := congrArg (intrinsicLineScalarEquiv L hL) h
+    simpa [v] using h'
+  have hv' : v' ≠ 0 := by
+    intro h
+    apply hv
+    apply Subtype.ext
+    have hvamb : eD.symm (v : D) = 0 := by
+      simpa [v'] using congrArg Subtype.val h
+    exact eD.symm.injective (by simpa using hvamb)
+  have hscalar0 : intrinsicLineScalarEquiv L' hL' v' ≠ 0 := by
+    intro h
+    apply hv'
+    apply (intrinsicLineScalarEquiv L' hL').injective
+    simpa using h
+  have hscalar : intrinsicLineScalarEquiv L' hL' v' = 1 := by
+    exact zmod_two_eq_one_of_ne_zero _ hscalar0
+  apply (intrinsicLineScalarEquiv L' hL').injective
+  simpa [v, v', hscalar]
+
+/-- The reduced line witness commutes with the actual nested quotient and
+codomain-comap carrier.  The quotient square is constructed here from the
+canonical third-isomorphism domain equivalence and the transported line;
+no quotient-square hypothesis is left to the caller. -/
+theorem nestedIntrinsicReducedLineWitness_reindex {n d j : Nat}
+    (A₂ A₁ : Submodule F (Fin d → F))
+    (B₁ B₂ : Submodule F (Fin n → F))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (L : Submodule F ((Fin d → F) ⧸ A₁))
+    (v : (Fin d → F) ⧸ A₁)
+    (T : ((Fin d → F) ⧸ A₁) →ₗ[F] B₁)
+    (f : (((Fin d → F) ⧸ A₁) →ₗ[F] B₁) → Complex)
+    (N' : ((((Fin d → F) ⧸ A₂) ⧸ A₁.map A₂.mkQ) ⧸
+      L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap) →ₗ[F]
+        (B₁.comap B₂.subtype)) :
+    intrinsicReducedLineWitness
+        ((nestedDomainEquiv A₂ A₁ hA).symm v) j
+        (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap).mkQ
+        (mapReindexEquiv (nestedDomainEquiv A₂ A₁ hA)
+          (nestedCodomainEquiv B₁ B₂ hB) T)
+        (fun M' => f ((mapReindexEquiv (nestedDomainEquiv A₂ A₁ hA)
+          (nestedCodomainEquiv B₁ B₂ hB)).symm M')) N' =
+      intrinsicReducedLineWitness v j L.mkQ T f
+        ((mapReindexEquiv
+          (quotientLineEquiv (nestedDomainEquiv A₂ A₁ hA) L
+            (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+            (nestedQuotientLineMap_eq A₂ A₁ hA L))
+          (nestedCodomainEquiv B₁ B₂ hB)).symm N') := by
+  exact intrinsicReducedLineWitness_reindex
+    (nestedDomainEquiv A₂ A₁ hA)
+    (quotientLineEquiv (nestedDomainEquiv A₂ A₁ hA) L
+      (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+      (nestedQuotientLineMap_eq A₂ A₁ hA L))
+    (nestedCodomainEquiv B₁ B₂ hB) v j L.mkQ
+    (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap).mkQ
+    (by
+      intro x
+      change quotientLineEquiv (nestedDomainEquiv A₂ A₁ hA) L
+          (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+          (nestedQuotientLineMap_eq A₂ A₁ hA L)
+          ((L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap).mkQ x) =
+        L.mkQ ((nestedDomainEquiv A₂ A₁ hA) x)
+      exact quotientLineEquiv_mk _ _ _ _ _)
+    T f N'
+
+/-- The nested quotient transport also respects the manuscript's canonical
+F₂ generator of the selected line.  This is the concrete bridge from the
+intrinsic quotient-square identity above to the typed one-step witness: the
+transported line has the same unique nonzero generator. -/
+theorem nestedIntrinsicReducedLineWitness_canonical_reindex {n d j : Nat}
+    (A₂ A₁ : Submodule F (Fin d → F))
+    (B₁ B₂ : Submodule F (Fin n → F))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (L : Submodule F ((Fin d → F) ⧸ A₁))
+    (hL : Module.finrank F L = 1)
+    (T : ((Fin d → F) ⧸ A₁) →ₗ[F] B₁)
+    (f : (((Fin d → F) ⧸ A₁) →ₗ[F] B₁) → Complex)
+    (N' : ((((Fin d → F) ⧸ A₂) ⧸ A₁.map A₂.mkQ) ⧸
+      L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap) →ₗ[F]
+        (B₁.comap B₂.subtype)) :
+    intrinsicReducedLineWitness
+        (↑((intrinsicLineScalarEquiv
+          (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+          (((nestedDomainEquiv A₂ A₁ hA).symm.finrank_map_eq L).trans hL)).symm 1)
+          : (((Fin d → F) ⧸ A₂) ⧸ A₁.map A₂.mkQ))
+        j
+        (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap).mkQ
+        (mapReindexEquiv (nestedDomainEquiv A₂ A₁ hA)
+          (nestedCodomainEquiv B₁ B₂ hB) T)
+        (fun M' => f ((mapReindexEquiv (nestedDomainEquiv A₂ A₁ hA)
+          (nestedCodomainEquiv B₁ B₂ hB)).symm M')) N' =
+    intrinsicReducedLineWitness
+        (↑((intrinsicLineScalarEquiv L hL).symm 1) : (Fin d → F) ⧸ A₁)
+        j L.mkQ T f
+        ((mapReindexEquiv
+          (quotientLineEquiv (nestedDomainEquiv A₂ A₁ hA) L
+            (L.map (nestedDomainEquiv A₂ A₁ hA).symm.toLinearMap)
+            (nestedQuotientLineMap_eq A₂ A₁ hA L))
+          (nestedCodomainEquiv B₁ B₂ hB)).symm N') := by
+  let eD := nestedDomainEquiv A₂ A₁ hA
+  let L' := L.map eD.symm.toLinearMap
+  have hL' : Module.finrank F L' = 1 :=
+    (eD.symm.finrank_map_eq L).trans hL
+  have hcan := lineCanonicalVector_reindex eD L hL L' hL'
+    (by rfl)
+  have hcanVal := congrArg Subtype.val hcan
+  calc
+    intrinsicReducedLineWitness
+        (↑((intrinsicLineScalarEquiv L' hL').symm 1) :
+          (((Fin d → F) ⧸ A₂) ⧸ A₁.map A₂.mkQ)) j L'.mkQ
+        (mapReindexEquiv eD (nestedCodomainEquiv B₁ B₂ hB) T)
+        (fun M' => f ((mapReindexEquiv eD
+          (nestedCodomainEquiv B₁ B₂ hB)).symm M')) N' =
+      intrinsicReducedLineWitness
+        (eD.symm ((intrinsicLineScalarEquiv L hL).symm 1))
+        j L'.mkQ (mapReindexEquiv eD (nestedCodomainEquiv B₁ B₂ hB) T)
+        (fun M' => f ((mapReindexEquiv eD
+          (nestedCodomainEquiv B₁ B₂ hB)).symm M')) N' := by
+          rw [← hcanVal]
+    _ = intrinsicReducedLineWitness
+        (↑((intrinsicLineScalarEquiv L hL).symm 1) : (Fin d → F) ⧸ A₁)
+        j L.mkQ T f
+        ((mapReindexEquiv
+          (quotientLineEquiv eD L L' (nestedQuotientLineMap_eq A₂ A₁ hA L))
+          (nestedCodomainEquiv B₁ B₂ hB)).symm N') := by
+          exact nestedIntrinsicReducedLineWitness_reindex
+            A₂ A₁ B₁ B₂ hA hB L
+            (↑((intrinsicLineScalarEquiv L hL).symm 1) : (Fin d → F) ⧸ A₁)
+            T f N'
+
+/-- For the manuscript's typed one-dimensional line, the intrinsic point is
+the canonical nonzero element of the line.  With that point, the typed
+two-step actual-difference witness is definitionally the finite-carrier
+conditional-translation witness above. -/
+theorem typedLineP_eq_intrinsic {n d j : Nat}
+    {A : Submodule F (Fin d → F)} (B : Submodule F (Fin n → F))
+    (L : Submodule F ((Fin d → F) ⧸ A)) (hL : Module.finrank F L = 1)
+    (f : (((Fin d → F) ⧸ A) →ₗ[F] B) → Complex)
+    (M : ((Fin d → F) ⧸ A) →ₗ[F] B) :
+    typedLineP B L hL j f M =
+      intrinsicLineP
+        (↑((lineScalarEquiv L hL).symm 1 : L) : (Fin d → F) ⧸ A) j f M := by
+  rfl
+
+/-- The actual reduced typed witness is exactly the intrinsic witness with
+the quotient map of the selected line.  This exposes the quotient square
+needed by `intrinsicReducedLineWitness_reindex`. -/
+theorem typedLineReducedWitness_eq_intrinsic {n d j : Nat}
+    {A : Submodule F (Fin d → F)} (B : Submodule F (Fin n → F))
+    (L : Submodule F ((Fin d → F) ⧸ A)) (hL : Module.finrank F L = 1)
+    (T : ((Fin d → F) ⧸ A) →ₗ[F] B)
+    (f : (((Fin d → F) ⧸ A) →ₗ[F] B) → Complex)
+    (N : (((Fin d → F) ⧸ A) ⧸ L) →ₗ[F] B) :
+    typedLineReducedWitness (k := j) B L hL T f N =
+      intrinsicReducedLineWitness
+        (↑((lineScalarEquiv L hL).symm 1 : L) : (Fin d → F) ⧸ A)
+        j L.mkQ T f N := by
+  simp [typedLineReducedWitness, intrinsicReducedLineWitness,
+    typedLineP_eq_intrinsic]
+
+end
+end PvNP.RealizableHardness.ActualTypedIntrinsicWitnessNaturality
