@@ -1,0 +1,66 @@
+# Local Codex Workflow Protocol
+
+## In-app decision default
+
+- Codex in this app does not use the Kuzuryu presence-approval gate for ordinary planning, proof-development, compiler, or GCP workflow decisions.
+- When a bounded decision is needed and the governing story, repository, safety boundary, and stop-loss are already defined, Codex chooses and records the best evidence-supported decision and continues.
+- Ask Dan directly only when a missing choice would materially change scope, authority, safety, claims, publication, spending, or another irreversible external action. Do not substitute a Kuzuryu request for that judgment.
+- Existing claim-expansion, publication, spending, destructive-action, and independent-review gates remain in force; this rule removes only the app-level presence-approval dependency.
+
+## Warning-baseline certification rule
+
+- For GCP Lean development evidence, the compiler gate requires every required source, Checks, and fresh-axiom stage to exit `0`, zero errors, zero unsolved goals, the required standard-axiom profiles, and zero new owned warning headers against a frozen pre-run baseline.
+- Inherited dependency warnings and pre-existing owned warning headers must be captured before the run with exact source/configuration hashes and compared for no regression. A matching frozen baseline does not block bounded mathematical acceptance or the milestone three-lens review.
+- Baseline warnings remain explicit S3137 certification-policy debt. They may not be silently suppressed, reclassified as clean, or converted into mathematical critical-path work. Full-manuscript certification must either discharge that debt or record an explicit final certification decision over the exact pinned baseline.
+- Preserve any executed legacy audit that required zero total warnings. Do not rewrite it after the run; report its red result alongside the newer compiler/no-regression decision.
+
+Scope: local Quantyra planning and implementation work with Codex.
+
+Last updated: 2026-10-03
+
+## Commit Cadence
+
+- At the end of each Codex work turn, inspect every repository touched during the turn with `git status --short`.
+- If there are changes from the current turn, commit them before the final response unless Dan explicitly requests otherwise.
+- Do not create an empty commit merely to satisfy cadence when there is nothing to commit; report the clean state instead.
+- Keep commits focused to the work performed in that turn.
+- Do not leave generated evidence, reports, or planning updates only in the working tree when the turn is complete.
+- When a repository already has unrelated local changes, stage and commit only the files changed for the current turn.
+- Push after committing when Dan requests a push, when the work is explicitly intended to be available on the remote, or when the repository has been operating under a commit-and-push handoff for the current task.
+
+## Verification Close-Out
+
+- Run the relevant verification commands for the files changed in the turn before committing when practical.
+- For Windows pytest temp-directory permission failures, rerun with `TMP` and `TEMP` pointed at a workspace-local temporary directory, then remove that directory after the run.
+- Report any skipped, interrupted, or impractical verification clearly in the final response.
+- For material formal research increments in satellite repos, also follow `docs/formal-three-lens-closeout-protocol.md` and `docs/protocol.md` § Formal research three-lens closeout: build/audit alone is not enough; proof-adversarial, complexity, and non-claims CLI-agent reviews must run at top level, and the closeout must include a three-lens table before the story is Closed.
+- Before launching satellite work on a **new force lane, redesign carrier, post-exhaustion continuation, classical-shaped residual discharge, or public naming of switching/AC0/Frege/PHP/P-vs-NP**, check `docs/literature-review-trigger-protocol.md`. If a trigger applies, file or refresh the lit-review note (or record a one-shot waiver) before implementation stories proceed.
+
+## Public Repo Boundary
+
+This is a local workflow rule. Do not encode it as public contributor policy in implementation repositories unless Dan explicitly asks for that repository's contributor rules to include it.
+
+## Formal proof development throughput - Chief Scientist direction 2026-10-01
+
+This development/acceptance distinction governs the active manuscript campaign and supersedes per-compile Root CLEAR/HOLD review loops. Execution remains in the mapped satellite; planning owns coordination only.
+
+- Luna authors own disjoint proof sources. GPT-6.1 Sol owns immutable capture, the sole compiler, diagnostic routing, selective Git and pushes. Continue edit -> capture -> compile -> diagnose -> repair until a coherent manuscript milestone is green. Syntax, namespace, instance, alias and tactic repairs need no Root CLEAR or approval for each development compile. The author provides exact stable bytes; Sol verifies source and dependency hashes and directly acknowledges immutable capture before the author edits a successor. Root reviews mathematical alignment, assumptions and claims boundaries, accepts after green, or resolves a genuine ambiguity.
+- **GCP-only Lean execution (Chief Scientist direction 2026-10-03):** do not run `lean.exe`, `lean`, `lake build`, `lake env lean`, or any command that transitively compiles Lean on the local workstation. Sol remains the sole compiler/Git writer, but every development and acceptance Lean invocation must execute on GCP. Local work may author and inspect source, compute hashes, prepare immutable captures, control the GCP run, and inspect preserved receipts. Record the cloud run identity, exact source/dependency hashes, terminal state, and retained logs for each authoritative compile. A local Lean result is non-authoritative and must be replaced by an exact GCP run before it can support any certification claim.
+- Milestones are original ambient fibre bijection/count, degree-D actual energy, full weighted W6, remaining HC46 and then outward support. Group internal helpers under those obligations; no conditional or easier replacement. Track obligations, assumptions, gaps and review debt rather than helper/build/commit counts.
+- Development compiles changed modules plus needed dependencies, preserves failed diagnostics and immutable inputs, and routes exact failures immediately. Milestone acceptance covers all relevant statements/hypotheses, dependency identities, source hashes, authoritative terminal and axiom profiles. Reuse unchanged declaration evidence only with tracked source and dependency identities. Preserve complete raw stdout/stderr, stage and terminal logs for every development attempt, including failures. Verify full relevant evidence at milestone/final gates; do not reread unchanged accumulated logs on every repair.
+- GPT-6.1 Sol retains the active handle through terminal, preservation and next action. An observation timeout is not failure; no duplicate compiler or restart. A handoff gives exact handle, immutable inputs, stage state and next action.
+- Commit and push material work every turn in coherent scoped batches. Preserve inherited dirt and unique evidence; no broad staging, reset or unique deletion. Archive cleanup requires verified preservation and explicit authorization. No empty commits.
+- Three required review lenses remain mandatory before route-final closeout. Final headless Claude Opus 5.5 through the Claude Code CLI and Gemini 3.1 Pro High through the AGY CLI remain required; retain exact model/commands, nonempty reports, scope and verdicts. No OpenCode for this campaign. The existing Grok restriction is unchanged. INCOMPLETE/NO-GO remains review debt and blocks route-final claims.
+
+
+## Critical argument first - Chief Scientist direction 2026-10-01
+
+Before translating a critical manuscript obligation, record its complete mathematical argument, exact assumptions, both directions when an equivalence is required, dependency identities and unresolved implications in the existing research planning surface. Every helper must name the exact step it advances. After three helper-only increments, assess whether the route still suffices for the original obligation; this is a route assessment, not a per-compile approval gate. Escalate mathematical gaps or changed assumptions promptly to Root; authors and GPT-6.1 Sol continue routine syntax/API/instance/tactic repairs without Root gates.
+
+Keep evidence levels distinct: argument reviewed (mathematical sufficiency assessed), translation underway (proof artifacts/diagnostics exist), and certified (exact statement and dependencies passed kernel/axiom verification). Neither a plausible roadmap nor coordinate infrastructure alone is certification. Keep the continuous immutable-capture/compiler/preservation loop and all existing milestone/final review gates.
+
+The three-helper threshold counts development increments, not compiler attempts. It is distinct from the existing literature-trigger rule for infrastructure formal closes; neither rule waives the other.
+
+### Lean capture encoding preflight (actual341 failure reconciliation)
+
+Within the existing author and Sol exact-byte capture acknowledgement, before launching a new Lean input Sol verifies valid UTF-8 and absence of a UTF-8 BOM, and the author confirms Lean mathematical glyph integrity (including absence of known mojibake). Preserve exact failed/offered bytes and complete diagnostics before repairing an encoding error. Encoding repairs stay in the routine author and Sol loop without Root approval; never modify or restart live immutable inputs. Use explicit UTF-8 without BOM for owned successor edits and compare normalized differences to retain mathematical edits. Do not blanket reencode inherited sources or broaden staging. Exact-byte custody and acceptance hash/dependency gates continue to apply.

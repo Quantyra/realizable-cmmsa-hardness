@@ -1,0 +1,534 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:79:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  traceCharacter ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z) ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB) (e.symm M))
+in the target expression
+  g (e.symm M) * ↑(traceCharacter ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z) M) =
+    g (e.symm.toEquiv M) * ↑(traceCharacter Z (e.symm.toEquiv M))
+
+n₁ d₁ n₂ d₂ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+A₂ : Submodule F (V d₂)
+B₂ : Submodule F (W n₂)
+eD : (V d₁ ⧸ A₁) ≃ₗ[F] V d₂ ⧸ A₂
+eB : ↥B₁ ≃ₗ[F] ↥B₂
+g : (V d₁ ⧸ A₁ →ₗ[F] ↥B₁) → ℂ
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+e : (V d₁ ⧸ A₁ →ₗ[F] ↥B₁) ≃ₗ[F] V d₂ ⧸ A₂ →ₗ[F] ↥B₂ := a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB
+M : V d₂ ⧸ A₂ →ₗ[F] ↥B₂
+hc :
+  traceCharacter ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z) ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB) (e.symm M)) =
+    traceCharacter Z (e.symm M)
+⊢ g (e.symm M) * ↑(traceCharacter ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z) M) =
+    g (e.symm.toEquiv M) * ↑(traceCharacter Z (e.symm.toEquiv M))
+
+Candidate context:
+77:     have hc := a8_energy_character_transport A₁ B₁ A₂ B₂ eD eB Z (e.symm M)
+78:     try simp only [LinearEquiv.apply_symm_apply] at hc
+79:     rw [hc]
+80:   convert congrArg₂ (fun (x : ℂ) (y : ℕ) => x / (y : ℂ)) hs (Fintype.card_congr e.symm.toEquiv) using 1 <;> congr 1
+81:   congr 1
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:81:2: No goals to be solved
+
+Candidate context:
+79:     rw [hc]
+80:   convert congrArg₂ (fun (x : ℂ) (y : ℕ) => x / (y : ℂ)) hs (Fintype.card_congr e.symm.toEquiv) using 1 <;> congr 1
+81:   congr 1
+82:   exact_mod_cast Fintype.card_congr e.symm.toEquiv
+83: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:168:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  typedW6Precedes A₂ B₂ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z)
+    ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) (e.symm Z'))
+in the target expression
+  (if typedW6Precedes A₂ B₂ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z) Z' then
+      complexCarrierFourierCoeff A₂ B₂ (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M)) Z' *
+        ↑(traceCharacter Z'
+            (((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).ker.subtype ∘ₗ
+              (a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z) N ∘ₗ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).range.mkQ))
+    else 0) =
+    if typedW6Precedes A₁ B₁ Z ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv Z') then
+      complexCarrierFourierCoeff A₁ B₁ g ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv Z') *
+        ↑(traceCharacter ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv Z')
+            (Z.ker.subtype ∘ₗ N ∘ₗ Z.range.mkQ))
+    else 0
+
+n₁ d₁ n₂ d₂ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+A₂ : Submodule F (V d₂)
+B₂ : Submodule F (W n₂)
+eD : (V d₁ ⧸ A₁) ≃ₗ[F] V d₂ ⧸ A₂
+eB : ↥B₁ ≃ₗ[F] ↥B₂
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+g : (V d₁ ⧸ A₁ →ₗ[F] ↥B₁) → ℂ
+N : (V d₁ ⧸ A₁) ⧸ Z.range →ₗ[F] ↥Z.ker
+Z' : ↥B₂ →ₗ[F] V d₂ ⧸ A₂
+e : (↥B₁ →ₗ[F] V d₁ ⧸ A₁) ≃ₗ[F] ↥B₂ →ₗ[F] V d₂ ⧸ A₂ := a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB
+hp :
+  typedW6Precedes A₂ B₂ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z)
+      ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) (e.symm Z')) ↔
+    typedW6Precedes A₁ B₁ Z (e.symm Z')
+⊢ (if typedW6Precedes A₂ B₂ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z) Z' then
+      complexCarrierFourierCoeff A₂ B₂ (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M)) Z' *
+        ↑(traceCharacter Z'
+            (((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).ker.subtype ∘ₗ
+              (a8EnergyOutputEquiv A₁ B₁ A₂ B₂ eD eB Z) N ∘ₗ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).range.mkQ))
+    else 0) =
+    if typedW6Precedes A₁ B₁ Z ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv Z') then
+      complexCarrierFourierCoeff A₁ B₁ g ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv Z') *
+        ↑(traceCharacter ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB).symm.toEquiv Z')
+            (Z.ker.subtype ∘ₗ N ∘ₗ Z.range.mkQ))
+    else 0
+
+Candidate context:
+166:   have hp := a8_energy_precedes_transport A₁ B₁ A₂ B₂ eD eB Z (e.symm Z')
+167:   try simp only [LinearEquiv.apply_symm_apply] at hp
+168:   rw [hp]
+169:   split_ifs with h
+170:   · have hf := a8_energy_fourier_transport A₁ B₁ A₂ B₂ eD eB g (e.symm Z')
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:191:4: Tactic `apply` failed: could not unify the conclusion of `Fintype.sum_equiv e.symm.toEquiv`
+  ∑
+      x ∈
+        @Finset.univ
+          ((V d₂ ⧸ A₂) ⧸ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).range →ₗ[F]
+            ↥((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).ker)
+          ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype,
+      ?f x =
+    ∑ x, ?g x
+with the goal
+  ∑
+      N ∈
+        @Finset.univ
+          ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.V✝ d₂ ⧸ A₂) ⧸
+              ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB)
+                  Z).range →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.F✝]
+            ↥((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).ker)
+          PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝,
+      Complex.normSq
+        (typedW6FourierDerivative A₂ B₂ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z)
+          (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M)) N) =
+    ∑ N, Complex.normSq (typedW6FourierDerivative A₁ B₁ Z g N)
+
+Note: The full type of `Fintype.sum_equiv e.symm.toEquiv` is
+  ∀
+    (f :
+      ((V d₂ ⧸ A₂) ⧸ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).range →ₗ[F]
+          ↥((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).ker) →
+        ?m.117)
+    (g : ((V d₁ ⧸ A₁) ⧸ Z.range →ₗ[F] ↥Z.ker) → ?m.117),
+    (∀
+        (x :
+          (V d₂ ⧸ A₂) ⧸ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).range →ₗ[F]
+            ↥((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).ker),
+        f x = g (e.symm.toEquiv x)) →
+      ∑ x, f x = ∑ x, g x
+
+case hx
+n₁ d₁ n₂ d₂ : ℕ
+A₁ : Submodule F (V d₁)
+B₁ : Submodule F (W n₁)
+A₂ : Submodule F (V d₂)
+B₂ : Submodule F (W n₂)
+eD : (V d₁ ⧸ A₁) ≃ₗ[F] V d₂ ⧸ A₂
+eB : ↥B₁ ≃ₗ[F] ↥B₂
+Z : ↥B₁ →ₗ[F] V d₁ ⧸ A₁
+g : (V d₁ ⧸ A₁ →ₗ[F] ↥B₁) → ℂ
+e : ((V d₁ ⧸ A₁) ⧸ Z.range →ₗ[F] ↥Z.ker) ≃ₗ[F]
+  (V d₂ ⧸ A₂) ⧸ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).range →ₗ[F]
+    ↥((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z).ker := ⋯
+⊢ ∑ N,
+      Complex.normSq
+        (typedW6FourierDerivative A₂ B₂ ((a8EnergyFrequencyEquiv A₁ B₁ A₂ B₂ eD eB) Z)
+          (fun M => g ((a8EnergyForwardEquiv A₁ B₁ A₂ B₂ eD eB).symm M)) N) =
+    ∑ N, Complex.normSq (typedW6FourierDerivative A₁ B₁ Z g N)
+
+Candidate context:
+189:   unfold typedW6OutputEnergy
+190:   apply congrArg₂ (fun (x : ℝ) (y : ℕ) => x / (y : ℝ))
+191:   · apply Fintype.sum_equiv e.symm.toEquiv
+192:     intro N
+193:     have h := a8_whole_typed_w6_derivative_naturality A₁ B₁ A₂ B₂ eD eB Z g (e.symm N)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:195:10: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype
+inferred
+  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝
+
+Candidate context:
+193:     have h := a8_whole_typed_w6_derivative_naturality A₁ B₁ A₂ B₂ eD eB Z g (e.symm N)
+194:     simpa [e] using congrArg Complex.normSq h
+195:   · exact Fintype.card_congr e.symm.toEquiv
+196: end Transport
+197: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:269:56: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+c : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)
+h : Submodule F (Fin (Module.finrank F ↥H) → F)
+N : (Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ c →ₗ[F] ↥h
+u : Fin d
+x✝ : Fin n
+⊢ ↑(((Submodule.equivMapOfInjective ↑(codomainBasis H).equivFun.symm ⋯ h).trans
+            (Submodule.equivMapOfInjective H.subtype ⋯ (Submodule.map (↑(codomainBasis H).equivFun.symm) h)))
+          (N
+            ((carrierCoordinateDomainQuotientEquiv C c).symm
+              (((Submodule.map (↑(domainBasis C).equivFun.symm) c).quotEquivOfEq
+                    (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) ⋯).symm
+                ((nestedDomainEquiv C (a8NestedAmbientDomain C c) ⋯).symm (Submodule.Quotient.mk (Pi.single u 1)))))))
+      x✝ =
+    ∑ x,
+      ↑(N
+              ((carrierCoordinateDomainQuotientEquiv C c).symm
+                (((Submodule.map (↑(domainBasis C).equivFun.symm) c).quotEquivOfEq
+                      (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) ⋯).symm
+                  ((nestedDomainEquiv C (a8NestedAmbientDomain C c) ⋯).symm (Submodule.Quotient.mk (Pi.single u 1))))))
+          x *
+        ↑((codomainBasis H) x) x✝
+
+Candidate context:
+267:           (by simpa using (a8_nested_domain_map C c).symm))
+268:         (LinearEquiv.ofEq _ _ (a8_nested_range_comap H h).symm))
+269:         (carrierCoordinateNestedHomEquiv C H c h N)) := by
+270:   ext u
+271:   simp [a8EnergyForwardEquiv, a8NestedDomainEquiv, a8NestedRangeEquiv,
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8EnergyNaturality.lean:301:2: Type mismatch: After simplification, term
+  hA1
+ has type
+  @Eq ℂ
+    (complexCarrierHybridFilter C H (Submodule.map (↑(domainBasis C).equivFun.symm) c)
+      (Submodule.map (↑(codomainBasis H).equivFun.symm) h)
+      (fun M => complexAmbientAffineRestrict C H T (complexAmbientHybridFilter C H f) M)
+      (carrierCoordinateBaseLift C H L +
+        (Submodule.comap H.subtype (a8NestedAmbientRange H h)).subtype ∘ₗ
+          ({
+                    toLinearMap :=
+                      (Submodule.map (↑(domainBasis C).equivFun.symm) c).mapQ
+                        (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) LinearMap.id ⋯,
+                    invFun :=
+                      ⇑((Submodule.map C.mkQ (a8NestedAmbientDomain C c)).mapQ
+                          (Submodule.map (↑(domainBasis C).equivFun.symm) c) LinearMap.id ⋯),
+                    left_inv := ⋯, right_inv := ⋯ }.arrowCongr
+                (LinearEquiv.ofEq (Submodule.map (↑(codomainBasis H).equivFun.symm) h)
+                  (Submodule.comap H.subtype (a8NestedAmbientRange H h)) ⋯))
+              ((carrierCoordinateNestedHomEquiv C H c h) N) ∘ₗ
+            (Submodule.map C.mkQ (a8NestedAmbientDomain C c)).mkQ))
+    (complexAmbientAffineRestrict (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+      (T + H.subtype ∘ₗ carrierCoordinateBaseLift C H L ∘ₗ C.mkQ)
+      (complexAmbientHybridFilter (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) f)
+      ((nestedCarrierEquiv C (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) H ⋯ ⋯)
+        (({
+                toLinearMap :=
+                  (Submodule.map (↑(domainBasis C).equivFun.symm) c).mapQ
+                    (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) LinearMap.id ⋯,
+                invFun :=
+                  ⇑((Submodule.map C.mkQ (a8NestedAmbientDomain C c)).mapQ
+                      (Submodule.map (↑(domainBasis C).equivFun.symm) c) LinearMap.id ⋯),
+                left_inv := ⋯, right_inv := ⋯ }.arrowCongr
+            (LinearEquiv.ofEq (Submodule.map (↑(codomainBasis H).equivFun.symm) h)
+              (Submodule.comap H.subtype (a8NestedAmbientRange H h)) ⋯))
+          ((carrierCoordinateNestedHomEquiv C H c h) N))))
+but is expected to have type
+  @Eq ℂ
+    (complexCarrierHybridFilter C H (Submodule.map (↑(domainBasis C).equivFun.symm) c)
+      (Submodule.map (↑(codomainBasis H).equivFun.symm) h) (filteredCarrierFunction C H T f)
+      (carrierCoordinateBaseLift C H L +
+        (Submodule.map (↑(codomainBasis H).equivFun.symm) h).subtype ∘ₗ
+          (carrierCoordinateNestedHomEquiv C H c h) N ∘ₗ (Submodule.map (↑(domainBasis C).equivFun.symm) c).mkQ))
+    (complexAmbientAffineRestrict (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h)
+      (T + H.subtype ∘ₗ carrierCoordinateBaseLift C H L ∘ₗ C.mkQ)
+      (complexAmbientHybridFilter (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) f)
+      ((nestedCarrierEquiv C (a8NestedAmbientDomain C c) (a8NestedAmbientRange H h) H ⋯ ⋯)
+        (({
+                toLinearMap :=
+                  (Submodule.map (↑(domainBasis C).equivFun.symm) c).mapQ
+                    (Submodule.map C.mkQ (a8NestedAmbientDomain C c)) LinearMap.id ⋯,
+                invFun :=
+                  ⇑((Submodule.map C.mkQ (a8NestedAmbientDomain C c)).mapQ
+                      (Submodule.map (↑(domainBasis C).equivFun.symm) c) LinearMap.id ⋯),
+                left_inv := ⋯, right_inv := ⋯ }.arrowCongr
+            (LinearEquiv.ofEq (Submodule.map (↑(codomainBasis H).equivFun.symm) h)
+              (Submodule.comap H.subtype (a8NestedAmbientRange H h)) ⋯))
+          ((carrierCoordinateNestedHomEquiv C H c h) N))))
+
+Candidate context:
+299:       (carrierCoordinateNestedHomEquiv C H c h N))
+300:   simp only [a8_nested_domain_map, a8_nested_range_comap] at hA1
+301:   simpa [filteredCarrierFunction, a8NestedAmbientShift,
+302:     a8_nested_domain_map, a8_nested_range_comap,
+303:     complexCarrierAffineRestrict, Submodule.Quotient.equiv, Submodule.mapQ_id, LinearEquiv.arrowCongr_apply, LinearMap.comp_assoc] using hA1
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:305:56: don't know how to synthesize placeholder for argument `h`
+context:
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : X.range ≤ A2
+p : a7T2ComplementPair X A2 B2
+C : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) := ⋯
+H : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n) := ⋯
+Z : ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ C := ⋯
+hCA : C ≤ A2 := ⋯
+eX : ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2) ≃ₗ[F] V d ⧸ A2 := ⋯
+eC : ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ C) ⧸
+    Submodule.map C.mkQ A2) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ A2 := ⋯
+hRange : (t2QuotientRestrict (↑p).1 (↑p).2 X).range = Submodule.map (↑p).1.mkQ A2 := ⋯
+eZ : ((V d ⧸ C) ⧸ Z.range) ≃ₗ[F] V d ⧸ A2 := ⋯
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+⊢ C ≤ A2.mkQ.ker
+
+Candidate context:
+303:     obtain ⟨v, rfl⟩ := C.mkQ_surjective w
+304:     change eX.symm (A2.mkQ v) = _
+305:     change eX.symm (A2.mkQ v) = eX.symm (C.liftQ A2.mkQ _ (C.mkQ v))
+306:     rw [Submodule.liftQ_apply]
+307:   exact hcomp
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:299:49: unsolved goals
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : X.range ≤ A2
+p : a7T2ComplementPair X A2 B2
+C : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) :=
+  (↑p).1
+H : Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝
+  (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n) :=
+  (↑p).2
+Z : ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer.V✝ d ⧸ C :=
+  t2QuotientRestrict C H X
+hCA : C ≤ A2 := le_trans le_sup_right (le_of_eq p.property.right.left)
+eX : ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2) ≃ₗ[F] V d ⧸ A2 := X.range.quotientQuotientEquivQuotient A2 hA
+eC : ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ C) ⧸
+    Submodule.map C.mkQ A2) ≃ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]
+  PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d ⧸ A2 :=
+  C.quotientQuotientEquivQuotient A2 hCA
+hRange : (t2QuotientRestrict (↑p).1 (↑p).2 X).range = Submodule.map (↑p).1.mkQ A2 := a8_t2_complement_range_eq X A2 B2 p
+eZ : ((V d ⧸ C) ⧸ Z.range) ≃ₗ[F] V d ⧸ A2 := Z.range.quotEquivOfEq (Submodule.map C.mkQ A2) hRange ≪≫ₗ eC
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d
+⊢ eX.symm (A2.mkQ v) = (a8T2ComplementDomainMap X A2 C H hA hCA) (Z.range.mkQ (C.mkQ v))
+
+Candidate context:
+297:     (Submodule.quotEquivOfEq (LinearMap.range Z) (A2.map C.mkQ) hRange).trans eC
+298:   let hcomp : (eZ.trans eX.symm).toLinearMap =
+299:       a8T2ComplementDomainMap X A2 C H hA hCA := by
+300:     apply LinearMap.ext
+301:     intro x
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:435:4: Tactic `apply` failed: could not unify the conclusion of `Fintype.sum_equiv e.symm`
+  ∑
+      x ∈
+        @Finset.univ
+          ((V d ⧸ (↑p).1) ⧸ (t2QuotientRestrict (↑p).1 (↑p).2 X).range →ₗ[F] ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker)
+          ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype,
+      ?f x =
+    ∑ x, ?g x
+with the goal
+  ∑
+      N ∈
+        @Finset.univ
+          ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.V✝ d ⧸ (↑p).1) ⧸
+              (t2QuotientRestrict (↑p).1 (↑p).2
+                  X).range →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.F✝]
+            ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker)
+          PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝,
+      Complex.normSq
+        (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+          (filteredCarrierFunction (↑p).1 (↑p).2 base g) N) =
+    ∑ N,
+      Complex.normSq
+        (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+          (filteredCarrierFunction (↑p).1 (↑p).2 base g) ((a8_t2_complement_hom_equiv X A2 B2 hA hB p) N))
+
+Note: The full type of `Fintype.sum_equiv e.symm` is
+  ∀
+    (f :
+      ((V d ⧸ (↑p).1) ⧸ (t2QuotientRestrict (↑p).1 (↑p).2 X).range →ₗ[F] ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker) →
+        ?m.553)
+    (g : ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2)) → ?m.553),
+    (∀
+        (x :
+          (V d ⧸ (↑p).1) ⧸ (t2QuotientRestrict (↑p).1 (↑p).2 X).range →ₗ[F] ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker),
+        f x = g (e.symm x)) →
+      ∑ x, f x = ∑ x, g x
+
+case hx
+n d : ℕ
+X : W n →ₗ[F] V d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : X.range ≤ A2
+hB : B2 ≤ X.ker
+p : a7T2ComplementPair X A2 B2
+base : V d →ₗ[F] W n
+g : BinaryMatrix n d → ℂ
+e : ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2)) ≃
+  ((V d ⧸ (↑p).1) ⧸ (t2QuotientRestrict (↑p).1 (↑p).2 X).range →ₗ[F] ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker) := ⋯
+hsum :
+  ∑ N,
+      Complex.normSq
+        (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+          (filteredCarrierFunction (↑p).1 (↑p).2 base g) (e N)) =
+    ∑ M,
+      Complex.normSq
+        (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+          (filteredCarrierFunction (↑p).1 (↑p).2 base g) M)
+hcard :
+  Fintype.card ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2)) =
+    Fintype.card
+      ((V d ⧸ (↑p).1) ⧸ (t2QuotientRestrict (↑p).1 (↑p).2 X).range →ₗ[F] ↥(t2QuotientRestrict (↑p).1 (↑p).2 X).ker)
+⊢ ∑ N,
+      Complex.normSq
+        (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+          (filteredCarrierFunction (↑p).1 (↑p).2 base g) N) =
+    ∑ N,
+      Complex.normSq
+        (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+          (filteredCarrierFunction (↑p).1 (↑p).2 base g) ((a8_t2_complement_hom_equiv X A2 B2 hA hB p) N))
+
+Candidate context:
+433:   unfold typedW6OutputEnergy
+434:   apply congrArg₂ (fun (x : ℝ) (y : ℕ) => x / (y : ℝ))
+435:   · apply Fintype.sum_equiv e.symm
+436:     intro N
+437:     simp [e]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:438:10: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  ActualBinaryMatrixHC46A9AmbientFiber.a9AmbientLinearMapFintype
+inferred
+  PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝
+
+Candidate context:
+436:     intro N
+437:     simp [e]
+438:   · exact Fintype.card_congr e.symm
+439: 
+440: /-- Whole-function reconstruction on the common nested carrier. Each selected
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:482:71: unexpected token 'set_option'; expected 'lemma'
+
+Candidate context:
+480: /-- Moving the common S0 map from the evaluation point into the affine base
+481: does not change the whole-function filter. The equality is proved by expanding
+482: both filters and identifying their affine phase arguments pointwise. -/
+483: set_option maxHeartbeats 1600000 in
+484: private theorem a8_common_S0_filter_shift {n d : Nat}
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:522:26: Tactic `assumption` failed
+
+n d : ℕ
+Xmat : BinaryMatrix n d
+A2 : Submodule F (V d)
+B2 : Submodule F (W n)
+hA : (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2
+hB : B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker
+base : V d →ₗ[F] W n
+g : BinaryMatrix n d → ℂ
+S0 : V d ⧸ (Matrix.toLin' (Matrix.transpose Xmat)).range →ₗ[F] ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker
+N :
+  (V d ⧸ (Matrix.toLin' (Matrix.transpose Xmat)).range) ⧸
+      Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ A2 →ₗ[F]
+    ↥(Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype B2)
+X : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose Xmat)
+R : Submodule (ZMod 2) (Fin d → ZMod 2) := X.range
+K : Submodule (ZMod 2) (Fin n → ZMod 2) := X.ker
+A12 : Submodule (ZMod 2) ((Fin d → ZMod 2) ⧸ R) := Submodule.map R.mkQ A2
+B12 : Submodule (ZMod 2) ↥K := Submodule.comap K.subtype B2
+Mleft : V d ⧸ (Matrix.toLin' (Matrix.transpose Xmat)).range →ₗ[F] ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker :=
+  S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ
+Mright : (Fin d → ZMod 2) ⧸ R →ₗ[ZMod 2] ↥K := B12.subtype ∘ₗ N ∘ₗ A12.mkQ
+b' : V d →ₗ[F] W n := base + K.subtype ∘ₗ S0 ∘ₗ R.mkQ
+hphase : base + K.subtype ∘ₗ Mleft ∘ₗ R.mkQ = b' + K.subtype ∘ₗ Mright ∘ₗ R.mkQ
+⊢ (∑ p,
+      ∑ Y,
+        if
+            t2RightSelected (Matrix.toLin' (Matrix.transpose Xmat)) (Matrix.toLin' (Matrix.transpose Y)) A2 B2 p.1
+              p.2 then
+          complexFourierCoeff g Y *
+            ↑(BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose Y))
+                (base +
+                  (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype ∘ₗ
+                    Mleft ∘ₗ (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ))
+        else 0) =
+    ∑ p,
+      ∑ Y,
+        if
+            t2RightSelected (Matrix.toLin' (Matrix.transpose Xmat)) (Matrix.toLin' (Matrix.transpose Y)) A2 B2 p.1
+              p.2 then
+          complexFourierCoeff g Y *
+            ↑(BinaryMatrixA1Phase.traceCharacter (Matrix.toLin' (Matrix.transpose Y))
+                (b' +
+                  (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype ∘ₗ
+                    Mright ∘ₗ (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ))
+        else 0
+
+Candidate context:
+520:   rw [a8_actual_T2_whole_function_expansion Xmat A2 B2 hA hB base g Mleft,
+521:     a8_actual_T2_whole_function_expansion Xmat A2 B2 hA hB b' g Mright]
+522:   all_goals first | rfl | simpa only [← hphase]
+523: 
+524: /-- Fixed-outer-base finite normalized-mean Cauchy bound. The first complex
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedTransport.lean:690:4: Type mismatch: After simplification, term
+  Eq.symm (a8_t2_complement_mean_transport X A2 B2 hA hB p b' g)
+ has type
+  @Eq ℝ
+    ((∑ N,
+        Complex.normSq
+          (typedW6FourierDerivative (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+            (filteredCarrierFunction (↑p).1 (↑p).2 b' g)
+            ({
+                toFun := fun N =>
+                  ↑(LinearEquiv.ofBijective (a8T2ComplementKernelMap X B2 (↑p).1 (↑p).2 ⋯ hB) ⋯) ∘ₗ
+                    N ∘ₗ
+                      ↑((((t2QuotientRestrict (↑p).1 (↑p).2 X).range.quotEquivOfEq (Submodule.map (↑p).1.mkQ A2)
+                                  ⋯).trans
+                              ((↑p).1.quotientQuotientEquivQuotient A2 ⋯)).trans
+                          (X.range.quotientQuotientEquivQuotient A2 hA).symm),
+                invFun := fun M =>
+                  ↑(LinearEquiv.ofBijective (a8T2ComplementKernelMap X B2 (↑p).1 (↑p).2 ⋯ hB) ⋯).symm ∘ₗ
+                    M ∘ₗ
+                      ↑((((t2QuotientRestrict (↑p).1 (↑p).2 X).range.quotEquivOfEq (Submodule.map (↑p).1.mkQ A2)
+                                    ⋯).trans
+                                ((↑p).1.quotientQuotientEquivQuotient A2 ⋯)).trans
+                            (X.range.quotientQuotientEquivQuotient A2 hA).symm).symm,
+                left_inv := ⋯, right_inv := ⋯ }
+              N))) /
+      ↑(Fintype.card ((V d ⧸ X.range) ⧸ Submodule.map X.range.mkQ A2 →ₗ[F] ↥(Submodule.comap X.ker.subtype B2))))
+    (typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+      (filteredCarrierFunction (↑p).1 (↑p).2 b' g))
+but is expected to have type
+  @Eq ℝ
+    ((∑ N,
+        Complex.normSq
+          (typedW6FourierDerivative (↑p).1 (↑p).2
+            (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose Xmat)))
+            (filteredCarrierFunction (↑p).1 (↑p).2 b' g)
+            (a8T2ComplementKernelMap (Matrix.toLin' (Matrix.transpose Xmat)) B2 (↑p).1 (↑p).2 ⋯ hB ∘ₗ
+              N ∘ₗ a8T2ComplementDomainMap (Matrix.toLin' (Matrix.transpose Xmat)) A2 (↑p).1 (↑p).2 hA ⋯))) /
+      ↑(Fintype.card ((V d ⧸ R) ⧸ A12 →ₗ[F] ↥B12)))
+    (typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X)
+      (filteredCarrierFunction (↑p).1 (↑p).2 b' g))
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedTransport
+
+
+Candidate context:
+688:           (filteredCarrierFunction p.1.1 p.1.2 b' g) := by
+689:     intro p
+690:     simpa only [fcomp, Ω, a8_t2_actual_complement_contribution, a8_t2_complement_hom_equiv, a8_t2_complement_kernel_equiv, a8_t2_complement_domain_equiv] using
+691:       (a8_t2_complement_mean_transport X A2 B2 hA hB p b' g).symm
+692:   calc
