@@ -1,0 +1,107 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean",
+    "line": 201,
+    "column": 26,
+    "message": "Application type mismatch: The argument",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:201:26: Application type mismatch: The argument\n  x\nhas type\n  Fin d\nbut is expected to have type\n  V d ⧸ C\nin the application\n  Submodule.mkQ_surjective C x",
+    "candidate_context": [
+      "199:       ⟨C, a8_nested_domain_contains C c, rfl⟩ := by",
+      "200:   ext x",
+      "201:   rcases C.mkQ_surjective x with ⟨v, rfl⟩",
+      "202:   change (Submodule.quotientQuotientEquivQuotient C",
+      "203:     (a8NestedAmbientDomain C c) (a8_nested_domain_contains C c))"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean",
+    "line": 220,
+    "column": 2,
+    "message": "Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:220:2: Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`\n  ?a1 = ?a2\nwith the goal\n  ↑((↑(codomainBasis H).equivFun.symm ∘ₗ h.subtype ∘ₗ ↑(a8NestedRangeEquiv H h).symm) b) x✝ =\n    ↑((a9AmbientBIncl (a8NestedAmbientRange H h) ⟨H, ⋯⟩) b) x✝\n\nNote: The full type of `@Subtype.ext` is\n  ∀ {α : Sort ?u.57} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2\n\nn : ℕ\nH : Submodule F (W n)\nh : Submodule F (Fin (Module.finrank F ↥H) → F)\nb : ↥(a8NestedAmbientRange H h)\nx✝ : Fin n\n⊢ ↑((↑(codomainBasis H).equivFun.symm ∘ₗ h.subtype ∘ₗ ↑(a8NestedRangeEquiv H h).symm) b) x✝ =\n    ↑((a9AmbientBIncl (a8NestedAmbientRange H h) ⟨H, ⋯⟩) b) x✝",
+    "candidate_context": [
+      "218:       ⟨H, a8_nested_range_contained H h, rfl⟩ := by",
+      "219:   ext b",
+      "220:   apply Subtype.ext",
+      "221:   change ((codomainBasis H).equivFun.symm",
+      "222:     (((a8NestedRangeEquiv H h).symm b) : Fin (Module.finrank F H) → F) : W n) ="
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean",
+    "line": 249,
+    "column": 2,
+    "message": "No goals to be solved",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:249:2: No goals to be solved",
+    "candidate_context": [
+      "247:   simp only [← LinearMap.comp_assoc]",
+      "248:   rw [hd]",
+      "249:   rfl",
+      "250: ",
+      "251: /-- Complement disjointness and cover alone preserve the parent rank."
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean",
+    "line": 432,
+    "column": 11,
+    "message": "Tactic `rewrite` failed: motive is not type correct:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:432:11: Tactic `rewrite` failed: motive is not type correct:\n  fun _a =>\n    (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv _a H) X))).range ⊓ c = ⊥ ↔\n      Submodule.comap _a.mkQ\n          (Submodule.map (↑(domainBasis _a).equivFun.symm)\n            ((Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv _a H) X))).range ⊓ c)) =\n        _a\nError: Application type mismatch: The argument\n  X\nhas type\n  ↥H →ₗ[F] V d ⧸ C\nbut is expected to have type\n  ↥H →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝]\n    PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ _a\nin the application\n  (carrierFrequencyEquiv _a H) X\n\nExplanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.\n\nPossible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).\n\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nc : Submodule F (Fin (Module.finrank F (V d ⧸ C)) → F)\nheq :\n  a8NestedAmbientDomain C c ⊓ Submodule.comap C.mkQ X.range =\n    Submodule.comap C.mkQ\n      (Submodule.map (↑(domainBasis C).equivFun.symm)\n        ((Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).range ⊓ c))\nhb : Submodule.comap C.mkQ ⊥ = C\n⊢ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).range ⊓ c = ⊥ ↔\n    Submodule.comap C.mkQ\n        (Submodule.map (↑(domainBasis C).equivFun.symm)\n          ((Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).range ⊓ c)) =\n      C",
+    "candidate_context": [
+      "430:     exact inf_comm _ _",
+      "431:   have hb : (⊥ : Submodule F (V d ⧸ C)).comap C.mkQ = C := by simp",
+      "432:   rw [heq, ← hb,",
+      "433:     (Submodule.comap_injective_of_surjective C.mkQ_surjective).eq_iff]",
+      "434:   simp"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean",
+    "line": 448,
+    "column": 4,
+    "message": "No goals to be solved",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:448:4: No goals to be solved",
+    "candidate_context": [
+      "446:         (codomainBasis H).equivFun.symm.toLinearMap).map H.subtype := by",
+      "447:     rw [Submodule.map_sup, a8_coordinate_parent_kernel, Submodule.map_sup]",
+      "448:     rfl",
+      "449:   have ht : (⊤ : Submodule F H).map H.subtype = H := by simp",
+      "450:   rw [heq, ← ht,"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean",
+    "line": 450,
+    "column": 11,
+    "message": "Tactic `rewrite` failed: motive is not type correct:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:450:11: Tactic `rewrite` failed: motive is not type correct:\n  fun _a =>\n    h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C _a) X))).ker = ⊤ ↔\n      Submodule.map _a.subtype\n          (Submodule.map (↑(codomainBasis _a).equivFun.symm)\n            (h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C _a) X))).ker)) =\n        _a\nError: Application type mismatch: The argument\n  h\nhas type\n  Submodule F (Fin (Module.finrank F ↥H) → F)\nbut is expected to have type\n  Submodule F (Fin (Module.finrank F ↥_a) → F)\nin the application\n  max h\n\nExplanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.\n\nPossible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).\n\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nh : Submodule F (Fin (Module.finrank F ↥H) → F)\nheq :\n  a8NestedAmbientRange H h ⊔ Submodule.map H.subtype X.ker =\n    Submodule.map H.subtype\n      (Submodule.map (↑(codomainBasis H).equivFun.symm)\n        (h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker))\nht : Submodule.map H.subtype ⊤ = H\n⊢ h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker = ⊤ ↔\n    Submodule.map H.subtype\n        (Submodule.map (↑(codomainBasis H).equivFun.symm)\n          (h ⊔ (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))).ker)) =\n      H",
+    "candidate_context": [
+      "448:     rfl",
+      "449:   have ht : (⊤ : Submodule F H).map H.subtype = H := by simp",
+      "450:   rw [heq, ← ht,",
+      "451:     (Submodule.map_injective_of_injective (Submodule.injective_subtype H)).eq_iff]",
+      "452:   simp"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean",
+    "line": 497,
+    "column": 65,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8PairAssembly.lean:497:65: unsolved goals\ncase refine_4\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nf : BinaryMatrix n d → ℂ\ne : a8T2AllPairs (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X))) ≃ a8AmbientFinalPairs C H X :=\n  a8AmbientFinalPairEquiv C H X\np : a8T2AllPairs (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X)))\nha✝ : p ∈ Finset.univ\nT : V d →ₗ[F] W n\n⊢ typedW6OutputEnergy (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2)\n        (a9AmbientFinalMap (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2) ⟨C, ⋯⟩ ⟨H, ⋯⟩ X)\n        (filteredCarrierFunction (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2) T f) ^\n      2 =\n    typedW6OutputEnergy (↑(↑(e p)).1) (↑(↑(e p)).2) (a9AmbientFinalMap ↑(↑(e p)).1 ↑(↑(e p)).2 ⟨C, ⋯⟩ ⟨H, ⋯⟩ X)\n        (filteredCarrierFunction (↑(↑(e p)).1) (↑(↑(e p)).2) T f) ^\n      2\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly\n",
+    "candidate_context": [
+      "495:           (a9AmbientFinalMap p.1.1.1 p.1.2.1",
+      "496:             ⟨C, p.1.1.2, rfl⟩ ⟨H, p.1.2.2, rfl⟩ X)",
+      "497:           (filteredCarrierFunction p.1.1.1 p.1.2.1 T f)) ^ 2) := by",
+      "498:   classical",
+      "499:   let e := a8AmbientFinalPairEquiv C H X"
+    ]
+  }
+]
