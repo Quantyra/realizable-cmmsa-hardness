@@ -14,6 +14,9 @@ until it cancels the `card ΩS` in the two-base denominator.
 namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
 
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7WeightedPredecessor
+open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
 open scoped BigOperators
 open PvNP.RealizableHardness.BinaryMatrixA1Complex
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer
@@ -24,10 +27,15 @@ open PvNP.RealizableHardness.BinaryMatrixComplexA14
 open PvNP.RealizableHardness.BinaryMatrixFourier
 
 set_option autoImplicit false
+set_option backward.isDefEq.respectTransparency false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
 private abbrev F := ZMod 2
 private abbrev V (d : Nat) := Fin d → F
 private abbrev W (n : Nat) := Fin n → F
 
+set_option maxHeartbeats 1600000 in
 /-- Two-base averaged transport for arbitrary complex `g`, using the actual
 normalized typed W6 output energy. The squared normalized N-energy is averaged
 over T and S0, with the square inside both means. The corrected graph count is
@@ -83,8 +91,8 @@ theorem a8_two_base_actual_averaged_transport {n d : Nat}
   let graph : Real := (2 : Real) ^
     (Xmat.rank * ((Module.finrank F A2 - Module.finrank F (LinearMap.range X)) +
       (Module.finrank F (LinearMap.ker X) - Module.finrank F B2)))
-  letI : Nonempty Ω := ⟨0⟩
-  letI : Nonempty ΩS := ⟨0⟩
+  let _ : Nonempty Ω := ⟨0⟩
+  let _ : Nonempty ΩS := ⟨0⟩
   have hpoint : ∀ T : ΩT, ∀ S0 : ΩS,
       ((∑ N : Ω, Complex.normSq
         (complexCarrierHybridFilter R K A12 B12
@@ -149,11 +157,15 @@ theorem a8_two_base_actual_averaged_transport {n d : Nat}
               exact hshift
           _ = (Fintype.card ΩS : Real) *
                 ∑ p : P, ∑ T : ΩT, (energy p T) ^ 2 := by
-              simp [Finset.sum_mul]
+              rw [← Finset.mul_sum]
   have hcard := a7_t2_complement_card_le Xmat A2 B2 hA hB
   have hcardR : (Fintype.card P : Real) ≤ graph := by
     dsimp [P, graph]
-    exact_mod_cast hcard
+    have hcardNat : Fintype.card P ≤ 2 ^ (Xmat.rank *
+        (Module.finrank F A2 - Module.finrank F (LinearMap.range X) +
+          (Module.finrank F (LinearMap.ker X) - Module.finrank F B2))) := by
+      convert hcard using 1 <;> congr 1
+    exact_mod_cast hcardNat
   have hnonneg : 0 ≤ ∑ p : P, ∑ T : ΩT, (energy p T) ^ 2 := by
     apply Finset.sum_nonneg
     intro p _
@@ -162,7 +174,7 @@ theorem a8_two_base_actual_averaged_transport {n d : Nat}
     exact sq_nonneg _
   have hcubic : cubic ≤ graph ^ 3 := by
     dsimp [cubic]
-    exact pow_le_pow_left₀ (by positivity) hcardR
+    exact pow_le_pow_left₀ (by positivity) hcardR 3
   have hscaled := mul_le_mul_of_nonneg_right hcubic hnonneg
   have hden : 0 < (Fintype.card ΩT : Real) * (Fintype.card ΩS : Real) := by
     positivity
@@ -217,13 +229,16 @@ theorem a8_actual_energy_zero_outside_supported_window {n d D : Nat}
     intro Z hYZ
     have hrank : Module.finrank F (LinearMap.range Y) ≤
         Module.finrank F (LinearMap.range Z) := by
-      unfold typedW6Precedes at hYZ
+      change Module.finrank F (LinearMap.range Y) +
+        Module.finrank F (LinearMap.range (Z - Y)) = Module.finrank F (LinearMap.range Z) at hYZ
       omega
     by_cases hc : c ≤ D
     · have hdrop :=
         PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.filteredCarrierFunction_support_drop
           A B T f hsupport (by simpa [c] using hc)
-      exact hdrop Z (by dsimp [c] at hc; omega)
+      have hdropZ := hdrop Z
+      change (D - c < Module.finrank F (LinearMap.range Z)) → _ at hdropZ
+      exact hdropZ (by dsimp [c] at hc; omega)
     · have hzero : filteredCarrierFunction A B T f = 0 := by
         funext M
         calc
@@ -261,4 +276,5 @@ theorem a8_actual_energy_zero_outside_supported_window {n d D : Nat}
   unfold typedW6OutputEnergy
   simp only [hderiv, Complex.normSq_zero, Finset.sum_const_zero, zero_div]
 
+end
 end PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly

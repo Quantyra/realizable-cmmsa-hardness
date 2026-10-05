@@ -1,0 +1,272 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 54,
+    "column": 11,
+    "message": "Unknown identifier `actualW6Derivative`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:54:11: Unknown identifier `actualW6Derivative`\n\nNote: It is not possible to treat `actualW6Derivative` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "52:       ((∑ N : Ω, Complex.normSq",
+      "53:         (complexCarrierHybridFilter R K A12 B12",
+      "54:           (actualW6Derivative Xmat T g)",
+      "55:           (S0 + B12.subtype.comp (N.comp A12.mkQ)))) /",
+      "56:         (Fintype.card Ω : Real)) ^ 2) /"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 65,
+    "column": 15,
+    "message": "Unknown identifier `filteredCarrierFunction`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:65:15: Unknown identifier `filteredCarrierFunction`\n\nNote: It is not possible to treat `filteredCarrierFunction` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "63:             (typedW6OutputEnergy p.1.1 p.1.2",
+      "64:               (t2QuotientRestrict p.1.1 p.1.2 X)",
+      "65:               (filteredCarrierFunction p.1.1 p.1.2 T g)) ^ 2) /",
+      "66:               (Fintype.card ΩT : Real) := by",
+      "67:   classical"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 81,
+    "column": 7,
+    "message": "Unknown identifier `filteredCarrierFunction`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:81:7: Unknown identifier `filteredCarrierFunction`",
+    "candidate_context": [
+      "79:   let energy : P → ΩT → Real := fun p T =>",
+      "80:     typedW6OutputEnergy p.1.1 p.1.2 (t2QuotientRestrict p.1.1 p.1.2 X)",
+      "81:       (filteredCarrierFunction p.1.1 p.1.2 T g)",
+      "82:   let cubic : Real := (Fintype.card P : Real) ^ 3",
+      "83:   let graph : Real := (2 : Real) ^"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 91,
+    "column": 11,
+    "message": "Unknown identifier `actualW6Derivative`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:91:11: Unknown identifier `actualW6Derivative`",
+    "candidate_context": [
+      "89:       ((∑ N : Ω, Complex.normSq",
+      "90:         (complexCarrierHybridFilter R K A12 B12",
+      "91:           (actualW6Derivative Xmat T g)",
+      "92:           (S0 + B12.subtype.comp (N.comp A12.mkQ)))) /",
+      "93:         (Fintype.card Ω : Real)) ^ 2 ≤"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 103,
+    "column": 13,
+    "message": "Unknown identifier `actualW6Derivative`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:103:13: Unknown identifier `actualW6Derivative`",
+    "candidate_context": [
+      "101:         ((∑ N : Ω, Complex.normSq",
+      "102:           (complexCarrierHybridFilter R K A12 B12",
+      "103:             (actualW6Derivative Xmat T g)",
+      "104:             (S0 + B12.subtype.comp (N.comp A12.mkQ)))) /",
+      "105:           (Fintype.card Ω : Real)) ^ 2) ≤"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 151,
+    "column": 55,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:151:55: unsolved goals\nn d : ℕ\nXmat : BinaryMatrix n d\nA2 : Submodule F (V d)\nB2 : Submodule F (W n)\nhA : (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2\nhB : B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker\ng : BinaryMatrix n d → ℂ\nX : (Fin n → ZMod 2) →ₗ[ZMod 2] Fin d → ZMod 2 := Matrix.toLin' (Matrix.transpose Xmat)\nR : Submodule (ZMod 2) (Fin d → ZMod 2) := X.range\nK : Submodule (ZMod 2) (Fin n → ZMod 2) := X.ker\nA12 : Submodule (ZMod 2) ((Fin d → ZMod 2) ⧸ R) := Submodule.map R.mkQ A2\nB12 : Submodule (ZMod 2) ↥K := Submodule.comap K.subtype B2\nΩT : Type := V d →ₗ[F] W n\nΩS : Type := V d ⧸ R →ₗ[F] ↥K\nΩ : Type := (V d ⧸ R) ⧸ A12 →ₗ[F] ↥B12\nP : Type := a7T2ComplementPair X A2 B2\nshift : ΩS → ΩT := fun S0 => K.subtype ∘ₗ S0 ∘ₗ R.mkQ\nenergy : P → ΩT → ℝ := fun p T => typedW6OutputEnergy (↑p).1 (↑p).2 (t2QuotientRestrict (↑p).1 (↑p).2 X) sorry\ncubic : ℝ := ↑(Fintype.card P) ^ 3\ngraph : ℝ :=\n  2 ^\n    (Matrix.rank Xmat *\n      (Module.finrank F ↥A2 - Module.finrank F ↥X.range + (Module.finrank F ↥X.ker - Module.finrank F ↥B2)))\nthis✝ : Nonempty Ω := Nonempty.intro 0\nthis : Nonempty ΩS := Nonempty.intro 0\nhpoint :\n  ∀ (T : ΩT) (S0 : ΩS),\n    ((∑ N, Complex.normSq (complexCarrierHybridFilter R K A12 B12 sorry (S0 + B12.subtype ∘ₗ N ∘ₗ A12.mkQ))) /\n          ↑(Fintype.card Ω)) ^\n        2 ≤\n      cubic * ∑ p, energy p (T + shift S0) ^ 2\n⊢ ∑ x, ↑(Fintype.card ΩS) * ∑ T, energy x T ^ 2 = ↑(Fintype.card ΩS) * ∑ p, ∑ T, energy p T ^ 2",
+    "candidate_context": [
+      "149:               exact hshift",
+      "150:           _ = (Fintype.card ΩS : Real) *",
+      "151:                 ∑ p : P, ∑ T : ΩT, (energy p T) ^ 2 := by",
+      "152:               simp [Finset.sum_mul]",
+      "153:   have hcard := a7_t2_complement_card_le Xmat A2 B2 hA hB"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 156,
+    "column": 4,
+    "message": "mod_cast has type",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:156:4: mod_cast has type\n  @Fintype.card (a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) A2 B2)\n      (@Subtype.fintype\n        (Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) ×\n          Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n))\n        (fun p =>\n          (Matrix.toLin' (Matrix.transpose Xmat)).range ⊓ p.1 = ⊥ ∧\n            (Matrix.toLin' (Matrix.transpose Xmat)).range ⊔ p.1 = A2 ∧\n              p.2 ⊓ (Matrix.toLin' (Matrix.transpose Xmat)).ker = B2 ∧\n                p.2 ⊔ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ⊤)\n        (fun a => instDecidableAnd)\n        (@instFintypeProd\n          (Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d))\n          (Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n))\n          (Fintype.ofFinite\n            (Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n              (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d)))\n          (Fintype.ofFinite\n            (Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n              (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n))))) ≤\n    2 ^\n      (Matrix.rank Xmat *\n        (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝ ↥A2 -\n            Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n              ↥(Matrix.toLin' (Matrix.transpose Xmat)).range +\n          (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n              ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker -\n            Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝ ↥B2)))\nbut is expected to have type\n  @Fintype.card (a7T2ComplementPair X A2 B2)\n      (@Subtype.fintype\n        (Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d) ×\n          Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n))\n        (fun p => X.range ⊓ p.1 = ⊥ ∧ X.range ⊔ p.1 = A2 ∧ p.2 ⊓ X.ker = B2 ∧ p.2 ⊔ X.ker = ⊤)\n        (fun a => instDecidableAnd)\n        (@instFintypeProd\n          (Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝ d))\n          (Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝\n            (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n))\n          SetLike.instFintype SetLike.instFintype)) ≤\n    2 ^\n      (Matrix.rank Xmat *\n        (Module.finrank F ↥A2 - Module.finrank F ↥X.range + (Module.finrank F ↥X.ker - Module.finrank F ↥B2)))",
+    "candidate_context": [
+      "154:   have hcardR : (Fintype.card P : Real) ≤ graph := by",
+      "155:     dsimp [P, graph]",
+      "156:     exact_mod_cast hcard",
+      "157:   have hnonneg : 0 ≤ ∑ p : P, ∑ T : ΩT, (energy p T) ^ 2 := by",
+      "158:     apply Finset.sum_nonneg"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 165,
+    "column": 4,
+    "message": "Type mismatch",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:165:4: Type mismatch\n  pow_le_pow_left₀ (Nat.cast_nonneg' (Fintype.card P)) hcardR\nhas type\n  ∀ (n_1 : ℕ), ↑(Fintype.card P) ^ n_1 ≤ graph ^ n_1\nbut is expected to have type\n  ↑(Fintype.card P) ^ 3 ≤ graph ^ 3",
+    "candidate_context": [
+      "163:   have hcubic : cubic ≤ graph ^ 3 := by",
+      "164:     dsimp [cubic]",
+      "165:     exact pow_le_pow_left₀ (by positivity) hcardR",
+      "166:   have hscaled := mul_le_mul_of_nonneg_right hcubic hnonneg",
+      "167:   have hden : 0 < (Fintype.card ΩT : Real) * (Fintype.card ΩS : Real) := by"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 173,
+    "column": 13,
+    "message": "Unknown identifier `actualW6Derivative`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:173:13: Unknown identifier `actualW6Derivative`",
+    "candidate_context": [
+      "171:         ((∑ N : Ω, Complex.normSq",
+      "172:           (complexCarrierHybridFilter R K A12 B12",
+      "173:             (actualW6Derivative Xmat T g)",
+      "174:             (S0 + B12.subtype.comp (N.comp A12.mkQ)))) /",
+      "175:           (Fintype.card Ω : Real)) ^ 2) /"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 191,
+    "column": 6,
+    "message": "Tactic `simp` failed with a nested error:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:191:6: Tactic `simp` failed with a nested error:\n(deterministic) timeout at `«Lean.Meta.acLt»`, maximum number of heartbeats (200000) has been reached\n\nNote: Use `set_option maxHeartbeats <num>` to set the limit.\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.",
+    "candidate_context": [
+      "189:           ((Fintype.card ΩT : Real) * (Fintype.card ΩS : Real)) := by",
+      "190:       apply div_le_div_of_nonneg_right _ (le_of_lt hden)",
+      "191:       simpa only [mul_assoc, mul_comm, mul_left_comm] using",
+      "192:         (mul_le_mul_of_nonneg_right hscaled",
+      "193:           (show 0 ≤ (Fintype.card ΩS : Real) by positivity))"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 31,
+    "column": 0,
+    "message": "(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:31:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached\n\nNote: Use `set_option maxHeartbeats <num>` to set the limit.\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.",
+    "candidate_context": [
+      "29: private abbrev W (n : Nat) := Fin n → F",
+      "30: ",
+      "31: /-- Two-base averaged transport for arbitrary complex `g`, using the actual",
+      "32: normalized typed W6 output energy. The squared normalized N-energy is averaged",
+      "33: over T and S0, with the square inside both means. The corrected graph count is"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 208,
+    "column": 16,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:208:16: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "206:     (Y : B →ₗ[F] (V d ⧸ A)) (T : V d →ₗ[F] W n)",
+      "207:     (f : BinaryMatrix n d → Complex)",
+      "208:     (hsupport : ComplexFourierSupportedThrough D f)",
+      "209:     (hout : D < Module.finrank F A + Module.finrank F (W n ⧸ B) +",
+      "210:       Module.finrank F (LinearMap.range Y)) :"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 211,
+    "column": 31,
+    "message": "Unknown identifier `filteredCarrierFunction`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:211:31: Unknown identifier `filteredCarrierFunction`\n\nNote: It is not possible to treat `filteredCarrierFunction` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "209:     (hout : D < Module.finrank F A + Module.finrank F (W n ⧸ B) +",
+      "210:       Module.finrank F (LinearMap.range Y)) :",
+      "211:     typedW6OutputEnergy A B Y (filteredCarrierFunction A B T f) = 0 := by",
+      "212:   classical",
+      "213:   let c := Module.finrank F A + Module.finrank F (W n ⧸ B)"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 216,
+    "column": 38,
+    "message": "Unknown identifier `filteredCarrierFunction`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:216:38: Unknown identifier `filteredCarrierFunction`",
+    "candidate_context": [
+      "214:   have hcoeff : ∀ Z : B →ₗ[F] (V d ⧸ A),",
+      "215:       typedW6Precedes A B Y Z →",
+      "216:       complexCarrierFourierCoeff A B (filteredCarrierFunction A B T f) Z = 0 := by",
+      "217:     intro Z hYZ",
+      "218:     have hrank : Module.finrank F (LinearMap.range Y) ≤"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 221,
+    "column": 6,
+    "message": "omega could not prove the goal:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:221:6: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  j ≥ 0\n  i ≥ 0\n  h ≥ 0\n  h + i ≥ 0\n  g ≥ 0\n  e ≥ 0\n  e - j ≥ 1\n  b ≥ 0\n  a ≥ 0\n  a + b + e - g ≥ 1\nwhere\n a := ↑(Module.finrank F ↥A)\n b := ↑(Module.finrank F (W n ⧸ B))\n e := ↑(Module.finrank F ↥Y.range)\n g := ↑D\n h := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.F✝ ↥Y.range)\n i := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.F✝ ↥(Z - Y).range)\n j := ↑(Module.finrank F ↥Z.range)",
+    "candidate_context": [
+      "219:         Module.finrank F (LinearMap.range Z) := by",
+      "220:       unfold typedW6Precedes at hYZ",
+      "221:       omega",
+      "222:     by_cases hc : c ≤ D",
+      "223:     · have hdrop :="
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 226,
+    "column": 41,
+    "message": "omega could not prove the goal:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:226:41: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  k ≥ 0\n  j ≥ 0\n  i ≥ 0\n  h ≥ 0\n  h - i ≥ 0\n  h ≥ 0\n  h + j + k ≥ 0\n  g ≥ 0\n  e ≥ 0\n  e - g ≤ 0\n  b ≥ 0\n  a ≥ 0\n  a + b - h - j - k ≤ 0\n  a + b + e - h - j - k ≥ 1\nwhere\n a := ↑(Module.finrank F ↥A)\n b := ↑(Module.finrank F (W n ⧸ B))\n e := ↑(Module.finrank F ↥Y.range)\n g := ↑(Module.finrank F ↥Z.range)\n h := ↑(D -\n    (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝ ↥A +\n      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝\n        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n ⧸ B)))\n i := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥Z.range)\n j := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝ ↥A)\n k := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.F✝\n    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.W✝ n ⧸ B))",
+    "candidate_context": [
+      "224:         PvNP.RealizableHardness.ActualBinaryMatrixHC46A18DerivativeRankProjection.filteredCarrierFunction_support_drop",
+      "225:           A B T f hsupport (by simpa [c] using hc)",
+      "226:       exact hdrop Z (by dsimp [c] at hc; omega)",
+      "227:     · have hzero : filteredCarrierFunction A B T f = 0 := by",
+      "228:         funext M"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 227,
+    "column": 19,
+    "message": "Unknown identifier `filteredCarrierFunction`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:227:19: Unknown identifier `filteredCarrierFunction`",
+    "candidate_context": [
+      "225:           A B T f hsupport (by simpa [c] using hc)",
+      "226:       exact hdrop Z (by dsimp [c] at hc; omega)",
+      "227:     · have hzero : filteredCarrierFunction A B T f = 0 := by",
+      "228:         funext M",
+      "229:         calc"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean",
+    "line": 253,
+    "column": 7,
+    "message": "Unknown identifier `filteredCarrierFunction`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AveragedAssembly.lean:253:7: Unknown identifier `filteredCarrierFunction`\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly\n",
+    "candidate_context": [
+      "251:       simp [complexCarrierFourierCoeff]",
+      "252:   have hderiv : ∀ N, typedW6FourierDerivative A B Y",
+      "253:       (filteredCarrierFunction A B T f) N = 0 := by",
+      "254:     intro N",
+      "255:     unfold typedW6FourierDerivative"
+    ]
+  }
+]
