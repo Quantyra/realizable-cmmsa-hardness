@@ -1,0 +1,100 @@
+{
+  "run": "cmmsa_a8_output_20261005T003023Z_e19fb2f2",
+  "capture": "capture-candidate2",
+  "audited_utc": "2026-10-05T00:58:12+00:00",
+  "green": false,
+  "certified": false,
+  "local_compilation": false,
+  "failures": [
+    "Warnings/errors/unsolved goals are not all zero"
+  ],
+  "stage_results": [
+    {
+      "index": 0,
+      "name": "dependency-closure",
+      "native_exit": 0,
+      "warnings": 1104,
+      "errors": 0,
+      "unsolved_goals": 0
+    },
+    {
+      "index": 1,
+      "name": "a8-output-source",
+      "native_exit": 0,
+      "warnings": 1104,
+      "errors": 0,
+      "unsolved_goals": 0
+    },
+    {
+      "index": 2,
+      "name": "a8-output-checks",
+      "native_exit": 0,
+      "warnings": 1104,
+      "errors": 0,
+      "unsolved_goals": 0
+    },
+    {
+      "index": 3,
+      "name": "fresh-axiom-output",
+      "native_exit": 0,
+      "warnings": 1,
+      "errors": 0,
+      "unsolved_goals": 0
+    }
+  ],
+  "claims_boundary": "Exact Luna domain quotient square, development candidate 2; unaccepted pending green GCP evidence and three-lens closeout. Accepted helper count 1; compiler/import repairs zero credit; threshold not crossed. S3132 partial / analytic A8 open; S3137 incomplete.",
+  "review_debt": {
+    "proof_adversarial": "INCOMPLETE",
+    "complexity": "INCOMPLETE",
+    "non_claims": "INCOMPLETE",
+    "note": "Development compiler evidence only; route-final acceptance remains open"
+  },
+  "vm_terminal_state": "TERMINATED",
+  "compiled_project_modules": 201,
+  "package_source_count": 11574,
+  "core_source_count": 2520,
+  "lean_identity": "Lean (version 4.34.0-rc2, x86_64-unknown-linux-gnu, commit 6a10ac8c22beadecabdbb0919c2b50214762f91d, Release)",
+  "compiler_sha256": "E8BAAA71855A616DC351028F3AD2200051B0671F423A1696A100E809302D5550",
+  "diagnostics": {
+    "warnings": 3313,
+    "errors": 0,
+    "unsolved_goals": 0
+  },
+  "axiom_profiles": {
+    "PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport.a8_carrier_coordinate_nested_filter": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport.a8_carrier_coordinate_nested_mean": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport.a8_output_coordinate_eq": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport.a8_output_pair_component_nested_mean": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport.a8_w6_domain_quotient_square": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "source_sha256": "27060E3D3E4E9AF55622C13318C366DEE7CCCEBE804653F59954624B006266A1",
+  "checks_sha256": "A1610A8E4190836643646E33C0152B578D7821DF3EC17F947B153514EDA48E42",
+  "archive_sha256": "2E57CFA1DE2C187032AFDA0FCF5631790DC6BC0BCAA1D355BF02BFF23AE78338",
+  "custody_recovery": {
+    "original_terminal_sha256": "B6D3D778814F19D6D2CC111FB7AE90EFA17B216CC2F4F659A515EFEE42451E94",
+    "original_runner_failure": "\nEvidence preservation:\nTraceback (most recent call last):\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1005\\runner.py\", line 211, in execute\n    control.cloud([\"compute\", \"scp\", VM + \":\" + remote_path, str(local_archive),\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                   \"--tunnel-through-iap\"], timeout=300)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1005\\runner.py\", line 110, in cloud\n    raise RuntimeError(\"GCP command failed; raw control receipt \" + prefix)\nRuntimeError: GCP command failed; raw control receipt control/005\n",
+    "original_runner_legacy_audit_sha256": "C002A25A64117EDA129536B0AD3CB81024E7C3E342DD98ED5413B3C96F34ECC7",
+    "custody_receipt_sha256": "DD0AFABC9BF48B142A6A6CF584F9A59805DB17D7B576F7D6249CADFE9BE300F4",
+    "note": "Companion summary resolves transport custody only. Original runner failure and raw diagnostics retained. Compiler/source/Checks/axiom stages were not rerun."
+  }
+}
