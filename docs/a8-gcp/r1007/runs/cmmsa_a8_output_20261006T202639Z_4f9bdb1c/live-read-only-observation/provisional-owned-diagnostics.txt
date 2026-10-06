@@ -1,0 +1,409 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:844:58: unexpected token '/--'; expected ':='
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:844:36: Unknown identifier `hc'.symm.trans_le`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:840:2: 'calc' expression has type
+  (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+of sort `Prop` but is expected to have type
+  Sort ?u.803
+of sort `Type ?u.803`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:721:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+C A : Submodule F (V d)
+B : Submodule F (W n)
+hC : Module.finrank F ↥C = 1
+hCA : C ≤ A
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+L : Submodule F (V d ⧸ Z) := Submodule.map Z.mkQ C
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hquotU : Module.finrank F (W n ⧸ U) = 0
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hL : Module.finrank F ↥L = 1
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+eD : (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸
+    C) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝]
+  (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C :=
+  (nestedDomainEquiv Z C ⋯).symm
+P : Submodule PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝
+  ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C) :=
+  Submodule.map (↑eD) (Submodule.map C.mkQ A)
+Q : Submodule F ↥U := Submodule.comap U.subtype B
+hP : Submodule.map (↑eD.symm) P = Submodule.map C.mkQ A
+hPdim : Module.finrank F ↥P = Module.finrank F ↥(Submodule.map C.mkQ A)
+hArec : Submodule.comap C.mkQ (Submodule.map C.mkQ A) = A
+hBrec : Submodule.map U.subtype Q = B
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ U) = 1
+hadd :
+  Module.finrank F ↥A + Module.finrank F (W n ⧸ B) =
+    1 + (Module.finrank F ↥(Submodule.map C.mkQ A) + Module.finrank F (↥U ⧸ Q))
+hinner : Module.finrank F ↥P + Module.finrank F (↥U ⧸ Q) ≤ j - 1
+g1 : ((V d ⧸ Z) ⧸ L →ₗ[F] ↥U) → ℂ :=
+  fun N => typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)
+hb :
+  (a22IntrinsicEnergy P Q 0 fun N =>
+      typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+he :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) (Submodule.map (↑(LinearEquiv.refl F ↥U).symm) Q)
+      ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)) 0) fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) =
+    a22IntrinsicEnergy P Q 0 g1
+hsource : typedComplexRankProjection Z U j f0 = fun M => filteredCarrierFunction Z U 0 (complexRankProjection j f) M
+hbase : U.subtype ∘ₗ S ∘ₗ Z.mkQ = T
+hmap : mapReindexEquiv eD (LinearEquiv.refl F ↥U) = lineCanonicalEquiv Z C U ⋯
+hfun :
+  (fun M => g1 ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)).symm M)) = fun M =>
+    filteredCarrierFunction C U T (complexRankProjection j f) M
+hb' :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+hc :
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) 0
+          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) fun M =>
+            filteredCarrierFunction C U T (complexRankProjection j f) M)
+          N)) =
+    carrierMean A B fun M =>
+      Complex.normSq (filteredCarrierFunction A B (T + U.subtype ∘ₗ 0 ∘ₗ C.mkQ) (complexRankProjection j f) M)
+hc' :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) =
+    a18UniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) Q 0
+          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) Q fun M =>
+            filteredCarrierFunction C U T (complexRankProjection j f) M)
+          N)
+⊢ (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:990:58: unexpected token '/--'; expected ':='
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:844:36: Unknown identifier `hc'.symm.trans_le`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:840:2: 'calc' expression has type
+  (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+of sort `Prop` but is expected to have type
+  Sort ?u.803
+of sort `Type ?u.803`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:721:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+C A : Submodule F (V d)
+B : Submodule F (W n)
+hC : Module.finrank F ↥C = 1
+hCA : C ≤ A
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+L : Submodule F (V d ⧸ Z) := Submodule.map Z.mkQ C
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hquotU : Module.finrank F (W n ⧸ U) = 0
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hL : Module.finrank F ↥L = 1
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+eD : (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸
+    C) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝]
+  (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C :=
+  (nestedDomainEquiv Z C ⋯).symm
+P : Submodule PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝
+  ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C) :=
+  Submodule.map (↑eD) (Submodule.map C.mkQ A)
+Q : Submodule F ↥U := Submodule.comap U.subtype B
+hP : Submodule.map (↑eD.symm) P = Submodule.map C.mkQ A
+hPdim : Module.finrank F ↥P = Module.finrank F ↥(Submodule.map C.mkQ A)
+hArec : Submodule.comap C.mkQ (Submodule.map C.mkQ A) = A
+hBrec : Submodule.map U.subtype Q = B
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ U) = 1
+hadd :
+  Module.finrank F ↥A + Module.finrank F (W n ⧸ B) =
+    1 + (Module.finrank F ↥(Submodule.map C.mkQ A) + Module.finrank F (↥U ⧸ Q))
+hinner : Module.finrank F ↥P + Module.finrank F (↥U ⧸ Q) ≤ j - 1
+g1 : ((V d ⧸ Z) ⧸ L →ₗ[F] ↥U) → ℂ :=
+  fun N => typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)
+hb :
+  (a22IntrinsicEnergy P Q 0 fun N =>
+      typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+he :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) (Submodule.map (↑(LinearEquiv.refl F ↥U).symm) Q)
+      ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)) 0) fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) =
+    a22IntrinsicEnergy P Q 0 g1
+hsource : typedComplexRankProjection Z U j f0 = fun M => filteredCarrierFunction Z U 0 (complexRankProjection j f) M
+hbase : U.subtype ∘ₗ S ∘ₗ Z.mkQ = T
+hmap : mapReindexEquiv eD (LinearEquiv.refl F ↥U) = lineCanonicalEquiv Z C U ⋯
+hfun :
+  (fun M => g1 ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)).symm M)) = fun M =>
+    filteredCarrierFunction C U T (complexRankProjection j f) M
+hb' :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+hc :
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) 0
+          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) fun M =>
+            filteredCarrierFunction C U T (complexRankProjection j f) M)
+          N)) =
+    carrierMean A B fun M =>
+      Complex.normSq (filteredCarrierFunction A B (T + U.subtype ∘ₗ 0 ∘ₗ C.mkQ) (complexRankProjection j f) M)
+hc' :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) =
+    a18UniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) Q 0
+          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) Q fun M =>
+            filteredCarrierFunction C U T (complexRankProjection j f) M)
+          N)
+⊢ (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:990:58: unexpected token '/--'; expected ':='
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:840:2: 'calc' expression has type
+  (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+of sort `Prop` but is expected to have type
+  Sort ?u.803
+of sort `Type ?u.803`
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:721:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+C A : Submodule F (V d)
+B : Submodule F (W n)
+hC : Module.finrank F ↥C = 1
+hCA : C ≤ A
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+L : Submodule F (V d ⧸ Z) := Submodule.map Z.mkQ C
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hquotU : Module.finrank F (W n ⧸ U) = 0
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hL : Module.finrank F ↥L = 1
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+eD : (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸
+    C) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝]
+  (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C :=
+  (nestedDomainEquiv Z C ⋯).symm
+P : Submodule PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝
+  ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C) :=
+  Submodule.map (↑eD) (Submodule.map C.mkQ A)
+Q : Submodule F ↥U := Submodule.comap U.subtype B
+hP : Submodule.map (↑eD.symm) P = Submodule.map C.mkQ A
+hPdim : Module.finrank F ↥P = Module.finrank F ↥(Submodule.map C.mkQ A)
+hArec : Submodule.comap C.mkQ (Submodule.map C.mkQ A) = A
+hBrec : Submodule.map U.subtype Q = B
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ U) = 1
+hadd :
+  Module.finrank F ↥A + Module.finrank F (W n ⧸ B) =
+    1 + (Module.finrank F ↥(Submodule.map C.mkQ A) + Module.finrank F (↥U ⧸ Q))
+hinner : Module.finrank F ↥P + Module.finrank F (↥U ⧸ Q) ≤ j - 1
+g1 : ((V d ⧸ Z) ⧸ L →ₗ[F] ↥U) → ℂ :=
+  fun N => typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)
+hb :
+  (a22IntrinsicEnergy P Q 0 fun N =>
+      typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+he :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) (Submodule.map (↑(LinearEquiv.refl F ↥U).symm) Q)
+      ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)) 0) fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) =
+    a22IntrinsicEnergy P Q 0 g1
+hsource : typedComplexRankProjection Z U j f0 = fun M => filteredCarrierFunction Z U 0 (complexRankProjection j f) M
+hbase : U.subtype ∘ₗ S ∘ₗ Z.mkQ = T
+hmap : mapReindexEquiv eD (LinearEquiv.refl F ↥U) = lineCanonicalEquiv Z C U ⋯
+hfun :
+  (fun M => g1 ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)).symm M)) = fun M =>
+    filteredCarrierFunction C U T (complexRankProjection j f) M
+hb' :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+hc :
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) 0
+          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) fun M =>
+            filteredCarrierFunction C U T (complexRankProjection j f) M)
+          N)) =
+    carrierMean A B fun M =>
+      Complex.normSq (filteredCarrierFunction A B (T + U.subtype ∘ₗ 0 ∘ₗ C.mkQ) (complexRankProjection j f) M)
+hc' :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) =
+    a18UniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) Q 0
+          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) Q fun M =>
+            filteredCarrierFunction C U T (complexRankProjection j f) M)
+          N)
+⊢ (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:990:58: unexpected token '/--'; expected ':='
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:721:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+C A : Submodule F (V d)
+B : Submodule F (W n)
+hC : Module.finrank F ↥C = 1
+hCA : C ≤ A
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+L : Submodule F (V d ⧸ Z) := Submodule.map Z.mkQ C
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hquotU : Module.finrank F (W n ⧸ U) = 0
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hL : Module.finrank F ↥L = 1
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+eD : (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸
+    C) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝]
+  (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C :=
+  (nestedDomainEquiv Z C ⋯).symm
+P : Submodule PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝
+  ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C) :=
+  Submodule.map (↑eD) (Submodule.map C.mkQ A)
+Q : Submodule F ↥U := Submodule.comap U.subtype B
+hP : Submodule.map (↑eD.symm) P = Submodule.map C.mkQ A
+hPdim : Module.finrank F ↥P = Module.finrank F ↥(Submodule.map C.mkQ A)
+hArec : Submodule.comap C.mkQ (Submodule.map C.mkQ A) = A
+hBrec : Submodule.map U.subtype Q = B
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ U) = 1
+hadd :
+  Module.finrank F ↥A + Module.finrank F (W n ⧸ B) =
+    1 + (Module.finrank F ↥(Submodule.map C.mkQ A) + Module.finrank F (↥U ⧸ Q))
+hinner : Module.finrank F ↥P + Module.finrank F (↥U ⧸ Q) ≤ j - 1
+g1 : ((V d ⧸ Z) ⧸ L →ₗ[F] ↥U) → ℂ :=
+  fun N => typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)
+hb :
+  (a22IntrinsicEnergy P Q 0 fun N =>
+      typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+he :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) (Submodule.map (↑(LinearEquiv.refl F ↥U).symm) Q)
+      ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)) 0) fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) =
+    a22IntrinsicEnergy P Q 0 g1
+hsource : typedComplexRankProjection Z U j f0 = fun M => filteredCarrierFunction Z U 0 (complexRankProjection j f) M
+hbase : U.subtype ∘ₗ S ∘ₗ Z.mkQ = T
+hmap : mapReindexEquiv eD (LinearEquiv.refl F ↥U) = lineCanonicalEquiv Z C U ⋯
+hfun :
+  (fun M => g1 ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)).symm M)) = fun M =>
+    filteredCarrierFunction C U T (complexRankProjection j f) M
+hb' :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+hc :
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) 0
+          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) fun M =>
+            filteredCarrierFunction C U T (complexRankProjection j f) M)
+          N)) =
+    carrierMean A B fun M =>
+      Complex.normSq (filteredCarrierFunction A B (T + U.subtype ∘ₗ 0 ∘ₗ C.mkQ) (complexRankProjection j f) M)
+hc' :
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) =
+    a18UniformMean fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) Q 0
+          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) Q fun M =>
+            filteredCarrierFunction C U T (complexRankProjection j f) M)
+          N)
+⊢ (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:990:58: unexpected token '/--'; expected ':='
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:990:58: unexpected token '/--'; expected ':='
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+
