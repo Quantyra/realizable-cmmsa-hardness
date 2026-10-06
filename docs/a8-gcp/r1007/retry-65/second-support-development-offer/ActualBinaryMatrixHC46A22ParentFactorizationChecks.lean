@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+#check a22_A1_composition_energy_eq
+#print axioms a22_A1_composition_energy_eq
+#check a22_exists_order_one_parent
+#print axioms a22_exists_order_one_parent
