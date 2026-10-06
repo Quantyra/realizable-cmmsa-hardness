@@ -1,0 +1,198 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:51:4: Type mismatch: After simplification, term
+  hx
+ has type
+  @Membership.mem Z (Submodule F Z) SetLike.instMembership (↑p).1 (Y.range.subtype (Y.rangeRestrict u))
+but is expected to have type
+  @Membership.mem Z (Submodule PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.F✝ Z) SetLike.instMembership (↑p).1
+    (Y u)
+
+Candidate context:
+49:     refine ⟨u, ?_, hu⟩
+50:     apply p.2.2
+51:     simpa only [Submodule.mem_comap, ← hu] using hx⟩
+52: 
+53: def a12FlagToSelected (p : a12RangeFlags Y) : a12SelectedPairs Y :=
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:71:57: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑p).1 ⊓ Y.range
+in the target expression
+  Y.range ⊓ (↑p).1 = (↑p).1
+
+case fst
+U : Type u_1
+Z : Type u_2
+inst✝³ : AddCommGroup U
+inst✝² : Module F U
+inst✝¹ : AddCommGroup Z
+inst✝ : Module F Z
+Y : U →ₗ[F] Z
+p : a12SelectedPairs Y
+⊢ Y.range ⊓ (↑p).1 = (↑p).1
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    p
+  has type
+    a12SelectedPairs Y
+  but is expected to have type
+    { p // Selected p.1 p.2 Y }
+  in the application
+    ↑p
+
+Candidate context:
+69:   · change (p.1.1.comap (LinearMap.range Y).subtype).map
+70:       (LinearMap.range Y).subtype = p.1.1
+71:     rw [Submodule.map_comap_eq, Submodule.range_subtype, inf_eq_left.mpr p.2.1]
+72:   · change (p.1.2.map Y.rangeRestrict).comap Y.rangeRestrict = p.1.2
+73:     apply Submodule.comap_map_eq_self
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:115:4: failed to synthesize instance of type class
+  Fintype (a12SelectedPairs (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+113: 
+114: theorem a12_selected_card_le {n d : Nat} (Y : BinaryMatrix n d) :
+115:     Fintype.card (a12SelectedPairs Y.transpose.toLin') ≤ 2 ^ (2 * Y.rank ^ 2) := by
+116:   classical
+117:   let R := LinearMap.range Y.transpose.toLin'
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:121:4: failed to synthesize instance of type class
+  Fintype (a12SelectedPairs (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+119:   have hsub := a12_submodule_card_le_end (E := R)
+120:   calc
+121:     Fintype.card (a12SelectedPairs Y.transpose.toLin') =
+122:         Fintype.card (a12RangeFlags Y.transpose.toLin') :=
+123:       Fintype.card_congr (a12SelectedFlagEquiv Y.transpose.toLin')
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:122:8: failed to synthesize instance of type class
+  Fintype (a12RangeFlags (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+120:   calc
+121:     Fintype.card (a12SelectedPairs Y.transpose.toLin') =
+122:         Fintype.card (a12RangeFlags Y.transpose.toLin') :=
+123:       Fintype.card_congr (a12SelectedFlagEquiv Y.transpose.toLin')
+124:     _ ≤ Fintype.card (Submodule F R × Submodule F R) :=
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:123:6: failed to synthesize instance of type class
+  Fintype (a12SelectedPairs (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+121:     Fintype.card (a12SelectedPairs Y.transpose.toLin') =
+122:         Fintype.card (a12RangeFlags Y.transpose.toLin') :=
+123:       Fintype.card_congr (a12SelectedFlagEquiv Y.transpose.toLin')
+124:     _ ≤ Fintype.card (Submodule F R × Submodule F R) :=
+125:       Fintype.card_le_of_injective Subtype.val Subtype.val_injective
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:175:4: Type mismatch: After simplification, term
+  mul_le_mul_of_nonneg_right he (a12_energy_nonneg A B f T)
+ has type
+  @LE.le ℝ Real.instPreorder.toLE
+    ((carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T f M)) * a12Energy A B f T)
+    (eta * a12Energy A B f T)
+but is expected to have type
+  @LE.le ℝ Real.instLE (a12Energy A B f T * a12Energy A B f T) (eta * a12Energy A B f T)
+
+Candidate context:
+173:   by_cases hc : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ D
+174:   · have he := hinfl A B T hc
+175:     simpa only [pow_two] using mul_le_mul_of_nonneg_right he (a12_energy_nonneg A B f T)
+176:   · rw [a12_energy_zero_above_support A B f hsupport (Nat.lt_of_not_ge hc) T]
+177:     simp
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:184:30: failed to synthesize instance of type class
+  Decidable (Selected A B (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+182:     (B : Submodule F (W n)) (f : BinaryMatrix n d → Complex) :
+183:     typedUniformMean (a12Energy A B f) =
+184:       ∑ Y : BinaryMatrix n d, if Selected A B Y.transpose.toLin'
+185:         then Complex.normSq (complexFourierCoeff f Y) else 0 := by
+186:   classical
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:203:9: failed to synthesize instance of type class
+  Fintype (a12SelectedPairs (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+201:     a7HybridQ f ≤ eta *
+202:       ∑ Y : BinaryMatrix n d,
+203:         (Fintype.card (a12SelectedPairs Y.transpose.toLin') : Real) *
+204:           Complex.normSq (complexFourierCoeff f Y) := by
+205:   classical
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:219:9: failed to synthesize instance of type class
+  Fintype (a12SelectedPairs (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+217:       exact Finset.sum_le_sum (fun p _ => hmean p.1 p.2)
+218:     _ = eta * ∑ Y : BinaryMatrix n d,
+219:         (Fintype.card (a12SelectedPairs Y.transpose.toLin') : Real) *
+220:           Complex.normSq (complexFourierCoeff f Y) := by
+221:       simp_rw [a12_energy_mean_eq_mass]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:234:7: failed to synthesize instance of type class
+  Fintype (a12SelectedPairs (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+232:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f) :
+233:     (∑ Y : BinaryMatrix n d,
+234:       (Fintype.card (a12SelectedPairs Y.transpose.toLin') : Real) *
+235:         Complex.normSq (complexFourierCoeff f Y)) ≤
+236:       (2 : Real) ^ (3 * D ^ 2) * uniformMean (fun M => Complex.normSq (f M)) := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:242:14: failed to synthesize instance of type class
+  Fintype (a12SelectedPairs (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+240:   intro Y _
+241:   by_cases hr : Y.rank ≤ D
+242:   · have hc : Fintype.card (a12SelectedPairs Y.transpose.toLin') ≤ 2 ^ (3 * D ^ 2) := by
+243:       apply (a12_selected_card_le Y).trans
+244:       apply Nat.pow_le_pow_right (by decide : 0 < (2 : Nat))
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:246:16: failed to synthesize instance of type class
+  Fintype (a12SelectedPairs (Matrix.toLin' (Matrix.transpose Y)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+
+Candidate context:
+244:       apply Nat.pow_le_pow_right (by decide : 0 < (2 : Nat))
+245:       nlinarith [Nat.mul_self_le_mul_self hr]
+246:     have hcr : (Fintype.card (a12SelectedPairs Y.transpose.toLin') : Real) ≤
+247:         (2 : Real) ^ (3 * D ^ 2) := by exact_mod_cast hc
+248:     exact mul_le_mul_of_nonneg_right hcr (Complex.normSq_nonneg _)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A12InfluenceBound.lean:256:62: unsolved goals
+n d D : ℕ
+eta : ℝ
+f : BinaryMatrix n d → ℂ
+hinfl : OriginalActualInfluenceThrough D eta f
+⊢ Module.finrank F (W n ⧸ ⊤) ≤ D
+
+Candidate context:
+254:     0 ≤ eta := by
+255:   have hcost : Module.finrank F (⊥ : Submodule F (V d)) +
+256:       Module.finrank F (W n ⧸ (⊤ : Submodule F (W n))) ≤ D := by simp
+257:   exact (a12_energy_nonneg ⊥ ⊤ f 0).trans (hinfl ⊥ ⊤ 0 hcost)
+258: 

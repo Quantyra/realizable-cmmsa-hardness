@@ -5,6 +5,8 @@ sys.dont_write_bytecode=True
 HERE=Path(__file__).resolve().parent
 m=runpy.run_path(str(HERE/'controller.py'),run_name='finish56_import'); m['configure']()
 run=m['PACKAGE']/'runs'/sys.argv[1]
+# Report immutable executed candidate, separately from authorized mutable successor.
+m['common'].FROZEN=json.loads((m['PACKAGE']/'captures/capture-integrated-57/manifest.json').read_bytes())['offered_identities']
 terminal=json.loads((run/'terminal.json').read_bytes()); assert terminal['vm_terminal_receipt']['status']=='TERMINATED'
 d=run/'remote-evidence'; cache=json.loads((d/'verified-cache-provenance.json').read_bytes()); objects=json.loads((d/'object-after.json').read_bytes())
 comparison={'cache_objects':len(cache['objects']),'changed':[n for n,h in cache['objects'].items() if objects.get(n)!=h],'compiler_equal':json.loads((d/'compiler-identity.json').read_bytes())==cache['compiler'],'packages_equal':json.loads((d/'package-source-hashes.json').read_bytes())==cache['package_sources'],'core_equal':json.loads((d/'core-source-hashes.json').read_bytes())==cache['core_sources']}

@@ -1,0 +1,4 @@
+Original full A12/A19 native57 routine proof/API repair candidate, no mathematical statement changes.
+Source EAC0D303434354B0F7E4C5584BC546A66C019608243933EEE089C8ED6108B28A
+Checks 47A8642320A3BA4CEA2B2C417920AACE44E129D34BC2930AE451D88ABBDE0DFA
+Native57 frozen2A8A RED14errors/1unsolved included/3ownedwarnings preserved; successor unverified.
