@@ -1,0 +1,38 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46RealQTransport
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46RealQTransport
+#check actualFibreQNorm
+#print axioms actualFibreQNorm
+#check UpToActualLqGlobal
+#print axioms UpToActualLqGlobal
+#check actualFibreQNorm_nonneg
+#print axioms actualFibreQNorm_nonneg
+#check actualFibreQNorm_whole
+#print axioms actualFibreQNorm_whole
+#check UpToActualLqGlobal_whole_space
+#print axioms UpToActualLqGlobal_whole_space
+#check UpToActualLqGlobal_parameter_nonneg
+#print axioms UpToActualLqGlobal_parameter_nonneg
+#check UpToActualLqGlobal_mul
+#print axioms UpToActualLqGlobal_mul
+#check UpToActualLqGlobal_finset_sum
+#print axioms UpToActualLqGlobal_finset_sum
+#check actualTranslatedRestriction
+#print axioms actualTranslatedRestriction
+#check actualTranslatedRestriction_mem
+#print axioms actualTranslatedRestriction_mem
+#check UpToActualLqGlobal_translate
+#print axioms UpToActualLqGlobal_translate
+#check carrierFibreQNorm
+#print axioms carrierFibreQNorm
+#check carrierFibreQNorm_lift
+#print axioms carrierFibreQNorm_lift
+#check UpToActualLqGlobal_whole
+#print axioms UpToActualLqGlobal_whole
+#check actualFibreQNorm_eq_finset
+#print axioms actualFibreQNorm_eq_finset
+#check exactPR_to_actual_LqGlobal
+#print axioms exactPR_to_actual_LqGlobal
+#check carrierFibreQNorm_coordinate
+#print axioms carrierFibreQNorm_coordinate
+#check UpToActualLqGlobal_raw_coordinate
+#print axioms UpToActualLqGlobal_raw_coordinate
