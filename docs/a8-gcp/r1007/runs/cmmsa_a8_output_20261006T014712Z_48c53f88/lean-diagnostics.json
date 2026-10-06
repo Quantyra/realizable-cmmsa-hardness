@@ -1,0 +1,77 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 82,
+    "column": 2,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:82:2: Type mismatch: After simplification, term\n  Eq.symm hs\n has type\n  ∑ a ∈ @Finset.univ (Subtype pred) (Fintype.ofFinite (Subtype pred)), finalEnergy C H X f ↑a =\n    ∑ a, if pred a then finalEnergy C H X f a else 0\nbut is expected to have type\n  ∑\n      p ∈\n        @Finset.univ (a8AmbientFinalPairs C H X)\n          (Subtype.fintype fun p =>\n            ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H),\n      finalEnergy C H X f ↑p =\n    ∑ p,\n      if ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H then finalEnergy C H X f p\n      else 0",
+    "candidate_context": [
+      "80:   have hs := Finset.sum_subtype (p := pred) (F := Fintype.ofFinite _) (Finset.univ.filter pred)",
+      "81:     (by intro p; simp) (finalEnergy C H X f)",
+      "82:   simpa only [Finset.sum_filter, a8_endpoint_sum_instances] using hs.symm",
+      "83: ",
+      "84: set_option maxHeartbeats 1600000 in"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 146,
+    "column": 15,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:146:15: unsolved goals\nn d D : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nf : BinaryMatrix n d → ℂ\nhsupport : ComplexFourierSupportedThrough D f\nXmat : BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H)\n  (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n    (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) :=\n  (carrierFrequencyEquiv C H) X\nR : Submodule (ZMod 2)\n  (Fin\n      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n        (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) →\n    ZMod 2) :=\n  (Matrix.toLin' (Matrix.transpose Xmat)).range\nK : Submodule (ZMod 2)\n  (Fin (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H) → ZMod 2) :=\n  (Matrix.toLin' (Matrix.transpose Xmat)).ker\nO : Type :=\n  Submodule F (Fin (Module.finrank F ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ R)) → F) ×\n    Submodule F (Fin (Module.finrank F ↥K) → F)\noutput : (V d →ₗ[F] W n) →\n  BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝ ↥K)\n      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝\n        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝\n            (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n              (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) ⧸\n          R)) →\n    ℂ :=\n  fun T => carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))\nhexhaust : ∀ (T : V d →ₗ[F] W n), a7HybridQ (output T) = ∑ p, a7PairShare p.1 p.2 (output T)\nhfubini :\n  (typedUniformMean fun T => a7HybridQ (output T)) = ∑ p, typedUniformMean fun T => a7PairShare p.1 p.2 (output T)\nhp :\n  ∀ (p : O),\n    (typedUniformMean fun T => a7PairShare p.1 p.2 (output T)) ≤\n      2 ^ (6 * D * Matrix.rank Xmat) * ∑ q, localEnergy C H X f ↑q\n⊢ ∑ x, ∑ x_1, ∑ x_2, localEnergy C H X f ↑x_2 = ∑ x, ∑ x_1, ∑ x_2, localEnergy C H X f ↑x_2",
+    "candidate_context": [
+      "144:           exact ⟨e.symm q, a8_endpoint_mem_fintype_elems _ _ _, e.apply_symm_apply q⟩",
+      "145:         · intro p _; rfl",
+      "146:       _ = _ := by",
+      "147:         simp only [a8T2HybridComplementPairs, Fintype.sum_prod_type, Fintype.sum_sigma,",
+      "148:           a8_endpoint_sum_instances]"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 152,
+    "column": 4,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:152:4: Type mismatch: After simplification, term\n  a8_all_pair_sum_reindex (Matrix.toLin' (Matrix.transpose Xmat)) fun p => localEnergy C H X f ↑p\n has type\n  ∑\n      p ∈\n        @Finset.univ (a8T2HybridComplementPairs (Matrix.toLin' (Matrix.transpose Xmat)))\n          (@Sigma.instFintype { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 }\n            (fun A2 =>\n              (B2 : { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }) ×\n                a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑A2 ↑B2)\n            (fun i =>\n              @Sigma.instFintype { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }\n                (fun B2 => a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑i ↑B2)\n                (fun i_1 =>\n                  Subtype.fintype fun p =>\n                    (Matrix.toLin' (Matrix.transpose Xmat)).range ⊓ p.1 = ⊥ ∧\n                      (Matrix.toLin' (Matrix.transpose Xmat)).range ⊔ p.1 = ↑i ∧\n                        p.2 ⊓ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ↑i_1 ∧\n                          p.2 ⊔ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ⊤)\n                (Fintype.ofFinite { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }))\n            (Fintype.ofFinite { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 })),\n      localEnergy C H X f ↑((a8T2AllPairEquiv (Matrix.toLin' (Matrix.transpose Xmat))) p) =\n    ∑ p, localEnergy C H X f ↑p\nbut is expected to have type\n  ∑\n      p ∈\n        @Finset.univ (a8T2HybridComplementPairs (Matrix.toLin' (Matrix.transpose Xmat)))\n          (@Sigma.instFintype { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 }\n            (fun A2 =>\n              (B2 : { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }) ×\n                a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑A2 ↑B2)\n            (fun i =>\n              @Sigma.instFintype { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }\n                (fun B2 => a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑i ↑B2)\n                (fun i_1 =>\n                  Subtype.fintype fun p =>\n                    (Matrix.toLin' (Matrix.transpose Xmat)).range ⊓ p.1 = ⊥ ∧\n                      (Matrix.toLin' (Matrix.transpose Xmat)).range ⊔ p.1 = ↑i ∧\n                        p.2 ⊓ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ↑i_1 ∧\n                          p.2 ⊔ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ⊤)\n                (Subtype.fintype fun B2 => B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker))\n            (Subtype.fintype (LE.le (Matrix.toLin' (Matrix.transpose Xmat)).range))),\n      localEnergy C H X f ↑p.snd.snd =\n    ∑ p, localEnergy C H X f ↑p",
+    "candidate_context": [
+      "150:       localEnergy C H X f p.2.2.1) =",
+      "151:       ∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1 := by",
+      "152:     simpa only [a8_endpoint_sum_instances] using",
+      "153:       a8_all_pair_sum_reindex Xmat.transpose.toLin' (fun p => localEnergy C H X f p.1)",
+      "154:   have hamb : (∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1) ="
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 156,
+    "column": 4,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:156:4: Type mismatch: After simplification, term\n  a8_all_pair_actual_ambient_energy_reindex C H X f\n has type\n  (∑ p,\n      typedUniformMean fun T =>\n        typedW6OutputEnergy (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2)\n            (a8NestedFrequency C H (↑p).1 (↑p).2\n              (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X)))))\n            (filteredCarrierFunction (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2) T f) ^\n          2) =\n    ∑\n      p ∈\n        @Finset.univ (a8AmbientFinalPairs C H X)\n          (@Subtype.fintype ({ A // C ≤ A } × { B // B ≤ H })\n            (fun p => ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H)\n            (fun a => instDecidableAnd)\n            (@instFintypeProd { A // C ≤ A } { B // B ≤ H } (Fintype.ofFinite { A // C ≤ A })\n              (Fintype.ofFinite { B // B ≤ H }))),\n      typedUniformMean fun T =>\n        typedW6OutputEnergy (↑(↑p).1) (↑(↑p).2) (a9AmbientFinalMap ↑(↑p).1 ↑(↑p).2 ⟨C, ⋯⟩ ⟨H, ⋯⟩ X)\n            (filteredCarrierFunction (↑(↑p).1) (↑(↑p).2) T f) ^\n          2\nbut is expected to have type\n  ∑ p, localEnergy C H X f ↑p =\n    ∑\n      p ∈\n        @Finset.univ (a8AmbientFinalPairs C H X)\n          (@Subtype.fintype ({ A // C ≤ A } × { B // B ≤ H })\n            (fun p => ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H)\n            (fun a => instDecidableAnd)\n            (@instFintypeProd { A // C ≤ A } { B // B ≤ H } (Subtype.fintype (LE.le C))\n              (Subtype.fintype fun B => B ≤ H))),\n      finalEnergy C H X f ↑p",
+    "candidate_context": [
+      "154:   have hamb : (∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1) =",
+      "155:       ∑ p : a8AmbientFinalPairs C H X, finalEnergy C H X f p.1 := by",
+      "156:     simpa only [a8_endpoint_sum_instances] using",
+      "157:       a8_all_pair_actual_ambient_energy_reindex C H X f",
+      "158:   calc"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 169,
+    "column": 13,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:169:13: unsolved goals\nn d D : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nf : BinaryMatrix n d → ℂ\nhsupport : ComplexFourierSupportedThrough D f\nXmat : BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H)\n  (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n    (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) :=\n  (carrierFrequencyEquiv C H) X\nR : Submodule (ZMod 2)\n  (Fin\n      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n        (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) →\n    ZMod 2) :=\n  (Matrix.toLin' (Matrix.transpose Xmat)).range\nK : Submodule (ZMod 2)\n  (Fin (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H) → ZMod 2) :=\n  (Matrix.toLin' (Matrix.transpose Xmat)).ker\nO : Type :=\n  Submodule F (Fin (Module.finrank F ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ R)) → F) ×\n    Submodule F (Fin (Module.finrank F ↥K) → F)\noutput : (V d →ₗ[F] W n) →\n  BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝ ↥K)\n      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝\n        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝\n            (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n              (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) ⧸\n          R)) →\n    ℂ :=\n  fun T => carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))\nhexhaust : ∀ (T : V d →ₗ[F] W n), a7HybridQ (output T) = ∑ p, a7PairShare p.1 p.2 (output T)\nhfubini :\n  (typedUniformMean fun T => a7HybridQ (output T)) = ∑ p, typedUniformMean fun T => a7PairShare p.1 p.2 (output T)\nhp :\n  ∀ (p : O),\n    (typedUniformMean fun T => a7PairShare p.1 p.2 (output T)) ≤\n      2 ^ (6 * D * Matrix.rank Xmat) * ∑ q, localEnergy C H X f ↑q\nhsum : ∑ p, ∑ q, localEnergy C H X f ↑q = ∑ p, localEnergy C H X f ↑p.snd.snd\nhgeom : ∑ p, localEnergy C H X f ↑p.snd.snd = ∑ p, localEnergy C H X f ↑p\nhamb : ∑ p, localEnergy C H X f ↑p = ∑ p, finalEnergy C H X f ↑p\n⊢ 2 ^ (6 * D * Matrix.rank Xmat) * ∑ p, finalEnergy C H X f ↑p =\n    2 ^ (6 * D * Matrix.rank ((carrierFrequencyEquiv C H) X)) * ∑ p, finalEnergy C H X f ↑p",
+    "candidate_context": [
+      "167:           (a8NestedAmbientDomain R p.1) (a8NestedAmbientRange K p.2),",
+      "168:           localEnergy C H X f q.1 := (Finset.mul_sum _ _ _).symm",
+      "169:     _ = _ := by rw [hsum, hgeom, hamb]",
+      "170: ",
+      "171: /-- Manuscript A8 for the complete output Q at the unchanged original T1"
+    ]
+  }
+]
