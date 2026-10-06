@@ -1,0 +1,77 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean",
+    "line": 62,
+    "column": 11,
+    "message": "typeclass instance problem is stuck",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:62:11: typeclass instance problem is stuck\n  RingHomCompTriple ?m.457 (RingHom.id PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝) ?m.456\n\nNote: Lean will not try to resolve this typeclass instance problem because the seventh type argument to `RingHomCompTriple` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.\n\nHint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.",
+    "candidate_context": [
+      "60:                 (N.comp (P.map (domainBasis R).equivFun.symm.toLinearMap).mkQ))))) ^ 2) := by",
+      "61:   classical",
+      "62:   let e := LinearEquiv.arrowCongr (domainBasis R).equivFun.symm",
+      "63:     (codomainBasis K).equivFun.symm",
+      "64:   have hbase : ∀ L, e L = carrierCoordinateBaseLift R K L := by"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean",
+    "line": 319,
+    "column": 4,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:319:4: Type mismatch: After simplification, term\n  a8_coordinate_pair_share_nested_mean R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout\n has type\n  a7PairShare Pout Qout\n      (carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))) =\n    typedUniformMean fun S0 =>\n      (a18UniformMean\n          fun\n            (N :\n              (V (Module.finrank F (V d ⧸ C)) ⧸ R) ⧸ Submodule.map (↑(domainBasis R).equivFun.symm) Pout →ₗ[F]\n                ↥(Submodule.map (↑(codomainBasis K).equivFun.symm) Qout)) =>\n          Complex.normSq\n            (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) Pout)\n              (Submodule.map (↑(codomainBasis K).equivFun.symm) Qout)\n              (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))\n              (S0 +\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Qout).subtype ∘ₗ\n                  N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) Pout).mkQ))) ^\n        2\nbut is expected to have type\n  a7PairShare Pout Qout\n      (carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))) =\n    typedUniformMean fun S0 =>\n      (a18UniformMean\n          fun\n            (N :\n              ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ R) ⧸ Submodule.map R.mkQ (a8NestedAmbientDomain R Pout) →ₗ[F]\n                ↥(Submodule.comap K.subtype (a8NestedAmbientRange K Qout))) =>\n          Complex.normSq\n            (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) Pout)\n              (Submodule.map (↑(codomainBasis K).equivFun.symm) Qout)\n              (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))\n              (S0 +\n                (Submodule.comap K.subtype (a8NestedAmbientRange K Qout)).subtype ∘ₗ\n                  N ∘ₗ (Submodule.map R.mkQ (a8NestedAmbientDomain R Pout)).mkQ))) ^\n        2",
+    "candidate_context": [
+      "317:               (S0 + (B2.comap K.subtype).subtype.comp (N.comp (A2.map R.mkQ).mkQ))))) ^ 2) := by",
+      "318:     intro T",
+      "319:     simpa [A2, B2, a8_nested_domain_map, a8_nested_range_comap] using",
+      "320:       a8_coordinate_pair_share_nested_mean R K",
+      "321:         (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean",
+    "line": 322,
+    "column": 11,
+    "message": "`simp` made no progress",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:322:11: `simp` made no progress",
+    "candidate_context": [
+      "320:       a8_coordinate_pair_share_nested_mean R K",
+      "321:         (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout",
+      "322:   simp_rw [hpair]",
+      "323:   unfold typedUniformMean a18UniformMean",
+      "324:   simpa [X, R, K, A2, B2, Finset.sum_div, div_div] using h"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean",
+    "line": 364,
+    "column": 6,
+    "message": "omega could not prove the goal:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:364:6: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  m ≥ 0\n  l ≥ 0\n  l - m ≥ 0\n  k ≥ 0\n  j ≥ 0\n  j - k ≥ 0\n  i ≥ 0\n  h ≥ 0\n  g ≥ 0\n  g - h - i - j + k - l + m ≤ 0\n  e ≥ 0\n  e - j + k - l + m ≤ 0\n  c ≥ 0\n  b ≥ 0\n  a ≥ 0\n  a - b - c ≥ 0\n  a - j + k - l + m ≤ -1\nwhere\n a := ↑D\n b := ↑(Module.finrank F ↥(a8NestedAmbientDomain C (↑p).1))\n c := ↑(Module.finrank F (W n ⧸ a8NestedAmbientRange H (↑p).2))\n e := ↑(Module.finrank F ((Fin (Module.finrank F ↥H) → F) ⧸ (↑p).2))\n g := ↑(Module.finrank F (W n ⧸ B))\n h := ↑(Module.finrank F ↥C)\n i := ↑(Module.finrank F (W n ⧸ H))\n j := ↑(Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker)\n k := ↑(Module.finrank F ↥B2)\n l := ↑(Module.finrank F ↥A2)\n m := ↑(Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Xmat)).range)",
+    "candidate_context": [
+      "362:         (Module.finrank F (LinearMap.ker Xmat.transpose.toLin') - Module.finrank F B2) ≤ D := by",
+      "363:       dsimp [cost, A, B] at hc",
+      "364:       omega",
+      "365:     have hmul := Nat.mul_le_mul_left Xmat.rank huv",
+      "366:     have hexp : (Xmat.rank *"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean",
+    "line": 385,
+    "column": 0,
+    "message": "(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:385:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached\n\nNote: Use `set_option maxHeartbeats <num>` to set the limit.\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AmbientAssembly\n",
+    "candidate_context": [
+      "383:     simp",
+      "384: ",
+      "385: /-- Supported arbitrary-complex per-pair transport with the universal",
+      "386: manuscript graph budget. Vanishing is proved from the actual carrier cost;",
+      "387: no supported-window inequality is assumed for the output pair. -/"
+    ]
+  }
+]

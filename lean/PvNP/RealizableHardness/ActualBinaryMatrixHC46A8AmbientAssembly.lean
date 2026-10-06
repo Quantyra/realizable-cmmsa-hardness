@@ -59,7 +59,9 @@ theorem a8_coordinate_pair_share_nested_mean {n d : Nat}
               (S0 + (Q.map (codomainBasis K).equivFun.symm.toLinearMap).subtype.comp
                 (N.comp (P.map (domainBasis R).equivFun.symm.toLinearMap).mkQ))))) ^ 2) := by
   classical
-  let e := LinearEquiv.arrowCongr (domainBasis R).equivFun.symm
+  let e : ((Fin (Module.finrank F (V d ⧸ R)) → F) →ₗ[F]
+      (Fin (Module.finrank F K) → F)) ≃ₗ[F] ((V d ⧸ R) →ₗ[F] K) :=
+    LinearEquiv.arrowCongr (domainBasis R).equivFun.symm
     (codomainBasis K).equivFun.symm
   have hbase : ∀ L, e L = carrierCoordinateBaseLift R K L := by
     intro L
@@ -229,7 +231,7 @@ theorem a8_ambient_two_base_actual_averaged_transport {n d : Nat}
     have hcardNat : Fintype.card P ≤ 2 ^ (Xmat.rank *
         (Module.finrank F A2 - Module.finrank F R +
           (Module.finrank F K - Module.finrank F B2))) := by
-      convert hcard using 1 <;> congr 1
+      convert hcard using 1
     exact_mod_cast hcardNat
   have hcubic : cubic ≤ graph ^ 3 := by
     dsimp [cubic]
@@ -258,7 +260,6 @@ theorem a8_ambient_two_base_actual_averaged_transport {n d : Nat}
         (Fintype.card ΩT : Real) := by
       rw [← Finset.sum_div]
       field_simp [ne_of_gt hcardT, ne_of_gt hcardS]
-      <;> ring
 
 /-- Each output pair, including zero and one-sided pairs, is transported to
 the actual ambient predecessor energies. Supported-window truncation is a
@@ -316,8 +317,9 @@ theorem a8_ambient_output_pair_le_actual_complement_sum {n d : Nat}
               (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))
               (S0 + (B2.comap K.subtype).subtype.comp (N.comp (A2.map R.mkQ).mkQ))))) ^ 2) := by
     intro T
-    simpa [A2, B2, a8_nested_domain_map, a8_nested_range_comap] using
-      a8_coordinate_pair_share_nested_mean R K
+    dsimp only [A2, B2]
+    simp_rw [a8_nested_domain_map, a8_nested_range_comap]
+    exact a8_coordinate_pair_share_nested_mean R K
         (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout
   simp_rw [hpair]
   unfold typedUniformMean a18UniformMean
@@ -360,7 +362,7 @@ private theorem a8_supported_graph_charge {n d D : Nat}
       Module.finrank F p.1.1 + Module.finrank F ((Fin (Module.finrank F H) → F) ⧸ p.1.2) at hcost
     have huv : (Module.finrank F A2 - Module.finrank F (LinearMap.range Xmat.transpose.toLin')) +
         (Module.finrank F (LinearMap.ker Xmat.transpose.toLin') - Module.finrank F B2) ≤ D := by
-      dsimp [cost, A, B] at hc
+      dsimp only [cost, A, B] at hc hcost
       omega
     have hmul := Nat.mul_le_mul_left Xmat.rank huv
     have hexp : (Xmat.rank *
@@ -382,6 +384,7 @@ private theorem a8_supported_graph_charge {n d D : Nat}
     rw [hz]
     simp
 
+set_option maxHeartbeats 1600000 in
 /-- Supported arbitrary-complex per-pair transport with the universal
 manuscript graph budget. Vanishing is proved from the actual carrier cost;
 no supported-window inequality is assumed for the output pair. -/
