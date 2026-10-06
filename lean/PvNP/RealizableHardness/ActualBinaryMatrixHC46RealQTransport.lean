@@ -103,7 +103,7 @@ theorem actualTranslatedRestriction_mem {n d : Nat} (Q : ActualAffineRestriction
   have he : M + U - (Q.base + U) = M - Q.base := by abel
   dsimp only [actualTranslatedRestriction]
   simp only [ActualAffineRestriction.fibre, Finset.mem_filter, Finset.mem_univ,
-    true_and, Set.mem_setOf_eq, he]
+    true_and, he]
 
 /-- Translation leaves real-q actual globalness unchanged. -/
 theorem UpToActualLqGlobal_translate {n d r : Nat} {q eps : Real}
@@ -229,9 +229,14 @@ theorem carrierFibreQNorm_coordinate {n d : Nat}
         simpa only [e0, LinearEquiv.apply_symm_apply] using x.property⟩
       left_inv := fun _ => Subtype.ext (by simp [e0])
       right_inv := fun _ => Subtype.ext (by simp [e0]) }
+  have hfun : (fun x : {M : (V d ⧸ A) →ₗ[F] B // M ∈ Q.fibre} =>
+      f (e0.symm (e x).val)) = fun x => f x.val := by
+    funext x
+    change f (e0.symm (e0 x.val)) = f x.val
+    rw [e0.symm_apply_apply]
   have hn := realQNorm_equiv e q (fun x => f (e0.symm x.val))
-  simpa only [actualFibreQNorm, carrierFibreQNorm, e, e0,
-    LinearEquiv.symm_apply_apply] using hn.symm
+  rw [hfun] at hn
+  simpa only [actualFibreQNorm, carrierFibreQNorm, e0] using hn.symm
 
 /-- An arbitrary raw restriction inherits all relative actual Lq bounds from
 original globalness and the exact outer-plus-inner cost budget. -/
@@ -402,7 +407,7 @@ theorem UpToActualLqGlobal_transpose {n d r : Nat} {q eps : Real}
     rw [heq] at hh
     exact Finset.image_nonempty.mp hh
   have ht := actualLq_implies_raw f hf Q hQ hneQ
-  have hi := Matrix.transpose_injective.injOn (s := (↑Q.fibre : Set (BinaryMatrix d n)))
+  have hi := Matrix.transpose_injective.injOn (s := (↑Q.fibre : Set (BinaryMatrix n d)))
   rw [heq]
   simpa only [finiteSetQNorm, complexTranspose, Finset.sum_image hi,
     Finset.card_image_iff.mpr hi, Matrix.transpose_transpose] using ht

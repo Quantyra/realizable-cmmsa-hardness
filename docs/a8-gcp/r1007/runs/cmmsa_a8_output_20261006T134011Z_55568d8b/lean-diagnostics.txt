@@ -1,0 +1,31 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:233:2: Type mismatch: After simplification, term
+  Eq.symm hn
+ has type
+  (realQNorm q fun x => f ((carrierMatrixEquiv A B).symm ↑x)) =
+    realQNorm q fun x =>
+      f
+        ((carrierMatrixEquiv A B).symm
+          ↑({ toFun := fun x => ⟨(carrierMatrixEquiv A B) ↑x, ⋯⟩,
+                invFun := fun x => ⟨(carrierMatrixEquiv A B).symm ↑x, ⋯⟩, left_inv := ⋯, right_inv := ⋯ }
+              x))
+but is expected to have type
+  (realQNorm q fun x => f ((carrierMatrixEquiv A B).symm ↑x)) = realQNorm q fun x => f ↑x
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:405:53: Type mismatch
+  Q.fibre
+has type
+  Finset (BinaryMatrix n d)
+but is expected to have type
+  Set (BinaryMatrix d n)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:407:2: Type mismatch: After simplification, term
+  ht
+ has type
+  ((∑ x ∈ Q.fibre, ‖f x‖ ^ q) / ↑Q.fibre.card) ^ (1 / q) ≤ eps
+but is expected to have type
+  ((∑ x ∈ Finset.image Matrix.transpose Q.fibre, ‖f (Matrix.transpose x)‖ ^ q) /
+        ↑(Finset.image Matrix.transpose Q.fibre).card) ^
+      (1 / q) ≤
+    eps
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46RealQTransport

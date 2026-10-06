@@ -1,0 +1,29 @@
+[
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 233,
+    "column": 2,
+    "message": "Type mismatch: After simplification, term",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:233:2: Type mismatch: After simplification, term\n  Eq.symm hn\n has type\n  (realQNorm q fun x => f ((carrierMatrixEquiv A B).symm ↑x)) =\n    realQNorm q fun x =>\n      f\n        ((carrierMatrixEquiv A B).symm\n          ↑({ toFun := fun x => ⟨(carrierMatrixEquiv A B) ↑x, ⋯⟩,\n                invFun := fun x => ⟨(carrierMatrixEquiv A B).symm ↑x, ⋯⟩, left_inv := ⋯, right_inv := ⋯ }\n              x))\nbut is expected to have type\n  (realQNorm q fun x => f ((carrierMatrixEquiv A B).symm ↑x)) = realQNorm q fun x => f ↑x"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 405,
+    "column": 53,
+    "message": "Type mismatch",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:405:53: Type mismatch\n  Q.fibre\nhas type\n  Finset (BinaryMatrix n d)\nbut is expected to have type\n  Set (BinaryMatrix d n)"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 407,
+    "column": 2,
+    "message": "Type mismatch: After simplification, term",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:407:2: Type mismatch: After simplification, term\n  ht\n has type\n  ((∑ x ∈ Q.fibre, ‖f x‖ ^ q) / ↑Q.fibre.card) ^ (1 / q) ≤ eps\nbut is expected to have type\n  ((∑ x ∈ Finset.image Matrix.transpose Q.fibre, ‖f (Matrix.transpose x)‖ ^ q) /\n        ↑(Finset.image Matrix.transpose Q.fibre).card) ^\n      (1 / q) ≤\n    eps\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46RealQTransport\n"
+  }
+]
