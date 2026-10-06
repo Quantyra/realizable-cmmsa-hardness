@@ -1,4 +1,4 @@
-﻿import json,hashlib,subprocess,datetime,ast
+import json,hashlib,subprocess,datetime,ast
 from pathlib import Path
 R=Path.cwd();P=R/'docs/a8-gcp/r1007';A=P/'retry-66';B=P/'retry-67'
 for p in B.glob('*.py'):ast.parse(p.read_text(encoding='utf-8-sig'))
@@ -15,6 +15,6 @@ rows={n:{'sha256':hashlib.sha256((R/n).read_bytes()).hexdigest().upper(),'bytes'
 for n,h in zip(names,hashes):
  data=(R/n).read_bytes();assert h==hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
 git(['update-index','-z','--index-info'],b''.join(('100644 '+h+'\t'+n+'\0').encode() for n,h in zip(names,hashes)))
-assert set(git(['diff','--cached','--name-only','-z']).decode().split('\0'))-{''}==files
+assert (set(git(['diff','--cached','--name-only','-z']).decode().split('\0'))-{''})<=files  # Unchanged intended entries are verified by raw index parity below.
 index={row.split('\t')[1]:row.split()[1] for row in git(['ls-files','--stage','-z']).decode().split('\0') if row};assert all(index[n]==h for n,h in zip(names,hashes))
 print(json.dumps({'staged_files':len(files),'raw_FS_blob_parity':True,'inherited_dirt_excluded':True}))
