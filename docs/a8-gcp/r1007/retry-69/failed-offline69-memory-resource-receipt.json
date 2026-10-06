@@ -1,0 +1,69 @@
+{
+  "utc": "2026-10-06T14:30:21.537114+00:00",
+  "local_python_handle": 93799,
+  "native_exit": 1,
+  "cloud_launched": false,
+  "capture_partial_preserved": "docs\\a8-gcp\\r1007\\captures\\capture-full-a22-hc46-69",
+  "failure": "MemoryError: Insufficient memory for buffer allocation",
+  "failing_stack": [
+    "retry-69/controller.py:offline -> adapted prepare.py:179 check_source_archive",
+    "prepare.py:50 sha(stream.extractfile(member).read())",
+    "tarfile.py:705 fileobj.read(length)",
+    "gzip.py:349 _buffer.read(size)",
+    "gzip.py:580 _decompressor.decompress(b\"\", size)"
+  ],
+  "dependency_tar_inventory": {
+    "package": {
+      "archive_path": "docs\\a8-gcp\\r1007\\captures\\capture-full-a22-hc46-69\\dependency-baseline\\package-sources.tar.gz",
+      "compressed_bytes": 28274366,
+      "members": 11574,
+      "uncompressed_bytes": 126340494,
+      "largest_members": [
+        [
+          459917,
+          ".lake/packages/mathlib/Mathlib.lean"
+        ],
+        [
+          320686,
+          ".lake/packages/complexitylib/Complexitylib/Models/TuringMachine/SingleTape/Internal/Correctness.lean"
+        ],
+        [
+          280337,
+          ".lake/packages/complexitylib/Complexitylib/Classes/Containments/Internal/SuccMachine.lean"
+        ]
+      ]
+    },
+    "core": {
+      "archive_path": "docs\\a8-gcp\\r1007\\captures\\capture-full-a22-hc46-69\\dependency-baseline\\core-sources.tar.gz",
+      "compressed_bytes": 5944130,
+      "members": 2520,
+      "uncompressed_bytes": 28914850,
+      "largest_members": [
+        [
+          532521,
+          "src/lean/Std/Data/DTreeMap/Internal/Lemmas.lean"
+        ],
+        [
+          488069,
+          "src/lean/Std/Data/Internal/List/Associative.lean"
+        ],
+        [
+          280532,
+          "src/lean/Std/Data/DTreeMap/Raw/Lemmas.lean"
+        ]
+      ]
+    }
+  },
+  "fresh_resource_observation": {
+    "C_free_bytes": 304730112,
+    "FreePhysicalMemory_KiB": 1052556,
+    "FreeVirtualMemory_KiB": 2747620,
+    "pagefile_AllocatedBaseSize_MiB": 23695,
+    "pagefile_CurrentUsage_MiB": 6301
+  },
+  "launch_storage_guard_would_pass": false,
+  "required_reserve_bytes": 1073741824,
+  "projected_run_bytes": 536870912,
+  "deletion_performed": false,
+  "unrelated_process_terminated": false
+}
