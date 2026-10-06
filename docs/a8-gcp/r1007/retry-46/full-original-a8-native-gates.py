@@ -40,10 +40,17 @@ for n in sorted(closure):
 rows=json.loads((run/'warning-classification.json').read_bytes())['stages']
 requests=[n for n in c.REQUESTED_AXIOMS if '.ActualBinaryMatrixHC46A11WeightedAggregate.' not in n]
 assert len(requests)==26
+owner_pins=json.loads((here/'current-axiom-owner-identities.json').read_bytes())
+assert owner_pins['manifest_sha256']==c.file_sha(cap/'manifest.json')
+current_owners={r['qualified']:r for r in owner_pins['requests'] if r['qualified'] in requests}
+assert set(current_owners)==set(requests)
+for row in current_owners.values():
+    assert row['current_capture_sha256']==manifest['project_sources'][row['owner_file']]['sha256']==c.file_sha(cap/'inputs'/row['owner_file'])
 profiles=c.axiom_profiles((d/'stage-3.stdout').read_text(encoding='utf-8')+'\n'+(d/'stage-3.stderr').read_text(encoding='utf-8'))
 stages=[int((d/f'stage-{i}.native-exit').read_text()) for i in range(4)]
 bad_axioms={n:profiles.get(n) for n in requests if n not in profiles or not set(profiles[n])<=c.STANDARD_AXIOMS}
 warnings=[r for r in rows if r['index']<4 and (r['owned_above_frozen_baseline'] or r['inherited_above_frozen_baseline'])]
 value={'run':run.name,'full_original_A8_native_gates_green':all(x==0 for x in stages) and not missing and not warnings and not bad_axioms,'stages_0_through_3':stages,'original_requested_axioms':26,'axiom_profiles':profiles,'bad_or_missing_axioms':bad_axioms,'project_closure_sources':len(closure),'project_closure':sorted(closure),'missing_compiled_objects':missing,'warning_regressions':warnings,'cache_objects_unchanged':400,'accepted':False,'helper_credit':0,'scope':'Complete original integrated A8 endpoint, all six source and Checks modules; mathematical three-lens acceptance remains separate; combined A11 outcome retained.'}
+value['current_capture_owner_identities']=current_owners
 c.write_new(run/'full-original-a8-native-gates.json',c.json_bytes(value))
 print(json.dumps({k:v for k,v in value.items() if k not in ['project_closure','axiom_profiles','warning_regressions']},indent=2))

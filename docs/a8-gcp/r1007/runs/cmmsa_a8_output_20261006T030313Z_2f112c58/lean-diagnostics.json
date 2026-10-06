@@ -1,0 +1,167 @@
+[
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 172,
+    "column": 77,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:172:77: unsolved goals\nn d : ℕ\nA : Submodule F (V d)\nB : Submodule F (W n)\nt : T1IndexTriple A B\n⊢ t1PullbackMap t = ↑((t1AmbientC t.C).quotEquivOfEq (t1AmbientC t.C) ⋯) ∘ₗ t1PullbackMap t",
+    "candidate_context": [
+      "170:     a7CarrierParent C H t hC hH =",
+      "171:     (Submodule.quotEquivOfEq _ _ hC).toLinearMap.comp",
+      "172:       ((t1PullbackMap t).comp (LinearEquiv.ofEq H _ hH.symm).toLinearMap) := by",
+      "173:   subst C",
+      "174:   subst H"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 287,
+    "column": 8,
+    "message": "Tactic `rewrite` failed: motive is not type correct:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:287:8: Tactic `rewrite` failed: motive is not type correct:\n  fun _a =>\n    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer.F✝ ↥_a +\n        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer.F✝\n          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer.W✝ n ⧸ B) =\n      a6Order t + Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer.F✝ ↥(t1PullbackMap t).range\nError: Application type mismatch: The argument\n  t\nhas type\n  T1IndexTriple A B\nbut is expected to have type\n  T1IndexTriple _a B\nin the application\n  a6Order t\n\nExplanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.\n\nPossible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).\n\ncase mpr\nn d : ℕ\nA : Submodule F (V d)\nB : Submodule F (W n)\nt : T1IndexTriple A B\nho : 0 < a6Order t\nhz : A = ⊥ ∧ B = ⊤\nhd :\n  Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer.F✝ ↥A +\n      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer.F✝\n        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer.W✝ n ⧸ B) =\n    a6Order t + Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer.F✝ ↥(t1PullbackMap t).range\n⊢ False",
+    "candidate_context": [
+      "285:     push Not at hz",
+      "286:     have hd := a6_dimension_split t",
+      "287:     rw [hz.1, hz.2] at hd",
+      "288:     simp only [finrank_bot, finrank_top, Module.finrank_fin_fun] at hd",
+      "289:     omega"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 492,
+    "column": 2,
+    "message": "omega could not prove the goal:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:492:2: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e ≥ 0\n  c ≥ 0\n  c - e ≥ 0\n  b ≥ 0\n  a ≥ 0\n  a - b ≤ 0\n  a - b + c ≤ -1\nwhere\n a := ↑(Module.finrank F ↥X.ker)\n b := ↑(Module.finrank F ↥H)\n c := ↑n\n e := ↑(Module.finrank F ↥H)",
+    "candidate_context": [
+      "490:     Module.finrank F H at h",
+      "491:   have hh := a11_subspace_dim_bound H",
+      "492:   omega",
+      "493: ",
+      "494: /-- Exact global A8 reindex by final pair and initial dimensions/rank. This"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 588,
+    "column": 4,
+    "message": "Tactic `rfl` failed: The left-hand side",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:588:4: Tactic `rfl` failed: The left-hand side\n  a11InitialFinalContribution D f ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩\nis not definitionally equal to the right-hand side\n  a11FinalGradeContribution D f (e ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)\n\ncase refine_4\nn d D : ℕ\nf : BinaryMatrix n d → ℂ\ne : a11InitialFinalSource n d ≃ a11FinalGradeTarget n d := a11GlobalA9SourceEquiv.trans a11GlobalA9PartitionEquiv\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nhp : 0 < a11InitialOrder ⟨C, ⟨H, X⟩⟩\nA :\n  Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.F✝\n    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.V✝ d)\nhCA : (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst ≤ A\nB :\n  Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.F✝\n    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.W✝ n)\nhBH : B ≤ (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst\nhA8A :\n  ↑(⟨A, hCA⟩, ⟨B, hBH⟩).1 ⊓ Submodule.comap (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst.mkQ (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.snd.range =\n    (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst\nhA8B :\n  ↑(⟨A, hCA⟩, ⟨B, hBH⟩).2 ⊔ Submodule.map (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst.subtype (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.snd.ker =\n    (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst\nha✝ : ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩ ∈ Finset.univ\n⊢ a11InitialFinalContribution D f ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩ =\n    a11FinalGradeContribution D f (e ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)",
+    "candidate_context": [
+      "586:   · intro q _; exact ⟨e.symm q, a11_mem_fintype_elems _ _ _, e.apply_symm_apply q⟩",
+      "587:   · rintro ⟨⟨⟨C, H, X⟩, hp⟩, ⟨⟨⟨A, hCA⟩, ⟨B, hBH⟩⟩, hA8A, hA8B⟩⟩ _",
+      "588:     rfl",
+      "589: ",
+      "590: private theorem a11_initial_final_sum_eq_selected {n d : Nat}"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 608,
+    "column": 2,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:608:2: Type mismatch: After simplification, term\n  hs\n has type\n  @Eq ℝ (∑ a, if pred a then energy a else 0) (∑ a, energy ↑a)\nbut is expected to have type\n  @Eq ℝ\n    (∑ p,\n      if\n          ↑p.1 ⊓ Submodule.comap z.fst.mkQ z.snd.snd.range = z.fst ∧\n            ↑p.2 ⊔ Submodule.map z.snd.fst.subtype z.snd.snd.ker = z.snd.fst then\n        typedUniformMean fun T =>\n          typedW6OutputEnergy (↑p.1) (↑p.2) (a9AmbientFinalMap ↑p.1 ↑p.2 ⟨z.fst, ⋯⟩ ⟨z.snd.fst, ⋯⟩ z.snd.snd)\n              (filteredCarrierFunction (↑p.1) (↑p.2) T f) ^\n            2\n      else 0)\n    (∑ x,\n      typedUniformMean fun T =>\n        typedW6OutputEnergy (↑(↑x).1) (↑(↑x).2) (a9AmbientFinalMap ↑(↑x).1 ↑(↑x).2 ⟨z.fst, ⋯⟩ ⟨z.snd.fst, ⋯⟩ z.snd.snd)\n            (filteredCarrierFunction (↑(↑x).1) (↑(↑x).2) T f) ^\n          2)",
+    "candidate_context": [
+      "606:   have hs := Finset.sum_subtype (p := pred) (F := Fintype.ofFinite _)",
+      "607:     (Finset.univ.filter pred) (by intro q; simp) energy",
+      "608:   simpa only [Finset.sum_filter, a11InitialFinalSum, a11AmbientEnergy,",
+      "609:     a11_sum_instances] using hs",
+      "610: "
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 767,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:767:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ i, ?f ↑i\nin the target expression\n  ∑ i, (fun k => if 0 < k then r ^ k else 0) ↑i ≤ 4 / 3 * r\n\nm : ℕ\nr : ℝ\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\nhr1 : r < 1\n⊢ ∑ i, (fun k => if 0 < k then r ^ k else 0) ↑i ≤ 4 / 3 * r",
+    "candidate_context": [
+      "765:   have hr1 : r < 1 := by linarith",
+      "766:   change (∑ i : Fin m, (fun k : Nat => if 0 < k then r ^ k else 0) i.val) ≤ _",
+      "767:   rw [Fin.sum_univ_eq_sum_range, ← Finset.sum_filter]",
+      "768:   have hset : (Finset.range m).filter (fun i => 0 < i) = Finset.Ico 1 m := by",
+      "769:     ext i"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 831,
+    "column": 10,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:831:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ x ∈ ?m.686, (?m.688 x + ?m.689 x)\nin the target expression\n  (∑ x, (if 0 < ↑x then r ^ ↑x else 0) * ∑ i, r ^ ↑i + ∑ x, r ^ ↑x * ∑ i, if 0 < ↑i then r ^ ↑i else 0) =\n    (∑ i, if 0 < ↑i then r ^ ↑i else 0) * ∑ i, r ^ ↑i + (∑ i, r ^ ↑i) * ∑ i, if 0 < ↑i then r ^ ↑i else 0\n\nm n : ℕ\nr : ℝ\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\nhpt :\n  ∀ (i : Fin m) (j : Fin n),\n    (if 0 < ↑i + ↑j then r ^ ↑i * r ^ ↑j else 0) ≤\n      (if 0 < ↑i then r ^ ↑i else 0) * r ^ ↑j + r ^ ↑i * if 0 < ↑j then r ^ ↑j else 0\nhm : ∑ i, r ^ ↑i ≤ 4 / 3\nhn : ∑ i, r ^ ↑i ≤ 4 / 3\nhpm : (∑ i, if 0 < ↑i then r ^ ↑i else 0) ≤ 4 / 3 * r\nhpn : (∑ i, if 0 < ↑i then r ^ ↑i else 0) ≤ 4 / 3 * r\nhnnn : 0 ≤ ∑ j, r ^ ↑j\nhnnr : 0 ≤ 4 / 3 * r\n⊢ (∑ x, (if 0 < ↑x then r ^ ↑x else 0) * ∑ i, r ^ ↑i + ∑ x, r ^ ↑x * ∑ i, if 0 < ↑i then r ^ ↑i else 0) =\n    (∑ i, if 0 < ↑i then r ^ ↑i else 0) * ∑ i, r ^ ↑i + (∑ i, r ^ ↑i) * ∑ i, if 0 < ↑i then r ^ ↑i else 0",
+    "candidate_context": [
+      "829:           (∑ j : Fin n, if 0 < j.val then r ^ j.val else 0) := by",
+      "830:       simp_rw [Finset.sum_add_distrib, ← Finset.mul_sum]",
+      "831:       rw [Finset.sum_add_distrib, Finset.sum_mul, Finset.sum_mul]",
+      "832:     _ ≤ ((4 / 3) * r) * (4 / 3) + (4 / 3) * ((4 / 3) * r) :=",
+      "833:       add_le_add (mul_le_mul hpm hn hnnn hnnr)"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 898,
+    "column": 4,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:898:4: Type mismatch: After simplification, term\n  hp\n has type\n  2 ^ 2 * (2 ^ (63 * ↑D))⁻¹ ≤ (2 ^ (31 * ↑D))⁻¹\nbut is expected to have type\n  4 * (2 ^ (63 * ↑D))⁻¹ ≤ (2 ^ (31 * ↑D))⁻¹",
+    "candidate_context": [
+      "896:     have he : (2 : Int) - 63 * D ≤ -(31 * D : Int) := by omega",
+      "897:     have hp := zpow_le_zpow_right₀ (by norm_num : (1 : Real) ≤ 2) he",
+      "898:     simpa [r, zpow_add₀ (by norm_num : (2 : Real) ≠ 0), sub_eq_add_neg] using hp",
+      "899: ",
+      "900: /-- The full post-tail rank weight pays the W6 denominator and leaves a"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 958,
+    "column": 27,
+    "message": "`ring_nf` made no progress on the goal",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:958:27: `ring_nf` made no progress on the goal",
+    "candidate_context": [
+      "956:       (a11_tail_rank_weight_le_w6 D (Module.finrank F (LinearMap.range Y)))",
+      "957:       (a11AmbientEnergy_nonneg A B Y f)",
+      "958:     convert hp using 1 <;> ring",
+      "959:   have hsum := Finset.sum_le_sum (fun (p : Submodule F (V d) × Submodule F (W n)) _ =>",
+      "960:     Finset.sum_le_sum (fun Y _ => hpt p.1 p.2 Y))"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 946,
+    "column": 57,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:946:57: unsolved goals\nn d D : ℕ\nf : BinaryMatrix n d → ℂ\nhsupport : ComplexFourierSupportedThrough D f\nhpt :\n  ∀ (A : Submodule F (V d)) (B : Submodule F (W n)) (Y : ↥B →ₗ[F] V d ⧸ A),\n    2 ^ (-(31 * ↑D * (↑(Module.finrank F ↥Y.range) + 1)) - 4 * ↑D * ↑(Module.finrank F ↥Y.range)) *\n        a11AmbientEnergy A B Y f ≤\n      2 ^ (-(31 * ↑D)) * (a11AmbientEnergy A B Y f / 2 ^ (6 * D * Module.finrank F ↥Y.range))\n⊢ ∑ p,\n      ∑ Y,\n        2 ^ (-(31 * ↑D * (↑(Module.finrank F ↥Y.range) + 1)) - 4 * ↑D * ↑(Module.finrank F ↥Y.range)) *\n          a11AmbientEnergy p.1 p.2 Y f ≤\n    2 ^ (1 - 31 * ↑D) * a7HybridQ f",
+    "candidate_context": [
+      "944:         (2 : Real) ^ (-(31 * D * (Module.finrank F (LinearMap.range Y) + 1) : Int) -",
+      "945:           4 * D * Module.finrank F (LinearMap.range Y)) * a11AmbientEnergy p.1 p.2 Y f) ≤",
+      "946:       (2 : Real) ^ ((1 : Int) - 31 * D) * a7HybridQ f := by",
+      "947:   have hpt : ∀ (A : Submodule F (V d)) (B : Submodule F (W n))",
+      "948:       (Y : B →ₗ[F] (V d ⧸ A)),"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 1019,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1019:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ x, ?g ↑x\nin the target expression\n  (∑ s,\n      if ↑i + ↑j + ↑k ≤ D then\n        2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *\n          a11AmbientEnergy A B (↑(↑s).fst) f\n      else 0) ≤\n    ∑ Y,\n      if 0 < ↑i + ↑j + ↑k then\n        2 ^ (100 * D * D) * 2 ^ (-(63 * ↑D * (↑↑i + ↑↑j + ↑↑k)) - 4 * ↑D * ↑↑k) * a11AmbientEnergy A B (↑Y) f\n      else 0\n\nn d D : ℕ\nA : Submodule F (V d)\nB : Submodule F (W n)\ni : Fin (d + 1)\nj k : Fin (n + 1)\nf : BinaryMatrix n d → ℂ\nhsupport : ComplexFourierSupportedThrough D f\n⊢ (∑ s,\n      if ↑i + ↑j + ↑k ≤ D then\n        2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *\n          a11AmbientEnergy A B (↑(↑s).fst) f\n      else 0) ≤\n    ∑ Y,\n      if 0 < ↑i + ↑j + ↑k then\n        2 ^ (100 * D * D) * 2 ^ (-(63 * ↑D * (↑↑i + ↑↑j + ↑↑k)) - 4 * ↑D * ↑↑k) * a11AmbientEnergy A B (↑Y) f\n      else 0\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A11WeightedAggregate\n",
+    "candidate_context": [
+      "1017:         100 * (D - (i.val + j.val + k.val)) * (D - (i.val + j.val + k.val)) + 6 * D * k.val) *",
+      "1018:           a11AmbientEnergy A B s.1.1.1 f else 0) ≤ _",
+      "1019:   rw [a11_sum_constant_gate]",
+      "1020:   by_cases hp : 0 < i.val + j.val + k.val",
+      "1021:   · by_cases ho : i.val + j.val + k.val ≤ D"
+    ]
+  }
+]
