@@ -6,7 +6,7 @@ HERE=Path(__file__).resolve().parent
 m=runpy.run_path(str(HERE/'controller.py'),run_name='finish56_import'); m['configure']()
 run=m['PACKAGE']/'runs'/sys.argv[1]
 # Report immutable executed candidate, separately from authorized mutable successor.
-m['common'].FROZEN=json.loads((m['PACKAGE']/'captures/capture-development-65b/manifest.json').read_bytes())['offered_identities']
+m['common'].FROZEN=json.loads((m['PACKAGE']/'captures/capture-development-65c/manifest.json').read_bytes())['offered_identities']
 terminal=json.loads((run/'terminal.json').read_bytes()); assert terminal['vm_terminal_receipt']['status']=='TERMINATED'
 d=run/'remote-evidence'; cache=json.loads((d/'verified-cache-provenance.json').read_bytes()); objects=json.loads((d/'object-after.json').read_bytes())
 comparison={'cache_objects':len(cache['objects']),'changed':[n for n,h in cache['objects'].items() if objects.get(n)!=h],'compiler_equal':json.loads((d/'compiler-identity.json').read_bytes())==cache['compiler'],'packages_equal':json.loads((d/'package-source-hashes.json').read_bytes())==cache['package_sources'],'core_equal':json.loads((d/'core-source-hashes.json').read_bytes())==cache['core_sources']}
@@ -30,7 +30,7 @@ baseline=json.loads((HERE/'current-warning-baseline.json').read_bytes())
 assert baseline['original_seal_sha256']==m['common'].file_sha(m['PACKAGE']/'warning-baseline-seal.json')
 assert baseline['original_union_headers']==baseline['current_union_headers']==981
 for n,row in baseline['comment_source_identities'].items():
-    assert m['common'].file_sha(m['PACKAGE']/'captures/capture-development-65b/inputs'/n)==row['current_comment_sha256']
+    assert m['common'].file_sha(m['PACKAGE']/'captures/capture-development-65c/inputs'/n)==row['current_comment_sha256']
 text=text.replace("for i in range(4): baseline |= warnings(PACKAGE/'warning-baseline',i)", "baseline=Counter(json.loads((PACKAGE/'retry-65/current-warning-baseline.json').read_bytes())['baseline_headers'])")
 text=text.replace("'baseline_union_headers':sum(baseline.values())", "'baseline_union_headers':sum(baseline.values()),'explicit_comment_line_relocation_receipt_sha256':file_sha(PACKAGE/'retry-65/current-warning-baseline.json')")
 (HERE/'finish-native.snapshot.py').write_bytes(text.encode())

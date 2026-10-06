@@ -15,7 +15,7 @@ OWNED+=['lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46'+n+s+'.lean' for n 
 CRITICAL=['PvNP.RealizableHardness.ActualBinaryMatrixHC46A17Full.actual_A17_full_parent_energy','PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_rank_projection','PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.original_influence_order_one_derivativeCoordinate_reduction']
 COMMENT_DEP='lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A7Transfer.lean'
 SOURCE=OWNED[-2]; CHECKS=OWNED[-1]; REPORT='docs/a8-gcp/r1007/retry-65/author-report.md'
-CAPTURE='capture-development-65c'; PRIOR='cmmsa_a8_output_20261006T113644Z_145e9858'
+CAPTURE='capture-development-65b'; PRIOR='cmmsa_a8_output_20261006T113644Z_145e9858'
 CANDIDATE_DIRS=[HERE/'first-realq-core-offer',HERE/'second-support-development-offer']
 def candidate_bytes(rel):
     if rel not in OWNED[-6:]: return (REPO/rel).read_bytes()
@@ -120,19 +120,18 @@ def offline():
     cloud=cloud[:start]+invalidation+cloud[end:]
     ast.parse(cloud)
     cloud=cloud.replace("for rel in manifest['owned_sources']:","for rel in manifest['owned_sources']+['lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A9AmbientReindex.lean']:")
-    common.write_new(HERE/'cloud_capture.retry3.snapshot.py',cloud)
+    common.write_new(HERE/'cloud_capture.retry2.snapshot.py',cloud)
     text=(PACKAGE/'prepare.py').read_text(encoding='utf-8')
-    text=text.replace('SCRIPTS = [',"SCRIPTS = ['retry-65/current-warning-baseline.json', 'retry-65/current-dependency-pins.json', 'retry-65/axiom-declaration-owner-map.json', 'retry-65/controller.py', 'retry-65/cloud_capture.retry3.snapshot.py', 'retry-65/adapted-prepare.retry3.snapshot.py', ")
+    text=text.replace('SCRIPTS = [',"SCRIPTS = ['retry-65/current-warning-baseline.json', 'retry-65/current-dependency-pins.json', 'retry-65/axiom-declaration-owner-map.json', 'retry-65/controller.py', 'retry-65/cloud_capture.retry2.snapshot.py', 'retry-65/adapted-prepare.retry2.snapshot.py', ")
     text=text.replace('rel in {SOURCE, CHECKS} else dependency_bytes(rel)','rel in OWNED else dependency_bytes(rel)').replace('for rel in [SOURCE, CHECKS]:','for rel in OWNED:')
     text=text.replace('path.read_bytes(), \"exact local candidate overlay\"','candidate_bytes(rel), \"exact immutable author-offer overlay; mutable successor separate\"')
-    text=text.replace('(REPO / SOURCE).read_bytes()', 'candidate_bytes(SOURCE)').replace('(REPO / CHECKS).read_bytes()', 'candidate_bytes(CHECKS)')
-    text=text.replace('save("inputs/cloud_capture.py", (PACKAGE / "cloud_capture.py").read_bytes())','save("inputs/cloud_capture.py", (PACKAGE / "retry-65/cloud_capture.retry3.snapshot.py").read_bytes())')
+    text=text.replace('save("inputs/cloud_capture.py", (PACKAGE / "cloud_capture.py").read_bytes())','save("inputs/cloud_capture.py", (PACKAGE / "retry-65/cloud_capture.retry2.snapshot.py").read_bytes())')
     start=text.index('    stages = ['); end=text.index('    inner = {',start)
     text=text[:start]+"    stages=STAGES\n    save('inputs/fresh-integrated-axioms.lean', FRESH.encode('utf-8'))\n    save('inputs/fresh-prior-a7-axioms.lean', FRESH_A8.encode('utf-8'))\n"+text[end:]
     text=text.replace('"claims_boundary": CLAIM}', '"claims_boundary": CLAIM,"owned_sources":OWNED,"cache_provenance":CACHE}')
     text=text.replace('"project_modules": len(records) - 1, "check_modules": 1','"project_modules": len(records) - 13, "check_modules": 13')
     text=text.replace('"reuse_workspace": "cmmsa_analytic_20261004T002601Z"','"reuse_workspace": PRIOR')
-    common.write_new(HERE/'adapted-prepare.retry3.snapshot.py',text)
+    common.write_new(HERE/'adapted-prepare.retry2.snapshot.py',text)
     p=module('prepare30',text); p.OWNED=OWNED; p.PRIOR=PRIOR; p.CACHE=provenance; p.candidate_bytes=candidate_bytes
     original_sha=p.file_sha
     p.file_sha=lambda path: common.sha(candidate_bytes(Path(path).relative_to(REPO).as_posix())) if Path(path).is_relative_to(REPO) and Path(path).relative_to(REPO).as_posix() in OWNED[-6:] else original_sha(path)
