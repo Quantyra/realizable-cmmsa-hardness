@@ -1,0 +1,480 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:219:31: Application type mismatch: The argument
+  hb
+has type
+  (@a18UniformMean
+      ((PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.V✝ d ⧸ C) ⧸
+          Submodule.map C.mkQ A →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝]
+        ↥(Submodule.comap H.subtype B))
+      PvNP.RealizableHardness.ActualTypedABMixedTower.linearMapFintype✝ fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C H (Submodule.map C.mkQ A) (Submodule.comap H.subtype B) 0
+          (complexCarrierHybridFilter C H (Submodule.map C.mkQ A) (Submodule.comap H.subtype B) fun M =>
+            filteredCarrierFunction C H T f M)
+          N)) ≤
+    b
+but is expected to have type
+  (@a18UniformMean ((V d ⧸ C) ⧸ Submodule.map C.mkQ A →ₗ[F] ↥(Submodule.comap H.subtype B))
+      PvNP.RealizableHardness.ActualTaggedConditionalGraphCount.finiteLinearMapFintype✝ fun N =>
+      Complex.normSq
+        (complexCarrierAffineRestrict C H (Submodule.map C.mkQ A) (Submodule.comap H.subtype B) 0
+          (complexCarrierHybridFilter C H (Submodule.map C.mkQ A) (Submodule.comap H.subtype B) fun M =>
+            filteredCarrierFunction C H T f M)
+          N)) ≤
+    b
+in the application
+  Eq.trans_le (Eq.symm he) hb
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:347:11: typeclass instance problem is stuck
+  RingHomCompTriple ?m.386 (RingHom.id F) ?m.385
+
+Note: Lean will not try to resolve this typeclass instance problem because the seventh type argument to `RingHomCompTriple` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:415:2: Type mismatch: After simplification, term
+  hb
+ has type
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (∑
+          x ∈
+            @Finset.univ
+              (↥⊤ →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝]
+                PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸ ⊥)
+              (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.backwardFintype✝ ⊥ ⊤),
+          if Selected A B x then
+            (∑ x_1, filteredCarrierFunction ⊥ ⊤ 0 g x_1 * ↑(BinaryMatrixA1Phase.traceCharacter x x_1)) /
+                ↑(Fintype.card
+                    (PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸
+                        ⊥ →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝]
+                      ↥⊤)) *
+              ↑(BinaryMatrixA1Phase.traceCharacter x (S + B.subtype ∘ₗ N ∘ₗ A.mkQ))
+          else 0)) ≤
+    b
+but is expected to have type
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (∑
+          x ∈
+            @Finset.univ (↥⊤ →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] V d ⧸ ⊥)
+              PvNP.RealizableHardness.ActualTaggedConditionalGraphCount.finiteLinearMapFintype✝,
+          if Selected A B x then
+            (∑ x_1, filteredCarrierFunction ⊥ ⊤ 0 g x_1 * ↑(BinaryMatrixA1Phase.traceCharacter x x_1)) /
+                ↑(Fintype.card (V d ⧸ ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] ↥⊤)) *
+              ↑(BinaryMatrixA1Phase.traceCharacter x (S + B.subtype ∘ₗ N ∘ₗ A.mkQ))
+          else 0)) ≤
+    b
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:463:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  filteredCarrierFunction ⊥ ⊤ 0 ?f ?M
+in the target expression
+  f0 ((mapReindexEquiv eD eC).symm M) = g ((LinearMap.toMatrix bD bC) M)
+
+D : Type u_1
+C : Type u_2
+inst✝⁷ : AddCommGroup D
+inst✝⁶ : Module F D
+inst✝⁵ : Finite D
+inst✝⁴ : Module.Finite F D
+inst✝³ : Module.Free F D
+inst✝² : AddCommGroup C
+inst✝¹ : Module F C
+inst✝ : Finite C
+n d r : ℕ
+b : ℝ
+bD : Module.Basis (Fin d) F D
+bC : Module.Basis (Fin n) F C
+g : BinaryMatrix n d → ℂ
+hg : OriginalActualInfluenceThrough r b g
+A : Submodule F D
+B : Submodule F C
+S : D →ₗ[F] C
+hcost : Module.finrank F ↥A + Module.finrank F (C ⧸ B) ≤ r
+eD : D ≃ₗ[F] V d ⧸ ⊥ := bD.equivFun ≪≫ₗ bottomTopDomainEquiv.symm
+eC : C ≃ₗ[F] ↥⊤ := bC.equivFun ≪≫ₗ bottomTopCodomainEquiv.symm
+A0 : Submodule F (V d ⧸ ⊥) := Submodule.map (↑eD) A
+B0 : Submodule F ↥⊤ := Submodule.map (↑eC) B
+S0 : V d ⧸ ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] ↥⊤ := (mapReindexEquiv eD eC).symm S
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥⊤) →
+  ℂ :=
+  fun M => filteredCarrierFunction ⊥ ⊤ 0 g M
+hA : Submodule.map (↑eD.symm) A0 = A
+hB : Submodule.map (↑eC.symm) B0 = B
+hAdim : Module.finrank F ↥A0 = Module.finrank F ↥A
+hBdim : Module.finrank F (↥⊤ ⧸ B0) = Module.finrank F (C ⧸ B)
+h0 : Module.finrank F ↥A0 + Module.finrank F (↥⊤ ⧸ B0) ≤ r
+hb : (a22IntrinsicEnergy A0 B0 S0 fun M => filteredCarrierFunction ⊥ ⊤ 0 g M) ≤ b
+he :
+  (a22IntrinsicEnergy (Submodule.map (↑eD.symm) A0) (Submodule.map (↑eC.symm) B0) ((mapReindexEquiv eD eC) S0) fun M =>
+      f0 ((mapReindexEquiv eD eC).symm M)) =
+    a22IntrinsicEnergy A0 B0 S0 f0
+M : D →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] C
+⊢ f0 ((mapReindexEquiv eD eC).symm M) = g ((LinearMap.toMatrix bD bC) M)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:580:8: Invalid rewrite argument: Expected an equality or iff proof or definition name, but `U` is a value of type
+  Submodule F (W n)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:583:8: Invalid rewrite argument: Expected an equality or iff proof or definition name, but `Z` is a value of type
+  Submodule F (V d)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:609:4: No goals to be solved
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:620:47: Invalid field notation: Type of
+  N
+is not known; cannot resolve field `comp`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AbsoluteValue.comp`
+  • `AddActionHom.comp`
+  • `AddGroupSeminorm.comp`
+  • `AddHom.comp`
+  • `AddMonoidHom.comp`
+  • `AffineMap.comp`
+  • `AlgHom.comp`
+  • `AlgebraicIndependent.comp`
+  • `AnalyticAt.comp`
+  • `AnalyticOn.comp`
+  • `AnalyticOnNhd.comp`
+  • `AnalyticWithinAt.comp`
+  • `AntilipschitzWith.comp`
+  • `Antitone.comp`
+  • `AntitoneOn.comp`
+  • `ApplicativeTransformation.comp`
+  • `BiheytingHom.comp`
+  • `BotHom.comp`
+  • `BoundedContinuousFunction.comp`
+  • `BoundedLatticeHom.comp`
+  • `BoundedOrderHom.comp`
+  • `CPolynomialAt.comp`
+  • `CPolynomialOn.comp`
+  • `CoheytingHom.comp`
+  • `CompTriple.comp`
+  • `CompleteLatticeHom.comp`
+  • `ConcaveOn.comp`
+  • `ContDiff.comp`
+  • `ContDiffAt.comp`
+  • `ContDiffOn.comp`
+  • `ContDiffWithinAt.comp`
+  • `Continuous.comp`
+  • `ContinuousAddMonoidHom.comp`
+  • `ContinuousAffineMap.comp`
+  • `ContinuousAlgHom.comp`
+  • `ContinuousAt.comp`
+  • `ContinuousLinearMap.comp`
+  • `ContinuousMap.comp`
+  • `ContinuousMonoidHom.comp`
+  • `ContinuousOn.comp`
+  • `ContinuousWithinAt.comp`
+  • `ConvexOn.comp`
+  • `DenseRange.comp`
+  • `Differentiable.comp`
+  • `DifferentiableAt.comp`
+  • `DifferentiableOn.comp`
+  • `DifferentiableWithinAt.comp`
+  • `Dilation.comp`
+  • `DistribMulActionHom.comp`
+  • `Equicontinuous.comp`
+  • `EquicontinuousAt.comp`
+  • `EquicontinuousOn.comp`
+  • `EquicontinuousWithinAt.comp`
+  • `FormalMultilinearSeries.comp`
+  • `FrameHom.comp`
+  • `Function.comp`
+  • `GeneralizingMap.comp`
+  • `GroupSeminorm.comp`
+  • `HasDerivAt.comp`
+  • `HasDerivAtFilter.comp`
+  • `HasDerivWithinAt.comp`
+  • `HasFDerivAt.comp`
+  • `HasFDerivAtFilter.comp`
+  • `HasFDerivWithinAt.comp`
+  • `HasFPowerSeriesAt.comp`
+  • `HasFPowerSeriesWithinAt.comp`
+  • `HasFTaylorSeriesUpToOn.comp`
+  • `HasFiniteFPowerSeriesAt.comp`
+  • `HasOpenCGraph.comp`
+  • `HasOpenLowerSections.comp`
+  • `HasOpenLowerSectionsOn.comp`
+  • `HasStrictDerivAt.comp`
+  • `HasStrictFDerivAt.comp`
+  • `HeytingHom.comp`
+  • `InfHom.comp`
+  • `InfTopHom.comp`
+  • `IsBaseChange.comp`
+  • `IsBoundedLinearMap.comp`
+  • `IsClosedMap.comp`
+  • `IsDvdSequence.comp`
+  • `IsHomeomorph.comp`
+  • `IsLocallyConstant.comp`
+  • `IsOpenMap.comp`
+  • `IsOpenQuotientMap.comp`
+  • `IsProperMap.comp`
+  • `IsSpectralMap.comp`
+  • `IsUniformEmbedding.comp`
+  • `IsUniformInducing.comp`
+  • `Isometry.comp`
+  • `LatticeHom.comp`
+  • `LeftOrdContinuous.comp`
+  • `LinearIndependent.comp`
+  • `LinearIsometry.comp`
+  • `LinearMap.comp`
+  • `LinearPMap.comp`
+  • `LipschitzOnWith.comp`
+  • `LipschitzWith.comp`
+  • `LocallyBoundedMap.comp`
+  • `LocallyLipschitz.comp`
+  • `LowerHemicontinuous.comp`
+  • `LowerHemicontinuousAt.comp`
+  • `LowerHemicontinuousOn.comp`
+  • `LowerHemicontinuousWithinAt.comp`
+  • `LowerSemicontinuous.comp`
+  • `LowerSemicontinuousAt.comp`
+  • `LowerSemicontinuousOn.comp`
+  • `LowerSemicontinuousWithinAt.comp`
+  • `Matrix.comp`
+  • `MonoidHom.comp`
+  • `MonoidWithZeroHom.comp`
+  • `Monotone.comp`
+  • `MonotoneOn.comp`
+  • `MulActionHom.comp`
+  • `MulDistribMulActionHom.comp`
+  • `MulHom.comp`
+  • `MulSemiringActionHom.comp`
+  • `NonUnitalAlgHom.comp`
+  • `NonUnitalRingHom.comp`
+  • `NonUnitalStarAlgHom.comp`
+  • `NonUnitalStarRingHom.comp`
+  • `NormedAddGroupHom.comp`
+  • `OneHom.comp`
+  • `OrderAddMonoidHom.comp`
+  • `OrderEmbedding.comp`
+  • `OrderHom.comp`
+  • `OrderMonoidHom.comp`
+  • `OrderMonoidWithZeroHom.comp`
+  • `OrderRingHom.comp`
+  • `Polynomial.comp`
+  • `PolynomialModule.comp`
+  • `Prefunctor.comp`
+  • `RelHom.comp`
+  • `RightOrdContinuous.comp`
+  • `RingHom.comp`
+  • `RingHomSurjective.comp`
+  • `SMul.comp`
+  • `ScottContinuous.comp`
+  • `ScottContinuousOn.comp`
+  • `Semicontinuous.comp`
+  • `SemicontinuousAt.comp`
+  • `SemicontinuousOn.comp`
+  • `SemicontinuousWithinAt.comp`
+  • `Seminorm.comp`
+  • `SeminormFamily.comp`
+  • `SetRel.comp`
+  • `SpecializingMap.comp`
+  • `SpectralMap.comp`
+  • `StarAlgHom.comp`
+  • `StarMonoidHom.comp`
+  • `StrictAnti.comp`
+  • `StrictAntiOn.comp`
+  • `StrictConcaveOn.comp`
+  • `StrictConvexOn.comp`
+  • `StrictMono.comp`
+  • `StrictMonoOn.comp`
+  • `SupBotHom.comp`
+  • `SupHom.comp`
+  • `TendstoLocallyUniformly.comp`
+  • `TendstoLocallyUniformlyOn.comp`
+  • `TendstoUniformly.comp`
+  • `TendstoUniformlyOn.comp`
+  • `TendstoUniformlyOnFilter.comp`
+  • `TopHom.comp`
+  • `UniformCauchySeqOn.comp`
+  • `UniformCauchySeqOnFilter.comp`
+  • `UniformContinuous.comp`
+  • `UniformContinuousOn.comp`
+  • `UniformContinuous₂.comp`
+  • `UniformEquicontinuous.comp`
+  • `UniformEquicontinuousOn.comp`
+  • `UniformSpace.comp`
+  • `UpperHemicontinuous.comp`
+  • `UpperHemicontinuousAt.comp`
+  • `UpperHemicontinuousOn.comp`
+  • `UpperHemicontinuousWithinAt.comp`
+  • `UpperSemicontinuous.comp`
+  • `UpperSemicontinuousAt.comp`
+  • `UpperSemicontinuousOn.comp`
+  • `UpperSemicontinuousWithinAt.comp`
+  • `VAdd.comp`
+  • `ZeroHom.comp`
+  • `iSupIndep.comp`
+  • `sInfHom.comp`
+  • `sSupHom.comp`
+  • `Aesop.GoalDiff.comp`
+  • `AlgHom.Finite.comp`
+  • `AlgHom.FinitePresentation.comp`
+  • `AlgHom.FiniteType.comp`
+  • `Algebra.EssFiniteType.comp`
+  • `CategoryTheory.Adjunction.comp`
+  • `CategoryTheory.CategoryStruct.comp`
+  • `CategoryTheory.Functor.comp`
+  • `CategoryTheory.FunctorToTypes.comp`
+  • `CategoryTheory.Grothendieck.comp`
+  • `CategoryTheory.LaxFunctor.comp`
+  • `CategoryTheory.MorphismProperty.comp`
+  • `CategoryTheory.OplaxFunctor.comp`
+  • `CategoryTheory.PrelaxFunctor.comp`
+  • `CategoryTheory.PrelaxFunctorStruct.comp`
+  • `CategoryTheory.Pseudofunctor.comp`
+  • `CategoryTheory.SplitEpi.comp`
+  • `CategoryTheory.SplitMono.comp`
+  • `ContinuousLinearMap.IsInvertible.comp`
+  • `Filter.EventuallyConst.comp`
+  • `Filter.IsBoundedUnder.comp`
+  • `Filter.Tendsto.comp`
+  • `Filter.TendstoCofinite.comp`
+  • `FreeAddGroup.map.comp`
+  • `FreeGroup.map.comp`
+  • `Function.Bijective.comp`
+  • `Function.HasFiniteMulSupport.comp`
+  • `Function.HasFiniteSupport.comp`
+  • `Function.Injective.comp`
+  • `Function.IsFixedPt.comp`
+  • `Function.IsPartialInv.comp`
+  • `Function.IsPeriodicPt.comp`
+  • `Function.LeftInverse.comp`
+  • `Function.Periodic.comp`
+  • `Function.RightInverse.comp`
+  • `Function.Semiconj₂.comp`
+  • `Function.Surjective.comp`
+  • `LinearMap.BilinForm.comp`
+  • `LinearMap.IsAdjointPair.comp`
+  • `Matrix.BlockTriangular.comp`
+  • `MonoidHom.CompTriple.comp`
+  • `MulChar.IsQuadratic.comp`
+  • `NormedAddGroupHom.NormNoninc.comp`
+  • `OmegaCompletePartialOrder.ContinuousHom.comp`
+  • `OmegaCompletePartialOrder.ωScottContinuous.comp`
+  • `Order.IsNormal.comp`
+  • `Ordinal.IsFundamentalSeq.comp`
+  • `Plausible.TotalFunction.comp`
+  • `Polynomial.Monic.comp`
+  • `Quiver.Path.comp`
+  • `RingHom.Finite.comp`
+  • `RingHom.FinitePresentation.comp`
+  • `RingHom.FiniteType.comp`
+  • `RingHom.SurjectiveOnStalks.comp`
+  • `Set.BijOn.comp`
+  • `Set.InjOn.comp`
+  • `Set.InvOn.comp`
+  • `Set.LeftInvOn.comp`
+  • `Set.MapsTo.comp`
+  • `Set.RightInvOn.comp`
+  • `Set.SurjOn.comp`
+  • `SetRel.IsRefl.comp`
+  • `Topology.IsClosedEmbedding.comp`
+  • `Topology.IsCoinducing.comp`
+  • `Topology.IsEmbedding.comp`
+  • `Topology.IsInducing.comp`
+  • `Topology.IsOpenEmbedding.comp`
+  • `Topology.IsQuotientMap.comp`
+  • `TypeCat.Fun.comp`
+  • `UniformSpace.Core.comp`
+  • `CategoryTheory.FreeBicategory.Hom.comp`
+  • `CategoryTheory.FreeMonoidalCategory.Hom.comp`
+  • `CategoryTheory.FreeMonoidalCategory.HomEquiv.comp`
+  • `CategoryTheory.Functor.Faithful.comp`
+  • `CategoryTheory.Functor.Full.comp`
+  • `CategoryTheory.Functor.FullyFaithful.comp`
+  • `CategoryTheory.Functor.LaxMonoidal.comp`
+  • `CategoryTheory.Functor.OplaxMonoidal.comp`
+  • `CategoryTheory.Limits.HasImageMap.comp`
+  • `CategoryTheory.Limits.WalkingParallelPairHom.comp`
+  • `Module.End.invtSubmodule.comp`
+  • `CategoryTheory.Comonad.Coalgebra.Hom.comp`
+  • `CategoryTheory.FreeMonoidalCategory.HomEquiv.below.comp`
+  • `CategoryTheory.Monad.Algebra.Hom.comp`
+  • `Mathlib.Meta.FunProp.DecompositionResult.comp`
+  • `Mathlib.Meta.FunProp.LambdaTheoremArgs.comp`
+  • `Mathlib.Meta.FunProp.LambdaTheoremType.comp`
+  • `Mathlib.Meta.FunProp.TheoremForm.comp`
+  • `Mathlib.Tactic.BicategoryLike.Mor₁.comp`
+  • `Mathlib.Tactic.BicategoryLike.Mor₂.comp`
+  • `Mathlib.Tactic.BicategoryLike.Mor₂Iso.comp`
+  • `Mathlib.Tactic.Coherence.LiftHom.comp`
+  • `Tactic.ComputeAsymptotics.Seq.FriendlyOperation.comp`
+  • `Tactic.ComputeAsymptotics.Seq.FriendlyOperationClass.comp`
+  • `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.FriendlyOperation.comp`
+  • `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.FriendlyOperationClass.comp`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:570:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+C A : Submodule F (V d)
+B : Submodule F (W n)
+hC : Module.finrank F ↥C = 1
+hCA : C ≤ A
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+L : Submodule F (V d ⧸ Z) := Submodule.map Z.mkQ C
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hquotU : Module.finrank F (W n ⧸ U) = 0
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hL : Module.finrank F ↥L = 1
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+eD : (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸
+    C) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝]
+  (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C :=
+  (nestedDomainEquiv Z C ⋯).symm
+P : Submodule PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝
+  ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C) :=
+  Submodule.map (↑eD) (Submodule.map C.mkQ A)
+Q : Submodule F ↥U := Submodule.comap U.subtype B
+hP : Submodule.map (↑eD.symm) P = Submodule.map C.mkQ A
+hPdim : Module.finrank F ↥P = Module.finrank F ↥(Submodule.map C.mkQ A)
+hArec : Submodule.comap C.mkQ (Submodule.map C.mkQ A) = A
+hBrec : Submodule.map U.subtype Q = B
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ U) = 1
+hadd :
+  Module.finrank F ↥A + Module.finrank F (W n ⧸ B) =
+    1 + (Module.finrank F ↥(Submodule.map C.mkQ A) + Module.finrank F (↥U ⧸ Q))
+hinner : Module.finrank F ↥P + Module.finrank F (↥U ⧸ Q) ≤ j - 1
+⊢ (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:689:8: Invalid rewrite argument: Expected an equality or iff proof or definition name, but `U` is a value of type
+  Submodule F (W n)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:692:8: Invalid rewrite argument: Expected an equality or iff proof or definition name, but `Z` is a value of type
+  Submodule F (V d)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:704:21: Invalid rewrite argument: Expected an equality or iff proof or definition name, but `Z` is a value of type
+  Submodule F (V d)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:717:2: 'change' tactic failed, pattern
+  Module.finrank F (W n ⧸ B) = 1 + Module.finrank F (↥H ⧸ Q0)
+is not definitionally equal to target
+  Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥Z.mkQ.ker +
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ B) =
+    1 + (0 + Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ (↥H ⧸ Q0))
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
