@@ -1,0 +1,20 @@
+--- retry-80/coherent-full-a22-hc46-successor/ActualBinaryMatrixHC46A22ParentFactorization.lean
++++ retry-80/parent-factorization-repair-offer/ActualBinaryMatrixHC46A22ParentFactorization.lean
+@@ -841,7 +841,7 @@
+     carrierMean A B (fun M => Complex.normSq
+         (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+         (2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2 :=
+-      hMeanTransport.symm.trans_le (hc'.symm.trans_le hb')
++      hMeanTransport.symm.trans_le ((hc').symm.trans_le hb')
+ 
+ 
+ /-- Complete codomain-hyperplane branch, including every relative inner
+@@ -987,7 +987,7 @@
+     carrierMean Z B (fun M => Complex.normSq
+         (filteredCarrierFunction Z B T (complexRankProjection j f) M)) ≤
+         (2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2 :=
+-      hMeanTransport.symm.trans_le (hc'.symm.trans_le hb')
++      hMeanTransport.symm.trans_le ((hc').symm.trans_le hb')
+ 
+ 
+ /-- The full positive-parent input to original A22. The only induction
