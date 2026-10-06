@@ -1,0 +1,964 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:142:6: Type mismatch: After simplification, term
+  hx
+ has type
+  x ∈ A
+but is expected to have type
+  x ∈ ↑A
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:162:7: Unknown identifier `actualDerivativeCoordinate`
+
+Note: It is not possible to treat `actualDerivativeCoordinate` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:168:13: Unknown constant `Submodule.map_map`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:167:77: unsolved goals
+n d j : ℕ
+b : ℝ
+f : BinaryMatrix n d → ℂ
+C A : Submodule F (V d)
+B H : Submodule F (W n)
+hCA : C ≤ A
+hBH : B ≤ H
+T : V d →ₗ[F] W n
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ H) = 1
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+hderived : OriginalActualInfluenceThrough (j - 1) b sorry
+P : Submodule PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+  (Fin
+      (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+        (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ C)) →
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝) :=
+  Submodule.map (↑(domainBasis C).equivFun) (Submodule.map C.mkQ A)
+Q : Submodule PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+  (Fin (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥H) →
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝) :=
+  Submodule.map (↑(codomainBasis H).equivFun) (Submodule.comap H.subtype B)
+⊢ Submodule.map (↑(domainBasis C).equivFun.symm) (Submodule.map (↑(domainBasis C).equivFun) (Submodule.map C.mkQ A)) =
+    Submodule.map C.mkQ A
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:170:13: Unknown constant `Submodule.map_map`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:169:85: unsolved goals
+n d j : ℕ
+b : ℝ
+f : BinaryMatrix n d → ℂ
+C A : Submodule F (V d)
+B H : Submodule F (W n)
+hCA : C ≤ A
+hBH : B ≤ H
+T : V d →ₗ[F] W n
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ H) = 1
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+hderived : OriginalActualInfluenceThrough (j - 1) b sorry
+P : Submodule PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+  (Fin
+      (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+        (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ C)) →
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝) :=
+  Submodule.map (↑(domainBasis C).equivFun) (Submodule.map C.mkQ A)
+Q : Submodule PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+  (Fin (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥H) →
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝) :=
+  Submodule.map (↑(codomainBasis H).equivFun) (Submodule.comap H.subtype B)
+hP : Submodule.map (↑(domainBasis C).equivFun.symm) P = Submodule.map C.mkQ A
+⊢ Submodule.map (↑(codomainBasis H).equivFun.symm)
+      (Submodule.map (↑(codomainBasis H).equivFun) (Submodule.comap H.subtype B)) =
+    Submodule.comap H.subtype B
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:181:57: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  B ⊓ H
+in the target expression
+  H ⊓ B = B
+
+n d j : ℕ
+b : ℝ
+f : BinaryMatrix n d → ℂ
+C A : Submodule F (V d)
+B H : Submodule F (W n)
+hCA : C ≤ A
+hBH : B ≤ H
+T : V d →ₗ[F] W n
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ H) = 1
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+hderived : OriginalActualInfluenceThrough (j - 1) b sorry
+P : Submodule PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+  (Fin
+      (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+        (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ C)) →
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝) :=
+  Submodule.map (↑(domainBasis C).equivFun) (Submodule.map C.mkQ A)
+Q : Submodule PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+  (Fin (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥H) →
+    PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝) :=
+  Submodule.map (↑(codomainBasis H).equivFun) (Submodule.comap H.subtype B)
+hP : Submodule.map (↑(domainBasis C).equivFun.symm) P = Submodule.map C.mkQ A
+hQ : Submodule.map (↑(codomainBasis H).equivFun.symm) Q = Submodule.comap H.subtype B
+hPA : Module.finrank F ↥P = Module.finrank F ↥(Submodule.map C.mkQ A)
+hQB : Module.finrank F ((Fin (Module.finrank F ↥H) → F) ⧸ Q) = Module.finrank F (↥H ⧸ Submodule.comap H.subtype B)
+hArec : Submodule.comap C.mkQ (Submodule.map C.mkQ A) = A
+⊢ H ⊓ B = B
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:187:4: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  m ≥ 0
+  l ≥ 0
+  k ≥ 0
+  i ≥ 0
+  i - k - l ≤ 1
+  h ≥ 0
+  g ≥ 0
+  g + h - m ≥ 1
+  e ≥ 0
+  c ≥ 0
+  c + e - m ≤ 1
+  0 ≤ a ≤ 1
+where
+ a := ↑(Module.finrank F (W n ⧸ H))
+ c := ↑(Module.finrank F ↥A)
+ e := ↑(Module.finrank F (W n ⧸ B))
+ g := ↑(Module.finrank F ↥(Submodule.map C.mkQ A))
+ h := ↑(Module.finrank F (↥H ⧸ Submodule.comap H.subtype B))
+ i := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ B))
+ k := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+    ↥(Submodule.map C.mkQ A))
+ l := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+    (↥H ⧸ Submodule.comap H.subtype B))
+ m := ↑(j - 1)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:215:8: Unknown identifier `typedLineReducedWitness`
+
+Note: It is not possible to treat `typedLineReducedWitness` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:230:16: Unknown identifier `typedLineReducedWitness`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:216:49: unsolved goals
+n d j p : ℕ
+eps : ℝ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+A : Submodule F (V d)
+B : Submodule F (W n)
+L : Submodule F (V d ⧸ A)
+hL : Module.finrank F ↥L = 1
+T : V d ⧸ A →ₗ[F] ↥B
+f : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hf : UpToCarrierLqGlobal A B j (pConjugate p) eps f
+hpR : 1 < ↑p
+hq : 1 ≤ pConjugate p
+hk : j - 1 + 1 = j
+heps : 0 ≤ eps
+hw :
+  UpToActualLqGlobal (j - 1) (pConjugate p) ((1 + 2 ^ (j - 1 + 1)) * (1 + 2 ^ (j - 1)) * eps) fun X =>
+    BinaryMatrixTypedA15ReducedGlobal.typedLineReducedWitness B L hL T f ((reducedMatrixEquiv B L).symm X)
+hc : (1 + 2 ^ j) * (1 + 2 ^ (j - 1)) ≤ 2 ^ (3 * j)
+⊢ OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2)
+    (complexRankProjection (j - 1) fun X => sorry)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:263:8: Unknown identifier `typedHyperplaneReducedWitness`
+
+Note: It is not possible to treat `typedHyperplaneReducedWitness` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:278:16: Unknown identifier `typedHyperplaneReducedWitness`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:264:57: unsolved goals
+n d j p : ℕ
+eps : ℝ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+A : Submodule F (V d)
+B : Submodule F (W n)
+L : Submodule F ↥B
+hL : Module.finrank F (↥B ⧸ L) = 1
+T : V d ⧸ A →ₗ[F] ↥B
+f : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hf : UpToCarrierLqGlobal A B j (pConjugate p) eps f
+hpR : 1 < ↑p
+hq : 1 ≤ pConjugate p
+hk : j - 1 + 1 = j
+heps : 0 ≤ eps
+hw :
+  UpToActualLqGlobal (j - 1) (pConjugate p) ((1 + 2 ^ (j - 1 + 1)) * (1 + 2 ^ (j - 1)) * eps) fun X =>
+    BinaryMatrixTypedA15HyperplaneReducedGlobal.typedHyperplaneReducedWitness B L hL T f
+      ((hyperplaneReducedMatrixEquiv L).symm X)
+hc : (1 + 2 ^ j) * (1 + 2 ^ (j - 1)) ≤ 2 ^ (3 * j)
+⊢ OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2)
+    (complexRankProjection (j - 1) fun X => sorry)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:307:37: Unknown identifier `Selected`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:323:11: typeclass instance problem is stuck
+  RingHomCompTriple ?m.386 (RingHom.id F) ?m.385
+
+Note: Lean will not try to resolve this typeclass instance problem because the seventh type argument to `RingHomCompTriple` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:399:10: Unknown identifier `Basis`
+
+Note: It is not possible to treat `Basis` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:399:35: Unknown identifier `Basis`
+
+Note: It is not possible to treat `Basis` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:414:59: Unknown constant `Submodule.map_map`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:414:46: unsolved goals
+D : Type u_1
+C : Type u_2
+inst✝⁷ : AddCommGroup D
+inst✝⁶ : Module F D
+inst✝⁵ : Finite D
+inst✝⁴ : Module.Finite F D
+inst✝³ : Module.Free F D
+inst✝² : AddCommGroup C
+inst✝¹ : Module F C
+inst✝ : Finite C
+n d r : ℕ
+b : ℝ
+bD : sorry
+bC : sorry
+g : BinaryMatrix n d → ℂ
+hg : OriginalActualInfluenceThrough r b g
+A : Submodule F D
+B : Submodule F C
+S : D →ₗ[F] C
+hcost : Module.finrank F ↥A + Module.finrank F (C ⧸ B) ≤ r
+eD : D ≃ₗ[F] V d ⧸ ⊥ := sorry
+eC : C ≃ₗ[F] ↥⊤ := sorry
+A0 : Submodule F (V d ⧸ ⊥) := Submodule.map (↑eD) A
+B0 : Submodule F ↥⊤ := Submodule.map (↑eC) B
+S0 : V d ⧸ ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] ↥⊤ := (mapReindexEquiv eD eC).symm S
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥⊤) →
+  ℂ :=
+  fun M => filteredCarrierFunction ⊥ ⊤ 0 g M
+⊢ Submodule.map (↑eD.symm) (Submodule.map (↑eD) A) = A
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:415:59: Unknown constant `Submodule.map_map`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:415:46: unsolved goals
+D : Type u_1
+C : Type u_2
+inst✝⁷ : AddCommGroup D
+inst✝⁶ : Module F D
+inst✝⁵ : Finite D
+inst✝⁴ : Module.Finite F D
+inst✝³ : Module.Free F D
+inst✝² : AddCommGroup C
+inst✝¹ : Module F C
+inst✝ : Finite C
+n d r : ℕ
+b : ℝ
+bD : sorry
+bC : sorry
+g : BinaryMatrix n d → ℂ
+hg : OriginalActualInfluenceThrough r b g
+A : Submodule F D
+B : Submodule F C
+S : D →ₗ[F] C
+hcost : Module.finrank F ↥A + Module.finrank F (C ⧸ B) ≤ r
+eD : D ≃ₗ[F] V d ⧸ ⊥ := sorry
+eC : C ≃ₗ[F] ↥⊤ := sorry
+A0 : Submodule F (V d ⧸ ⊥) := Submodule.map (↑eD) A
+B0 : Submodule F ↥⊤ := Submodule.map (↑eC) B
+S0 : V d ⧸ ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] ↥⊤ := (mapReindexEquiv eD eC).symm S
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥⊤) →
+  ℂ :=
+  fun M => filteredCarrierFunction ⊥ ⊤ 0 g M
+hA : Submodule.map (↑eD.symm) A0 = A
+⊢ Submodule.map (↑eC.symm) (Submodule.map (↑eC) B) = B
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:461:20: Unknown identifier `typedLineReducedWitness`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:460:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+A : Submodule F (V d)
+B : Submodule F (W n)
+L : Submodule F (V d ⧸ A)
+hL : Module.finrank F ↥L = 1
+T : V d ⧸ A →ₗ[F] ↥B
+f : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hf : UpToCarrierLqGlobal A B j (pConjugate p) eps f
+P : Submodule F ((V d ⧸ A) ⧸ L)
+Q : Submodule F ↥B
+S : (V d ⧸ A) ⧸ L →ₗ[F] ↥B
+hcost : Module.finrank F ↥P + Module.finrank F (↥B ⧸ Q) ≤ j - 1
+⊢ (a22IntrinsicEnergy P Q S fun N =>
+      typedComplexLineFilter B L hL (typedComplexRankProjection A B j f) (T + N ∘ₗ L.mkQ)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:501:20: Unknown identifier `typedHyperplaneReducedWitness`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:500:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+A : Submodule F (V d)
+B : Submodule F (W n)
+L : Submodule F ↥B
+hL : Module.finrank F (↥B ⧸ L) = 1
+T : V d ⧸ A →ₗ[F] ↥B
+f : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+hf : UpToCarrierLqGlobal A B j (pConjugate p) eps f
+P : Submodule F (V d ⧸ A)
+Q : Submodule F ↥L
+S : V d ⧸ A →ₗ[F] ↥L
+hcost : Module.finrank F ↥P + Module.finrank F (↥L ⧸ Q) ≤ j - 1
+⊢ (a22IntrinsicEnergy P Q S fun N =>
+      typedComplexHyperplaneFilter B L hL (typedComplexRankProjection A B j f) (T + L.subtype ∘ₗ N)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:547:4: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 1
+  g ≥ 0
+  e ≥ 0
+  c ≥ 0
+  b ≥ 2
+  a ≥ 1
+  a - c - e ≥ 0
+where
+ a := ↑j
+ b := ↑p
+ c := ↑(Module.finrank F ↥A)
+ e := ↑(Module.finrank F (W n ⧸ B))
+ g := ↑(Module.finrank F (W n))
+ i := ↑(Module.finrank F (W n ⧸ U))
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:563:13: Unknown constant `Submodule.map_map`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:562:55: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+C A : Submodule F (V d)
+B : Submodule F (W n)
+hC : Module.finrank F ↥C = 1
+hCA : C ≤ A
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+L : Submodule F (V d ⧸ Z) := Submodule.map Z.mkQ C
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hL : Module.finrank F ↥L = 1
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+eD : (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸
+    C) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝]
+  (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C :=
+  (nestedDomainEquiv Z C ⋯).symm
+P : Submodule PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝
+  ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C) :=
+  Submodule.map (↑eD) (Submodule.map C.mkQ A)
+Q : Submodule F ↥U := Submodule.comap U.subtype B
+⊢ Submodule.map (↑eD.symm) (Submodule.map (↑eD) (Submodule.map C.mkQ A)) = Submodule.map C.mkQ A
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:580:4: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l ≥ 0
+  k ≥ 0
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  g - h - i ≤ 1
+  e ≥ 0
+  e + k - l ≥ 1
+  c ≥ 0
+  b ≥ 0
+  b + c - l ≤ 1
+  a ≥ 2
+where
+ a := ↑p
+ b := ↑(Module.finrank F ↥A)
+ c := ↑(Module.finrank F (W n ⧸ B))
+ e := ↑(Module.finrank F ↥(Submodule.map C.mkQ A))
+ g := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ B))
+ h := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+    ↥(Submodule.map C.mkQ A))
+ i := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ (↥U ⧸ Q))
+ k := ↑(Module.finrank F (↥U ⧸ Q))
+ l := ↑(j - 1)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:582:47: Invalid field notation: Type of
+  N
+is not known; cannot resolve field `comp`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AbsoluteValue.comp`
+  • `AddActionHom.comp`
+  • `AddGroupSeminorm.comp`
+  • `AddHom.comp`
+  • `AddMonoidHom.comp`
+  • `AffineMap.comp`
+  • `AlgHom.comp`
+  • `AlgebraicIndependent.comp`
+  • `AnalyticAt.comp`
+  • `AnalyticOn.comp`
+  • `AnalyticOnNhd.comp`
+  • `AnalyticWithinAt.comp`
+  • `AntilipschitzWith.comp`
+  • `Antitone.comp`
+  • `AntitoneOn.comp`
+  • `ApplicativeTransformation.comp`
+  • `BiheytingHom.comp`
+  • `BotHom.comp`
+  • `BoundedContinuousFunction.comp`
+  • `BoundedLatticeHom.comp`
+  • `BoundedOrderHom.comp`
+  • `CPolynomialAt.comp`
+  • `CPolynomialOn.comp`
+  • `CoheytingHom.comp`
+  • `CompTriple.comp`
+  • `CompleteLatticeHom.comp`
+  • `ConcaveOn.comp`
+  • `ContDiff.comp`
+  • `ContDiffAt.comp`
+  • `ContDiffOn.comp`
+  • `ContDiffWithinAt.comp`
+  • `Continuous.comp`
+  • `ContinuousAddMonoidHom.comp`
+  • `ContinuousAffineMap.comp`
+  • `ContinuousAlgHom.comp`
+  • `ContinuousAt.comp`
+  • `ContinuousLinearMap.comp`
+  • `ContinuousMap.comp`
+  • `ContinuousMonoidHom.comp`
+  • `ContinuousOn.comp`
+  • `ContinuousWithinAt.comp`
+  • `ConvexOn.comp`
+  • `DenseRange.comp`
+  • `Differentiable.comp`
+  • `DifferentiableAt.comp`
+  • `DifferentiableOn.comp`
+  • `DifferentiableWithinAt.comp`
+  • `Dilation.comp`
+  • `DistribMulActionHom.comp`
+  • `Equicontinuous.comp`
+  • `EquicontinuousAt.comp`
+  • `EquicontinuousOn.comp`
+  • `EquicontinuousWithinAt.comp`
+  • `FormalMultilinearSeries.comp`
+  • `FrameHom.comp`
+  • `Function.comp`
+  • `GeneralizingMap.comp`
+  • `GroupSeminorm.comp`
+  • `HasDerivAt.comp`
+  • `HasDerivAtFilter.comp`
+  • `HasDerivWithinAt.comp`
+  • `HasFDerivAt.comp`
+  • `HasFDerivAtFilter.comp`
+  • `HasFDerivWithinAt.comp`
+  • `HasFPowerSeriesAt.comp`
+  • `HasFPowerSeriesWithinAt.comp`
+  • `HasFTaylorSeriesUpToOn.comp`
+  • `HasFiniteFPowerSeriesAt.comp`
+  • `HasOpenCGraph.comp`
+  • `HasOpenLowerSections.comp`
+  • `HasOpenLowerSectionsOn.comp`
+  • `HasStrictDerivAt.comp`
+  • `HasStrictFDerivAt.comp`
+  • `HeytingHom.comp`
+  • `InfHom.comp`
+  • `InfTopHom.comp`
+  • `IsBaseChange.comp`
+  • `IsBoundedLinearMap.comp`
+  • `IsClosedMap.comp`
+  • `IsDvdSequence.comp`
+  • `IsHomeomorph.comp`
+  • `IsLocallyConstant.comp`
+  • `IsOpenMap.comp`
+  • `IsOpenQuotientMap.comp`
+  • `IsProperMap.comp`
+  • `IsSpectralMap.comp`
+  • `IsUniformEmbedding.comp`
+  • `IsUniformInducing.comp`
+  • `Isometry.comp`
+  • `LatticeHom.comp`
+  • `LeftOrdContinuous.comp`
+  • `LinearIndependent.comp`
+  • `LinearIsometry.comp`
+  • `LinearMap.comp`
+  • `LinearPMap.comp`
+  • `LipschitzOnWith.comp`
+  • `LipschitzWith.comp`
+  • `LocallyBoundedMap.comp`
+  • `LocallyLipschitz.comp`
+  • `LowerHemicontinuous.comp`
+  • `LowerHemicontinuousAt.comp`
+  • `LowerHemicontinuousOn.comp`
+  • `LowerHemicontinuousWithinAt.comp`
+  • `LowerSemicontinuous.comp`
+  • `LowerSemicontinuousAt.comp`
+  • `LowerSemicontinuousOn.comp`
+  • `LowerSemicontinuousWithinAt.comp`
+  • `Matrix.comp`
+  • `MonoidHom.comp`
+  • `MonoidWithZeroHom.comp`
+  • `Monotone.comp`
+  • `MonotoneOn.comp`
+  • `MulActionHom.comp`
+  • `MulDistribMulActionHom.comp`
+  • `MulHom.comp`
+  • `MulSemiringActionHom.comp`
+  • `NonUnitalAlgHom.comp`
+  • `NonUnitalRingHom.comp`
+  • `NonUnitalStarAlgHom.comp`
+  • `NonUnitalStarRingHom.comp`
+  • `NormedAddGroupHom.comp`
+  • `OneHom.comp`
+  • `OrderAddMonoidHom.comp`
+  • `OrderEmbedding.comp`
+  • `OrderHom.comp`
+  • `OrderMonoidHom.comp`
+  • `OrderMonoidWithZeroHom.comp`
+  • `OrderRingHom.comp`
+  • `Polynomial.comp`
+  • `PolynomialModule.comp`
+  • `Prefunctor.comp`
+  • `RelHom.comp`
+  • `RightOrdContinuous.comp`
+  • `RingHom.comp`
+  • `RingHomSurjective.comp`
+  • `SMul.comp`
+  • `ScottContinuous.comp`
+  • `ScottContinuousOn.comp`
+  • `Semicontinuous.comp`
+  • `SemicontinuousAt.comp`
+  • `SemicontinuousOn.comp`
+  • `SemicontinuousWithinAt.comp`
+  • `Seminorm.comp`
+  • `SeminormFamily.comp`
+  • `SetRel.comp`
+  • `SpecializingMap.comp`
+  • `SpectralMap.comp`
+  • `StarAlgHom.comp`
+  • `StarMonoidHom.comp`
+  • `StrictAnti.comp`
+  • `StrictAntiOn.comp`
+  • `StrictConcaveOn.comp`
+  • `StrictConvexOn.comp`
+  • `StrictMono.comp`
+  • `StrictMonoOn.comp`
+  • `SupBotHom.comp`
+  • `SupHom.comp`
+  • `TendstoLocallyUniformly.comp`
+  • `TendstoLocallyUniformlyOn.comp`
+  • `TendstoUniformly.comp`
+  • `TendstoUniformlyOn.comp`
+  • `TendstoUniformlyOnFilter.comp`
+  • `TopHom.comp`
+  • `UniformCauchySeqOn.comp`
+  • `UniformCauchySeqOnFilter.comp`
+  • `UniformContinuous.comp`
+  • `UniformContinuousOn.comp`
+  • `UniformContinuous₂.comp`
+  • `UniformEquicontinuous.comp`
+  • `UniformEquicontinuousOn.comp`
+  • `UniformSpace.comp`
+  • `UpperHemicontinuous.comp`
+  • `UpperHemicontinuousAt.comp`
+  • `UpperHemicontinuousOn.comp`
+  • `UpperHemicontinuousWithinAt.comp`
+  • `UpperSemicontinuous.comp`
+  • `UpperSemicontinuousAt.comp`
+  • `UpperSemicontinuousOn.comp`
+  • `UpperSemicontinuousWithinAt.comp`
+  • `VAdd.comp`
+  • `ZeroHom.comp`
+  • `iSupIndep.comp`
+  • `sInfHom.comp`
+  • `sSupHom.comp`
+  • `Aesop.GoalDiff.comp`
+  • `AlgHom.Finite.comp`
+  • `AlgHom.FinitePresentation.comp`
+  • `AlgHom.FiniteType.comp`
+  • `Algebra.EssFiniteType.comp`
+  • `CategoryTheory.Adjunction.comp`
+  • `CategoryTheory.CategoryStruct.comp`
+  • `CategoryTheory.Functor.comp`
+  • `CategoryTheory.FunctorToTypes.comp`
+  • `CategoryTheory.Grothendieck.comp`
+  • `CategoryTheory.LaxFunctor.comp`
+  • `CategoryTheory.MorphismProperty.comp`
+  • `CategoryTheory.OplaxFunctor.comp`
+  • `CategoryTheory.PrelaxFunctor.comp`
+  • `CategoryTheory.PrelaxFunctorStruct.comp`
+  • `CategoryTheory.Pseudofunctor.comp`
+  • `CategoryTheory.SplitEpi.comp`
+  • `CategoryTheory.SplitMono.comp`
+  • `ContinuousLinearMap.IsInvertible.comp`
+  • `Filter.EventuallyConst.comp`
+  • `Filter.IsBoundedUnder.comp`
+  • `Filter.Tendsto.comp`
+  • `Filter.TendstoCofinite.comp`
+  • `FreeAddGroup.map.comp`
+  • `FreeGroup.map.comp`
+  • `Function.Bijective.comp`
+  • `Function.HasFiniteMulSupport.comp`
+  • `Function.HasFiniteSupport.comp`
+  • `Function.Injective.comp`
+  • `Function.IsFixedPt.comp`
+  • `Function.IsPartialInv.comp`
+  • `Function.IsPeriodicPt.comp`
+  • `Function.LeftInverse.comp`
+  • `Function.Periodic.comp`
+  • `Function.RightInverse.comp`
+  • `Function.Semiconj₂.comp`
+  • `Function.Surjective.comp`
+  • `LinearMap.BilinForm.comp`
+  • `LinearMap.IsAdjointPair.comp`
+  • `Matrix.BlockTriangular.comp`
+  • `MonoidHom.CompTriple.comp`
+  • `MulChar.IsQuadratic.comp`
+  • `NormedAddGroupHom.NormNoninc.comp`
+  • `OmegaCompletePartialOrder.ContinuousHom.comp`
+  • `OmegaCompletePartialOrder.ωScottContinuous.comp`
+  • `Order.IsNormal.comp`
+  • `Ordinal.IsFundamentalSeq.comp`
+  • `Plausible.TotalFunction.comp`
+  • `Polynomial.Monic.comp`
+  • `Quiver.Path.comp`
+  • `RingHom.Finite.comp`
+  • `RingHom.FinitePresentation.comp`
+  • `RingHom.FiniteType.comp`
+  • `RingHom.SurjectiveOnStalks.comp`
+  • `Set.BijOn.comp`
+  • `Set.InjOn.comp`
+  • `Set.InvOn.comp`
+  • `Set.LeftInvOn.comp`
+  • `Set.MapsTo.comp`
+  • `Set.RightInvOn.comp`
+  • `Set.SurjOn.comp`
+  • `SetRel.IsRefl.comp`
+  • `Topology.IsClosedEmbedding.comp`
+  • `Topology.IsCoinducing.comp`
+  • `Topology.IsEmbedding.comp`
+  • `Topology.IsInducing.comp`
+  • `Topology.IsOpenEmbedding.comp`
+  • `Topology.IsQuotientMap.comp`
+  • `TypeCat.Fun.comp`
+  • `UniformSpace.Core.comp`
+  • `CategoryTheory.FreeBicategory.Hom.comp`
+  • `CategoryTheory.FreeMonoidalCategory.Hom.comp`
+  • `CategoryTheory.FreeMonoidalCategory.HomEquiv.comp`
+  • `CategoryTheory.Functor.Faithful.comp`
+  • `CategoryTheory.Functor.Full.comp`
+  • `CategoryTheory.Functor.FullyFaithful.comp`
+  • `CategoryTheory.Functor.LaxMonoidal.comp`
+  • `CategoryTheory.Functor.OplaxMonoidal.comp`
+  • `CategoryTheory.Limits.HasImageMap.comp`
+  • `CategoryTheory.Limits.WalkingParallelPairHom.comp`
+  • `Module.End.invtSubmodule.comp`
+  • `CategoryTheory.Comonad.Coalgebra.Hom.comp`
+  • `CategoryTheory.FreeMonoidalCategory.HomEquiv.below.comp`
+  • `CategoryTheory.Monad.Algebra.Hom.comp`
+  • `Mathlib.Meta.FunProp.DecompositionResult.comp`
+  • `Mathlib.Meta.FunProp.LambdaTheoremArgs.comp`
+  • `Mathlib.Meta.FunProp.LambdaTheoremType.comp`
+  • `Mathlib.Meta.FunProp.TheoremForm.comp`
+  • `Mathlib.Tactic.BicategoryLike.Mor₁.comp`
+  • `Mathlib.Tactic.BicategoryLike.Mor₂.comp`
+  • `Mathlib.Tactic.BicategoryLike.Mor₂Iso.comp`
+  • `Mathlib.Tactic.Coherence.LiftHom.comp`
+  • `Tactic.ComputeAsymptotics.Seq.FriendlyOperation.comp`
+  • `Tactic.ComputeAsymptotics.Seq.FriendlyOperationClass.comp`
+  • `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.FriendlyOperation.comp`
+  • `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.FriendlyOperationClass.comp`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:537:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+C A : Submodule F (V d)
+B : Submodule F (W n)
+hC : Module.finrank F ↥C = 1
+hCA : C ≤ A
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+L : Submodule F (V d ⧸ Z) := Submodule.map Z.mkQ C
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hL : Module.finrank F ↥L = 1
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+eD : (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸
+    C) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝]
+  (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C :=
+  (nestedDomainEquiv Z C ⋯).symm
+P : Submodule PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝
+  ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C) :=
+  Submodule.map (↑eD) (Submodule.map C.mkQ A)
+Q : Submodule F ↥U := Submodule.comap U.subtype B
+hP : Submodule.map (↑eD.symm) P = Submodule.map C.mkQ A
+hPdim : Module.finrank F ↥P = Module.finrank F ↥(Submodule.map C.mkQ A)
+hArec : Submodule.comap C.mkQ (Submodule.map C.mkQ A) = A
+hBrec : Submodule.map U.subtype Q = B
+houter : Module.finrank F ↥C + Module.finrank F (W n ⧸ U) = 1
+hadd :
+  Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥A +
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ B) =
+    1 +
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+          ↥(Submodule.map C.mkQ A) +
+        Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ (↥U ⧸ Q))
+hinner : Module.finrank F ↥P + Module.finrank F (↥U ⧸ Q) ≤ j - 1
+⊢ (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:651:4: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 1
+  e ≥ 0
+  c ≥ 0
+  b ≥ 2
+  a ≥ 1
+  a - c ≥ 0
+where
+ a := ↑j
+ b := ↑p
+ c := ↑(Module.finrank F (W n ⧸ B))
+ e := ↑(Module.finrank F (W n))
+ g := ↑(Module.finrank F (W n ⧸ U))
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:661:4: Type mismatch
+  hh
+has type
+  Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥Z.mkQ.ker +
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ Submodule.map U.subtype L) =
+    Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ (↥U ⧸ L)
+but is expected to have type
+  Module.finrank F ↥Z + Module.finrank F (W n ⧸ H) = 1
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:665:58: Unknown constant `Submodule.map_map`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:665:46: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+L : Submodule F ↥⊤
+hL : Module.finrank F (↥⊤ ⧸ L) = 1
+B : Submodule F (W n)
+hBH : B ≤ hyperplaneCanonicalCodomain ⊤ L
+T : V d →ₗ[F] W n
+hcost : Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+H : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+  (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.W✝ n) :=
+  hyperplaneCanonicalCodomain U L
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+houter : Module.finrank F ↥Z + Module.finrank F (W n ⧸ H) = 1
+eC : ↥(hyperplaneCanonicalCodomain U L) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝] ↥L :=
+  (hyperplaneCanonicalCodomainEquiv U L).symm
+Q0 : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ ↥H := Submodule.comap H.subtype B
+Q : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ ↥L := Submodule.map (↑eC) Q0
+⊢ Submodule.map (↑eC.symm) (Submodule.map (↑eC) Q0) = Q0
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:669:57: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  B ⊓ hyperplaneCanonicalCodomain ⊤ L
+in the target expression
+  H ⊓ B = B
+
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+L : Submodule F ↥⊤
+hL : Module.finrank F (↥⊤ ⧸ L) = 1
+B : Submodule F (W n)
+hBH : B ≤ hyperplaneCanonicalCodomain ⊤ L
+T : V d →ₗ[F] W n
+hcost : Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+H : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+  (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.W✝ n) :=
+  hyperplaneCanonicalCodomain U L
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+houter : Module.finrank F ↥Z + Module.finrank F (W n ⧸ H) = 1
+eC : ↥(hyperplaneCanonicalCodomain U L) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝] ↥L :=
+  (hyperplaneCanonicalCodomainEquiv U L).symm
+Q0 : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ ↥H := Submodule.comap H.subtype B
+Q : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ ↥L := Submodule.map (↑eC) Q0
+hQ : Submodule.map (↑eC.symm) Q = Q0
+hQdim : Module.finrank F (↥L ⧸ Q) = Module.finrank F (↥H ⧸ Q0)
+⊢ H ⊓ B = B
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:676:4: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  e ≥ 0
+  e - g ≤ 1
+  c ≥ 0
+  c - h ≥ 1
+  b ≥ 0
+  b - h ≤ 1
+  a ≥ 2
+where
+ a := ↑p
+ b := ↑(Module.finrank F (W n ⧸ B))
+ c := ↑(Module.finrank F (↥H ⧸ Q0))
+ e := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ Submodule.map H.subtype Q0))
+ g := ↑(Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ (↥H ⧸ Q0))
+ h := ↑(j - 1)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:641:64: unsolved goals
+n d j p : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hj : 1 ≤ j
+hp : 2 ≤ p
+hg : UpToActualLqGlobal j (pConjugate p) eps f
+hIH :
+  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),
+    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)
+L : Submodule F ↥⊤
+hL : Module.finrank F (↥⊤ ⧸ L) = 1
+B : Submodule F (W n)
+hBH : B ≤ hyperplaneCanonicalCodomain ⊤ L
+T : V d →ₗ[F] W n
+hcost : Module.finrank F (W n ⧸ B) ≤ j
+Z : Submodule F (V d) := ⊥
+U : Submodule F (W n) := ⊤
+H : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝
+  (PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.W✝ n) :=
+  hyperplaneCanonicalCodomain U L
+S : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸
+    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]
+  ↥⊤ :=
+  bottomTopCarrierAmbientHomEquiv.symm T
+f0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸
+      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]
+    ↥U) →
+  ℂ :=
+  fun M => filteredCarrierFunction Z U 0 f M
+hzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0
+hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0
+houter : Module.finrank F ↥Z + Module.finrank F (W n ⧸ H) = 1
+eC : ↥(hyperplaneCanonicalCodomain U L) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝] ↥L :=
+  (hyperplaneCanonicalCodomainEquiv U L).symm
+Q0 : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ ↥H := Submodule.comap H.subtype B
+Q : Submodule PvNP.RealizableHardness.BinaryMatrixA15NestedHyperplane.F✝ ↥L := Submodule.map (↑eC) Q0
+hQ : Submodule.map (↑eC.symm) Q = Q0
+hQdim : Module.finrank F (↥L ⧸ Q) = Module.finrank F (↥H ⧸ Q0)
+hBrec : Submodule.map H.subtype Q0 = B
+hadd :
+  Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥Z.mkQ.ker +
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ Submodule.map H.subtype Q0) =
+    1 + (0 + Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ (↥H ⧸ Q0))
+hinner : Module.finrank F ↥⊥ + Module.finrank F (↥L ⧸ Q) ≤ j - 1
+⊢ (carrierMean ⊥ B fun M => Complex.normSq (filteredCarrierFunction ⊥ B T (complexRankProjection j f) M)) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:744:6: Type mismatch: After simplification, term
+  hCH
+ has type
+  Module.finrank F ↥C + Module.finrank F (W n ⧸ H) = 1
+but is expected to have type
+  Module.finrank F (W n ⧸ H) = 1
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:762:6: Type mismatch: After simplification, term
+  hx
+ has type
+  x ∈ A
+but is expected to have type
+  x ∈ ↑A
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
