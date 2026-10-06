@@ -1,0 +1,59 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A21DyadicMoment.lean:154:23: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?a ^ ?m) ^ ?n
+in the target expression
+  2 ^ (a21Exponent q * (2 ^ 2 * D ^ 2)) * (2 ^ (114 * D ^ 2) * eps * uniformMean fun M => Complex.normSq (f M)) *
+      (2 ^ (196 * D ^ 2) * eps ^ 2) ^ (q / 2 - 1) =
+    (2 ^ (a21Exponent q * (2 ^ 2 * D ^ 2) + 114 * D ^ 2 + 196 * D ^ 2 * (q / 2 - 1)) *
+        uniformMean fun M => Complex.normSq (f M)) *
+      eps ^ (2 * q / 2 - 1)
+
+k : ℕ
+ih :
+  ∀ {n d D : ℕ} {eps : ℝ} (f : BinaryMatrix n d → ℂ),
+    ComplexFourierSupportedThrough D f →
+      UpToActualNormSqGlobal D eps f →
+        (lpMoment (2 ^ (k + 1)) fun M => ‖f M‖) ≤
+          (2 ^ (a21Exponent (2 ^ (k + 1)) * D ^ 2) * uniformMean fun M => Complex.normSq (f M)) *
+            eps ^ (2 ^ (k + 1) / 2 - 1)
+n d D : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+heps : 0 ≤ eps
+hk : ¬k = 0
+q : ℕ := 2 ^ (k + 1)
+hq : 4 ≤ q
+hqhalf : q / 2 = 2 ^ k
+heven : 2 * (q / 2) = q
+htarget : 2 ^ (k + 1 + 1) = 2 * q
+g : BinaryMatrix n d → ℂ := fun M => f M * f M
+eta : ℝ := 2 ^ (196 * D ^ 2) * eps ^ 2
+hgSupport : ComplexFourierSupportedThrough (2 * D) g
+hgGlobal : UpToActualNormSqGlobal (2 * D) eta g
+hIH :
+  (lpMoment (2 ^ (k + 1)) fun M => ‖g M‖) ≤
+    (2 ^ (a21Exponent (2 ^ (k + 1)) * (2 * D) ^ 2) * uniformMean fun M => Complex.normSq (g M)) *
+      eta ^ (2 ^ (k + 1) / 2 - 1)
+hsecond :
+  (uniformMean fun M => Complex.normSq (g M)) ≤ 2 ^ (114 * D ^ 2) * eps * uniformMean fun M => Complex.normSq (f M)
+houter : 0 ≤ 2 ^ (a21Exponent q * (2 * D) ^ 2)
+heta : 0 ≤ eta ^ (q / 2 - 1)
+hdensity : 1 + 2 * (q / 2 - 1) = 2 * q / 2 - 1
+hexponent : 4 * a21Exponent q + 196 * (q / 2 - 1) + 114 ≤ a21Exponent (2 * q)
+htotal : a21Exponent q * (2 * D) ^ 2 + 114 * D ^ 2 + 196 * D ^ 2 * (q / 2 - 1) ≤ a21Exponent (2 * q) * D ^ 2
+⊢ 2 ^ (a21Exponent q * (2 ^ 2 * D ^ 2)) * (2 ^ (114 * D ^ 2) * eps * uniformMean fun M => Complex.normSq (f M)) *
+      (2 ^ (196 * D ^ 2) * eps ^ 2) ^ (q / 2 - 1) =
+    (2 ^ (a21Exponent q * (2 ^ 2 * D ^ 2) + 114 * D ^ 2 + 196 * D ^ 2 * (q / 2 - 1)) *
+        uniformMean fun M => Complex.normSq (f M)) *
+      eps ^ (2 * q / 2 - 1)
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A21DyadicMoment
+
+
+Candidate context:
+152:                 uniformMean (fun M => Complex.normSq (f M)) * eps ^ ((2 * q) / 2 - 1) := by
+153:           dsimp [eta]
+154:           rw [mul_pow, ← pow_mul, ← pow_mul]
+155:           rw [← hdensity]
+156:           simp only [pow_add, pow_one]
