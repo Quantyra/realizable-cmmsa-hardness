@@ -1,0 +1,136 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:72:5: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+f : BinaryMatrix n d → ℂ
+pred : { A // C ≤ A } × { B // B ≤ H } → Prop :=
+  fun p => ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H
+p : { A // C ≤ A } × { B // B ≤ H }
+⊢ pred p ↔ ?m.218 p
+
+Candidate context:
+70:       p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H
+71:   have hs := Finset.sum_subtype (Finset.univ.filter pred)
+72:     (by intro p; simp) (finalEnergy C H X f)
+73:   rw [← hs, Finset.sum_filter]
+74:   rfl
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:65:40: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+f : BinaryMatrix n d → ℂ
+pred : { A // C ≤ A } × { B // B ≤ H } → Prop :=
+  fun p => ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H
+⊢ ∑ p, finalEnergy C H X f ↑p =
+    ∑ p,
+      if ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H then finalEnergy C H X f p
+      else 0
+
+Candidate context:
+63:       if p.1.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧
+64:           p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H then
+65:         finalEnergy C H X f p else 0 := by
+66:   classical
+67:   let pred := fun p : {A : Submodule F (V d) // C ≤ A} ×
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:82:16: Unknown identifier `ComplexFourierSupportedThrough`
+
+Note: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+80:     (C : Submodule F (V d)) (H : Submodule F (W n))
+81:     (X : H →ₗ[F] (V d ⧸ C)) (f : BinaryMatrix n d → Complex)
+82:     (hsupport : ComplexFourierSupportedThrough D f) :
+83:     let Xmat := carrierFrequencyEquiv C H X
+84:     let R := LinearMap.range Xmat.transpose.toLin'
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:88:9: Unknown identifier `actualW6Derivative`
+
+Note: It is not possible to treat `actualW6Derivative` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+86:     typedUniformMean (fun T : V d →ₗ[F] W n =>
+87:       a7HybridQ (carrierFunctionCoordinate R K
+88:         (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)))) ≤
+89:     (2 : Real) ^ (6 * D * Xmat.rank) *
+90:       ∑ p : a8AmbientFinalPairs C H X, finalEnergy C H X f p.1 := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:100:5: Unknown identifier `actualW6Derivative`
+
+Candidate context:
+98:     Submodule F (Fin (Module.finrank F K) → F)
+99:   let output := fun T : V d →ₗ[F] W n => carrierFunctionCoordinate R K
+100:     (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))
+101:   have hexhaust : ∀ T : V d →ₗ[F] W n,
+102:       a7HybridQ (output T) = ∑ p : O, a7PairShare p.1 p.2 (output T) := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:118:10: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+Candidate context:
+116:           localEnergy C H X f q.1 := by
+117:     intro p
+118:     exact a8_ambient_output_pair_le_supported_complement_sum C H Xmat p.1 p.2 f hsupport
+119:   have hsum : (∑ p : O,
+120:       ∑ q : a7T2ComplementPair Xmat.transpose.toLin'
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:76:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+Candidate context:
+74:   rfl
+75: 
+76: /-- Complete supported output-Q transport at any fixed original carrier and
+77: frequency. The source remains arbitrary complex and the graph budget is the
+78: manuscript factor, derived from support rather than assumed per pair. -/
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:163:16: Unknown identifier `ComplexFourierSupportedThrough`
+
+Note: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Candidate context:
+161:     {A : Submodule F (V d)} {B : Submodule F (W n)}
+162:     (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)
+163:     (hsupport : ComplexFourierSupportedThrough D f) (_horder : a6Order t ≤ D) :
+164:     let C := t1AmbientC t.C
+165:     let H := t1AmbientH t.K
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:178:20: unsolved goals
+n d D : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+t : T1IndexTriple A B
+f : BinaryMatrix n d → ℂ
+hsupport : sorry
+_horder : a6Order t ≤ D
+⊢ (typedUniformMean fun T => a7HybridQ (a7OutputBinary t T f)) ≤
+    2 ^ (6 * D * Module.finrank F ↥(t1PullbackMap t).range) *
+      ∑ p,
+        if
+            ↑p.1 ⊓ Submodule.comap (t1AmbientC t.C).mkQ (t1PullbackMap t).range = t1AmbientC t.C ∧
+              ↑p.2 ⊔ Submodule.map (t1AmbientH t.K).subtype (t1PullbackMap t).ker = t1AmbientH t.K then
+          typedUniformMean fun T =>
+            typedW6OutputEnergy (↑p.1) (↑p.2)
+                (a9AmbientFinalMap ↑p.1 ↑p.2 ⟨t1AmbientC t.C, ⋯⟩ ⟨t1AmbientH t.K, ⋯⟩ (t1PullbackMap t))
+                (filteredCarrierFunction (↑p.1) (↑p.2) T f) ^
+              2
+        else 0
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint
+
+
+Candidate context:
+176:                 (a9AmbientFinalMap p.1.1 p.2.1 ⟨C, p.1.2, rfl⟩ ⟨H, p.2.2, rfl⟩ X)
+177:                 (filteredCarrierFunction p.1.1 p.2.1 T f)) ^ 2)
+178:           else 0 := by
+179:   classical
+180:   dsimp only
