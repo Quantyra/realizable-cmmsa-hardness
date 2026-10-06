@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-06T19:05:07.814607+00:00",
+  "argv": [
+    "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+    "compute",
+    "ssh",
+    "quantyra-lean-builder-01",
+    "--tunnel-through-iap",
+    "--command=python3 -c 'from pathlib import Path; import json,subprocess,os; p=Path('\"'\"'/home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261006T185926Z_58859866-evidence'\"'\"'); lines=subprocess.check_output(['\"'\"'ps'\"'\"','\"'\"'-eo'\"'\"','\"'\"'pid,ppid,etime,pcpu,pmem,comm,args'\"'\"']).decode().splitlines(); selected=[x[:1500] for x in lines if len(x.split())>5 and x.split()[5] in ['\"'\"'bash'\"'\"','\"'\"'python3'\"'\"','\"'\"'lake'\"'\"','\"'\"'lean'\"'\"','\"'\"'cp'\"'\"','\"'\"'sha256sum'\"'\"','\"'\"'tar'\"'\"','\"'\"'gzip'\"'\"','\"'\"'elan'\"'\"'] and x.split()[0]!=str(os.getpid())]; tails={x.name:x.read_bytes()[-4096:].decode(errors='\"'\"'replace'\"'\"') for x in [p/'\"'\"'setup.stdout'\"'\"',p/'\"'\"'setup.stderr'\"'\"'] if x.exists()}; print(json.dumps({'\"'\"'exists'\"'\"':p.exists(),'\"'\"'files'\"'\"':sorted(x.name for x in p.iterdir()) if p.exists() else [],'\"'\"'completed'\"'\"':{x.name:x.read_text().strip() for x in p.glob('\"'\"'stage-*.native-exit'\"'\"')},'\"'\"'processes'\"'\"':selected[:30],'\"'\"'setup_tail'\"'\"':tails}))'",
+    "--quiet",
+    "--project=quantyra-lean-cert-20260915",
+    "--zone=us-central1-a",
+    "--account=dfredriksen@quantyra.org"
+  ],
+  "native_exit": 0,
+  "read_only": true,
+  "compiler_restarted": false
+}
