@@ -1,0 +1,1224 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:172:77: unsolved goals
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+t : T1IndexTriple A B
+x : ↥(t1AmbientH t.K)
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer.V✝ d
+hv : (t1AmbientC t.C).mkQ v = (t1PullbackMap t) x
+⊢ Submodule.Quotient.mk v = ((t1AmbientC t.C).quotEquivOfEq (t1AmbientC t.C) ⋯) ((t1PullbackMap t) x)
+
+Candidate context:
+170:     a7CarrierParent C H t hC hH =
+171:     (Submodule.quotEquivOfEq _ _ hC).toLinearMap.comp
+172:       ((t1PullbackMap t).comp (LinearEquiv.ofEq H _ hH.symm).toLinearMap) := by
+173:   subst C
+174:   subst H
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:293:63: `simp` made no progress
+
+Candidate context:
+291:     have hd := a6_dimension_split t
+292:     have hA0 : Module.finrank F A = 0 := by rw [hz.1]; exact finrank_bot _ _
+293:     have hB0 : Module.finrank F (W n ⧸ B) = 0 := by rw [hz.2]; simp
+294:     change Module.finrank F A + Module.finrank F (W n ⧸ B) =
+295:       a6Order t + Module.finrank F (LinearMap.range (t1PullbackMap t)) at hd
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:297:4: `simp` made no progress
+
+Candidate context:
+295:       a6Order t + Module.finrank F (LinearMap.range (t1PullbackMap t)) at hd
+296:     rw [hA0, hB0] at hd
+297:     simp only [finrank_bot, finrank_top, Module.finrank_fin_fun] at hd
+298:     omega
+299: 
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:597:2: unsolved goals
+case refine_4
+n d D : ℕ
+f : BinaryMatrix n d → ℂ
+e : a11InitialFinalSource n d ≃ a11FinalGradeTarget n d := a11GlobalA9SourceEquiv.trans a11GlobalA9PartitionEquiv
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+hp : 0 < a11InitialOrder ⟨C, ⟨H, X⟩⟩
+A :
+  Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.V✝ d)
+hCA : (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst ≤ A
+B :
+  Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.W✝ n)
+hBH : B ≤ (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst
+hA8A :
+  ↑(⟨A, hCA⟩, ⟨B, hBH⟩).1 ⊓ Submodule.comap (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst.mkQ (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.snd.range =
+    (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst
+hA8B :
+  ↑(⟨A, hCA⟩, ⟨B, hBH⟩).2 ⊔ Submodule.map (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst.subtype (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.snd.ker =
+    (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst
+ha✝ : ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩ ∈ Finset.univ
+⊢ (if Module.finrank F ↥C + Module.finrank F (W n ⧸ H) + Module.finrank F ↥X.range ≤ D then
+      2 ^
+          (24 * D * (Module.finrank F ↥C + Module.finrank F (W n ⧸ H) + Module.finrank F ↥X.range) +
+              100 * (D - (Module.finrank F ↥C + Module.finrank F (W n ⧸ H) + Module.finrank F ↥X.range)) *
+                (D - (Module.finrank F ↥C + Module.finrank F (W n ⧸ H) + Module.finrank F ↥X.range)) +
+            6 * D * Module.finrank F ↥X.range) *
+        a11AmbientEnergy A B (a9AmbientFinalMap A B ⟨C, ⋯⟩ ⟨H, ⋯⟩ X) f
+    else 0) =
+    if
+        ↑({
+                          toFun := fun p =>
+                            ⟨p.fst,
+                              ⟨p.snd.fst,
+                                ⟨p.snd.snd.fst,
+                                  ⟨p.snd.snd.snd.fst,
+                                    ⟨p.snd.snd.snd.snd.fst,
+                                      ⟨{
+                                            toFun := fun z =>
+                                              And.rec
+                                                (fun left right =>
+                                                  And.rec
+                                                    (fun left_1 right =>
+                                                      ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst ↑z.snd.snd,
+                                                          ⋯⟩,
+                                                        ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                            induces := ⋯ },
+                                                          ⋯⟩⟩)
+                                                    right)
+                                                ⋯,
+                                            invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                            left_inv := ⋯, right_inv := ⋯ }
+                                          ↑p.snd.snd.snd.snd.snd,
+                                        ⋯⟩⟩⟩⟩⟩⟩,
+                          invFun := fun p =>
+                            ⟨p.fst,
+                              ⟨p.snd.fst,
+                                ⟨p.snd.snd.fst,
+                                  ⟨p.snd.snd.snd.fst,
+                                    ⟨p.snd.snd.snd.snd.fst,
+                                      ⟨{
+                                              toFun := fun z =>
+                                                And.rec
+                                                  (fun left right =>
+                                                    And.rec
+                                                      (fun left_1 right =>
+                                                        ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst ↑z.snd.snd,
+                                                            ⋯⟩,
+                                                          ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                              induces := ⋯ },
+                                                            ⋯⟩⟩)
+                                                      right)
+                                                  ⋯,
+                                              invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                              left_inv := ⋯, right_inv := ⋯ }.symm
+                                          ↑p.snd.snd.snd.snd.snd,
+                                        ⋯⟩⟩⟩⟩⟩⟩,
+                          left_inv := ⋯, right_inv := ⋯ }
+                        ({
+                            toFun := fun p =>
+                              And.rec
+                                (fun left right =>
+                                  ⟨↑(↑p.snd).1,
+                                    ⟨↑(↑p.snd).2,
+                                      ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                        ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                          ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                            ⟨⟨⟨(↑p.fst).fst, ⋯⟩, ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                              ⋯⟩⟩⟩⟩⟩⟩)
+                                ⋯,
+                            invFun := fun p =>
+                              And.rec
+                                (fun left right =>
+                                  And.rec
+                                    (fun left_1 right =>
+                                      ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                            ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst, ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                          ⋯⟩,
+                                        ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                    right)
+                                ⋯,
+                            left_inv := ⋯, right_inv := ⋯ }
+                          ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.fst +
+              ↑({
+                            toFun := fun p =>
+                              ⟨p.fst,
+                                ⟨p.snd.fst,
+                                  ⟨p.snd.snd.fst,
+                                    ⟨p.snd.snd.snd.fst,
+                                      ⟨p.snd.snd.snd.snd.fst,
+                                        ⟨{
+                                              toFun := fun z =>
+                                                And.rec
+                                                  (fun left right =>
+                                                    And.rec
+                                                      (fun left_1 right =>
+                                                        ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst ↑z.snd.snd,
+                                                            ⋯⟩,
+                                                          ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                              induces := ⋯ },
+                                                            ⋯⟩⟩)
+                                                      right)
+                                                  ⋯,
+                                              invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                              left_inv := ⋯, right_inv := ⋯ }
+                                            ↑p.snd.snd.snd.snd.snd,
+                                          ⋯⟩⟩⟩⟩⟩⟩,
+                            invFun := fun p =>
+                              ⟨p.fst,
+                                ⟨p.snd.fst,
+                                  ⟨p.snd.snd.fst,
+                                    ⟨p.snd.snd.snd.fst,
+                                      ⟨p.snd.snd.snd.snd.fst,
+                                        ⟨{
+                                                toFun := fun z =>
+                                                  And.rec
+                                                    (fun left right =>
+                                                      And.rec
+                                                        (fun left_1 right =>
+                                                          ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                ↑z.snd.snd,
+                                                              ⋯⟩,
+                                                            ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                induces := ⋯ },
+                                                              ⋯⟩⟩)
+                                                        right)
+                                                    ⋯,
+                                                invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                left_inv := ⋯, right_inv := ⋯ }.symm
+                                            ↑p.snd.snd.snd.snd.snd,
+                                          ⋯⟩⟩⟩⟩⟩⟩,
+                            left_inv := ⋯, right_inv := ⋯ }
+                          ({
+                              toFun := fun p =>
+                                And.rec
+                                  (fun left right =>
+                                    ⟨↑(↑p.snd).1,
+                                      ⟨↑(↑p.snd).2,
+                                        ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                          ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                            ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                              ⟨⟨⟨(↑p.fst).fst, ⋯⟩, ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                ⋯⟩⟩⟩⟩⟩⟩)
+                                  ⋯,
+                              invFun := fun p =>
+                                And.rec
+                                  (fun left right =>
+                                    And.rec
+                                      (fun left_1 right =>
+                                        ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                              ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst, ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                            ⋯⟩,
+                                          ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                      right)
+                                  ⋯,
+                              left_inv := ⋯, right_inv := ⋯ }
+                            ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.fst +
+            ↑({
+                            toFun := fun p =>
+                              ⟨p.fst,
+                                ⟨p.snd.fst,
+                                  ⟨p.snd.snd.fst,
+                                    ⟨p.snd.snd.snd.fst,
+                                      ⟨p.snd.snd.snd.snd.fst,
+                                        ⟨{
+                                              toFun := fun z =>
+                                                And.rec
+                                                  (fun left right =>
+                                                    And.rec
+                                                      (fun left_1 right =>
+                                                        ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst ↑z.snd.snd,
+                                                            ⋯⟩,
+                                                          ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                              induces := ⋯ },
+                                                            ⋯⟩⟩)
+                                                      right)
+                                                  ⋯,
+                                              invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                              left_inv := ⋯, right_inv := ⋯ }
+                                            ↑p.snd.snd.snd.snd.snd,
+                                          ⋯⟩⟩⟩⟩⟩⟩,
+                            invFun := fun p =>
+                              ⟨p.fst,
+                                ⟨p.snd.fst,
+                                  ⟨p.snd.snd.fst,
+                                    ⟨p.snd.snd.snd.fst,
+                                      ⟨p.snd.snd.snd.snd.fst,
+                                        ⟨{
+                                                toFun := fun z =>
+                                                  And.rec
+                                                    (fun left right =>
+                                                      And.rec
+                                                        (fun left_1 right =>
+                                                          ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                ↑z.snd.snd,
+                                                              ⋯⟩,
+                                                            ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                induces := ⋯ },
+                                                              ⋯⟩⟩)
+                                                        right)
+                                                    ⋯,
+                                                invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                left_inv := ⋯, right_inv := ⋯ }.symm
+                                            ↑p.snd.snd.snd.snd.snd,
+                                          ⋯⟩⟩⟩⟩⟩⟩,
+                            left_inv := ⋯, right_inv := ⋯ }
+                          ({
+                              toFun := fun p =>
+                                And.rec
+                                  (fun left right =>
+                                    ⟨↑(↑p.snd).1,
+                                      ⟨↑(↑p.snd).2,
+                                        ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                          ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                            ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                              ⟨⟨⟨(↑p.fst).fst, ⋯⟩, ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                ⋯⟩⟩⟩⟩⟩⟩)
+                                  ⋯,
+                              invFun := fun p =>
+                                And.rec
+                                  (fun left right =>
+                                    And.rec
+                                      (fun left_1 right =>
+                                        ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                              ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst, ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                            ⋯⟩,
+                                          ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                      right)
+                                  ⋯,
+                              left_inv := ⋯, right_inv := ⋯ }
+                            ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.snd.fst ≤
+          D then
+      2 ^
+          (24 * D *
+                (↑({
+                                toFun := fun p =>
+                                  ⟨p.fst,
+                                    ⟨p.snd.fst,
+                                      ⟨p.snd.snd.fst,
+                                        ⟨p.snd.snd.snd.fst,
+                                          ⟨p.snd.snd.snd.snd.fst,
+                                            ⟨{
+                                                  toFun := fun z =>
+                                                    And.rec
+                                                      (fun left right =>
+                                                        And.rec
+                                                          (fun left_1 right =>
+                                                            ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                  ↑z.snd.snd,
+                                                                ⋯⟩,
+                                                              ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                  induces := ⋯ },
+                                                                ⋯⟩⟩)
+                                                          right)
+                                                      ⋯,
+                                                  invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                  left_inv := ⋯, right_inv := ⋯ }
+                                                ↑p.snd.snd.snd.snd.snd,
+                                              ⋯⟩⟩⟩⟩⟩⟩,
+                                invFun := fun p =>
+                                  ⟨p.fst,
+                                    ⟨p.snd.fst,
+                                      ⟨p.snd.snd.fst,
+                                        ⟨p.snd.snd.snd.fst,
+                                          ⟨p.snd.snd.snd.snd.fst,
+                                            ⟨{
+                                                    toFun := fun z =>
+                                                      And.rec
+                                                        (fun left right =>
+                                                          And.rec
+                                                            (fun left_1 right =>
+                                                              ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                    ↑z.snd.snd,
+                                                                  ⋯⟩,
+                                                                ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                    induces := ⋯ },
+                                                                  ⋯⟩⟩)
+                                                            right)
+                                                        ⋯,
+                                                    invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                    left_inv := ⋯, right_inv := ⋯ }.symm
+                                                ↑p.snd.snd.snd.snd.snd,
+                                              ⋯⟩⟩⟩⟩⟩⟩,
+                                left_inv := ⋯, right_inv := ⋯ }
+                              ({
+                                  toFun := fun p =>
+                                    And.rec
+                                      (fun left right =>
+                                        ⟨↑(↑p.snd).1,
+                                          ⟨↑(↑p.snd).2,
+                                            ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                              ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                  ⟨⟨⟨(↑p.fst).fst, ⋯⟩, ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                    ⋯⟩⟩⟩⟩⟩⟩)
+                                      ⋯,
+                                  invFun := fun p =>
+                                    And.rec
+                                      (fun left right =>
+                                        And.rec
+                                          (fun left_1 right =>
+                                            ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                  ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                    ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                ⋯⟩,
+                                              ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                          right)
+                                      ⋯,
+                                  left_inv := ⋯, right_inv := ⋯ }
+                                ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.fst +
+                    ↑({
+                                  toFun := fun p =>
+                                    ⟨p.fst,
+                                      ⟨p.snd.fst,
+                                        ⟨p.snd.snd.fst,
+                                          ⟨p.snd.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.snd.fst,
+                                              ⟨{
+                                                    toFun := fun z =>
+                                                      And.rec
+                                                        (fun left right =>
+                                                          And.rec
+                                                            (fun left_1 right =>
+                                                              ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                    ↑z.snd.snd,
+                                                                  ⋯⟩,
+                                                                ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                    induces := ⋯ },
+                                                                  ⋯⟩⟩)
+                                                            right)
+                                                        ⋯,
+                                                    invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                    left_inv := ⋯, right_inv := ⋯ }
+                                                  ↑p.snd.snd.snd.snd.snd,
+                                                ⋯⟩⟩⟩⟩⟩⟩,
+                                  invFun := fun p =>
+                                    ⟨p.fst,
+                                      ⟨p.snd.fst,
+                                        ⟨p.snd.snd.fst,
+                                          ⟨p.snd.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.snd.fst,
+                                              ⟨{
+                                                      toFun := fun z =>
+                                                        And.rec
+                                                          (fun left right =>
+                                                            And.rec
+                                                              (fun left_1 right =>
+                                                                ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                      ↑z.snd.snd,
+                                                                    ⋯⟩,
+                                                                  ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                      induces := ⋯ },
+                                                                    ⋯⟩⟩)
+                                                              right)
+                                                          ⋯,
+                                                      invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                      left_inv := ⋯, right_inv := ⋯ }.symm
+                                                  ↑p.snd.snd.snd.snd.snd,
+                                                ⋯⟩⟩⟩⟩⟩⟩,
+                                  left_inv := ⋯, right_inv := ⋯ }
+                                ({
+                                    toFun := fun p =>
+                                      And.rec
+                                        (fun left right =>
+                                          ⟨↑(↑p.snd).1,
+                                            ⟨↑(↑p.snd).2,
+                                              ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                                ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                  ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                    ⟨⟨⟨(↑p.fst).fst, ⋯⟩,
+                                                        ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                      ⋯⟩⟩⟩⟩⟩⟩)
+                                        ⋯,
+                                    invFun := fun p =>
+                                      And.rec
+                                        (fun left right =>
+                                          And.rec
+                                            (fun left_1 right =>
+                                              ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                    ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                      ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                  ⋯⟩,
+                                                ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                            right)
+                                        ⋯,
+                                    left_inv := ⋯, right_inv := ⋯ }
+                                  ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.fst +
+                  ↑({
+                                  toFun := fun p =>
+                                    ⟨p.fst,
+                                      ⟨p.snd.fst,
+                                        ⟨p.snd.snd.fst,
+                                          ⟨p.snd.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.snd.fst,
+                                              ⟨{
+                                                    toFun := fun z =>
+                                                      And.rec
+                                                        (fun left right =>
+                                                          And.rec
+                                                            (fun left_1 right =>
+                                                              ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                    ↑z.snd.snd,
+                                                                  ⋯⟩,
+                                                                ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                    induces := ⋯ },
+                                                                  ⋯⟩⟩)
+                                                            right)
+                                                        ⋯,
+                                                    invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                    left_inv := ⋯, right_inv := ⋯ }
+                                                  ↑p.snd.snd.snd.snd.snd,
+                                                ⋯⟩⟩⟩⟩⟩⟩,
+                                  invFun := fun p =>
+                                    ⟨p.fst,
+                                      ⟨p.snd.fst,
+                                        ⟨p.snd.snd.fst,
+                                          ⟨p.snd.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.snd.fst,
+                                              ⟨{
+                                                      toFun := fun z =>
+                                                        And.rec
+                                                          (fun left right =>
+                                                            And.rec
+                                                              (fun left_1 right =>
+                                                                ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                      ↑z.snd.snd,
+                                                                    ⋯⟩,
+                                                                  ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                      induces := ⋯ },
+                                                                    ⋯⟩⟩)
+                                                              right)
+                                                          ⋯,
+                                                      invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                      left_inv := ⋯, right_inv := ⋯ }.symm
+                                                  ↑p.snd.snd.snd.snd.snd,
+                                                ⋯⟩⟩⟩⟩⟩⟩,
+                                  left_inv := ⋯, right_inv := ⋯ }
+                                ({
+                                    toFun := fun p =>
+                                      And.rec
+                                        (fun left right =>
+                                          ⟨↑(↑p.snd).1,
+                                            ⟨↑(↑p.snd).2,
+                                              ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                                ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                  ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                    ⟨⟨⟨(↑p.fst).fst, ⋯⟩,
+                                                        ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                      ⋯⟩⟩⟩⟩⟩⟩)
+                                        ⋯,
+                                    invFun := fun p =>
+                                      And.rec
+                                        (fun left right =>
+                                          And.rec
+                                            (fun left_1 right =>
+                                              ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                    ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                      ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                  ⋯⟩,
+                                                ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                            right)
+                                        ⋯,
+                                    left_inv := ⋯, right_inv := ⋯ }
+                                  ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.snd.fst) +
+              100 *
+                  (D -
+                    (↑({
+                                    toFun := fun p =>
+                                      ⟨p.fst,
+                                        ⟨p.snd.fst,
+                                          ⟨p.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.snd.fst,
+                                                ⟨{
+                                                      toFun := fun z =>
+                                                        And.rec
+                                                          (fun left right =>
+                                                            And.rec
+                                                              (fun left_1 right =>
+                                                                ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                      ↑z.snd.snd,
+                                                                    ⋯⟩,
+                                                                  ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                      induces := ⋯ },
+                                                                    ⋯⟩⟩)
+                                                              right)
+                                                          ⋯,
+                                                      invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                      left_inv := ⋯, right_inv := ⋯ }
+                                                    ↑p.snd.snd.snd.snd.snd,
+                                                  ⋯⟩⟩⟩⟩⟩⟩,
+                                    invFun := fun p =>
+                                      ⟨p.fst,
+                                        ⟨p.snd.fst,
+                                          ⟨p.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.snd.fst,
+                                                ⟨{
+                                                        toFun := fun z =>
+                                                          And.rec
+                                                            (fun left right =>
+                                                              And.rec
+                                                                (fun left_1 right =>
+                                                                  ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                        ↑z.snd.snd,
+                                                                      ⋯⟩,
+                                                                    ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                        induces := ⋯ },
+                                                                      ⋯⟩⟩)
+                                                                right)
+                                                            ⋯,
+                                                        invFun := fun z =>
+                                                          ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                        left_inv := ⋯, right_inv := ⋯ }.symm
+                                                    ↑p.snd.snd.snd.snd.snd,
+                                                  ⋯⟩⟩⟩⟩⟩⟩,
+                                    left_inv := ⋯, right_inv := ⋯ }
+                                  ({
+                                      toFun := fun p =>
+                                        And.rec
+                                          (fun left right =>
+                                            ⟨↑(↑p.snd).1,
+                                              ⟨↑(↑p.snd).2,
+                                                ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                                  ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                    ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                      ⟨⟨⟨(↑p.fst).fst, ⋯⟩,
+                                                          ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                        ⋯⟩⟩⟩⟩⟩⟩)
+                                          ⋯,
+                                      invFun := fun p =>
+                                        And.rec
+                                          (fun left right =>
+                                            And.rec
+                                              (fun left_1 right =>
+                                                ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                      ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                        ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                    ⋯⟩,
+                                                  ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                              right)
+                                          ⋯,
+                                      left_inv := ⋯, right_inv := ⋯ }
+                                    ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.fst +
+                        ↑({
+                                      toFun := fun p =>
+                                        ⟨p.fst,
+                                          ⟨p.snd.fst,
+                                            ⟨p.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.fst,
+                                                ⟨p.snd.snd.snd.snd.fst,
+                                                  ⟨{
+                                                        toFun := fun z =>
+                                                          And.rec
+                                                            (fun left right =>
+                                                              And.rec
+                                                                (fun left_1 right =>
+                                                                  ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                        ↑z.snd.snd,
+                                                                      ⋯⟩,
+                                                                    ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                        induces := ⋯ },
+                                                                      ⋯⟩⟩)
+                                                                right)
+                                                            ⋯,
+                                                        invFun := fun z =>
+                                                          ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                        left_inv := ⋯, right_inv := ⋯ }
+                                                      ↑p.snd.snd.snd.snd.snd,
+                                                    ⋯⟩⟩⟩⟩⟩⟩,
+                                      invFun := fun p =>
+                                        ⟨p.fst,
+                                          ⟨p.snd.fst,
+                                            ⟨p.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.fst,
+                                                ⟨p.snd.snd.snd.snd.fst,
+                                                  ⟨{
+                                                          toFun := fun z =>
+                                                            And.rec
+                                                              (fun left right =>
+                                                                And.rec
+                                                                  (fun left_1 right =>
+                                                                    ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                          ↑z.snd.snd,
+                                                                        ⋯⟩,
+                                                                      ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                          induces := ⋯ },
+                                                                        ⋯⟩⟩)
+                                                                  right)
+                                                              ⋯,
+                                                          invFun := fun z =>
+                                                            ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                          left_inv := ⋯, right_inv := ⋯ }.symm
+                                                      ↑p.snd.snd.snd.snd.snd,
+                                                    ⋯⟩⟩⟩⟩⟩⟩,
+                                      left_inv := ⋯, right_inv := ⋯ }
+                                    ({
+                                        toFun := fun p =>
+                                          And.rec
+                                            (fun left right =>
+                                              ⟨↑(↑p.snd).1,
+                                                ⟨↑(↑p.snd).2,
+                                                  ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                                    ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                      ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                        ⟨⟨⟨(↑p.fst).fst, ⋯⟩,
+                                                            ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                          ⋯⟩⟩⟩⟩⟩⟩)
+                                            ⋯,
+                                        invFun := fun p =>
+                                          And.rec
+                                            (fun left right =>
+                                              And.rec
+                                                (fun left_1 right =>
+                                                  ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                        ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                          ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                      ⋯⟩,
+                                                    ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                                right)
+                                            ⋯,
+                                        left_inv := ⋯, right_inv := ⋯ }
+                                      ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.fst +
+                      ↑({
+                                      toFun := fun p =>
+                                        ⟨p.fst,
+                                          ⟨p.snd.fst,
+                                            ⟨p.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.fst,
+                                                ⟨p.snd.snd.snd.snd.fst,
+                                                  ⟨{
+                                                        toFun := fun z =>
+                                                          And.rec
+                                                            (fun left right =>
+                                                              And.rec
+                                                                (fun left_1 right =>
+                                                                  ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                        ↑z.snd.snd,
+                                                                      ⋯⟩,
+                                                                    ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                        induces := ⋯ },
+                                                                      ⋯⟩⟩)
+                                                                right)
+                                                            ⋯,
+                                                        invFun := fun z =>
+                                                          ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                        left_inv := ⋯, right_inv := ⋯ }
+                                                      ↑p.snd.snd.snd.snd.snd,
+                                                    ⋯⟩⟩⟩⟩⟩⟩,
+                                      invFun := fun p =>
+                                        ⟨p.fst,
+                                          ⟨p.snd.fst,
+                                            ⟨p.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.fst,
+                                                ⟨p.snd.snd.snd.snd.fst,
+                                                  ⟨{
+                                                          toFun := fun z =>
+                                                            And.rec
+                                                              (fun left right =>
+                                                                And.rec
+                                                                  (fun left_1 right =>
+                                                                    ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                          ↑z.snd.snd,
+                                                                        ⋯⟩,
+                                                                      ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                          induces := ⋯ },
+                                                                        ⋯⟩⟩)
+                                                                  right)
+                                                              ⋯,
+                                                          invFun := fun z =>
+                                                            ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                          left_inv := ⋯, right_inv := ⋯ }.symm
+                                                      ↑p.snd.snd.snd.snd.snd,
+                                                    ⋯⟩⟩⟩⟩⟩⟩,
+                                      left_inv := ⋯, right_inv := ⋯ }
+                                    ({
+                                        toFun := fun p =>
+                                          And.rec
+                                            (fun left right =>
+                                              ⟨↑(↑p.snd).1,
+                                                ⟨↑(↑p.snd).2,
+                                                  ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                                    ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                      ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                        ⟨⟨⟨(↑p.fst).fst, ⋯⟩,
+                                                            ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                          ⋯⟩⟩⟩⟩⟩⟩)
+                                            ⋯,
+                                        invFun := fun p =>
+                                          And.rec
+                                            (fun left right =>
+                                              And.rec
+                                                (fun left_1 right =>
+                                                  ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                        ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                          ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                      ⋯⟩,
+                                                    ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                                right)
+                                            ⋯,
+                                        left_inv := ⋯, right_inv := ⋯ }
+                                      ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.snd.fst)) *
+                (D -
+                  (↑({
+                                  toFun := fun p =>
+                                    ⟨p.fst,
+                                      ⟨p.snd.fst,
+                                        ⟨p.snd.snd.fst,
+                                          ⟨p.snd.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.snd.fst,
+                                              ⟨{
+                                                    toFun := fun z =>
+                                                      And.rec
+                                                        (fun left right =>
+                                                          And.rec
+                                                            (fun left_1 right =>
+                                                              ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                    ↑z.snd.snd,
+                                                                  ⋯⟩,
+                                                                ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                    induces := ⋯ },
+                                                                  ⋯⟩⟩)
+                                                            right)
+                                                        ⋯,
+                                                    invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                    left_inv := ⋯, right_inv := ⋯ }
+                                                  ↑p.snd.snd.snd.snd.snd,
+                                                ⋯⟩⟩⟩⟩⟩⟩,
+                                  invFun := fun p =>
+                                    ⟨p.fst,
+                                      ⟨p.snd.fst,
+                                        ⟨p.snd.snd.fst,
+                                          ⟨p.snd.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.snd.fst,
+                                              ⟨{
+                                                      toFun := fun z =>
+                                                        And.rec
+                                                          (fun left right =>
+                                                            And.rec
+                                                              (fun left_1 right =>
+                                                                ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                      ↑z.snd.snd,
+                                                                    ⋯⟩,
+                                                                  ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                      induces := ⋯ },
+                                                                    ⋯⟩⟩)
+                                                              right)
+                                                          ⋯,
+                                                      invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                      left_inv := ⋯, right_inv := ⋯ }.symm
+                                                  ↑p.snd.snd.snd.snd.snd,
+                                                ⋯⟩⟩⟩⟩⟩⟩,
+                                  left_inv := ⋯, right_inv := ⋯ }
+                                ({
+                                    toFun := fun p =>
+                                      And.rec
+                                        (fun left right =>
+                                          ⟨↑(↑p.snd).1,
+                                            ⟨↑(↑p.snd).2,
+                                              ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                                ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                  ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                    ⟨⟨⟨(↑p.fst).fst, ⋯⟩,
+                                                        ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                      ⋯⟩⟩⟩⟩⟩⟩)
+                                        ⋯,
+                                    invFun := fun p =>
+                                      And.rec
+                                        (fun left right =>
+                                          And.rec
+                                            (fun left_1 right =>
+                                              ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                    ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                      ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                  ⋯⟩,
+                                                ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                            right)
+                                        ⋯,
+                                    left_inv := ⋯, right_inv := ⋯ }
+                                  ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.fst +
+                      ↑({
+                                    toFun := fun p =>
+                                      ⟨p.fst,
+                                        ⟨p.snd.fst,
+                                          ⟨p.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.snd.fst,
+                                                ⟨{
+                                                      toFun := fun z =>
+                                                        And.rec
+                                                          (fun left right =>
+                                                            And.rec
+                                                              (fun left_1 right =>
+                                                                ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                      ↑z.snd.snd,
+                                                                    ⋯⟩,
+                                                                  ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                      induces := ⋯ },
+                                                                    ⋯⟩⟩)
+                                                              right)
+                                                          ⋯,
+                                                      invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                      left_inv := ⋯, right_inv := ⋯ }
+                                                    ↑p.snd.snd.snd.snd.snd,
+                                                  ⋯⟩⟩⟩⟩⟩⟩,
+                                    invFun := fun p =>
+                                      ⟨p.fst,
+                                        ⟨p.snd.fst,
+                                          ⟨p.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.snd.fst,
+                                                ⟨{
+                                                        toFun := fun z =>
+                                                          And.rec
+                                                            (fun left right =>
+                                                              And.rec
+                                                                (fun left_1 right =>
+                                                                  ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                        ↑z.snd.snd,
+                                                                      ⋯⟩,
+                                                                    ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                        induces := ⋯ },
+                                                                      ⋯⟩⟩)
+                                                                right)
+                                                            ⋯,
+                                                        invFun := fun z =>
+                                                          ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                        left_inv := ⋯, right_inv := ⋯ }.symm
+                                                    ↑p.snd.snd.snd.snd.snd,
+                                                  ⋯⟩⟩⟩⟩⟩⟩,
+                                    left_inv := ⋯, right_inv := ⋯ }
+                                  ({
+                                      toFun := fun p =>
+                                        And.rec
+                                          (fun left right =>
+                                            ⟨↑(↑p.snd).1,
+                                              ⟨↑(↑p.snd).2,
+                                                ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                                  ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                    ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                      ⟨⟨⟨(↑p.fst).fst, ⋯⟩,
+                                                          ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                        ⋯⟩⟩⟩⟩⟩⟩)
+                                          ⋯,
+                                      invFun := fun p =>
+                                        And.rec
+                                          (fun left right =>
+                                            And.rec
+                                              (fun left_1 right =>
+                                                ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                      ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                        ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                    ⋯⟩,
+                                                  ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                              right)
+                                          ⋯,
+                                      left_inv := ⋯, right_inv := ⋯ }
+                                    ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.fst +
+                    ↑({
+                                    toFun := fun p =>
+                                      ⟨p.fst,
+                                        ⟨p.snd.fst,
+                                          ⟨p.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.snd.fst,
+                                                ⟨{
+                                                      toFun := fun z =>
+                                                        And.rec
+                                                          (fun left right =>
+                                                            And.rec
+                                                              (fun left_1 right =>
+                                                                ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                      ↑z.snd.snd,
+                                                                    ⋯⟩,
+                                                                  ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                      induces := ⋯ },
+                                                                    ⋯⟩⟩)
+                                                              right)
+                                                          ⋯,
+                                                      invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                      left_inv := ⋯, right_inv := ⋯ }
+                                                    ↑p.snd.snd.snd.snd.snd,
+                                                  ⋯⟩⟩⟩⟩⟩⟩,
+                                    invFun := fun p =>
+                                      ⟨p.fst,
+                                        ⟨p.snd.fst,
+                                          ⟨p.snd.snd.fst,
+                                            ⟨p.snd.snd.snd.fst,
+                                              ⟨p.snd.snd.snd.snd.fst,
+                                                ⟨{
+                                                        toFun := fun z =>
+                                                          And.rec
+                                                            (fun left right =>
+                                                              And.rec
+                                                                (fun left_1 right =>
+                                                                  ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                        ↑z.snd.snd,
+                                                                      ⋯⟩,
+                                                                    ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                        induces := ⋯ },
+                                                                      ⋯⟩⟩)
+                                                                right)
+                                                            ⋯,
+                                                        invFun := fun z =>
+                                                          ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                        left_inv := ⋯, right_inv := ⋯ }.symm
+                                                    ↑p.snd.snd.snd.snd.snd,
+                                                  ⋯⟩⟩⟩⟩⟩⟩,
+                                    left_inv := ⋯, right_inv := ⋯ }
+                                  ({
+                                      toFun := fun p =>
+                                        And.rec
+                                          (fun left right =>
+                                            ⟨↑(↑p.snd).1,
+                                              ⟨↑(↑p.snd).2,
+                                                ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                                  ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                                    ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                      ⟨⟨⟨(↑p.fst).fst, ⋯⟩,
+                                                          ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                        ⋯⟩⟩⟩⟩⟩⟩)
+                                          ⋯,
+                                      invFun := fun p =>
+                                        And.rec
+                                          (fun left right =>
+                                            And.rec
+                                              (fun left_1 right =>
+                                                ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                      ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst,
+                                                        ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                                    ⋯⟩,
+                                                  ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                              right)
+                                          ⋯,
+                                      left_inv := ⋯, right_inv := ⋯ }
+                                    ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.snd.fst)) +
+            6 * D *
+              ↑({
+                              toFun := fun p =>
+                                ⟨p.fst,
+                                  ⟨p.snd.fst,
+                                    ⟨p.snd.snd.fst,
+                                      ⟨p.snd.snd.snd.fst,
+                                        ⟨p.snd.snd.snd.snd.fst,
+                                          ⟨{
+                                                toFun := fun z =>
+                                                  And.rec
+                                                    (fun left right =>
+                                                      And.rec
+                                                        (fun left_1 right =>
+                                                          ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                ↑z.snd.snd,
+                                                              ⋯⟩,
+                                                            ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                induces := ⋯ },
+                                                              ⋯⟩⟩)
+                                                        right)
+                                                    ⋯,
+                                                invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                left_inv := ⋯, right_inv := ⋯ }
+                                              ↑p.snd.snd.snd.snd.snd,
+                                            ⋯⟩⟩⟩⟩⟩⟩,
+                              invFun := fun p =>
+                                ⟨p.fst,
+                                  ⟨p.snd.fst,
+                                    ⟨p.snd.snd.fst,
+                                      ⟨p.snd.snd.snd.fst,
+                                        ⟨p.snd.snd.snd.snd.fst,
+                                          ⟨{
+                                                  toFun := fun z =>
+                                                    And.rec
+                                                      (fun left right =>
+                                                        And.rec
+                                                          (fun left_1 right =>
+                                                            ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst
+                                                                  ↑z.snd.snd,
+                                                                ⋯⟩,
+                                                              ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd,
+                                                                  induces := ⋯ },
+                                                                ⋯⟩⟩)
+                                                          right)
+                                                      ⋯,
+                                                  invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩,
+                                                  left_inv := ⋯, right_inv := ⋯ }.symm
+                                              ↑p.snd.snd.snd.snd.snd,
+                                            ⋯⟩⟩⟩⟩⟩⟩,
+                              left_inv := ⋯, right_inv := ⋯ }
+                            ({
+                                toFun := fun p =>
+                                  And.rec
+                                    (fun left right =>
+                                      ⟨↑(↑p.snd).1,
+                                        ⟨↑(↑p.snd).2,
+                                          ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                                            ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                              ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                                ⟨⟨⟨(↑p.fst).fst, ⋯⟩, ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩,
+                                                  ⋯⟩⟩⟩⟩⟩⟩)
+                                    ⋯,
+                                invFun := fun p =>
+                                  And.rec
+                                    (fun left right =>
+                                      And.rec
+                                        (fun left_1 right =>
+                                          ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                                ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst, ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                              ⋯⟩,
+                                            ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                                        right)
+                                    ⋯,
+                                left_inv := ⋯, right_inv := ⋯ }
+                              ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).snd.snd.snd.snd.fst) *
+        a11AmbientEnergy
+          ({
+                toFun := fun p =>
+                  ⟨p.fst,
+                    ⟨p.snd.fst,
+                      ⟨p.snd.snd.fst,
+                        ⟨p.snd.snd.snd.fst,
+                          ⟨p.snd.snd.snd.snd.fst,
+                            ⟨{
+                                  toFun := fun z =>
+                                    And.rec
+                                      (fun left right =>
+                                        And.rec
+                                          (fun left_1 right =>
+                                            ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst ↑z.snd.snd, ⋯⟩,
+                                              ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd, induces := ⋯ }, ⋯⟩⟩)
+                                          right)
+                                      ⋯,
+                                  invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩, left_inv := ⋯,
+                                  right_inv := ⋯ }
+                                ↑p.snd.snd.snd.snd.snd,
+                              ⋯⟩⟩⟩⟩⟩⟩,
+                invFun := fun p =>
+                  ⟨p.fst,
+                    ⟨p.snd.fst,
+                      ⟨p.snd.snd.fst,
+                        ⟨p.snd.snd.snd.fst,
+                          ⟨p.snd.snd.snd.snd.fst,
+                            ⟨{
+                                    toFun := fun z =>
+                                      And.rec
+                                        (fun left right =>
+                                          And.rec
+                                            (fun left_1 right =>
+                                              ⟨⟨a9AmbientFinalMap p.fst p.snd.fst z.fst z.snd.fst ↑z.snd.snd, ⋯⟩,
+                                                ⟨{ A0 := z.fst, B0 := z.snd.fst, X := ↑z.snd.snd, induces := ⋯ }, ⋯⟩⟩)
+                                            right)
+                                        ⋯,
+                                    invFun := fun z => ⟨(↑z.snd).A0, ⟨(↑z.snd).B0, ⟨(↑z.snd).X, ⋯⟩⟩⟩, left_inv := ⋯,
+                                    right_inv := ⋯ }.symm
+                                ↑p.snd.snd.snd.snd.snd,
+                              ⋯⟩⟩⟩⟩⟩⟩,
+                left_inv := ⋯, right_inv := ⋯ }
+              ({
+                  toFun := fun p =>
+                    And.rec
+                      (fun left right =>
+                        ⟨↑(↑p.snd).1,
+                          ⟨↑(↑p.snd).2,
+                            ⟨⟨Module.finrank F ↥(↑p.fst).fst, ⋯⟩,
+                              ⟨⟨Module.finrank F (W n ⧸ (↑p.fst).snd.fst), ⋯⟩,
+                                ⟨⟨Module.finrank F ↥(↑p.fst).snd.snd.range, ⋯⟩,
+                                  ⟨⟨⟨(↑p.fst).fst, ⋯⟩, ⟨⟨(↑p.fst).snd.fst, ⋯⟩, ⟨(↑p.fst).snd.snd, ⋯⟩⟩⟩, ⋯⟩⟩⟩⟩⟩⟩)
+                      ⋯,
+                  invFun := fun p =>
+                    And.rec
+                      (fun left right =>
+                        And.rec
+                          (fun left_1 right =>
+                            ⟨⟨⟨↑(↑p.snd.snd.snd.snd.snd).fst,
+                                  ⟨↑(↑p.snd.snd.snd.snd.snd).snd.fst, ↑(↑p.snd.snd.snd.snd.snd).snd.snd⟩⟩,
+                                ⋯⟩,
+                              ⟨(⟨p.fst, ⋯⟩, ⟨p.snd.fst, ⋯⟩), ⋯⟩⟩)
+                          right)
+                      ⋯,
+                  left_inv := ⋯, right_inv := ⋯ }
+                ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)).fst
+          ⋯.fst ⋯ ⋯
+    else ⋯
+
+Candidate context:
+595:   · intro p _ q _ h; exact e.injective h
+596:   · intro q _; exact ⟨e.symm q, a11_mem_fintype_elems _ _ _, e.apply_symm_apply q⟩
+597:   · rintro ⟨⟨⟨C, H, X⟩, hp⟩, ⟨⟨⟨A, hCA⟩, ⟨B, hBH⟩⟩, hA8A, hA8B⟩⟩ _
+598:     simp only [e, Equiv.trans_apply, a11InitialFinalContribution, a11FinalGradeContribution,
+599:       a11GlobalA9SourceEquiv, a11GlobalA9PartitionEquiv, a9AmbientA8PartitionEquiv,
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1057:10: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x, ?f x
+in the target expression
+  ∑ x,
+      2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *
+        a11AmbientEnergy A B (↑x.fst) f ≤
+    ∑ x, 2 ^ (100 * D * D) * 2 ^ (-(63 * ↑D * (↑↑i + ↑↑j + ↑↑k)) - 4 * ↑D * ↑↑k) * a11AmbientEnergy A B (↑x) f
+
+case pos
+n d D : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+i : Fin (d + 1)
+j k : Fin (n + 1)
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hgate :
+  (∑ x,
+      if ↑i + ↑j + ↑k ≤ D then
+        2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *
+          a11AmbientEnergy A B (↑(↑x).fst) f
+      else 0) =
+    if 0 < ↑i + ↑j + ↑k then
+      ∑ x,
+        if ↑i + ↑j + ↑k ≤ D then
+          2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *
+            a11AmbientEnergy A B (↑x.fst) f
+        else 0
+    else 0
+hp : 0 < ↑i + ↑j + ↑k
+ho : ↑i + ↑j + ↑k ≤ D
+⊢ ∑ x,
+      2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *
+        a11AmbientEnergy A B (↑x.fst) f ≤
+    ∑ x, 2 ^ (100 * D * D) * 2 ^ (-(63 * ↑D * (↑↑i + ↑↑j + ↑↑k)) - 4 * ↑D * ↑↑k) * a11AmbientEnergy A B (↑x) f
+
+Candidate context:
+1055:   · by_cases ho : i.val + j.val + k.val ≤ D
+1056:     · simp only [ite_eq_left hp, ite_eq_left ho]
+1057:       rw [Fintype.sum_sigma]
+1058:       apply Finset.sum_le_sum
+1059:       intro Y _
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1066:2: unsolved goals
+case neg
+n d D : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+i : Fin (d + 1)
+j k : Fin (n + 1)
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hgate :
+  (∑ x,
+      if ↑i + ↑j + ↑k ≤ D then
+        2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *
+          a11AmbientEnergy A B (↑(↑x).fst) f
+      else 0) =
+    if 0 < ↑i + ↑j + ↑k then
+      ∑ x,
+        if ↑i + ↑j + ↑k ≤ D then
+          2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *
+            a11AmbientEnergy A B (↑x.fst) f
+        else 0
+    else 0
+hp : ¬0 < ↑i + ↑j + ↑k
+⊢ 0 ≤ 0
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A11WeightedAggregate
+
+
+Candidate context:
+1064:         mul_nonneg (mul_nonneg (pow_nonneg (by norm_num) _)
+1065:           (zpow_nonneg (by norm_num) _)) (a11AmbientEnergy_nonneg A B Y.1 f))
+1066:   · simp only [ite_eq_right hp, Finset.sum_const_zero]
+1067: 
+1068: abbrev a11RankedFinalFrequencies {n d : Nat}

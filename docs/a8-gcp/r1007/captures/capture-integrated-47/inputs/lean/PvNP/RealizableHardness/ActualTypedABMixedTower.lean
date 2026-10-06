@@ -1,0 +1,615 @@
+import PvNP.RealizableHardness.ActualTypedMixedTower
+import PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+import PvNP.RealizableHardness.ActualTypedIntrinsicWitnessNaturality
+import PvNP.RealizableHardness.ActualTypedIntrinsicHyperplaneNaturality
+import PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+import PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+import PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+import PvNP.RealizableHardness.BinaryMatrixTypedA14HyperplaneFixedBase
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Reduced
+import PvNP.RealizableHardness.BinaryMatrixTypedA14HyperplaneReduced
+import PvNP.RealizableHardness.BinaryMatrixActualAffine
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+import PvNP.RealizableHardness.BinaryMatrixFourier
+
+namespace PvNP.RealizableHardness.ActualTypedABMixedTower
+
+open ActualTypedIntrinsicWitnessNaturality
+open ActualTypedIntrinsicHyperplaneNaturality
+open BinaryMatrixA1NestedCarrier
+open BinaryMatrixTypedA15ReducedGlobal
+open BinaryMatrixTypedA15HyperplaneReducedGlobal
+open BinaryMatrixTypedA15Transport
+open BinaryMatrixTypedA14FixedBase
+open BinaryMatrixTypedA14HyperplaneFixedBase
+open BinaryMatrixTypedA14Line
+open BinaryMatrixTypedA14Reduced
+open BinaryMatrixTypedA14Hyperplane
+open BinaryMatrixTypedA14HyperplaneReduced
+open BinaryMatrixActualAffine
+open BinaryMatrixComplexA15
+open BinaryMatrixFourier
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+private noncomputable instance submoduleFintype {α : Type*}
+    [Fintype α] [AddCommGroup α] [Module F α] (S : Submodule F α) :
+    Fintype S := Fintype.ofFinite S
+
+private noncomputable instance quotientFintype {α : Type*}
+    [Fintype α] [AddCommGroup α] [Module F α] (S : Submodule F α) :
+    Fintype (α ⧸ S) := Fintype.ofFinite _
+
+private noncomputable instance linearMapFintype {D C : Type*}
+    [Finite D] [Finite C] [AddCommGroup D] [Module F D]
+    [AddCommGroup C] [Module F C] : Fintype (D →ₗ[F] C) := by
+  classical
+  letI : Fintype D := Fintype.ofFinite D
+  letI : Fintype C := Fintype.ofFinite C
+  exact FunLike.fintype _
+
+private noncomputable instance linearMapDecidableEq {D C : Type*}
+    [AddCommGroup D] [Module F D]
+    [AddCommGroup C] [Module F C]
+    [Fintype (D →ₗ[F] C)] : DecidableEq (D →ₗ[F] C) := Classical.decEq _
+
+/-- A recursively adapted flag records the current domain and codomain
+subspaces of fixed ambient coordinate spaces. A line step replaces `A` by a
+larger ambient subspace whose quotient image is the chosen line; a
+hyperplane step replaces `B` by the ambient image of the chosen hyperplane.
+The signal at every node is the actual intrinsic A15 signal on that carrier. -/
+inductive ActualTypedABMixedTower {n d : Nat} :
+    (A : Submodule F (V d)) → (B : Submodule F (W n)) →
+    (((V d ⧸ A) →ₗ[F] B) → Complex) → Nat → Type 1
+  | done {A : Submodule F (V d)} {B : Submodule F (W n)}
+      (f : ((V d ⧸ A) →ₗ[F] B) → Complex) :
+      ActualTypedABMixedTower A B f 0
+  | line {A : Submodule F (V d)} {B : Submodule F (W n)}
+      {A' : Submodule F (V d)}
+      (hA : A ≤ A')
+      (hL : Module.finrank F (A'.map A.mkQ) = 1)
+      (k : Nat) (T : (V d ⧸ A) →ₗ[F] B)
+      (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+      (tail : ActualTypedABMixedTower A' B
+        (fun M => typedLineReducedWitness (k := k) B
+          (A'.map A.mkQ) hL T f
+          (M.comp (nestedDomainEquiv A A' hA).toLinearMap)) k) :
+      ActualTypedABMixedTower A B f (k + 1)
+  | hyperplane {A : Submodule F (V d)} {B : Submodule F (W n)}
+      {H : Submodule F B}
+      (hH : Module.finrank F (B ⧸ H) = 1)
+      (k : Nat) (T : (V d ⧸ A) →ₗ[F] B)
+      (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+      (tail : ActualTypedABMixedTower A (H.map B.subtype)
+        (fun N => typedHyperplaneReducedWitness (k := k) B H hH T f
+          ((Submodule.equivMapOfInjective B.subtype B.injective_subtype H).symm.toLinearMap.comp N)) k) :
+      ActualTypedABMixedTower A B f (k + 1)
+
+/-- The line successor's quotient carrier is the canonical nested quotient
+over `A`; the stored inclusion `hA` is precisely what defines this
+equivalence. -/
+def lineSuccessorQuotientEquiv {n d : Nat}
+    (A A' : Submodule F (V d)) (hA : A ≤ A') :
+    ((V d ⧸ A) ⧸ A'.map A.mkQ) ≃ₗ[F] (V d ⧸ A') :=
+  nestedDomainEquiv A A' hA
+
+/-- The hyperplane successor's ambient codomain inclusion is the actual
+submodule image of `H` through the current codomain subtype. -/
+theorem hyperplaneSuccessor_le {n : Nat}
+    (B : Submodule F (W n)) (H : Submodule F B) :
+    H.map B.subtype ≤ B := by
+  intro x hx
+  rcases Submodule.mem_map.mp hx with ⟨y, hy, rfl⟩
+  exact y.property
+
+/-- The line step records its canonical adapted domain inclusion. -/
+theorem lineSuccessor_inclusion {d : Nat}
+    (A A' : Submodule F (V d)) (hA : A ≤ A') : A ≤ A' := hA
+
+/-- Hyperplane updates use the canonical equivalence from the actual
+hyperplane carrier to its ambient image. -/
+def hyperplaneSuccessorEquiv {n : Nat}
+    (B : Submodule F (W n)) (H : Submodule F B) :
+    H ≃ₗ[F] H.map B.subtype :=
+  Submodule.equivMapOfInjective B.subtype B.injective_subtype H
+
+/-- The adapted recursion consumes one dimension at each step, counted in
+the current quotient-domain and current codomain carriers. This is the
+well-founded budget for an induction that retains the actual A/B state. -/
+theorem adapted_length_le_total_finrank {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} {k : Nat}
+    (tower : ActualTypedABMixedTower A B f k) :
+    k ≤ Module.finrank F (V d ⧸ A) + Module.finrank F B := by
+  induction tower with
+  | done f => simp
+  | @line A B A' hA hL k T f tail ih =>
+      have hquot :
+          Module.finrank F ((V d ⧸ A) ⧸ (A'.map A.mkQ)) +
+            Module.finrank F (A'.map A.mkQ) =
+              Module.finrank F (V d ⧸ A) :=
+        (A'.map A.mkQ).finrank_quotient_add_finrank
+      have he : Module.finrank F ((V d ⧸ A) ⧸ (A'.map A.mkQ)) =
+          Module.finrank F (V d ⧸ A') :=
+        (nestedDomainEquiv A A' hA).finrank_eq
+      have hdim : Module.finrank F (V d ⧸ A) =
+          Module.finrank F (V d ⧸ A') + 1 := by
+        omega
+      omega
+  | @hyperplane A B H hH k T f tail ih =>
+      have hquot := H.finrank_quotient_add_finrank
+      have he := (hyperplaneSuccessorEquiv B H).finrank_eq
+      have hdim : Module.finrank F B =
+          Module.finrank F (H.map B.subtype) + 1 := by
+        omega
+      omega
+
+/-- Exact line-stage globalness transition for the adapted state. The
+one-step A15 theorem consumes the current bound through `k+1` and produces
+the reduced-carrier bound through `k` with its manuscript loss. -/
+theorem adapted_line_oneStep_A15_global {n d k : Nat} {eps : Real}
+    (A A' : Submodule F (V d)) (B : Submodule F (W n))
+    (hA : A ≤ A')
+    (hL : Module.finrank F (A'.map A.mkQ) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (heps : 0 ≤ eps)
+    (hf : UpToTypedNormSqGlobal A B (k + 1) eps f) :
+    UpToReducedNormSqGlobal A B (A'.map A.mkQ) k
+      (4 * (2 : Real) ^ (4 * (k + 1)) * eps)
+      (typedLineReducedWitness (k := k) B (A'.map A.mkQ) hL T f) := by
+  exact typed_line_oneStep_A15_global A B (A'.map A.mkQ) hL T f heps hf
+
+/-- Exact hyperplane-stage globalness transition for the adapted state. The
+actual codomain image used by the recursive state is `H.map B.subtype`; the
+one-step bound remains on the genuine hyperplane carrier `H`. -/
+theorem adapted_hyperplane_oneStep_A15_global {n d k : Nat} {eps : Real}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (H : Submodule F B)
+    (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (heps : 0 ≤ eps)
+    (hf : UpToTypedNormSqGlobal A B (k + 1) eps f) :
+    UpToHyperplaneReducedNormSqGlobal A B H k
+      (4 * (2 : Real) ^ (4 * (k + 1)) * eps)
+      (typedHyperplaneReducedWitness (k := k) B H hH T f) := by
+  exact typed_hyperplane_oneStep_A15_global A B H hH T f heps hf
+
+/-- Pull reduced globalness back to the flattened adapted domain. This is the
+normalized-fibre transport needed between consecutive line steps: the
+quotient equivalence carries both the fixed-domain condition and the affine
+base, while the codomain variation is unchanged. -/
+theorem reduced_global_to_flat_adapted {n d r : Nat} {eps : Real}
+    (A A' : Submodule F (V d)) (B : Submodule F (W n))
+    (hA : A ≤ A')
+    (g : (((V d ⧸ A) ⧸ A'.map A.mkQ) →ₗ[F] B) → Complex)
+    (hg : UpToReducedNormSqGlobal A B (A'.map A.mkQ) r eps g) :
+    UpToTypedNormSqGlobal A' B r eps
+      (fun M => g (M.comp (nestedDomainEquiv A A' hA).toLinearMap)) := by
+  classical
+  let e := nestedDomainEquiv A A' hA
+  let em : (((V d ⧸ A') →ₗ[F] B) ≃ₗ[F]
+      (((V d ⧸ A) ⧸ (A'.map A.mkQ)) →ₗ[F] B)) :=
+    LinearEquiv.arrowCongr e.symm (LinearEquiv.refl F B)
+  intro Q'
+  intro hQ'
+  let Q : ReducedRestriction A B (A'.map A.mkQ) :=
+    { domainFixed := Q'.domainFixed.comap e.toLinearMap
+      codomainVariation := Q'.codomainVariation
+      base := Q'.base.comp e.toLinearMap }
+  have hmap : Q.domainFixed.map e.toLinearMap = Q'.domainFixed := by
+    exact Submodule.map_comap_eq_self (by simp [Q, e])
+  have hdom : Module.finrank F Q.domainFixed =
+      Module.finrank F Q'.domainFixed := by
+    calc
+      Module.finrank F Q.domainFixed =
+          Module.finrank F (Q.domainFixed.map e.toLinearMap) :=
+        (e.finrank_map_eq Q.domainFixed).symm
+      _ = Module.finrank F Q'.domainFixed := by rw [hmap]
+  have horder : Q.order = Q'.order := by
+    unfold ReducedRestriction.order CarrierRestriction.order
+    rw [hdom]
+  have hmem : ∀ M, M ∈ Q'.fibre ↔ em M ∈ Q.fibre := by
+    intro M
+    simp only [CarrierRestriction.fibre, ReducedRestriction.fibre,
+      Finset.mem_filter, Finset.mem_univ, true_and, Q]
+    constructor
+    · rintro ⟨hfix, hvar⟩
+      constructor
+      · intro a ha
+        change e a ∈ Q'.domainFixed at ha
+        have h := hfix (e a) ha
+        simpa [em, Q, LinearEquiv.arrowCongr_apply,
+          LinearMap.sub_apply, LinearMap.comp_apply] using h
+      · intro x
+        have h := hvar (e x)
+        simpa [em, Q, LinearEquiv.arrowCongr_apply,
+          LinearMap.sub_apply, LinearMap.comp_apply] using h
+    · rintro ⟨hfix, hvar⟩
+      constructor
+      · intro x hx
+        have hx' : e.symm x ∈ Q.domainFixed := by
+          change e (e.symm x) ∈ Q'.domainFixed
+          simpa using hx
+        have h := hfix (e.symm x) hx'
+        simpa [em, Q, LinearEquiv.arrowCongr_apply,
+          LinearMap.sub_apply, LinearMap.comp_apply] using h
+      · intro x
+        have h := hvar (e.symm x)
+        simpa [em, Q, LinearEquiv.arrowCongr_apply,
+          LinearMap.sub_apply, LinearMap.comp_apply] using h
+  have hsum :
+      (∑ M ∈ Q'.fibre,
+        Complex.normSq (g (M.comp e.toLinearMap))) =
+      ∑ N ∈ Q.fibre, Complex.normSq (g N) := by
+    exact Finset.sum_equiv em.toEquiv hmem (by intro M hM; rfl)
+  have hcard : Q'.fibre.card = Q.fibre.card :=
+    Finset.card_equiv em.toEquiv hmem
+  have hbound := hg Q (by rw [horder]; exact hQ')
+  rw [← hsum, ← hcard] at hbound
+  exact hbound
+
+end
+
+/-- Transport hyperplane-reduced globalness to the flattened codomain carrier.
+The equivalence is the actual subtype-image equivalence, and the proof
+preserves each normalized affine fibre. -/
+theorem hyperplane_reduced_global_to_flat_adapted {n d r : Nat} {eps : Real}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (H : Submodule F B)
+    (g : ((V d ⧸ A) →ₗ[F] H) → Complex)
+    (hg : UpToHyperplaneReducedNormSqGlobal A B H r eps g) :
+    UpToTypedNormSqGlobal A (H.map B.subtype) r eps
+      (fun M => g ((hyperplaneSuccessorEquiv B H).symm.toLinearMap.comp M)) := by
+  classical
+  let e : H ≃ₗ[F] H.map B.subtype := hyperplaneSuccessorEquiv B H
+  let em : (((V d ⧸ A) →ₗ[F] H.map B.subtype) ≃ₗ[F]
+      ((V d ⧸ A) →ₗ[F] H)) :=
+    LinearEquiv.arrowCongr (LinearEquiv.refl F (V d ⧸ A)) e.symm
+  intro Q'
+  intro hQ'
+  let Q : HyperplaneReducedRestriction A B H :=
+    { domainFixed := Q'.domainFixed
+      codomainVariation := Q'.codomainVariation.comap e.toLinearMap
+      base := e.symm.toLinearMap.comp Q'.base }
+  have hmap : Q.codomainVariation.map e.toLinearMap = Q'.codomainVariation := by
+    exact Submodule.map_comap_eq_self (by simp [Q, e])
+  have hcod : Module.finrank F (H.map B.subtype) = Module.finrank F H := by
+    exact e.finrank_eq.symm
+  have hvar : Module.finrank F Q.codomainVariation =
+      Module.finrank F Q'.codomainVariation := by
+    calc
+      Module.finrank F Q.codomainVariation =
+          Module.finrank F (Q.codomainVariation.map e.toLinearMap) :=
+        (e.finrank_map_eq Q.codomainVariation).symm
+      _ = Module.finrank F Q'.codomainVariation := by rw [hmap]
+  have hquot : Module.finrank F ((H.map B.subtype) ⧸ Q'.codomainVariation) =
+      Module.finrank F (H ⧸ Q.codomainVariation) := by
+    have hq' : Module.finrank F ((H.map B.subtype) ⧸ Q'.codomainVariation) +
+        Module.finrank F Q'.codomainVariation = Module.finrank F (H.map B.subtype) :=
+      Q'.codomainVariation.finrank_quotient_add_finrank
+    have hq : Module.finrank F (H ⧸ Q.codomainVariation) +
+        Module.finrank F Q.codomainVariation = Module.finrank F H :=
+      Q.codomainVariation.finrank_quotient_add_finrank
+    omega
+  have horder : Q.order = Q'.order := by
+    unfold HyperplaneReducedRestriction.order CarrierRestriction.order
+    rw [hquot]
+  have hmem : ∀ M, M ∈ Q'.fibre ↔ em M ∈ Q.fibre := by
+    intro M
+    simp only [CarrierRestriction.fibre, HyperplaneReducedRestriction.fibre,
+      Finset.mem_filter, Finset.mem_univ, true_and, Q]
+    constructor
+    · rintro ⟨hfix, hvar⟩
+      constructor
+      · intro x hx
+        have h := congrArg e.symm (hfix x hx)
+        simpa [em, e, LinearEquiv.arrowCongr_apply, LinearMap.sub_apply,
+          LinearMap.comp_apply, Q] using h
+      · intro x
+        have hx := hvar x
+        simpa [em, e, LinearEquiv.arrowCongr_apply, LinearMap.sub_apply,
+          LinearMap.comp_apply, Q] using hx
+    · rintro ⟨hfix, hvar⟩
+      constructor
+      · intro x hx
+        have h := congrArg e (hfix x hx)
+        simpa [em, e, LinearEquiv.arrowCongr_apply, LinearMap.sub_apply,
+          LinearMap.comp_apply, Q] using h
+      · intro x
+        have hx := hvar x
+        simpa [em, e, LinearEquiv.arrowCongr_apply, LinearMap.sub_apply,
+          LinearMap.comp_apply, Q] using hx
+  have hsum :
+      (∑ M ∈ Q'.fibre,
+        Complex.normSq (g (e.symm.toLinearMap.comp M))) =
+      ∑ N ∈ Q.fibre, Complex.normSq (g N) := by
+    exact Finset.sum_equiv em.toEquiv hmem (by intro M hM; rfl)
+  have hcard : Q'.fibre.card = Q.fibre.card :=
+    Finset.card_equiv em.toEquiv hmem
+  have hbound := hg Q (by rw [horder]; exact hQ')
+  rw [← hsum, ← hcard] at hbound
+  exact hbound
+
+/-- The carrier and function reached by following the actual recursive
+children of an adapted tower. -/
+structure ActualTypedABTerminalData (n d : Nat) where
+  Aend : Submodule F (V d)
+  Bend : Submodule F (W n)
+  fend : ((V d ⧸ Aend) →ₗ[F] Bend) → Complex
+  terminal : ActualTypedABMixedTower Aend Bend fend 0
+
+/-- Deterministically follow a mixed tower to its genuine terminal state. -/
+noncomputable def adaptedTerminalData {n d : Nat} {A : Submodule F (V d)}
+    {B : Submodule F (W n)} {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    {k : Nat} (tower : ActualTypedABMixedTower A B f k) :
+    ActualTypedABTerminalData n d :=
+  match tower with
+  | .done f => ⟨A, B, f, ActualTypedABMixedTower.done f⟩
+  | .line _ _ _ _ _ tail => adaptedTerminalData tail
+  | .hyperplane _ _ _ _ tail => adaptedTerminalData tail
+/-- The accumulated scalar loss after `k` recursive one-step A15 estimates. -/
+def adaptedA15TotalLoss (k : Nat) : Real :=
+  (2 : Real) ^ (2 * k ^ 2 + 4 * k)
+
+theorem adaptedA15TotalLoss_succ (k : Nat) :
+    adaptedA15TotalLoss (k + 1) =
+      (4 * (2 : Real) ^ (4 * (k + 1))) * adaptedA15TotalLoss k := by
+  unfold adaptedA15TotalLoss
+  have hexp : 2 * (k + 1) ^ 2 + 4 * (k + 1) =
+      (2 * k ^ 2 + 4 * k) + (4 * (k + 1) + 2) := by ring
+  rw [hexp, pow_add]
+  norm_num [pow_add]
+  ring
+
+/-- Repeated actual A15 transitions along a legal typed mixed tower produce a
+terminal globalness bound. The output is obtained from the actual recursive
+children, and the total loss is the product of the one-step losses. -/
+theorem adaptedA15TotalLoss_le_degree (k D : Nat) (hk : k ≤ D) :
+    adaptedA15TotalLoss k ≤ (2 : Real) ^ (11 * D ^ 2) := by
+  unfold adaptedA15TotalLoss
+  have hk2 : k ^ 2 ≤ D ^ 2 := Nat.pow_le_pow_left hk 2
+  by_cases hD : D = 0
+  · subst D
+    have hk0 : k = 0 := Nat.eq_zero_of_le_zero hk
+    subst k
+    norm_num
+  · have hDpos : 1 ≤ D := Nat.one_le_iff_ne_zero.mpr hD
+    have hDsq : D ≤ D ^ 2 := by nlinarith [Nat.mul_le_mul_left D hDpos]
+    have hexp : 2 * k ^ 2 + 4 * k ≤ 11 * D ^ 2 := by
+      nlinarith
+    exact pow_le_pow_right₀ (by norm_num : (1 : Real) ≤ 2) hexp
+
+theorem adapted_tower_terminal_global {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} {k : Nat}
+    (tower : ActualTypedABMixedTower A B f k) :
+    ∀ eps : Real, 0 ≤ eps → UpToTypedNormSqGlobal A B k eps f →
+      UpToTypedNormSqGlobal (adaptedTerminalData tower).Aend
+        (adaptedTerminalData tower).Bend 0
+        (adaptedA15TotalLoss k * eps) (adaptedTerminalData tower).fend := by
+  induction tower with
+  | done f =>
+      intro eps heps hf
+      simpa [adaptedTerminalData, adaptedA15TotalLoss] using hf
+  | @line A B A' hA hL k T f tail ih =>
+      intro eps heps hf
+      have hred := adapted_line_oneStep_A15_global
+        (A := A) (A' := A') (B := B) hA hL T f heps hf
+      have hflat := reduced_global_to_flat_adapted
+        A A' B hA (typedLineReducedWitness (k := k) B
+          (A'.map A.mkQ) hL T f) hred
+      have hnext : 0 ≤ (4 * (2 : Real) ^ (4 * (k + 1))) * eps := by
+        positivity
+      have htail := ih ((4 * (2 : Real) ^ (4 * (k + 1))) * eps) hnext hflat
+      have hscale : adaptedA15TotalLoss k *
+          ((4 * (2 : Real) ^ (4 * (k + 1))) * eps) =
+          adaptedA15TotalLoss (k + 1) * eps := by
+        rw [adaptedA15TotalLoss_succ]
+        ring
+      change UpToTypedNormSqGlobal (adaptedTerminalData tail).Aend
+        (adaptedTerminalData tail).Bend 0
+        (adaptedA15TotalLoss (k + 1) * eps)
+        (adaptedTerminalData tail).fend
+      rw [← hscale]
+      exact htail
+  | @hyperplane A B H hH k T f tail ih =>
+      intro eps heps hf
+      have hred := adapted_hyperplane_oneStep_A15_global
+        (A := A) (B := B) (H := H) hH T f heps hf
+      have hflat := hyperplane_reduced_global_to_flat_adapted
+        A B H (typedHyperplaneReducedWitness (k := k) B H hH T f) hred
+      have hnext : 0 ≤ (4 * (2 : Real) ^ (4 * (k + 1))) * eps := by
+        positivity
+      have htail := ih ((4 * (2 : Real) ^ (4 * (k + 1))) * eps) hnext hflat
+      have hscale : adaptedA15TotalLoss k *
+          ((4 * (2 : Real) ^ (4 * (k + 1))) * eps) =
+          adaptedA15TotalLoss (k + 1) * eps := by
+        rw [adaptedA15TotalLoss_succ]
+        ring
+      change UpToTypedNormSqGlobal (adaptedTerminalData tail).Aend
+        (adaptedTerminalData tail).Bend 0
+        (adaptedA15TotalLoss (k + 1) * eps)
+        (adaptedTerminalData tail).fend
+      rw [← hscale]
+      exact htail
+
+/-- The recursive A15 output is bounded by the manuscript's `2^(11 D^2)`
+loss whenever the actual tower order is at most the input degree parameter. -/
+theorem adapted_tower_terminal_global_of_degree_bound {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} {k D : Nat}
+    (tower : ActualTypedABMixedTower A B f k) (hk : k ≤ D) :
+    ∀ eps : Real, 0 ≤ eps → UpToTypedNormSqGlobal A B D eps f →
+      UpToTypedNormSqGlobal (adaptedTerminalData tower).Aend
+        (adaptedTerminalData tower).Bend 0
+        ((2 : Real) ^ (11 * D ^ 2) * eps) (adaptedTerminalData tower).fend := by
+  intro eps heps hf
+  have hkGlobal : UpToTypedNormSqGlobal A B k eps f := by
+    intro Q hQ
+    exact hf Q (le_trans hQ hk)
+  have hfinal := adapted_tower_terminal_global tower eps heps hkGlobal
+  have hloss := adaptedA15TotalLoss_le_degree k D hk
+  intro Q hQ
+  have h := hfinal Q hQ
+  calc
+    (∑ M ∈ Q.fibre, Complex.normSq ((adaptedTerminalData tower).fend M)) /
+        Q.fibre.card ≤ adaptedA15TotalLoss k * eps := h
+    _ ≤ (2 : Real) ^ (11 * D ^ 2) * eps :=
+      mul_le_mul_of_nonneg_right hloss heps
+/-- Order-zero typed globalness is the normalized whole-space norm-square
+energy bound. -/
+theorem adapted_terminal_energy_of_global {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} {eps : Real}
+    (hf : UpToTypedNormSqGlobal A B 0 eps f) :
+    (∑ M : ((V d ⧸ A) →ₗ[F] B), Complex.normSq (f M)) /
+        Fintype.card ((V d ⧸ A) →ₗ[F] B) ≤ eps := by
+  let Q : CarrierRestriction A B := ⟨⊥, ⊤, 0⟩
+  have hquot : Module.finrank F (B ⧸ (⊤ : Submodule F B)) = 0 := by
+    have h := (⊤ : Submodule F B).finrank_quotient_add_finrank
+    simpa using h
+  have horder : Q.order = 0 := by
+    simp [Q, CarrierRestriction.order, hquot]
+  have h := hf Q (by rw [horder])
+  simpa [Q, CarrierRestriction.fibre, CarrierRestriction.order] using h
+
+/-- Combining the tower induction with the order-zero fibre identity gives
+the terminal whole-space energy estimate at the explicit degree loss. -/
+theorem adapted_tower_terminal_energy_of_degree_bound {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} {k D : Nat}
+    (tower : ActualTypedABMixedTower A B f k) (hk : k ≤ D) :
+    ∀ eps : Real, 0 ≤ eps → UpToTypedNormSqGlobal A B D eps f →
+      (∑ M : ((V d ⧸ (adaptedTerminalData tower).Aend) →ₗ[F]
+          (adaptedTerminalData tower).Bend),
+          Complex.normSq ((adaptedTerminalData tower).fend M)) /
+          Fintype.card ((V d ⧸ (adaptedTerminalData tower).Aend) →ₗ[F]
+            (adaptedTerminalData tower).Bend) ≤
+        (2 : Real) ^ (11 * D ^ 2) * eps := by
+  intro eps heps hf
+  exact adapted_terminal_energy_of_global
+    (adapted_tower_terminal_global_of_degree_bound tower hk eps heps hf)
+/-- Coordinate-to-typed form of the mixed A16 tower energy estimate. The
+input is the original function's full actual globalness bound; all affine
+bases and carrier changes remain those stored in the legal tower. -/
+theorem actual_typed_A16_tower_energy_bound {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} {k D : Nat}
+    (tower : ActualTypedABMixedTower A B f k) (hk : k ≤ D) :
+    ∀ eps : Real, 0 ≤ eps →
+      UpToActualNormSqGlobal D eps
+        (fun X => f ((carrierMatrixEquiv A B).symm X)) →
+      (∑ M : ((V d ⧸ (adaptedTerminalData tower).Aend) →ₗ[F]
+          (adaptedTerminalData tower).Bend),
+          Complex.normSq ((adaptedTerminalData tower).fend M)) /
+          Fintype.card ((V d ⧸ (adaptedTerminalData tower).Aend) →ₗ[F]
+            (adaptedTerminalData tower).Bend) ≤
+        (2 : Real) ^ (11 * D ^ 2) * eps := by
+  intro eps heps hfActual
+  have hfTyped : UpToTypedNormSqGlobal A B D eps f :=
+    (typed_global_iff_coordinate A B f).mpr hfActual
+  exact adapted_tower_terminal_energy_of_degree_bound tower hk eps heps hfTyped
+/-- A16 form with the original function expressed in the chosen A/B carrier
+coordinates. The tower still uses the actual quotient/subtype linear maps;
+`carrierMatrixEquiv` is only the input-coordinate presentation. -/
+theorem actual_coordinate_A16_tower_energy_bound {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)} {k D : Nat}
+    (fCoord : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A)) → Complex)
+    (tower : ActualTypedABMixedTower A B
+      (fun M => fCoord (carrierMatrixEquiv A B M)) k) (hk : k ≤ D) :
+    ∀ eps : Real, 0 ≤ eps → UpToActualNormSqGlobal D eps fCoord →
+      (∑ M : ((V d ⧸ (adaptedTerminalData tower).Aend) →ₗ[F]
+          (adaptedTerminalData tower).Bend),
+          Complex.normSq ((adaptedTerminalData tower).fend M)) /
+          Fintype.card ((V d ⧸ (adaptedTerminalData tower).Aend) →ₗ[F]
+            (adaptedTerminalData tower).Bend) ≤
+        (2 : Real) ^ (11 * D ^ 2) * eps := by
+  intro eps heps hfCoord
+  let f : ((V d ⧸ A) →ₗ[F] B) → Complex :=
+    fun M => fCoord (carrierMatrixEquiv A B M)
+  have hfTyped : UpToTypedNormSqGlobal A B D eps f := by
+    apply (typed_global_iff_coordinate A B f).mpr
+    simpa [f] using hfCoord
+  exact adapted_tower_terminal_energy_of_degree_bound tower hk eps heps hfTyped
+
+/-- The exact manuscript A14 operator equation attached to every node of a
+typed mixed tower. At a line node this identifies the reduced witness after
+rank projection with the selected line filter of the next rank projection,
+at the updated affine base `T + N.comp L.mkQ`; the hyperplane case records
+the corresponding actual subtype update. The tail clause recursively keeps
+the same equations for the genuine children stored by the tower. -/
+def HasActualA14OperatorSemantics {n d : Nat} {A : Submodule F (V d)}
+    {B : Submodule F (W n)} {f : ((V d ⧸ A) →ₗ[F] B) → Complex}
+    {k : Nat} : ActualTypedABMixedTower A B f k → Prop
+  | .done _ => True
+  | @ActualTypedABMixedTower.line n d A B A' hA hL j T f tail =>
+      (∀ N : ((V d ⧸ A) ⧸ A'.map A.mkQ) →ₗ[F] B,
+        reducedComplexRankProjection B (A'.map A.mkQ) j
+          (typedLineReducedWitness (k := j) B (A'.map A.mkQ) hL T f) N =
+        typedComplexLineFilter B (A'.map A.mkQ) hL
+          (typedComplexRankProjection A B (j + 1) f)
+          (T + N.comp (A'.map A.mkQ).mkQ)) ∧
+        HasActualA14OperatorSemantics tail
+  | @ActualTypedABMixedTower.hyperplane n d A B H hH j T f tail =>
+      (∀ N : (V d ⧸ A) →ₗ[F] H,
+        hyperplaneReducedComplexRankProjection B H hH j
+          (typedHyperplaneReducedWitness (k := j) B H hH T f) N =
+        typedComplexHyperplaneFilter B H hH
+          (typedComplexRankProjection A B (j + 1) f)
+          (T + H.subtype.comp N)) ∧
+        HasActualA14OperatorSemantics tail
+
+/-- Every stored mixed-tower step satisfies its manuscript selected-operator
+identity, with no externally supplied operator-compatibility premise. -/
+theorem actual_typed_AB_tower_has_A14_operator_semantics {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    {f : ((V d ⧸ A) →ₗ[F] B) → Complex} {k : Nat}
+    (tower : ActualTypedABMixedTower A B f k) :
+    HasActualA14OperatorSemantics tower := by
+  induction tower with
+  | done _ => trivial
+  | @line A B A' hA hL j T f tail ih =>
+      constructor
+      · intro N
+        exact typed_A14_fixedLine A B (A'.map A.mkQ) hL T f N
+      · exact ih
+  | @hyperplane A B H hH j T f tail ih =>
+      constructor
+      · intro N
+        exact typed_A14_fixedHyperplane A B H hH T f N
+      · exact ih
+
+/-- Source-shaped typed A16 statement: an arbitrary actual carrier function
+whose Fourier support/globalness is certified by `UpToActualNormSqGlobal D`
+can be followed through any legal line/hyperplane choice tree of length at
+most `D`. The same tree is certified to satisfy the manuscript's A14
+selected-operator equations at every stage, and its actual terminal signal
+has the `2^(11 D^2)` energy bound. -/
+theorem actual_selected_AB_tower_A16 {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)} {k D : Nat}
+    (fCoord : BinaryMatrix (Module.finrank F B)
+      (Module.finrank F (V d ⧸ A)) → Complex)
+    (tower : ActualTypedABMixedTower A B
+      (fun M => fCoord (carrierMatrixEquiv A B M)) k)
+    (hk : k ≤ D) :
+    ∀ eps : Real, 0 ≤ eps → UpToActualNormSqGlobal D eps fCoord →
+      HasActualA14OperatorSemantics tower ∧
+      ((∑ M : ((V d ⧸ (adaptedTerminalData tower).Aend) →ₗ[F]
+          (adaptedTerminalData tower).Bend),
+          Complex.normSq ((adaptedTerminalData tower).fend M)) /
+          Fintype.card ((V d ⧸ (adaptedTerminalData tower).Aend) →ₗ[F]
+            (adaptedTerminalData tower).Bend)) ≤
+        (2 : Real) ^ (11 * D ^ 2) * eps := by
+  intro eps heps hglobal
+  exact ⟨actual_typed_AB_tower_has_A14_operator_semantics tower,
+    actual_coordinate_A16_tower_energy_bound fCoord tower hk eps heps hglobal⟩
+end PvNP.RealizableHardness.ActualTypedABMixedTower
