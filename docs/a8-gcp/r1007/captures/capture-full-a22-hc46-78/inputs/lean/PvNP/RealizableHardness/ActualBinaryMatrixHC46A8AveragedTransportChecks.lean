@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedTransport
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8OutputCoordinateTransport
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedTransport
+
+#check a8_actual_T2_whole_function_expansion
+#print axioms a8_actual_T2_whole_function_expansion
+#check a8_actual_T2_complement_reconstruction
+#print axioms a8_actual_T2_complement_reconstruction
+#check a8_fixed_base_actual_energy_cube
+#print axioms a8_fixed_base_actual_energy_cube
+#check a8T2ComplementDomainMap
+#print axioms a8T2ComplementDomainMap
+#check a8T2ComplementKernelMap
+#print axioms a8T2ComplementKernelMap
+#check a8_fixed_complement_t2_typed_fourier
+#print axioms a8_fixed_complement_t2_typed_fourier
