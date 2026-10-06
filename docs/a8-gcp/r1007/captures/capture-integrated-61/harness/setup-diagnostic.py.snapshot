@@ -1,0 +1,77 @@
+"""Offline adaptation of r1005 custody/orchestration. Never runs a compiler."""
+from pathlib import Path
+import hashlib, json, re, shutil, subprocess
+from datetime import datetime, timezone
+
+P = Path(__file__).resolve().parent
+R = P.parents[2]
+prior = P.with_name('r1005')
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest().upper()
+def save(n, b):
+    with (P / n).open('xb') as f: f.write(b if isinstance(b, bytes) else b.encode('utf-8'))
+source = 'lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8OutputCoordinateTransport.lean'
+checks = source.replace('.lean','Checks.lean')
+report = 'docs/a8-gcp/r1007/author-report.md'
+flags = getattr(subprocess,'CREATE_NO_WINDOW',0)
+cmd = [r'C:\Users\Dan\AppData\Local\Google\CloudSDKPortable\google-cloud-sdk\bin\gcloud.cmd','compute','instances','describe','quantyra-lean-builder-01','--project=quantyra-lean-cert-20260915','--zone=us-central1-a','--format=json(name,id,status,zone,lastStartTimestamp,lastStopTimestamp)']
+res = subprocess.run(cmd,capture_output=True,creationflags=flags)
+save('initial-vm.stdout',res.stdout); save('initial-vm.stderr',res.stderr)
+state = json.loads(res.stdout)
+assert res.returncode == 0 and state['status']=='TERMINATED' and state['id']=='8337954477286097405'
+save('initial-inspection.json',json.dumps({'utc':datetime.now(timezone.utc).isoformat(),'argv':cmd,'exit':res.returncode,'state':state,'active_compile':False,'basis':'TERMINATED VM cannot have an active compiler; r1005 completed archive and recovered termination receipts retained unchanged.'},indent=2))
+diff = subprocess.check_output(['git','diff','--binary','HEAD','--',source,checks,report],cwd=R)
+save('candidate-vs-HEAD.patch',diff)
+save('author-report-vs-HEAD.note','Report is untracked: exact complete bytes preserved in capture, no HEAD version exists.\n')
+frozen = {n:sha(R/n) for n in [source,checks,report]}
+for n in [source,checks]:
+    data=(R/n).read_bytes(); data.decode('utf-8',errors='strict'); assert not data.startswith(b'\xef\xbb\xbf')
+save('candidate-identities.json',json.dumps({'sha256':frozen,'lean_utf8_strict':True,'lean_bom':False,'source_edited':False},indent=2))
+names=['common.py','prepare.py','runner.py','audit.py','cloud_capture.py','remote-template.sh']
+for n in names: shutil.copyfile(prior/n,P/n)
+shutil.copytree(prior/'warning-baseline',P/'warning-baseline')
+shutil.copyfile(prior/'warning-baseline-seal.json',P/'warning-baseline-seal.json')
+shutil.copyfile(prior/'workflow-protocol.snapshot',P/'workflow-protocol.snapshot')
+save('README.md','S3132 r1007 diagnostic only. GCP-only; no acceptance, no roadmap credit, no source repair or Git writes.\n')
+s=(P/'common.py').read_text()
+s=re.sub(r'^REPORT = .*$', 'REPORT = '+repr(report),s,flags=re.M)
+s=re.sub(r'^FROZEN = .*$', 'FROZEN = '+repr(frozen),s,flags=re.M)
+s=re.sub(r'^CLAIM = .*$', 'CLAIM = '+repr('Diagnostic compiler attempt only; bounded increment not accepted; zero roadmap credit; S3132 partial; S3137 incomplete; endpoint a8_output_q_le_actual_predecessor_sum remains open.'),s,flags=re.M)
+s=s.replace("'a8_w6_domain_quotient_square']]", "'a8_w6_domain_quotient_square', 'a8T2ComplementDomainMap', 'a8T2ComplementKernelMap', 'a8_fixed_complement_t2_typed_fourier']]")
+(P/'common.py').write_text(s,encoding='utf-8')
+s=(P/'prepare.py').read_text()
+a=s.index('SCRIPTS = '); b=s.index('BASELINE_FILES = ',a)
+s=s[:a]+'SCRIPTS = '+repr(names+['setup-diagnostic.py','README.md','warning-baseline-seal.json','workflow-protocol.snapshot'])+'\n'+s[b:]
+s=s.replace('    for route in sorted((PACKAGE / "author-route").iterdir()):\n        save("author-route/" + route.name, route.read_bytes())\n','')
+s=s.replace('        path = REPO / rel\n        if not path.is_file():','        path = REPO / rel\n        if not path.is_file():')
+s=s.replace('        data = path.read_bytes()\n        text = data.decode', '        data = path.read_bytes() if rel in {SOURCE, CHECKS} else git("show", "HEAD:" + rel)\n        text = data.decode')
+s=s.replace('"PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber"]}', '"PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber",\n            "PvNP.RealizableHardness.ActualBinaryMatrixHC46T2Transfer"]}')
+(P/'prepare.py').write_text(s,encoding='utf-8')
+# Baseline dependencies are captured from HEAD, while inherited live dirt is preserved.
+s=(P/'common.py').read_text()
+s=s.replace('            if file_sha(REPO / name) != row["sha256"]:', '            actual = file_sha(REPO / name) if name in {SOURCE, CHECKS} else sha(subprocess.check_output(["git", "show", "HEAD:" + name], cwd=REPO, creationflags=CREATE_FLAGS))\n            if actual != row["sha256"]:')
+(P/'common.py').write_text(s,encoding='utf-8')
+s=(P/'runner.py').read_text()
+s=s.replace('import argparse','import base64\nimport argparse',1)
+# Observe existing processes before any upload or compiler launch; never overwrite active work.
+s=s.replace('        control.cloud(["compute", "scp", str(archive)', '        _, active, _ = control.cloud(["compute", "ssh", VM, "--tunnel-through-iap", "--command=ps -eo pid,ppid,comm,args | grep -E \'[l]ean|[l]ake|[c]loud_capture.py|[c]mmsa_a8_output_.*[.]sh\' || true"])\n        if active.strip():\n            start_attempted = False\n            raise RuntimeError("Unexpected active remote run; retain VM unchanged and finish that run first")\n        control.cloud(["compute", "scp", str(archive)',1)
+a=s.index('                    control.cloud(["compute", "scp", VM + ":" + remote_path')
+b=s.index('                    repository_archive = ',a)
+s=s[:a]+'''                    _, output, _ = control.cloud(["compute", "ssh", VM, "--tunnel-through-iap",
+                                                 "--command=sha256sum " + remote_path + "; stat -c %s " + remote_path])
+                    remote_evidence_sha = output.decode().splitlines()[0].split()[0].upper()
+                    size = int(output.decode().splitlines()[1])
+                    block = 4 * 1024 * 1024
+                    with local_archive.open("xb") as stream:
+                        for index in range((size + block - 1) // block):
+                            command = "dd if=" + remote_path + " bs=" + str(block) + " skip=" + str(index) + " count=1 status=none | base64 -w0"
+                            _, chunk, _ = control.cloud(["compute", "ssh", VM, "--tunnel-through-iap", "--command=" + command], timeout=120)
+                            data = base64.b64decode(chunk, validate=True)
+                            if len(data) != min(block, size-index*block): raise ValueError("Archive chunk size mismatch")
+                            stream.write(data)
+                            print("Preserved archive chunk", index, len(data), flush=True)
+                    if size != local_archive.stat().st_size or remote_evidence_sha != file_sha(local_archive):
+                        raise ValueError("Downloaded cloud evidence archive hash mismatch")
+''' + s[b:]
+(P/'runner.py').write_text(s,encoding='utf-8')
+save('adaptation.json',json.dumps({'parent':'r1005','baseline':'HEAD project dependencies plus exact two local candidate overlays','parent_hashes':{n:sha(prior/n) for n in names},'changes':['freeze r1007 identities','capture HEAD dependency closure','add explicit T2 closure target','read-only active process preflight','reuse r1005 bounded SSH archive custody instead of stalled SCP'],'no_local_compiler':True,'no_git_writes':True},indent=2))
+print(json.dumps(frozen,indent=2))

@@ -1,0 +1,30 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean:221:53: unsolved goals
+case mk
+n d D : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+domainFixed✝ : Submodule (ZMod 2) (Fin d → ZMod 2)
+codomainVariation✝ : Submodule (ZMod 2) (Fin n → ZMod 2)
+base✝ : BinaryMatrix n d
+hR : { domainFixed := domainFixed✝, codomainVariation := codomainVariation✝, base := base✝ }.order ≤ 2 * D
+A : Submodule (ZMod 2) (Fin d → ZMod 2) :=
+  { domainFixed := domainFixed✝, codomainVariation := codomainVariation✝, base := base✝ }.domainFixed
+B : Submodule (ZMod 2) (Fin n → ZMod 2) :=
+  { domainFixed := domainFixed✝, codomainVariation := codomainVariation✝, base := base✝ }.codomainVariation
+T : (Fin d → ZMod 2) →ₗ[ZMod 2] Fin n → ZMod 2 :=
+  Matrix.mulVecLin { domainFixed := domainFixed✝, codomainVariation := codomainVariation✝, base := base✝ }.base
+Q : CarrierRestriction A B := { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ 2 * D
+⊢ LinearMap.toMatrix' (Matrix.mulVecLin base✝) = base✝
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareGlobalness
+
+
+Candidate context:
+219:   let Q : CarrierRestriction A B := ⟨⊥, ⊤, 0⟩
+220:   have hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ 2 * D := hR
+221:   have hlift : liftCarrierRestriction A B T Q = R := by
+222:     cases R
+223:     simp [liftCarrierRestriction, Q, A, B, T, Submodule.range_subtype]
