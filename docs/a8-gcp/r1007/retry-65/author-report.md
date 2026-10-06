@@ -1,0 +1,3 @@
+# Development65 real-q core
+
+Only stable Norm5E75/1B5E,Transport4F4A/5010,Operator43E1/DA48 are new targets. Incomplete Parent and full consumers excluded from this development compiler, but their immutable offers preserved separately and all14authorpaths remain mutable. Full original real-q A22/unchangedHC46/selected consumer still required. Prior85 accepted source graph preserved; newly imported dependencies explicitly pinned to pushedHEAD and no native or review acceptance inferred. Baseline981 unchanged; enlarged-import warnings disclosed separately, never silently added as allowances. No local Lean/helper credit.
