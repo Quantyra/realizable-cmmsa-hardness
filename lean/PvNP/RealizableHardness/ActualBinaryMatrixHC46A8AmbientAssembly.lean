@@ -36,6 +36,9 @@ noncomputable section
 attribute [local instance] Classical.propDecidable
 attribute [local instance] Fintype.ofFinite
 
+private theorem a8_mem_fintype_elems {α : Type*} (s : Fintype α) (x : α) :
+    x ∈ s.elems := s.complete x
+
 private abbrev F := ZMod 2
 private abbrev V (d : Nat) := Fin d → F
 private abbrev W (n : Nat) := Fin n → F
@@ -84,20 +87,17 @@ theorem a8_coordinate_pair_share_nested_mean {n d : Nat}
     simp only [hbase, complexCarrierAffineRestrict]
   unfold a7PairShare typedUniformMean
   simp_rw [hterm]
-  have hs := Equiv.sum_comp e.toEquiv (fun S0 : (V d ⧸ R) →ₗ[F] K =>
-    (a18UniformMean (fun N :
-      (((V d ⧸ R) ⧸ P.map (domainBasis R).equivFun.symm.toLinearMap) →ₗ[F]
-        Q.map (codomainBasis K).equivFun.symm.toLinearMap) =>
-      Complex.normSq
-        (complexCarrierHybridFilter R K
-          (P.map (domainBasis R).equivFun.symm.toLinearMap)
-          (Q.map (codomainBasis K).equivFun.symm.toLinearMap) g
-          (S0 + (Q.map (codomainBasis K).equivFun.symm.toLinearMap).subtype.comp
-            (N.comp (P.map (domainBasis R).equivFun.symm.toLinearMap).mkQ))))) ^ 2)
-  rw [hs]
-  congr 1
-  exact_mod_cast Fintype.card_congr e.toEquiv
-
+  apply congrArg₂ (fun (x : ℝ) (y : ℕ) => x / (y : ℝ))
+  · refine Finset.sum_bij (fun L _ => e L) ?_ ?_ ?_ ?_
+    · intro L _; exact a8_mem_fintype_elems _ _
+    · intro L _ M _ hLM; exact e.injective hLM
+    · intro L _; exact ⟨e.symm L, by exact a8_mem_fintype_elems _ _, e.apply_symm_apply L⟩
+    · intro L _; rfl
+  · unfold Fintype.card
+    refine Finset.card_bij (fun L _ => e L) ?_ ?_ ?_
+    · intro L _; exact a8_mem_fintype_elems _ _
+    · intro L _ M _ hLM; exact e.injective hLM
+    · intro L _; exact ⟨e.symm L, by exact a8_mem_fintype_elems _ _, e.apply_symm_apply L⟩
 /-- Complete per-output-pair transport for the original ambient-base family.
 No independently averaged local base replaces the ambient base. -/
 theorem a8_ambient_two_base_actual_averaged_transport {n d : Nat}
@@ -318,9 +318,10 @@ theorem a8_ambient_output_pair_le_actual_complement_sum {n d : Nat}
               (S0 + (B2.comap K.subtype).subtype.comp (N.comp (A2.map R.mkQ).mkQ))))) ^ 2) := by
     intro T
     dsimp only [A2, B2]
-    simp_rw [a8_nested_domain_map, a8_nested_range_comap]
-    exact a8_coordinate_pair_share_nested_mean R K
-        (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout
+    have hh := a8_coordinate_pair_share_nested_mean R K
+      (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout
+    rw [← a8_nested_domain_map R Pout, ← a8_nested_range_comap K Qout] at hh
+    exact hh
   simp_rw [hpair]
   unfold typedUniformMean a18UniformMean
   simpa [X, R, K, A2, B2, Finset.sum_div, div_div] using h

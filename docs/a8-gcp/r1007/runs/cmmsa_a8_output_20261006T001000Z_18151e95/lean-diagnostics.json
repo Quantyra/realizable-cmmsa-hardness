@@ -1,0 +1,47 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean",
+    "line": 97,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:97:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ i,\n    (a18UniformMean fun N =>\n        Complex.normSq\n          (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) P)\n            (Submodule.map (↑(codomainBasis K).equivFun.symm) Q) g\n            (e.toEquiv i +\n              (Submodule.map (↑(codomainBasis K).equivFun.symm) Q).subtype ∘ₗ\n                N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) P).mkQ))) ^\n      2\nin the target expression\n  (∑ x,\n        (a18UniformMean fun N =>\n            Complex.normSq\n              (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) P)\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Q) g\n                (e x +\n                  (Submodule.map (↑(codomainBasis K).equivFun.symm) Q).subtype ∘ₗ\n                    N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) P).mkQ))) ^\n          2) /\n      ↑(Fintype.card\n          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝\n              (Module.finrank F (V d ⧸ R)) →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]\n            PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ (Module.finrank F ↥K))) =\n    (∑ x,\n        (a18UniformMean fun N =>\n            Complex.normSq\n              (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) P)\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Q) g\n                (x +\n                  (Submodule.map (↑(codomainBasis K).equivFun.symm) Q).subtype ∘ₗ\n                    N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) P).mkQ))) ^\n          2) /\n      ↑(Fintype.card (V d ⧸ R →ₗ[F] ↥K))\n\nn d : ℕ\nR : Submodule F (V d)\nK : Submodule F (W n)\ng : (V d ⧸ R →ₗ[F] ↥K) → ℂ\nP : Submodule F (Fin (Module.finrank F (V d ⧸ R)) → F)\nQ : Submodule F (Fin (Module.finrank F ↥K) → F)\ne : ((Fin (Module.finrank F (V d ⧸ R)) → F) →ₗ[F] Fin (Module.finrank F ↥K) → F) ≃ₗ[F] V d ⧸ R →ₗ[F] ↥K :=\n  (domainBasis R).equivFun.symm.arrowCongr (codomainBasis K).equivFun.symm\nhbase :\n  ∀ (L : (Fin (Module.finrank F (V d ⧸ R)) → F) →ₗ[F] Fin (Module.finrank F ↥K) → F),\n    e L = carrierCoordinateBaseLift R K L\nhterm :\n  ∀\n    (L :\n      PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.V✝\n          (Module.finrank F (V d ⧸ R)) →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.F✝]\n        PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport.W✝ (Module.finrank F ↥K)),\n    typedW6QComponent P Q L (carrierFunctionCoordinate R K g) =\n      (a18UniformMean fun N =>\n          Complex.normSq\n            (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) P)\n              (Submodule.map (↑(codomainBasis K).equivFun.symm) Q) g\n              (e L +\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Q).subtype ∘ₗ\n                  N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) P).mkQ))) ^\n        2\nhs :\n  ∑ i,\n      (a18UniformMean fun N =>\n          Complex.normSq\n            (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) P)\n              (Submodule.map (↑(codomainBasis K).equivFun.symm) Q) g\n              (e.toEquiv i +\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Q).subtype ∘ₗ\n                  N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) P).mkQ))) ^\n        2 =\n    ∑ i,\n      (a18UniformMean fun N =>\n          Complex.normSq\n            (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) P)\n              (Submodule.map (↑(codomainBasis K).equivFun.symm) Q) g\n              (i +\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Q).subtype ∘ₗ\n                  N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) P).mkQ))) ^\n        2\n⊢ (∑ x,\n        (a18UniformMean fun N =>\n            Complex.normSq\n              (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) P)\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Q) g\n                (e x +\n                  (Submodule.map (↑(codomainBasis K).equivFun.symm) Q).subtype ∘ₗ\n                    N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) P).mkQ))) ^\n          2) /\n      ↑(Fintype.card\n          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝\n              (Module.finrank F (V d ⧸ R)) →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]\n            PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ (Module.finrank F ↥K))) =\n    (∑ x,\n        (a18UniformMean fun N =>\n            Complex.normSq\n              (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) P)\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Q) g\n                (x +\n                  (Submodule.map (↑(codomainBasis K).equivFun.symm) Q).subtype ∘ₗ\n                    N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) P).mkQ))) ^\n          2) /\n      ↑(Fintype.card (V d ⧸ R →ₗ[F] ↥K))",
+    "candidate_context": [
+      "95:           (S0 + (Q.map (codomainBasis K).equivFun.symm.toLinearMap).subtype.comp",
+      "96:             (N.comp (P.map (domainBasis R).equivFun.symm.toLinearMap).mkQ))))) ^ 2)",
+      "97:   rw [hs]",
+      "98:   congr 1",
+      "99:   exact_mod_cast Fintype.card_congr e.toEquiv"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean",
+    "line": 322,
+    "column": 4,
+    "message": "Type mismatch",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:322:4: Type mismatch\n  a8_coordinate_pair_share_nested_mean R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout\nhas type\n  a7PairShare Pout Qout\n      (carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))) =\n    typedUniformMean fun S0 =>\n      (a18UniformMean\n          fun\n            (N :\n              (V (Module.finrank F (V d ⧸ C)) ⧸ R) ⧸ Submodule.map (↑(domainBasis R).equivFun.symm) Pout →ₗ[F]\n                ↥(Submodule.map (↑(codomainBasis K).equivFun.symm) Qout)) =>\n          Complex.normSq\n            (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) Pout)\n              (Submodule.map (↑(codomainBasis K).equivFun.symm) Qout)\n              (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))\n              (S0 +\n                (Submodule.map (↑(codomainBasis K).equivFun.symm) Qout).subtype ∘ₗ\n                  N ∘ₗ (Submodule.map (↑(domainBasis R).equivFun.symm) Pout).mkQ))) ^\n        2\nbut is expected to have type\n  a7PairShare Pout Qout\n      (carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))) =\n    typedUniformMean fun S0 =>\n      (a18UniformMean\n          fun\n            (N :\n              ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ R) ⧸ Submodule.map R.mkQ (a8NestedAmbientDomain R Pout) →ₗ[F]\n                ↥(Submodule.comap K.subtype (a8NestedAmbientRange K Qout))) =>\n          Complex.normSq\n            (complexCarrierHybridFilter R K (Submodule.map (↑(domainBasis R).equivFun.symm) Pout)\n              (Submodule.map (↑(codomainBasis K).equivFun.symm) Qout)\n              (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))\n              (S0 +\n                (Submodule.comap K.subtype (a8NestedAmbientRange K Qout)).subtype ∘ₗ\n                  N ∘ₗ (Submodule.map R.mkQ (a8NestedAmbientDomain R Pout)).mkQ))) ^\n        2",
+    "candidate_context": [
+      "320:     dsimp only [A2, B2]",
+      "321:     simp_rw [a8_nested_domain_map, a8_nested_range_comap]",
+      "322:     exact a8_coordinate_pair_share_nested_mean R K",
+      "323:         (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout",
+      "324:   simp_rw [hpair]"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean",
+    "line": 324,
+    "column": 11,
+    "message": "`simp` made no progress",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:324:11: `simp` made no progress\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AmbientAssembly\n",
+    "candidate_context": [
+      "322:     exact a8_coordinate_pair_share_nested_mean R K",
+      "323:         (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout",
+      "324:   simp_rw [hpair]",
+      "325:   unfold typedUniformMean a18UniformMean",
+      "326:   simpa [X, R, K, A2, B2, Finset.sum_div, div_div] using h"
+    ]
+  }
+]
