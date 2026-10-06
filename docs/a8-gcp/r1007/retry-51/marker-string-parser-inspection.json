@@ -1,0 +1,8 @@
+{
+  "core_source_archive_sha256": "9471DC7B7896CDEA503CC1CBDCEC677F965F97743ECD5A2E56B4622E8BB125B6",
+  "source_file": "src/lean/Lean/Parser/Basic.lean",
+  "source_sha256": "9FC3DF26147BB4C8DCA560507426474F975628AD8598BBB4F5E392CEA24AE8D7",
+  "lines_659_through_672": "  if h : c.atEnd i then s.mkEOIError\n  else\n    let curr := c.get' i h\n    if isQuotable curr then\n      s.next' c i h\n    else if curr == 'x' then\n      andthenFn hexDigitFn hexDigitFn c (s.next' c i h)\n    else if curr == 'u' then\n      andthenFn hexDigitFn (andthenFn hexDigitFn (andthenFn hexDigitFn hexDigitFn)) c (s.next' c i h)\n    else if inString && curr == '\\n' then\n      stringGapFn false c s\n    else\n      s.mkUnexpectedError \"invalid escape sequence\"\n",
+  "marker_JSON_uXXXX_escape_supported_by_pinned_Lean_parser": true,
+  "local_compilation": false
+}

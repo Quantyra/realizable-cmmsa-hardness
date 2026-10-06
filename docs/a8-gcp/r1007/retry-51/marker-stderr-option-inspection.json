@@ -1,0 +1,49 @@
+{
+  "matches": [
+    {
+      "file": "src/lean/Lean/CoreM.lean",
+      "line": 581,
+      "context": "    |>.run' ctx st\n\n/-- Option for capturing output to stderr during elaboration. -/\nregister_builtin_option stderrAsMessages : Bool := {\n  defValue := true\n  descr    := \"(server) capture output to the Lean stderr channel (such as from `dbg_trace`) during elaboration of a command as a diagnostic message\"\n}\n\n/--"
+    },
+    {
+      "file": "src/lean/Lean/CoreM.lean",
+      "line": 618,
+      "context": "def wrapAsyncAsSnapshot {\u03b1 : Type} (act : \u03b1 \u2192 CoreM Unit) (cancelTk? : Option IO.CancelToken)\n    (desc : String := by exact decl_name%.toString) : CoreM (\u03b1 \u2192 BaseIO SnapshotTree) := do\n  let f \u2190 wrapAsync (cancelTk? := cancelTk?) fun a => do\n    IO.FS.withIsolatedStreams (isolateStderr := stderrAsMessages.get (\u2190 getOptions)) do\n      let tid \u2190 IO.getTID\n      -- reset trace/info state and message log so as not to report them twice\n      modify fun st => { st with\n        messages := st.messages.markAllReported\n        traceState := { tid }"
+    },
+    {
+      "file": "src/lean/Lean/Elab/BuiltinEvalCommand.lean",
+      "line": 228,
+      "context": "      -- `evalConst` may emit IO, but this is collected by `withIsolatedStreams` below.\n      let r \u2190 toMessageData <$> evalConst t declName (checkMeta := !Elab.inServer.get (\u2190 getOptions))\n      return { eval := pure r, printVal := some (\u2190 inferType e) }\n  let (output, exOrRes) \u2190 IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get (\u2190 getOptions)) do\n    try\n      -- Generate an action without executing it. We use `withoutModifyingEnv` to ensure\n      -- we don't pollute the environment with auxiliary declarations.\n      let act : EvalAction \u2190 withoutModifyingEnv <| runTermElabM fun _ => do Term.withDeclName (mkPrivateName (\u2190 getEnv) declName) do\n        withSaveInfoContext do -- save the environment post-elaboration (for matchers, let rec, etc.)"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Command.lean",
+      "line": 468,
+      "context": "    (desc : String := by exact decl_name%.toString) :\n    CommandElabM (\u03b1 \u2192 BaseIO SnapshotTree) := do\n  let f \u2190 wrapAsync (cancelTk? := cancelTk?) fun a => do\n    IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get (\u2190 getOptions)) do\n      let tid \u2190 IO.getTID\n      -- reset trace state and message log so as not to report them twice\n      modify fun st => { st with\n        messages := st.messages.markAllReported\n        traceState := { tid }"
+    },
+    {
+      "file": "src/lean/Lean/Language/Lean.lean",
+      "line": 767,
+      "context": "      cancelTk?    := some cancelTk\n    }\n    let (output, _) \u2190\n      IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get scope.opts) do\n        EIO.toBaseIO do\n          withLoggingExceptions\n            (getResetInfoTrees *> Elab.Command.elabCommandTopLevel stx cmds)\n            cmdCtx cmdStateRef\n    let cmdState \u2190 cmdStateRef.get"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Basic.lean",
+      "line": 2671,
+      "context": "  realizeAndReport (realize : MetaM Dynamic) (coreCtx : Core.Context) env opts := do\n    let coreCtx := { coreCtx with options := opts }\n    let act :=\n      IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get opts) (do\n        -- catch all exceptions\n        let _ : MonadExceptOf _ MetaM := MonadAlwaysExcept.except\n        observing do\n          -- The scope at which `enableRealizationsForConst forConst` was called is essentially\n          -- arbitrary, normalize here. As `realize` will not add new constants nor should it"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Basic.lean",
+      "line": 2773,
+      "context": "      maxHeartbeats := Core.getMaxHeartbeats opts\n    }\n    let act :=\n      IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get opts) (do\n        -- catch all exceptions\n        let _ : MonadExceptOf _ MetaM := MonadAlwaysExcept.except\n        observing do\n          -- Re-privatize private `constName` under the current module so that auxiliary\n          -- declarations generated during realization get names scoped to the realizing module,"
+    },
+    {
+      "file": "src/lean/Lean/Server/Test/Runner.lean",
+      "line": 740,
+      "context": "  let isProject := args[0]?.any (\u00b7 == \"-p\")\n  let (ipcCmd, ipcArgs) :=\n    if isProject then\n      (\"lake\", #[\"serve\", \"--\", \"-DstderrAsMessages=false\", \"-Dexperimental.module=true\"])\n    else\n      (\"lean\", #[\"--server\", \"-DstderrAsMessages=false\", \"-Dexperimental.module=true\"])\n  let path := if args.size == 1 then args[0]! else args[1]!\n  let uri := s!\"file:///{path}\"\n  -- We want `dbg_trace` tactics to write directly to stderr instead of being caught in reuse"
+    },
+    {
+      "file": "src/lean/Lean/Server/Test/Runner.lean",
+      "line": 742,
+      "context": "    if isProject then\n      (\"lake\", #[\"serve\", \"--\", \"-DstderrAsMessages=false\", \"-Dexperimental.module=true\"])\n    else\n      (\"lean\", #[\"--server\", \"-DstderrAsMessages=false\", \"-Dexperimental.module=true\"])\n  let path := if args.size == 1 then args[0]! else args[1]!\n  let uri := s!\"file:///{path}\"\n  -- We want `dbg_trace` tactics to write directly to stderr instead of being caught in reuse\n  Ipc.runWith ipcCmd ipcArgs do\n    let initializationOptions? := some {"
+    }
+  ]
+}

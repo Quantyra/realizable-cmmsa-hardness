@@ -1,0 +1,96 @@
+CMMSA-A11-BEGIN original-line=9 command=namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A11WeightedAggregate
+CMMSA-A11-BEGIN original-line=10 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
+CMMSA-A11-BEGIN original-line=11 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
+CMMSA-A11-BEGIN original-line=12 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
+CMMSA-A11-BEGIN original-line=13 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint
+CMMSA-A11-BEGIN original-line=14 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex
+CMMSA-A11-BEGIN original-line=15 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
+CMMSA-A11-BEGIN original-line=16 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+CMMSA-A11-BEGIN original-line=17 command=open PvNP.RealizableHardness.BinaryMatrixComplexA14
+CMMSA-A11-BEGIN original-line=18 command=open PvNP.RealizableHardness.BinaryMatrixFourier
+CMMSA-A11-BEGIN original-line=19 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber
+CMMSA-A11-BEGIN original-line=20 command=open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+CMMSA-A11-BEGIN original-line=21 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly
+CMMSA-A11-BEGIN original-line=22 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
+CMMSA-A11-BEGIN original-line=23 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+CMMSA-A11-BEGIN original-line=24 command=open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+CMMSA-A11-BEGIN original-line=25 command=open scoped BigOperators
+CMMSA-A11-BEGIN original-line=26 command=set_option autoImplicit false
+CMMSA-A11-BEGIN original-line=27 command=set_option backward.isDefEq.respectTransparency false
+CMMSA-A11-BEGIN original-line=28 command=noncomputable section
+CMMSA-A11-BEGIN original-line=30 command=private abbrev F := ZMod 2
+CMMSA-A11-BEGIN original-line=31 command=private abbrev V (d : Nat) := Fin d → F
+CMMSA-A11-BEGIN original-line=32 command=private abbrev W (n : Nat) := Fin n → F
+CMMSA-A11-BEGIN original-line=34 command=private theorem a11_mem_fintype_elems (α : Type*) (inst : Fintype α) (x : α) :
+CMMSA-A11-BEGIN original-line=38 command=private theorem a11_sum_instances {α : Type*} [Finite α]
+CMMSA-A11-BEGIN original-line=46 command=section Canonical
+CMMSA-A11-BEGIN original-line=47 command=variable {n d : Nat} (C : Submodule F (V d)) (H : Submodule F (W n))
+CMMSA-A11-BEGIN original-line=48 command=variable (X : H →ₗ[F] (V d ⧸ C))
+CMMSA-A11-BEGIN original-line=50 command=def a11OriginalA : Submodule F (V d) := (LinearMap.range X).comap C.mkQ
+CMMSA-A11-BEGIN original-line=52 command=def a11OriginalB : Submodule F (W n) := (LinearMap.ker X).map H.subtype
+CMMSA-A11-BEGIN original-line=54 command=def a11OriginalInternalC : Submodule F (a11OriginalA C H X) :=
+CMMSA-A11-BEGIN original-line=57 command=def a11OriginalK : Submodule F (W n ⧸ a11OriginalB C H X) :=
+CMMSA-A11-BEGIN original-line=60 command=theorem a11_original_C_le_A : C ≤ a11OriginalA C H X :=
+CMMSA-A11-BEGIN original-line=63 command=theorem a11_original_B_le_H : a11OriginalB C H X ≤ H :=
+CMMSA-A11-BEGIN original-line=67 command=def a11DomainRangeMap : a11OriginalA C H X →ₗ[F] LinearMap.range X where
+CMMSA-A11-BEGIN original-line=72 command=theorem a11_domain_range_surjective : Function.Surjective (a11DomainRangeMap C H X) := by
+CMMSA-A11-BEGIN original-line=82 command=theorem a11_domain_range_kernel : LinearMap.ker (a11DomainRangeMap C H X) =
+CMMSA-A11-BEGIN original-line=90 command=def a11RangeQuotientMap : H →ₗ[F] a11OriginalK C H X where
+CMMSA-A11-BEGIN original-line=96 command=theorem a11_range_quotient_surjective : Function.Surjective (a11RangeQuotientMap C H X) := by
+CMMSA-A11-BEGIN original-line=100 command=theorem a11_range_quotient_kernel : LinearMap.ker (a11RangeQuotientMap C H X) =
+CMMSA-A11-BEGIN original-line=112 command=def a11DomainRangeEquiv :
+CMMSA-A11-BEGIN original-line=118 command=def a11RangeQuotientEquiv :
+CMMSA-A11-BEGIN original-line=125 command=def a11CanonicalXbar :
+CMMSA-A11-BEGIN original-line=131 command=def a11CanonicalTriple : T1IndexTriple (a11OriginalA C H X) (a11OriginalB C H X) where
+CMMSA-A11-BEGIN original-line=137 command=theorem a11_canonical_Xbar_square (h : H) :
+CMMSA-A11-BEGIN original-line=147 command=theorem a11_canonical_ambient_C : t1AmbientC (a11CanonicalTriple C H X).C = C := by
+CMMSA-A11-BEGIN original-line=154 command=theorem a11_canonical_ambient_H : t1AmbientH (a11CanonicalTriple C H X).K = H := by
+CMMSA-A11-BEGIN original-line=159 command=private theorem a11_subtype_cast_coe
+CMMSA-A11-BEGIN original-line=166 command=private theorem a11_parent_cast_formula
+A11MarkedDiagnostic.lean:229:32: error: don't know how to synthesize placeholder for argument `h`
+context:
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+t : T1IndexTriple A B
+x : ↥(t1AmbientH t.K)
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer.V✝ d
+hv : (t1AmbientC t.C).mkQ v = (t1PullbackMap t) x
+⊢ t1AmbientC t.C = t1AmbientC t.C
+A11MarkedDiagnostic.lean:221:77: error: unsolved goals
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+t : T1IndexTriple A B
+x : ↥(t1AmbientH t.K)
+v : PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer.V✝ d
+hv : (t1AmbientC t.C).mkQ v = (t1PullbackMap t) x
+⊢ (t1PullbackMap t) x = (↑((t1AmbientC t.C).quotEquivOfEq (t1AmbientC t.C) ⋯) ∘ₗ t1PullbackMap t) x
+CMMSA-A11-BEGIN original-line=186 command=theorem a11_canonical_pullback :
+CMMSA-A11-BEGIN original-line=220 command=end Canonical
+CMMSA-A11-BEGIN original-line=222 command=abbrev a11InitialData (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=225 command=abbrev a11OuterTriples (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=228 command=private theorem a11_initial_data_ext {n d : Nat}
+CMMSA-A11-BEGIN original-line=238 command=private theorem a11_outer_triple_ext {n d : Nat}
+CMMSA-A11-BEGIN original-line=250 command=def a11GlobalInitialEquiv {n d : Nat} : a11OuterTriples n d ≃ a11InitialData n d where
+CMMSA-A11-BEGIN original-line=274 command=def a11InitialOrder {n d : Nat} (p : a11InitialData n d) : Nat :=
+CMMSA-A11-BEGIN original-line=278 command=theorem a11_global_initial_order {n d : Nat} (p : a11OuterTriples n d) :
+CMMSA-A11-BEGIN original-line=283 command=theorem a11_nonzero_iff_order_pos {n d : Nat}
+CMMSA-A11-BEGIN original-line=304 command=def a11PositiveGlobalInitialEquiv {n d : Nat} :
+CMMSA-A11-BEGIN original-line=313 command=def a11StrictLowerDegreeIH (D : Nat) : Prop :=
+CMMSA-A11-BEGIN original-line=321 command=theorem a11_actual_mixed_fourth_le_output_q {n d D : Nat}
+CMMSA-A11-BEGIN original-line=344 command=def a11ActualFinalSum {n d : Nat}
+CMMSA-A11-BEGIN original-line=362 command=theorem a11_actual_mixed_fourth_le_actual_final_sum {n d D : Nat}
+CMMSA-A11-BEGIN original-line=380 command=theorem a11_weighted_actual_mixed_le_final_sum {n d D : Nat}
+CMMSA-A11-BEGIN original-line=395 command=abbrev a11NonzeroOuterTriples (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=398 command=private def a11NonzeroOuterFlattenEquiv {n d : Nat} :
+CMMSA-A11-BEGIN original-line=406 command=def a11NonzeroInitialEquiv {n d : Nat} :
+CMMSA-A11-BEGIN original-line=410 command=def a11InitialFinalSum {n d : Nat} (z : a11InitialData n d)
+CMMSA-A11-BEGIN original-line=425 command=theorem a11_weighted_mixed_sum_le_actual_initial_sum {n d D : Nat}
+CMMSA-A11-BEGIN original-line=473 command=abbrev a11InitialFinalSource (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=477 command=abbrev a11FinalGradeSource (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=483 command=private theorem a11_subspace_dim_bound {m : Nat} (C : Submodule F (Fin m → F)) :
+CMMSA-A11-BEGIN original-line=490 command=private theorem a11_subspace_codim_bound {m : Nat} (H : Submodule F (Fin m → F)) :
+CMMSA-A11-BEGIN original-line=497 command=private theorem a11_initial_rank_bound {n d : Nat}
+CMMSA-A11-BEGIN original-line=509 command=def a11GlobalA9SourceEquiv {n d : Nat} :
+CMMSA-A11-

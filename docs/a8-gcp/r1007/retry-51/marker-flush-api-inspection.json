@@ -1,0 +1,164 @@
+{
+  "matches": [
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 699,
+      "context": "/--\nA pure-Lean abstraction of POSIX streams. These streams may represent an underlying POSIX stream or\nbe implemented by Lean code.\n\nBecause standard input, standard output, and standard error are all `IO.FS.Stream`s that can be\noverridden, Lean code may capture and redirect input and output.\n-/\nstructure FS.Stream where\n  /--\n  Flushes the stream's output buffers.\n  -/\n  flush   : IO Unit\n  /--"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 705,
+      "context": "-/\nstructure FS.Stream where\n  /--\n  Flushes the stream's output buffers.\n  -/\n  flush   : IO Unit\n  /--\n  Reads up to the given number of bytes from the stream.\n\n  If the returned array is empty, an end-of-file marker (EOF) has been reached. An EOF does not\n  actually close a stream, so further reads may block and return more data.\n  -/\n  read    : USize \u2192 IO ByteArray"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 717,
+      "context": "  read    : USize \u2192 IO ByteArray\n  /--\n  Writes the provided bytes to the stream.\n\n  If the stream represents a physical output device such as a file on disk, then the results may be\n  buffered. Call `FS.Stream.flush` to synchronize their contents.\n  -/\n  write   : ByteArray \u2192 IO Unit\n  /--\n  Reads text up to and including the next newline from the stream.\n\n  If the returned string is empty, an end-of-file marker (EOF) has been reached.\n  An EOF does not actually close a stream, so further reads may block and return more data."
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 748,
+      "context": "/--\nReturns the current thread's standard output stream.\n\nUse `IO.setStdout` to replace the current thread's standard output stream.\n-/\n@[extern \"lean_get_stdout\"] opaque getStdout : BaseIO FS.Stream\n/--\nReturns the current thread's standard error stream.\n\nUse `IO.setStderr` to replace the current thread's standard error stream.\n-/\n@[extern \"lean_get_stderr\"] opaque getStderr : BaseIO FS.Stream\n"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 754,
+      "context": "/--\nReturns the current thread's standard error stream.\n\nUse `IO.setStderr` to replace the current thread's standard error stream.\n-/\n@[extern \"lean_get_stderr\"] opaque getStderr : BaseIO FS.Stream\n\n/--\nReplaces the standard input stream of the current thread and returns its previous value.\n\nUse `IO.getStdin` to get the current standard input stream.\n-/\n@[extern \"lean_get_set_stdin\"] opaque setStdin  : FS.Stream \u2192 BaseIO FS.Stream"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 765,
+      "context": "-/\n@[extern \"lean_get_set_stdin\"] opaque setStdin  : FS.Stream \u2192 BaseIO FS.Stream\n/--\nReplaces the standard output stream of the current thread and returns its previous value.\n\nUse `IO.getStdout` to get the current standard output stream.\n-/\n@[extern \"lean_get_set_stdout\"] opaque setStdout : FS.Stream \u2192 BaseIO FS.Stream\n/--\nReplaces the standard error stream of the current thread and returns its previous value.\n\nUse `IO.getStderr` to get the current standard error stream.\n-/"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 771,
+      "context": "-/\n@[extern \"lean_get_set_stdout\"] opaque setStdout : FS.Stream \u2192 BaseIO FS.Stream\n/--\nReplaces the standard error stream of the current thread and returns its previous value.\n\nUse `IO.getStderr` to get the current standard error stream.\n-/\n@[extern \"lean_get_set_stderr\"] opaque setStderr : FS.Stream \u2192 BaseIO FS.Stream\n\n/--\nIterates an `IO` action. Starting with an initial state, the action is applied repeatedly until it\nreturns a final value in `Sum.inr`. Each time it returns `Sum.inl`, the returned value is treated as\na new state."
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 826,
+      "context": "\n/--\nFlushes the output buffer associated with the handle, writing any unwritten data to the associated\noutput device.\n-/\n@[extern \"lean_io_prim_handle_flush\"] opaque flush (h : @& Handle) : IO Unit\n/--\nRewinds the read/write cursor to the beginning of the handle's file.\n-/\n@[extern \"lean_io_prim_handle_rewind\"] opaque rewind (h : @& Handle) : IO Unit\n/--\nTruncates the handle to its read/write cursor.\n"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 834,
+      "context": "-/\n@[extern \"lean_io_prim_handle_rewind\"] opaque rewind (h : @& Handle) : IO Unit\n/--\nTruncates the handle to its read/write cursor.\n\nThis operation does not automatically flush output buffers, so the contents of the output device may\nnot reflect the change immediately. This does not usually lead to problems because the read/write\ncursor includes buffered writes. However, buffered writes followed by `IO.FS.Handle.rewind`, then\n`IO.FS.Handle.truncate`, and then closing the file may lead to a non-empty file. If unsure, call\n`IO.FS.Handle.flush` before truncating.\n-/\n@[extern \"lean_io_prim_handle_truncate\"] opaque truncate (h : @& Handle) : IO Unit\n/--"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 838,
+      "context": "\nThis operation does not automatically flush output buffers, so the contents of the output device may\nnot reflect the change immediately. This does not usually lead to problems because the read/write\ncursor includes buffered writes. However, buffered writes followed by `IO.FS.Handle.rewind`, then\n`IO.FS.Handle.truncate`, and then closing the file may lead to a non-empty file. If unsure, call\n`IO.FS.Handle.flush` before truncating.\n-/\n@[extern \"lean_io_prim_handle_truncate\"] opaque truncate (h : @& Handle) : IO Unit\n/--\nReads up to the given number of bytes from the handle. If the returned array is empty, an\nend-of-file marker (EOF) has been reached.\n\nEncountering an EOF does not close a handle. Subsequent reads may block and return more data."
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 852,
+      "context": "@[extern \"lean_io_prim_handle_read\"] opaque read (h : @& Handle) (bytes : USize) : IO ByteArray\n/--\nWrites the provided bytes to the handle.\n\nWriting to a handle is typically buffered, and may not immediately modify the file on disk. Use\n`IO.FS.Handle.flush` to write changes to buffers to the associated device.\n-/\n@[extern \"lean_io_prim_handle_write\"] opaque write (h : @& Handle) (buffer : @& ByteArray) : IO Unit\n\n/--\nReads UTF-8-encoded text up to and including the next line break from the handle. If the returned\nstring is empty, an end-of-file marker (EOF) has been reached.\n"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 867,
+      "context": "@[extern \"lean_io_prim_handle_get_line\"] opaque getLine (h : @& Handle) : IO String\n/--\nWrites the provided string to the file handle using the UTF-8 encoding.\n\nWriting to a handle is typically buffered, and may not immediately modify the file on disk. Use\n`IO.FS.Handle.flush` to write changes to buffers to the associated device.\n-/\n@[extern \"lean_io_prim_handle_put_str\"] opaque putStr (h : @& Handle) (s : @& String) : IO Unit\n\nend Handle\n\n/--\nResolves a path to an absolute path that contains no '.', '..', or symbolic links."
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1241,
+      "context": "\n/--\nRuns an action with the specified stream `h` as standard input, restoring the original standard\ninput stream afterwards.\n-/\ndef withStdin [Monad m] [MonadFinally m] [MonadLiftT BaseIO m] (h : FS.Stream) (x : m \u03b1) : m \u03b1 := do\n  let prev \u2190 setStdin h\n  try x finally discard <| setStdin prev\n\n/--\nRuns an action with the specified stream `h` as standard output, restoring the original standard\noutput stream afterwards.\n-/"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1266,
+      "context": "  let prev \u2190 setStderr h\n  try x finally discard <| setStderr prev\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it to the current standard\noutput (as determined by `IO.getStdout`).\n-/\ndef print [ToString \u03b1] (s : \u03b1) : IO Unit := do\n  let out \u2190 getStdout\n  out.putStr <| toString s\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it with a trailing newline to"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1269,
+      "context": "/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it to the current standard\noutput (as determined by `IO.getStdout`).\n-/\ndef print [ToString \u03b1] (s : \u03b1) : IO Unit := do\n  let out \u2190 getStdout\n  out.putStr <| toString s\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it with a trailing newline to\nthe current standard output (as determined by `IO.getStdout`).\n-/\ndef println [ToString \u03b1] (s : \u03b1) : IO Unit :="
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1274,
+      "context": "  let out \u2190 getStdout\n  out.putStr <| toString s\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it with a trailing newline to\nthe current standard output (as determined by `IO.getStdout`).\n-/\ndef println [ToString \u03b1] (s : \u03b1) : IO Unit :=\n  print ((toString s).push '\\n')\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it to the current standard\nerror (as determined by `IO.getStderr`)."
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1281,
+      "context": "def println [ToString \u03b1] (s : \u03b1) : IO Unit :=\n  print ((toString s).push '\\n')\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it to the current standard\nerror (as determined by `IO.getStderr`).\n-/\ndef eprint [ToString \u03b1] (s : \u03b1) : IO Unit := do\n  let out \u2190 getStderr\n  out.putStr <| toString s\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it with a trailing newline to"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1284,
+      "context": "/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it to the current standard\nerror (as determined by `IO.getStderr`).\n-/\ndef eprint [ToString \u03b1] (s : \u03b1) : IO Unit := do\n  let out \u2190 getStderr\n  out.putStr <| toString s\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it with a trailing newline to\nthe current standard error (as determined by `IO.getStderr`).\n-/\ndef eprintln [ToString \u03b1] (s : \u03b1) : IO Unit :="
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1289,
+      "context": "  let out \u2190 getStderr\n  out.putStr <| toString s\n\n/--\nConverts `s` to a string using its `ToString \u03b1` instance, and prints it with a trailing newline to\nthe current standard error (as determined by `IO.getStderr`).\n-/\ndef eprintln [ToString \u03b1] (s : \u03b1) : IO Unit :=\n  eprint <| toString s |>.push '\\n'\n\n@[export lean_io_eprint]\nprivate def eprintAux (s : String) : IO Unit :=\n  eprint s"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1432,
+      "context": "\n/--\nConfiguration for a child process to be spawned.\n\nUse `IO.Process.spawn` to start the child process. `IO.Process.output` and `IO.Process.run` can be\nused when the child process should be run to completion, with its output and/or error code captured.\n-/\nstructure SpawnArgs extends StdioConfig where\n  /-- Command name. -/\n  cmd : String\n  /-- Arguments for the command. -/\n  args : Array String := #[]\n  /-- The child process's working directory. Inherited from the parent current process if `none`. -/"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1538,
+      "context": "  stdout   : String\n  /-- Everything that was written to the process's standard error. -/\n  stderr   : String\n\n/--\nRuns a process to completion and captures its output and exit code.\nThe child process is run with a null standard input or the specified input if provided,\nand the current process blocks until it has run to completion.\n\nThe specifications of standard input, output, and error handles in `args` are ignored.\n-/\ndef output (args : SpawnArgs) (input? : Option String := none) : IO Output := do\n  let child \u2190"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1549,
+      "context": "def output (args : SpawnArgs) (input? : Option String := none) : IO Output := do\n  let child \u2190\n    if let some input := input? then\n      let (stdin, child) \u2190 (\u2190 spawn { args with stdout := .piped, stderr := .piped, stdin := .piped }).takeStdin\n      stdin.putStr input\n      stdin.flush\n      pure child\n    else\n      spawn { args with stdout := .piped, stderr := .piped, stdin := .null }\n  let stdout \u2190 IO.asTask child.stdout.readToEnd Task.Priority.dedicated\n  let stderr \u2190 child.stderr.readToEnd\n  let exitCode \u2190 child.wait\n  let stdout \u2190 IO.ofExcept stdout.get"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1684,
+      "context": "Creates a Lean stream from a file handle. Each stream operation is implemented by the corresponding\nfile handle operation.\n-/\n@[export lean_stream_of_handle]\ndef ofHandle (h : Handle) : Stream where\n  flush   := Handle.flush h\n  read    := Handle.read h\n  write   := Handle.write h\n  getLine := Handle.getLine h\n  putStr  := Handle.putStr h\n  isTty   := Handle.isTty h\n\n/--"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1706,
+      "context": "\n/--\nCreates a stream from a mutable reference to a buffer.\n\nThe resulting stream simulates a file, mutating the contents of the reference in response to writes\nand reading from it in response to reads. These streams can be used with `IO.withStdin`,\n`IO.setStdin`, and the corresponding operators for standard output and standard error to redirect\ninput and output.\n-/\ndef ofBuffer (r : Ref Buffer) : Stream where\n  flush   := pure ()\n  read    := fun n => r.modifyGet fun b =>\n    let data := b.data.extract b.pos (b.pos + n.toNat)"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1711,
+      "context": "and reading from it in response to reads. These streams can be used with `IO.withStdin`,\n`IO.setStdin`, and the corresponding operators for standard output and standard error to redirect\ninput and output.\n-/\ndef ofBuffer (r : Ref Buffer) : Stream where\n  flush   := pure ()\n  read    := fun n => r.modifyGet fun b =>\n    let data := b.data.extract b.pos (b.pos + n.toNat)\n    (data, { b with pos := b.pos + data.size })\n  write   := fun data => r.modify fun b =>\n    -- set `exact` to `false` so that repeatedly writing to the stream does not impose quadratic run time\n    { b with data := data.copySlice 0 b.data b.pos data.size false, pos := b.pos + data.size }\n  getLine := do"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1796,
+      "context": "  read #[]\n\nend Stream\n\n/--\nRuns an action with `stdin` emptied and `stdout` and `stderr` captured into a `String`. If\n`isolateStderr` is `false`, only `stdout` is captured.\n-/\ndef withIsolatedStreams [Monad m] [MonadFinally m] [MonadLiftT BaseIO m] (x : m \u03b1)\n    (isolateStderr := true) : m (String \u00d7 \u03b1) := do\n  let bIn \u2190 mkRef { : Stream.Buffer }\n  let bOut \u2190 mkRef { : Stream.Buffer }\n  let r \u2190 withStdin (Stream.ofBuffer bIn) <|"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1797,
+      "context": "\nend Stream\n\n/--\nRuns an action with `stdin` emptied and `stdout` and `stderr` captured into a `String`. If\n`isolateStderr` is `false`, only `stdout` is captured.\n-/\ndef withIsolatedStreams [Monad m] [MonadFinally m] [MonadLiftT BaseIO m] (x : m \u03b1)\n    (isolateStderr := true) : m (String \u00d7 \u03b1) := do\n  let bIn \u2190 mkRef { : Stream.Buffer }\n  let bOut \u2190 mkRef { : Stream.Buffer }\n  let r \u2190 withStdin (Stream.ofBuffer bIn) <|\n    withStdout (Stream.ofBuffer bOut) <|"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1799,
+      "context": "\n/--\nRuns an action with `stdin` emptied and `stdout` and `stderr` captured into a `String`. If\n`isolateStderr` is `false`, only `stdout` is captured.\n-/\ndef withIsolatedStreams [Monad m] [MonadFinally m] [MonadLiftT BaseIO m] (x : m \u03b1)\n    (isolateStderr := true) : m (String \u00d7 \u03b1) := do\n  let bIn \u2190 mkRef { : Stream.Buffer }\n  let bOut \u2190 mkRef { : Stream.Buffer }\n  let r \u2190 withStdin (Stream.ofBuffer bIn) <|\n    withStdout (Stream.ofBuffer bOut) <|\n      (if isolateStderr then withStderr (Stream.ofBuffer bOut) else id) <|\n        x"
+    },
+    {
+      "file": "src/lean/Init/System/IO.lean",
+      "line": 1803,
+      "context": "-/\ndef withIsolatedStreams [Monad m] [MonadFinally m] [MonadLiftT BaseIO m] (x : m \u03b1)\n    (isolateStderr := true) : m (String \u00d7 \u03b1) := do\n  let bIn \u2190 mkRef { : Stream.Buffer }\n  let bOut \u2190 mkRef { : Stream.Buffer }\n  let r \u2190 withStdin (Stream.ofBuffer bIn) <|\n    withStdout (Stream.ofBuffer bOut) <|\n      (if isolateStderr then withStderr (Stream.ofBuffer bOut) else id) <|\n        x\n  let bOut \u2190 liftM (m := BaseIO) bOut.get\n  let out := String.fromUTF8! bOut.data\n  pure (out, r)\n"
+    },
+    {
+      "file": "src/lean/Lean/Elab/BuiltinEvalCommand.lean",
+      "line": 225,
+      "context": "          throw ex\n        throwError m!\"Unable to synthesize `{.ofConstName ``MonadEval}` instance \\\n          to adapt{indentExpr (\u2190 inferType e)}\\n\\\n          to `{.ofConstName ``IO}` or `{.ofConstName ``CommandElabM}`.\"\n      let declName \u2190 addAndCompileExprForEval declName r (allowSorry := bang)\n      -- `evalConst` may emit IO, but this is collected by `withIsolatedStreams` below.\n      let r \u2190 toMessageData <$> evalConst t declName (checkMeta := !Elab.inServer.get (\u2190 getOptions))\n      return { eval := pure r, printVal := some (\u2190 inferType e) }\n  let (output, exOrRes) \u2190 IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get (\u2190 getOptions)) do\n    try\n      -- Generate an action without executing it. We use `withoutModifyingEnv` to ensure\n      -- we don't pollute the environment with auxiliary declarations.\n      let act : EvalAction \u2190 withoutModifyingEnv <| runTermElabM fun _ => do Term.withDeclName (mkPrivateName (\u2190 getEnv) declName) do"
+    },
+    {
+      "file": "src/lean/Lean/Elab/BuiltinEvalCommand.lean",
+      "line": 228,
+      "context": "          to `{.ofConstName ``IO}` or `{.ofConstName ``CommandElabM}`.\"\n      let declName \u2190 addAndCompileExprForEval declName r (allowSorry := bang)\n      -- `evalConst` may emit IO, but this is collected by `withIsolatedStreams` below.\n      let r \u2190 toMessageData <$> evalConst t declName (checkMeta := !Elab.inServer.get (\u2190 getOptions))\n      return { eval := pure r, printVal := some (\u2190 inferType e) }\n  let (output, exOrRes) \u2190 IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get (\u2190 getOptions)) do\n    try\n      -- Generate an action without executing it. We use `withoutModifyingEnv` to ensure\n      -- we don't pollute the environment with auxiliary declarations.\n      let act : EvalAction \u2190 withoutModifyingEnv <| runTermElabM fun _ => do Term.withDeclName (mkPrivateName (\u2190 getEnv) declName) do\n        withSaveInfoContext do -- save the environment post-elaboration (for matchers, let rec, etc.)\n          let e \u2190 elabTermForEval term expectedType?\n          -- If there is an elaboration error, don't evaluate!"
+    },
+    {
+      "file": "src/lean/Std/Async/IO.lean",
+      "line": 38,
+      "context": "  write : \u03b1 \u2192 \u03b2 \u2192 Async Unit\n\n  writeAll : \u03b1 \u2192 Array \u03b2 \u2192 Async Unit :=\n    fun socket data => data.forM (write socket)\n\n  flush : \u03b1 \u2192 Async Unit :=\n    fun _ => pure ()\n\n/--\nInterface for asynchronous streaming with selector-based iteration.\n-/\nclass AsyncStream (\u03b1 : Type) (\u03b2 : outParam Type) where\n  next : \u03b1 \u2192 Selector \u03b2"
+    }
+  ]
+}
