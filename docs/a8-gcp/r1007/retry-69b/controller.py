@@ -156,7 +156,17 @@ def offline():
 
     assert terminal['vm_terminal_receipt']['status']=='TERMINATED'
 
-    m['old'].old.verify_custody(json.loads((previous/'custody.json').read_bytes()))
+    custody=json.loads((previous/'custody.json').read_bytes())
+    cleanup=json.loads((HERE/'approved-duplicate-cleanup-receipt.json').read_text(encoding='utf-8-sig'))
+    proposal=HERE/'duplicate-short-archive-cleanup-candidates.json'
+    assert common.file_sha(proposal)=='F89E690A4A24974C0F11FAEFFBFB8BADD7407298D54D9273DF2DE878C67B6B68'
+    rows=json.loads(proposal.read_bytes())['eligible']
+    approved=[row for row in rows if row['delete_candidate_path']==custody['short_path'] and row['retained_repository_path']==custody['repository_path']]
+    assert len(approved)==1 and cleanup['fresh_both_copy_hashes_verified'] and cleanup['removed_count']==52
+    assert custody['short_path'] in cleanup['removed_paths'] and custody['before_stop'] is True
+    assert not Path(custody['short_path']).exists()
+    assert common.file_sha(custody['repository_path'])==custody['remote_sha256']==custody['repository_sha256']==custody['short_sha256']==approved[0]['sha256']
+    common.write_new(HERE/'retained-prior-custody-reverification.json',common.json_bytes({'utc':common.utc(),'prior_run':PRIOR,'original_custody_sha256':common.file_sha(previous/'custody.json'),'approved_cleanup_receipt_sha256':common.file_sha(HERE/'approved-duplicate-cleanup-receipt.json'),'retained_archive_sha256':custody['remote_sha256'],'short_copy_authorized_deleted':True,'original_custody_unchanged':True}))
 
     old_manifest=json.loads((priorcap/'manifest.json').read_bytes())
 
