@@ -1,0 +1,47 @@
+[
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean",
+    "line": 173,
+    "column": 8,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean:173:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ i, v (e.symm.toEquiv i)\nin the target expression\n  (∑ M, (fun X => v (e.symm X)) M) /\n      ↑(Fintype.card\n          (BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)\n            (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝\n              (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)))) =\n    (∑ x, v x) / ↑(Fintype.card (V d ⧸ A →ₗ[F] ↥B))\n\nn d D : ℕ\neps : ℝ\nf : BinaryMatrix n d → ℂ\nhsupport : ComplexFourierSupportedThrough D f\nhglobal : UpToActualNormSqGlobal D eps f\nA : Submodule F (V d)\nB : Submodule F (W n)\nT : V d →ₗ[F] W n\nhcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ 2 * D\nbudget : ℝ := 2 ^ (41 * D ^ 2) * eps\nraw : (PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸ A →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝] ↥B) →\n  ℂ :=\n  complexAmbientAffineRestrict A B T f\ne : (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸\n      A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]\n    ↥B) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]\n  BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)\n    (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝\n      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) :=\n  carrierMatrixEquiv A B\ng : BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)\n    (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝\n      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) →\n  ℂ :=\n  fun X => raw (e.symm X)\nhgSupport : ComplexFourierSupportedThrough D g\nhthree : UpToActualNormSqGlobal (3 * D) budget f\nhgGlobal : UpToActualNormSqGlobal D budget g\nhfourth :\n  (uniformMean fun M => Complex.normSq (g M) ^ 2) ≤\n    2 ^ (114 * D ^ 2) * budget * uniformMean fun M => Complex.normSq (g M)\nhsecond : (a20Mean fun M => Complex.normSq (raw M)) ≤ budget\nv : (V d ⧸ A →ₗ[F] ↥B) → ℝ\nhs : ∑ i, v (e.symm.toEquiv i) = ∑ i, v i\nhc :\n  Fintype.card\n      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸\n          A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]\n        ↥B) =\n    Fintype.card\n      (BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)\n        (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝\n          (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)))\n⊢ (∑ M, (fun X => v (e.symm X)) M) /\n      ↑(Fintype.card\n          (BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)\n            (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝\n              (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)))) =\n    (∑ x, v x) / ↑(Fintype.card (V d ⧸ A →ₗ[F] ↥B))",
+    "candidate_context": [
+      "171:     have hc := Fintype.card_congr e.toEquiv",
+      "172:     unfold uniformMean a20Mean",
+      "173:     rw [hs, hc]",
+      "174:   have hsecond' : uniformMean (fun X => Complex.normSq (g X)) ≤ budget := by",
+      "175:     change uniformMean (fun X => Complex.normSq (raw (e.symm X))) ≤ budget"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean",
+    "line": 176,
+    "column": 8,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean:176:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  uniformMean fun X => ?v (e.symm X)\nin the target expression\n  (uniformMean fun X => Complex.normSq (raw (e.symm X))) ≤ budget\n\nn d D : ℕ\neps : ℝ\nf : BinaryMatrix n d → ℂ\nhsupport : ComplexFourierSupportedThrough D f\nhglobal : UpToActualNormSqGlobal D eps f\nA : Submodule F (V d)\nB : Submodule F (W n)\nT : V d →ₗ[F] W n\nhcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ 2 * D\nbudget : ℝ := 2 ^ (41 * D ^ 2) * eps\nraw : (PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸ A →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝] ↥B) →\n  ℂ :=\n  complexAmbientAffineRestrict A B T f\ne : (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸\n      A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]\n    ↥B) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]\n  BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)\n    (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝\n      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) :=\n  carrierMatrixEquiv A B\ng : BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)\n    (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝\n      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) →\n  ℂ :=\n  fun X => raw (e.symm X)\nhgSupport : ComplexFourierSupportedThrough D g\nhthree : UpToActualNormSqGlobal (3 * D) budget f\nhgGlobal : UpToActualNormSqGlobal D budget g\nhfourth :\n  (uniformMean fun M => Complex.normSq (g M) ^ 2) ≤\n    2 ^ (114 * D ^ 2) * budget * uniformMean fun M => Complex.normSq (g M)\nhsecond : (a20Mean fun M => Complex.normSq (raw M)) ≤ budget\nhsum : ∀ (v : (V d ⧸ A →ₗ[F] ↥B) → ℝ), (uniformMean fun X => v (e.symm X)) = a20Mean v\n⊢ (uniformMean fun X => Complex.normSq (raw (e.symm X))) ≤ budget",
+    "candidate_context": [
+      "174:   have hsecond' : uniformMean (fun X => Complex.normSq (g X)) ≤ budget := by",
+      "175:     change uniformMean (fun X => Complex.normSq (raw (e.symm X))) ≤ budget",
+      "176:     rw [hsum]",
+      "177:     exact hsecond",
+      "178:   have hb : 0 ≤ budget := by"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean",
+    "line": 220,
+    "column": 4,
+    "message": "No applicable extensionality theorem found for type",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean:220:4: No applicable extensionality theorem found for type\n  ActualAffineRestriction n d\n\nNote: Extensionality theorems can be registered by marking them with the `[ext]` attribute\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareGlobalness\n",
+    "candidate_context": [
+      "218:   have hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ 2 * D := hR",
+      "219:   have hlift : liftCarrierRestriction A B T Q = R := by",
+      "220:     ext",
+      "221:     · simp [liftCarrierRestriction, Q, A]",
+      "222:     · simp [liftCarrierRestriction, Q, B, Submodule.range_subtype]"
+    ]
+  }
+]

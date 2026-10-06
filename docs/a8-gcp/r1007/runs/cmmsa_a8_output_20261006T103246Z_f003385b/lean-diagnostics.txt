@@ -1,0 +1,128 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean:173:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, v (e.symm.toEquiv i)
+in the target expression
+  (∑ M, (fun X => v (e.symm X)) M) /
+      ↑(Fintype.card
+          (BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)
+            (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+              (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)))) =
+    (∑ x, v x) / ↑(Fintype.card (V d ⧸ A →ₗ[F] ↥B))
+
+n d D : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ 2 * D
+budget : ℝ := 2 ^ (41 * D ^ 2) * eps
+raw : (PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸ A →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝] ↥B) →
+  ℂ :=
+  complexAmbientAffineRestrict A B T f
+e : (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]
+    ↥B) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]
+  BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)
+    (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) :=
+  carrierMatrixEquiv A B
+g : BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)
+    (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) →
+  ℂ :=
+  fun X => raw (e.symm X)
+hgSupport : ComplexFourierSupportedThrough D g
+hthree : UpToActualNormSqGlobal (3 * D) budget f
+hgGlobal : UpToActualNormSqGlobal D budget g
+hfourth :
+  (uniformMean fun M => Complex.normSq (g M) ^ 2) ≤
+    2 ^ (114 * D ^ 2) * budget * uniformMean fun M => Complex.normSq (g M)
+hsecond : (a20Mean fun M => Complex.normSq (raw M)) ≤ budget
+v : (V d ⧸ A →ₗ[F] ↥B) → ℝ
+hs : ∑ i, v (e.symm.toEquiv i) = ∑ i, v i
+hc :
+  Fintype.card
+      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸
+          A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]
+        ↥B) =
+    Fintype.card
+      (BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)
+        (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+          (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)))
+⊢ (∑ M, (fun X => v (e.symm X)) M) /
+      ↑(Fintype.card
+          (BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)
+            (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+              (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)))) =
+    (∑ x, v x) / ↑(Fintype.card (V d ⧸ A →ₗ[F] ↥B))
+
+Candidate context:
+171:     have hc := Fintype.card_congr e.toEquiv
+172:     unfold uniformMean a20Mean
+173:     rw [hs, hc]
+174:   have hsecond' : uniformMean (fun X => Complex.normSq (g X)) ≤ budget := by
+175:     change uniformMean (fun X => Complex.normSq (raw (e.symm X))) ≤ budget
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean:176:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  uniformMean fun X => ?v (e.symm X)
+in the target expression
+  (uniformMean fun X => Complex.normSq (raw (e.symm X))) ≤ budget
+
+n d D : ℕ
+eps : ℝ
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+hglobal : UpToActualNormSqGlobal D eps f
+A : Submodule F (V d)
+B : Submodule F (W n)
+T : V d →ₗ[F] W n
+hcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ 2 * D
+budget : ℝ := 2 ^ (41 * D ^ 2) * eps
+raw : (PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸ A →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝] ↥B) →
+  ℂ :=
+  complexAmbientAffineRestrict A B T f
+e : (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸
+      A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]
+    ↥B) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]
+  BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)
+    (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) :=
+  carrierMatrixEquiv A B
+g : BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝ ↥B)
+    (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝
+      (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸ A)) →
+  ℂ :=
+  fun X => raw (e.symm X)
+hgSupport : ComplexFourierSupportedThrough D g
+hthree : UpToActualNormSqGlobal (3 * D) budget f
+hgGlobal : UpToActualNormSqGlobal D budget g
+hfourth :
+  (uniformMean fun M => Complex.normSq (g M) ^ 2) ≤
+    2 ^ (114 * D ^ 2) * budget * uniformMean fun M => Complex.normSq (g M)
+hsecond : (a20Mean fun M => Complex.normSq (raw M)) ≤ budget
+hsum : ∀ (v : (V d ⧸ A →ₗ[F] ↥B) → ℝ), (uniformMean fun X => v (e.symm X)) = a20Mean v
+⊢ (uniformMean fun X => Complex.normSq (raw (e.symm X))) ≤ budget
+
+Candidate context:
+174:   have hsecond' : uniformMean (fun X => Complex.normSq (g X)) ≤ budget := by
+175:     change uniformMean (fun X => Complex.normSq (raw (e.symm X))) ≤ budget
+176:     rw [hsum]
+177:     exact hsecond
+178:   have hb : 0 ≤ budget := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean:220:4: No applicable extensionality theorem found for type
+  ActualAffineRestriction n d
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareGlobalness
+
+
+Candidate context:
+218:   have hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ 2 * D := hR
+219:   have hlift : liftCarrierRestriction A B T Q = R := by
+220:     ext
+221:     · simp [liftCarrierRestriction, Q, A]
+222:     · simp [liftCarrierRestriction, Q, B, Submodule.range_subtype]
