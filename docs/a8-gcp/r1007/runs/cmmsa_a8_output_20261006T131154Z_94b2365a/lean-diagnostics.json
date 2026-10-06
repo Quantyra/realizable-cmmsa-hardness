@@ -1,0 +1,137 @@
+[
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 101,
+    "column": 69,
+    "message": "unsolved goals",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:101:69: unsolved goals\nn d : ℕ\nQ : ActualAffineRestriction n d\nU M : BinaryMatrix n d\nhe : M + U - (Q.base + U) = M - Q.base\n⊢ M + U ∈\n      {M |\n        (∀ a ∈ Q.domainFixed, Matrix.mulVec (M - (Q.base + U)) a = 0) ∧\n          ∀ (v : Fin d → ZMod 2), Matrix.mulVec (M - (Q.base + U)) v ∈ Q.codomainVariation} ↔\n    (∀ a ∈ Q.domainFixed, Matrix.mulVec (M - Q.base) a = 0) ∧\n      ∀ (v : Fin d → ZMod 2), Matrix.mulVec (M - Q.base) v ∈ Q.codomainVariation"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 118,
+    "column": 40,
+    "message": "unsolved goals",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:118:40: unsolved goals\nn d r : ℕ\nq eps : ℝ\nf : BinaryMatrix n d → ℂ\nhg : UpToActualLqGlobal r q eps f\nU : BinaryMatrix n d\nQ : ActualAffineRestriction n d\nhQ : Q.order ≤ r\nR : ActualAffineRestriction n d := actualTranslatedRestriction Q U\nx✝ : ↥Q.fibre\n⊢ -1 • U + (↑x✝ + U) = ↑x✝\ninfo: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:119:44: Try this:\n  [apply] abel_nf"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 119,
+    "column": 41,
+    "message": "unsolved goals",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:119:41: unsolved goals\nn d r : ℕ\nq eps : ℝ\nf : BinaryMatrix n d → ℂ\nhg : UpToActualLqGlobal r q eps f\nU : BinaryMatrix n d\nQ : ActualAffineRestriction n d\nhQ : Q.order ≤ r\nR : ActualAffineRestriction n d := actualTranslatedRestriction Q U\nx✝ : ↥R.fibre\n⊢ U + (↑x✝ + -1 • U) = ↑x✝"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 140,
+    "column": 2,
+    "message": "Type mismatch: After simplification, term",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:140:2: Type mismatch: After simplification, term\n  hn\n has type\n  @Eq ℝ (realQNorm q fun x => complexAmbientAffineRestrict A B T f ↑x) (realQNorm q fun y => f ↑y)\nbut is expected to have type\n  @Eq ℝ (carrierFibreQNorm A B q Q (complexAmbientAffineRestrict A B T f))\n    (actualFibreQNorm q (liftCarrierRestriction A B T Q) f)"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 164,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:164:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ x, ?g ↑x\nin the target expression\n  ((∑ x, ‖(fun x => f ↑x) x‖ ^ q) / ↑(Fintype.card ↥Q.fibre)) ^ (1 / q) =\n    ((∑ M ∈ Q.fibre, ‖f M‖ ^ q) / ↑Q.fibre.card) ^ (1 / q)\n\nn d : ℕ\nq : ℝ\nQ : ActualAffineRestriction n d\nf : BinaryMatrix n d → ℂ\n⊢ ((∑ x, ‖(fun x => f ↑x) x‖ ^ q) / ↑(Fintype.card ↥Q.fibre)) ^ (1 / q) =\n    ((∑ M ∈ Q.fibre, ‖f M‖ ^ q) / ↑Q.fibre.card) ^ (1 / q)"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 183,
+    "column": 4,
+    "message": "No goals to be solved",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:183:4: No goals to be solved"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 192,
+    "column": 51,
+    "message": "Unknown identifier `actual_fibre_base_mem`",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:192:51: Unknown identifier `actual_fibre_base_mem`"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 204,
+    "column": 11,
+    "message": "`simp` made no progress",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:204:11: `simp` made no progress"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 222,
+    "column": 8,
+    "message": "Type mismatch: After simplification, term",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:222:8: Type mismatch: After simplification, term\n  x.property\n has type\n  ↑x ∈ (coordinateRestriction Q).fibre\nbut is expected to have type\n  (carrierMatrixEquiv A B) (e0.symm ↑x) ∈ (coordinateRestriction Q).fibre"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 226,
+    "column": 2,
+    "message": "Type mismatch: After simplification, term",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:226:2: Type mismatch: After simplification, term\n  Eq.symm hn\n has type\n  (realQNorm q fun x => f (e0.symm ↑x)) = realQNorm q fun x => f (e0.symm ↑(e x))\nbut is expected to have type\n  (actualFibreQNorm q (coordinateRestriction Q) fun X => f ((carrierMatrixEquiv A B).symm X)) =\n    carrierFibreQNorm A B q Q f"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 275,
+    "column": 19,
+    "message": "Unknown identifier `actual_fibre_base_mem`",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:275:19: Unknown identifier `actual_fibre_base_mem`"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 288,
+    "column": 53,
+    "message": "Application type mismatch: The argument",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:288:53: Application type mismatch: The argument\n  R.fibre\nhas type\n  Finset (BinaryMatrix n d)\nbut is expected to have type\n  Set (BinaryMatrix n ?m.38)\nin the application\n  @Function.Injective.injOn (BinaryMatrix n ?m.38) (BinaryMatrix n (?m.38 + 1)) (fun M => rawLastColumn M t)\n    (rawLastColumn_injective t) R.fibre"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 308,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:308:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ x, ?g ↑x\nin the target expression\n  ((∑ x, ‖(fun x => f ↑x) x‖ ^ q) / ↑(Fintype.card ↥Q.fibre)) ^ (1 / q) =\n    ((∑ x ∈ Q.fibre, ‖f x‖ ^ q) / ↑Q.fibre.card) ^ (1 / q)\n\nn d : ℕ\nA : Submodule F (V d)\nB : Submodule F (W n)\nQ : CarrierRestriction A B\nq : ℝ\nf : (V d ⧸ A →ₗ[F] ↥B) → ℂ\n⊢ ((∑ x, ‖(fun x => f ↑x) x‖ ^ q) / ↑(Fintype.card ↥Q.fibre)) ^ (1 / q) =\n    ((∑ x ∈ Q.fibre, ‖f x‖ ^ q) / ↑Q.fibre.card) ^ (1 / q)"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 359,
+    "column": 66,
+    "message": "Application type mismatch: The argument",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:359:66: Application type mismatch: The argument\n  Q.fibre\nhas type\n  Finset\n    (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸\n        A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]\n      ↥B)\nbut is expected to have type\n  Set\n    (PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.V✝ ?m.62 ⧸\n        ?m.63 →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.F✝]\n      ↥B)\nin the application\n  @Function.Injective.injOn\n    (PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.V✝ ?m.62 ⧸\n        ?m.63 →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.F✝]\n      ↥B)\n    (BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.F✝ ↥L + 1)\n      (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.F✝\n        (PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.V✝ ?m.62 ⧸ ?m.63)))\n    (⇑(hyperplaneMatrixEquiv B L hL)) (LinearEquiv.injective (hyperplaneMatrixEquiv B L hL)) Q.fibre"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean",
+    "line": 396,
+    "column": 52,
+    "message": "Application type mismatch: The argument",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:396:52: Application type mismatch: The argument\n  Q.fibre\nhas type\n  Finset (BinaryMatrix n d)\nbut is expected to have type\n  Set (Matrix ?m.94 ?m.95 ?m.96)\nin the application\n  @Function.Injective.injOn (Matrix ?m.94 ?m.95 ?m.96) (Matrix ?m.95 ?m.94 ?m.96) Matrix.transpose\n    Matrix.transpose_injective Q.fibre\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46RealQTransport\n"
+  }
+]

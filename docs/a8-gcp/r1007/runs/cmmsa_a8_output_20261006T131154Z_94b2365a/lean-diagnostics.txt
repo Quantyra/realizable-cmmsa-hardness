@@ -1,0 +1,140 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:101:69: unsolved goals
+n d : ℕ
+Q : ActualAffineRestriction n d
+U M : BinaryMatrix n d
+he : M + U - (Q.base + U) = M - Q.base
+⊢ M + U ∈
+      {M |
+        (∀ a ∈ Q.domainFixed, Matrix.mulVec (M - (Q.base + U)) a = 0) ∧
+          ∀ (v : Fin d → ZMod 2), Matrix.mulVec (M - (Q.base + U)) v ∈ Q.codomainVariation} ↔
+    (∀ a ∈ Q.domainFixed, Matrix.mulVec (M - Q.base) a = 0) ∧
+      ∀ (v : Fin d → ZMod 2), Matrix.mulVec (M - Q.base) v ∈ Q.codomainVariation
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:118:40: unsolved goals
+n d r : ℕ
+q eps : ℝ
+f : BinaryMatrix n d → ℂ
+hg : UpToActualLqGlobal r q eps f
+U : BinaryMatrix n d
+Q : ActualAffineRestriction n d
+hQ : Q.order ≤ r
+R : ActualAffineRestriction n d := actualTranslatedRestriction Q U
+x✝ : ↥Q.fibre
+⊢ -1 • U + (↑x✝ + U) = ↑x✝
+info: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:119:44: Try this:
+  [apply] abel_nf
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:119:41: unsolved goals
+n d r : ℕ
+q eps : ℝ
+f : BinaryMatrix n d → ℂ
+hg : UpToActualLqGlobal r q eps f
+U : BinaryMatrix n d
+Q : ActualAffineRestriction n d
+hQ : Q.order ≤ r
+R : ActualAffineRestriction n d := actualTranslatedRestriction Q U
+x✝ : ↥R.fibre
+⊢ U + (↑x✝ + -1 • U) = ↑x✝
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:140:2: Type mismatch: After simplification, term
+  hn
+ has type
+  @Eq ℝ (realQNorm q fun x => complexAmbientAffineRestrict A B T f ↑x) (realQNorm q fun y => f ↑y)
+but is expected to have type
+  @Eq ℝ (carrierFibreQNorm A B q Q (complexAmbientAffineRestrict A B T f))
+    (actualFibreQNorm q (liftCarrierRestriction A B T Q) f)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:164:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x, ?g ↑x
+in the target expression
+  ((∑ x, ‖(fun x => f ↑x) x‖ ^ q) / ↑(Fintype.card ↥Q.fibre)) ^ (1 / q) =
+    ((∑ M ∈ Q.fibre, ‖f M‖ ^ q) / ↑Q.fibre.card) ^ (1 / q)
+
+n d : ℕ
+q : ℝ
+Q : ActualAffineRestriction n d
+f : BinaryMatrix n d → ℂ
+⊢ ((∑ x, ‖(fun x => f ↑x) x‖ ^ q) / ↑(Fintype.card ↥Q.fibre)) ^ (1 / q) =
+    ((∑ M ∈ Q.fibre, ‖f M‖ ^ q) / ↑Q.fibre.card) ^ (1 / q)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:183:4: No goals to be solved
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:192:51: Unknown identifier `actual_fibre_base_mem`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:204:11: `simp` made no progress
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:222:8: Type mismatch: After simplification, term
+  x.property
+ has type
+  ↑x ∈ (coordinateRestriction Q).fibre
+but is expected to have type
+  (carrierMatrixEquiv A B) (e0.symm ↑x) ∈ (coordinateRestriction Q).fibre
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:226:2: Type mismatch: After simplification, term
+  Eq.symm hn
+ has type
+  (realQNorm q fun x => f (e0.symm ↑x)) = realQNorm q fun x => f (e0.symm ↑(e x))
+but is expected to have type
+  (actualFibreQNorm q (coordinateRestriction Q) fun X => f ((carrierMatrixEquiv A B).symm X)) =
+    carrierFibreQNorm A B q Q f
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:275:19: Unknown identifier `actual_fibre_base_mem`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:288:53: Application type mismatch: The argument
+  R.fibre
+has type
+  Finset (BinaryMatrix n d)
+but is expected to have type
+  Set (BinaryMatrix n ?m.38)
+in the application
+  @Function.Injective.injOn (BinaryMatrix n ?m.38) (BinaryMatrix n (?m.38 + 1)) (fun M => rawLastColumn M t)
+    (rawLastColumn_injective t) R.fibre
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:308:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x, ?g ↑x
+in the target expression
+  ((∑ x, ‖(fun x => f ↑x) x‖ ^ q) / ↑(Fintype.card ↥Q.fibre)) ^ (1 / q) =
+    ((∑ x ∈ Q.fibre, ‖f x‖ ^ q) / ↑Q.fibre.card) ^ (1 / q)
+
+n d : ℕ
+A : Submodule F (V d)
+B : Submodule F (W n)
+Q : CarrierRestriction A B
+q : ℝ
+f : (V d ⧸ A →ₗ[F] ↥B) → ℂ
+⊢ ((∑ x, ‖(fun x => f ↑x) x‖ ^ q) / ↑(Fintype.card ↥Q.fibre)) ^ (1 / q) =
+    ((∑ x ∈ Q.fibre, ‖f x‖ ^ q) / ↑Q.fibre.card) ^ (1 / q)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:359:66: Application type mismatch: The argument
+  Q.fibre
+has type
+  Finset
+    (PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.V✝ d ⧸
+        A →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Transport.F✝]
+      ↥B)
+but is expected to have type
+  Set
+    (PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.V✝ ?m.62 ⧸
+        ?m.63 →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.F✝]
+      ↥B)
+in the application
+  @Function.Injective.injOn
+    (PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.V✝ ?m.62 ⧸
+        ?m.63 →ₗ[PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.F✝]
+      ↥B)
+    (BinaryMatrix (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.F✝ ↥L + 1)
+      (Module.finrank PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.F✝
+        (PvNP.RealizableHardness.BinaryMatrixTypedA15Hyperplane.V✝ ?m.62 ⧸ ?m.63)))
+    (⇑(hyperplaneMatrixEquiv B L hL)) (LinearEquiv.injective (hyperplaneMatrixEquiv B L hL)) Q.fibre
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQTransport.lean:396:52: Application type mismatch: The argument
+  Q.fibre
+has type
+  Finset (BinaryMatrix n d)
+but is expected to have type
+  Set (Matrix ?m.94 ?m.95 ?m.96)
+in the application
+  @Function.Injective.injOn (Matrix ?m.94 ?m.95 ?m.96) (Matrix ?m.95 ?m.94 ?m.96) Matrix.transpose
+    Matrix.transpose_injective Q.fibre
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46RealQTransport

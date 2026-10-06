@@ -15,6 +15,7 @@ open ActualBinaryMatrixHC46BooleanGlobalness ActualBinaryMatrixHC46
 open BinaryMatrixTypedA15AdaptedGlobal BinaryMatrixTypedA15OneStep
 open BinaryMatrixTypedA15HyperplaneGlobal BinaryMatrixTypedA15Hyperplane BinaryMatrixCodomainA15
 open BinaryMatrixFirstDerivative BinaryMatrixLineA15
+open ActualBinaryMatrixHC46A18TransposeTransport
 open BinaryMatrixA1Complex
 open scoped BigOperators
 set_option autoImplicit false
@@ -100,8 +101,9 @@ theorem actualTranslatedRestriction_mem {n d : Nat} (Q : ActualAffineRestriction
     (U M : BinaryMatrix n d) :
     M + U ∈ (actualTranslatedRestriction Q U).fibre ↔ M ∈ Q.fibre := by
   have he : M + U - (Q.base + U) = M - Q.base := by abel
+  dsimp only [actualTranslatedRestriction]
   simp only [ActualAffineRestriction.fibre, Finset.mem_filter, Finset.mem_univ,
-    true_and, actualTranslatedRestriction, he]
+    true_and, Set.mem_setOf_eq, he]
 
 /-- Translation leaves real-q actual globalness unchanged. -/
 theorem UpToActualLqGlobal_translate {n d r : Nat} {q eps : Real}
@@ -114,9 +116,10 @@ theorem UpToActualLqGlobal_translate {n d r : Nat} {q eps : Real}
     { toFun := fun x => ⟨x.val + U, (actualTranslatedRestriction_mem Q U x.val).mpr x.property⟩
       invFun := fun x => ⟨x.val - U, by
         apply (actualTranslatedRestriction_mem Q U (x.val - U)).mp
-        simpa using x.property⟩
-      left_inv := fun _ => Subtype.ext (by abel)
-      right_inv := fun _ => Subtype.ext (by abel) }
+        rw [sub_add_cancel]
+        exact x.property⟩
+      left_inv := fun x => Subtype.ext (add_sub_cancel_right x.val U)
+      right_inv := fun x => Subtype.ext (sub_add_cancel x.val U) }
   have hn := realQNorm_equiv e q (fun x => f x.val)
   exact hn.trans_le (hg R hQ)
 
@@ -137,7 +140,7 @@ theorem carrierFibreQNorm_lift {n d : Nat}
     rw [carrierAmbientLiftFibreEquiv_apply]
     rfl
   have hn := realQNorm_equiv e q (fun y => f y.val)
-  simpa only [he] using hn
+  simpa only [carrierFibreQNorm, actualFibreQNorm, he] using hn
 
 
 /-- Compatibility spelling for the all-spaces induction consumer. -/
@@ -161,7 +164,7 @@ theorem actualFibreQNorm_eq_finset {n d : Nat} (q : Real)
     actualFibreQNorm q Q f =
       ((∑ M ∈ Q.fibre, ‖f M‖ ^ q) / (Q.fibre.card : Real)) ^ (1 / q) := by
   unfold actualFibreQNorm realQNorm
-  rw [subtype_sum]
+  rw [subtype_sum Q.fibre (fun M => ‖f M‖ ^ q)]
   simp only [Fintype.card_coe]
 
 /-- Exact nominal pseudorandomness gives the original real conjugate norm
@@ -180,7 +183,6 @@ theorem exactPR_to_actual_LqGlobal {n d r p : Nat} {eta : Real}
   have he : 1 / q = 1 - 1 / (p : Real) := by
     dsimp [q, pConjugate]
     field_simp
-    ring
   have hg := exactPR_to_actual_normSqGlobal b hPR
   intro Q hQ
   have hn (M : BinaryMatrix n d) :
@@ -201,7 +203,12 @@ theorem exactPR_to_actual_LqGlobal {n d r p : Nat} {eta : Real}
   have hnonneg : 0 ≤ fibreEnergy Q.fibre (booleanIndicatorComplex b) := by
     exact div_nonneg (Finset.sum_nonneg fun M _ => Complex.normSq_nonneg _) hcard.le
   rw [actualFibreQNorm_eq_finset]
-  simp_rw [hn]
+  change ((∑ M ∈ Q.fibre, ‖booleanIndicatorComplex b M‖ ^ q) /
+    (Q.fibre.card : Real)) ^ (1 / q) ≤ _
+  have hs : (∑ M ∈ Q.fibre, ‖booleanIndicatorComplex b M‖ ^ q) =
+      ∑ M ∈ Q.fibre, Complex.normSq (booleanIndicatorComplex b M) := by
+    exact Finset.sum_congr rfl (fun M _ => hn M)
+  rw [hs]
   change (fibreEnergy Q.fibre (booleanIndicatorComplex b)) ^ (1 / q) ≤ _
   rw [← he]
   exact Real.rpow_le_rpow hnonneg henergy (div_nonneg (by norm_num) hq.le)
@@ -219,11 +226,12 @@ theorem carrierFibreQNorm_coordinate {n d : Nat}
     { toFun := fun x => ⟨e0 x.val, (mem_coordinate_fibre_iff Q x.val).mpr x.property⟩
       invFun := fun x => ⟨e0.symm x.val, by
         apply (mem_coordinate_fibre_iff Q (e0.symm x.val)).mp
-        simpa only [LinearEquiv.apply_symm_apply] using x.property⟩
+        simpa only [e0, LinearEquiv.apply_symm_apply] using x.property⟩
       left_inv := fun _ => Subtype.ext (by simp [e0])
       right_inv := fun _ => Subtype.ext (by simp [e0]) }
   have hn := realQNorm_equiv e q (fun x => f (e0.symm x.val))
-  simpa only [LinearEquiv.symm_apply_apply] using hn.symm
+  simpa only [actualFibreQNorm, carrierFibreQNorm, e, e0,
+    LinearEquiv.symm_apply_apply] using hn.symm
 
 /-- An arbitrary raw restriction inherits all relative actual Lq bounds from
 original globalness and the exact outer-plus-inner cost budget. -/
@@ -285,7 +293,7 @@ theorem UpToActualLqGlobal_rawLastColumn {n d k : Nat} {q eps : Real}
     UpToActualLqGlobal k q eps (fun M => f (rawLastColumn M t)) := by
   apply rawLq_implies_actual
   intro R hR hne
-  have hi := (rawLastColumn_injective t).injOn (s := R.fibre)
+  have hi := (rawLastColumn_injective t).injOn (s := (↑R.fibre : Set (BinaryMatrix n d)))
   have hne' : (liftRestriction t R).fibre.Nonempty := by
     rw [liftRestriction_fibre]
     exact hne.image _
@@ -305,7 +313,7 @@ theorem carrierFibreQNorm_eq_finset {n d : Nat}
     (q : Real) (f : ((V d ⧸ A) →ₗ[F] B) → Complex) :
     carrierFibreQNorm A B q Q f = finiteSetQNorm q Q.fibre f := by
   unfold carrierFibreQNorm realQNorm finiteSetQNorm
-  rw [subtype_sum]
+  rw [subtype_sum Q.fibre (fun M => ‖f M‖ ^ q)]
   simp only [Fintype.card_coe]
 
 /-- Adapted line coordinates preserve the complete real-q fibre norm. -/
@@ -356,7 +364,8 @@ theorem carrierFibreQNorm_hyperplane_coordinate {n d : Nat}
     (Q : CarrierRestriction A B) (q : Real) (f : ((V d ⧸ A) →ₗ[F] B) → Complex) :
     actualFibreQNorm q (hyperplaneCoordinateRestriction L hL Q)
       (fun X => f ((hyperplaneMatrixEquiv B L hL).symm X)) = carrierFibreQNorm A B q Q f := by
-  have hi := (hyperplaneMatrixEquiv B L hL).injective.injOn (s := Q.fibre)
+  have hi := (hyperplaneMatrixEquiv (A := A) B L hL).injective.injOn
+    (s := (↑Q.fibre : Set ((V d ⧸ A) →ₗ[F] B)))
   rw [actualFibreQNorm_eq_finset, hyperplane_coordinate_fibre_image, carrierFibreQNorm_eq_finset]
   simp only [finiteSetQNorm, Finset.sum_image hi, Finset.card_image_iff.mpr hi,
     LinearEquiv.symm_apply_apply]
@@ -393,7 +402,7 @@ theorem UpToActualLqGlobal_transpose {n d r : Nat} {q eps : Real}
     rw [heq] at hh
     exact Finset.image_nonempty.mp hh
   have ht := actualLq_implies_raw f hf Q hQ hneQ
-  have hi := Matrix.transpose_injective.injOn (s := Q.fibre)
+  have hi := Matrix.transpose_injective.injOn (s := (↑Q.fibre : Set (BinaryMatrix d n)))
   rw [heq]
   simpa only [finiteSetQNorm, complexTranspose, Finset.sum_image hi,
     Finset.card_image_iff.mpr hi, Matrix.transpose_transpose] using ht
