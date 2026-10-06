@@ -322,6 +322,9 @@ theorem a8_ambient_output_pair_le_actual_complement_sum {n d : Nat}
       (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)) Pout Qout
     rw [← a8_nested_domain_map R Pout, ← a8_nested_range_comap K Qout] at hh
     exact hh
+  change typedUniformMean (fun T : V d →ₗ[F] W n =>
+    a7PairShare Pout Qout (carrierFunctionCoordinate R K
+      (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)))) ≤ _
   simp_rw [hpair]
   unfold typedUniformMean a18UniformMean
   simpa [X, R, K, A2, B2, Finset.sum_div, div_div] using h
