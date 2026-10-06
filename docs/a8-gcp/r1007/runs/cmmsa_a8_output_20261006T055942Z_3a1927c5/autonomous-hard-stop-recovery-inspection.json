@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-06T06:09:23.867573+00:00",
+  "script_sha256": "2045FB174D54A14F8693DBF9B5296FDD92C3F58F9591B4C0A986A2131251BE26",
+  "shutdown_line": 45,
+  "shutdown_command": "sudo systemd-run --unit=\"$RUN_ID-hard-stop\" --on-active=70min /sbin/shutdown -h now",
+  "local_auth_independent_systemd_unit": true,
+  "remote_begin_observed_after_setup_guard": true,
+  "basis_observation": "process-observation-20261006T060256Z",
+  "execution_inference": "set -e script proceeded past hard-stop installation before observed cloud_capture begin; actual timer receipt remains for final archive",
+  "fresh_terminal_not_yet_proven": true
+}
