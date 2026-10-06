@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareGlobalness
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A20SquareGlobalness
+#check a20Mean
+#check a20_three_degree_global
+#check manuscript_A20_raw_fourth_le
+#check manuscript_A20_square_supportedThrough
+#check manuscript_A20_actual
+#print axioms a20_three_degree_global
+#print axioms manuscript_A20_raw_fourth_le
+#print axioms manuscript_A20_square_supportedThrough
+#print axioms manuscript_A20_actual
+#print axioms PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.actual_A18_original_global
