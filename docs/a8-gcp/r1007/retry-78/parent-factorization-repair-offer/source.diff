@@ -1,0 +1,93 @@
+--- retry-78/coherent-full-a22-hc46-successor/ActualBinaryMatrixHC46A22ParentFactorization.lean
++++ retry-78/parent-factorization-repair-offer/ActualBinaryMatrixHC46A22ParentFactorization.lean
+@@ -304,7 +304,17 @@
+   have hz : carrierCoordinateBaseLift C H 0 = 0 := by
+     simp only [carrierCoordinateBaseLift, LinearMap.comp_zero,
+       LinearMap.zero_comp]
+-  have he := a22_A1_composition_energy_eq f C A B H hCA hBH T 0
++  have he :
++      a18UniformMean (fun N : (((V d ⧸ C) ⧸ A.map C.mkQ) →ₗ[F]
++          B.comap H.subtype) =>
++        Complex.normSq (complexCarrierAffineRestrict C H (A.map C.mkQ)
++          (B.comap H.subtype) 0
++          (complexCarrierHybridFilter C H (A.map C.mkQ) (B.comap H.subtype)
++            (fun M => filteredCarrierFunction C H T f M)) N)) =
++      carrierMean A B (fun M => Complex.normSq
++        (filteredCarrierFunction A B T f M)) := by
++    simpa only [LinearMap.zero_comp, LinearMap.comp_zero, add_zero] using
++      (a22_A1_composition_energy_eq f C A B H hCA hBH T 0)
+   have hm' : carrierMean P Q (fun N => Complex.normSq
+       (filteredCarrierFunction P Q 0 (actualDerivativeCoordinate C H T f) N)) =
+       a18UniformMean (fun N : (((V d ⧸ C) ⧸ A.map C.mkQ) →ₗ[F]
+@@ -789,8 +799,11 @@
+     simpa only [Submodule.map_id, LinearEquiv.refl_toLinearMap,
+       LinearEquiv.refl_symm, map_zero]
+       using he.trans_le hb
+-  have hc := a22_A1_composition_energy_eq (complexRankProjection j f)
+-    C A B U hCA (by simp [U]) T 0
++  have hc : _ = carrierMean A B (fun M => Complex.normSq
++      (filteredCarrierFunction A B
++        (T + U.subtype.comp (0.comp C.mkQ)) (complexRankProjection j f) M)) :=
++    a22_A1_composition_energy_eq (complexRankProjection j f)
++      C A B U hCA (by simp [U]) T 0
+   have hc' : a22IntrinsicEnergy (A.map C.mkQ) Q 0
+       (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M) =
+       a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict C U
+@@ -809,7 +822,7 @@
+           (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)
+           (0 + Q.subtype.comp (N.comp (A.map C.mkQ).mkQ))]
+         exact complexLinearMapSelectedFilter_fintype_irrel _ _ _ _ _ _ _
+-  have hc'' : a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict C U
++  have hMeanTransport : a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict C U
+         (A.map C.mkQ) Q 0
+         (complexCarrierHybridFilter C U (A.map C.mkQ) Q
+           (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)) N)) =
+@@ -817,7 +830,11 @@
+         (filteredCarrierFunction A B T (complexRankProjection j f) M)) := by
+     simpa only [LinearMap.zero_comp, LinearMap.comp_zero, add_zero] using
+       ((a18UniformMean_fintype_irrel _ _ _).trans hc)
+-  exact hc''.symm.trans_le (hc'.symm.trans_le hb')
++  calc
++    carrierMean A B (fun M => Complex.normSq
++        (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤
++        (2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2 :=
++      hMeanTransport.symm.trans_le (hc'.symm.trans_le hb')
+ 
+ 
+ /-- Complete codomain-hyperplane branch, including every relative inner
+@@ -918,8 +935,11 @@
+       (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M) ≤
+       (2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2 := by
+     simpa only [Submodule.map_bot, map_zero] using he.trans_le hb
+-  have hc := a22_A1_composition_energy_eq (complexRankProjection j f)
+-    Z Z B H le_rfl hBH T 0
++  have hc : _ = carrierMean Z B (fun M => Complex.normSq
++      (filteredCarrierFunction Z B
++        (T + H.subtype.comp (0.comp Z.mkQ)) (complexRankProjection j f) M)) :=
++    a22_A1_composition_energy_eq (complexRankProjection j f)
++      Z Z B H le_rfl hBH T 0
+   have hc' : a22IntrinsicEnergy (⊥ : Submodule F (V d ⧸ Z)) Q0 0
+       (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M) =
+       a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict Z H
+@@ -939,7 +959,7 @@
+           (0 + Q0.subtype.comp
+             (N.comp (⊥ : Submodule F (V d ⧸ Z)).mkQ))]
+         exact complexLinearMapSelectedFilter_fintype_irrel _ _ _ _ _ _ _
+-  have hc'' : a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict Z H
++  have hMeanTransport : a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict Z H
+         (⊥ : Submodule F (V d ⧸ Z)) Q0 0
+         (complexCarrierHybridFilter Z H (⊥ : Submodule F (V d ⧸ Z)) Q0
+           (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M)) N)) =
+@@ -947,7 +967,11 @@
+         (filteredCarrierFunction Z B T (complexRankProjection j f) M)) := by
+     simpa only [Z, Q0, Submodule.map_bot, LinearMap.zero_comp, LinearMap.comp_zero, add_zero] using
+       ((a18UniformMean_fintype_irrel _ _ _).trans hc)
+-  exact hc''.symm.trans_le (hc'.symm.trans_le hb')
++  calc
++    carrierMean Z B (fun M => Complex.normSq
++        (filteredCarrierFunction Z B T (complexRankProjection j f) M)) ≤
++        (2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2 :=
++      hMeanTransport.symm.trans_le (hc'.symm.trans_le hb')
+ 
+ 
+ /-- The full positive-parent input to original A22. The only induction
