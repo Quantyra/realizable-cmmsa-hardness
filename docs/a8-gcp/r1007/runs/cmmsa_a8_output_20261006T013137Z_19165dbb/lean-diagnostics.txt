@@ -1,0 +1,195 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:73:13: don't know how to synthesize implicit argument `F`
+  @Finset.sum_subtype ({ A // C ≤ A } × { B // B ≤ H }) ℝ Real.instAddCommMonoid pred ?m.218
+    (Finset.filter pred Finset.univ)
+    (fun p =>
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Iff
+              (Eq.trans Finset.mem_filter._simp_1
+                (Eq.trans (congrFun' (congrArg And (Finset.mem_univ._simp_1 p)) (pred p)) (true_and (pred p)))))
+            (pred p))
+          (iff_self (pred p))))
+    (finalEnergy C H X f)
+context:
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+f : BinaryMatrix n d → ℂ
+pred : { A // C ≤ A } × { B // B ≤ H } → Prop := ⋯
+⊢ Fintype (Subtype pred)
+
+Candidate context:
+71:     p.1.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧
+72:       p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H
+73:   have hs := Finset.sum_subtype (p := pred) (Finset.univ.filter pred)
+74:     (by intro p; simp) (finalEnergy C H X f)
+75:   rw [← hs, Finset.sum_filter]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:73:7: failed to infer `have` declaration type
+
+Candidate context:
+71:     p.1.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧
+72:       p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H
+73:   have hs := Finset.sum_subtype (p := pred) (Finset.univ.filter pred)
+74:     (by intro p; simp) (finalEnergy C H X f)
+75:   rw [← hs, Finset.sum_filter]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:67:40: unsolved goals
+n d : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+f : BinaryMatrix n d → ℂ
+pred : { A // C ≤ A } × { B // B ≤ H } → Prop :=
+  fun p => ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H
+⊢ ∑ p, finalEnergy C H X f ↑p =
+    ∑ p,
+      if ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H then finalEnergy C H X f p
+      else 0
+
+Candidate context:
+65:       if p.1.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧
+66:           p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H then
+67:         finalEnergy C H X f p else 0 := by
+68:   classical
+69:   let pred := fun p : {A : Submodule F (V d) // C ≤ A} ×
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:139:15: unsolved goals
+n d D : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+Xmat : BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H)
+  (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) :=
+  (carrierFrequencyEquiv C H) X
+R : Submodule (ZMod 2)
+  (Fin
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) →
+    ZMod 2) :=
+  (Matrix.toLin' (Matrix.transpose Xmat)).range
+K : Submodule (ZMod 2)
+  (Fin (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H) → ZMod 2) :=
+  (Matrix.toLin' (Matrix.transpose Xmat)).ker
+O : Type :=
+  Submodule F (Fin (Module.finrank F ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ R)) → F) ×
+    Submodule F (Fin (Module.finrank F ↥K) → F)
+output : (V d →ₗ[F] W n) →
+  BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝ ↥K)
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝
+            (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝
+              (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) ⧸
+          R)) →
+    ℂ :=
+  fun T => carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))
+hexhaust : ∀ (T : V d →ₗ[F] W n), a7HybridQ (output T) = ∑ p, a7PairShare p.1 p.2 (output T)
+hfubini :
+  (typedUniformMean fun T => a7HybridQ (output T)) = ∑ p, typedUniformMean fun T => a7PairShare p.1 p.2 (output T)
+hp :
+  ∀ (p : O),
+    (typedUniformMean fun T => a7PairShare p.1 p.2 (output T)) ≤
+      2 ^ (6 * D * Matrix.rank Xmat) * ∑ q, localEnergy C H X f ↑q
+⊢ ∑ x, ∑ x_1, ∑ x_2, localEnergy C H X f ↑x_2 = ∑ x, ∑ x_1, ∑ x_2, localEnergy C H X f ↑x_2
+
+Candidate context:
+137:           exact ⟨e.symm q, a8_endpoint_mem_fintype_elems _ _ _, e.apply_symm_apply q⟩
+138:         · intro p _; rfl
+139:       _ = _ := by simp only [a8T2HybridComplementPairs, Fintype.sum_prod_type, Fintype.sum_sigma]
+140:   have hgeom : (∑ p : a8T2HybridComplementPairs Xmat.transpose.toLin',
+141:       localEnergy C H X f p.2.2.1) =
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:143:4: Type mismatch
+  a8_all_pair_sum_reindex (Matrix.toLin' (Matrix.transpose Xmat)) fun p => localEnergy C H X f ↑p
+has type
+  ∑
+      p ∈
+        @Finset.univ (a8T2HybridComplementPairs (Matrix.toLin' (Matrix.transpose Xmat)))
+          (@Sigma.instFintype { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 }
+            (fun A2 =>
+              (B2 : { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }) ×
+                a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑A2 ↑B2)
+            (fun i =>
+              @Sigma.instFintype { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }
+                (fun B2 => a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑i ↑B2)
+                (fun i_1 =>
+                  Subtype.fintype fun p =>
+                    (Matrix.toLin' (Matrix.transpose Xmat)).range ⊓ p.1 = ⊥ ∧
+                      (Matrix.toLin' (Matrix.transpose Xmat)).range ⊔ p.1 = ↑i ∧
+                        p.2 ⊓ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ↑i_1 ∧
+                          p.2 ⊔ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ⊤)
+                (Fintype.ofFinite { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }))
+            (Fintype.ofFinite { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 })),
+      localEnergy C H X f ↑((a8T2AllPairEquiv (Matrix.toLin' (Matrix.transpose Xmat))) p) =
+    ∑ p, localEnergy C H X f ↑p
+but is expected to have type
+  ∑
+      p ∈
+        @Finset.univ (a8T2HybridComplementPairs (Matrix.toLin' (Matrix.transpose Xmat)))
+          (@Sigma.instFintype { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 }
+            (fun A2 =>
+              (B2 : { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }) ×
+                a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑A2 ↑B2)
+            (fun i =>
+              @Sigma.instFintype { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }
+                (fun B2 => a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑i ↑B2)
+                (fun i_1 =>
+                  Subtype.fintype fun p =>
+                    (Matrix.toLin' (Matrix.transpose Xmat)).range ⊓ p.1 = ⊥ ∧
+                      (Matrix.toLin' (Matrix.transpose Xmat)).range ⊔ p.1 = ↑i ∧
+                        p.2 ⊓ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ↑i_1 ∧
+                          p.2 ⊔ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ⊤)
+                (Subtype.fintype fun B2 => B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker))
+            (Subtype.fintype (LE.le (Matrix.toLin' (Matrix.transpose Xmat)).range))),
+      localEnergy C H X f ↑p.snd.snd =
+    ∑ p, localEnergy C H X f ↑p
+
+Candidate context:
+141:       localEnergy C H X f p.2.2.1) =
+142:       ∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1 := by
+143:     exact a8_all_pair_sum_reindex Xmat.transpose.toLin' (fun p => localEnergy C H X f p.1)
+144:   have hamb : (∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1) =
+145:       ∑ p : a8AmbientFinalPairs C H X, finalEnergy C H X f p.1 := by
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:146:4: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+Candidate context:
+144:   have hamb : (∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1) =
+145:       ∑ p : a8AmbientFinalPairs C H X, finalEnergy C H X f p.1 := by
+146:     exact a8_all_pair_actual_ambient_energy_reindex C H X f
+147:   calc
+148:     _ = ∑ p : O, typedUniformMean (fun T : V d →ₗ[F] W n =>
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:78:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+Candidate context:
+76:   rfl
+77: 
+78: /-- Complete supported output-Q transport at any fixed original carrier and
+79: frequency. The source remains arbitrary complex and the graph budget is the
+80: manuscript factor, derived from support rather than assumed per pair. -/
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:162:8: (kernel) unknown constant 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint.a8_actual_coordinate_q_le_final_sum'
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint
+
+
+Candidate context:
+160: /-- Manuscript A8 for the complete output Q at the unchanged original T1
+161: triple, with every actual final predecessor and no support-window premise. -/
+162: theorem a8_output_q_le_actual_predecessor_sum {n d D : Nat}
+163:     {A : Submodule F (V d)} {B : Submodule F (W n)}
+164:     (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)

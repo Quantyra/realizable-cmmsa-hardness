@@ -1,0 +1,122 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 73,
+    "column": 13,
+    "message": "don't know how to synthesize implicit argument `F`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:73:13: don't know how to synthesize implicit argument `F`\n  @Finset.sum_subtype ({ A // C ≤ A } × { B // B ≤ H }) ℝ Real.instAddCommMonoid pred ?m.218\n    (Finset.filter pred Finset.univ)\n    (fun p =>\n      of_eq_true\n        (Eq.trans\n          (congrFun'\n            (congrArg Iff\n              (Eq.trans Finset.mem_filter._simp_1\n                (Eq.trans (congrFun' (congrArg And (Finset.mem_univ._simp_1 p)) (pred p)) (true_and (pred p)))))\n            (pred p))\n          (iff_self (pred p))))\n    (finalEnergy C H X f)\ncontext:\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nf : BinaryMatrix n d → ℂ\npred : { A // C ≤ A } × { B // B ≤ H } → Prop := ⋯\n⊢ Fintype (Subtype pred)",
+    "candidate_context": [
+      "71:     p.1.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧",
+      "72:       p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H",
+      "73:   have hs := Finset.sum_subtype (p := pred) (Finset.univ.filter pred)",
+      "74:     (by intro p; simp) (finalEnergy C H X f)",
+      "75:   rw [← hs, Finset.sum_filter]"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 73,
+    "column": 7,
+    "message": "failed to infer `have` declaration type",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:73:7: failed to infer `have` declaration type",
+    "candidate_context": [
+      "71:     p.1.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧",
+      "72:       p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H",
+      "73:   have hs := Finset.sum_subtype (p := pred) (Finset.univ.filter pred)",
+      "74:     (by intro p; simp) (finalEnergy C H X f)",
+      "75:   rw [← hs, Finset.sum_filter]"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 67,
+    "column": 40,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:67:40: unsolved goals\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nf : BinaryMatrix n d → ℂ\npred : { A // C ≤ A } × { B // B ≤ H } → Prop :=\n  fun p => ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H\n⊢ ∑ p, finalEnergy C H X f ↑p =\n    ∑ p,\n      if ↑p.1 ⊓ Submodule.comap C.mkQ X.range = C ∧ ↑p.2 ⊔ Submodule.map H.subtype X.ker = H then finalEnergy C H X f p\n      else 0",
+    "candidate_context": [
+      "65:       if p.1.1 ⊓ (LinearMap.range X).comap C.mkQ = C ∧",
+      "66:           p.2.1 ⊔ (LinearMap.ker X).map H.subtype = H then",
+      "67:         finalEnergy C H X f p else 0 := by",
+      "68:   classical",
+      "69:   let pred := fun p : {A : Submodule F (V d) // C ≤ A} ×"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 139,
+    "column": 15,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:139:15: unsolved goals\nn d D : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nf : BinaryMatrix n d → ℂ\nhsupport : ComplexFourierSupportedThrough D f\nXmat : BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H)\n  (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n    (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) :=\n  (carrierFrequencyEquiv C H) X\nR : Submodule (ZMod 2)\n  (Fin\n      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n        (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) →\n    ZMod 2) :=\n  (Matrix.toLin' (Matrix.transpose Xmat)).range\nK : Submodule (ZMod 2)\n  (Fin (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H) → ZMod 2) :=\n  (Matrix.toLin' (Matrix.transpose Xmat)).ker\nO : Type :=\n  Submodule F (Fin (Module.finrank F ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ R)) → F) ×\n    Submodule F (Fin (Module.finrank F ↥K) → F)\noutput : (V d →ₗ[F] W n) →\n  BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝ ↥K)\n      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝\n        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝\n            (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝\n              (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) ⧸\n          R)) →\n    ℂ :=\n  fun T => carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))\nhexhaust : ∀ (T : V d →ₗ[F] W n), a7HybridQ (output T) = ∑ p, a7PairShare p.1 p.2 (output T)\nhfubini :\n  (typedUniformMean fun T => a7HybridQ (output T)) = ∑ p, typedUniformMean fun T => a7PairShare p.1 p.2 (output T)\nhp :\n  ∀ (p : O),\n    (typedUniformMean fun T => a7PairShare p.1 p.2 (output T)) ≤\n      2 ^ (6 * D * Matrix.rank Xmat) * ∑ q, localEnergy C H X f ↑q\n⊢ ∑ x, ∑ x_1, ∑ x_2, localEnergy C H X f ↑x_2 = ∑ x, ∑ x_1, ∑ x_2, localEnergy C H X f ↑x_2",
+    "candidate_context": [
+      "137:           exact ⟨e.symm q, a8_endpoint_mem_fintype_elems _ _ _, e.apply_symm_apply q⟩",
+      "138:         · intro p _; rfl",
+      "139:       _ = _ := by simp only [a8T2HybridComplementPairs, Fintype.sum_prod_type, Fintype.sum_sigma]",
+      "140:   have hgeom : (∑ p : a8T2HybridComplementPairs Xmat.transpose.toLin',",
+      "141:       localEnergy C H X f p.2.2.1) ="
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 143,
+    "column": 4,
+    "message": "Type mismatch",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:143:4: Type mismatch\n  a8_all_pair_sum_reindex (Matrix.toLin' (Matrix.transpose Xmat)) fun p => localEnergy C H X f ↑p\nhas type\n  ∑\n      p ∈\n        @Finset.univ (a8T2HybridComplementPairs (Matrix.toLin' (Matrix.transpose Xmat)))\n          (@Sigma.instFintype { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 }\n            (fun A2 =>\n              (B2 : { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }) ×\n                a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑A2 ↑B2)\n            (fun i =>\n              @Sigma.instFintype { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }\n                (fun B2 => a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑i ↑B2)\n                (fun i_1 =>\n                  Subtype.fintype fun p =>\n                    (Matrix.toLin' (Matrix.transpose Xmat)).range ⊓ p.1 = ⊥ ∧\n                      (Matrix.toLin' (Matrix.transpose Xmat)).range ⊔ p.1 = ↑i ∧\n                        p.2 ⊓ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ↑i_1 ∧\n                          p.2 ⊔ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ⊤)\n                (Fintype.ofFinite { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }))\n            (Fintype.ofFinite { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 })),\n      localEnergy C H X f ↑((a8T2AllPairEquiv (Matrix.toLin' (Matrix.transpose Xmat))) p) =\n    ∑ p, localEnergy C H X f ↑p\nbut is expected to have type\n  ∑\n      p ∈\n        @Finset.univ (a8T2HybridComplementPairs (Matrix.toLin' (Matrix.transpose Xmat)))\n          (@Sigma.instFintype { A2 // (Matrix.toLin' (Matrix.transpose Xmat)).range ≤ A2 }\n            (fun A2 =>\n              (B2 : { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }) ×\n                a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑A2 ↑B2)\n            (fun i =>\n              @Sigma.instFintype { B2 // B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker }\n                (fun B2 => a7T2ComplementPair (Matrix.toLin' (Matrix.transpose Xmat)) ↑i ↑B2)\n                (fun i_1 =>\n                  Subtype.fintype fun p =>\n                    (Matrix.toLin' (Matrix.transpose Xmat)).range ⊓ p.1 = ⊥ ∧\n                      (Matrix.toLin' (Matrix.transpose Xmat)).range ⊔ p.1 = ↑i ∧\n                        p.2 ⊓ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ↑i_1 ∧\n                          p.2 ⊔ (Matrix.toLin' (Matrix.transpose Xmat)).ker = ⊤)\n                (Subtype.fintype fun B2 => B2 ≤ (Matrix.toLin' (Matrix.transpose Xmat)).ker))\n            (Subtype.fintype (LE.le (Matrix.toLin' (Matrix.transpose Xmat)).range))),\n      localEnergy C H X f ↑p.snd.snd =\n    ∑ p, localEnergy C H X f ↑p",
+    "candidate_context": [
+      "141:       localEnergy C H X f p.2.2.1) =",
+      "142:       ∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1 := by",
+      "143:     exact a8_all_pair_sum_reindex Xmat.transpose.toLin' (fun p => localEnergy C H X f p.1)",
+      "144:   have hamb : (∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1) =",
+      "145:       ∑ p : a8AmbientFinalPairs C H X, finalEnergy C H X f p.1 := by"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 146,
+    "column": 4,
+    "message": "(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:146:4: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached\n\nNote: Use `set_option maxHeartbeats <num>` to set the limit.\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.",
+    "candidate_context": [
+      "144:   have hamb : (∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1) =",
+      "145:       ∑ p : a8AmbientFinalPairs C H X, finalEnergy C H X f p.1 := by",
+      "146:     exact a8_all_pair_actual_ambient_energy_reindex C H X f",
+      "147:   calc",
+      "148:     _ = ∑ p : O, typedUniformMean (fun T : V d →ₗ[F] W n =>"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 78,
+    "column": 0,
+    "message": "(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:78:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached\n\nNote: Use `set_option maxHeartbeats <num>` to set the limit.\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.",
+    "candidate_context": [
+      "76:   rfl",
+      "77: ",
+      "78: /-- Complete supported output-Q transport at any fixed original carrier and",
+      "79: frequency. The source remains arbitrary complex and the graph budget is the",
+      "80: manuscript factor, derived from support rather than assumed per pair. -/"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean",
+    "line": 162,
+    "column": 8,
+    "message": "(kernel) unknown constant 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint.a8_actual_coordinate_q_le_final_sum'",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:162:8: (kernel) unknown constant 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint.a8_actual_coordinate_q_le_final_sum'\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint\n",
+    "candidate_context": [
+      "160: /-- Manuscript A8 for the complete output Q at the unchanged original T1",
+      "161: triple, with every actual final predecessor and no support-window premise. -/",
+      "162: theorem a8_output_q_le_actual_predecessor_sum {n d D : Nat}",
+      "163:     {A : Submodule F (V d)} {B : Submodule F (W n)}",
+      "164:     (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)"
+    ]
+  }
+]
