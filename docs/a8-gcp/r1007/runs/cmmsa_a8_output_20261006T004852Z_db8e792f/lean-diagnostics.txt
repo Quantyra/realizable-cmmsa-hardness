@@ -1,0 +1,104 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8AmbientAssembly.lean:331:2: Type mismatch: After simplification, term
+  h
+ has type
+  ∑ x,
+      ∑ i,
+        (∑ i_1,
+              Complex.normSq
+                  (complexCarrierHybridFilter (Matrix.toLin' (Matrix.transpose Xmat)).range
+                    (Matrix.toLin' (Matrix.transpose Xmat)).ker
+                    (Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ
+                      (a8NestedAmbientDomain (Matrix.toLin' (Matrix.transpose Xmat)).range Pout))
+                    (Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype
+                      (a8NestedAmbientRange (Matrix.toLin' (Matrix.transpose Xmat)).ker Qout))
+                    (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H x f))
+                    (i +
+                      (Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype
+                            (a8NestedAmbientRange (Matrix.toLin' (Matrix.transpose Xmat)).ker Qout)).subtype ∘ₗ
+                        i_1 ∘ₗ
+                          (Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ
+                              (a8NestedAmbientDomain (Matrix.toLin' (Matrix.transpose Xmat)).range Pout)).mkQ)) /
+                ↑(Fintype.card
+                    (((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ (Matrix.toLin' (Matrix.transpose Xmat)).range) ⧸
+                        Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ
+                          (a8NestedAmbientDomain (Matrix.toLin' (Matrix.transpose Xmat)).range Pout) →ₗ[F]
+                      ↥(Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype
+                          (a8NestedAmbientRange (Matrix.toLin' (Matrix.transpose Xmat)).ker Qout))))) ^
+            2 /
+          (↑(Fintype.card (V d →ₗ[F] W n)) *
+            ↑(Fintype.card
+                ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ (Matrix.toLin' (Matrix.transpose Xmat)).range →ₗ[F]
+                  ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker))) ≤
+    (2 ^
+          (Matrix.rank Xmat *
+            (Module.finrank F ↥(a8NestedAmbientDomain (Matrix.toLin' (Matrix.transpose Xmat)).range Pout) -
+                Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Xmat)).range +
+              (Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker -
+                Module.finrank F
+                  ↥(Submodule.map (↑(codomainBasis (Matrix.toLin' (Matrix.transpose Xmat)).ker).equivFun.symm)
+                      Qout))))) ^
+        3 *
+      ∑ x,
+        ∑ i,
+          typedW6OutputEnergy (a8NestedAmbientDomain C (↑x).1) (a8NestedAmbientRange H (↑x).2)
+                (a8NestedFrequency C H (↑x).1 (↑x).2
+                  (t2QuotientRestrict (↑x).1 (↑x).2 (Matrix.toLin' (Matrix.transpose Xmat))))
+                (filteredCarrierFunction (a8NestedAmbientDomain C (↑x).1) (a8NestedAmbientRange H (↑x).2) i f) ^
+              2 /
+            ↑(Fintype.card (V d →ₗ[F] W n))
+but is expected to have type
+  ∑ x,
+      ∑ x_1,
+        (∑ i,
+              Complex.normSq
+                  (complexCarrierHybridFilter (Matrix.toLin' (Matrix.transpose Xmat)).range
+                    (Matrix.toLin' (Matrix.transpose Xmat)).ker
+                    (Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ
+                      (a8NestedAmbientDomain (Matrix.toLin' (Matrix.transpose Xmat)).range Pout))
+                    (Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype
+                      (a8NestedAmbientRange (Matrix.toLin' (Matrix.transpose Xmat)).ker Qout))
+                    (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H x f))
+                    (x_1 +
+                      (Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype
+                            (a8NestedAmbientRange (Matrix.toLin' (Matrix.transpose Xmat)).ker Qout)).subtype ∘ₗ
+                        i ∘ₗ
+                          (Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ
+                              (a8NestedAmbientDomain (Matrix.toLin' (Matrix.transpose Xmat)).range Pout)).mkQ)) /
+                ↑(Fintype.card
+                    (((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ (Matrix.toLin' (Matrix.transpose Xmat)).range) ⧸
+                        Submodule.map (Matrix.toLin' (Matrix.transpose Xmat)).range.mkQ
+                          (a8NestedAmbientDomain (Matrix.toLin' (Matrix.transpose Xmat)).range Pout) →ₗ[F]
+                      ↥(Submodule.comap (Matrix.toLin' (Matrix.transpose Xmat)).ker.subtype
+                          (a8NestedAmbientRange (Matrix.toLin' (Matrix.transpose Xmat)).ker Qout))))) ^
+            2 /
+          (↑(Fintype.card
+                ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ (Matrix.toLin' (Matrix.transpose Xmat)).range →ₗ[F]
+                  ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker)) *
+            ↑(Fintype.card (V d →ₗ[F] W n))) ≤
+    (2 ^
+          (Matrix.rank Xmat *
+            (Module.finrank F ↥(a8NestedAmbientDomain (Matrix.toLin' (Matrix.transpose Xmat)).range Pout) -
+                Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Xmat)).range +
+              (Module.finrank F ↥(Matrix.toLin' (Matrix.transpose Xmat)).ker -
+                Module.finrank F
+                  ↥(Submodule.map (↑(codomainBasis (Matrix.toLin' (Matrix.transpose Xmat)).ker).equivFun.symm)
+                      Qout))))) ^
+        3 *
+      ∑ x,
+        ∑ i,
+          typedW6OutputEnergy (a8NestedAmbientDomain C (↑x).1) (a8NestedAmbientRange H (↑x).2)
+                (a8NestedFrequency C H (↑x).1 (↑x).2
+                  (t2QuotientRestrict (↑x).1 (↑x).2 (Matrix.toLin' (Matrix.transpose Xmat))))
+                (filteredCarrierFunction (a8NestedAmbientDomain C (↑x).1) (a8NestedAmbientRange H (↑x).2) i f) ^
+              2 /
+            ↑(Fintype.card (V d →ₗ[F] W n))
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AmbientAssembly
+
+
+Candidate context:
+329:   simp_rw [hpair]
+330:   unfold typedUniformMean a18UniformMean
+331:   simpa [X, R, K, A2, B2, Finset.sum_div, div_div] using h
+332: 
+333: private theorem a8_supported_graph_charge {n d D : Nat}

@@ -328,7 +328,9 @@ theorem a8_ambient_output_pair_le_actual_complement_sum {n d : Nat}
       (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f)))) ≤ _
   simp_rw [hpair]
   unfold typedUniformMean a18UniformMean
-  simpa [X, R, K, A2, B2, Finset.sum_div, div_div] using h
+  have hden_comm := mul_comm (Fintype.card (V d →ₗ[F] W n) : Real)
+    (Fintype.card ((((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ R) →ₗ[F] K)) : Real)
+  simpa [X, R, K, A2, B2, Finset.sum_div, div_div, hden_comm] using h
 
 private theorem a8_supported_graph_charge {n d D : Nat}
     (C : Submodule F (V d)) (H : Submodule F (W n))
