@@ -1,0 +1,171 @@
+{
+  "frozen_core_archive": "C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\captures\\capture-integrated-48\\dependency-baseline\\core-sources.tar.gz",
+  "matches": [
+    {
+      "file": "src/lean/Lean/Compiler/LCNF/Main.lean",
+      "line": 210,
+      "context": "206:           Lean.addTrace `Compiler.result m!\"size: {decl.size}\\n{\u2190 ppDecl' decl (\u2190 getPhase)}\"\n207: \n208:       -- TODO consider doing this in one go afterwards in a separate mapM and running clearPure to save memory\n209:       -- or consider running clear? unclear\n210:       profileitM Exception \"compilation (IR)\" (\u2190 getOptions) do\n211:         let irDecls \u2190 IR.toIR decls\n212:         discard <| IR.compile irDecls\n213: where\n214:   runPassManagerPart (inPhase outPhase : Purity) (profilerName : String)\n215:       (passes : Array Pass) (decls : Array (Decl inPhase)) (isCheckEnabled : Bool) :\n216:       CompilerM (Array (Decl outPhase)) := do"
+    },
+    {
+      "file": "src/lean/Lean/Compiler/LCNF/Main.lean",
+      "line": 214,
+      "context": "210:       profileitM Exception \"compilation (IR)\" (\u2190 getOptions) do\n211:         let irDecls \u2190 IR.toIR decls\n212:         discard <| IR.compile irDecls\n213: where\n214:   runPassManagerPart (inPhase outPhase : Purity) (profilerName : String)\n215:       (passes : Array Pass) (decls : Array (Decl inPhase)) (isCheckEnabled : Bool) :\n216:       CompilerM (Array (Decl outPhase)) := do\n217:     profileitM Exception profilerName (\u2190 getOptions) do\n218:       let mut state : (pu : Purity) \u00d7 Array (Decl pu) := \u27e8inPhase, decls\u27e9\n219:       for pass in passes do\n220:         checkSystem \"LCNF compiler\""
+    },
+    {
+      "file": "src/lean/Lean/Compiler/LCNF/Main.lean",
+      "line": 217,
+      "context": "213: where\n214:   runPassManagerPart (inPhase outPhase : Purity) (profilerName : String)\n215:       (passes : Array Pass) (decls : Array (Decl inPhase)) (isCheckEnabled : Bool) :\n216:       CompilerM (Array (Decl outPhase)) := do\n217:     profileitM Exception profilerName (\u2190 getOptions) do\n218:       let mut state : (pu : Purity) \u00d7 Array (Decl pu) := \u27e8inPhase, decls\u27e9\n219:       for pass in passes do\n220:         checkSystem \"LCNF compiler\"\n221:         state \u2190 withTraceNode `Compiler (fun _ => return m!\"compiler phase: {pass.phase}, pass: {pass.name}\") do\n222:           let decls \u2190 withPhase pass.phase do\n223:             state.fst.withAssertPurity pass.phase.toPurity fun h => do"
+    },
+    {
+      "file": "src/lean/Lean/Compiler/Main.lean",
+      "line": 19,
+      "context": "15: /--\n16: Run the code generation pipeline for all declarations in `declNames`\n17: that fulfill the requirements of `shouldGenerateCode`.\n18: -/\n19: def compile (declNames : Array Name) : CoreM Unit := do profileitM Exception \"compiler new\" (\u2190 getOptions) do\n20:   withOptions (compiler.postponeCompile.set \u00b7 false) do\n21:   withTraceNode `Compiler (fun _ => return m!\"compiling: {declNames}\") do\n22:     LCNF.main declNames {}\n23: \n24: builtin_initialize\n25:   registerTraceClass `Compiler"
+    },
+    {
+      "file": "src/lean/Lean/Elab/PreDefinition/Main.lean",
+      "line": 290,
+      "context": "286: \n287: \n288: def addPreDefinitions (docCtx : LocalContext \u00d7 LocalInstances) (preDefs : Array PreDefinition) :\n289:     TermElabM Unit := withLCtx {} {} do\n290:   profileitM Exception \"process pre-definitions\" (\u2190 getOptions) do\n291:     withTraceNode `Elab.def.processPreDef (fun _ => return m!\"process pre-definitions\") do\n292:       for preDef in preDefs do\n293:         trace[Elab.definition.body] \"{preDef.declName} : {preDef.type} :=\\n{preDef.value}\"\n294:       let preDefs \u2190 preDefs.mapM ensureNoUnassignedMVarsAtPreDef\n295:       let preDefs \u2190 betaReduceLetRecApps preDefs\n296:       let cliques := partitionPreDefs preDefs"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/Main.lean",
+      "line": 396,
+      "context": "392:     let goal \u2190 GoalM.run' goal <| assertExtra params\n393:     k goal\n394:   go.run params (evalTactic? := evalTactic?)\n395: \n396: def main (mvarId : MVarId) (params : Params) : MetaM Result := do profileitM Exception \"grind\" (\u2190 getOptions) do\n397:   let params := if grind.unusedLemmaThreshold.get (\u2190 getOptions) > 0 then\n398:     { params with config.markInstances := true }\n399:   else params\n400:   GrindM.runAtGoal mvarId params fun goal => do\n401:     let failure? \u2190 solve goal\n402:     let result \u2190 mkResult params failure?"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/Main.lean",
+      "line": 481,
+      "context": "477:     let type \u2190 mvarId.getType\n478:     let (a, val) \u2190 withNewMCtxDepth do\n479:       let mvar' \u2190 mkFreshExprSyntheticOpaqueMVar type\n480:       let a \u2190 k mvar'.mvarId!\n481:       let val \u2190 instantiateMVarsProfiling mvar'\n482:       let val \u2190 resolveDelayedMVarAssignments val\n483:       return (a, val)\n484:     let val \u2190 finalize val\n485:     (mvarId.assign val : MetaM _)\n486:     return a\n487: "
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Simp/Main.lean",
+      "line": 766,
+      "context": "762: end Simp\n763: open Simp (SimprocsArray Stats)\n764: \n765: def simpCore (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)\n766:     (s : Simp.State := {}) : MetaM (Simp.Result \u00d7 Simp.State) := do profileitM Exception \"simp\" (\u2190 getOptions) do\n767:   match discharge? with\n768:   | none   => Simp.mainCore e ctx s (methods := Simp.mkDefaultMethodsCore simprocs)\n769:   | some d => Simp.mainCore e ctx s (methods := Simp.mkMethods simprocs d (wellBehavedDischarge := false))\n770: \n771: def simp (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)\n772:     (stats : Stats := {}) : MetaM (Simp.Result \u00d7 Stats) := do profileitM Exception \"simp\" (\u2190 getOptions) do"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Simp/Main.lean",
+      "line": 772,
+      "context": "768:   | none   => Simp.mainCore e ctx s (methods := Simp.mkDefaultMethodsCore simprocs)\n769:   | some d => Simp.mainCore e ctx s (methods := Simp.mkMethods simprocs d (wellBehavedDischarge := false))\n770: \n771: def simp (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)\n772:     (stats : Stats := {}) : MetaM (Simp.Result \u00d7 Stats) := do profileitM Exception \"simp\" (\u2190 getOptions) do\n773:   let (r, s) \u2190 simpCore e ctx simprocs discharge? { stats with }\n774:   return (r, { s with })\n775: \n776: def dsimp (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[])\n777:     (stats : Stats := {}) : MetaM (Expr \u00d7 Stats) := do profileitM Exception \"dsimp\" (\u2190 getOptions) do\n778:   Simp.dsimpMain e ctx stats (methods := Simp.mkDefaultMethodsCore simprocs )"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Simp/Main.lean",
+      "line": 777,
+      "context": "773:   let (r, s) \u2190 simpCore e ctx simprocs discharge? { stats with }\n774:   return (r, { s with })\n775: \n776: def dsimp (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[])\n777:     (stats : Stats := {}) : MetaM (Expr \u00d7 Stats) := do profileitM Exception \"dsimp\" (\u2190 getOptions) do\n778:   Simp.dsimpMain e ctx stats (methods := Simp.mkDefaultMethodsCore simprocs )\n779: \n780: /-- See `simpTarget`. This method assumes `mvarId` is not assigned, and we are already using `mvarId`s local context. -/\n781: def simpTargetCore (mvarId : MVarId) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)\n782:     (mayCloseGoal := true) (stats : Stats := {}) : MetaM (Option MVarId \u00d7 Stats) := do\n783:   let target \u2190 instantiateMVars (\u2190 mvarId.getType)"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 178,
+      "context": "174:   out.putStrLn    \"      --deps             just print dependencies of a Lean input\"\n175:   out.putStrLn    \"      --src-deps         just print dependency sources of a Lean input\"\n176:   out.putStrLn    \"      --print-prefix     print the installation prefix for Lean and exit\"\n177:   out.putStrLn    \"      --print-libdir     print the installation directory for Lean's built-in libraries and exit\"\n178:   out.putStrLn    \"      --profile          display elaboration/type checking time for each definition/theorem\"\n179:   out.putStrLn    \"      --stats            display environment statistics\"\n180:   out.putStrLn    \"      --incr-save=file   EXPERIMENTAL: save a full incremental snapshot of post-elaboration state at end of run\"\n181:   out.putStrLn    \"      --incr-load=file   EXPERIMENTAL: reuse a snapshot saved by `--incr-(header-)save` at start of run\"\n182:   out.putStrLn    \"      --incr-header-save=file\"\n183:   out.putStrLn    \"                         EXPERIMENTAL: like `--incr-save`, but save only the header (state after importing)\"\n184:   if Internal.isDebug () then"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 259,
+      "context": "255: @[export lean_shell_options_get_run]\n256: def ShellOptions.getRun (opts : ShellOptions) : Bool :=\n257:   opts.run\n258: \n259: @[export lean_shell_options_get_profiler]\n260: def ShellOptions.getProfiler (opts : ShellOptions) : Bool :=\n261:   profiler.get opts.leanOpts\n262: \n263: @[export lean_shell_options_get_num_threads]\n264: def ShellOptions.getNumThreads (opts : ShellOptions) : UInt32 :=\n265:   opts.numThreads"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 260,
+      "context": "256: def ShellOptions.getRun (opts : ShellOptions) : Bool :=\n257:   opts.run\n258: \n259: @[export lean_shell_options_get_profiler]\n260: def ShellOptions.getProfiler (opts : ShellOptions) : Bool :=\n261:   profiler.get opts.leanOpts\n262: \n263: @[export lean_shell_options_get_num_threads]\n264: def ShellOptions.getNumThreads (opts : ShellOptions) : UInt32 :=\n265:   opts.numThreads\n266: "
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 261,
+      "context": "257:   opts.run\n258: \n259: @[export lean_shell_options_get_profiler]\n260: def ShellOptions.getProfiler (opts : ShellOptions) : Bool :=\n261:   profiler.get opts.leanOpts\n262: \n263: @[export lean_shell_options_get_num_threads]\n264: def ShellOptions.getNumThreads (opts : ShellOptions) : UInt32 :=\n265:   opts.numThreads\n266: \n267: def checkOptArg (optName : String) (optArg? : Option String) : IO String := do"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 405,
+      "context": "401:   | 'S' => -- `--server`\n402:     return {opts with component := .watchdog}\n403:   | 'W' => -- `--worker`\n404:     return {opts with component := .worker}\n405:   | 'P' => -- `--profile`\n406:     return {opts with leanOpts := profiler.set opts.leanOpts true}\n407:   | 'B' => -- `--debug=tag`\n408:     if Internal.isDebug () then\n409:       let arg \u2190 checkOptArg \"B\" optArg?\n410:       Internal.enableDebug arg\n411:       return opts"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 406,
+      "context": "402:     return {opts with component := .watchdog}\n403:   | 'W' => -- `--worker`\n404:     return {opts with component := .worker}\n405:   | 'P' => -- `--profile`\n406:     return {opts with leanOpts := profiler.set opts.leanOpts true}\n407:   | 'B' => -- `--debug=tag`\n408:     if Internal.isDebug () then\n409:       let arg \u2190 checkOptArg \"B\" optArg?\n410:       Internal.enableDebug arg\n411:       return opts\n412:     -- if not `LEAN_DEBUG`, fall through to unknown option"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 565,
+      "context": "561:     if let some c := opts.cFileName? then\n562:       let .ok out \u2190 IO.FS.Handle.mk c .write |>.toBaseIO\n563:         | IO.eprintln s!\"failed to create '{c}'\"\n564:           return 1\n565:       profileitIO \"C code generation\" opts.leanOpts do\n566:         let data \u2190 Compiler.LCNF.emitC mainModuleName\n567:           |>.toIO' { fileName, fileMap := default } { env }\n568:         out.write data.toUTF8\n569:     if let some bc := opts.bcFileName? then\n570:       initLLVM\n571:       profileitIO \"LLVM code generation\" opts.leanOpts do"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 571,
+      "context": "567:           |>.toIO' { fileName, fileMap := default } { env }\n568:         out.write data.toUTF8\n569:     if let some bc := opts.bcFileName? then\n570:       initLLVM\n571:       profileitIO \"LLVM code generation\" opts.leanOpts do\n572:         emitLLVM env mainModuleName bc\n573:   displayCumulativeProfilingTimes\n574:   if Internal.hasAddressSanitizer () then\n575:     return if env?.isSome then 0 else 1\n576:   else\n577:     -- When not using the address/leak sanitizer, we interrupt execution without garbage collecting."
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 573,
+      "context": "569:     if let some bc := opts.bcFileName? then\n570:       initLLVM\n571:       profileitIO \"LLVM code generation\" opts.leanOpts do\n572:         emitLLVM env mainModuleName bc\n573:   displayCumulativeProfilingTimes\n574:   if Internal.hasAddressSanitizer () then\n575:     return if env?.isSome then 0 else 1\n576:   else\n577:     -- When not using the address/leak sanitizer, we interrupt execution without garbage collecting.\n578:     -- This is useful when profiling improvements to Lean startup time.\n579:     IO.Process.exit <| if env?.isSome then 0 else 1"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 578,
+      "context": "574:   if Internal.hasAddressSanitizer () then\n575:     return if env?.isSome then 0 else 1\n576:   else\n577:     -- When not using the address/leak sanitizer, we interrupt execution without garbage collecting.\n578:     -- This is useful when profiling improvements to Lean startup time.\n579:     IO.Process.exit <| if env?.isSome then 0 else 1"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 14,
+      "context": "10: import Init.Data.Range.Polymorphic.Iterators\n11: \n12: public section\n13: \n14: /-! `trace.profiler.output` Firefox Profiler integration -/\n15: \n16: namespace Lean.Firefox\n17: \n18: /-! Definitions from https://github.com/firefox-devtools/profiler/blob/main/src/types/profile.ts -/\n19: \n20: structure Milliseconds where"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 18,
+      "context": "14: /-! `trace.profiler.output` Firefox Profiler integration -/\n15: \n16: namespace Lean.Firefox\n17: \n18: /-! Definitions from https://github.com/firefox-devtools/profiler/blob/main/src/types/profile.ts -/\n19: \n20: structure Milliseconds where\n21:   ms : Float\n22: deriving Inhabited\n23: \n24: instance : Coe Float Milliseconds := \u27e8fun s => .mk (s * 1000)\u27e9"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 50,
+      "context": "46:   eventDelay : String := \"ms\"\n47:   threadCPUDelta : String := \"\u00b5s\"\n48: deriving FromJson, ToJson\n49: \n50: structure ProfileMeta where\n51:   interval : Milliseconds := 0.0  -- should be irrelevant with `tracing-ms`\n52:   startTime : Milliseconds\n53:   categories : Array Category := #[]\n54:   processType : Nat := 0\n55:   product : String := \"lean\"\n56:   preprocessedProfileVersion : Nat := 48"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 56,
+      "context": "52:   startTime : Milliseconds\n53:   categories : Array Category := #[]\n54:   processType : Nat := 0\n55:   product : String := \"lean\"\n56:   preprocessedProfileVersion : Nat := 48\n57:   markerSchema : Array Json := #[]\n58:   -- without this field, no CPU usage is shown\n59:   sampleUnits : SampleUnits := {}\n60: deriving FromJson, ToJson\n61: \n62: structure StackTable where"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 158,
+      "context": "154:   stringArray : Array String\n155:   funcTable : FuncTable\n156: deriving FromJson, ToJson\n157: \n158: structure Profile where\n159:   \u00abmeta\u00bb : ProfileMeta\n160:   libs : Array Json := #[]\n161:   threads : Array Thread\n162: deriving FromJson, ToJson\n163: \n164: /-- Thread with maps necessary for computing max sharing indices -/"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 159,
+      "context": "155:   funcTable : FuncTable\n156: deriving FromJson, ToJson\n157: \n158: structure Profile where\n159:   \u00abmeta\u00bb : ProfileMeta\n160:   libs : Array Json := #[]\n161:   threads : Array Thread\n162: deriving FromJson, ToJson\n163: \n164: /-- Thread with maps necessary for computing max sharing indices -/\n165: structure ThreadWithMaps extends Thread where"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 252,
+      "context": "248:       modify fun thread => { thread with lastTime := data.startTime }\n249:       for c in children do\n250:         if let some nextStart := getFirstStart? c then\n251:           -- add run time slice between children/before first child\n252:           -- a \"slice\" is always a pair of samples as otherwise Firefox Profiler interpolates\n253:           -- between adjacent samples in undesirable ways\n254:           modify fun thread => { thread with samples := {\n255:             stack := thread.samples.stack.push stackIdx |>.push stackIdx\n256:             time := thread.samples.time.push thread.lastTime |>.push nextStart\n257:             weight := thread.samples.weight.push 0.0 |>.push (nextStart - thread.lastTime)\n258:             threadCPUDelta := thread.samples.threadCPUDelta.push 0.0 |>.push (nextStart - thread.lastTime)"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 286,
+      "context": "282:     name := #[], resource := #[], fileName := #[], lineNumber := #[], columnNumber := #[],\n283:     length := 0 }\n284: }\n285: \n286: def Profile.export (name : String) (startTime : Float) (traceStates : Array TraceState)\n287:     (opts : Options) : IO Profile := do\n288:   let tids := traceStates.groupByKey (\u00b7.tid)\n289:   let stopTime := (\u2190 IO.monoNanosNow).toFloat / 1000000000\n290:   let threads \u2190 tids.toArray.qsort (fun (t1, _) (t2, _) => t1 < t2) |>.mapM fun (tid, traceStates) => do\n291:     let mut thread := { Thread.new (if tid = 0 then name else toString tid) with isMainThread := tid = 0 }\n292:     let traces := traceStates.map (\u00b7.traces.toArray)"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 287,
+      "context": "283:     length := 0 }\n284: }\n285: \n286: def Profile.export (name : String) (startTime : Float) (traceStates : Array TraceState)\n287:     (opts : Options) : IO Profile := do\n288:   let tids := traceStates.groupByKey (\u00b7.tid)\n289:   let stopTime := (\u2190 IO.monoNanosNow).toFloat / 1000000000\n290:   let threads \u2190 tids.toArray.qsort (fun (t1, _) (t2, _) => t1 < t2) |>.mapM fun (tid, traceStates) => do\n291:     let mut thread := { Thread.new (if tid = 0 then name else toString tid) with isMainThread := tid = 0 }\n292:     let traces := traceStates.map (\u00b7.traces.toArray)\n293:     -- sort traces of thread by start time"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 314,
+      "context": "310:             weight := thread.samples.weight.push 0.0 |>.push 0.0\n311:             threadCPUDelta := thread.samples.threadCPUDelta.push 0.0 |>.push 0.0\n312:             length := thread.samples.length + 2\n313:           } }\n314:       thread \u2190 addTrace (Lean.trace.profiler.output.pp.get opts) thread trace\n315:     return thread\n316:   return {\n317:     \u00abmeta\u00bb := { startTime, categories }\n318:     threads := threads.map (\u00b7.toThread)\n319:   }\n320: "
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 411,
+      "context": "407:           stringArray := thread.stringArray.push s\n408:           stringMap := thread.stringMap.insert s thread.stringMap.size })\n409: \n410: /--\n411: Merges given profiles such that samples with identical stacks are deduplicated by adding up their\n412: weights. Minimizes profile size while preserving per-stack timing information.\n413: -/\n414: def Profile.collide (ps : Array Profile) : Option Profile := do\n415:   let base \u2190 ps[0]?\n416:   let thread := Thread.new \"collided\"\n417:   let thread := ps.map (\u00b7.threads) |>.flatten.foldl collideThreads { thread with }"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 412,
+      "context": "408:           stringMap := thread.stringMap.insert s thread.stringMap.size })\n409: \n410: /--\n411: Merges given profiles such that samples with identical stacks are deduplicated by adding up their\n412: weights. Minimizes profile size while preserving per-stack timing information.\n413: -/\n414: def Profile.collide (ps : Array Profile) : Option Profile := do\n415:   let base \u2190 ps[0]?\n416:   let thread := Thread.new \"collided\"\n417:   let thread := ps.map (\u00b7.threads) |>.flatten.foldl collideThreads { thread with }\n418:   return { base with threads := #[thread.toThread] }"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profiler.lean",
+      "line": 414,
+      "context": "410: /--\n411: Merges given profiles such that samples with identical stacks are deduplicated by adding up their\n412: weights. Minimizes profile size while preserving per-stack timing information.\n413: -/\n414: def Profile.collide (ps : Array Profile) : Option Profile := do\n415:   let base \u2190 ps[0]?\n416:   let thread := Thread.new \"collided\"\n417:   let thread := ps.map (\u00b7.threads) |>.flatten.foldl collideThreads { thread with }\n418:   return { base with threads := #[thread.toThread] }\n419: \n420: end Lean.Firefox"
+    }
+  ],
+  "local_compilation": false
+}

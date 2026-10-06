@@ -1,0 +1,291 @@
+{
+  "matches": [
+    {
+      "file": "src/lean/Lean/AddDecl.lean",
+      "line": 184,
+      "context": "181:       setEnv async.mainEnv\n182: where\n183:   doAdd := do\n184:     profileitM Exception \"type checking\" (\u2190 getOptions) do\n185:       withTraceNode `Kernel (fun _ => return m!\"typechecking declarations {decl.getTopLevelNames}\") do\n186:         warnIfUsesSorry decl\n187:         try\n188:           let env \u2190 (\u2190 getEnv).addDeclAux (\u2190 getOptions) decl (\u2190 read).cancelTk?\n189:             |> ofExceptKernelException\n190:           setEnv env\n191:         catch ex =>\n192:           -- avoid follow-up errors by (trying to) add broken decl as axiom\n193:           addAsAxiom"
+    },
+    {
+      "file": "src/lean/Lean/Compiler/LCNF/Main.lean",
+      "line": 210,
+      "context": "207: \n208:       -- TODO consider doing this in one go afterwards in a separate mapM and running clearPure to save memory\n209:       -- or consider running clear? unclear\n210:       profileitM Exception \"compilation (IR)\" (\u2190 getOptions) do\n211:         let irDecls \u2190 IR.toIR decls\n212:         discard <| IR.compile irDecls\n213: where\n214:   runPassManagerPart (inPhase outPhase : Purity) (profilerName : String)\n215:       (passes : Array Pass) (decls : Array (Decl inPhase)) (isCheckEnabled : Bool) :\n216:       CompilerM (Array (Decl outPhase)) := do\n217:     profileitM Exception profilerName (\u2190 getOptions) do\n218:       let mut state : (pu : Purity) \u00d7 Array (Decl pu) := \u27e8inPhase, decls\u27e9\n219:       for pass in passes do"
+    },
+    {
+      "file": "src/lean/Lean/Compiler/LCNF/Main.lean",
+      "line": 217,
+      "context": "214:   runPassManagerPart (inPhase outPhase : Purity) (profilerName : String)\n215:       (passes : Array Pass) (decls : Array (Decl inPhase)) (isCheckEnabled : Bool) :\n216:       CompilerM (Array (Decl outPhase)) := do\n217:     profileitM Exception profilerName (\u2190 getOptions) do\n218:       let mut state : (pu : Purity) \u00d7 Array (Decl pu) := \u27e8inPhase, decls\u27e9\n219:       for pass in passes do\n220:         checkSystem \"LCNF compiler\"\n221:         state \u2190 withTraceNode `Compiler (fun _ => return m!\"compiler phase: {pass.phase}, pass: {pass.name}\") do\n222:           let decls \u2190 withPhase pass.phase do\n223:             state.fst.withAssertPurity pass.phase.toPurity fun h => do\n224:               pass.run (h \u25b8 state.snd)\n225:           pure \u27e8_, decls\u27e9\n226:         withPhase pass.phaseOut <| checkpoint pass.name state.snd (isCheckEnabled || pass.shouldAlwaysRunCheck)"
+    },
+    {
+      "file": "src/lean/Lean/Compiler/Main.lean",
+      "line": 19,
+      "context": "16: Run the code generation pipeline for all declarations in `declNames`\n17: that fulfill the requirements of `shouldGenerateCode`.\n18: -/\n19: def compile (declNames : Array Name) : CoreM Unit := do profileitM Exception \"compiler new\" (\u2190 getOptions) do\n20:   withOptions (compiler.postponeCompile.set \u00b7 false) do\n21:   withTraceNode `Compiler (fun _ => return m!\"compiling: {declNames}\") do\n22:     LCNF.main declNames {}\n23: \n24: builtin_initialize\n25:   registerTraceClass `Compiler\n26:   registerTraceClass `Compiler.stat\n27: \n28: end Lean.Compiler"
+    },
+    {
+      "file": "src/lean/Lean/CoreM.lean",
+      "line": 706,
+      "context": "703:   if (\u2190 IO.hasFinished t) then\n704:     return t.get\n705:   withTraceNode `Elab.block (tag := tag) (fun _ => pure tag) do\n706:     profileitM Exception \"blocked\" (\u2190 getOptions) do\n707:       IO.wait t\n708: \n709: /--\n710: This ref exists to break a linking cycle that goes as follows:\n711: - We start in `Environment.lean`, there we have functions referencing the compiler such as\n712:   `evalConst`\n713: - This pulls in the entire compiler transitively as well as all of its dependents\n714: - The compiler relies on things like WHNF to inspect types\n715: - WHNF in turn imports Environment"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Command.lean",
+      "line": 339,
+      "context": "336:     modify fun s => { s with messages := s.messages.add msg }\n337: \n338: def runLinters (stx : Syntax) (promise : Option (IO.Promise InfoTree) := .none) : CommandElabM Unit := do\n339:   profileitM Exception \"linting\" (\u2190 getOptions) do\n340:     withTraceNode `Elab.lint (fun _ => return m!\"running linters\") do\n341:       let linters \u2190 lintersRef.get\n342:       let producedInfoTrees \u2190 IO.mkRef ({} : PersistentArray InfoTree)\n343:       unless linters.isEmpty do\n344:         for linter in linters do\n345:           withTraceNode `Elab.lint (fun _ => return m!\"running linter: {.ofConstName linter.name}\")\n346:               (tag := linter.name.toString) do\n347:             let savedState \u2190 get\n348:             let originalSize := savedState.infoState.trees.size"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Command.lean",
+      "line": 371,
+      "context": "368:             mkLinterInfoGroupNode (\u2190 producedInfoTrees.get)\n369: \n370: def runModuleLinters (cmds : Array Syntax) : CommandElabM Unit := do\n371:   profileitM Exception \"module linting\" (\u2190 getOptions) do\n372:     withTraceNode `Elab.lint (fun _ => return m!\"running module linters\") do\n373:       let linters \u2190 moduleLintersRef.get\n374:       unless linters.isEmpty do\n375:         for linter in linters do\n376:           withTraceNode `Elab.lint (fun _ => return m!\"running module linter: {.ofConstName linter.name}\")\n377:               (tag := linter.name.toString) do\n378:             let savedState \u2190 get\n379:             try\n380:               linter.run cmds"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Command.lean",
+      "line": 392,
+      "context": "389: \n390: def runStatefulLinters (stx : Syntax) (prev : Array LinterState)\n391:     (promise : Option (IO.Promise InfoTree) := .none) : CommandElabM (Array LinterState) := do\n392:   profileitM Exception \"stateful linting\" (\u2190 getOptions) do\n393:     withTraceNode `Elab.lint (fun _ => return m!\"running stateful linters\") do\n394:       let linters \u2190 statefulLintersRef.get\n395:       let producedInfoTrees \u2190 IO.mkRef ({} : PersistentArray InfoTree)\n396:       let run {\u03b1 : Type} (phase : String) (idx : Nat) (onError : CommandElabM \u03b1)\n397:           (act : CommandElabM \u03b1) : CommandElabM \u03b1 :=\n398:         withTraceNode `Elab.lint\n399:             (fun _ => return m!\"running stateful linter #{idx} ({phase})\")\n400:             (tag := toString idx) do\n401:           let savedState \u2190 get"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Command.lean",
+      "line": 841,
+      "context": "838: `elabCommand` wrapper that should be used for the initial invocation, not for recursive calls after\n839: macro expansion etc.\n840: -/\n841: def elabCommandTopLevel (stx : Syntax) (cmds : Array Syntax := #[]) : CommandElabM Unit := withRef stx do profileitM Exception \"elaboration\" (\u2190 getOptions) do\n842:   withReader ({ \u00b7 with suppressElabErrors :=\n843:     stx.hasMissing && !showPartialSyntaxErrors.get (\u2190 getOptions) }) do\n844:   -- initialize quotation context using hash of input string\n845:   let ss? := stx.getSubstring? (withLeading := false) (withTrailing := false)\n846:   withInitQuotContext (ss?.map (hash \u00b7.toString.trimAscii.copy)) do\n847:   -- Reset messages and info state, which are both per-command\n848:   modify fun st => { st with messages := {}, infoState := { enabled := st.infoState.enabled } }\n849:   try\n850:     -- We should *not* factor out `elabCommand`'s `withLogging` to here since it would make its error"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Do/Basic.lean",
+      "line": 985,
+      "context": "982:   let k := stx.raw.getKind\n983:   trace[Elab.do.step] \"do element: {stx}\"\n984:   checkSystem \"do element elaborator\"\n985:   profileitM Exception \"do element elaborator\" (decl := k) (\u2190 getOptions) <|\n986:   withRef stx <| withIncRecDepth <| withFreshMacroScope <| do\n987:   let m\u03b3 \u2190 mkMonadApp (\u2190 read).doBlockResultType\n988:   if (\u2190 read).deadCode matches .deadSyntactically then\n989:     logWarningAt stx \"This `do` element and its control-flow region are dead code. Consider removing it.\"\n990:     return \u2190 mkFreshExprMVar m\u03b3 (userName := `deadCode)\n991:   if (\u2190 read).deadCode matches .deadSemantically then\n992:     logWarningAt stx \"This `do` element and its control-flow region are dead code. Consider refactoring your code to remove it.\"\n993:   withDeadCode .alive do -- we have warned for this doElem. No need to warn for every element of the block\n994:   let env \u2190 getEnv"
+    },
+    {
+      "file": "src/lean/Lean/Elab/MutualDef.lean",
+      "line": 1321,
+      "context": "1318:       withDeprecationContextFromAttrs oldAttrs do\n1319:       withDeclName header.declName do\n1320:       wrapAsyncAsSnapshot (desc := s!\"elaborating proof of {declId.declName}\")\n1321:         (cancelTk? := cancelTk) fun _ => do profileitM Exception \"elaboration\" (\u2190 getOptions) do\n1322:       setEnv async.asyncEnv\n1323:       try\n1324:         finishElab #[header]\n1325:       finally\n1326:         reportDiag\n1327:         -- must introduce node to fill `infoHole` with multiple info trees\n1328:         let info := .ofCustomInfo { stx := header.value, value := .mk (\u03b1 := AsyncBodyInfo) {} }\n1329:         let ctx \u2190 CommandContextInfo.save\n1330:         infoPromise.resolve <| .context (.commandCtx ctx) <| .node info (\u2190 getInfoTrees)"
+    },
+    {
+      "file": "src/lean/Lean/Elab/PreDefinition/Basic.lean",
+      "line": 76,
+      "context": "73:   | Except.ok levelParams => pure levelParams\n74: \n75: def fixLevelParams (preDefs : Array PreDefinition) (scopeLevelNames allUserLevelNames : List Name) : TermElabM (Array PreDefinition) := do\n76:   profileitM Exception s!\"fix level params\" (\u2190 getOptions) do\n77:     withTraceNode `Elab.def.fixLevelParams (fun _ => return m!\"fix level params\") do\n78:       -- We used to use `shareCommon` here, but is was a bottleneck\n79:       let levelParams \u2190 getLevelParamsPreDecls preDefs scopeLevelNames allUserLevelNames\n80:       let us := levelParams.map mkLevelParam\n81:       let fixExpr (e : Expr) : Expr :=\n82:         e.replace fun c => match c with\n83:           | Expr.const declName _ => if preDefs.any fun preDef => preDef.declName == declName then some $ Lean.mkConst declName us else none\n84:           | _ => none\n85:       return preDefs.map fun preDef =>"
+    },
+    {
+      "file": "src/lean/Lean/Elab/PreDefinition/Basic.lean",
+      "line": 325,
+      "context": "322:             m!\"and for `{preDefs[i]!.declName}` is{indentExpr type\u1d62} : {\u2190 inferType type\u1d62}\"\n323: \n324: def shareCommonPreDefs (preDefs : Array PreDefinition) : CoreM (Array PreDefinition) := do\n325:   profileitM Exception \"share common exprs\" (\u2190 getOptions) do\n326:     withTraceNode `Elab.def.maxSharing (fun _ => return m!\"share common exprs\") do\n327:       let mut es := #[]\n328:       for preDef in preDefs do\n329:         es := es.push preDef.type |>.push preDef.value\n330:       es := ShareCommon.shareCommon' es\n331:       let mut result := #[]\n332:       for h : i in *...preDefs.size do\n333:         let preDef := preDefs[i]\n334:         result := result.push { preDef with type := es[2*i]!, value := es[2*i+1]! }"
+    },
+    {
+      "file": "src/lean/Lean/Elab/PreDefinition/Main.lean",
+      "line": 290,
+      "context": "287: \n288: def addPreDefinitions (docCtx : LocalContext \u00d7 LocalInstances) (preDefs : Array PreDefinition) :\n289:     TermElabM Unit := withLCtx {} {} do\n290:   profileitM Exception \"process pre-definitions\" (\u2190 getOptions) do\n291:     withTraceNode `Elab.def.processPreDef (fun _ => return m!\"process pre-definitions\") do\n292:       for preDef in preDefs do\n293:         trace[Elab.definition.body] \"{preDef.declName} : {preDef.type} :=\\n{preDef.value}\"\n294:       let preDefs \u2190 preDefs.mapM ensureNoUnassignedMVarsAtPreDef\n295:       let preDefs \u2190 betaReduceLetRecApps preDefs\n296:       let cliques := partitionPreDefs preDefs\n297:       for preDefs in cliques do\n298:         trace[Elab.definition.scc] \"{preDefs.map (\u00b7.declName)}\"\n299:         if preDefs.size == 1 && isNonRecursive preDefs[0]! then"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Tactic/Basic.lean",
+      "line": 193,
+      "context": "190: \n191: partial def evalTactic (stx : Syntax) : TacticM Unit := do\n192:   checkSystem \"tactic execution\"\n193:   profileitM Exception \"tactic execution\" (decl := stx.getKind) (\u2190 getOptions) <|\n194:   withRef stx <| withIncRecDepth <| withFreshMacroScope <| match stx with\n195:     | .node _ k _    =>\n196:       if k == nullKind then\n197:         -- Macro writers create a sequence of tactics `t\u2081 ... t\u2099` using `mkNullNode #[t\u2081, ..., t\u2099]`\n198:         -- We could support incrementality here by allocating `n` new snapshot bundles but the\n199:         -- practical value is not clear\n200:         -- NOTE: `withTacticInfoContext` is used to preserve the invariant of `elabTactic` producing\n201:         -- exactly one info tree, which is necessary for using `getInfoTreeWithContext`.\n202:         Term.withoutTacticIncrementality true <| withTacticInfoContext stx do"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Tactic/Grind/Basic.lean",
+      "line": 144,
+      "context": "141: \n142: partial def evalGrindTactic (stx : Syntax) : GrindTacticM Unit := do\n143:   checkSystem \"grind tactic execution\"\n144:   profileitM Exception \"grind tactic execution\" (decl := stx.getKind) (\u2190 getOptions) <|\n145:   withRef stx <| withIncRecDepth <| withFreshMacroScope <| match stx with\n146:     | .node _ k _    =>\n147:       if k == nullKind then\n148:         Term.withoutTacticIncrementality true <| withTacticInfoContext stx do\n149:           stx.getArgs.forM evalGrindTactic\n150:       else withTraceNode `Elab.step (fun _ => return stx) (tag := stx.getKind.toString) do\n151:         let evalFns := grindTacElabAttribute.getEntries (\u2190 getEnv) stx.getKind\n152:         let macros  := macroAttribute.getEntries (\u2190 getEnv) stx.getKind\n153:         if evalFns.isEmpty && macros.isEmpty then"
+    },
+    {
+      "file": "src/lean/Lean/Elab/Term/TermElabM.lean",
+      "line": 1085,
+      "context": "1082: \n1083: private def applyAttributesCore\n1084:     (declName : Name) (attrs : Array Attribute)\n1085:     (applicationTime? : Option AttributeApplicationTime) : TermElabM Unit := do profileitM Exception \"attribute application\" (\u2190 getOptions) do\n1086:   /-\n1087:   Remark: if the declaration has syntax errors, `declName` may be `.anonymous` see issue #4309\n1088:   In this case, we skip attribute application.\n1089:   -/\n1090:   if declName == .anonymous then\n1091:     return\n1092:   withDeclName declName do\n1093:     for attr in attrs do\n1094:       -- Use same visibility as for other signature elements, independent of call site"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Basic.lean",
+      "line": 2594,
+      "context": "2591:     return e\n2592: \n2593: def instantiateMVarsProfiling (e : Expr) : MetaM Expr := do\n2594:   profileitM Exception s!\"instantiate metavars\" (\u2190 getOptions) do\n2595:   withTraceNode `Meta.instantiateMVars (fun _ => pure e) do\n2596:     instantiateMVars e\n2597: \n2598: private partial def setAllDiagRanges (snap : Language.SnapshotTree) (pos endPos : Position) :\n2599:     BaseIO Language.SnapshotTree := do\n2600:   let msgLog := snap.element.diagnostics.msgLog\n2601:   let msgLog := { msgLog with unreported := msgLog.unreported.map fun diag =>\n2602:       { diag with pos, endPos } }\n2603:   return {"
+    },
+    {
+      "file": "src/lean/Lean/Meta/LazyDiscrTree.lean",
+      "line": 1061,
+      "context": "1058:   let (cNGen, ngen) := ngen.mkChild\n1059:   setNGen ngen\n1060:   let importTree \u2190 (\u2190ref.get).getDM $ do\n1061:     profileitM Exception  \"lazy discriminator import initialization\" (\u2190getOptions) $ do\n1062:       let t \u2190 createImportedDiscrTree (createTreeCtx cctx) cNGen (\u2190getEnv) addEntry\n1063:                 (constantsPerTask := constantsPerTask)\n1064:       -- If a reference is provided, extract and append dropped entries\n1065:       if let some droppedRef := droppedEntriesRef then\n1066:         let (extracted, t) \u2190 extractKeys t droppedKeys\n1067:         -- Append to existing dropped entries (e.g., from module tree)\n1068:         let existing := (\u2190 droppedRef.get).getD #[]\n1069:         droppedRef.set (some (existing ++ extracted))\n1070:         pure t"
+    },
+    {
+      "file": "src/lean/Lean/Meta/LazyDiscrTree.lean",
+      "line": 1108,
+      "context": "1105:     (droppedKeys : List (List LazyDiscrTree.Key))\n1106:     (droppedEntriesRef : Option (IO.Ref (Option (Array \u03b1))) := none) :\n1107:     MetaM (ModuleDiscrTreeRef \u03b1) := do\n1108:   profileitM Exception \"build module discriminator tree\" (\u2190getOptions) $ do\n1109:     let t \u2190 createModuleDiscrTree entriesForConst\n1110:     let t \u2190 if let some droppedRef := droppedEntriesRef then\n1111:       let (extracted, t) \u2190 extractKeys t droppedKeys\n1112:       -- Append to existing dropped entries (if any)\n1113:       let existing := (\u2190 droppedRef.get).getD #[]\n1114:       droppedRef.set (some (existing ++ extracted))\n1115:       pure t\n1116:     else\n1117:       dropKeys t droppedKeys"
+    },
+    {
+      "file": "src/lean/Lean/Meta/LazyDiscrTree.lean",
+      "line": 1127,
+      "context": "1124: this module's definitions.\n1125: -/\n1126: def findModuleMatches (moduleRef : ModuleDiscrTreeRef \u03b1) (ty : Expr) : MetaM (MatchResult \u03b1) := do\n1127:   profileitM Exception  \"lazy discriminator local search\" (\u2190 getOptions) $ do\n1128:     let discrTree \u2190 moduleRef.ref.get\n1129:     let (localCandidates, localTree) \u2190 discrTree.getMatch ty\n1130:     moduleRef.ref.set localTree\n1131:     pure localCandidates\n1132: \n1133: /--\n1134: `findMatchesExt` searches for entries in a lazily initialized discriminator tree.\n1135: \n1136: It provides some additional capabilities beyond `findMatches` to adjust results"
+    },
+    {
+      "file": "src/lean/Lean/Meta/LetToHave.lean",
+      "line": 441,
+      "context": "438: The `Meta.letToHave` trace class logs errors and messages.\n439: -/\n440: def letToHave (e : Expr) : MetaM Expr := do\n441:   profileitM Exception \"let-to-have transformation\" (\u2190 getOptions) do\n442:     let e \u2190 instantiateMVars e\n443:     withoutExporting <| LetToHave.main e\n444: \n445: builtin_initialize\n446:   registerTraceClass `Meta.letToHave\n447:   registerTraceClass `Meta.letToHave.debug\n448: \n449: end Lean.Meta"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Sym/Canon.lean",
+      "line": 533,
+      "context": "530: eta reduction is applied only inside types. Instances are re-synthesized.\n531: Runs at reducible transparency.\n532: -/\n533: public def canon (e : Expr) : SymM Expr := do profileitM Exception \"sym canon\" (\u2190 getOptions) do\n534:   withReducible do Canon.canon e {}\n535: \n536: end Lean.Meta.Sym"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Sym/SynthInstance.lean",
+      "line": 53,
+      "context": "50: def getBuiltinInstance? (type : Expr) : Option Expr :=\n51:   builtinInsts[type]?\n52: \n53: def synthInstanceMeta? (type : Expr) : MetaM (Option Expr) := do profileitM Exception \"sym typeclass inference\" (\u2190 getOptions) (decl := type.getAppFn.constName?.getD .anonymous) do\n54:   if let some inst := getBuiltinInstance? type then\n55:     return inst\n56:   catchInternalId isDefEqStuckExceptionId\n57:     (synthInstanceCore? type none)\n58:     (fun _ => pure none)\n59: \n60: /--\n61: Registers `inst` as **the** instance for `type`. `synthInstance?` returns it without\n62: running typeclass resolution, making `inst` the canonical representative for `type`."
+    },
+    {
+      "file": "src/lean/Lean/Meta/SynthInstance.lean",
+      "line": 1008,
+      "context": "1005:       cacheResult cacheKey kind abstResult? result?\n1006:       return result?\n1007: \n1008: def synthInstance? (type : Expr) (maxResultSize? : Option Nat := none) : MetaM (Option Expr) := do profileitM Exception \"typeclass inference\" (\u2190 getOptions) (decl := type.getAppFn.constName?.getD .anonymous) do\n1009:   synthInstanceCore? type maxResultSize?\n1010: \n1011: /--\n1012:   Return `LOption.some r` if succeeded, `LOption.none` if it failed, and `LOption.undef` if\n1013:   instance cannot be synthesized right now because `type` contains metavariables. -/\n1014: def trySynthInstance (type : Expr) (maxResultSize? : Option Nat := none) : MetaM (LOption Expr) := do\n1015:   catchInternalId isDefEqStuckExceptionId\n1016:     (toLOptionM <| synthInstance? type maxResultSize?)\n1017:     (fun _ => pure LOption.undef)"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/AC/Eq.lean",
+      "line": 494,
+      "context": "491:   if (\u2190 propagateEqs) then return .propagated\n492:   return .progress\n493: \n494: def check : GoalM CheckResult := do profileitM Exception \"grind ac\" (\u2190 getOptions) do\n495:   if (\u2190 checkMaxSteps) then return .none\n496:   let mut result : CheckResult := .none\n497:   checkInvariants\n498:   try\n499:     for opId in *...(\u2190 get').structs.size do\n500:       let r \u2190 ACM.run opId checkStruct\n501:       result := result.join r\n502:       if (\u2190 isInconsistent) then return .closed\n503:     return result"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/Arith/CommRing/EqCnstr.lean",
+      "line": 604,
+      "context": "601:   modifyCommRing fun s => { s with recheck := false }\n602:   return .progress\n603: \n604: def check : GoalM CheckResult := do profileitM Exception \"grind ring\" (\u2190 getOptions) do\n605:   if (\u2190 checkMaxSteps) then return .none\n606:   let mut result : CheckResult := .none\n607:   checkInvariants\n608:   try\n609:     for ringId in *...(\u2190 get').rings.size do\n610:       let r \u2190 RingM.run ringId checkRing\n611:       result := result.join r\n612:       if (\u2190 isInconsistent) then\n613:         return .closed"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/Arith/Cutsat/Search.lean",
+      "line": 590,
+      "context": "587: \n588: The result is `false` if module already has a satisfying assignment.\n589: -/\n590: def check : GoalM Bool := do profileitM Exception \"grind cutsat\" (\u2190 getOptions) do\n591:   if (\u2190 hasAssignment) then\n592:     return false\n593:   else if (\u2190 get').steps \u2265 (\u2190 getConfig).liaSteps then\n594:     -- A previous search reached the `liaSteps` threshold. The solver is disabled to\n595:     -- ensure `grind` does not keep restarting the (bounded) search at every iteration.\n596:     return false\n597:   else\n598:     searchAssignment\n599:     return true"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/Arith/Linear/Search.lean",
+      "line": 303,
+      "context": "300: \n301: The result is `false` if module for every structure already has an assignment.\n302: -/\n303: def check : GoalM Bool := do profileitM Exception \"grind linarith\" (\u2190 getOptions) do\n304:   let mut progress := false\n305:   for structId in *...(\u2190 get').structs.size do\n306:     let r \u2190 LinearM.run structId do\n307:       if (\u2190 hasAssignment) then\n308:         return false\n309:       searchAssignment\n310:       return true\n311:     progress := progress || r\n312:     if (\u2190 isInconsistent) then"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/EMatch.lean",
+      "line": 966,
+      "context": "963: open EMatch\n964: \n965: /-- Performs one round of E-matching, and returns new instances. -/\n966: private def ematchCore (extraThms : Array EMatchTheorem) : GoalM InstanceMap := do profileitM Exception \"grind ematch\" (\u2190 getOptions) do\n967:   let go (thms newThms : PArray EMatchTheorem) : EMatch.M Unit := do\n968:     withReader (fun ctx => { ctx with useMT := true }) <| ematchTheorems thms\n969:     withReader (fun ctx => { ctx with useMT := false }) do\n970:       ematchTheorems newThms\n971:       extraThms.forM ematchTheorem\n972:   if (\u2190 checkMaxInstancesExceeded <||> checkMaxEmatchExceeded) then\n973:     return {}\n974:   else\n975:     let (_, s) \u2190 go (\u2190 get).ematch.thms (\u2190 get).ematch.newThms |>.run"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/EMatch.lean",
+      "line": 1021,
+      "context": "1018:     modifyThe Grind.State fun st => { st with instanceMap := st.instanceMap.insertMany s.instanceMap.toArray }\n1019:   return (\u2190 get).ematch.numInstances != numInstances\n1020: where\n1021:   go : EMatch.M Unit := do profileitM Exception \"grind ematch\" (\u2190 getOptions) do\n1022:     withReader (fun ctx => { ctx with useMT := false }) do\n1023:       if (\u2190 checkMaxInstancesExceeded <||> checkMaxEmatchExceeded) then\n1024:         return ()\n1025:       thms.forM ematchTheorem\n1026: \n1027: end Lean.Meta.Grind"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/Main.lean",
+      "line": 396,
+      "context": "393:     k goal\n394:   go.run params (evalTactic? := evalTactic?)\n395: \n396: def main (mvarId : MVarId) (params : Params) : MetaM Result := do profileitM Exception \"grind\" (\u2190 getOptions) do\n397:   let params := if grind.unusedLemmaThreshold.get (\u2190 getOptions) > 0 then\n398:     { params with config.markInstances := true }\n399:   else params\n400:   GrindM.runAtGoal mvarId params fun goal => do\n401:     let failure? \u2190 solve goal\n402:     let result \u2190 mkResult params failure?\n403:     if failure?.isNone then\n404:       checkUnusedActivations mvarId result.counters\n405:     return result"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/MarkNestedSubsingletons.lean",
+      "line": 43,
+      "context": "40: -/\n41: -- TODO: consider other subsingletons in the future? We decided to not support them to avoid the overhead of\n42: -- synthesizing `Subsingleton` instances.\n43: partial def markNestedSubsingletons (e : Expr) : GrindM Expr := do profileitM Exception \"grind mark subsingleton\" (\u2190 getOptions) do\n44:   visit e |>.run' {}\n45: where\n46:   visit (e : Expr) : M Expr := do\n47:     if isMarkedSubsingletonApp e then\n48:       return e -- `e` is already marked\n49:     -- check whether result is cached\n50:     if let some r := (\u2190 get).get? { expr := e } then\n51:       return r\n52:     -- check whether `e` is a proposition or `Decidable`"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/Simp.lean",
+      "line": 19,
+      "context": "16: namespace Lean.Meta.Grind\n17: \n18: /-- Simplifies the given expression using the `grind` simprocs and normalization theorems. -/\n19: def simpCore (e : Expr) : GrindM Simp.Result := do profileitM Exception \"grind simp\" (\u2190 getOptions) do\n20:   let simp \u2190 modifyGet fun s => (s.simp, { s with simp := {} })\n21:   let ctx := (\u2190 readThe Context).simp\n22:   /-\n23:   Remark: we used to use `skipIfInShareCommon` as an additional filter to avoid re-visiting expressions\n24:   that have already been fully processed by `grind`. The idea was to use the `inShareCommon` test since\n25:   the last step of the `grind` normalizer is `shareCommon`.\n26:   However, this optimization was incorrect because there are other places in the `grind` code base that\n27:   use `shareCommon`.\n28:   -/"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Grind/Simp.lean",
+      "line": 38,
+      "context": "35:   return r\n36: \n37: /-- Similar to `simpCore`, but uses `dsimp`. -/\n38: def dsimpCore (e : Expr) : GrindM Expr := do profileitM Exception \"grind dsimp\" (\u2190 getOptions) do\n39:   let simp \u2190 modifyGet fun s => (s.simp, { s with simp := {} })\n40:   let ctx := (\u2190 readThe Context).simp\n41:   let (r, simp) \u2190 Simp.dsimpMainCore e ctx simp (methods := (\u2190 readThe Context).simpMethods)\n42:   modify fun s => { s with simp }\n43:   return r\n44: \n45: set_option compiler.ignoreBorrowAnnotation true in\n46: /--\n47: Preprocesses `e` using `grind` normalization theorems and simprocs,"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/LibrarySearch.lean",
+      "line": 362,
+      "context": "359:     (collectAll : Bool := false) :\n360:     MetaM (Option (Array (List MVarId \u00d7 MetavarContext))) := do\n361:   withTraceNode `Tactic.librarySearch (fun _ => return m!\"{\u2190 goal.getType}\") do\n362:   profileitM Exception \"librarySearch\" (\u2190 getOptions) do\n363:     let cfg : ApplyConfig := { allowSynthFailures := true }\n364:     let shouldAbort \u2190 mkHeartbeatCheck leavePercentHeartbeats\n365:     let act := fun cand => do\n366:         if \u2190shouldAbort then\n367:           abortSpeculation\n368:         librarySearchLemma cfg tactic allowFailure cand\n369:     -- First pass: search with droppedKeys (excludes star-indexed lemmas)\n370:     let candidates \u2190 librarySearchSymm libSearchFindDecls goal\n371:     match \u2190 tryOnEach act candidates collectAll with"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Simp/Main.lean",
+      "line": 766,
+      "context": "763: open Simp (SimprocsArray Stats)\n764: \n765: def simpCore (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)\n766:     (s : Simp.State := {}) : MetaM (Simp.Result \u00d7 Simp.State) := do profileitM Exception \"simp\" (\u2190 getOptions) do\n767:   match discharge? with\n768:   | none   => Simp.mainCore e ctx s (methods := Simp.mkDefaultMethodsCore simprocs)\n769:   | some d => Simp.mainCore e ctx s (methods := Simp.mkMethods simprocs d (wellBehavedDischarge := false))\n770: \n771: def simp (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)\n772:     (stats : Stats := {}) : MetaM (Simp.Result \u00d7 Stats) := do profileitM Exception \"simp\" (\u2190 getOptions) do\n773:   let (r, s) \u2190 simpCore e ctx simprocs discharge? { stats with }\n774:   return (r, { s with })\n775: "
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Simp/Main.lean",
+      "line": 772,
+      "context": "769:   | some d => Simp.mainCore e ctx s (methods := Simp.mkMethods simprocs d (wellBehavedDischarge := false))\n770: \n771: def simp (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)\n772:     (stats : Stats := {}) : MetaM (Simp.Result \u00d7 Stats) := do profileitM Exception \"simp\" (\u2190 getOptions) do\n773:   let (r, s) \u2190 simpCore e ctx simprocs discharge? { stats with }\n774:   return (r, { s with })\n775: \n776: def dsimp (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[])\n777:     (stats : Stats := {}) : MetaM (Expr \u00d7 Stats) := do profileitM Exception \"dsimp\" (\u2190 getOptions) do\n778:   Simp.dsimpMain e ctx stats (methods := Simp.mkDefaultMethodsCore simprocs )\n779: \n780: /-- See `simpTarget`. This method assumes `mvarId` is not assigned, and we are already using `mvarId`s local context. -/\n781: def simpTargetCore (mvarId : MVarId) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Simp/Main.lean",
+      "line": 777,
+      "context": "774:   return (r, { s with })\n775: \n776: def dsimp (e : Expr) (ctx : Simp.Context) (simprocs : SimprocsArray := #[])\n777:     (stats : Stats := {}) : MetaM (Expr \u00d7 Stats) := do profileitM Exception \"dsimp\" (\u2190 getOptions) do\n778:   Simp.dsimpMain e ctx stats (methods := Simp.mkDefaultMethodsCore simprocs )\n779: \n780: /-- See `simpTarget`. This method assumes `mvarId` is not assigned, and we are already using `mvarId`s local context. -/\n781: def simpTargetCore (mvarId : MVarId) (ctx : Simp.Context) (simprocs : SimprocsArray := #[]) (discharge? : Option Simp.Discharge := none)\n782:     (mayCloseGoal := true) (stats : Stats := {}) : MetaM (Option MVarId \u00d7 Stats) := do\n783:   let target \u2190 instantiateMVars (\u2190 mvarId.getType)\n784:   let (r, stats) \u2190 simp target ctx simprocs discharge? stats\n785:   if mayCloseGoal && r.expr.isTrue then\n786:     match r.proof? with"
+    },
+    {
+      "file": "src/lean/Lean/Meta/Tactic/Simp/Types.lean",
+      "line": 773,
+      "context": "770: Remark: If all argument kinds are `fixed` or `eq`, it returns `none` because\n771: using simple congruence theorems `congr`, `congrArg`, and `congrFun` produces a more compact proof.\n772: -/\n773: def mkCongrSimp? (f : Expr) : SimpM (Option CongrTheorem) := do profileitM Exception \"congr simp thm\" (\u2190 getOptions) do\n774:   if f.isConst then if (\u2190 isMatcher f.constName!) then\n775:     -- We always use simple congruence theorems for auxiliary match applications\n776:     return none\n777:   match (\u2190 get).congrCache[f]? with\n778:   | some thm? => return thm?\n779:   | none =>\n780:     let thm? \u2190 go?\n781:     modify fun s => { s with congrCache := s.congrCache.insert f thm? }\n782:     return thm?"
+    },
+    {
+      "file": "src/lean/Lean/Shell.lean",
+      "line": 573,
+      "context": "570:       initLLVM\n571:       profileitIO \"LLVM code generation\" opts.leanOpts do\n572:         emitLLVM env mainModuleName bc\n573:   displayCumulativeProfilingTimes\n574:   if Internal.hasAddressSanitizer () then\n575:     return if env?.isSome then 0 else 1\n576:   else\n577:     -- When not using the address/leak sanitizer, we interrupt execution without garbage collecting.\n578:     -- This is useful when profiling improvements to Lean startup time.\n579:     IO.Process.exit <| if env?.isSome then 0 else 1"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profile.lean",
+      "line": 23,
+      "context": "20: See also `trace.profiler` for an alternative profiling system with structured output.\"\n21: }\n22: \n23: register_builtin_option profiler.threshold : Nat := {\n24:   defValue := 100\n25:   descr    := \"threshold in milliseconds, profiling times under threshold will not be reported individually\"\n26: }\n27: \n28: @[export lean_get_profiler]\n29: private def get_profiler (o : Options) : Bool :=\n30:   profiler.get o\n31: \n32: @[export lean_get_profiler_threshold]"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profile.lean",
+      "line": 33,
+      "context": "30:   profiler.get o\n31: \n32: @[export lean_get_profiler_threshold]\n33: def profiler.threshold.getSecs (o : Options) : Float :=\n34:   (profiler.threshold.get o).toFloat / 1000\n35: \n36: /-- Print and accumulate run time of `act` when option `profiler` is set to `true`. -/\n37: @[extern \"lean_profileit\"]\n38: def profileit {\u03b1 : Type} (category : @& String) (opts : @& Options) (fn : Unit \u2192 \u03b1) (decl := Name.anonymous) : \u03b1 := fn ()\n39: \n40: unsafe def profileitIOUnsafe {\u03b5 \u03b1 : Type} (category : String) (opts : Options) (act : EIO \u03b5 \u03b1) (decl := Name.anonymous) : EIO \u03b5 \u03b1 :=\n41:   match profileit (decl := decl) category opts fun _ => unsafeEIO act with\n42:   | Except.ok a    => pure a"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profile.lean",
+      "line": 34,
+      "context": "31: \n32: @[export lean_get_profiler_threshold]\n33: def profiler.threshold.getSecs (o : Options) : Float :=\n34:   (profiler.threshold.get o).toFloat / 1000\n35: \n36: /-- Print and accumulate run time of `act` when option `profiler` is set to `true`. -/\n37: @[extern \"lean_profileit\"]\n38: def profileit {\u03b1 : Type} (category : @& String) (opts : @& Options) (fn : Unit \u2192 \u03b1) (decl := Name.anonymous) : \u03b1 := fn ()\n39: \n40: unsafe def profileitIOUnsafe {\u03b5 \u03b1 : Type} (category : String) (opts : Options) (act : EIO \u03b5 \u03b1) (decl := Name.anonymous) : EIO \u03b5 \u03b1 :=\n41:   match profileit (decl := decl) category opts fun _ => unsafeEIO act with\n42:   | Except.ok a    => pure a\n43:   | Except.error e => throw e"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profile.lean",
+      "line": 37,
+      "context": "34:   (profiler.threshold.get o).toFloat / 1000\n35: \n36: /-- Print and accumulate run time of `act` when option `profiler` is set to `true`. -/\n37: @[extern \"lean_profileit\"]\n38: def profileit {\u03b1 : Type} (category : @& String) (opts : @& Options) (fn : Unit \u2192 \u03b1) (decl := Name.anonymous) : \u03b1 := fn ()\n39: \n40: unsafe def profileitIOUnsafe {\u03b5 \u03b1 : Type} (category : String) (opts : Options) (act : EIO \u03b5 \u03b1) (decl := Name.anonymous) : EIO \u03b5 \u03b1 :=\n41:   match profileit (decl := decl) category opts fun _ => unsafeEIO act with\n42:   | Except.ok a    => pure a\n43:   | Except.error e => throw e\n44: \n45: @[implemented_by profileitIOUnsafe]\n46: def profileitIO {\u03b5 \u03b1 : Type} (category : String) (opts : Options) (act : EIO \u03b5 \u03b1) (decl := Name.anonymous) : EIO \u03b5 \u03b1 := act"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profile.lean",
+      "line": 40,
+      "context": "37: @[extern \"lean_profileit\"]\n38: def profileit {\u03b1 : Type} (category : @& String) (opts : @& Options) (fn : Unit \u2192 \u03b1) (decl := Name.anonymous) : \u03b1 := fn ()\n39: \n40: unsafe def profileitIOUnsafe {\u03b5 \u03b1 : Type} (category : String) (opts : Options) (act : EIO \u03b5 \u03b1) (decl := Name.anonymous) : EIO \u03b5 \u03b1 :=\n41:   match profileit (decl := decl) category opts fun _ => unsafeEIO act with\n42:   | Except.ok a    => pure a\n43:   | Except.error e => throw e\n44: \n45: @[implemented_by profileitIOUnsafe]\n46: def profileitIO {\u03b5 \u03b1 : Type} (category : String) (opts : Options) (act : EIO \u03b5 \u03b1) (decl := Name.anonymous) : EIO \u03b5 \u03b1 := act\n47: \n48: -- impossible to infer `\u03b5`\n49: def profileitM {m : Type \u2192 Type} (\u03b5 : Type) [MonadFunctorT (EIO \u03b5) m] {\u03b1 : Type} (category : String) (opts : Options) (act : m \u03b1) (decl := Name.anonymous) : m \u03b1 :="
+    },
+    {
+      "file": "src/lean/Lean/Util/Profile.lean",
+      "line": 46,
+      "context": "43:   | Except.error e => throw e\n44: \n45: @[implemented_by profileitIOUnsafe]\n46: def profileitIO {\u03b5 \u03b1 : Type} (category : String) (opts : Options) (act : EIO \u03b5 \u03b1) (decl := Name.anonymous) : EIO \u03b5 \u03b1 := act\n47: \n48: -- impossible to infer `\u03b5`\n49: def profileitM {m : Type \u2192 Type} (\u03b5 : Type) [MonadFunctorT (EIO \u03b5) m] {\u03b1 : Type} (category : String) (opts : Options) (act : m \u03b1) (decl := Name.anonymous) : m \u03b1 :=\n50:   monadMap (fun {\u03b2} => profileitIO (\u03b5 := \u03b5) (\u03b1 := \u03b2) (decl := decl) category opts) act\n51: \n52: /-- Print all profiling times (if any) to standard error. -/\n53: @[extern \"lean_display_cumulative_profiling_times\"]\n54: opaque displayCumulativeProfilingTimes : BaseIO Unit\n55: "
+    },
+    {
+      "file": "src/lean/Lean/Util/Profile.lean",
+      "line": 49,
+      "context": "46: def profileitIO {\u03b5 \u03b1 : Type} (category : String) (opts : Options) (act : EIO \u03b5 \u03b1) (decl := Name.anonymous) : EIO \u03b5 \u03b1 := act\n47: \n48: -- impossible to infer `\u03b5`\n49: def profileitM {m : Type \u2192 Type} (\u03b5 : Type) [MonadFunctorT (EIO \u03b5) m] {\u03b1 : Type} (category : String) (opts : Options) (act : m \u03b1) (decl := Name.anonymous) : m \u03b1 :=\n50:   monadMap (fun {\u03b2} => profileitIO (\u03b5 := \u03b5) (\u03b1 := \u03b2) (decl := decl) category opts) act\n51: \n52: /-- Print all profiling times (if any) to standard error. -/\n53: @[extern \"lean_display_cumulative_profiling_times\"]\n54: opaque displayCumulativeProfilingTimes : BaseIO Unit\n55: \n56: end Lean"
+    },
+    {
+      "file": "src/lean/Lean/Util/Profile.lean",
+      "line": 54,
+      "context": "51: \n52: /-- Print all profiling times (if any) to standard error. -/\n53: @[extern \"lean_display_cumulative_profiling_times\"]\n54: opaque displayCumulativeProfilingTimes : BaseIO Unit\n55: \n56: end Lean"
+    },
+    {
+      "file": "src/lean/Lean/Util/Trace.lean",
+      "line": 178,
+      "context": "175: register_builtin_option trace.profiler : Bool := {\n176:   defValue := false\n177:   descr    :=\n178:     \"activate nested traces with execution time above `trace.profiler.threshold` and annotate with \\\n179:     time\"\n180: }\n181: \n182: register_builtin_option trace.profiler.threshold : Nat := {\n183:   defValue := 10\n184:   descr    :=\n185:     \"threshold in milliseconds (or heartbeats if `trace.profiler.useHeartbeats` is true), \\\n186:     traces below threshold will not be activated\"\n187: }"
+    },
+    {
+      "file": "src/lean/Lean/Util/Trace.lean",
+      "line": 182,
+      "context": "179:     time\"\n180: }\n181: \n182: register_builtin_option trace.profiler.threshold : Nat := {\n183:   defValue := 10\n184:   descr    :=\n185:     \"threshold in milliseconds (or heartbeats if `trace.profiler.useHeartbeats` is true), \\\n186:     traces below threshold will not be activated\"\n187: }\n188: \n189: register_builtin_option trace.profiler.useHeartbeats : Bool := {\n190:   defValue := false\n191:   descr    :="
+    },
+    {
+      "file": "src/lean/Lean/Util/Trace.lean",
+      "line": 238,
+      "context": "235:     let stop \u2190 IO.monoNanosNow\n236:     return (a, start.toFloat / 1000000000, stop.toFloat / 1000000000)\n237: \n238: @[inline] def trace.profiler.threshold.unitAdjusted (o : Options) : Float :=\n239:   if trace.profiler.useHeartbeats.get o then\n240:     (trace.profiler.threshold.get o).toFloat\n241:   else\n242:     -- milliseconds to seconds\n243:     (trace.profiler.threshold.get o).toFloat / 1000\n244: \n245: /--\n246: `MonadExcept` variant that is expected to catch all exceptions of the given type in case the\n247: standard instance doesn't."
+    },
+    {
+      "file": "src/lean/Lean/Util/Trace.lean",
+      "line": 240,
+      "context": "237: \n238: @[inline] def trace.profiler.threshold.unitAdjusted (o : Options) : Float :=\n239:   if trace.profiler.useHeartbeats.get o then\n240:     (trace.profiler.threshold.get o).toFloat\n241:   else\n242:     -- milliseconds to seconds\n243:     (trace.profiler.threshold.get o).toFloat / 1000\n244: \n245: /--\n246: `MonadExcept` variant that is expected to catch all exceptions of the given type in case the\n247: standard instance doesn't.\n248: \n249: In most circumstances, we want to let runtime exceptions during term elaboration bubble up to the"
+    },
+    {
+      "file": "src/lean/Lean/Util/Trace.lean",
+      "line": 243,
+      "context": "240:     (trace.profiler.threshold.get o).toFloat\n241:   else\n242:     -- milliseconds to seconds\n243:     (trace.profiler.threshold.get o).toFloat / 1000\n244: \n245: /--\n246: `MonadExcept` variant that is expected to catch all exceptions of the given type in case the\n247: standard instance doesn't.\n248: \n249: In most circumstances, we want to let runtime exceptions during term elaboration bubble up to the\n250: command elaborator (see `Core.tryCatch`). However, in a few cases like building the trace tree, we\n251: really need to handle (and then re-throw) every exception lest we end up with a broken tree.\n252: -/"
+    },
+    {
+      "file": "src/lean/Lean/Util/Trace.lean",
+      "line": 349,
+      "context": "346:     let _ := always.except\n347:     let (res, start, stop) := resStartStop\n348:     let aboveThresh := trace.profiler.get opts &&\n349:       stop - start > trace.profiler.threshold.unitAdjusted opts\n350:     unless clsEnabled || aboveThresh do\n351:       modifyTraces (oldTraces ++ \u00b7)\n352:       return (\u2190 MonadExcept.ofExcept res)\n353:     let ref \u2190 getRef\n354:     let mut m \u2190 try msg res catch _ => pure m!\"<exception thrown while producing trace node message>\"\n355:     let result := res.toTraceResult\n356:     let mut data : TraceData := { cls, collapsed, tag, result? := some result }\n357:     if trace.profiler.get opts then\n358:       data := { data with startTime := start, stopTime := stop }"
+    },
+    {
+      "file": "src/lean/Lean/Util/Trace.lean",
+      "line": 435,
+      "context": "432:     let _ := always.except\n433:     let (res, start, stop) := resStartStop\n434:     let aboveThresh := trace.profiler.get opts &&\n435:       stop - start > trace.profiler.threshold.unitAdjusted opts\n436:     unless clsEnabled || aboveThresh do\n437:       modifyTraces (oldTraces ++ \u00b7)\n438:       return (\u2190 MonadExcept.ofExcept res)\n439:     let result := res.toTraceResult\n440:     let mut msg := msg\n441:     let mut data : TraceData := { cls, collapsed, tag, result? := some result }\n442:     if trace.profiler.get opts then\n443:       data := { data with startTime := start, stopTime := stop }\n444:     addTraceNode oldTraces data ref msg"
+    },
+    {
+      "file": "src/lean/LeanIR.lean",
+      "line": 172,
+      "context": "169:       |>.toIO' { fileName := irFile, fileMap := default } { env }\n170:     out.write data.toUTF8\n171: \n172:   displayCumulativeProfilingTimes\n173:   if printStats then\n174:     env.displayStats\n175:   return 0"
+    }
+  ],
+  "frozen_core_only": true,
+  "local_compilation": false
+}

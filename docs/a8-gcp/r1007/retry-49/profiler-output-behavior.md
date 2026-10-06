@@ -1,0 +1,5 @@
+# Pinned profiler output behavior
+
+Frozen compiler source inspection is retained in retry-48/profile-output-implementation.json and profile-implementation-inspection.json. Lean.Util.Profile documents profileit as printing and accumulating action time; Shell separately calls displayCumulativeProfilingTimes at final completion. Default profiler.threshold is 100 milliseconds. This supports expecting completed-action timing before final cumulative output, but does not establish flushing behavior or a marker for the currently unfinished declaration.
+
+Run 49 sets profiler.threshold=0 only to avoid suppressing short completed timings. Its first A11 invocation is bounded diagnostic-only lake env lean --profile with no output-object flags, followed by the unchanged standard source, Checks, and full axiom gates. Raw stdout and stderr will determine actual partial-output behavior. No profile output substitutes for any acceptance gate. If profiling supplies no useful partial output, preserve this attempt before choosing bounded derived diagnostic markers or slices; do not weaken original propositions or introduce speculative proof edits.
