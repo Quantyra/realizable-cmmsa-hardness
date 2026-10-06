@@ -15,11 +15,7 @@ set includes the zero-order pair `(⊥, ⊤)`. At Fourier degree zero the positi
 pairs vanish, the zero-order term equals the fourth moment, and that moment
 equals `2^(100*0*0) * Q(f)`. For every source, that same zero-order term is the
 squared `L2` energy, so it sits under `Q`. The positive-degree closure from A6
-remains conditional on its explicit mixed-sum bound in this module. The
-original A11 consumer in ActualBinaryMatrixHC46A11WeightedAggregate discharges
-that bound using strict simultaneous induction over all spaces and proves
-final manuscript A7, accepted with notes at frozen run 56. This does not
-establish full HC46, a Q upper bound, or manuscript-wide certification.
+is stated only under an explicit mixed-sum bound; that bound is not A7.
 -/
 
 namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
@@ -2352,10 +2348,8 @@ theorem a7_mixed_sum_degree_one {n d : Nat}
   rw [heq]
   exact hsat
 
-/-- Degree-one fourth moment bound. The general original A7 theorem is
-proved by the A11 consumer in ActualBinaryMatrixHC46A11WeightedAggregate,
-accepted with notes at frozen run 56; this local theorem remains the
-degree-one specialization. -/
+/-- Degree-one fourth moment bound. This is not manuscript A7 for a general
+cutoff: orders strictly below a larger `D` are still open. -/
 theorem a7_degree_one_fourth_bound {n d : Nat}
     (f : BinaryMatrix n d → Complex)
     (hsupport : ComplexFourierSupportedThrough 1 f) :
