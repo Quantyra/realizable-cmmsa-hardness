@@ -1,0 +1,18 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A22OperatorLq
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A22OperatorLq
+#check UpToActualLqGlobal_add
+#print axioms UpToActualLqGlobal_add
+#check UpToActualLqGlobal_translation_average
+#print axioms UpToActualLqGlobal_translation_average
+#check complexLineAverage_LqGlobal
+#print axioms complexLineAverage_LqGlobal
+#check complexLineIminusE_LqGlobal
+#print axioms complexLineIminusE_LqGlobal
+#check complexLineP_LqGlobal
+#print axioms complexLineP_LqGlobal
+#check a22_A14_coefficient_le
+#print axioms a22_A14_coefficient_le
+#check complexLineP_A22_LqGlobal
+#print axioms complexLineP_A22_LqGlobal
+#check a22_typed_line_witness_global
+#print axioms a22_typed_line_witness_global

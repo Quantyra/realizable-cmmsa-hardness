@@ -1,0 +1,47 @@
+[
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQNorm.lean",
+    "line": 77,
+    "column": 35,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQNorm.lean:77:35: unsolved goals\nX : Type u_1\ninst✝¹ : Fintype X\ninst✝ : Nonempty X\np q : ℝ\nhpq : p.HolderConjugate q\nf g : X → ℂ\nN : ℝ := ↑(Fintype.card X)\nhN : 0 < N\nhr : ∑ i, ‖f i‖ * ‖g i‖ ≤ (∑ i, ‖f i‖ ^ p) ^ (1 / p) * (∑ i, ‖g i‖ ^ q) ^ (1 / q)\n⊢ ∑ x, ‖f x‖ * ‖g x‖ ≤ ∑ x, ‖f x‖ * ‖g x‖",
+    "candidate_context": [
+      "75:     (fun x _ => norm_nonneg _) (fun x _ => norm_nonneg _)",
+      "76:   have ht : ‖∑ x, star (f x) * g x‖ ≤ ∑ x, ‖f x‖ * ‖g x‖ := by",
+      "77:     exact (norm_sum_le _ _).trans (by simp only [norm_mul, norm_star])",
+      "78:   have hcancel : N ^ (1 / p) * N ^ (1 / q) = N := by",
+      "79:     rw [← Real.rpow_add hN]"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQNorm.lean",
+    "line": 141,
+    "column": 10,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQNorm.lean:141:10: unsolved goals\ncase empty\nX : Type u_1\nI : Type u_2\ninst✝ : Fintype X\nq : ℝ\nhq : 1 ≤ q\nf : I → X → ℂ\n⊢ (↑(Fintype.card X) * 0 ^ q / ↑(Fintype.card X)) ^ q⁻¹ ≤ 0",
+    "candidate_context": [
+      "139:   classical",
+      "140:   induction s using Finset.induction_on with",
+      "141:   | empty =>",
+      "142:       simp [realQNorm, Real.zero_rpow (by positivity : 1 / q ≠ 0)]",
+      "143:   | @insert i s hi ih =>"
+    ]
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQNorm.lean",
+    "line": 146,
+    "column": 8,
+    "message": "Application type mismatch: The argument",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46RealQNorm.lean:146:8: Application type mismatch: The argument\n  add_le_add_left ih ?m.60\nhas type\n  (realQNorm q fun x => ∑ i ∈ s, f i x) + ?m.60 ≤ ∑ i ∈ s, realQNorm q (f i) + ?m.60\nbut is expected to have type\n  (realQNorm q (f i) + realQNorm q fun x => ∑ j ∈ s, f j x) ≤ realQNorm q (f i) + ∑ i ∈ s, realQNorm q (f i)\nin the application\n  LE.le.trans (realQNorm_add_le hq (f i) fun x => ∑ j ∈ s, f j x) (add_le_add_left ih ?m.60)",
+    "candidate_context": [
+      "144:       simp only [Finset.sum_insert hi]",
+      "145:       exact (realQNorm_add_le hq (f i) (fun x => ∑ j ∈ s, f j x)).trans",
+      "146:         (add_le_add_left ih _)",
+      "147: ",
+      "148: end"
+    ]
+  }
+]

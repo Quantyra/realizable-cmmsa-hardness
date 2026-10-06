@@ -1,0 +1,24 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+#check a22_A1_composition_energy_eq
+#print axioms a22_A1_composition_energy_eq
+#check a22_exists_order_one_parent
+#print axioms a22_exists_order_one_parent
+
+#check a22_parent_from_order_one_coordinate
+#print axioms a22_parent_from_order_one_coordinate
+
+#check a22_line_witness_from_lowerIH
+#print axioms a22_line_witness_from_lowerIH
+
+#check a22_hyperplane_witness_from_lowerIH
+#print axioms a22_hyperplane_witness_from_lowerIH
+
+#check a22_intrinsic_energy_reindex
+#print axioms a22_intrinsic_energy_reindex
+
+#check a22_initial_intrinsic_from_original
+#print axioms a22_initial_intrinsic_from_original
+
+#check a22_intrinsic_from_coordinate_influence
+#print axioms a22_intrinsic_from_coordinate_influence
