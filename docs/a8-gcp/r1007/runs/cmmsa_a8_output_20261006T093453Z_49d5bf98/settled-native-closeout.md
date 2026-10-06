@@ -1,0 +1,3 @@
+# Settled original A12/A19 native58 RED
+
+Seven native exits0/0/0/0/1/125/125. One owned source error235 no-goals and one owned warning135 redundant tactic; no separate unsolved goal or inherited regression. Full new Checks/all68 blocked; prior49 source/Checks/profiles green separately. Custody879BACF6359660FA9BDD20F631A69CE0E70D966330CDBBA5DBF9248FBF8B366C before one idle-stop. Independent TERMINATED02:49:02.496PT. All400 cached objects unchanged; compiler/packages/core equal;136 inherited states and16 frozen inputs preserved. Only authorized9AAF successor is mutable, separately captured. No local Lean, no A12/A19 acceptance. Raw generic RED audits preserved.

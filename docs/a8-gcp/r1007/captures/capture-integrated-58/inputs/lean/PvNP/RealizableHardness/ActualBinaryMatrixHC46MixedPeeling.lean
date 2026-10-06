@@ -1,0 +1,333 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46FinitePeeling
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46MixedPeeling
+
+open BinaryMatrixFourier BinaryMatrixComplexA15 BinaryMatrixComplexA14
+open BinaryMatrixFirstDerivative BinaryMatrixCodomainA15
+open ActualBinaryMatrixHC46FinitePeeling
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- The exact A15 loss for removing `k` domain coordinates and then `l`
+codomain coordinates from a matrix-valued function. -/
+def mixedCoordinatePeelLoss (r k l : Nat) : Real :=
+  hyperplanePeelLoss r l * linePeelLoss (r + l) k
+
+private theorem linePeelLoss_nonneg (r k : Nat) : 0 <= linePeelLoss r k := by
+  induction k with
+  | zero => simp [linePeelLoss]
+  | succ k ih =>
+      simp only [linePeelLoss]
+      exact mul_nonneg (by positivity) ih
+
+/-- Closed form of the accumulated line-peeling loss. If the initial
+rank is `d = r + k`, this is `2^(4*k*d - 2*k^2 + 4*k)`. -/
+theorem linePeelLoss_eq_pow (r k : Nat) :
+    linePeelLoss r k =
+      (2 : Real) ^ (4 * r * k + 2 * k ^ 2 + 4 * k) := by
+  induction k with
+  | zero => simp [linePeelLoss]
+  | succ k ih =>
+      rw [linePeelLoss, ih]
+      calc
+        (4 * (2 : Real) ^ (4 * (r + k + 1))) *
+            (2 : Real) ^ (4 * r * k + 2 * k ^ 2 + 4 * k)
+            = ((2 : Real) ^ 2 * (2 : Real) ^ (4 * (r + k + 1))) *
+                (2 : Real) ^ (4 * r * k + 2 * k ^ 2 + 4 * k) := by norm_num
+        _ = (2 : Real) ^ (2 + 4 * (r + k + 1)) *
+              (2 : Real) ^ (4 * r * k + 2 * k ^ 2 + 4 * k) := by
+                rw [← pow_add]
+        _ = (2 : Real) ^ ((2 + 4 * (r + k + 1)) +
+              (4 * r * k + 2 * k ^ 2 + 4 * k)) := by rw [← pow_add]
+        _ = (2 : Real) ^ (4 * r * (k + 1) +
+              2 * (k + 1) ^ 2 + 4 * (k + 1)) := by
+                congr 1
+                ring
+
+theorem hyperplanePeelLoss_eq_pow (r k : Nat) :
+    hyperplanePeelLoss r k =
+      (2 : Real) ^ (4 * r * k + 2 * k ^ 2 + 4 * k) := by
+  induction k with
+  | zero => simp [hyperplanePeelLoss]
+  | succ k ih =>
+      rw [hyperplanePeelLoss, ih]
+      calc
+        (4 * (2 : Real) ^ (4 * (r + k + 1))) *
+            (2 : Real) ^ (4 * r * k + 2 * k ^ 2 + 4 * k)
+            = ((2 : Real) ^ 2 * (2 : Real) ^ (4 * (r + k + 1))) *
+                (2 : Real) ^ (4 * r * k + 2 * k ^ 2 + 4 * k) := by norm_num
+        _ = (2 : Real) ^ (2 + 4 * (r + k + 1)) *
+              (2 : Real) ^ (4 * r * k + 2 * k ^ 2 + 4 * k) := by
+                rw [← pow_add]
+        _ = (2 : Real) ^ ((2 + 4 * (r + k + 1)) +
+              (4 * r * k + 2 * k ^ 2 + 4 * k)) := by rw [← pow_add]
+        _ = (2 : Real) ^ (4 * r * (k + 1) +
+              2 * (k + 1) ^ 2 + 4 * (k + 1)) := by
+                congr 1
+                ring
+
+/-- The mixed domain/codomain loss depends only on the total number of
+peeled coordinates, with the exact A15 exponent. -/
+theorem mixedCoordinatePeelLoss_eq_pow (r k l : Nat) :
+    mixedCoordinatePeelLoss r k l =
+      (2 : Real) ^
+        (4 * r * (k + l) + 2 * (k + l) ^ 2 + 4 * (k + l)) := by
+  rw [mixedCoordinatePeelLoss, hyperplanePeelLoss_eq_pow,
+    linePeelLoss_eq_pow]
+  rw [← pow_add]
+  congr 1
+  ring
+/-- Apply prescribed domain-line peels first and codomain-hyperplane peels
+second. The order fixes the rank parameter used by each A15 step. -/
+def mixedCoordinatePeel {n d : Nat} (r k l : Nat)
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2) :
+    BinaryMatrix n d -> Complex :=
+  coordinateHyperplanePeel (n := n) (d := d) r l
+    (coordinateLinePeel (n := n + l) (d := d) (r + l) k f tLine)
+    tHyp
+
+theorem mixedCoordinatePeel_global {n d r k l : Nat} {eps : Real}
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2)
+    (heps : 0 <= eps)
+    (hf : UpToActualNormSqGlobal (r + (k + l)) eps f) :
+    UpToActualNormSqGlobal r (mixedCoordinatePeelLoss r k l * eps)
+      (mixedCoordinatePeel r k l f tLine tHyp) := by
+  have hline := coordinateLinePeel_global
+    (n := n + l) (d := d) (r := r + l) (k := k)
+    f tLine heps (by simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hf)
+  have hline0 : 0 <= linePeelLoss (r + l) k * eps := by
+    have hloss := linePeelLoss_nonneg (r + l) k
+    exact mul_nonneg hloss heps
+  have hhyper := coordinateHyperplanePeel_global
+    (n := n) (d := d) (r := r) (k := l)
+    (coordinateLinePeel (n := n + l) (d := d) (r + l) k f tLine)
+    tHyp hline0 hline
+  simpa [mixedCoordinatePeel, mixedCoordinatePeelLoss,
+    Nat.add_assoc, Nat.add_comm, Nat.add_left_comm,
+    mul_assoc, mul_comm, mul_left_comm] using hhyper
+
+/-- Repeated hybrid-line derivative with prescribed bases, applied from the
+last peeled column back to the first. -/
+def coordinateLineDerivativeChain {n d : Nat} (r : Nat) :
+    (k : Nat) ->
+    (f : BinaryMatrix n (d + k) -> Complex) ->
+    (t : Fin k -> Fin n -> ZMod 2) ->
+    BinaryMatrix n d -> Complex
+  | 0, f, _ => complexRankProjection r f
+  | k + 1, f, t =>
+      coordinateLineDerivativeChain r k
+        (fun M => complexHybridLineDerivative (t (Fin.last k)) f M)
+        (fun i => t i.castSucc)
+
+/-- Repeated hybrid-hyperplane derivative with prescribed bases. -/
+def coordinateHyperplaneDerivativeChain {n d : Nat} (r : Nat) :
+    (k : Nat) ->
+    (f : BinaryMatrix (n + k) d -> Complex) ->
+    (t : Fin k -> Fin d -> ZMod 2) ->
+    BinaryMatrix n d -> Complex
+  | 0, f, _ => complexRankProjection r f
+  | k + 1, f, t =>
+      coordinateHyperplaneDerivativeChain r k
+        (fun M => complexHyperplaneDerivative (t (Fin.last k)) f M)
+        (fun i => t i.castSucc)
+
+private theorem complexRankProjection_idempotent_local {n d j : Nat}
+      (f : BinaryMatrix n d -> Complex) :
+    complexRankProjection j (complexRankProjection j f) =
+      complexRankProjection j f := by
+  funext M
+  apply Complex.ext
+  · simp_rw [BinaryMatrixComplexA14.complexRankProjection_re]
+    have hreal : rankProjection j (rankProjection j (fun X => (f X).re)) =
+        rankProjection j (fun X => (f X).re) := by
+      funext X
+      change (∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n d)).filter
+          (fun Y => Y.rank = j), fourierCoeff
+            (rankProjection j (fun X => (f X).re)) Y * character Y X) =
+        ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n d)).filter
+          (fun Y => Y.rank = j), fourierCoeff (fun X => (f X).re) Y *
+            character Y X
+      apply Finset.sum_congr rfl
+      intro Y hY
+      rw [fourierCoeff_rankProjection]
+      have hYrank : Y.rank = j := (Finset.mem_filter.mp hY).2
+      simp [hYrank]
+    exact congrFun hreal M
+  · simp_rw [BinaryMatrixComplexA14.complexRankProjection_im]
+    have him : rankProjection j (rankProjection j (fun X => (f X).im)) =
+        rankProjection j (fun X => (f X).im) := by
+      funext X
+      change (∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n d)).filter
+          (fun Y => Y.rank = j), fourierCoeff
+            (rankProjection j (fun X => (f X).im)) Y * character Y X) =
+        ∑ Y ∈ (Finset.univ : Finset (BinaryMatrix n d)).filter
+          (fun Y => Y.rank = j), fourierCoeff (fun X => (f X).im) Y *
+            character Y X
+      apply Finset.sum_congr rfl
+      intro Y hY
+      rw [fourierCoeff_rankProjection]
+      have hYrank : Y.rank = j := (Finset.mem_filter.mp hY).2
+      simp [hYrank]
+    exact congrFun him M
+
+theorem coordinateLinePeel_rankProjection_eq_derivativeChain
+    {n d r k : Nat} (f : BinaryMatrix n (d + k) -> Complex)
+    (t : Fin k -> Fin n -> ZMod 2) :
+    complexRankProjection r (coordinateLinePeel r k f t) =
+      coordinateLineDerivativeChain r k
+        (complexRankProjection (r + k) f) t := by
+  induction k generalizing d with
+  | zero =>
+      simpa [coordinateLinePeel, coordinateLineDerivativeChain] using
+        (complexRankProjection_idempotent_local (j := r) f).symm
+  | succ k ih =>
+      let f' : BinaryMatrix n (d + k) -> Complex := fun M =>
+        complexLineP (r + k) f (rawLastColumn M (t (Fin.last k)))
+      let t' : Fin k -> Fin n -> ZMod 2 := fun i => t i.castSucc
+      change complexRankProjection r (coordinateLinePeel r k f' t') =
+        coordinateLineDerivativeChain r k
+          (fun M => complexHybridLineDerivative (t (Fin.last k))
+            (complexRankProjection (r + k + 1) f) M) t'
+      rw [ih]
+      have hA14 : complexRankProjection (r + k) f' =
+          (fun M => complexHybridLineDerivative (t (Fin.last k))
+            (complexRankProjection (r + k + 1) f) M) := by
+        funext M
+        exact BinaryMatrixComplexA14.complex_A14_fixedLine
+          (t (Fin.last k)) f M
+      exact congrArg (fun g =>
+        coordinateLineDerivativeChain r k g t') hA14
+
+theorem coordinateHyperplanePeel_rankProjection_eq_derivativeChain
+    {n d r k : Nat} (f : BinaryMatrix (n + k) d -> Complex)
+    (t : Fin k -> Fin d -> ZMod 2) :
+    complexRankProjection r (coordinateHyperplanePeel r k f t) =
+      coordinateHyperplaneDerivativeChain r k
+        (complexRankProjection (r + k) f) t := by
+  induction k generalizing n with
+  | zero =>
+      simpa [coordinateHyperplanePeel, coordinateHyperplaneDerivativeChain] using
+        (complexRankProjection_idempotent_local (j := r) f).symm
+  | succ k ih =>
+      let f' : BinaryMatrix (n + k) d -> Complex := fun M =>
+        complexHyperplaneP (r + k) f (rawLastRow M (t (Fin.last k)))
+      let t' : Fin k -> Fin d -> ZMod 2 := fun i => t i.castSucc
+      change complexRankProjection r (coordinateHyperplanePeel r k f' t') =
+        coordinateHyperplaneDerivativeChain r k
+          (fun M => complexHyperplaneDerivative (t (Fin.last k))
+            (complexRankProjection (r + k + 1) f) M) t'
+      rw [ih]
+      have hA14 : complexRankProjection (r + k) f' =
+          (fun M => complexHyperplaneDerivative (t (Fin.last k))
+            (complexRankProjection (r + k + 1) f) M) := by
+        funext M
+        exact BinaryMatrixComplexA14.complex_A14_fixedHyperplane
+          (t (Fin.last k)) f M
+      exact congrArg (fun g =>
+        coordinateHyperplaneDerivativeChain r k g t') hA14
+
+theorem coordinateLineDerivativeChain_energy_bound
+    {n d r k : Nat} {eps : Real}
+    (f : BinaryMatrix n (d + k) -> Complex)
+    (t : Fin k -> Fin n -> ZMod 2)
+    (heps : 0 <= eps)
+    (hf : UpToActualNormSqGlobal (r + k) eps f) :
+    fibreEnergy Finset.univ
+      (coordinateLineDerivativeChain r k
+        (complexRankProjection (r + k) f) t) <= linePeelLoss r k * eps := by
+  have hglobal := coordinateLinePeel_global f t heps hf
+  have henergy := (BinaryMatrixA15BaseCase.complexRankProjection_energy_le
+    (j := r)
+    (coordinateLinePeel r k f t)).trans
+    (BinaryMatrixA15BaseCase.actualGlobal_zero_energy_le
+      (coordinateLinePeel r k f t) hglobal)
+  rw [← coordinateLinePeel_rankProjection_eq_derivativeChain f t]
+  exact henergy
+
+theorem coordinateHyperplaneDerivativeChain_energy_bound
+    {n d r k : Nat} {eps : Real}
+    (f : BinaryMatrix (n + k) d -> Complex)
+    (t : Fin k -> Fin d -> ZMod 2)
+    (heps : 0 <= eps)
+    (hf : UpToActualNormSqGlobal (r + k) eps f) :
+    fibreEnergy Finset.univ
+      (coordinateHyperplaneDerivativeChain r k
+        (complexRankProjection (r + k) f) t) <= hyperplanePeelLoss r k * eps := by
+  have hglobal := coordinateHyperplanePeel_global f t heps hf
+  have henergy := (BinaryMatrixA15BaseCase.complexRankProjection_energy_le
+    (j := r)
+    (coordinateHyperplanePeel r k f t)).trans
+    (BinaryMatrixA15BaseCase.actualGlobal_zero_energy_le
+      (coordinateHyperplanePeel r k f t) hglobal)
+  rw [← coordinateHyperplanePeel_rankProjection_eq_derivativeChain f t]
+  exact henergy
+
+/-- The mixed A14 derivative chain: line derivatives are taken first and
+the prescribed codomain-hyperplane derivatives second. -/
+def mixedCoordinateDerivativeChain {n d : Nat} (r k l : Nat)
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2) :
+    BinaryMatrix n d -> Complex :=
+  coordinateHyperplaneDerivativeChain r l
+    (coordinateLineDerivativeChain (r + l) k f tLine) tHyp
+
+/-- Repeated fixed-base A14 identities identify the rank-r projection after
+mixed peeling with the mixed hybrid-derivative chain. -/
+theorem mixedCoordinatePeel_rankProjection_eq_derivativeChain
+    {n d r k l : Nat}
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2) :
+    complexRankProjection r (mixedCoordinatePeel r k l f tLine tHyp) =
+      mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp := by
+  have hHyp := coordinateHyperplanePeel_rankProjection_eq_derivativeChain
+    (n := n) (d := d) (r := r) (k := l)
+    (coordinateLinePeel (n := n + l) (d := d) (r + l) k f tLine) tHyp
+  have hLine := coordinateLinePeel_rankProjection_eq_derivativeChain
+    (n := n + l) (d := d) (r := r + l) (k := k) f tLine
+  have hrank : r + (k + l) = (r + l) + k := by omega
+  calc
+    complexRankProjection r (mixedCoordinatePeel r k l f tLine tHyp) =
+        coordinateHyperplaneDerivativeChain r l
+          (complexRankProjection (r + l)
+            (coordinateLinePeel (n := n + l) (d := d) (r + l) k f tLine))
+          tHyp := by
+            simpa [mixedCoordinatePeel] using hHyp
+    _ = mixedCoordinateDerivativeChain r k l
+          (complexRankProjection (r + (k + l)) f) tLine tHyp := by
+            unfold mixedCoordinateDerivativeChain
+            rw [hrank, hLine]
+
+/-- Parseval/globalness bound for the composed mixed A14 derivative chain. -/
+theorem mixedCoordinateDerivativeChain_energy_bound
+    {n d r k l : Nat} {eps : Real}
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2)
+    (heps : 0 <= eps)
+    (hf : UpToActualNormSqGlobal (r + (k + l)) eps f) :
+    fibreEnergy Finset.univ
+      (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp) <=
+      mixedCoordinatePeelLoss r k l * eps := by
+  have hglobal := mixedCoordinatePeel_global
+    (n := n) (d := d) (r := r) (k := k) (l := l)
+    f tLine tHyp heps
+    (by simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hf)
+  have henergy :=
+    (BinaryMatrixA15BaseCase.complexRankProjection_energy_le (j := r)
+      (mixedCoordinatePeel r k l f tLine tHyp)).trans
+    (BinaryMatrixA15BaseCase.actualGlobal_zero_energy_le
+      (mixedCoordinatePeel r k l f tLine tHyp) hglobal)
+  rw [← mixedCoordinatePeel_rankProjection_eq_derivativeChain f tLine tHyp]
+  exact henergy
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46MixedPeeling
