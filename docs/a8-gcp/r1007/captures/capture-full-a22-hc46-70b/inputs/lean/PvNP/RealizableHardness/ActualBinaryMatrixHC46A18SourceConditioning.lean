@@ -1,0 +1,331 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
+import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+
+/-!
+Exact carrier identity for the expanded branch of the A18 column split.
+For a codimension-one extension `B ≤ B'`, every vector outside `B` spans
+`B'` together with `B`. This is the typed bridge needed to reindex actual
+outside-column maps by their column value.
+-/
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceConditioning
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
+
+/-- An outside vector in a one-dimensional extension generates the actual
+expanded codomain together with the old subspace. -/
+theorem spanExtension_eq_of_codim_one
+    {W : Type*} [AddCommGroup W] [Module (ZMod 2) W] [Module.Finite (ZMod 2) W]
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' = Module.finrank (ZMod 2) B + 1)
+    (w : B') (hw : (w : W) ∉ B) :
+    spanExtensionSubmodule B (w : W) = B' := by
+  apply Submodule.eq_of_le_of_finrank_eq
+  · intro x hx
+    rcases Submodule.mem_sup.mp hx with ⟨b, hb, c, hc, hbc⟩
+    rcases Submodule.mem_span_singleton.mp hc with ⟨a, ha⟩
+    rw [← hbc, ← ha]
+    exact B'.add_mem (hB hb) (B'.smul_mem a w.property)
+  · rw [spanExtensionSubmodule, Submodule.finrank_sup_span_singleton hw]
+    exact hdim.symm
+
+/-- Partition actual linear maps into fibers of their distinguished column.
+This is the exact dependent sum behind the expanded A18 branch; the next
+step transports each fiber through the quotient-section coordinates. -/
+noncomputable def outsideColumnSigmaEquiv
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B') (v : X) :
+    {F : X →ₗ[ZMod 2] B' // (F v : W) ∉ B} ≃
+      Σ w : {w : B' // (w : W) ∉ B},
+        {F : X →ₗ[ZMod 2] B' // F v = w} where
+  toFun F := ⟨⟨F.1 v, F.2⟩, ⟨F.1, rfl⟩⟩
+  invFun p := ⟨p.2.1, by simpa only [p.2.2] using p.1.2⟩
+  left_inv F := by
+    apply Subtype.ext
+    rfl
+  right_inv p := by
+    rcases p with ⟨w, ⟨F, hF⟩⟩
+    -- `hF : F v = ↑w`. The sigma index is that subtype, so compare indices by
+    -- `Subtype.ext` and the stored maps by `Sigma.subtype_ext`.
+    apply Sigma.subtype_ext
+    · exact Subtype.ext hF
+    · rfl
+
+/-! The evaluation fibers all have the same size when the distinguished
+column vector is nonzero. The translating functional is kept explicit so
+the source-specific theorem below can construct it from `phi v = 1`. -/
+
+noncomputable def evaluationFiberEquiv
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    (v : X) (ell : X →ₗ[ZMod 2] ZMod 2) (hell : ell v = 1)
+    (y z : W) :
+    {F : X →ₗ[ZMod 2] W // F v = y} ≃
+      {F : X →ₗ[ZMod 2] W // F v = z} where
+  toFun F := ⟨F.1 + ell.smulRight (z - y), by
+    simp [F.2, hell]⟩
+  invFun F := ⟨F.1 - ell.smulRight (z - y), by
+    simp [F.2, hell]⟩
+  left_inv F := by
+    apply Subtype.ext
+    ext x
+    simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+  right_inv F := by
+    apply Subtype.ext
+    ext x
+    simp [sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
+
+/-- The actual outside-column event has exactly half the full map space in a
+binary codimension-one extension, provided the sampled quotient vector is
+nonzero. This establishes the event mass from the source geometry; it is not
+an assumed density premise. -/
+theorem outsideColumn_card_half
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W] [Fintype X] [Fintype W]
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' = Module.finrank (ZMod 2) B + 1)
+    (v : X) (ell : X →ₗ[ZMod 2] ZMod 2) (hell : ell v = 1) :
+    Fintype.card (X →ₗ[ZMod 2] B') =
+      2 * Fintype.card {F : X →ₗ[ZMod 2] B' // (F v : W) ∉ B} := by
+  classical
+  let Fib (y : B') := {F : X →ₗ[ZMod 2] B' // F v = y}
+  have hfib (y : B') : Fintype.card (Fib y) = Fintype.card (Fib 0) := by
+    exact Fintype.card_congr (evaluationFiberEquiv v ell hell y 0)
+  let allColumns : (Σ y : B', Fib y) ≃ (X →ₗ[ZMod 2] B') :=
+    { toFun := fun p => p.2.1
+      invFun := fun F => ⟨F v, ⟨F, rfl⟩⟩
+      left_inv := fun p => by
+        rcases p with ⟨y, ⟨F, hF⟩⟩
+        apply Sigma.subtype_ext hF
+        rfl
+      right_inv := fun F => rfl }
+
+  have htotal : Fintype.card (X →ₗ[ZMod 2] B') =
+      Fintype.card B' * Fintype.card (Fib 0) := by
+    calc
+      Fintype.card (X →ₗ[ZMod 2] B') = Fintype.card (Σ y : B', Fib y) :=
+        (Fintype.card_congr allColumns).symm
+      _ = Fintype.card B' * Fintype.card (Fib 0) := by
+        rw [Fintype.card_sigma]
+        simp_rw [hfib]
+        simp
+  have houtside :
+      Fintype.card {F : X →ₗ[ZMod 2] B' // (F v : W) ∉ B} =
+        Fintype.card {y : B' // (y : W) ∉ B} * Fintype.card (Fib 0) := by
+    calc
+      _ = Fintype.card (Σ y : {y : B' // (y : W) ∉ B}, Fib y.1) :=
+        Fintype.card_congr (outsideColumnSigmaEquiv B B' hB v)
+      _ = Fintype.card {y : B' // (y : W) ∉ B} * Fintype.card (Fib 0) := by
+        rw [Fintype.card_sigma]
+        simp_rw [hfib]
+        simp
+  have hcomp : Fintype.card {y : B' // (y : W) ∉ B} = Fintype.card B := by
+    rw [Fintype.card_subtype]
+    exact binary_submodule_complement_card_eq B B' hB hdim
+  have hdimcard : Fintype.card B' = 2 * Fintype.card B := by
+    have hBcard : Fintype.card B = 2 ^ Module.finrank (ZMod 2) B := by
+      simpa using (Module.card_eq_pow_finrank (K := ZMod 2) (V := B))
+    have hB'card : Fintype.card B' = 2 ^ Module.finrank (ZMod 2) B' := by
+      simpa using (Module.card_eq_pow_finrank (K := ZMod 2) (V := B'))
+    rw [hBcard, hB'card, hdim, pow_succ]
+    ring
+  rw [htotal, houtside, hdimcard, hcomp]
+  rw [Nat.mul_assoc]
+
+/-- The quotient vector selected by a functional taking value one on `v` is
+nonzero. This is the geometric input that supplies the translating
+functional for the half-mass count. -/
+theorem restrictedFunctional_quotient_vector_ne_zero
+    {X : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1) :
+    Submodule.mkQ (functionalKernelInAmbient A phi) (v : X) ≠ 0 := by
+  intro hzero
+  have hvK : (v : X) ∈ functionalKernelInAmbient A phi :=
+    (Submodule.Quotient.mk_eq_zero _).mp hzero
+  change (v : X) ∈ (LinearMap.ker phi).map A.subtype at hvK
+  rcases Submodule.mem_map.mp hvK with ⟨a, ha, hax⟩
+  have hae : a = v := Subtype.ext hax
+  have hvzero : phi v = 0 := by
+    rw [← hae]
+    exact LinearMap.mem_ker.mp ha
+  rw [hv] at hvzero
+  norm_num at hvzero
+
+/-- The source-defined quotient column has the required half-mass outside
+any codimension-one expanded codomain. The translating functional is
+constructed from `phi v = 1`, rather than supplied as a sampling premise. -/
+theorem restrictedFunctional_outsideColumn_card_half
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W] [Fintype X] [Fintype W]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1)
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' = Module.finrank (ZMod 2) B + 1) :
+    Fintype.card ((X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B') =
+      2 * Fintype.card {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B' //
+        (N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) : W) ∉ B} := by
+  classical
+  let qv := Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)
+  have hqv := restrictedFunctional_quotient_vector_ne_zero A phi v hv
+  have hnot : qv ≠ 0 := by
+    simpa [qv] using hqv
+
+  let hExt := LinearMap.exists_extend_of_notMem
+    (0 : (⊥ : Submodule (ZMod 2) (X ⧸ functionalKernelInAmbient A phi)) →ₗ[ZMod 2] ZMod 2)
+    hnot 1
+  let ell := Classical.choose hExt
+  have hell := (Classical.choose_spec hExt).2
+  simpa only [qv] using
+    (outsideColumn_card_half B B' hB hdim qv ell hell)
+
+/-- For the actual restricted-functional quotient, conditioning on the
+outside-column event costs at most two for every nonnegative real statistic.
+The event-mass bound above is discharged from the binary codimension-one
+geometry and the source condition `phi v = 1`. -/
+theorem restrictedFunctional_outsideColumn_mean_le_two
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W] [Fintype X] [Fintype W]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1)
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' = Module.finrank (ZMod 2) B + 1)
+    (g : (X ⧸ functionalKernelInAmbient A phi →ₗ[ZMod 2] B') → ℝ)
+    (hg : ∀ N, 0 ≤ g N) :
+    (∑ N ∈ (Finset.univ : Finset (X ⧸ functionalKernelInAmbient A phi →ₗ[ZMod 2] B')).filter
+      (fun N => (N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) : W) ∉ B),
+      g N) /
+      ((Finset.univ : Finset (X ⧸ functionalKernelInAmbient A phi →ₗ[ZMod 2] B')).filter
+        (fun N => (N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) : W) ∉ B)).card
+      ≤ 2 * ((∑ N : X ⧸ functionalKernelInAmbient A phi →ₗ[ZMod 2] B', g N) /
+        (Fintype.card (X ⧸ functionalKernelInAmbient A phi →ₗ[ZMod 2] B') : ℝ)) := by
+  classical
+  let α := X ⧸ functionalKernelInAmbient A phi →ₗ[ZMod 2] B'
+  let p : α → Prop := fun N =>
+    (N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) : W) ∉ B
+  have hprob : Fintype.card α ≤ 2 * (Finset.univ.filter p).card := by
+    have hcard := restrictedFunctional_outsideColumn_card_half
+      A phi v hv B B' hB hdim
+    have hcard' : Fintype.card α =
+        2 * Fintype.card {N : α // p N} := by
+      simpa [α, p] using hcard
+    rw [Fintype.card_subtype] at hcard'
+    exact hcard'.le
+  have hne : (Finset.univ.filter p).Nonempty := by
+    have htotal : 0 < Fintype.card α := Fintype.card_pos_iff.mpr ⟨0⟩
+    have hpos : 0 < (Finset.univ.filter p).card := by omega
+    exact Finset.card_pos.mp hpos
+  exact conditional_uniform_mean_le_two p hne hprob g hg
+
+/-- Exact finite sum reindexing for the outside-column event, with the
+column value kept as the dependent sigma index. -/
+theorem outsideColumnSigma_sum
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W] [Fintype X] [Fintype W]
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B') (v : X)
+    (g : {F : X →ₗ[ZMod 2] B' // (F v : W) ∉ B} → ℝ) :
+    (∑ F : {F : X →ₗ[ZMod 2] B' // (F v : W) ∉ B}, g F) =
+      ∑ p : Σ w : {w : B' // (w : W) ∉ B},
+          {F : X →ₗ[ZMod 2] B' // F v = w},
+        g ((outsideColumnSigmaEquiv B B' hB v).symm p) := by
+  classical
+  exact (Equiv.sum_comp (outsideColumnSigmaEquiv B B' hB v).symm
+    (fun F => g F)).symm
+
+/-- Normalized outside-column averaging is exactly averaging first over the
+column and then its map fiber. No branch-mass or energy hypothesis is used. -/
+theorem outsideColumnSigma_mean
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W] [Fintype X] [Fintype W]
+    (B B' : Submodule (ZMod 2) W) (hB : B ≤ B') (v : X)
+    (g : {F : X →ₗ[ZMod 2] B' // (F v : W) ∉ B} → ℝ) :
+    (∑ F : {F : X →ₗ[ZMod 2] B' // (F v : W) ∉ B}, g F) /
+        (Fintype.card {F : X →ₗ[ZMod 2] B' // (F v : W) ∉ B} : ℝ) =
+      (∑ p : Σ w : {w : B' // (w : W) ∉ B},
+          {F : X →ₗ[ZMod 2] B' // F v = w},
+        g ((outsideColumnSigmaEquiv B B' hB v).symm p)) /
+        (Fintype.card (Σ w : {w : B' // (w : W) ∉ B},
+          {F : X →ₗ[ZMod 2] B' // F v = w}) : ℝ) := by
+  rw [outsideColumnSigma_sum B B' hB v g,
+    Fintype.card_congr (outsideColumnSigmaEquiv B B' hB v)]
+
+/-- A fixed outside-column fiber in the actual codimension-one extension is
+the quotient-section coordinate product. This is the fiberwise bridge used
+to combine the sigma partition with the source's quotient-conditioned law. -/
+noncomputable def actualOutsideColumnFiberCoordinates
+    {X W : Type*} [AddCommGroup X] [Module (ZMod 2) X]
+    [AddCommGroup W] [Module (ZMod 2) W]
+    (A : Submodule (ZMod 2) X) (phi : A →ₗ[ZMod 2] ZMod 2)
+    (v : A) (hv : phi v = 1)
+    (B B' : Submodule (ZMod 2) W) (w : B') (hw : (w : W) ∉ B)
+    (hspan : spanExtensionSubmodule B (w : W) = B') :
+    {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B' //
+      N (Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)) = w} ≃
+      ((X ⧸ A) →ₗ[ZMod 2] B) × ((X ⧸ A) →ₗ[ZMod 2] ZMod 2) := by
+  let eW : spanExtensionSubmodule B (w : W) ≃ₗ[ZMod 2] B' :=
+    LinearEquiv.ofEq _ _ hspan
+  let wExt : spanExtensionSubmodule B (w : W) :=
+    ⟨(w : W), Submodule.mem_sup_right
+      (Submodule.subset_span (Set.mem_singleton (w : W)))⟩
+  let eFixed := restrictedFunctionalAppendSamplingEquiv A phi v hv B
+    (w : W) hw
+  let qv : X ⧸ functionalKernelInAmbient A phi :=
+    Submodule.mkQ (functionalKernelInAmbient A phi) (v : X)
+  have hforced
+      (N : {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2] B' //
+        N qv = w}) :
+      eW.symm.toLinearMap.comp N.1 qv = wExt := by
+    change eW.symm (N.1 qv) = wExt
+    rw [N.2]
+    apply eW.injective
+    rfl
+  refine
+    { toFun := fun N => eFixed ⟨eW.symm.toLinearMap.comp N.1, hforced N⟩
+      invFun := fun p => ⟨eW.toLinearMap.comp (eFixed.symm p).1, ?_⟩
+      left_inv := ?_
+      right_inv := ?_ }
+  · change eW ((eFixed.symm p).1 qv) = w
+    rw [(eFixed.symm p).2]
+    rfl
+  · intro N
+    apply Subtype.ext
+    apply LinearMap.ext
+    intro x
+    have hfixed := congrArg Subtype.val
+      (eFixed.symm_apply_apply
+        (⟨eW.symm.toLinearMap.comp N.1, hforced N⟩ :
+          {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2]
+            spanExtensionSubmodule B (w : W) // N qv = wExt}))
+    change eW ((eFixed.symm
+      (eFixed ⟨eW.symm.toLinearMap.comp N.1, hforced N⟩)).1 x) = N.1 x
+    rw [hfixed]
+    change eW (eW.symm (N.1 x)) = N.1 x
+    exact eW.apply_symm_apply _
+  · intro p
+    let T := eFixed.symm p
+    have hcancel : eW.symm.toLinearMap.comp (eW.toLinearMap.comp T.1) = T.1 := by
+      ext x
+      simp [LinearMap.comp_apply, LinearEquiv.apply_symm_apply]
+    have hsource :
+        (⟨eW.symm.toLinearMap.comp (eW.toLinearMap.comp T.1), by
+          change (eW.symm.toLinearMap.comp (eW.toLinearMap.comp T.1)) qv = wExt
+          rw [hcancel]
+          exact T.2⟩ :
+          {N : (X ⧸ functionalKernelInAmbient A phi) →ₗ[ZMod 2]
+            spanExtensionSubmodule B (w : W) // N qv = wExt}) = T := by
+      apply Subtype.ext
+      exact hcancel
+    calc
+      eFixed ⟨eW.symm.toLinearMap.comp (eW.toLinearMap.comp T.1), by
+        change (eW.symm.toLinearMap.comp (eW.toLinearMap.comp T.1)) qv = wExt
+        rw [hcancel]
+        exact T.2⟩ = eFixed T := congrArg eFixed hsource
+      _ = p := eFixed.apply_symm_apply p
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceConditioning
+end

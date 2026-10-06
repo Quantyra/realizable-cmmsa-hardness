@@ -1,0 +1,566 @@
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+import Mathlib.Tactic
+
+/-!
+Finite linear-functional disintegration used by the A18 conditional
+restriction calculation.  This module isolates the exact uniform-extension
+count: once a functional is fixed on a subspace, all of its extensions form
+an affine copy of the kernel of restriction.  It does not assume any
+globalness estimate or final A18 bound.
+-/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+variable {K V : Type*} [Field K]
+variable [AddCommGroup V] [Module K V]
+
+noncomputable instance linearMapFintype {W : Type*} [Fintype V] [Fintype W]
+    [AddCommMonoid W] [Module K W] : Fintype (V →ₗ[K] W) := by
+  letI : Finite (V →ₗ[K] W) :=
+    Finite.of_injective (fun f : V →ₗ[K] W => (f : V → W))
+      (by
+        intro f g h
+        exact LinearMap.ext (fun x => congrFun h x))
+  exact Fintype.ofFinite _
+
+noncomputable instance submoduleFintype [Fintype V] (A : Submodule K V) : Fintype A := by
+  letI : Finite A := Finite.of_injective (fun x : A => (x : V)) Subtype.val_injective
+  exact Fintype.ofFinite A
+
+/-- Restriction of linear functionals from the ambient space to a subspace. -/
+def dualRestriction (A : Submodule K V) :
+    (V →ₗ[K] K) →ₗ[K] (A →ₗ[K] K) where
+  toFun φ := φ.comp A.subtype
+  map_add' φ ψ := by
+    ext x
+    rfl
+  map_smul' c φ := by
+    ext x
+    rfl
+
+@[simp] theorem dualRestriction_apply (A : Submodule K V)
+    (φ : V →ₗ[K] K) (x : A) :
+    dualRestriction A φ x = φ x := rfl
+
+/-- Every extension of a fixed functional on A is in bijection with the
+kernel of restriction, by subtracting one chosen extension.  In particular,
+the number of extensions does not depend on the prescribed restriction. -/
+def dualRestrictionFiberEquivKernel (A : Submodule K V)
+    (ψ : A →ₗ[K] K) (φ₀ : V →ₗ[K] K)
+    (hφ₀ : dualRestriction A φ₀ = ψ) :
+    {φ : V →ₗ[K] K // dualRestriction A φ = ψ} ≃
+      {δ : V →ₗ[K] K // dualRestriction A δ = 0} where
+  toFun φ := ⟨φ.1 - φ₀, by
+    change dualRestriction A (φ.1 - φ₀) = 0
+    rw [map_sub, φ.2, hφ₀, sub_self]⟩
+  invFun δ := ⟨δ.1 + φ₀, by
+    change dualRestriction A (δ.1 + φ₀) = ψ
+    rw [map_add, δ.2, hφ₀, zero_add]⟩
+  left_inv φ := by
+    apply Subtype.ext
+    exact sub_add_cancel _ _
+  right_inv δ := by
+    apply Subtype.ext
+    exact add_sub_cancel_right _ _
+
+/-- The fibre cardinality of dual restriction is constant on every attainable
+target.  This is the finite counting statement needed to keep the ambient
+functional coordinates outside A independent after conditioning on φ|A. -/
+theorem dualRestrictionFiber_card_eq_kernel [Fintype K] [Fintype V]
+    (A : Submodule K V)
+    (ψ : A →ₗ[K] K) (φ₀ : V →ₗ[K] K)
+    (hφ₀ : dualRestriction A φ₀ = ψ) :
+    Fintype.card {φ : V →ₗ[K] K // dualRestriction A φ = ψ} =
+      Fintype.card {δ : V →ₗ[K] K // dualRestriction A δ = 0} :=
+  Fintype.card_congr (dualRestrictionFiberEquivKernel A ψ φ₀ hφ₀)
+
+/-- A prescribed value on a vector in A is already determined by the
+restriction fibre; no extra ambient functional condition is introduced. -/
+theorem dualRestriction_preserves_value {A : Submodule K V}
+    (ψ : A →ₗ[K] K) (φ : V →ₗ[K] K)
+    (hφ : dualRestriction A φ = ψ) {v : V} (hv : v ∈ A) :
+    φ v = ψ ⟨v, hv⟩ := by
+  have h := congrArg (fun g : A →ₗ[K] K => g ⟨v, hv⟩) hφ
+  simpa [dualRestriction] using h
+
+/-- Restriction together with the value on one new vector. -/
+def dualRestrictionAt (A : Submodule K V) (w : V) :
+    (V →ₗ[K] K) →ₗ[K] ((A →ₗ[K] K) × K) where
+  toFun φ := (dualRestriction A φ, φ w)
+  map_add' φ ψ := by
+    ext <;> simp
+  map_smul' c φ := by
+    ext <;> simp
+
+@[simp] theorem dualRestrictionAt_apply (A : Submodule K V) (w : V)
+    (φ : V →ₗ[K] K) :
+    dualRestrictionAt A w φ = (dualRestriction A φ, φ w) := rfl
+
+/-- A fibre of restriction-plus-one-coordinate is an affine translate of its
+kernel. -/
+def dualRestrictionAtFiberEquivKernel (A : Submodule K V) (w : V)
+    (z : (A →ₗ[K] K) × K) (φ₀ : V →ₗ[K] K)
+    (hφ₀ : dualRestrictionAt A w φ₀ = z) :
+    {φ : V →ₗ[K] K // dualRestrictionAt A w φ = z} ≃
+      {δ : V →ₗ[K] K // dualRestrictionAt A w δ = 0} where
+  toFun φ := ⟨φ.1 - φ₀, by
+    change dualRestrictionAt A w (φ.1 - φ₀) = 0
+    rw [map_sub, φ.2, hφ₀, sub_self]⟩
+  invFun δ := ⟨δ.1 + φ₀, by
+    change dualRestrictionAt A w (δ.1 + φ₀) = z
+    rw [map_add, δ.2, hφ₀, zero_add]⟩
+  left_inv φ := by
+    apply Subtype.ext
+    exact sub_add_cancel _ _
+  right_inv δ := by
+    apply Subtype.ext
+    exact add_sub_cancel_right _ _
+
+/-- All attainable pairs (restriction to A, value at w) have equally sized
+fibres. -/
+theorem dualRestrictionAtFiber_card_eq_kernel [Fintype K] [Fintype V]
+    (A : Submodule K V) (w : V)
+    (z : (A →ₗ[K] K) × K) (φ₀ : V →ₗ[K] K)
+    (hφ₀ : dualRestrictionAt A w φ₀ = z) :
+    Fintype.card {φ : V →ₗ[K] K // dualRestrictionAt A w φ = z} =
+      Fintype.card {δ : V →ₗ[K] K // dualRestrictionAt A w δ = 0} :=
+  Fintype.card_congr (dualRestrictionAtFiberEquivKernel A w z φ₀ hφ₀)
+
+/-- When w is outside A, every prescribed restriction and value at w is
+attainable. This is the columnwise extension step used in the conditional
+pushforward count. -/
+theorem dualRestrictionAt_surjective_of_notMem (A : Submodule K V)
+    {w : V} (hw : w ∉ A) (ψ : A →ₗ[K] K) (y : K) :
+    ∃ φ : V →ₗ[K] K, dualRestrictionAt A w φ = (ψ, y) := by
+  obtain ⟨φ, hψ, hy⟩ := LinearMap.exists_extend_of_notMem ψ hw y
+  refine ⟨φ, ?_⟩
+  change (φ.comp A.subtype, φ w) = (ψ, y)
+  exact Prod.ext hψ hy
+
+/-- The conditional pushforward on the new column is uniform: for fixed
+restriction ψ, the number of ambient functionals taking any prescribed value
+at w is independent of that value. -/
+theorem dualRestrictionAtFiber_card_eq_of_notMem [Fintype K] [Fintype V]
+    (A : Submodule K V) {w : V} (hw : w ∉ A) (ψ : A →ₗ[K] K)
+    (y₁ y₂ : K) :
+    Fintype.card {φ : V →ₗ[K] K // dualRestrictionAt A w φ = (ψ, y₁)} =
+      Fintype.card {φ : V →ₗ[K] K // dualRestrictionAt A w φ = (ψ, y₂)} := by
+  obtain ⟨φ₁, hφ₁⟩ := dualRestrictionAt_surjective_of_notMem A hw ψ y₁
+  obtain ⟨φ₂, hφ₂⟩ := dualRestrictionAt_surjective_of_notMem A hw ψ y₂
+  rw [dualRestrictionAtFiber_card_eq_kernel A w (ψ, y₁) φ₁ hφ₁,
+      dualRestrictionAtFiber_card_eq_kernel A w (ψ, y₂) φ₂ hφ₂]
+
+/-- Explicit columnwise transport: changing the prescribed value at w is
+translation by a functional that vanishes on A. This gives the actual
+pushforward fibre bijection, not only equality of cardinalities. -/
+noncomputable def dualRestrictionAtFiberEquiv_of_notMem (A : Submodule K V)
+    {w : V} (hw : w ∉ A) (ψ : A →ₗ[K] K) (y₁ y₂ : K) :
+    {φ : V →ₗ[K] K // dualRestrictionAt A w φ = (ψ, y₁)} ≃
+      {φ : V →ₗ[K] K // dualRestrictionAt A w φ = (ψ, y₂)} := by
+  let hθexists := LinearMap.exists_extend_of_notMem
+    (0 : A →ₗ[K] K) hw (y₂ - y₁)
+  let θ := Classical.choose hθexists
+  have hθ := Classical.choose_spec hθexists
+  rcases hθ with ⟨hθA, hθw⟩
+  have hθA' : dualRestriction A θ = 0 := by
+    simpa [dualRestriction] using hθA
+  refine
+    { toFun := fun φ => ⟨φ.1 + θ, ?_⟩
+      invFun := fun φ => ⟨φ.1 - θ, ?_⟩
+      left_inv := ?_
+      right_inv := ?_ }
+  · apply Prod.ext
+    · change dualRestriction A (φ.1 + θ) = ψ
+      have hφA : dualRestriction A φ.1 = ψ := congrArg Prod.fst φ.2
+      rw [map_add, hφA, hθA']
+      simp
+    · change φ.1 w + θ w = y₂
+      have hφw : φ.1 w = y₁ := congrArg Prod.snd φ.2
+      rw [hφw, hθw]
+      ring
+  · apply Prod.ext
+    · change dualRestriction A (φ.1 - θ) = ψ
+      have hφA : dualRestriction A φ.1 = ψ := congrArg Prod.fst φ.2
+      rw [map_sub, hφA, hθA']
+      simp
+    · change φ.1 w - θ w = y₁
+      have hφw : φ.1 w = y₂ := congrArg Prod.snd φ.2
+      rw [hφw, hθw]
+      ring
+  · intro φ
+    apply Subtype.ext
+    exact add_sub_cancel_right _ _
+  · intro φ
+    apply Subtype.ext
+    exact sub_add_cancel _ _
+
+/-- If the queried vector already lies in A, its value is fixed by the
+restriction. This is the zero-new-coordinate/unavailable-branch companion to
+the uniform outside-A pushforward theorem. -/
+theorem dualRestrictionAt_impossible_of_mem (A : Submodule K V)
+    {w : V} (hw : w ∈ A) (ψ : A →ₗ[K] K) (y : K)
+    (hy : y ≠ ψ ⟨w, hw⟩) :
+    ¬ ∃ φ : V →ₗ[K] K, dualRestrictionAt A w φ = (ψ, y) := by
+  rintro ⟨φ, hφ⟩
+  have hres : dualRestriction A φ = ψ := congrArg Prod.fst hφ
+  have hvalue : φ w = y := congrArg Prod.snd hφ
+  exact hy (hvalue.symm.trans (dualRestriction_preserves_value ψ φ hres hw))
+
+/-- The one-vector enlargement, named so Lean does not have to infer the
+submodule lattice operation through a higher-order linear-map type. -/
+def spanExtensionSubmodule (A : Submodule K V) (w : V) : Submodule K V :=
+  A ⊔ Submodule.span K ({w} : Set V)
+
+/-- Vector-valued version of the restriction-plus-column map. It records an
+arbitrary linear map on A and its value on one new vector, so it is the
+coordinate-level law for appending a column with codomain in W. -/
+def dualSupVectorCoordinateMap {W : Type*} [AddCommGroup W] [Module K W]
+    (A : Submodule K V) (w : V) :
+    (spanExtensionSubmodule A w →ₗ[K] W) →ₗ[K]
+      ((A →ₗ[K] W) × W) where
+  toFun f :=
+    (f.comp (Submodule.inclusion
+      (show A ≤ spanExtensionSubmodule A w from by
+        dsimp [spanExtensionSubmodule]
+        exact le_sup_left)),
+      f ⟨w, Submodule.mem_sup_right
+        (Submodule.subset_span (Set.mem_singleton w))⟩)
+  map_add' f g := by
+    ext <;> simp
+  map_smul' c f := by
+    ext <;> simp
+
+/-- Exact vector-valued restriction/extension bijection when the new column
+is independent of A. No ambient-width condition is used. -/
+noncomputable def dualSupVectorCoordinateEquiv {W : Type*}
+    [AddCommGroup W] [Module K W] (A : Submodule K V) {w : V}
+    (hw : w ∉ A) :
+    (spanExtensionSubmodule A w →ₗ[K] W) ≃ₗ[K]
+      ((A →ₗ[K] W) × W) :=
+  LinearEquiv.ofBijective (dualSupVectorCoordinateMap A w) <| by
+    constructor
+    · intro f g h
+      apply LinearMap.ext
+      intro x
+      have hA := congrArg Prod.fst h
+      have hwv := congrArg Prod.snd h
+      rcases Submodule.mem_sup.mp x.property with ⟨a, ha, b, hb, hxb⟩
+      rcases Submodule.mem_span_singleton.mp hb with ⟨c, hc⟩
+      let a' : spanExtensionSubmodule A w :=
+        ⟨a, Submodule.mem_sup_left ha⟩
+      let w' : spanExtensionSubmodule A w :=
+        ⟨w, Submodule.mem_sup_right
+          (Submodule.subset_span (Set.mem_singleton w))⟩
+      have hxeq : x = a' + c • w' := by
+        apply Subtype.ext
+        change (x : V) = a + c • w
+        rw [← hxb, ← hc]
+      have hfa : f a' = g a' := by
+        have h := congrArg (fun q : A →ₗ[K] W => q ⟨a, ha⟩) hA
+        have hinc :
+            Submodule.inclusion
+                (show A ≤ spanExtensionSubmodule A w from by
+                  dsimp [spanExtensionSubmodule]
+                  exact le_sup_left) ⟨a, ha⟩ = a' := by
+          apply Subtype.ext
+          rfl
+        change f (Submodule.inclusion
+          (show A ≤ spanExtensionSubmodule A w from by
+            dsimp [spanExtensionSubmodule]
+            exact le_sup_left) ⟨a, ha⟩) = g (Submodule.inclusion
+              (show A ≤ spanExtensionSubmodule A w from by
+                dsimp [spanExtensionSubmodule]
+                exact le_sup_left) ⟨a, ha⟩) at h
+        rw [hinc] at h
+        exact h
+      have hwfg : f w' = g w' := by
+        simpa [dualSupVectorCoordinateMap, w'] using hwv
+      rw [hxeq, map_add, map_smul, hfa, hwfg]
+      simp only [map_add, map_smul]
+    · rintro ⟨ψ, y⟩
+      obtain ⟨φ, hψ, hφw⟩ := LinearMap.exists_extend_of_notMem ψ hw y
+      let B : Submodule K V := spanExtensionSubmodule A w
+      let w' : B := ⟨w, Submodule.mem_sup_right
+        (Submodule.subset_span (Set.mem_singleton w))⟩
+      refine ⟨φ.comp B.subtype, ?_⟩
+      change ((φ.comp B.subtype).comp
+          (Submodule.inclusion (show A ≤ B from le_sup_left)),
+        (φ.comp B.subtype) w') = (ψ, y)
+      apply Prod.ext
+      · apply LinearMap.ext
+        intro a
+        have h := congrArg (fun f : A →ₗ[K] W => f a) hψ
+        simpa [B, spanExtensionSubmodule, LinearMap.comp_apply, Submodule.coe_inclusion] using h
+      · simpa [w'] using hφw
+
+/-- The appended-column fibre cardinality is exactly the product of the
+restriction-map space and the new vector space. -/
+theorem dualSupVectorCoordinate_card [Fintype W]
+    [AddCommGroup W] [Module K W] [Fintype V]
+    (A : Submodule K V) {w : V} (hw : w ∉ A) :
+    Fintype.card (spanExtensionSubmodule A w →ₗ[K] W) =
+      Fintype.card ((A →ₗ[K] W) × W) :=
+  Fintype.card_congr (dualSupVectorCoordinateEquiv A hw).toEquiv
+
+/-- The new column of a map in the enlarged domain subspace. -/
+def dualSupVectorColumn {W : Type*} [AddCommGroup W] [Module K W]
+    (A : Submodule K V) (w : V)
+    (f : spanExtensionSubmodule A w →ₗ[K] W) : W :=
+  f ⟨w, by
+    dsimp [spanExtensionSubmodule]
+    exact Submodule.mem_sup_right
+      (Submodule.subset_span (Set.mem_singleton w))⟩
+
+/-- Conditioning a linear map on its new column being outside B corresponds
+exactly to conditioning the product coordinates on their W-component being
+outside B. This is the finite pushforward identity used by A18. -/
+noncomputable def dualSupVectorOutsideEquiv {W : Type*}
+    [AddCommGroup W] [Module K W] (A : Submodule K V) (w : V)
+    (hw : w ∉ A) (B : Submodule K W) :
+    {f : spanExtensionSubmodule A w →ₗ[K] W // dualSupVectorColumn A w f ∉ B} ≃
+      {p : (A →ₗ[K] W) × W // p.2 ∉ B} := by
+  let e : (spanExtensionSubmodule A w →ₗ[K] W) ≃ₗ[K] ((A →ₗ[K] W) × W) :=
+    dualSupVectorCoordinateEquiv A hw
+  refine
+    { toFun := fun f => ⟨e f.1, ?_⟩
+      invFun := fun p => ⟨e.symm p.1, ?_⟩
+      left_inv := ?_
+      right_inv := ?_ }
+  · simpa [e, dualSupVectorColumn, dualSupVectorCoordinateEquiv,
+      dualSupVectorCoordinateMap] using f.2
+  · have hsnd := congrArg Prod.snd (e.apply_symm_apply p.1)
+    have hcolumn : dualSupVectorColumn A w (e.symm p.1) = p.1.2 := by
+      change (dualSupVectorCoordinateMap A w (e.symm p.1)).2 = p.1.2
+      exact hsnd
+    rw [hcolumn]
+    exact p.2
+  · intro f
+    apply Subtype.ext
+    exact e.left_inv f.1
+  · intro p
+    apply Subtype.ext
+    exact e.right_inv p.1
+
+/-- The conditional sum of any statistic over maps with a new column
+outside B is the corresponding sum over independent restriction and column
+coordinates. -/
+theorem dualSupVectorOutside_sum {W : Type*} [AddCommGroup W] [Module K W]
+    [Fintype V] [Fintype W] (A : Submodule K V) (w : V) (hw : w ∉ A)
+    (B : Submodule K W)
+    (g : (spanExtensionSubmodule A w →ₗ[K] W) → Real) :
+    (∑ f : {f : spanExtensionSubmodule A w →ₗ[K] W //
+        dualSupVectorColumn A w f ∉ B}, g f.1) =
+      ∑ p : {p : (A →ₗ[K] W) × W // p.2 ∉ B},
+        g ((dualSupVectorCoordinateEquiv A hw).symm p.1) := by
+  classical
+  let e := dualSupVectorOutsideEquiv A w hw B
+  calc
+    (∑ f : {f : spanExtensionSubmodule A w →ₗ[K] W //
+        dualSupVectorColumn A w f ∉ B}, g f.1) =
+      ∑ p : {p : (A →ₗ[K] W) × W // p.2 ∉ B},
+        g ((dualSupVectorCoordinateEquiv A hw).symm p.1) := by
+          calc
+            (∑ f : {f : spanExtensionSubmodule A w →ₗ[K] W //
+                dualSupVectorColumn A w f ∉ B}, g f.1) =
+                ∑ p : {p : (A →ₗ[K] W) × W // p.2 ∉ B},
+                  g ((e.symm p).1) :=
+                    (Equiv.sum_comp e.symm (fun f => g f.1)).symm
+            _ = ∑ p : {p : (A →ₗ[K] W) × W // p.2 ∉ B},
+                  g ((dualSupVectorCoordinateEquiv A hw).symm p.1) := by
+                    apply Finset.sum_congr rfl
+                    intro p hp
+                    congr 1
+
+/-- The normalized conditional law is preserved by the columnwise
+restriction/extension equivalence. -/
+theorem dualSupVectorOutside_mean {W : Type*} [AddCommGroup W] [Module K W]
+    [Fintype V] [Fintype W] (A : Submodule K V) (w : V) (hw : w ∉ A)
+    (B : Submodule K W)
+    (g : (spanExtensionSubmodule A w →ₗ[K] W) → Real) :
+    ((∑ f : {f : spanExtensionSubmodule A w →ₗ[K] W //
+        dualSupVectorColumn A w f ∉ B}, g f.1) /
+      (Fintype.card {f : spanExtensionSubmodule A w →ₗ[K] W //
+        dualSupVectorColumn A w f ∉ B} : Real)) =
+      ((∑ p : {p : (A →ₗ[K] W) × W // p.2 ∉ B},
+        g ((dualSupVectorCoordinateEquiv A hw).symm p.1)) /
+      (Fintype.card {p : (A →ₗ[K] W) × W // p.2 ∉ B} : Real)) := by
+  rw [dualSupVectorOutside_sum A w hw B g,
+    Fintype.card_congr (dualSupVectorOutsideEquiv A w hw B)]
+
+/-- Conditioning a nonnegative finite mean on an event of probability at
+least one half costs at most two. This is the exact scalar step used after
+the columnwise restriction/extension bijection; it does not assume an
+energy estimate. -/
+theorem conditional_uniform_mean_le_two {α : Type*} [Fintype α]
+    (p : α → Prop) [DecidablePred p]
+    (hne : (Finset.univ.filter p).Nonempty)
+    (hprob : Fintype.card α ≤ 2 * (Finset.univ.filter p).card)
+    (g : α → Real) (hg : ∀ x, 0 ≤ g x) :
+    (∑ x ∈ (Finset.univ : Finset α).filter p, g x) /
+        ((Finset.univ.filter p).card : Real) ≤
+      2 * ((∑ x : α, g x) / (Fintype.card α : Real)) := by
+  have hp : 0 < (Finset.univ.filter p).card := by
+    exact Finset.card_pos.mpr hne
+  rcases hne with ⟨x, hx⟩
+  have hα : 0 < Fintype.card α := Fintype.card_pos_iff.mpr ⟨x⟩
+  have hsum :
+      (∑ x ∈ (Finset.univ : Finset α).filter p, g x) ≤ ∑ x : α, g x := by
+    rw [Finset.sum_filter]
+    apply Finset.sum_le_sum
+    intro x hx
+    by_cases hpx : p x <;> simp [hpx, hg x]
+  have hsum0 : 0 ≤ ∑ x : α, g x := Finset.sum_nonneg fun x hx => hg x
+  have hprobR : (Fintype.card α : Real) ≤
+      2 * ((Finset.univ.filter p).card : Real) := by exact_mod_cast hprob
+  have hpR : 0 < ((Finset.univ.filter p).card : Real) := Nat.cast_pos.mpr hp
+  have hαR : 0 < (Fintype.card α : Real) := Nat.cast_pos.mpr hα
+  have hcross :
+      (∑ x : α, g x) * (Fintype.card α : Real) ≤
+        (2 * (∑ x : α, g x)) * ((Finset.univ.filter p).card : Real) := by
+    calc
+      (∑ x : α, g x) * (Fintype.card α : Real) ≤
+        (∑ x : α, g x) * (2 * ((Finset.univ.filter p).card : Real)) :=
+          mul_le_mul_of_nonneg_left hprobR hsum0
+      _ = (2 * (∑ x : α, g x)) * ((Finset.univ.filter p).card : Real) := by ring
+  calc
+    (∑ x ∈ (Finset.univ : Finset α).filter p, g x) /
+        ((Finset.univ.filter p).card : Real) ≤
+      (∑ x : α, g x) / ((Finset.univ.filter p).card : Real) :=
+        div_le_div_of_nonneg_right hsum (le_of_lt hpR)
+    _ ≤ (2 * (∑ x : α, g x)) / (Fintype.card α : Real) :=
+      (div_le_div_iff₀ hpR hαR).2 hcross
+    _ = 2 * ((∑ x : α, g x) / (Fintype.card α : Real)) := by ring
+
+/-- In a binary vector space, if B has codimension one in B', exactly half
+of B' lies outside B. This discharges the half-mass guard for the expanded
+column branch without a nonempty-fibre premise. -/
+theorem binary_submodule_complement_card_eq [Fintype V] [Module (ZMod 2) V]
+    (B B' : Submodule (ZMod 2) V) (hB : B ≤ B')
+    (hdim : Module.finrank (ZMod 2) B' = Module.finrank (ZMod 2) B + 1) :
+    (Finset.univ.filter (fun w : B' => (w : V) ∉ B)).card = Fintype.card B := by
+  classical
+  let e : {w : B' // (w : V) ∈ B} ≃ B :=
+    { toFun := fun (w : {w : B' // (w : V) ∈ B}) =>
+        (⟨(w.1 : V), w.2⟩ : B)
+      invFun := fun (w : B) =>
+        (⟨⟨(w : V), hB w.2⟩, w.2⟩ : {w : B' // (w : V) ∈ B})
+      left_inv := by
+        intro w
+        apply Subtype.ext
+        apply Subtype.ext
+        rfl
+      right_inv := by
+        intro w
+        apply Subtype.ext
+        rfl }
+  have hin : (Finset.univ.filter (fun w : B' => (w : V) ∈ B)).card =
+      Fintype.card B := by
+    calc
+      (Finset.univ.filter (fun w : B' => (w : V) ∈ B)).card =
+          Fintype.card {w : B' // (w : V) ∈ B} := by
+            rw [Fintype.card_subtype]
+      _ = Fintype.card B := Fintype.card_congr e
+  have hcardB : Fintype.card B =
+      2 ^ Module.finrank (ZMod 2) B := by
+    simpa using (Module.card_eq_pow_finrank (K := ZMod 2) (V := B))
+  have hcardB' : Fintype.card B' =
+      2 ^ Module.finrank (ZMod 2) B' := by
+    simpa using (Module.card_eq_pow_finrank (K := ZMod 2) (V := B'))
+  have hsplit := Finset.card_filter_add_card_filter_not
+    (s := (Finset.univ : Finset B')) (fun w : B' => (w : V) ∈ B)
+  simp only [Finset.card_univ] at hsplit
+  rw [hin, hcardB, hcardB', hdim] at hsplit
+  simp only [pow_succ] at hsplit
+  omega
+
+/-- The restriction data on A together with the value at an independent new
+vector are exactly the data of a functional on A + span{w}. -/
+def dualSupCoordinateMap (A : Submodule K V) (w : V) :
+    ((spanExtensionSubmodule A w) →ₗ[K] K) →ₗ[K]
+      ((A →ₗ[K] K) × K) where
+  toFun f :=
+    (f.comp (Submodule.inclusion (show A ≤ spanExtensionSubmodule A w from by
+        dsimp [spanExtensionSubmodule]
+        exact le_sup_left)),
+      f ⟨w, Submodule.mem_sup_right (Submodule.subset_span (Set.mem_singleton w))⟩)
+  map_add' f g := by
+    ext <;> simp
+  map_smul' c f := by
+    ext <;> simp
+
+/-- If w is outside A, the local functional data on the enlarged subspace are
+in bijection with arbitrary data (ψ,y) on A and w. This is the finite
+restriction/extension bijection used to identify a new sampled column. -/
+noncomputable def dualSupCoordinateEquiv (A : Submodule K V) {w : V}
+    (hw : w ∉ A) :
+    ((spanExtensionSubmodule A w) →ₗ[K] K) ≃ₗ[K]
+      ((A →ₗ[K] K) × K) :=
+  LinearEquiv.ofBijective (dualSupCoordinateMap A w) <| by
+    constructor
+    · intro f g h
+      apply LinearMap.ext
+      intro x
+      have hA := congrArg Prod.fst h
+      have hwv := congrArg Prod.snd h
+      rcases Submodule.mem_sup.mp x.property with ⟨a, ha, b, hb, hxb⟩
+      rcases Submodule.mem_span_singleton.mp hb with ⟨c, hc⟩
+      let a' : spanExtensionSubmodule A w := ⟨a, Submodule.mem_sup_left ha⟩
+      let w' : spanExtensionSubmodule A w :=
+        ⟨w, Submodule.mem_sup_right (Submodule.subset_span (Set.mem_singleton w))⟩
+      have hxeq : x = a' + c • w' := by
+        apply Subtype.ext
+        change (x : V) = a + c • w
+        rw [← hxb, ← hc]
+      have hfa : f a' = g a' := by
+        have := congrArg (fun q : A →ₗ[K] K => q ⟨a, ha⟩) hA
+        have hinc :
+            Submodule.inclusion
+                (show A ≤ spanExtensionSubmodule A w from by
+                  dsimp [spanExtensionSubmodule]
+                  exact le_sup_left) ⟨a, ha⟩ = a' := by
+          apply Subtype.ext
+          rfl
+        change f (Submodule.inclusion
+          (show A ≤ spanExtensionSubmodule A w from by
+            dsimp [spanExtensionSubmodule]
+            exact le_sup_left) ⟨a, ha⟩) = g (Submodule.inclusion
+              (show A ≤ spanExtensionSubmodule A w from by
+                dsimp [spanExtensionSubmodule]
+                exact le_sup_left) ⟨a, ha⟩) at this
+        rw [hinc] at this
+        exact this
+      have hwfg : f w' = g w' := by
+        simpa [dualSupCoordinateMap, w'] using hwv
+      rw [hxeq, map_add, map_smul, hfa, hwfg]
+      simp only [map_add, map_smul]
+    · rintro ⟨ψ, y⟩
+      obtain ⟨φ, hψ, hφw⟩ := LinearMap.exists_extend_of_notMem ψ hw y
+      let B : Submodule K V := spanExtensionSubmodule A w
+      let w' : B := ⟨w, Submodule.mem_sup_right
+        (Submodule.subset_span (Set.mem_singleton w))⟩
+      refine ⟨φ.comp B.subtype, ?_⟩
+      change ((φ.comp B.subtype).comp
+          (Submodule.inclusion (show A ≤ B from le_sup_left)),
+        (φ.comp B.subtype) w') = (ψ, y)
+      apply Prod.ext
+      · apply LinearMap.ext
+        intro a
+        have h := congrArg (fun f : A →ₗ[K] K => f a) hψ
+        simpa [B, spanExtensionSubmodule, LinearMap.comp_apply, Submodule.coe_inclusion] using h
+      · simpa [w'] using hφw
+
+/-- The extension bijection has inverse given by restricting an ambient
+functional to A + span{w}, retaining the same restriction and column value. -/
+@[simp] theorem dualSupCoordinateEquiv_apply (A : Submodule K V) {w : V}
+    (hw : w ∉ A) (f : (spanExtensionSubmodule A w) →ₗ[K] K) :
+    dualSupCoordinateEquiv A hw f =
+      (f.comp (Submodule.inclusion (show A ≤ spanExtensionSubmodule A w from by
+        dsimp [spanExtensionSubmodule]
+        exact le_sup_left)),
+       f ⟨w, Submodule.mem_sup_right (Submodule.subset_span (Set.mem_singleton w))⟩) := rfl
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18Conditioning

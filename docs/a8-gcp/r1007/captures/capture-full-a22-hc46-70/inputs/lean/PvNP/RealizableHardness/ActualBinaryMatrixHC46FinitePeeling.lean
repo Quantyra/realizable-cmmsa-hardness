@@ -1,0 +1,99 @@
+import PvNP.RealizableHardness.BinaryMatrixA15BaseCase
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46FinitePeeling
+
+open BinaryMatrixFourier BinaryMatrixComplexA15
+open BinaryMatrixFirstDerivative
+open BinaryMatrixCodomainA15
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- The exact product of the one-step A15 losses for `k` successive
+coordinate-line peels, starting at global rank `r + k`. -/
+def linePeelLoss (r : Nat) : Nat -> Real
+  | 0 => 1
+  | k + 1 =>
+      (4 * (2 : Real) ^ (4 * (r + k + 1))) * linePeelLoss r k
+
+/-- The exact product of the one-step A15 losses for `k` successive
+coordinate-hyperplane peels, starting at global rank `r + k`. -/
+def hyperplanePeelLoss (r : Nat) : Nat -> Real
+  | 0 => 1
+  | k + 1 =>
+      (4 * (2 : Real) ^ (4 * (r + k + 1))) * hyperplanePeelLoss r k
+
+/-- Iterate the actual A15 line operator along a prescribed list of appended
+columns. The result is a function on the matrix space with those columns
+removed. -/
+def coordinateLinePeel {n d : Nat} (r : Nat) :
+    (k : Nat) ->
+    (f : BinaryMatrix n (d + k) -> Complex) ->
+    (t : Fin k -> Fin n -> ZMod 2) ->
+    BinaryMatrix n d -> Complex
+  | 0, f, _ => f
+  | k + 1, f, t =>
+      coordinateLinePeel r k
+        (fun M => complexLineP (r + k) f
+          (rawLastColumn M (t (Fin.last k))))
+        (fun i => t i.castSucc)
+
+/-- Iterate the actual A15 hyperplane operator along a prescribed list of
+appended rows. -/
+def coordinateHyperplanePeel {n d : Nat} (r : Nat) :
+    (k : Nat) ->
+    (f : BinaryMatrix (n + k) d -> Complex) ->
+    (t : Fin k -> Fin d -> ZMod 2) ->
+    BinaryMatrix n d -> Complex
+  | 0, f, _ => f
+  | k + 1, f, t =>
+      coordinateHyperplanePeel r k
+        (fun M => complexHyperplaneP (r + k) f
+          (rawLastRow M (t (Fin.last k))))
+        (fun i => t i.castSucc)
+
+theorem coordinateLinePeel_global {n d r k : Nat} {eps : Real}
+    (f : BinaryMatrix n (d + k) -> Complex)
+    (t : Fin k -> Fin n -> ZMod 2)
+    (heps : 0 <= eps)
+    (hf : UpToActualNormSqGlobal (r + k) eps f) :
+    UpToActualNormSqGlobal r (linePeelLoss r k * eps)
+      (coordinateLinePeel (n := n) (d := d) r k f t) := by
+  induction k generalizing d eps with
+  | zero =>
+      simpa [coordinateLinePeel, linePeelLoss] using hf
+  | succ k ih =>
+      let f' : BinaryMatrix n (d + k) -> Complex := fun M =>
+        complexLineP (r + k) f (rawLastColumn M (t (Fin.last k)))
+      let t' : Fin k -> Fin n -> ZMod 2 := fun i => t i.castSucc
+      have hstep := actualGlobal_A15_complex_fixedLine
+        (t (Fin.last k)) f heps hf
+      have heps' : 0 <= 4 * (2 : Real) ^ (4 * (r + k + 1)) * eps := by
+        positivity
+      have hrec := ih (d := d) f' t' heps' hstep
+      simpa [coordinateLinePeel, linePeelLoss, f', t', Nat.add_assoc, mul_assoc, mul_left_comm, mul_comm] using hrec
+
+theorem coordinateHyperplanePeel_global {n d r k : Nat} {eps : Real}
+    (f : BinaryMatrix (n + k) d -> Complex)
+    (t : Fin k -> Fin d -> ZMod 2)
+    (heps : 0 <= eps)
+    (hf : UpToActualNormSqGlobal (r + k) eps f) :
+    UpToActualNormSqGlobal r (hyperplanePeelLoss r k * eps)
+      (coordinateHyperplanePeel (n := n) (d := d) r k f t) := by
+  induction k generalizing n eps with
+  | zero =>
+      simpa [coordinateHyperplanePeel, hyperplanePeelLoss] using hf
+  | succ k ih =>
+      let f' : BinaryMatrix (n + k) d -> Complex := fun M =>
+        complexHyperplaneP (r + k) f (rawLastRow M (t (Fin.last k)))
+      let t' : Fin k -> Fin d -> ZMod 2 := fun i => t i.castSucc
+      have hstep := actualGlobal_A15_complex_fixedHyperplane
+        (t (Fin.last k)) f heps hf
+      have heps' : 0 <= 4 * (2 : Real) ^ (4 * (r + k + 1)) * eps := by
+        positivity
+      have hrec := ih (n := n) f' t' heps' hstep
+      simpa [coordinateHyperplanePeel, hyperplanePeelLoss, f', t', Nat.add_assoc, mul_assoc, mul_left_comm, mul_comm] using hrec
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46FinitePeeling
