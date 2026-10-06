@@ -1,0 +1,1 @@
+Full original215/14/49 eightstages; actual5B3406/F981 boundedforwardprojection proofrepair, separate108flushedstderrmarkerdiagnostic with exactmarker-removal bodyidentity, standardactualsource/Checks/all49mandatory. No acceptancefromdiagnostic. Cache400/inherited/resource/warning/custody gates unchanged. No localLean/cleanup.

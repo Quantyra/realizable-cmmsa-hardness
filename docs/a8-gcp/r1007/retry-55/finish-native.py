@@ -4,7 +4,7 @@ from pathlib import Path
 sys.dont_write_bytecode=True
 HERE=Path(__file__).resolve().parent
 m=runpy.run_path(str(HERE/'controller.py'),run_name='finish55_import'); m['configure']()
-run=m['PACKAGE']/'runs/cmmsa_a8_output_20261006T074455Z_fd14cccb'
+run=m['PACKAGE']/'runs/cmmsa_a8_output_20261006T081337Z_6df39b3b'
 terminal=json.loads((run/'terminal.json').read_bytes()); assert terminal['vm_terminal_receipt']['status']=='TERMINATED'
 d=run/'remote-evidence'; cache=json.loads((d/'verified-cache-provenance.json').read_bytes()); objects=json.loads((d/'object-after.json').read_bytes())
 comparison={'cache_objects':len(cache['objects']),'changed':[n for n,h in cache['objects'].items() if objects.get(n)!=h],'compiler_equal':json.loads((d/'compiler-identity.json').read_bytes())==cache['compiler'],'packages_equal':json.loads((d/'package-source-hashes.json').read_bytes())==cache['package_sources'],'core_equal':json.loads((d/'core-source-hashes.json').read_bytes())==cache['core_sources']}

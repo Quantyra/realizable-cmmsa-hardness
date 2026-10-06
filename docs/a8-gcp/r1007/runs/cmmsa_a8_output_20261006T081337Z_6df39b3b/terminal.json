@@ -1,0 +1,27 @@
+{
+  "run": "cmmsa_a8_output_20261006T081337Z_6df39b3b",
+  "capture": "capture-integrated-55",
+  "finished_utc": "2026-10-06T08:22:05+00:00",
+  "start_attempted": true,
+  "compiler_attempted": true,
+  "created_resources": [],
+  "vm_terminal_receipt": null,
+  "evidence_archive_sha256": "4B67071AE9E98199C8DA7579F7D59B82D24747E7ADCC00155470D6169BAD1CF0",
+  "failure": "\nEvidence preservation:\nTraceback (most recent call last):\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\runner.py\", line 226, in execute\n    if len(data) != min(block, size-index*block): raise ValueError(\"Archive chunk size mismatch\")\n                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Archive chunk size mismatch\n\nResource settlement:\nTraceback (most recent call last):\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\runner.py\", line 238, in execute\n    terminal_state = control.settle()\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-14\\controller.py\", line 113, in settle\n    branch=settlement_branch(attempted,self.records,custody)\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-14\\controller.py\", line 92, in settlement_branch\n    verify_custody(custody); return 'full-archive-custody'\n    ~~~~~~~~~~~~~~^^^^^^^^^\n  File \"C:\\Users\\Dan\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\a8-gcp\\r1007\\retry-14\\controller.py\", line 46, in verify_custody\n    assert c and c['before_stop'] is True\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+  "local_process_check_after": {
+    "utc": "2026-10-06T08:22:06+00:00",
+    "command": [
+      "powershell.exe",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "ConvertTo-Json -InputObject @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match '^(lean|lake)(\\.exe)?$' } | Select-Object Id,ProcessName,Path) -Compress"
+    ],
+    "processes": [],
+    "native_exit": 0
+  },
+  "inherited_dirt_preserved": true,
+  "inherited_preservation_scope": "All tracked modified/deleted file hashes, all untracked Lean file hashes, complete tracked diff, and directory-level untracked Git status. Other inherited untracked contents are outside every write operation; they are not exhaustively hashed.",
+  "local_compilation": false,
+  "automatic_git_writes": false
+}

@@ -1,0 +1,109 @@
+warning: cslib: repository '/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261006T081337Z_6df39b3b/.lake/packages/cslib' has local changes
+CMMSA-A11-BEGIN original-line=9 command=namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A11WeightedAggregate
+CMMSA-A11-BEGIN original-line=10 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7T1Transfer
+CMMSA-A11-BEGIN original-line=11 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A6Transfer
+CMMSA-A11-BEGIN original-line=12 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
+CMMSA-A11-BEGIN original-line=13 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8Endpoint
+CMMSA-A11-BEGIN original-line=14 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientReindex
+CMMSA-A11-BEGIN original-line=15 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46DR6Moment
+CMMSA-A11-BEGIN original-line=16 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7HybridW6Transport
+CMMSA-A11-BEGIN original-line=17 command=open PvNP.RealizableHardness.BinaryMatrixComplexA14
+CMMSA-A11-BEGIN original-line=18 command=open PvNP.RealizableHardness.BinaryMatrixFourier
+CMMSA-A11-BEGIN original-line=19 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A9AmbientFiber
+CMMSA-A11-BEGIN original-line=20 command=open PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+CMMSA-A11-BEGIN original-line=21 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly
+CMMSA-A11-BEGIN original-line=22 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
+CMMSA-A11-BEGIN original-line=23 command=open PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+CMMSA-A11-BEGIN original-line=24 command=open PvNP.RealizableHardness.ActualFiniteDegreeFourierReconstruction
+CMMSA-A11-BEGIN original-line=25 command=open scoped BigOperators
+CMMSA-A11-BEGIN original-line=26 command=set_option autoImplicit false
+CMMSA-A11-BEGIN original-line=27 command=set_option backward.isDefEq.respectTransparency false
+CMMSA-A11-BEGIN original-line=28 command=noncomputable section
+CMMSA-A11-BEGIN original-line=30 command=private abbrev F := ZMod 2
+CMMSA-A11-BEGIN original-line=31 command=private abbrev V (d : Nat) := Fin d → F
+CMMSA-A11-BEGIN original-line=32 command=private abbrev W (n : Nat) := Fin n → F
+CMMSA-A11-BEGIN original-line=34 command=private theorem a11_mem_fintype_elems (α : Type*) (inst : Fintype α) (x : α) :
+CMMSA-A11-BEGIN original-line=38 command=private theorem a11_sum_instances {α : Type*} [Finite α]
+CMMSA-A11-BEGIN original-line=46 command=section Canonical
+CMMSA-A11-BEGIN original-line=47 command=variable {n d : Nat} (C : Submodule F (V d)) (H : Submodule F (W n))
+CMMSA-A11-BEGIN original-line=48 command=variable (X : H →ₗ[F] (V d ⧸ C))
+CMMSA-A11-BEGIN original-line=50 command=def a11OriginalA : Submodule F (V d) := (LinearMap.range X).comap C.mkQ
+CMMSA-A11-BEGIN original-line=52 command=def a11OriginalB : Submodule F (W n) := (LinearMap.ker X).map H.subtype
+CMMSA-A11-BEGIN original-line=54 command=def a11OriginalInternalC : Submodule F (a11OriginalA C H X) :=
+CMMSA-A11-BEGIN original-line=57 command=def a11OriginalK : Submodule F (W n ⧸ a11OriginalB C H X) :=
+CMMSA-A11-BEGIN original-line=60 command=theorem a11_original_C_le_A : C ≤ a11OriginalA C H X :=
+CMMSA-A11-BEGIN original-line=63 command=theorem a11_original_B_le_H : a11OriginalB C H X ≤ H :=
+CMMSA-A11-BEGIN original-line=67 command=def a11DomainRangeMap : a11OriginalA C H X →ₗ[F] LinearMap.range X where
+CMMSA-A11-BEGIN original-line=72 command=theorem a11_domain_range_surjective : Function.Surjective (a11DomainRangeMap C H X) := by
+CMMSA-A11-BEGIN original-line=82 command=theorem a11_domain_range_kernel : LinearMap.ker (a11DomainRangeMap C H X) =
+CMMSA-A11-BEGIN original-line=90 command=def a11RangeQuotientMap : H →ₗ[F] a11OriginalK C H X where
+CMMSA-A11-BEGIN original-line=96 command=theorem a11_range_quotient_surjective : Function.Surjective (a11RangeQuotientMap C H X) := by
+CMMSA-A11-BEGIN original-line=100 command=theorem a11_range_quotient_kernel : LinearMap.ker (a11RangeQuotientMap C H X) =
+CMMSA-A11-BEGIN original-line=112 command=def a11DomainRangeEquiv :
+CMMSA-A11-BEGIN original-line=118 command=def a11RangeQuotientEquiv :
+CMMSA-A11-BEGIN original-line=125 command=def a11CanonicalXbar :
+CMMSA-A11-BEGIN original-line=131 command=def a11CanonicalTriple : T1IndexTriple (a11OriginalA C H X) (a11OriginalB C H X) where
+CMMSA-A11-BEGIN original-line=137 command=theorem a11_canonical_Xbar_square (h : H) :
+CMMSA-A11-BEGIN original-line=147 command=theorem a11_canonical_ambient_C : t1AmbientC (a11CanonicalTriple C H X).C = C := by
+CMMSA-A11-BEGIN original-line=154 command=theorem a11_canonical_ambient_H : t1AmbientH (a11CanonicalTriple C H X).K = H := by
+CMMSA-A11-BEGIN original-line=159 command=private theorem a11_subtype_cast_coe
+CMMSA-A11-BEGIN original-line=166 command=private theorem a11_parent_cast_formula
+CMMSA-A11-BEGIN original-line=186 command=theorem a11_canonical_pullback :
+CMMSA-A11-BEGIN original-line=220 command=end Canonical
+CMMSA-A11-BEGIN original-line=222 command=abbrev a11InitialData (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=225 command=abbrev a11OuterTriples (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=228 command=private theorem a11_initial_data_ext {n d : Nat}
+CMMSA-A11-BEGIN original-line=238 command=private theorem a11_outer_triple_ext {n d : Nat}
+CMMSA-A11-BEGIN original-line=250 command=def a11GlobalInitialEquiv {n d : Nat} : a11OuterTriples n d ≃ a11InitialData n d where
+CMMSA-A11-BEGIN original-line=274 command=def a11InitialOrder {n d : Nat} (p : a11InitialData n d) : Nat :=
+CMMSA-A11-BEGIN original-line=278 command=theorem a11_global_initial_order {n d : Nat} (p : a11OuterTriples n d) :
+CMMSA-A11-BEGIN original-line=283 command=theorem a11_nonzero_iff_order_pos {n d : Nat}
+CMMSA-A11-BEGIN original-line=304 command=def a11PositiveGlobalInitialEquiv {n d : Nat} :
+CMMSA-A11-BEGIN original-line=313 command=def a11StrictLowerDegreeIH (D : Nat) : Prop :=
+CMMSA-A11-BEGIN original-line=321 command=theorem a11_actual_mixed_fourth_le_output_q {n d D : Nat}
+CMMSA-A11-BEGIN original-line=344 command=def a11ActualFinalSum {n d : Nat}
+CMMSA-A11-BEGIN original-line=362 command=theorem a11_actual_mixed_fourth_le_actual_final_sum {n d D : Nat}
+CMMSA-A11-BEGIN original-line=380 command=theorem a11_weighted_actual_mixed_le_final_sum {n d D : Nat}
+CMMSA-A11-BEGIN original-line=395 command=abbrev a11NonzeroOuterTriples (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=398 command=private def a11NonzeroOuterFlattenEquiv {n d : Nat} :
+CMMSA-A11-BEGIN original-line=406 command=def a11NonzeroInitialEquiv {n d : Nat} :
+CMMSA-A11-BEGIN original-line=410 command=def a11InitialFinalSum {n d : Nat} (z : a11InitialData n d)
+CMMSA-A11-BEGIN original-line=425 command=theorem a11_weighted_mixed_sum_le_actual_initial_sum {n d D : Nat}
+CMMSA-A11-BEGIN original-line=473 command=abbrev a11InitialFinalSource (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=477 command=abbrev a11FinalGradeSource (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=483 command=private theorem a11_subspace_dim_bound {m : Nat} (C : Submodule F (Fin m → F)) :
+CMMSA-A11-BEGIN original-line=490 command=private theorem a11_subspace_codim_bound {m : Nat} (H : Submodule F (Fin m → F)) :
+CMMSA-A11-BEGIN original-line=497 command=private theorem a11_initial_rank_bound {n d : Nat}
+CMMSA-A11-BEGIN original-line=509 command=def a11GlobalA9SourceEquiv {n d : Nat} :
+CMMSA-A11-BEGIN original-line=538 command=abbrev a11FinalGradeTarget (n d : Nat) :=
+CMMSA-A11-BEGIN original-line=545 command=def a11GlobalA9PartitionEquiv {n d : Nat} :
+CMMSA-A11-BEGIN original-line=560 command=def a11AmbientEnergy {n d : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
+CMMSA-A11-BEGIN original-line=565 command=private def a11InitialFinalContribution {n d : Nat} (D : Nat)
+CMMSA-A11-BEGIN original-line=577 command=private def a11FinalGradeContribution {n d : Nat} (D : Nat)
+CMMSA-A11-BEGIN original-line=591 command=theorem a11_weighted_actual_A9_partition {n d D : Nat} (f : BinaryMatrix n d → Complex) :
+CMMSA-A11-BEGIN original-line=621 command=private theorem a11_initial_final_sum_eq_selected {n d : Nat}
+CMMSA-A11-BEGIN original-line=644 command=theorem a11_weighted_mixed_sum_le_actual_final_fibers {n d D : Nat}
+CMMSA-A11-BEGIN original-line=663 command=theorem a11AmbientEnergy_nonneg {n d : Nat}
+CMMSA-A11-BEGIN original-line=670 command=theorem a11AmbientEnergy_zero_outside_window {n d D : Nat}
+CMMSA-A11-BEGIN original-line=682 command=theorem a11_full_A10_exponent_saving {D t k : Nat} (ht : t ≤ D) (hk : k ≤ t) :
+CMMSA-A11-BEGIN original-line=696 command=theorem a11_actual_fixed_final_saved_charge {n d D i j k : Nat}
+CMMSA-A11-BEGIN original-line=782 command=private theorem a11_finite_geom_le {m : Nat} {r : Real}
+CMMSA-A11-BEGIN original-line=793 command=private theorem a11_finite_positive_geom_le {m : Nat} {r : Real}
+CMMSA-A11-BEGIN original-line=817 command=private theorem a11_finite_double_geom_le {m n : Nat} {r : Real}
+CMMSA-A11-BEGIN original-line=829 command=private theorem a11_finite_double_positive_geom_le {m n : Nat} {r : Real}
+CMMSA-A11-BEGIN original-line=876 command=private theorem a11_tail_weight_factor (D i j k : Nat) :
+CMMSA-A11-BEGIN original-line=889 command=theorem a11_full_finite_ij_tail {D k m n : Nat} (hD : 0 < D) :
+CMMSA-A11-BEGIN original-line=941 command=theorem a11_tail_rank_weight_le_w6 (D k : Nat) :
+CMMSA-A11-BEGIN original-line=954 command=theorem a11_all_actual_final_energy_w6 {n d D : Nat}
+CMMSA-A11-BEGIN original-line=979 command=theorem a11_all_actual_final_energy_terminal {n d D : Nat}
+CMMSA-A11-BEGIN original-line=1017 command=private theorem a11_sum_constant_gate {α : Type*} [Fintype α]
+CMMSA-A11-BEGIN original-line=1036 command=private theorem a11_saved_power_split (D i j k : Nat) :
+CMMSA-A11-BEGIN original-line=1045 command=private theorem a11_actual_grade_le_saved_family {n d D : Nat}
+CMMSA-A11-BEGIN original-line=1095 command=abbrev a11RankedFinalFrequencies {n d : Nat}
+CMMSA-A11-BEGIN original-line=1099 command=def a11RankedFinalFrequencyEquiv {n d : Nat}
+CMMSA-A11-BEGIN original-line=1113 command=theorem a11_actual_final_fibers_le_post_tail_energy {n d D : Nat}
+CMMSA-A11-BEGIN original-line=1206 command=theorem a11_original_weighted_mixed_bound {n d D : Nat}
+CMMSA-A11-BEGIN original-line=1222 command=theorem a11_original_A7_positive_from_strict_IH {n d D : Nat}
+CMMSA-A11-BEGIN original-line=1232 command=theorem manuscript_A7_actual {n d D : Nat}
+CMMSA-A11-BEGIN original-line=1254 command=end
+CMMSA-A11-BEGIN original-line=1255 command=end PvNP.RealizableHardness.ActualBinaryMatrixHC46A11WeightedAggregate
