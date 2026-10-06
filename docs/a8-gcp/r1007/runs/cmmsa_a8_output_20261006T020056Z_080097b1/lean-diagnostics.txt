@@ -1,0 +1,88 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:147:15: unsolved goals
+n d D : ℕ
+C : Submodule F (V d)
+H : Submodule F (W n)
+X : ↥H →ₗ[F] V d ⧸ C
+f : BinaryMatrix n d → ℂ
+hsupport : ComplexFourierSupportedThrough D f
+Xmat : BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H)
+  (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝
+    (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) :=
+  (carrierFrequencyEquiv C H) X
+R : Submodule (ZMod 2)
+  (Fin
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) →
+    ZMod 2) :=
+  (Matrix.toLin' (Matrix.transpose Xmat)).range
+K : Submodule (ZMod 2)
+  (Fin (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝ ↥H) → ZMod 2) :=
+  (Matrix.toLin' (Matrix.transpose Xmat)).ker
+O : Type :=
+  Submodule F (Fin (Module.finrank F ((Fin (Module.finrank F (V d ⧸ C)) → F) ⧸ R)) → F) ×
+    Submodule F (Fin (Module.finrank F ↥K) → F)
+output : (V d →ₗ[F] W n) →
+  BinaryMatrix (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝ ↥K)
+      (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate.V✝
+            (Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.F✝
+              (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.V✝ d ⧸ C)) ⧸
+          R)) →
+    ℂ :=
+  fun T => carrierFunctionCoordinate R K (actualW6Derivative Xmat 0 (actualDerivativeCoordinate C H T f))
+hexhaust : ∀ (T : V d →ₗ[F] W n), a7HybridQ (output T) = ∑ p, a7PairShare p.1 p.2 (output T)
+hfubini :
+  (typedUniformMean fun T => a7HybridQ (output T)) = ∑ p, typedUniformMean fun T => a7PairShare p.1 p.2 (output T)
+hp :
+  ∀ (p : O),
+    (typedUniformMean fun T => a7PairShare p.1 p.2 (output T)) ≤
+      2 ^ (6 * D * Matrix.rank Xmat) * ∑ q, localEnergy C H X f ↑q
+⊢ ∑ x, ∑ q, localEnergy C H X f ↑q = ∑ p, localEnergy C H X f ↑p.snd.snd
+
+Candidate context:
+145:           exact ⟨e.symm q, a8_endpoint_mem_fintype_elems _ _ _, e.apply_symm_apply q⟩
+146:         · intro p _; rfl
+147:       _ = _ := by
+148:         simp only [a8T2HybridComplementPairs, Fintype.sum_prod_type, Fintype.sum_sigma,
+149:           a8_endpoint_sum_instances]
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:153:4: Type mismatch: After simplification, term
+  a8_all_pair_sum_reindex (Matrix.toLin' (Matrix.transpose Xmat)) fun p => localEnergy C H X f ↑p
+ has type
+  @Eq ℝ (∑ p, localEnergy C H X f ↑((a8T2AllPairEquiv (Matrix.toLin' (Matrix.transpose Xmat))) p))
+    (∑ p, localEnergy C H X f ↑p)
+but is expected to have type
+  @Eq ℝ (∑ p, localEnergy C H X f ↑p.snd.snd) (∑ p, localEnergy C H X f ↑p)
+
+Candidate context:
+151:       localEnergy C H X f p.2.2.1) =
+152:       ∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1 := by
+153:     simpa only [a8_endpoint_sum_instances] using
+154:       a8_all_pair_sum_reindex Xmat.transpose.toLin' (fun p => localEnergy C H X f p.1)
+155:   have hamb : (∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1) =
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A8Endpoint.lean:157:4: Type mismatch: After simplification, term
+  a8_all_pair_actual_ambient_energy_reindex C H X f
+ has type
+  @Eq ℝ
+    (∑ p,
+      typedUniformMean fun T =>
+        typedW6OutputEnergy (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2)
+            (a8NestedFrequency C H (↑p).1 (↑p).2
+              (t2QuotientRestrict (↑p).1 (↑p).2 (Matrix.toLin' (Matrix.transpose ((carrierFrequencyEquiv C H) X)))))
+            (filteredCarrierFunction (a8NestedAmbientDomain C (↑p).1) (a8NestedAmbientRange H (↑p).2) T f) ^
+          2)
+    (∑ p,
+      typedUniformMean fun T =>
+        typedW6OutputEnergy (↑(↑p).1) (↑(↑p).2) (a9AmbientFinalMap ↑(↑p).1 ↑(↑p).2 ⟨C, ⋯⟩ ⟨H, ⋯⟩ X)
+            (filteredCarrierFunction (↑(↑p).1) (↑(↑p).2) T f) ^
+          2)
+but is expected to have type
+  @Eq ℝ (∑ p, localEnergy C H X f ↑p) (∑ p, finalEnergy C H X f ↑p)
+
+Candidate context:
+155:   have hamb : (∑ p : a8T2AllPairs Xmat.transpose.toLin', localEnergy C H X f p.1) =
+156:       ∑ p : a8AmbientFinalPairs C H X, finalEnergy C H X f p.1 := by
+157:     simpa only [a8_endpoint_sum_instances] using
+158:       a8_all_pair_actual_ambient_energy_reindex C H X f
+159:   calc
