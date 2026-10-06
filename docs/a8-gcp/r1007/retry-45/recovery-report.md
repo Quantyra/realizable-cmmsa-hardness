@@ -1,0 +1,13 @@
+# Run45 recovered custody and native boundary
+
+Run `cmmsa_a8_output_20261006T023135Z_1fc1ec5c` retains its original immutable four-stage harness. Stages exited 0/1/125/125. The complete original A8 endpoint source built in 7.6 seconds with zero owned A8 error or warning headers. A11 produced 53 owned error headers, including 12 unsolved-goal headers, and 32 new owned warning headers. The sealed inherited warning baseline is 981; source-stage total is 1013. Checks and fresh axioms were skipped, so no A8 or A11 acceptance follows.
+
+Local disk-full errors interrupted the repository archive copy and terminal creation. The original 20,971,520-byte partial archive, zero-byte terminal.json, failed coherent-offer snapshot, and executed runner receipts remain preserved. No files were deleted. The fully received short archive is 38,972,523 bytes and matches remote control006 SHA-256 `0605CF51F0EDE1B8FAF58B04C56933EF97ABEC49B581CD6A9616F3DEE9D0125C`. A separate recovered repository archive matches that same hash. Custody was established before one idle-proven stop; recovery supplement and fresh independent termination receipts prove TERMINATED with lastStopTimestamp `2026-10-05T19:50:38.350-07:00`.
+
+The separate effective terminal exists only to run closeout diagnostics. Its conservative false preservation field is not an executed runner outcome: the executed terminal has zero bytes and supplies no flag. The preservation supplement independently proves all 136 original inherited states and all 14 immutable captured inputs unchanged. All 400 reusable dependency object pins, compiler, package sources and core sources remain unchanged. Authoritative final diagnostic headers exactly match the provisional snapshot.
+
+Current A11 successor `14E1ACE9AE2A2448219B9EFB58B130190F9A00E8C423A79099C134D50CB66D01` and Checks `F98111324FE48EA2501D68BE30F549BDBDC1DA0C7024AA2BD67DEDB127A720D8` were captured successfully in the separate coherent-recovery offer; failed first capture remains distinct. These repairs are unverified source development.
+
+Next immutable full46 retains 215 project sources, 14 owned modules/Checks and all49 original qualified requests. Seven ordered stages place the complete original A8 sources, six Checks modules and fresh26 original A8 requests before A11 source/Checks and combined fresh49 requests. This permits complete original A8 evidence independently of A11 failure; it grants no helper3 or mathematical acceptance. Python syntax checks alone were performed locally.
+
+Remaining to-do list: focused commit/push; immutable46 capture and sole GCP verification; native A11 repairs; full original A8 and A11/A7 acceptance gates and downstream certification.

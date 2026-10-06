@@ -1,0 +1,797 @@
+[
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 98,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:98:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  Submodule.Quotient.mk ?m.165 = 0\nin the target expression\n  (a11OriginalB C H X).mkQ ↑h = 0 ↔ h ∈ X.ker\n\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nhB : Submodule.comap H.subtype (a11OriginalB C H X) = X.ker\nh : ↥H\n⊢ (a11OriginalB C H X).mkQ ↑h = 0 ↔ h ∈ X.ker",
+    "candidate_context": [
+      "96:   rw [← Subtype.val_injective.eq_iff]",
+      "97:   change (a11OriginalB C H X).mkQ h.val = 0 ↔ h ∈ LinearMap.ker X",
+      "98:   rw [Submodule.Quotient.mk_eq_zero]",
+      "99:   exact SetLike.ext_iff.mp hB h",
+      "100: "
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 130,
+    "column": 25,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:130:25: unsolved goals\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nh : ↥H\n⊢ X.quotKerEquivRange (Submodule.Quotient.mk h) = ⟨X h, ⋯⟩",
+    "candidate_context": [
+      "128:     a11DomainRangeEquiv C H X",
+      "129:       (a11CanonicalXbar C H X (a11RangeQuotientMap C H X h)) =",
+      "130:       ⟨X h, ⟨h, rfl⟩⟩ := by",
+      "131:   simp [a11CanonicalXbar, a11RangeQuotientEquiv,",
+      "132:     LinearEquiv.trans_apply, Submodule.quotEquivOfEq_mk,"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 164,
+    "column": 2,
+    "message": "Tactic `rfl` failed: The left-hand side",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:164:2: Tactic `rfl` failed: The left-hand side\n  a7CarrierParent (t1AmbientC t.C) (t1AmbientH t.K) t ⋯ ⋯\nis not definitionally equal to the right-hand side\n  ↑((t1AmbientC t.C).quotEquivOfEq (t1AmbientC t.C) ⋯) ∘ₗ\n    t1PullbackMap t ∘ₗ ↑(LinearEquiv.ofEq (t1AmbientH t.K) (t1AmbientH t.K) ⋯)\n\nn d : ℕ\nA : Submodule F (V d)\nB : Submodule F (W n)\nt : T1IndexTriple A B\n⊢ a7CarrierParent (t1AmbientC t.C) (t1AmbientH t.K) t ⋯ ⋯ =\n    ↑((t1AmbientC t.C).quotEquivOfEq (t1AmbientC t.C) ⋯) ∘ₗ\n      t1PullbackMap t ∘ₗ ↑(LinearEquiv.ofEq (t1AmbientH t.K) (t1AmbientH t.K) ⋯)",
+    "candidate_context": [
+      "162:   subst C",
+      "163:   subst H",
+      "164:   rfl",
+      "165: ",
+      "166: /-- The image/quotient square identifies the full actual pullback with the"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 176,
+    "column": 45,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:176:45: unsolved goals\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nt : T1IndexTriple (a11OriginalA C H X) (a11OriginalB C H X) := a11CanonicalTriple C H X\nhC : t1AmbientC (a11CanonicalTriple C H X).C = C := a11_canonical_ambient_C C H X\nhH : t1AmbientH (a11CanonicalTriple C H X).K = H := a11_canonical_ambient_H C H X\na : ↥(a11OriginalA C H X)\n⊢ ((t1AmbientC (a11OriginalInternalC C H X)).quotEquivOfEq C hC)\n      ((t1AQuotientToAmbient (a11OriginalInternalC C H X)) (Submodule.Quotient.mk a)) =\n    ↑(({ toFun := fun a => ⟨Submodule.Quotient.mk ↑a, ⋯⟩, map_add' := ⋯, map_smul' := ⋯ }.quotKerEquivOfSurjective ⋯)\n        (((a11OriginalInternalC C H X).quotEquivOfEq\n            { toFun := fun a => ⟨Submodule.Quotient.mk ↑a, ⋯⟩, map_add' := ⋯, map_smul' := ⋯ }.ker ⋯)\n          (Submodule.Quotient.mk a)))",
+    "candidate_context": [
+      "174:   have hd : ∀ q : a11OriginalA C H X ⧸ a11OriginalInternalC C H X,",
+      "175:       Submodule.quotEquivOfEq _ _ hC (t1AQuotientToAmbient t.C q) =",
+      "176:         (a11DomainRangeEquiv C H X q).val := by",
+      "177:     intro q",
+      "178:     rcases (a11OriginalInternalC C H X).mkQ_surjective q with ⟨a, rfl⟩"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 191,
+    "column": 8,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:191:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ↑((t1AmbientHQuotientEquiv ?B ?K) (Submodule.Quotient.mk ?h))\nin the target expression\n  ↑((t1AmbientHQuotientEquiv (a11OriginalB C H X) t.K)\n        ((Submodule.comap (t1AmbientH t.K).subtype (a11OriginalB C H X)).mkQ h0)) =\n    ↑((a11RangeQuotientMap C H X) h)\n\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nt : T1IndexTriple (a11OriginalA C H X) (a11OriginalB C H X) := ⋯\nhC : t1AmbientC (a11CanonicalTriple C H X).C = C := ⋯\nhH : t1AmbientH (a11CanonicalTriple C H X).K = H := ⋯\nhd :\n  ∀ (q : ↥(a11OriginalA C H X) ⧸ a11OriginalInternalC C H X),\n    ((t1AmbientC (a11CanonicalTriple C H X).C).quotEquivOfEq C hC) ((t1AQuotientToAmbient t.C) q) =\n      ↑((a11DomainRangeEquiv C H X) q)\nh : ↥H\nh0 : ↥(t1AmbientH t.K) := ⋯\nhval : ↑h0 = ↑h\n⊢ ↑((t1AmbientHQuotientEquiv (a11OriginalB C H X) t.K)\n        ((Submodule.comap (t1AmbientH t.K).subtype (a11OriginalB C H X)).mkQ h0)) =\n    ↑((a11RangeQuotientMap C H X) h)\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    (a11RangeQuotientMap C H X) h\n  has type\n    ↥(a11OriginalK C H X)\n  but is expected to have type\n    ↥t.K\n  in the application\n    ↑((a11RangeQuotientMap C H X) h)",
+    "candidate_context": [
+      "189:       a11RangeQuotientMap C H X h := by",
+      "190:     apply Subtype.ext",
+      "191:     rw [t1AmbientHQuotientEquiv_apply_mk]",
+      "192:     change (a11OriginalB C H X).mkQ h0.val = (a11OriginalB C H X).mkQ h.val",
+      "193:     rw [hval]"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 198,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:198:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ((t1AmbientC (a11CanonicalTriple C H X).C).quotEquivOfEq C hC) ((t1AQuotientToAmbient t.C) ?q)\nin the target expression\n  ((t1AmbientC (a11CanonicalTriple C H X).C).quotEquivOfEq C hC)\n      ((t1AQuotientToAmbient t.C)\n        (t.Xbar\n          ((t1AmbientHQuotientEquiv (a11OriginalB C H X) t.K)\n            ((Submodule.comap (t1AmbientH t.K).subtype (a11OriginalB C H X)).mkQ h0)))) =\n    X h\n\nn d : ℕ\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nt : T1IndexTriple (a11OriginalA C H X) (a11OriginalB C H X) := a11CanonicalTriple C H X\nhC : t1AmbientC (a11CanonicalTriple C H X).C = C := a11_canonical_ambient_C C H X\nhH : t1AmbientH (a11CanonicalTriple C H X).K = H := a11_canonical_ambient_H C H X\nhd :\n  ∀ (q : ↥(a11OriginalA C H X) ⧸ a11OriginalInternalC C H X),\n    ((t1AmbientC (a11CanonicalTriple C H X).C).quotEquivOfEq C hC) ((t1AQuotientToAmbient t.C) q) =\n      ↑((a11DomainRangeEquiv C H X) q)\nh : ↥H\nh0 : ↥(t1AmbientH t.K) := (LinearEquiv.ofEq H (t1AmbientH (a11CanonicalTriple C H X).K) ⋯) h\nhval : ↑h0 = ↑h\nhq :\n  (t1AmbientHQuotientEquiv (a11OriginalB C H X) t.K)\n      ((Submodule.comap (t1AmbientH t.K).subtype (a11OriginalB C H X)).mkQ h0) =\n    (a11RangeQuotientMap C H X) h\n⊢ ((t1AmbientC (a11CanonicalTriple C H X).C).quotEquivOfEq C hC)\n      ((t1AQuotientToAmbient t.C)\n        (t.Xbar\n          ((t1AmbientHQuotientEquiv (a11OriginalB C H X) t.K)\n            ((Submodule.comap (t1AmbientH t.K).subtype (a11OriginalB C H X)).mkQ h0)))) =\n    X h",
+    "candidate_context": [
+      "196:       ((t1AmbientHQuotientEquiv (a11OriginalB C H X) t.K)",
+      "197:         (((a11OriginalB C H X).comap (t1AmbientH t.K).subtype).mkQ h0)))) = X h",
+      "198:   rw [hd, hq]",
+      "199:   exact congrArg Subtype.val (a11_canonical_Xbar_square C H X h)",
+      "200: "
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 275,
+    "column": 4,
+    "message": "`simp` made no progress",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:275:4: `simp` made no progress",
+    "candidate_context": [
+      "273:     push_neg at hz",
+      "274:     have hd := a6_dimension_split t",
+      "275:     simp [hz.1, hz.2] at hd",
+      "276:     omega",
+      "277: "
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 290,
+    "column": 4,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:290:4: Unknown identifier `ComplexFourierSupportedThrough`",
+    "candidate_context": [
+      "288: def a11StrictLowerDegreeIH (D : Nat) : Prop :=",
+      "289:   ∀ e : Nat, e < D → ∀ {n d : Nat} (g : BinaryMatrix n d → Complex),",
+      "290:     ComplexFourierSupportedThrough e g →",
+      "291:       uniformMean (fun M => Complex.normSq (g M) ^ 2) ≤",
+      "292:         (2 : Real) ^ (100 * e * e) * a7HybridQ g"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 299,
+    "column": 16,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:299:16: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "297:     {A : Submodule F (V d)} {B : Submodule F (W n)}",
+      "298:     (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)",
+      "299:     (hsupport : ComplexFourierSupportedThrough D f)",
+      "300:     (hIH : a11StrictLowerDegreeIH D) (hpos : 0 < a6Order t) (horder : a6Order t ≤ D) :",
+      "301:     a6DerivativeFourth A B t f ≤"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 315,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:315:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?a * ?b / ?c\nin the target expression\n  (∑ x, (fun T => a7MixedOutputFourth t T f) x) /\n      ↑(Fintype.card\n          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝\n              d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]\n            PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n)) ≤\n    2 ^ (100 * (D - a6Order t) * (D - a6Order t)) *\n      ((∑ x, (fun T => a7HybridQ (a7OutputBinary t T f)) x) / ↑(Fintype.card (V d →ₗ[F] W n)))\n\nn d D : ℕ\nA : Submodule F (V d)\nB : Submodule F (W n)\nt : T1IndexTriple A B\nf : BinaryMatrix n d → ℂ\nhsupport : sorry\nhIH : a11StrictLowerDegreeIH D\nhpos : 0 < a6Order t\nhorder : a6Order t ≤ D\nhlt : D - a6Order t < D\nhpoint :\n  ∀ (T : V d →ₗ[F] W n),\n    a7MixedOutputFourth t T f ≤ 2 ^ (100 * (D - a6Order t) * (D - a6Order t)) * a7HybridQ (a7OutputBinary t T f)\n⊢ (∑ x, (fun T => a7MixedOutputFourth t T f) x) /\n      ↑(Fintype.card\n          (PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.V✝\n              d →ₗ[PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.F✝]\n            PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer.W✝ n)) ≤\n    2 ^ (100 * (D - a6Order t) * (D - a6Order t)) *\n      ((∑ x, (fun T => a7HybridQ (a7OutputBinary t T f)) x) / ↑(Fintype.card (V d →ₗ[F] W n)))",
+    "candidate_context": [
+      "313:   rw [a7_mixed_fourth_output]",
+      "314:   unfold typedUniformMean",
+      "315:   rw [mul_div_assoc, Finset.mul_sum]",
+      "316:   apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)",
+      "317:   exact Finset.sum_le_sum (fun T _ => hpoint T)"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 340,
+    "column": 16,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:340:16: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "338:     {A : Submodule F (V d)} {B : Submodule F (W n)}",
+      "339:     (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)",
+      "340:     (hsupport : ComplexFourierSupportedThrough D f)",
+      "341:     (hIH : a11StrictLowerDegreeIH D) (hpos : 0 < a6Order t) (horder : a6Order t ≤ D) :",
+      "342:     a6DerivativeFourth A B t f ≤"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 358,
+    "column": 16,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:358:16: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "356:     {A : Submodule F (V d)} {B : Submodule F (W n)}",
+      "357:     (t : T1IndexTriple A B) (f : BinaryMatrix n d → Complex)",
+      "358:     (hsupport : ComplexFourierSupportedThrough D f)",
+      "359:     (hIH : a11StrictLowerDegreeIH D) (hpos : 0 < a6Order t) (horder : a6Order t ≤ D) :",
+      "360:     (2 : Real) ^ (24 * D * a6Order t) * a6DerivativeFourth A B t f ≤"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 401,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:401:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "399: hypothesis. High initial orders vanish, rather than being dropped by fiat. -/",
+      "400: theorem a11_weighted_mixed_sum_le_actual_initial_sum {n d D : Nat}",
+      "401:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f)",
+      "402:     (hIH : a11StrictLowerDegreeIH D) :",
+      "403:     (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 477,
+    "column": 2,
+    "message": "omega could not prove the goal:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:477:2: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e ≥ 0\n  c ≥ 0\n  c - e ≥ 0\n  b ≥ 0\n  a ≥ 0\n  a - b ≤ 0\n  a - b + c ≤ -1\nwhere\n a := ↑(Module.finrank F ↥X.ker)\n b := ↑(Module.finrank F ↥H)\n c := ↑n\n e := ↑(Module.finrank F ↥H)",
+    "candidate_context": [
+      "475:   have h := X.finrank_range_add_finrank_ker",
+      "476:   have hh := a11_subspace_dim_bound H",
+      "477:   omega",
+      "478: ",
+      "479: /-- Exact global A8 reindex by final pair and initial dimensions/rank. This"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 573,
+    "column": 4,
+    "message": "Tactic `rfl` failed: The left-hand side",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:573:4: Tactic `rfl` failed: The left-hand side\n  a11InitialFinalContribution D f ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩\nis not definitionally equal to the right-hand side\n  a11FinalGradeContribution D f (e ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)\n\ncase refine_4\nn d D : ℕ\nf : BinaryMatrix n d → ℂ\ne : a11InitialFinalSource n d ≃ a11FinalGradeTarget n d := a11GlobalA9SourceEquiv.trans a11GlobalA9PartitionEquiv\nC : Submodule F (V d)\nH : Submodule F (W n)\nX : ↥H →ₗ[F] V d ⧸ C\nhp : 0 < a11InitialOrder ⟨C, ⟨H, X⟩⟩\nA :\n  Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.F✝\n    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.V✝ d)\nhCA : (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst ≤ A\nB :\n  Submodule PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.F✝\n    (PvNP.RealizableHardness.ActualBinaryMatrixHC46A8PairAssembly.W✝ n)\nhBH : B ≤ (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst\nhA8A :\n  ↑(⟨A, hCA⟩, ⟨B, hBH⟩).1 ⊓ Submodule.comap (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst.mkQ (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.snd.range =\n    (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).fst\nhA8B :\n  ↑(⟨A, hCA⟩, ⟨B, hBH⟩).2 ⊔ Submodule.map (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst.subtype (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.snd.ker =\n    (↑⟨⟨C, ⟨H, X⟩⟩, hp⟩).snd.fst\nha✝ : ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩ ∈ Finset.univ\n⊢ a11InitialFinalContribution D f ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩ =\n    a11FinalGradeContribution D f (e ⟨⟨⟨C, ⟨H, X⟩⟩, hp⟩, ⟨(⟨A, hCA⟩, ⟨B, hBH⟩), ⋯⟩⟩)",
+    "candidate_context": [
+      "571:   · intro q _; exact ⟨e.symm q, a11_mem_fintype_elems _ _ _, e.apply_symm_apply q⟩",
+      "572:   · rintro ⟨⟨⟨C, H, X⟩, hp⟩, ⟨⟨⟨A, hCA⟩, ⟨B, hBH⟩⟩, hA8A, hA8B⟩⟩ _",
+      "573:     rfl",
+      "574: ",
+      "575: private theorem a11_initial_final_sum_eq_selected {n d : Nat}"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 591,
+    "column": 59,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:591:59: unsolved goals\nn d : ℕ\nz : a11InitialData n d\nf : BinaryMatrix n d → ℂ\npred : { A // z.fst ≤ A } × { B // B ≤ z.snd.fst } → Prop :=\n  fun q =>\n    ↑q.1 ⊓ Submodule.comap z.fst.mkQ z.snd.snd.range = z.fst ∧\n      ↑q.2 ⊔ Submodule.map z.snd.fst.subtype z.snd.snd.ker = z.snd.fst\nenergy : { A // z.fst ≤ A } × { B // B ≤ z.snd.fst } → ℝ :=\n  fun q => a11AmbientEnergy (↑q.1) (↑q.2) (a9AmbientFinalMap ↑q.1 ↑q.2 ⟨z.fst, ⋯⟩ ⟨z.snd.fst, ⋯⟩ z.snd.snd) f\nq : { A // z.fst ≤ A } × { B // B ≤ z.snd.fst }\n⊢ pred q ↔ ?m.284 q",
+    "candidate_context": [
+      "589:     a11AmbientEnergy q.1.1 q.2.1",
+      "590:       (a9AmbientFinalMap q.1.1 q.2.1 ⟨z.1, q.1.2, rfl⟩ ⟨z.2.1, q.2.2, rfl⟩ z.2.2) f",
+      "591:   have hs := Finset.sum_subtype (Finset.univ.filter pred) (by intro q; simp) energy",
+      "592:   rw [← hs, Finset.sum_filter]",
+      "593:   rfl"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 581,
+    "column": 66,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:581:66: unsolved goals\nn d : ℕ\nz : a11InitialData n d\nf : BinaryMatrix n d → ℂ\npred : { A // z.fst ≤ A } × { B // B ≤ z.snd.fst } → Prop :=\n  fun q =>\n    ↑q.1 ⊓ Submodule.comap z.fst.mkQ z.snd.snd.range = z.fst ∧\n      ↑q.2 ⊔ Submodule.map z.snd.fst.subtype z.snd.snd.ker = z.snd.fst\nenergy : { A // z.fst ≤ A } × { B // B ≤ z.snd.fst } → ℝ :=\n  fun q => a11AmbientEnergy (↑q.1) (↑q.2) (a9AmbientFinalMap ↑q.1 ↑q.2 ⟨z.fst, ⋯⟩ ⟨z.snd.fst, ⋯⟩ z.snd.snd) f\n⊢ a11InitialFinalSum z f =\n    ∑ q, a11AmbientEnergy (↑(↑q).1) (↑(↑q).2) (a9AmbientFinalMap ↑(↑q).1 ↑(↑q).2 ⟨z.fst, ⋯⟩ ⟨z.snd.fst, ⋯⟩ z.snd.snd) f",
+    "candidate_context": [
+      "579:         a11AmbientEnergy q.1.1.1 q.1.2.1",
+      "580:           (a9AmbientFinalMap q.1.1.1 q.1.2.1",
+      "581:             ⟨z.1, q.1.1.2, rfl⟩ ⟨z.2.1, q.1.2.2, rfl⟩ z.2.2) f := by",
+      "582:   classical",
+      "583:   let pred := fun q : {A : Submodule F (V d) // z.1 ≤ A} ×"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 598,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:598:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "596: actual fixed-final fibers, without an assumed aggregate estimate. -/",
+      "597: theorem a11_weighted_mixed_sum_le_actual_final_fibers {n d D : Nat}",
+      "598:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f)",
+      "599:     (hIH : a11StrictLowerDegreeIH D) :",
+      "600:     (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 626,
+    "column": 16,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:626:16: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "624:     (A : Submodule F (V d)) (B : Submodule F (W n))",
+      "625:     (Y : B →ₗ[F] (V d ⧸ A)) (f : BinaryMatrix n d → Complex)",
+      "626:     (hsupport : ComplexFourierSupportedThrough D f)",
+      "627:     (hout : D < Module.finrank F A + Module.finrank F (W n ⧸ B) +",
+      "628:       Module.finrank F (LinearMap.range Y)) :"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 631,
+    "column": 11,
+    "message": "`simp` made no progress",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:631:11: `simp` made no progress",
+    "candidate_context": [
+      "629:     a11AmbientEnergy A B Y f = 0 := by",
+      "630:   unfold a11AmbientEnergy",
+      "631:   simp_rw [a8_actual_energy_zero_outside_supported_window A B Y _ f hsupport hout]",
+      "632:   simp [typedUniformMean]",
+      "633: "
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 652,
+    "column": 16,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:652:16: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "650:     (A : Submodule F (V d)) (B : Submodule F (W n))",
+      "651:     (Y : B →ₗ[F] (V d ⧸ A)) (f : BinaryMatrix n d → Complex)",
+      "652:     (hsupport : ComplexFourierSupportedThrough D f)",
+      "653:     (hY : Module.finrank F (LinearMap.range Y) = k) (horder : i + j + k ≤ D) :",
+      "654:     (∑ _x : A9AmbientFixedFinalFiber (V d) (W n) A B Y i j k,"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 694,
+    "column": 42,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:694:42: unsolved goals\nn d D i j k : ℕ\nA : Submodule F (V d)\nB : Submodule F (W n)\nY : ↥B →ₗ[F] V d ⧸ A\nf : BinaryMatrix n d → ℂ\nhsupport : sorry\nhY : Module.finrank F ↥Y.range = k\nhorder : i + j + k ≤ D\nhE : 0 ≤ a11AmbientEnergy A B Y f\nhi : i ≤ Module.finrank F ↥A\nhj : j ≤ Module.finrank F (W n ⧸ B)\nhwin : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) + k ≤ D\nhc : 2 ^ (6 * D * k) * ∑ _x, a11AmbientEnergy A B Y f ≤ 2 ^ (3 * D * (i + j + k) + 6 * D * k) * a11AmbientEnergy A B Y f\nr : ℕ := 24 * D * (i + j + k) + 100 * (D - (i + j + k)) * (D - (i + j + k))\nhm :\n  2 ^ r * (2 ^ (6 * D * k) * ∑ _x, a11AmbientEnergy A B Y f) ≤\n    2 ^ r * (2 ^ (3 * D * (i + j + k) + 6 * D * k) * a11AmbientEnergy A B Y f)\nhs :\n  ↑(100 * (D - (i + j + k)) * (D - (i + j + k)) + 27 * D * (i + j + k) + 6 * D * k) ≤\n    100 * ↑D * ↑D - 63 * ↑D * ↑(i + j + k) - 4 * ↑D * ↑k\nhexp : ↑(r + (3 * D * (i + j + k) + 6 * D * k)) ≤ 100 * ↑D * ↑D - 63 * ↑D * (↑i + ↑j + ↑k) - 4 * ↑D * ↑k\nhp : 2 ^ (r + (3 * D * (i + j + k) + 6 * D * k)) ≤ 2 ^ (100 * ↑D * ↑D - 63 * ↑D * (↑i + ↑j + ↑k) - 4 * ↑D * ↑k)\n⊢ 2 ^ (24 * D * (i + j + k)) *\n      (2 ^ (100 * (D - (i + j + k)) * (D - (i + j + k))) *\n        (2 ^ (3 * D * (i + j + k) + 6 * D * k) * a11AmbientEnergy A B Y f)) =\n    2 ^ (r + (3 * D * (i + j + k) + 6 * D * k)) * a11AmbientEnergy A B Y f",
+    "candidate_context": [
+      "692:               a11AmbientEnergy A B Y f) := hm",
+      "693:           _ = (2 : Real) ^ (r + (3 * D * (i + j + k) + 6 * D * k)) *",
+      "694:               a11AmbientEnergy A B Y f := by rw [pow_add, mul_assoc]",
+      "695:           _ ≤ _ := mul_le_mul_of_nonneg_right hp hE",
+      "696:       · have hout : D < Module.finrank F A + Module.finrank F (W n ⧸ B) +"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 711,
+    "column": 8,
+    "message": "omega could not prove the goal:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:711:8: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  o ≥ 0\n  m ≥ 0\n  m - o ≤ 0\n  l ≥ 0\n  h ≥ 0\n  h - l ≤ 0\n  h - l - m + o ≥ 1\n  g ≥ 0\n  g - h ≥ 0\n  e ≥ 0\n  c ≥ 0\n  b ≥ 0\n  b - c ≤ 0\n  a ≥ 0\n  a - b - e + m - o ≥ 0\nwhere\n a := ↑D\n b := ↑i\n c := ↑(Module.finrank F ↥A)\n e := ↑(Module.finrank ActualBinaryMatrixHC46A9AmbientFiber.F ↥(↑x).X.range)\n g := ↑(Module.finrank F ↥↑(↑x).B0)\n h := ↑(Module.finrank F ↥B)\n l := ↑(Module.finrank F (W n))\n m := ↑(Module.finrank ActualBinaryMatrixHC46A9AmbientFiber.F ↥↑(↑x).B0)\n o := ↑(Module.finrank ActualBinaryMatrixHC46A9AmbientFiber.F (W n))",
+    "candidate_context": [
+      "709:         have hcodim := x.1.B0.2.2",
+      "710:         exfalso",
+      "711:         omega",
+      "712:       rw [hz]",
+      "713:       exact mul_nonneg (zpow_nonneg (by norm_num : (0 : Real) ≤ 2) _) hE"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 723,
+    "column": 6,
+    "message": "omega could not prove the goal:",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:723:6: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  h ≥ 0\n  g ≥ 0\n  g - h ≥ 0\n  e ≥ 0\n  c ≥ 0\n  c - h ≤ -1\n  b ≥ 0\n  a ≥ 0\n  a - b - e - h ≥ 0\nwhere\n a := ↑D\n b := ↑j\n c := ↑(Module.finrank F ↥A)\n e := ↑(Module.finrank ActualBinaryMatrixHC46A9AmbientFiber.F ↥(↑x).X.range)\n g := ↑(Module.finrank ActualBinaryMatrixHC46A9AmbientFiber.F ↥A)\n h := ↑(Module.finrank ActualBinaryMatrixHC46A9AmbientFiber.F ↥↑(↑x).A0)",
+    "candidate_context": [
+      "721:       have hcost := x.1.A0.2.2",
+      "722:       exfalso",
+      "723:       omega",
+      "724:     rw [hz]",
+      "725:     exact mul_nonneg (zpow_nonneg (by norm_num : (0 : Real) ≤ 2) _) hE"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 732,
+    "column": 33,
+    "message": "failed to synthesize instance of type class",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:732:33: failed to synthesize instance of type class\n  CanonicallyOrderedAdd ℝ\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.",
+    "candidate_context": [
+      "730:   have hr1 : r < 1 := by linarith",
+      "731:   have hden : 0 < 1 - r := by linarith",
+      "732:   rw [Fin.sum_univ_eq_sum_range, geom_sum_of_lt_one hr1]",
+      "733:   apply (div_le_iff₀ hden).mpr",
+      "734:   have hp := pow_nonneg hr m"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 729,
+    "column": 40,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:729:40: unsolved goals\nm : ℕ\nr : ℝ\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\nhr1 : r < 1\nhden : 0 < 1 - r\n⊢ ∑ i ∈ Finset.range m, r ^ i ≤ 4 / 3",
+    "candidate_context": [
+      "727: private theorem a11_finite_geom_le {m : Nat} {r : Real}",
+      "728:     (hr : 0 ≤ r) (hrq : r ≤ 1 / 4) :",
+      "729:     (∑ i : Fin m, r ^ i.val) ≤ 4 / 3 := by",
+      "730:   have hr1 : r < 1 := by linarith",
+      "731:   have hden : 0 < 1 - r := by linarith"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 741,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:741:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ i, ?f ↑i\nin the target expression\n  (∑ i, if 0 < ↑i then r ^ ↑i else 0) ≤ 4 / 3 * r\n\nm : ℕ\nr : ℝ\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\nhr1 : r < 1\n⊢ (∑ i, if 0 < ↑i then r ^ ↑i else 0) ≤ 4 / 3 * r",
+    "candidate_context": [
+      "739:     (∑ i : Fin m, if 0 < i.val then r ^ i.val else 0) ≤ (4 / 3) * r := by",
+      "740:   have hr1 : r < 1 := by linarith",
+      "741:   rw [Fin.sum_univ_eq_sum_range, ← Finset.sum_filter]",
+      "742:   have hset : (Finset.range m).filter (fun i => 0 < i) = Finset.Ico 1 m := by",
+      "743:     ext i"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 757,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:757:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (∑ i ∈ ?s, ?f i) * ?a\nin the target expression\n  ∑ x, r ^ ↑x * ∑ i, r ^ ↑i ≤ 2\n\nm n : ℕ\nr : ℝ\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\n⊢ ∑ x, r ^ ↑x * ∑ i, r ^ ↑i ≤ 2",
+    "candidate_context": [
+      "755:     (∑ i : Fin m, ∑ j : Fin n, r ^ i.val * r ^ j.val) ≤ 2 := by",
+      "756:   simp_rw [← Finset.mul_sum]",
+      "757:   rw [Finset.sum_mul]",
+      "758:   have hm := a11_finite_geom_le (m := m) hr hrq",
+      "759:   have hn := a11_finite_geom_le (m := n) hr hrq"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 779,
+    "column": 6,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:779:6: unsolved goals\ncase neg\nm n : ℕ\nr : ℝ\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\ni : Fin m\nj : Fin n\nhi : 0 < ↑i\nhj : ¬0 < ↑j\nhs : 0 < ↑i + ↑j\n⊢ r ^ ↑i * r ^ ↑j ≤ r ^ ↑i * r ^ ↑j",
+    "candidate_context": [
+      "777:         simp only [if_pos hi, if_pos hj, if_pos hs]",
+      "778:         nlinarith [mul_nonneg (pow_nonneg hr i.val) (pow_nonneg hr j.val)]",
+      "779:       · have hs : 0 < i.val + j.val := by omega",
+      "780:         simp only [if_pos hi, if_neg hj, if_pos hs, mul_zero, add_zero]",
+      "781:     · by_cases hj : 0 < j.val"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 782,
+    "column": 6,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:782:6: unsolved goals\ncase pos\nm n : ℕ\nr : ℝ\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\ni : Fin m\nj : Fin n\nhi : ¬0 < ↑i\nhj : 0 < ↑j\nhs : 0 < ↑i + ↑j\n⊢ r ^ ↑i * r ^ ↑j ≤ r ^ ↑i * r ^ ↑j",
+    "candidate_context": [
+      "780:         simp only [if_pos hi, if_neg hj, if_pos hs, mul_zero, add_zero]",
+      "781:     · by_cases hj : 0 < j.val",
+      "782:       · have hs : 0 < i.val + j.val := by omega",
+      "783:         simp only [if_neg hi, if_pos hj, if_pos hs, zero_mul, zero_add]",
+      "784:       · have hs : ¬ 0 < i.val + j.val := by omega"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 784,
+    "column": 6,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:784:6: unsolved goals\ncase neg\nm n : ℕ\nr : ℝ\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\ni : Fin m\nj : Fin n\nhi : ¬0 < ↑i\nhj : ¬0 < ↑j\nhs : ¬0 < ↑i + ↑j\n⊢ 0 ≤ 0",
+    "candidate_context": [
+      "782:       · have hs : 0 < i.val + j.val := by omega",
+      "783:         simp only [if_neg hi, if_pos hj, if_pos hs, zero_mul, zero_add]",
+      "784:       · have hs : ¬ 0 < i.val + j.val := by omega",
+      "785:         simp only [if_neg hi, if_neg hj, if_neg hs, zero_mul, mul_zero, add_zero]",
+      "786:   have hm := a11_finite_geom_le (m := m) hr hrq"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 795,
+    "column": 14,
+    "message": "Unknown identifier `i.val`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:795:14: Unknown identifier `i.val`",
+    "candidate_context": [
+      "793:     _ ≤ ∑ i : Fin m, ∑ j : Fin n,",
+      "794:         (if 0 < i.val then r ^ i.val else 0) * r ^ j.val +",
+      "795:           r ^ i.val * (if 0 < j.val then r ^ j.val else 0) :=",
+      "796:       Finset.sum_le_sum (fun i _ => Finset.sum_le_sum (fun j _ => hpt i j))",
+      "797:     _ = (∑ i : Fin m, if 0 < i.val then r ^ i.val else 0) *"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 795,
+    "column": 30,
+    "message": "Unknown identifier `j.val`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:795:30: Unknown identifier `j.val`",
+    "candidate_context": [
+      "793:     _ ≤ ∑ i : Fin m, ∑ j : Fin n,",
+      "794:         (if 0 < i.val then r ^ i.val else 0) * r ^ j.val +",
+      "795:           r ^ i.val * (if 0 < j.val then r ^ j.val else 0) :=",
+      "796:       Finset.sum_le_sum (fun i _ => Finset.sum_le_sum (fun j _ => hpt i j))",
+      "797:     _ = (∑ i : Fin m, if 0 < i.val then r ^ i.val else 0) *"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 795,
+    "column": 45,
+    "message": "Unknown identifier `j.val`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:795:45: Unknown identifier `j.val`",
+    "candidate_context": [
+      "793:     _ ≤ ∑ i : Fin m, ∑ j : Fin n,",
+      "794:         (if 0 < i.val then r ^ i.val else 0) * r ^ j.val +",
+      "795:           r ^ i.val * (if 0 < j.val then r ^ j.val else 0) :=",
+      "796:       Finset.sum_le_sum (fun i _ => Finset.sum_le_sum (fun j _ => hpt i j))",
+      "797:     _ = (∑ i : Fin m, if 0 < i.val then r ^ i.val else 0) *"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 835,
+    "column": 4,
+    "message": "Type mismatch",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:835:4: Type mismatch\n  hp\nhas type\n  (2 ^ (63 * ↑D))⁻¹ ≤ 1 / 4\nbut is expected to have type\n  r ≤ 1 / 4",
+    "candidate_context": [
+      "833:     have hp := zpow_le_zpow_right₀ (by norm_num : (1 : Real) ≤ 2) he",
+      "834:     norm_num at hp",
+      "835:     exact hp",
+      "836:   by_cases hk : 0 < k",
+      "837:   · have hpos : ∀ (i : Fin m) (j : Fin n), 0 < i.val + j.val + k := by intros; omega"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 839,
+    "column": 8,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:839:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ i ∈ ?s, ?f i * ?a\nin the target expression\n  ∑ x, ∑ x_1, (2 ^ (-(63 * ↑D))) ^ ↑x * (2 ^ (-(63 * ↑D))) ^ ↑x_1 * 2 ^ (-(63 * ↑D * ↑k) - 4 * ↑D * ↑k) ≤\n    2 ^ (-(31 * ↑D * (↑k + 1)) - 4 * ↑D * ↑k)\n\ncase pos\nD k m n : ℕ\nhD : 0 < D\nr : ℝ := 2 ^ (-(63 * ↑D))\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\nhk : 0 < k\nhpos : ∀ (i : Fin m) (j : Fin n), 0 < ↑i + ↑j + k\n⊢ ∑ x, ∑ x_1, (2 ^ (-(63 * ↑D))) ^ ↑x * (2 ^ (-(63 * ↑D))) ^ ↑x_1 * 2 ^ (-(63 * ↑D * ↑k) - 4 * ↑D * ↑k) ≤\n    2 ^ (-(31 * ↑D * (↑k + 1)) - 4 * ↑D * ↑k)",
+    "candidate_context": [
+      "837:   · have hpos : ∀ (i : Fin m) (j : Fin n), 0 < i.val + j.val + k := by intros; omega",
+      "838:     simp_rw [if_pos (hpos _ _), a11_tail_weight_factor]",
+      "839:     rw [← Finset.sum_mul]",
+      "840:     simp_rw [← Finset.sum_mul]",
+      "841:     have hgeom := a11_finite_double_geom_le (m := m) (n := n) hr hrq"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 867,
+    "column": 8,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:867:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ i, ∑ j, if 0 < ↑i + ↑j then 2 ^ (-(63 * ↑D * (↑↑i + ↑↑j))) else 0\nin the target expression\n  (∑ x, ∑ x_1, if 0 < ↑x + ↑x_1 then 2 ^ (-(63 * ↑D * (↑↑x + ↑↑x_1 + ↑0)) - 4 * ↑D * ↑0) else 0) ≤\n    2 ^ (-(31 * ↑D * (↑0 + 1)) - 4 * ↑D * ↑0)\n\ncase neg\nD m n : ℕ\nhD : 0 < D\nr : ℝ := 2 ^ (-(63 * ↑D))\nhr : 0 ≤ r\nhrq : r ≤ 1 / 4\nhk : ¬0 < 0\nhgeom : (∑ i, ∑ j, if 0 < ↑i + ↑j then r ^ ↑i * r ^ ↑j else 0) ≤ 4 * r\nheq :\n  (∑ i, ∑ j, if 0 < ↑i + ↑j then 2 ^ (-(63 * ↑D * (↑↑i + ↑↑j))) else 0) =\n    ∑ i, ∑ j, if 0 < ↑i + ↑j then r ^ ↑i * r ^ ↑j else 0\n⊢ (∑ x, ∑ x_1, if 0 < ↑x + ↑x_1 then 2 ^ (-(63 * ↑D * (↑↑x + ↑↑x_1 + ↑0)) - 4 * ↑D * ↑0) else 0) ≤\n    2 ^ (-(31 * ↑D * (↑0 + 1)) - 4 * ↑D * ↑0)",
+    "candidate_context": [
+      "865:       · simpa [r] using a11_tail_weight_factor D i.val j.val 0",
+      "866:       · rfl",
+      "867:     rw [heq]",
+      "868:     apply hgeom.trans",
+      "869:     have he : (2 : Int) - 63 * D ≤ -(31 * D : Int) := by omega"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 889,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:889:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "887: mean commuted exactly through the finite final-frequency sum. -/",
+      "888: theorem a11_all_actual_final_energy_w6 {n d D : Nat}",
+      "889:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f) :",
+      "890:     (∑ p : Submodule F (V d) × Submodule F (W n),",
+      "891:       ∑ Y : p.2 →ₗ[F] (V d ⧸ p.1),"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 894,
+    "column": 25,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:894:25: unsolved goals\nn d D : ℕ\nf : BinaryMatrix n d → ℂ\nhsupport : sorry\n⊢ ∑ p, ∑ Y, a11AmbientEnergy p.1 p.2 Y f / 2 ^ (6 * D * Module.finrank F ↥Y.range) ≤ 2 * a7HybridQ f",
+    "candidate_context": [
+      "892:         a11AmbientEnergy p.1 p.2 Y f /",
+      "893:           (2 : Real) ^ (6 * D * Module.finrank F (LinearMap.range Y))) ≤",
+      "894:       2 * a7HybridQ f := by",
+      "895:   have h := typedW6AllPairs_uniformT_le_two f hsupport",
+      "896:   change _ ≤ 2 * a7HybridQ f at h"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 914,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:914:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "912: full i/j tails, retaining every final pair and every rank-zero frequency. -/",
+      "913: theorem a11_all_actual_final_energy_terminal {n d D : Nat}",
+      "914:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f) :",
+      "915:     (∑ p : Submodule F (V d) × Submodule F (W n),",
+      "916:       ∑ Y : p.2 →ₗ[F] (V d ⧸ p.1),"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 931,
+    "column": 4,
+    "message": "Type mismatch: After simplification, term",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:931:4: Type mismatch: After simplification, term\n  hp\n has type\n  a11AmbientEnergy A B Y f *\n      2 ^ (-(↑D * 31 * (↑(Module.finrank F ↥Y.range) + 1)) - ↑D * 4 * ↑(Module.finrank F ↥Y.range)) ≤\n    a11AmbientEnergy A B Y f * (2 ^ (-(↑D * 31)) / 2 ^ (D * 6 * Module.finrank F ↥Y.range))\nbut is expected to have type\n  a11AmbientEnergy A B Y f *\n      2 ^ (-(↑D * 31 * (↑(Module.finrank F ↥Y.range) + 1)) - ↑D * 4 * ↑(Module.finrank F ↥Y.range)) ≤\n    2 ^ (-(↑D * 31)) * (a11AmbientEnergy A B Y f / 2 ^ (D * 6 * Module.finrank F ↥Y.range))",
+    "candidate_context": [
+      "929:       (a11_tail_rank_weight_le_w6 D (Module.finrank F (LinearMap.range Y)))",
+      "930:       (a11AmbientEnergy_nonneg A B Y f)",
+      "931:     simpa only [div_mul_eq_mul_div, mul_div_assoc, mul_comm] using hp",
+      "932:   have hsum := Finset.sum_le_sum (fun p _ =>",
+      "933:     Finset.sum_le_sum (fun Y _ => hpt p.1 p.2 Y))"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 933,
+    "column": 38,
+    "message": "Invalid projection: Type of",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:933:38: Invalid projection: Type of\n  p\nis not known; cannot resolve projection `1`",
+    "candidate_context": [
+      "931:     simpa only [div_mul_eq_mul_div, mul_div_assoc, mul_comm] using hp",
+      "932:   have hsum := Finset.sum_le_sum (fun p _ =>",
+      "933:     Finset.sum_le_sum (fun Y _ => hpt p.1 p.2 Y))",
+      "934:   apply hsum.trans",
+      "935:   simp_rw [← Finset.mul_sum]"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 933,
+    "column": 42,
+    "message": "Invalid projection: Type of",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:933:42: Invalid projection: Type of\n  p\nis not known; cannot resolve projection `2`",
+    "candidate_context": [
+      "931:     simpa only [div_mul_eq_mul_div, mul_div_assoc, mul_comm] using hp",
+      "932:   have hsum := Finset.sum_le_sum (fun p _ =>",
+      "933:     Finset.sum_le_sum (fun Y _ => hpt p.1 p.2 Y))",
+      "934:   apply hsum.trans",
+      "935:   simp_rw [← Finset.mul_sum]"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 919,
+    "column": 57,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:919:57: unsolved goals\nn d D : ℕ\nf : BinaryMatrix n d → ℂ\nhsupport : sorry\nhpt :\n  ∀ (A : Submodule F (V d)) (B : Submodule F (W n)) (Y : ↥B →ₗ[F] V d ⧸ A),\n    2 ^ (-(31 * ↑D * (↑(Module.finrank F ↥Y.range) + 1)) - 4 * ↑D * ↑(Module.finrank F ↥Y.range)) *\n        a11AmbientEnergy A B Y f ≤\n      2 ^ (-(31 * ↑D)) * (a11AmbientEnergy A B Y f / 2 ^ (6 * D * Module.finrank F ↥Y.range))\n⊢ ∑ p,\n      ∑ Y,\n        2 ^ (-(31 * ↑D * (↑(Module.finrank F ↥Y.range) + 1)) - 4 * ↑D * ↑(Module.finrank F ↥Y.range)) *\n          a11AmbientEnergy p.1 p.2 Y f ≤\n    2 ^ (1 - 31 * ↑D) * a7HybridQ f",
+    "candidate_context": [
+      "917:         (2 : Real) ^ (-(31 * D * (Module.finrank F (LinearMap.range Y) + 1) : Int) -",
+      "918:           4 * D * Module.finrank F (LinearMap.range Y)) * a11AmbientEnergy p.1 p.2 Y f) ≤",
+      "919:       (2 : Real) ^ ((1 : Int) - 31 * D) * a7HybridQ f := by",
+      "920:   have hpt : ∀ (A : Submodule F (V d)) (B : Submodule F (W n))",
+      "921:       (Y : B →ₗ[F] (V d ⧸ A)),"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 946,
+    "column": 36,
+    "message": "failed to synthesize instance of type class",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:946:36: failed to synthesize instance of type class\n  Decidable p\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.",
+    "candidate_context": [
+      "944: private theorem a11_sum_constant_gate {α : Type*} [Fintype α]",
+      "945:     (p : Prop) (g : α → Real) :",
+      "946:     (∑ x : {x : α // p}, g x.val) = if p then ∑ x : α, g x else 0 := by",
+      "947:   classical",
+      "948:   by_cases hp : p"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 975,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:975:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "973:     (A : Submodule F (V d)) (B : Submodule F (W n))",
+      "974:     (i : Fin (d + 1)) (j k : Fin (n + 1))",
+      "975:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f) :",
+      "976:     (∑ s : {s : A9AmbientA8Target (i := i.val) (j := j.val) (k := k.val) A B //",
+      "977:         0 < i.val + j.val + k.val},"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 992,
+    "column": 6,
+    "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:992:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ∑ x, ?g ↑x\nin the target expression\n  (∑ s,\n      if ↑i + ↑j + ↑k ≤ D then\n        2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *\n          a11AmbientEnergy A B (↑(↑s).fst) f\n      else 0) ≤\n    ∑ Y,\n      if 0 < ↑i + ↑j + ↑k then\n        2 ^ (100 * D * D) * 2 ^ (-(63 * ↑D * (↑↑i + ↑↑j + ↑↑k)) - 4 * ↑D * ↑↑k) * a11AmbientEnergy A B (↑Y) f\n      else 0\n\nn d D : ℕ\nA : Submodule F (V d)\nB : Submodule F (W n)\ni : Fin (d + 1)\nj k : Fin (n + 1)\nf : BinaryMatrix n d → ℂ\nhsupport : sorry\n⊢ (∑ s,\n      if ↑i + ↑j + ↑k ≤ D then\n        2 ^ (24 * D * (↑i + ↑j + ↑k) + 100 * (D - (↑i + ↑j + ↑k)) * (D - (↑i + ↑j + ↑k)) + 6 * D * ↑k) *\n          a11AmbientEnergy A B (↑(↑s).fst) f\n      else 0) ≤\n    ∑ Y,\n      if 0 < ↑i + ↑j + ↑k then\n        2 ^ (100 * D * D) * 2 ^ (-(63 * ↑D * (↑↑i + ↑↑j + ↑↑k)) - 4 * ↑D * ↑↑k) * a11AmbientEnergy A B (↑Y) f\n      else 0",
+    "candidate_context": [
+      "990:         100 * (D - (i.val + j.val + k.val)) * (D - (i.val + j.val + k.val)) + 6 * D * k.val) *",
+      "991:           a11AmbientEnergy A B s.1.1.1 f else 0) ≤ _",
+      "992:   rw [a11_sum_constant_gate]",
+      "993:   by_cases hp : 0 < i.val + j.val + k.val",
+      "994:   · by_cases ho : i.val + j.val + k.val ≤ D"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 1026,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1026:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "1024: then the proven i/j tails are consumed before enlarging to all final maps. -/",
+      "1025: theorem a11_actual_final_fibers_le_post_tail_energy {n d D : Nat}",
+      "1026:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f)",
+      "1027:     (hD : 0 < D) :",
+      "1028:     (∑ p : a11FinalGradeTarget n d, a11FinalGradeContribution D f p) ≤"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 1119,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1119:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "1117: original support, positive degree and strict simultaneous lower-degree IH. -/",
+      "1118: theorem a11_original_weighted_mixed_bound {n d D : Nat}",
+      "1119:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f)",
+      "1120:     (hD : 0 < D) (hIH : a11StrictLowerDegreeIH D) :",
+      "1121:     (∑ p : dr6ActualNonzeroABPairs (n := n) (d := d),"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 1126,
+    "column": 86,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1126:86: unsolved goals\nn d D : ℕ\nf : BinaryMatrix n d → ℂ\nhsupport : sorry\nhD : 0 < D\nhIH : a11StrictLowerDegreeIH D\nhinit :\n  (∑ p, ∑ t, if 0 < a6Order t then 2 ^ (24 * D * a6Order t) * a6DerivativeFourth (↑p).1 (↑p).2 t f else 0) ≤\n    ∑ p, a11FinalGradeContribution D f p\nhtail :\n  ∑ p, a11FinalGradeContribution D f p ≤\n    2 ^ (100 * D * D) *\n      ∑ p,\n        ∑ Y,\n          2 ^ (-(31 * ↑D * (↑(Module.finrank F ↥Y.range) + 1)) - 4 * ↑D * ↑(Module.finrank F ↥Y.range)) *\n            a11AmbientEnergy p.1 p.2 Y f\n⊢ (∑ p, ∑ t, if 0 < a6Order t then 2 ^ (24 * D * a6Order t) * a6DerivativeFourth (↑p).1 (↑p).2 t f else 0) ≤\n    2 ^ (100 * D * D) * 2 ^ (1 - 31 * ↑D) * a7HybridQ f",
+    "candidate_context": [
+      "1124:           (2 : Real) ^ (24 * D * a6Order t) * a6DerivativeFourth p.1.1 p.1.2 t f",
+      "1125:         else 0) ≤",
+      "1126:       (2 : Real) ^ (100 * D * D) * (2 : Real) ^ ((1 : Int) - 31 * D) * a7HybridQ f := by",
+      "1127:   have hinit := a11_weighted_mixed_sum_le_actual_final_fibers f hsupport hIH",
+      "1128:   have htail := a11_actual_final_fibers_le_post_tail_energy f hsupport hD"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 1135,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1135:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "1133: /-- Positive-degree A7 consumes the genuine weighted hS proved above. -/",
+      "1134: theorem a11_original_A7_positive_from_strict_IH {n d D : Nat}",
+      "1135:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f)",
+      "1136:     (hD : 0 < D) (hIH : a11StrictLowerDegreeIH D) :",
+      "1137:     uniformMean (fun M => Complex.normSq (f M) ^ 2) ≤"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 1145,
+    "column": 49,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1145:49: Unknown identifier `ComplexFourierSupportedThrough`\n\nNote: It is not possible to treat `ComplexFourierSupportedThrough` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.",
+    "candidate_context": [
+      "1143: matrix spaces and all supported complex functions, with no analytic oracle. -/",
+      "1144: theorem manuscript_A7_actual {n d D : Nat}",
+      "1145:     (f : BinaryMatrix n d → Complex) (hsupport : ComplexFourierSupportedThrough D f) :",
+      "1146:     uniformMean (fun M => Complex.normSq (f M) ^ 2) ≤",
+      "1147:       (2 : Real) ^ (100 * D * D) * a7HybridQ f := by"
+    ]
+  },
+  {
+    "stage": 1,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean",
+    "line": 1149,
+    "column": 6,
+    "message": "Unknown identifier `ComplexFourierSupportedThrough`",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A11WeightedAggregate.lean:1149:6: Unknown identifier `ComplexFourierSupportedThrough`\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A11WeightedAggregate\n",
+    "candidate_context": [
+      "1147:       (2 : Real) ^ (100 * D * D) * a7HybridQ f := by",
+      "1148:   have hall : ∀ e : Nat, ∀ {n' d' : Nat} (g : BinaryMatrix n' d' → Complex),",
+      "1149:       ComplexFourierSupportedThrough e g →",
+      "1150:         uniformMean (fun M => Complex.normSq (g M) ^ 2) ≤",
+      "1151:           (2 : Real) ^ (100 * e * e) * a7HybridQ g := by"
+    ]
+  }
+]
