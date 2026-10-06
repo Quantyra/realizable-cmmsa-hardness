@@ -1,0 +1,133 @@
+
+MANUSCRIPT paper/body.tex lines 999-1050
+For a fixed induced frequency $Z:\ker X\to V/\operatorname{im}X$ of
+rank $l$, the selected original frequencies are exactly
+\[
+ Y=\begin{pmatrix}I+uC&uZ\\ C&Z\end{pmatrix},
+ \quad u:\operatorname{im}Z\to\operatorname{im}X,
+ \quad C:\operatorname{im}X\to\operatorname{im}Z.     \tag{A3}
+\]
+Their number is $2^{2kl}$. To check this, the off-diagonal blocks of
+$Y-X$ must factor through $Z$ and land in its image; rank additivity
+forces the remaining block $uC$. Conversely choose a lift $v$ with
+$Zv=C$; then $Y-X=[u;I]Z[v,I]$ has rank $l$, whereas elimination gives
+$\operatorname{rank}Y=k+l$. The formula is independent of the lift.
+Equivalently, the complementary images and kernels from rank additivity
+force these same blocks. Thus $D_X$ lowers degree by $k$, with zero for
+levels below $k$.
+
+\subsection{A weighted fourth-power estimate without contraction}
+For degree-at-most-$d$ $f$, put $E=\|f\|_2^2$,
+$a_X=\sum_{Y\succeq X}|\widehat f(Y)|^2$, and $e_X=\|D_Xf\|_2^2$.
+Cauchy--Schwarz on the fibers (A3) gives
+$e_X\le2^{2k(d-k)}a_X$ for $k=\operatorname{rank}X\le d$; for $k>d$
+both are zero. Since $a_X\le E$,
+$e_X^2\le2^{4k(d-k)}Ea_X$.
+For a fixed rank-$j$ $Y$, its rank-$k$ predecessors correspond to rank-$k$
+projections on $\operatorname{im}Y$, by $X=QY$. Choosing the image of
+$Q$ and a complementary kernel counts exactly
+$\genfrac{[}{]}{0pt}{}{j}{k}_2\,2^{k(j-k)}$. The Gaussian product formula gives
+$\genfrac{[}{]}{0pt}{}{j}{k}_2\le4\,2^{k(j-k)}$: its denominator product exceeds
+$1/4$, since its first three factors give $21/64$ and the remaining
+product is at least $1-\sum_{a\ge4}2^{-a}=7/8$.
+The $k=0$ count is exactly one. Interchanging finite sums now yields
+\[
+ \begin{split}
+ \sum_X2^{-6d\operatorname{rank}X}\|D_Xf\|_2^4
+ &\le E^2\left(1+4\sum_{k\ge1}2^{-6k^2}\right)\\
+ &\le\frac{67}{63}E^2\le2E^2.                       \end{split}\tag{W6}
+\]
+Indeed the coefficient at a rank-$j\le d$ frequency has exponent
+$-6dk+4k(d-k)+2k(j-k)\le-6k^2$.
+At $d=0$ the sum is exactly $E^2$.
+
+This argument is necessary: $D_X$ is not a contraction. In fact the
+weight-$4d$ fourth-power claim in the pinned Ellis--Kindler--Lifshitz
+version fails for the stated operators. For $V=W=\mathbb F_2^d$ and
+$f=\sum_{Y\in\mathrm{GL}_d}\chi_Y$, write $G_d=|\mathrm{GL}_d|$.
+Then $E=G_d$, and every rank-one $X$ has
+$e_X=2^{4(d-1)}G_{d-1}$ by (A3). There are $(2^d-1)^2$ such $X$, and
+$G_d=(2^d-1)2^{d-1}G_{d-1}$. Their contribution to the weight-$4d$
+sum divided by $E^2$ is $2^{2d-6}$, already $4$ at $d=4$.
+We use (W6); the later induction has enough slack for it.
+
+\subsection{Degree reduction from two convolution classes}
+
+MANUSCRIPT paper/body.tex lines 1261-1337
+frequencies.
+
+We prove simultaneously on all finite spaces, by induction on $d$,
+\[
+ \|f\|_4^4\le2^{100d^2}Q(f),\qquad
+ Q(f)=\sum_{A,B}\mathbb E_T\|D_{A,B,T}f\|_2^4.       \tag{A7}
+\]
+At $d=0$ only the zero-order derivative survives and equality holds.
+In (A6) write the initial pair $(A_0,B_0)$, rank-$k$ map $X$,
+$s=\dim A_0+\operatorname{codim}B_0$, and $t=s+k>0$.
+The mixed derivative has degree at most $d-t<d$. Apply the induction
+hypothesis on its actual smaller space, then (T2) and (A1).
+A subsequent hybrid derivative has order $u+v\le d-t$.
+The two complement choices in (T2) have counts $2^{ku}$ and $2^{kv}$,
+by writing complements as graphs. Their fourth-power cost is at most
+$2^{3dk}\le2^{6dk}$. The enlarged ordinary order is
+$s+2k+u+v\le d+k$, not necessarily $d$; the count only uses the correct
+mixed bound $s+k+u+v\le d$.
+With $A_1/A_0=\operatorname{im}X$, $B_1=\ker X$, this yields
+\[
+ \begin{split}
+ \mathbb E_T\|D_XD_{A_0,B_0,T}f\|_4^4
+ \le {}&2^{100(d-t)^2+6dk}
+ \sum_{\substack{A\ge A_0,B\le B_0\\
+                 A\cap A_1=A_0,\ B+B_1=B_0}}
+ \mathbb E_T\|D_{X|B\bmod A}D_{A,B,T}f\|_2^4.       \end{split}\tag{A8}
+\]
+In (A8), the induced quotient is by $A/A_0$ inside $V/A_0$,
+with the canonical identification $(V/A_0)/(A/A_0)=V/A$.
+Each final $A,B$ reconstructs the intermediate pair as $A+A_1$,
+$B\cap B_1$, so there is no further multiplicity at this stage.
+For each fixed inner shift, original $T$ plus its canonical embedding
+is still uniform on the original group; Fubini removes the inner
+average with no cardinality or rank-conditioning factor.
+
+For completeness we count the remaining reindexing. Fix final $A,B,Y$
+of dimensions $a=\dim A,b=\operatorname{codim}B,k=\operatorname{rank}Y$;
+nonzero terms require $a+b+k\le d$. Fix initial dimensions
+$i=\dim A_0,j=\operatorname{codim}B_0$. The exact number of initial
+triples inducing $Y$ is
+\[
+ \genfrac{[}{]}{0pt}{}{a}{i}_2\genfrac{[}{]}{0pt}{}{b}{j}_2\,2^{k(a-i)}2^{k(b-j)}.   \tag{A9}
+\]
+Choose $A_0\le A$ and $B_0\ge B$ first. The image of $X$ is a lift
+of $\operatorname{im}Y$ to $V/A_0$ disjoint from $A/A_0$, hence a graph
+with $2^{k(a-i)}$ choices. Its kernel in $B_0/\ker Y$ complements
+$B/\ker Y$, with $2^{k(b-j)}$ choices. These choices determine $X$
+uniquely: project along the chosen kernel, apply $Y$, then lift its
+image. This also proves preservation of rank $k$.
+The count is at most $2^{d(i+j+k)}$, and we conservatively use
+$2^{3d(i+j+k)}$. For $t=i+j+k\in[1,d]$, (A6)--(A9) have exponent
+\[
+ 100(d-t)^2+27dt+6dk
+ \le100d^2-73dt+6dk
+ \le100d^2-63dt-4dk.                                \tag{A10}
+\]
+For fixed $k\ge1$, put $z=2^{-63d}$ and sum over $i,j\ge0$:
+$z^k/(1-z)^2\le2z^k\le2^{-31d(k+1)}$.
+For $k=0$ omit $i=j=0$; then
+$(1-z)^{-2}-1\le4z\le2^{-31d}$. Thus
+\[
+ \begin{split}
+ \frac{\|f\|_4^4}{162}\le {}&2^{6d^2}\|f\|_2^4+
+ 2^{100d^2}\sum_{k=0}^d2^{-31d(k+1)}\\[-2pt]
+ &\qquad\cdot\sum_{\substack{A,B,Y:\operatorname{rank}Y=k\\
+                             |(A,B)|+k>0}}
+ 2^{-4dk}\mathbb E_T\|D_YD_{A,B,T}f\|_2^4.          \end{split}\tag{A11}
+\]
+The coefficients satisfy
+$2^{-31d(k+1)-4dk}=2^{-31d-29dk}2^{-6dk}$.
+Apply (W6), with the common bound $d$, to each actual $D_{A,B,T}f$,
+and enlarge sums by nonnegativity. The last line is at most
+$2^{100d^2+1-31d}Q(f)$. Also $\|f\|_2^4\le Q(f)$ by the zero-order
+term. For $d\ge1$,
+$162(2^{-94d^2}+2^{1-31d})<1$, proving (A7).
+This closes a strict-lower-degree induction; its conclusion was not
+used at the current degree.
