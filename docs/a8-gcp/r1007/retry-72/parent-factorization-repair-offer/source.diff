@@ -1,0 +1,187 @@
+--- retry-71/E4BB/ActualBinaryMatrixHC46A22ParentFactorization.lean
++++ retry-72/ActualBinaryMatrixHC46A22ParentFactorization.lean
+@@ -33,6 +33,13 @@
+ private abbrev V (d : Nat) := Fin d → F
+ private abbrev W (n : Nat) := Fin n → F
+ 
++private theorem a18UniformMean_fintype_irrel {α : Type*}
++    (i j : Fintype α) (g : α → Real) :
++    @a18UniformMean α i g = @a18UniformMean α j g := by
++  have hij : i = j := Subsingleton.elim _ _
++  cases hij
++  rfl
++
+ private theorem exists_mem_ne_zero_of_ne_bot {E : Type*} [AddCommGroup E]
+     [Module F E] (A : Submodule F E) (hA : A ≠ ⊥) :
+     ∃ x, x ∈ A ∧ x ≠ 0 := by
+@@ -60,7 +67,7 @@
+   have hid : e.symm.toLinearMap.comp e.toLinearMap = LinearMap.id := by
+     apply LinearMap.ext
+     intro x
+-    simp [LinearEquiv.coe_toLinearMap]
++    simp
+   rw [hid, Submodule.map_id]
+ 
+ /-- Full A1 conditional-energy identity, with no influence or globalness premise. -/
+@@ -216,7 +223,12 @@
+     simp [carrierCoordinateBaseLift]
+   rw [hm, hP, hQ, hz] at hb
+   have he := a22_A1_composition_energy_eq f C A B H hCA hBH T 0
+-  simpa using he.symm.trans_le hb
++  refine he.symm.trans_le ?_
++  convert hb using 1
++  all_goals first
++    | exact a18UniformMean_fintype_irrel _ _ _
++    | exact Subsingleton.elim _ _
++    | rfl
+ 
+ 
+ /-- Strict all-spaces lower induction controls every original influence of
+@@ -342,9 +354,13 @@
+       (mapReindexEquiv eD eC S)
+       (fun M => f ((mapReindexEquiv eD eC).symm M)) =
+       a22IntrinsicEnergy A B S f := by
+-  let eQ := Submodule.Quotient.equiv A (A.map eD.symm.toLinearMap) eD.symm rfl
+-  let eB := Submodule.equivMapOfInjective eC.symm.toLinearMap eC.symm.injective B
+-  let e := LinearEquiv.arrowCongr eQ eB
++  let eQ : (D ⧸ A) ≃ₗ[F] (D' ⧸ A.map eD.symm.toLinearMap) :=
++    Submodule.Quotient.equiv A (A.map eD.symm.toLinearMap) eD.symm rfl
++  let eB : B ≃ₗ[F] B.map eC.symm.toLinearMap :=
++    Submodule.equivMapOfInjective eC.symm.toLinearMap eC.symm.injective B
++  let e : (D ⧸ A →ₗ[F] B) ≃ₗ[F]
++      (D' ⧸ A.map eD.symm.toLinearMap →ₗ[F] B.map eC.symm.toLinearMap) :=
++    LinearEquiv.arrowCongr eQ eB
+   have hselected : ∀ Y : C →[F] D,
+       Selected (A.map eD.symm.toLinearMap) (B.map eC.symm.toLinearMap)
+           (frequencyReindexEquiv eD eC Y) ↔ Selected A B Y := by
+@@ -412,9 +428,14 @@
+     exact hcost
+   have hb := original_influence_A1_relative_mean g hg
+     (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) A B 0 S hfinal
+-  simpa only [a22IntrinsicEnergy, complexCarrierAffineRestrict,
++  simp only [a22IntrinsicEnergy, complexCarrierAffineRestrict,
+     complexCarrierHybridFilter, complexCarrierFourierCoeff,
+-    complexLinearMapSelectedFilter, complexLinearMapFourierCoeff] using hb
++    complexLinearMapSelectedFilter, complexLinearMapFourierCoeff]
++  convert hb using 1
++  all_goals first
++    | exact a18UniformMean_fintype_irrel _ _ _
++    | exact Subsingleton.elim _ _
++    | rfl
+ 
+ 
+ section CoordinateInfluence
+@@ -460,6 +481,7 @@
+   have hf : (fun M => f0 ((mapReindexEquiv eD eC).symm M)) =
+       fun M => g (LinearMap.toMatrix bD bC M) := by
+     funext M
++    dsimp only [f0]
+     rw [filteredCarrierFunction_bot_top]
+     congr 1
+     ext i j
+@@ -575,12 +597,13 @@
+   let f0 := fun M => filteredCarrierFunction Z U 0 f M
+   have hquotU : Module.finrank F (W n ⧸ U) = 0 := by
+     have h := U.finrank_quotient_add_finrank
+-    change Module.finrank F (W n ⧸ U) + Module.finrank F U =
++    change Module.finrank F (W n ⧸ U) +
++      Module.finrank F (⊤ : Submodule F (W n)) =
+       Module.finrank F (W n) at h
+-    rw [U, finrank_top] at h
++    rw [finrank_top] at h
+     omega
+   have hzero : Module.finrank F Z + Module.finrank F (W n ⧸ U) = 0 := by
+-    rw [Z, finrank_bot, hquotU]
++    rw [finrank_bot, hquotU]
+   have hL : Module.finrank F L = 1 := by
+     have hi : Function.Injective Z.mkQ := by
+       apply LinearMap.ker_eq_bot.mp
+@@ -606,7 +629,6 @@
+     simp [Q, U]
+   have houter : Module.finrank F C + Module.finrank F (W n ⧸ U) = 1 := by
+     rw [hC, hquotU]
+-    norm_num
+   have hadd := relative_endpoint_cost_add C U (A.map C.mkQ) Q
+   rw [hArec, hBrec, houter] at hadd
+   change Module.finrank F A + Module.finrank F (W n ⧸ B) =
+@@ -616,7 +638,7 @@
+     change Module.finrank F (A.map C.mkQ) +
+       Module.finrank F (U ⧸ Q) ≤ j - 1
+     omega
+-  let g1 := fun N => typedComplexLineFilter U L hL
++  let g1 := fun (N : ((V d ⧸ Z) ⧸ L) →ₗ[F] U) => typedComplexLineFilter U L hL
+     (typedComplexRankProjection Z U j f0) (S + N.comp L.mkQ)
+   have hb := a22_line_relative_from_lowerIH hj hp hIH Z U L hL S f0 hf0 P Q 0 hinner
+   have he := a22_intrinsic_energy_reindex eD (LinearEquiv.refl F U) P Q 0 g1
+@@ -655,7 +677,12 @@
+       complexCarrierHybridFilter, complexCarrierFourierCoeff,
+       complexLinearMapSelectedFilter, complexLinearMapFourierCoeff,
+       LinearMap.zero_comp, LinearMap.comp_zero, add_zero] using hc
+-  exact hc'.symm.trans_le hb'
++  refine hc'.symm.trans_le ?_
++  convert hb' using 1
++  all_goals first
++    | exact a18UniformMean_fintype_irrel _ _ _
++    | exact Subsingleton.elim _ _
++    | rfl
+ 
+ 
+ /-- Complete codomain-hyperplane branch, including every relative inner
+@@ -684,12 +711,13 @@
+   let f0 := fun M => filteredCarrierFunction Z U 0 f M
+   have hquotU : Module.finrank F (W n ⧸ U) = 0 := by
+     have h := U.finrank_quotient_add_finrank
+-    change Module.finrank F (W n ⧸ U) + Module.finrank F U =
++    change Module.finrank F (W n ⧸ U) +
++      Module.finrank F (⊤ : Submodule F (W n)) =
+       Module.finrank F (W n) at h
+-    rw [U, finrank_top] at h
++    rw [finrank_top] at h
+     omega
+   have hzero : Module.finrank F Z + Module.finrank F (W n ⧸ U) = 0 := by
+-    rw [Z, finrank_bot, hquotU]
++    rw [finrank_bot, hquotU]
+   have hf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0 := by
+     have hr := UpToActualLqGlobal_raw_typed (k := j) f hg Z U 0
+       (by rw [hzero]; omega)
+@@ -701,7 +729,7 @@
+       (Submodule.topEquiv : (⊤ : Submodule F (W n)) ≃ₗ[F] W n)
+       hcanon).finrank_eq
+   have houter : Module.finrank F Z + Module.finrank F (W n ⧸ H) = 1 := by
+-    rw [← hquot, hL, Z, finrank_bot]
++    rw [← hquot, hL, finrank_bot]
+   let eC := (hyperplaneCanonicalCodomainEquiv U L).symm
+   let Q0 := B.comap H.subtype
+   let Q := Q0.map eC.toLinearMap
+@@ -713,7 +741,7 @@
+     rw [Submodule.map_comap_eq, Submodule.range_subtype, inf_eq_right.mpr hBH]
+   have hadd := relative_endpoint_cost_add Z H (⊥ : Submodule F (V d ⧸ Z)) Q0
+   rw [hBrec] at hadd
+-  simp only [Submodule.comap_bot, finrank_bot, houter] at hadd
++  simp only [Submodule.comap_bot, Submodule.ker_mkQ, finrank_bot, houter] at hadd
+   change Module.finrank F (W n ⧸ B) =
+     1 + Module.finrank F (H ⧸ Q0) at hadd
+   have hinner : Module.finrank F (⊥ : Submodule F (V d ⧸ Z)) +
+@@ -721,7 +749,7 @@
+     rw [finrank_bot, hQdim]
+     change Module.finrank F (H ⧸ Q0) ≤ j - 1
+     omega
+-  let g1 := fun N => typedComplexHyperplaneFilter U L hL
++  let g1 := fun (N : (V d ⧸ Z) →ₗ[F] L) => typedComplexHyperplaneFilter U L hL
+     (typedComplexRankProjection Z U j f0) (S + L.subtype.comp N)
+   have hb := a22_hyperplane_relative_from_lowerIH hj hp hIH Z U L hL S f0 hf0
+     (⊥ : Submodule F (V d ⧸ Z)) Q 0 hinner
+@@ -763,7 +791,12 @@
+       complexCarrierFourierCoeff, complexLinearMapSelectedFilter,
+       complexLinearMapFourierCoeff, LinearMap.zero_comp,
+       LinearMap.comp_zero, add_zero] using hc
+-  exact hc'.symm.trans_le hb'
++  refine hc'.symm.trans_le ?_
++  convert hb' using 1
++  all_goals first
++    | exact a18UniformMean_fintype_irrel _ _ _
++    | exact Subsingleton.elim _ _
++    | rfl
+ 
+ 
+ /-- The full positive-parent input to original A22. The only induction
