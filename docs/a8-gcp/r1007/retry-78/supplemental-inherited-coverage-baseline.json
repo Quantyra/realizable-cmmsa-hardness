@@ -1,0 +1,922 @@
+{
+  "utc": "2026-10-06T12:57:49.514303+00:00",
+  "authorization": "Root planning06243c5 separate expanded-coverage seal; original981 unchanged",
+  "source_run": "cmmsa_a8_output_20261006T123622Z_1dfa244e",
+  "stage": 0,
+  "native_exit": 0,
+  "raw_stdout_sha256": "0C7A8DE1EA93A951D78B74819D3951F07C4FA9875EBB1EA475CA2BB5A118C743",
+  "original_baseline_sha256": "4E74A921493D66CB31220190B0AF52F82A46240B99994F457EF41A8C8600CFF1",
+  "warning_headers": {
+    "warning: lean/PvNP/RealizableHardness/ActualStarRelationCount.lean:58:4: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualGraphIncidence.lean:42:24: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualGraphIncidence.lean:43:23: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:36:10: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:37:67: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean:53:10: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixLiftExactBudgetZoom.lean:99:29: Variable name `R` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixLiftExactBudgetZoom.lean:179:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixLiftExactBudgetZoom.lean:164:33: Variable name `he` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixLiftExactBudgetZoom.lean:194:34: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:34:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:35:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:37:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:58:16: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:113:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:114:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:115:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:116:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:117:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:121:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:149:28: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:149:51: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:150:6: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:150:11: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:154:28: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean:154:51: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixGrassmannIdentity.lean:140:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.MatrixGrassmannIdentity.rawF_deficient`:": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixGrassmannIdentity.lean:208:10: `dif_pos` has been deprecated: Use `dite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixGrassmannIdentity.lean:268:4: `mul_le_one\u2080` has been deprecated: No replacement, use constituent lemmas from proof.": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixGrassmannIdentity.lean:367:8: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/TaggedFinite3LinSource.lean:16:18: Variable name `i` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/TaggedFinite3LinSource.lean:16:20: Variable name `j` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/TaggedFinite3LinSource.lean:46:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.Finite3LinSource.restrictAssignment_repeatAssignment`:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualEqualityCloudDegree.lean:56:8: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualEqualityCloudDegree.lean:64:8: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixLiftLeftRowNormalForm.lean:49:4: Unused tactic linter: `change (targetSpan B).mkQ y.val = 0` does nothing": 1,
+    "warning: lean/PvNP/RealizableHardness/MatrixLiftLeftRowNormalForm.lean:145:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.MatrixLiftLeftRowNormalForm.rawNormalized_score_eq`:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualCmmsaAdmissibilitySelector.lean:70:4: Try `simp at hmem` instead of `simpa using hmem`": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualCmmsaAdmissibilitySelector.lean:110:54: Variable name `hd` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:483:2: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:475:5: Variable name `hInj` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:508:2: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:513:5: Variable name `hInj` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:744:29: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:769:32: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:769:45: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:784:5: Variable name `hInj` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:792:15: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:825:2: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:844:15: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:832:5: Variable name `hInj` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:1092:29: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:1118:32: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean:1118:45: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualFixedFunctionalMatrixLift.lean:39:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualFixedFunctionalMatrixLift.lean:68:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:65:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:75:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:78:36: Variable name `hdV` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:85:26: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:85:37: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:85:52: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:110:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:111:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean:119:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:795:12: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:796:12: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:796:27: Unused tactic linter: `norm_num` does nothing": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:796:27: this tactic is never executed": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:795:23: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:807:12: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:808:12: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:807:27: Unused tactic linter: `norm_num` does nothing": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:807:27: this tactic is never executed": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:808:23: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:854:8: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean:862:8: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedSpectralParameters.lean:109:8: Unused tactic linter: `ring` does nothing": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedSpectralParameters.lean:109:8: this tactic is never executed": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:36:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean:38:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:45:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualStarJointKernel.incrementSumMap_range`:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:73:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarJointKernel.lean:74:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:64:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:101:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.RobustSourceLineContainment.nontrivial_inf_iff_quotientImages`:": 1,
+    "warning: lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:432:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:435:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:436:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean:414:19: Variable name `hd` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedSelectedDecoderBridge.lean:76:5: Variable name `hrows` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedSelectedDecoderBridge.lean:263:41: `dif_pos` has been deprecated: Use `dite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:33:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualStarKernelSupport.kernelWitness_has_exact_support_relation`:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean:92:4: Try this: intro i hzero": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:102:4: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:128:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:129:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:134:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:185:10: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:190:10: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean:213:19: Variable name `hdV` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarBadMassWitness.lean:48:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarBadMassWitness.lean:50:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarBadMassWitness.lean:39:26: Variable name `hS` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarBadMassWitness.lean:43:5: Variable name `hsum` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarBadMassWitness.lean:116:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarBadMassWitness.lean:118:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarBadMassWitness.lean:110:5: Variable name `hsum` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:98:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:99:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:123:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean:124:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualQuestionMassBridge.lean:70:4: `push_neg` has been deprecated. Prefer using `push Not` instead.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualQuestionMassBridge.lean:171:10: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualQuestionMassBridge.lean:313:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualQuestionMassBridge.conflict_degree_le`:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualQuestionMassBridge.lean:423:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualQuestionMassBridge.lean:474:14: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean:99:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean:121:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/TaggedQuestionMassBridge.lean:213:14: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/TaggedQuestionMassBridge.lean:213:32: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/TaggedQuestionMassBridge.lean:226:14: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/TaggedQuestionMassBridge.lean:255:12: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedQuestionMass.lean:41:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedQuestionMass.lean:50:6: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedQuestionMass.lean:57:4: Unused tactic linter: `change": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:28:5: Variable name `r` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:57:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:91:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean:110:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean:87:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedQuestionRetainedMass.lean:99:12: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedQuestionRetainedMass.lean:124:10: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarDomainDrawTwoIndexEventBridge.lean:53:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:238:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:239:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean:245:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarSameLawTwoIndexComposition.lean:110:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentationFiberAudit.lean:137:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentationFiberAudit.lean:138:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentationFiberAudit.lean:139:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedPresentationFiberAudit.lean:145:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedSampleNonempty.lean:144:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedSampleNonempty.lean:200:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedSampleNonempty.lean:292:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalGraphCount.lean:66:4: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalGraphCount.lean:74:10: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalGraphCount.lean:98:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalGraphCount.lean:99:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalGraphCount.lean:100:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalGraphCount.lean:164:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalGraphCount.lean:165:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedVertexPresentationFiber.lean:243:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedVertexPresentationFiber.lean:245:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainCollision.lean:37:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainCollision.lean:40:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainCollision.lean:57:4: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainDraw.lean:36:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainDraw.lean:90:51: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainDraw.lean:176:22: Variable name `hh` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainDraw.lean:195:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainDraw.lean:401:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainDraw.lean:403:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean:121:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean:123:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean:178:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean:180:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean:214:16: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean:216:16: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean:218:10: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean:219:10: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:94:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:114:8: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:138:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:140:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:142:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:211:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:209:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:202:48: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:331:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:362:6: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:501:16: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:664:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:700:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:722:5: Variable name `hsel` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:1063:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:1206:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:1218:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:1400:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:1394:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:1403:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:1404:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean:1597:5: Variable name `hA` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarSelection.lean:16:8: automatically included section variable(s) unused in theorem `_private.PvNP.RealizableHardness.ActualOrdinaryStarSelection.0.PvNP.RealizableHardness.ActualOrdinaryStarSelection.star_accepts_iff`:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarSelection.lean:37:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarSelection.lean:38:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarSelection.lean:46:15: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarSelection.lean:46:34: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedFixedUDensityForce.lean:61:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedFixedUDensityForce.lean:91:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedFixedUDensityForce.lean:92:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedFixedUDensityForce.lean:172:21: `if_true` has been deprecated: Use `ite_true` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedFixedUDensityForce.lean:174:21: `if_false` has been deprecated: Use `ite_false` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarMatchingFiber.lean:82:54: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarMatchingFiber.lean:114:8: automatically included section variable(s) unused in theorem `_private.PvNP.RealizableHardness.ActualOrdinaryStarMatchingFiber.0.PvNP.RealizableHardness.ActualOrdinaryStarMatchingFiber.matchesStar_iff_restrict_jointSpan`:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComposedPhysicalSampler.lean:124:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComposedPhysicalSampler.lean:126:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComposedPhysicalSampler.lean:201:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComposedPhysicalSampler.lean:221:43: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComposedPhysicalSampler.lean:242:53: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComposedPhysicalSampler.lean:469:7: Variable name `T` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarWeightedSelection.lean:83:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarWeightedSelection.lean:84:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarWeightedSelection.lean:129:21: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarWeightedSelection.lean:135:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarWeightedSelection.lean:189:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarWeightedSelection.lean:197:8: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualOrdinaryStarWeightedSelection.lean:204:13: Variable name `h\u03b5` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualFixedFunctionalStarMoment.lean:32:0: automatically included section variable(s) unused in theorem `PvNP.RealizableHardness.ActualFixedFunctionalStarMoment.matchesStar_iff_bits`:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualFixedFunctionalStarMoment.lean:55:12: `if_neg` has been deprecated: Use `ite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualFixedFunctionalStarMoment.lean:117:17: `if_pos` has been deprecated: Use `ite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualFixedFunctionalStarMoment.lean:104:65: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedMZSideDraw.lean:195:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedMZSideDraw.lean:212:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedMZSideDraw.lean:214:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedMZSideDraw.lean:283:17: Variable name `he` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedMZSideDraw.lean:384:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedMZSideDraw.lean:388:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedMZSideDraw.lean:423:7: Variable name `T` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualFiniteMomentLpBounds.lean:22:50: Variable name `hp` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualFiniteMomentLpBounds.lean:144:49: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualRankImageRightBasisInvariance.lean:85:33: `dif_pos` has been deprecated: Use `dite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualRankImageRightBasisInvariance.lean:85:46: `dif_pos` has been deprecated: Use `dite_eq_left` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualRankImageRightBasisInvariance.lean:90:33: `dif_neg` has been deprecated: Use `dite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualRankImageRightBasisInvariance.lean:90:46: `dif_neg` has been deprecated: Use `dite_eq_right` instead": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:238:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:246:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:258:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:260:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:263:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:266:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:360:17: Variable name `he` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:374:18: Variable name `he` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:376:18: Variable name `he` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:410:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:418:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:432:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:431:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:440:4: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:439:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:586:47: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:684:4: try 'simp' instead of 'simpa'": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:705:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:918:8: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean:917:6: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualComplementCoordinateMassBridge.lean:164:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualComplementCoordinateMassBridge.lean:165:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualComplementCoordinateMassBridge.lean:166:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualComplementCoordinateMassBridge.lean:168:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualComplementCoordinateMassBridge.lean:170:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualComplementCoordinateMassBridge.lean:173:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAppendMoment.lean:143:13: Variable name `hsum` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAppendMoment.lean:144:13: Variable name `hbudget` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAppendMoment.lean:243:13: Variable name `hsum` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAppendMoment.lean:244:13: Variable name `hbudget` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:36:38: Variable name `hEven` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:47:5: Variable name `basisInv` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:49:5: Variable name `hEven` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:49:29: Variable name `hi` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:50:5: Variable name `hRho` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:51:5: Variable name `hc` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:52:5: Variable name `hs` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:53:5: Variable name `hHeight` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:166:16: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:241:46: Variable name `hC` is not explicitly referenced.": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:512:46: this tactic is never executed": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:512:46: Unused tactic linter: `ring` does nothing": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:582:2: Try this: ": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:599:6: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:906:46: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:1117:6: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean:1117:22: This simp argument is unused:": 1,
+    "warning: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46.lean:112:5: Variable name `hbudget` is not explicitly referenced.": 1
+  },
+  "header_count": 283,
+  "source_pins": {
+    "lean/PvNP/RealizableHardness/ActualBinaryGrassmannSamplingBounds.lean": {
+      "sha256": "3AFC06C189D7829F6A34BCFC646AA59A8EAE5A3C7B3D8AA848798C0BAD2905FA",
+      "bytes": 54077,
+      "imports": [
+        "PvNP.RealizableHardness.ActualBinaryGrassmannIncidence",
+        "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46.lean": {
+      "sha256": "1C47B86B25502FBA6969B5CCF5F39703C9E7FCAA4CD29CFE32205701BD8D662C",
+      "bytes": 8451,
+      "imports": [
+        "PvNP.RealizableHardness.ActualSelectedComplementAnalyticMoment"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualCmmsaAdmissibilitySelector.lean": {
+      "sha256": "455B9C1EFDBB64B0CA06E3CFB284EA59F6DFA37F5CBEE239FC2872D0A85FF11B",
+      "bytes": 10339,
+      "imports": [
+        "PvNP.RealizableHardness.ActualCmmsaParameterReconciliation",
+        "Mathlib.Data.Finset.Max",
+        "Mathlib.Data.Nat.Log",
+        "Mathlib.Data.Nat.Sqrt",
+        "Mathlib.Tactic"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualComplementCoordinateMassBridge.lean": {
+      "sha256": "0BDD2A95493E631DAF013FB4915B985A67B45FC137CD2A6DA22B1C24BFDE5857",
+      "bytes": 17759,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedComplementStarDensityBridge",
+        "PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection",
+        "PvNP.RealizableHardness.ActualTaggedConcreteStarLaw",
+        "PvNP.RealizableHardness.ActualOrdinaryStarMatchingFiber",
+        "Mathlib.LinearAlgebra.Dimension.Free"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualEqualityCloudDegree.lean": {
+      "sha256": "2C8320823C096A52420E6C6566DA5C31F77946D10E733802CEC851A484678B96",
+      "bytes": 4761,
+      "imports": [
+        "PvNP.RealizableHardness.ActualEqualityCloud",
+        "PvNP.RealizableHardness.ActualGraphIncidence"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualFiniteMomentLpBounds.lean": {
+      "sha256": "BF9C27E32D08A6D4FCE7853D6D45F5BF2BA229635BE0C2AC7229A02979B5532B",
+      "bytes": 11583,
+      "imports": [
+        "Mathlib.Analysis.MeanInequalitiesPow",
+        "Mathlib.Analysis.MeanInequalities",
+        "PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualFixedFunctionalMatrixLift.lean": {
+      "sha256": "1002E7F8541C8FDE977E0123FB7CBFA85C33D6CF0D2593D5925929E2FC22147F",
+      "bytes": 4632,
+      "imports": [
+        "PvNP.RealizableHardness.ActualChangedAmbient8SBoundary",
+        "PvNP.RealizableHardness.MatrixLiftNominalDirectComparison"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualFixedFunctionalStarMoment.lean": {
+      "sha256": "202014CFC75A05EC63FE4F55B9637B7B84705B78BA68EA886AA384072DA31893",
+      "bytes": 9193,
+      "imports": [
+        "PvNP.RealizableHardness.ActualOrdinaryStarWeightedSelection",
+        "PvNP.RealizableHardness.MatrixGrassmannIdentity"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualGraphIncidence.lean": {
+      "sha256": "15DB3BCBFE98D5B07096034358183E457EB2DB8E555044DDC3A91BB673AA2B42",
+      "bytes": 3405,
+      "imports": [
+        "PvNP.RealizableHardness.ActualGraphEdges",
+        "Mathlib.Data.Fintype.Card"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualOrdinaryStarMatchingFiber.lean": {
+      "sha256": "6EBB19671F368AD1FFDD00755469CE14ABDDDAF7ECBBA223E92C0AE031E7077E",
+      "bytes": 7697,
+      "imports": [
+        "PvNP.RealizableHardness.ActualOrdinaryStarSelection",
+        "PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce",
+        "PvNP.RealizableHardness.ActualStarJointKernel",
+        "PvNP.RealizableHardness.GrassmannFlagPosterior"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualOrdinaryStarSelection.lean": {
+      "sha256": "04E4EC58CFC28EF1361A42D6040BE7EF9C104DE543F18CADD6794BAFBBFB9758",
+      "bytes": 4310,
+      "imports": [
+        "PvNP.RealizableHardness.ActualChangedAmbient8SBoundary",
+        "PvNP.RealizableHardness.ActualStarAcceptedGoodMass"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualOrdinaryStarWeightedSelection.lean": {
+      "sha256": "3476145D6E59C051F544BAE44BCD9B188EE72F7D227D0C4EDAB7AAA3F8A498C4",
+      "bytes": 12979,
+      "imports": [
+        "PvNP.RealizableHardness.ActualOrdinaryStarMatchingFiber"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualQuestionMassBridge.lean": {
+      "sha256": "A7D5A591E56A2334FC2FF83A366461B5D0E8325709F6AC4A24EB54C7BA95B969",
+      "bytes": 23242,
+      "imports": [
+        "PvNP.RealizableHardness.ActualOccurrenceCounts",
+        "PvNP.RealizableHardness.ActualOccurrenceDegree",
+        "PvNP.RealizableHardness.ActualStarQuestionSupport",
+        "Mathlib.Algebra.Order.BigOperators.Group.Finset"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualRankImageRightBasisInvariance.lean": {
+      "sha256": "F2286607C739FF54B221DD209A4148BF0FC4915DEB4A956ACE72D8EE49986957",
+      "bytes": 8129,
+      "imports": [
+        "PvNP.RealizableHardness.MatrixLiftNominalDirectComparison",
+        "PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualSelectedComplementAnalyticMoment.lean": {
+      "sha256": "BFAE5D2ECAA63D258742FC776B3A21720744F0238A6624D4800304072FFE92F9",
+      "bytes": 66548,
+      "imports": [
+        "Mathlib.Analysis.MeanInequalities",
+        "Mathlib.Analysis.MeanInequalitiesPow",
+        "PvNP.RealizableHardness.ActualSelectedComplementAppendMoment",
+        "PvNP.RealizableHardness.ActualSelectedSpectralParameters",
+        "PvNP.RealizableHardness.ActualLeafLabelRankImageAlignment",
+        "PvNP.RealizableHardness.ActualRankImageRightBasisInvariance",
+        "PvNP.RealizableHardness.ActualAppendFourierCrossLevelOrthogonality",
+        "PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment",
+        "PvNP.RealizableHardness.ActualFiniteMomentLpBounds"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualSelectedComplementAppendMoment.lean": {
+      "sha256": "1D84E04486A9045AA6A883D8225B28C253558AD5CC0C47B3289FD817540B0D0B",
+      "bytes": 11931,
+      "imports": [
+        "PvNP.RealizableHardness.ActualComplementCoordinateMassBridge",
+        "PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator",
+        "PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard",
+        "PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector",
+        "PvNP.RealizableHardness.ActualCmmsaParameterReconciliation",
+        "PvNP.RealizableHardness.SamplerParameters"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualSelectedSpectralParameters.lean": {
+      "sha256": "78FB8DF0B635E950ED087C3598530B328AD25EC5AC4B2DBF556CBE433A46E582",
+      "bytes": 5389,
+      "imports": [
+        "PvNP.RealizableHardness.ActualCmmsaAdmissibilitySelector",
+        "PvNP.RealizableHardness.ActualCmmsaParameterReconciliation",
+        "PvNP.RealizableHardness.ActualStarFixedRhoDimensionGuard"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualSourceStarLaw.lean": {
+      "sha256": "DC4EC18DCF630A02207318690D64CDA672E0DACBC72DCD34C438BAAAF883DA11",
+      "bytes": 9962,
+      "imports": [
+        "PvNP.RealizableHardness.GrassmannFlagPosterior",
+        "PvNP.RealizableHardness.ActualFiniteIncidenceSampling",
+        "PvNP.RealizableHardness.ActualBinaryGrassmannSamplingBounds"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarAcceptedGoodMass.lean": {
+      "sha256": "A260893B52F3B95E2C2182EDEADC2E811171EC1DD1DBEB3478A5D38EA2A1A1FD",
+      "bytes": 76564,
+      "imports": [
+        "PvNP.RealizableHardness.ActualFiniteIncidenceSampling",
+        "PvNP.RealizableHardness.ActualQuestionCenterDomainDraw",
+        "PvNP.RealizableHardness.ActualSourceStarLaw",
+        "PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure",
+        "PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge",
+        "PvNP.RealizableHardness.ActualStarFixedRhoTwoIndexGuard",
+        "PvNP.RealizableHardness.ActualStarSameLawTwoIndexComposition",
+        "PvNP.RealizableHardness.ActualPresentedLeafGluing",
+        "PvNP.RealizableHardness.ActualStarAcceptance",
+        "PvNP.RealizableHardness.ActualPredrawLeafTable",
+        "PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelection.lean": {
+      "sha256": "BD16438EE3121B4081F2A949CA9BE42BE8558592E936A74F868DCE3BEC372593",
+      "bytes": 7763,
+      "imports": [
+        "Mathlib.LinearAlgebra.Dual.Lemmas",
+        "Mathlib.LinearAlgebra.Dimension.Finite",
+        "Mathlib.LinearAlgebra.Isomorphisms",
+        "Mathlib.Algebra.DirectSum.Module",
+        "Mathlib.Tactic"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarAffineFunctionalSelectionForceSelection.lean": {
+      "sha256": "877BDA93402FDFEAEA60E3AB5FB40F0AB277E8760845669B0A9F11B706015ECE",
+      "bytes": 13055,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarAffineFunctionalSelectionForce",
+        "Mathlib.Algebra.DirectSum.Module",
+        "Mathlib.LinearAlgebra.Dimension.Finite",
+        "PvNP.RealizableHardness.ActualFiniteLaw"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarBadMassWitness.lean": {
+      "sha256": "D2EEBA320DDF2EE01F6C06A4295D717BC40FC011B22C1244A9FC5CD51F8DE2F5",
+      "bytes": 5490,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarJointKernel",
+        "PvNP.RealizableHardness.ActualStarKernelSupport",
+        "PvNP.RealizableHardness.ActualStarExtensionProduct"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarCoordinateExtensionLawBridge.lean": {
+      "sha256": "DE578F3B6A051100254C6D37FEDAFF49296FB1C35EA4F38750720CB14D849BCB",
+      "bytes": 6431,
+      "imports": [
+        "PvNP.RealizableHardness.ActualFiniteLaw",
+        "PvNP.RealizableHardness.ActualQuestionCenterDomainDraw",
+        "PvNP.RealizableHardness.ActualSourceStarLaw",
+        "PvNP.RealizableHardness.ActualStarExtensionProduct",
+        "PvNP.RealizableHardness.GrassmannFlagPosterior"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarDomainDrawEventBridge.lean": {
+      "sha256": "4D64AB349250F4FF80AA98B50A9A38B58AF3A700A184989009BFCC57BC6D9AF4",
+      "bytes": 5824,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge",
+        "PvNP.RealizableHardness.ActualStarFixedCenterFirstMoment",
+        "PvNP.RealizableHardness.ActualStarJointKernel"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarDomainDrawTwoIndexEventBridge.lean": {
+      "sha256": "33F8C9A18FB0676AD436BFD311B3BCEF0CBB98C80A7E288F9A408808BD51B8C0",
+      "bytes": 4269,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarDomainDrawEventBridge"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarExtensionProduct.lean": {
+      "sha256": "D6ED23A06E1445FD8AF0483A34E2A2BC8A5F9857536B704F4D5200D3BA93A131",
+      "bytes": 12287,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarLineIncidence",
+        "Mathlib.Tactic"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarFiniteUnionBound.lean": {
+      "sha256": "56AFB00F6085E96265BAE3F265CD5A5C05631F67FA3EE68A2C602206FFD8C474",
+      "bytes": 3279,
+      "imports": [
+        "PvNP.RealizableHardness.ActualFiniteLaw",
+        "Mathlib.Tactic"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarFixedCenterFirstMoment.lean": {
+      "sha256": "33395B16E7968DB3CED71BC24A2F4920E9D21A03D2357FCF9BFB1E64BE6CCD09",
+      "bytes": 7347,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarFiniteUnionBound",
+        "PvNP.RealizableHardness.ActualStarSupportCatalog"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarJointKernel.lean": {
+      "sha256": "F02B9C19A7145C07EEFA78693E24CA4EADE747303E75300EBDC54563BD12D40F",
+      "bytes": 5787,
+      "imports": [
+        "PvNP.RealizableHardness.ActualSourceStarLaw",
+        "Mathlib.Algebra.DirectSum.Module",
+        "Mathlib.LinearAlgebra.DirectSum.Finite",
+        "Mathlib.LinearAlgebra.Dimension.Constructions",
+        "Mathlib.LinearAlgebra.FiniteDimensional.Lemmas"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarKernelSupport.lean": {
+      "sha256": "113641BCFA86B2E8582CF612156953A05E29DE15BCE579EDE9E5543B8205F4B7",
+      "bytes": 3839,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarJointKernel",
+        "PvNP.RealizableHardness.ActualStarRelationCount"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarLineIncidence.lean": {
+      "sha256": "14F53ED1450C6D722427A9CE4E8C4FEF398084E958FF8D0AC9746C6BCD1CDCCF",
+      "bytes": 4434,
+      "imports": [
+        "PvNP.RealizableHardness.ActualSourceStarLaw",
+        "PvNP.RealizableHardness.GrassmannFlagPosterior"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarRelationCount.lean": {
+      "sha256": "6827A7FF69392D5D86D1F55DB9AFC0D069396CDDBB2CDAA9D0386B8938FB7BC8",
+      "bytes": 4066,
+      "imports": [
+        "Mathlib.Algebra.BigOperators.Fin"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarSameLawTwoIndexComposition.lean": {
+      "sha256": "CDEFF63DC4479587F5D818CB44918C1FF9BAA43B4EB9C163852FFD1E810B62FE",
+      "bytes": 7028,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarFixedCenterScalarClosure",
+        "PvNP.RealizableHardness.ActualStarFixedRhoTwoIndexGuard",
+        "PvNP.RealizableHardness.ActualStarCoordinateExtensionLawBridge",
+        "PvNP.RealizableHardness.ActualStarDomainDrawTwoIndexEventBridge",
+        "PvNP.RealizableHardness.SamplerParameters"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualStarSupportCatalog.lean": {
+      "sha256": "38A990307BE5CBBCBB90E43639E96878ED66FE36CCE7641219D816576382FE70",
+      "bytes": 5943,
+      "imports": [
+        "PvNP.RealizableHardness.ActualStarBadMassWitness",
+        "PvNP.RealizableHardness.ActualStarRelationCount",
+        "Mathlib.Data.Fintype.EquivFin"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedComplementIncidence.lean": {
+      "sha256": "D51CA831411A7D9EF361F46ADABF87C1517BB3F04B7804355CD855B1DD9CDAC5",
+      "bytes": 46276,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedMZSideDraw",
+        "PvNP.RealizableHardness.ActualTaggedConditionalDomainDraw"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedComposedPhysicalSampler.lean": {
+      "sha256": "209A166B3425659CC541A9EE5CBE4A3185E51ED0FCD172B37CF358CBE3B0F999",
+      "bytes": 22756,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedTargetPresentationInvariant",
+        "PvNP.RealizableHardness.ActualTaggedConditionalDomainDraw",
+        "PvNP.RealizableHardness.ActualTaggedOrderedFullLawForce",
+        "PvNP.RealizableHardness.ActualTaggedFixedUDensityForce"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainCollision.lean": {
+      "sha256": "4E97AED4D1F8DC8115EB3CA7214F90F2411B69D1DE959FA5E76EED091ABF3ED9",
+      "bytes": 4438,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedConditionalGraphCount",
+        "PvNP.RealizableHardness.ActualTaggedVertexPresentationFiber",
+        "PvNP.RealizableHardness.ActualTaggedOrderedSampleNonempty",
+        "PvNP.RealizableHardness.ActualQuestionCenterCollisionBound"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedConditionalDomainDraw.lean": {
+      "sha256": "23A4CA9158310E4B9D19481A3D8F82D09644891ED06999C2993C12A83E084A36",
+      "bytes": 19340,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedConditionalDomainCollision",
+        "PvNP.RealizableHardness.GrassmannCounting"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedConditionalGraphCount.lean": {
+      "sha256": "F470E0BBFBFFE560E0BD9E397EEDA11378E2AFB70A7BB675C55AA86110AC36FF",
+      "bytes": 7814,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedPresentationFiberAudit",
+        "Mathlib.LinearAlgebra.FreeModule.Finite.Matrix",
+        "Mathlib.FieldTheory.Finiteness"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedFixedUDensityForce.lean": {
+      "sha256": "FFC1A93E4A1FAEBCA783D21DA946A6D8F4EEFBDB5C7C72150149A32F22B574CB",
+      "bytes": 16875,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedOrderedFullLawForce"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedMZSideDraw.lean": {
+      "sha256": "B2CCE2FC8F7CFBC646A70EFBB5760711D9F5F89B371842D6ED5512E93501DFAB",
+      "bytes": 19872,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedComposedPhysicalSampler",
+        "PvNP.RealizableHardness.GrassmannCounting"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedOrderedClassCollisionBound.lean": {
+      "sha256": "9DE71B12E30D3464C5A2420A9845015A73723B00BB208F80D17ADDFDBB935CA4",
+      "bytes": 21762,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedConditionalDomainDraw",
+        "PvNP.RealizableHardness.ActualQuestionCenterCollisionBound"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedOrderedSampleNonempty.lean": {
+      "sha256": "89A9C9F582CF8E5445706C4D74E0951E8C8CC349029D4014B90E8433791DA4CF",
+      "bytes": 13159,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedOrderedQuestionSourceBridge",
+        "PvNP.RealizableHardness.ActualSourceStarLaw",
+        "PvNP.RealizableHardness.ActualQuestionCenterDomainDraw"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedPresentationFiberAudit.lean": {
+      "sha256": "214882E014C0C0E7897D605EE7512403510F8BD11329BA95E3254EFAC03E1812",
+      "bytes": 7003,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedOrderedQuestionSourceBridge",
+        "Mathlib.LinearAlgebra.FreeModule.Finite.Matrix",
+        "Mathlib.FieldTheory.Finiteness"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedPresentedSelection.lean": {
+      "sha256": "838B2B75DD69C9706B6E924DF4D3AD3E0E661747F9F9BF486853CB55A593B793",
+      "bytes": 43162,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedFixedTableAcceptance",
+        "PvNP.RealizableHardness.ActualCompatibleRhsFunctional",
+        "PvNP.RealizableHardness.ActualLeafRelationLaws",
+        "PvNP.RealizableHardness.ActualCliqueJointLaw",
+        "Mathlib.Logic.Equiv.Set",
+        "Mathlib.Logic.Equiv.Prod"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedQuestionMass.lean": {
+      "sha256": "7BC31AAB2765EB0E0463751DCF2447230D40FC520F2A2D3948DBF40142C139F7",
+      "bytes": 3812,
+      "imports": [
+        "PvNP.RealizableHardness.TaggedQuestionMassBridge"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedQuestionRetainedMass.lean": {
+      "sha256": "22F98B1FF1F84D0BED94744A62873A933C7B531EA310DA953D01B5FBA1581E91",
+      "bytes": 12636,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedQuestionMass",
+        "Mathlib.Data.Finset.Card"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedSelectedDecoderBridge.lean": {
+      "sha256": "D428F9A1822A364C057A3209017B19916FF323F717590398A0F3CCC21898AB22",
+      "bytes": 15634,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedPresentedSelection"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/ActualTaggedVertexPresentationFiber.lean": {
+      "sha256": "2DB76070B1A12710521D68F54F2D7230B4EFECE497A31A49549A5C546912F77C",
+      "bytes": 18085,
+      "imports": [
+        "PvNP.RealizableHardness.ActualTaggedPresentationFiberAudit",
+        "PvNP.RealizableHardness.ActualFiniteLaw"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/MatrixGrassmannIdentity.lean": {
+      "sha256": "EA286521F8D890167CFCF46F9C653104236AE02487F6AA287FBFBCBF6D001168",
+      "bytes": 19952,
+      "imports": [
+        "PvNP.RealizableHardness.MatrixGrassmannFibre"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/MatrixLiftExactBudgetZoom.lean": {
+      "sha256": "4193FABCE59C8F0D2BCB2C807D90D31B1A8F8BB20AB65ADB7ABE4FC7874CDD32",
+      "bytes": 14487,
+      "imports": [
+        "PvNP.RealizableHardness.MatrixGrassmannIntersectingAnchor",
+        "PvNP.RealizableHardness.GrassmannFlagPosterior"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/MatrixLiftLeftRowNormalForm.lean": {
+      "sha256": "6A76ADCBE4A56643CA6B2E7B7D089EBDD8CA983495B7395F12207FB8A2E19573",
+      "bytes": 6681,
+      "imports": [
+        "PvNP.RealizableHardness.MatrixLiftFullRowRankBridge"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/RobustSourceLineContainment.lean": {
+      "sha256": "D97FCE8944A5933E6747C20C334C3EAC9944A2895EF93F7A807903FE92B663A7",
+      "bytes": 22665,
+      "imports": [
+        "PvNP.RealizableHardness.ActualBinaryGrassmannSamplingBounds",
+        "PvNP.RealizableHardness.GrassmannFlagPosterior"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/TaggedFinite3LinSource.lean": {
+      "sha256": "D2145BA050CBE6772999B41F3B4027A82312D1A0387C1E0EDF00781C732F2956",
+      "bytes": 2278,
+      "imports": [
+        "PvNP.RealizableHardness.ActualFinite3LinSource"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    },
+    "lean/PvNP/RealizableHardness/TaggedQuestionMassBridge.lean": {
+      "sha256": "B258BB7FE60CFC4D7AA17F45427B94060B3F896D9A5565DE2EA07B2D7C349CBE",
+      "bytes": 12097,
+      "imports": [
+        "PvNP.RealizableHardness.TaggedFinite3LinSource",
+        "PvNP.RealizableHardness.ActualQuestionMassBridge"
+      ],
+      "basis": "New development import pinned to exact pushed HEAD; no prior native/body acceptance inferred",
+      "forbidden_tokens": []
+    }
+  },
+  "config_pins": {
+    "lakefile.toml": {
+      "sha256": "9771389F92E3E04D030379228746CF4A0F8F869C0C2298BFFAAB080B7D597D25",
+      "head_sha256": "03C6564B4A501867A608A3439198E41B88EEDF17E3C79C6BFD01790F6AE34CBE",
+      "normalized_equal": true
+    },
+    "lake-manifest.json": {
+      "sha256": "8EF280586AEE0AD5F21EA92AD8053CFB69C58A2CC2DC77CE6D2D5772A1081678",
+      "head_sha256": "825D2E1A20005A259FDF5B181528B391DD6BA18A52C86127CAF4C3BE990E04F0",
+      "normalized_equal": true
+    },
+    "lean-toolchain": {
+      "sha256": "B563246BDE88BAD741A3FE1C6B126AD8DAB470340D55AC3E97CCA9B3F200878B",
+      "head_sha256": "8190E75A201741065FE508B28955DD64DD72D090BABE5F70CE6848879D68AE88",
+      "normalized_equal": true
+    }
+  },
+  "compiler_identity": {
+    "path": "/home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean",
+    "sha256": "E8BAAA71855A616DC351028F3AD2200051B0671F423A1696A100E809302D5550"
+  },
+  "accepted": false,
+  "final_warning_debt_discharged": false,
+  "raw65_RED_unchanged": true
+}

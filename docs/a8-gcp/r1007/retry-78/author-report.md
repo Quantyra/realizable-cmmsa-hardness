@@ -1,0 +1,1 @@
+Full original A22/HC46 coherent successor. Sole Parent proof repair59675; unchanged public statements/premises, remaining order-one timeout requires GCP diagnosis. Native evidence only; no acceptance or local Lean.

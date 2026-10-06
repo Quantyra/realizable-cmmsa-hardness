@@ -1,0 +1,23 @@
+--- retry-77/coherent-full-a22-hc46-successor/ActualBinaryMatrixHC46A22ParentFactorization.lean
++++ retry-77/parent-factorization-repair-offer/ActualBinaryMatrixHC46A22ParentFactorization.lean
+@@ -815,7 +815,8 @@
+           (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)) N)) =
+       carrierMean A B (fun M => Complex.normSq
+         (filteredCarrierFunction A B T (complexRankProjection j f) M)) := by
+-    exact (a18UniformMean_fintype_irrel _ _ _).trans hc
++    simpa only [LinearMap.zero_comp, LinearMap.comp_zero, add_zero] using
++      ((a18UniformMean_fintype_irrel _ _ _).trans hc)
+   exact hc''.symm.trans_le (hc'.symm.trans_le hb')
+ 
+ 
+@@ -944,8 +945,8 @@
+           (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M)) N)) =
+       carrierMean Z B (fun M => Complex.normSq
+         (filteredCarrierFunction Z B T (complexRankProjection j f) M)) := by
+-    simpa only [Z, Q0, Submodule.map_bot] using
+-      (a18UniformMean_fintype_irrel _ _ _).trans hc
++    simpa only [Z, Q0, Submodule.map_bot, LinearMap.zero_comp, LinearMap.comp_zero, add_zero] using
++      ((a18UniformMean_fintype_irrel _ _ _).trans hc)
+   exact hc''.symm.trans_le (hc'.symm.trans_le hb')
+ 
+ 
