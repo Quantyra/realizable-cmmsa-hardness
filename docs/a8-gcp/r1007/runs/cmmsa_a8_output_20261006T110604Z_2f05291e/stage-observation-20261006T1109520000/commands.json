@@ -1,0 +1,28 @@
+[
+  {
+    "index": 0,
+    "argv": [
+      "C:\\Users\\Dan\\AppData\\Local\\Google\\CloudSDKPortable\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-01",
+      "--tunnel-through-iap",
+      "--command=date -u; ps -eo pid,ppid,etimes,pcpu,rss,comm,args | awk '$6 == \"lean\" || $6 == \"lake\" || $6 == \"python3\"'; for i in 0 1 2 3 4 5 6; do if test -f /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261006T110604Z_2f05291e-evidence/stage-$i.native-exit; then printf \"stage-%s=\" \"$i\"; cat /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261006T110604Z_2f05291e-evidence/stage-$i.native-exit; fi; done; wc -c /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261006T110604Z_2f05291e-evidence/stage-4.stdout /home/dfredriksen_quantyra_org/cmmsa-evidence/cmmsa_a8_output_20261006T110604Z_2f05291e-evidence/stage-4.stderr",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-06T11:09:52+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 49680,
+    "finished_utc": "2026-10-06T11:10:00+00:00",
+    "native_exit": 1,
+    "timed_out": false,
+    "seconds": 7.42753129999619,
+    "stdout_path": "control/000.stdout",
+    "stderr_path": "control/000.stderr",
+    "stdout_sha256": "BE995C34E6BBDBB04CCFB4BF0630A4181596481FEDAE4D6609D46AE2A08053A5",
+    "stderr_sha256": "D619CEE56A99E62054411832170FFB982B4CCC4E9D8F2D7E2442CB46E85279F8"
+  }
+]

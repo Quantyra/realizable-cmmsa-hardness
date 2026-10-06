@@ -1,0 +1,17 @@
+[
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean",
+    "line": 221,
+    "column": 53,
+    "message": "unsolved goals",
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A20SquareGlobalness.lean:221:53: unsolved goals\ncase mk\nn d D : ℕ\neps : ℝ\nf : BinaryMatrix n d → ℂ\nhsupport : ComplexFourierSupportedThrough D f\nhglobal : UpToActualNormSqGlobal D eps f\ndomainFixed✝ : Submodule (ZMod 2) (Fin d → ZMod 2)\ncodomainVariation✝ : Submodule (ZMod 2) (Fin n → ZMod 2)\nbase✝ : BinaryMatrix n d\nhR : { domainFixed := domainFixed✝, codomainVariation := codomainVariation✝, base := base✝ }.order ≤ 2 * D\nA : Submodule (ZMod 2) (Fin d → ZMod 2) :=\n  { domainFixed := domainFixed✝, codomainVariation := codomainVariation✝, base := base✝ }.domainFixed\nB : Submodule (ZMod 2) (Fin n → ZMod 2) :=\n  { domainFixed := domainFixed✝, codomainVariation := codomainVariation✝, base := base✝ }.codomainVariation\nT : (Fin d → ZMod 2) →ₗ[ZMod 2] Fin n → ZMod 2 :=\n  Matrix.mulVecLin { domainFixed := domainFixed✝, codomainVariation := codomainVariation✝, base := base✝ }.base\nQ : CarrierRestriction A B := { domainFixed := ⊥, codomainVariation := ⊤, base := 0 }\nhcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ 2 * D\ni : Fin n\nj : Fin d\n⊢ ∑ x, base✝ i x * Pi.single j 1 x = base✝ i j",
+    "candidate_context": [
+      "219:   let Q : CarrierRestriction A B := ⟨⊥, ⊤, 0⟩",
+      "220:   have hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ 2 * D := hR",
+      "221:   have hlift : liftCarrierRestriction A B T Q = R := by",
+      "222:     cases R",
+      "223:     simp [liftCarrierRestriction, Q, A, B, T, Submodule.range_subtype]"
+    ]
+  }
+]
