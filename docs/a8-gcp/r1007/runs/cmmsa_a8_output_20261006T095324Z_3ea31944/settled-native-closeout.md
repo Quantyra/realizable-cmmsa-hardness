@@ -1,0 +1,3 @@
+# Settled original A12/A19 native59 GREEN, review pending
+
+All seven native exits0; exact original68 requested profiles standard, no missing objects, no owned warning or inherited regression. New A12/A19 source9AAF andChecks47A8 remain immutable. Custody221571B868E8FB0A568FDD942168760A25BC3F216BFCE813A7528C4A4E987106 before one idle-stop; independentTERMINATED03:03:23.864PT. Cache400unchanged/compiler/packages/coreequal;136 inherited and16 frozen inputs preserved. Raw generic RED warning/parser output retained, qualified full original gate GREEN separately. Corrected215 object-inventory assertion was captured in executed59controller; scoped push follows settlement. No localLean/no mathematical acceptance until separate required reviews.
