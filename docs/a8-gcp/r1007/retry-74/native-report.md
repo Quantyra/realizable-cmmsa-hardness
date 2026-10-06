@@ -1,0 +1,46 @@
+# Original A22 / HC46 native result
+
+{
+  "run": "cmmsa_a8_output_20261006T184251Z_fb189fe8",
+  "capture": "capture-full-a22-hc46-74",
+  "full_original_A22_HC46_selected_native_gates_green": false,
+  "all_seven_stage_exits": [
+    0,
+    0,
+    0,
+    0,
+    1,
+    125,
+    125
+  ],
+  "original_requested_axioms": 172,
+  "project_closure_sources": 319,
+  "cache_objects_unchanged": 566,
+  "custody_sha256": "C0A889D63523B53D4634EEE8751AE3CEFA96A90CC17011D3A631F59865D09CE7",
+  "independent_vm_status": "TERMINATED",
+  "accepted": false,
+  "local_compilation": false,
+  "owned_error_headers": 11,
+  "owned_warning_headers": [
+    0,
+    0,
+    0,
+    0,
+    3,
+    0,
+    0
+  ],
+  "inherited_regression_headers": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "bad_profiles": 172,
+  "missing_objects": 11
+}
+
+Raw generic audit remains unchanged. Native gates do not constitute mathematical acceptance. Full original target reviews remain required; inherited warning debt remains open.

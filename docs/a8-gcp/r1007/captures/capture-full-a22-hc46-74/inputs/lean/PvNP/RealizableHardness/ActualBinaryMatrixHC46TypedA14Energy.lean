@@ -1,0 +1,111 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA14FixedBase
+import PvNP.RealizableHardness.BinaryMatrixTypedA14HyperplaneFixedBase
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedA14Energy
+
+open BinaryMatrixFourier BinaryMatrixA1TypedFourier
+open BinaryMatrixTypedA14Line BinaryMatrixTypedA14FixedBase
+open BinaryMatrixTypedA14Reduced
+open BinaryMatrixTypedA14Hyperplane BinaryMatrixTypedA14HyperplaneFixedBase
+open BinaryMatrixTypedA14HyperplaneReduced
+open BinaryMatrixTypedA15Reduced
+open BinaryMatrixTypedA15ReducedGlobal
+open BinaryMatrixTypedA15HyperplaneReducedGlobal
+open ActualBinaryMatrixHC46TypedFourierTransport
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d -> F
+
+def finiteCarrierMean {α : Type*} [Fintype α]
+    (g : α -> Real) : Real :=
+  (∑ x : α, g x) / (Fintype.card α : Real)
+
+theorem reducedCarrierMean_coordinate {n d : Nat}
+    {A : Submodule F (V d)} (B : Submodule F (Fin n -> F))
+    (L : Submodule F (V d ⧸ A))
+    (g : (((V d ⧸ A) ⧸ L) →ₗ[F] B) -> Real) :
+    finiteCarrierMean g =
+      uniformMean (fun X => g ((reducedMatrixEquiv B L).symm X)) := by
+  unfold finiteCarrierMean BinaryMatrixFourier.uniformMean
+  have hsum :
+      (∑ N : ((V d ⧸ A) ⧸ L) →ₗ[F] B, g N) =
+        ∑ X : BinaryMatrix (Module.finrank F B)
+            (Module.finrank F ((V d ⧸ A) ⧸ L)),
+          g ((reducedMatrixEquiv B L).symm X) := by
+    apply Fintype.sum_equiv (reducedMatrixEquiv B L).toEquiv
+    intro N
+    simp
+  rw [hsum]
+  congr 1
+  exact_mod_cast Fintype.card_congr (reducedMatrixEquiv B L).toEquiv
+
+/-- Averaging the genuine typed A14 fixed-line identity preserves its exact
+operator and affine base. This is the one-step energy input for a typed tower. -/
+theorem typed_line_A14_energy {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) :
+    finiteCarrierMean (fun (N : ((V d ⧸ A) ⧸ L) →ₗ[F] B) => Complex.normSq
+      (reducedComplexRankProjection B L j
+        (typedLineReducedWitness (k := j) B L hL T f) N)) =
+    finiteCarrierMean (fun (N : ((V d ⧸ A) ⧸ L) →ₗ[F] B) => Complex.normSq
+      (typedComplexLineFilter B L hL
+        (typedComplexRankProjection A B (j + 1) f)
+        (T + N.comp L.mkQ))) := by
+  unfold finiteCarrierMean
+  congr 1
+  apply Finset.sum_congr rfl
+  intro N _
+  exact congrArg Complex.normSq (typed_A14_fixedLine A B L hL T f N)
+
+theorem typed_line_A14_energy_coordinate {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) :
+    uniformMean (fun X => Complex.normSq
+      (reducedComplexRankProjection B L j
+        (typedLineReducedWitness (k := j) B L hL T f)
+        ((reducedMatrixEquiv B L).symm X))) =
+    finiteCarrierMean (fun (N : ((V d ⧸ A) ⧸ L) →ₗ[F] B) => Complex.normSq
+      (typedComplexLineFilter B L hL
+        (typedComplexRankProjection A B (j + 1) f)
+      (T + N.comp L.mkQ))) := by
+  calc
+    _ = finiteCarrierMean (fun (N : ((V d ⧸ A) ⧸ L) →ₗ[F] B) =>
+        Complex.normSq (reducedComplexRankProjection B L j
+          (typedLineReducedWitness (k := j) B L hL T f) N)) :=
+          (reducedCarrierMean_coordinate B L (fun N => Complex.normSq
+            (reducedComplexRankProjection B L j
+              (typedLineReducedWitness (k := j) B L hL T f) N))).symm
+    _ = _ := typed_line_A14_energy A B L hL T f
+
+/-- The corresponding averaged typed A14 hyperplane identity, retaining the
+ actual transpose-based hyperplane filter and the same affine base. -/
+theorem typed_hyperplane_A14_energy {n d j : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (Fin n -> F))
+    (H : Submodule F B) (hH : Module.finrank F (B ⧸ H) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) -> Complex) :
+    finiteCarrierMean (fun (N : (V d ⧸ A) →ₗ[F] H) => Complex.normSq
+      (hyperplaneReducedComplexRankProjection B H hH j
+        (typedHyperplaneReducedWitness (k := j) B H hH T f) N)) =
+    finiteCarrierMean (fun (N : (V d ⧸ A) →ₗ[F] H) => Complex.normSq
+      (typedComplexHyperplaneFilter B H hH
+        (typedComplexRankProjection A B (j + 1) f)
+        (T + H.subtype.comp N))) := by
+  unfold finiteCarrierMean
+  congr 1
+  apply Finset.sum_congr rfl
+  intro N _
+  exact congrArg Complex.normSq
+    (typed_A14_fixedHyperplane A B H hH T f N)
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedA14Energy

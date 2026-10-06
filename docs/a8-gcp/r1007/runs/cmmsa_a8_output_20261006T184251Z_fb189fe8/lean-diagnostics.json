@@ -1,0 +1,101 @@
+[
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 125,
+    "column": 6,
+    "message": "unsolved goals",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:125:6: unsolved goals\ncase neg\nn d : ℕ\nA₂ : Submodule F (V d)\nB₂ : Submodule F (W n)\nA₁₂ : Submodule F (V d ⧸ A₂)\nB₁₂ : Submodule F ↥B₂\ng : (V d ⧸ A₂ →ₗ[F] ↥B₂) → ℂ\nM : V d ⧸ A₂ →ₗ[F] ↥B₂\nu : (↥B₂ →ₗ[F] V d ⧸ A₂) → ℂ :=\n  fun Y =>\n    if Selected A₁₂ B₁₂ Y then complexCarrierFourierCoeff A₂ B₂ g Y * ↑(BinaryMatrixA1Phase.traceCharacter Y M) else 0\nY : ↥B₂ →ₗ[F] V d ⧸ A₂\nhY : Y ∈ Finset.univ\nh : ¬Selected A₁₂ B₁₂ Y\n⊢ (if False then complexCarrierFourierCoeff A₂ B₂ g Y * ↑(BinaryMatrixA1Phase.traceCharacter Y M) else 0) =\n    if False then complexLinearMapFourierCoeff g Y * ↑(BinaryMatrixA1Phase.traceCharacter Y M) else 0"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 261,
+    "column": 0,
+    "message": "(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:261:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached\n\nNote: Use `set_option maxHeartbeats <num>` to set the limit.\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command."
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 493,
+    "column": 15,
+    "message": "Type mismatch",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:493:15: Type mismatch\n  Equiv.sum_comp e.toEquiv ?m.2235\nhas type\n  ∑ i, ?m.2235 (e.toEquiv i) = ∑ i, ?m.2235 i\nbut is expected to have type\n  ∑ N,\n      Complex.normSq\n        (complexLinearMapSelectedFilter (Selected (Submodule.map (↑eD.symm) A) (Submodule.map (↑eC.symm) B))\n          (fun M => f ((mapReindexEquiv eD eC).symm M))\n          ((mapReindexEquiv eD eC) S +\n            (Submodule.map (↑eC.symm) B).subtype ∘ₗ e N ∘ₗ (Submodule.map (↑eD.symm) A).mkQ)) =\n    ∑ N,\n      Complex.normSq\n        (complexLinearMapSelectedFilter (Selected (Submodule.map (↑eD.symm) A) (Submodule.map (↑eC.symm) B))\n          (fun M => f ((mapReindexEquiv eD eC).symm M))\n          ((mapReindexEquiv eD eC) S + (Submodule.map (↑eC.symm) B).subtype ∘ₗ N ∘ₗ (Submodule.map (↑eD.symm) A).mkQ))"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 538,
+    "column": 46,
+    "message": "unexpected token ':='; expected ')', ',' or ':'",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:538:46: unexpected token ':='; expected ')', ',' or ':'"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 533,
+    "column": 6,
+    "message": "Type mismatch",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:533:6: Type mismatch\n  fun N =>\n    Complex.normSq\n      (complexCarrierAffineRestrict ⊥ ⊤ A B S\n        (complexCarrierHybridFilter ⊥ ⊤ A B fun M => filteredCarrierFunction ⊥ ⊤ 0 g M) N)\nhas type\n  ((PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸ ⊥) ⧸ A →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝]\n      ↥B) →\n    ℝ\nbut is expected to have type\n  ℝ"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 586,
+    "column": 61,
+    "message": "unsolved goals",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:586:61: unsolved goals\nD : Type u_1\nC : Type u_2\ninst✝⁷ : AddCommGroup D\ninst✝⁶ : Module F D\ninst✝⁵ : Finite D\ninst✝⁴ : Module.Finite F D\ninst✝³ : Module.Free F D\ninst✝² : AddCommGroup C\ninst✝¹ : Module F C\ninst✝ : Finite C\nn d r : ℕ\nb : ℝ\nbD : Module.Basis (Fin d) F D\nbC : Module.Basis (Fin n) F C\ng : BinaryMatrix n d → ℂ\nhg : OriginalActualInfluenceThrough r b g\nA : Submodule F D\nB : Submodule F C\nS : D →ₗ[F] C\nhcost : Module.finrank F ↥A + Module.finrank F (C ⧸ B) ≤ r\neD : D ≃ₗ[F] V d ⧸ ⊥ := bD.equivFun ≪≫ₗ bottomTopDomainEquiv.symm\neC : C ≃ₗ[F] ↥⊤ := bC.equivFun ≪≫ₗ bottomTopCodomainEquiv.symm\nA0 : Submodule F (V d ⧸ ⊥) := Submodule.map (↑eD) A\nB0 : Submodule F ↥⊤ := Submodule.map (↑eC) B\nS0 : V d ⧸ ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] ↥⊤ := (mapReindexEquiv eD eC).symm S\nf0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸\n      ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]\n    ↥⊤) →\n  ℂ :=\n  fun M => filteredCarrierFunction ⊥ ⊤ 0 g M\nhA : Submodule.map (↑eD.symm) A0 = A\nhB : Submodule.map (↑eC.symm) B0 = B\nhAdim : Module.finrank F ↥A0 = Module.finrank F ↥A\nhBdim : Module.finrank F (↥⊤ ⧸ B0) = Module.finrank F (C ⧸ B)\n⊢ Module.finrank F ↥A + Module.finrank F (C ⧸ B) ≤ r"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 596,
+    "column": 4,
+    "message": "No goals to be solved",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:596:4: No goals to be solved"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 806,
+    "column": 56,
+    "message": "Application type mismatch: The argument",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:806:56: Application type mismatch: The argument\n  hfunhc\nhas type\n  (fun N =>\n      Complex.normSq\n        (@complexLinearMapSelectedFilter (V d ⧸ C) (↥U) (Submodule.Quotient.addCommGroup C)\n          (Submodule.Quotient.module C) ⋯ ⋯ U.addCommGroup U.module\n          (PvNP.RealizableHardness.ActualTypedABProjectionEnergy.carrierMapFintype✝ C U)\n          (PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedFourierTransport.carrierFrequencyFintype✝ C U)\n          (Selected (Submodule.map C.mkQ A) Q) (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)\n          (0 + Q.subtype ∘ₗ N ∘ₗ (Submodule.map C.mkQ A).mkQ))) =\n    fun N =>\n    Complex.normSq\n      (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) Q 0\n        (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) Q fun M =>\n          filteredCarrierFunction C U T (complexRankProjection j f) M)\n        N)\nbut is expected to have type\n  (fun N =>\n      Complex.normSq\n        (@complexLinearMapSelectedFilter (V d ⧸ C) (↥U) (Submodule.Quotient.addCommGroup C)\n          (Submodule.Quotient.module C) ⋯ ⋯ U.addCommGroup U.module\n          PvNP.RealizableHardness.ActualTaggedConditionalGraphCount.finiteLinearMapFintype✝\n          PvNP.RealizableHardness.ActualTaggedConditionalGraphCount.finiteLinearMapFintype✝\n          (Selected (Submodule.map C.mkQ A) Q) (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)\n          (0 + Q.subtype ∘ₗ N ∘ₗ (Submodule.map C.mkQ A).mkQ))) =\n    fun N =>\n    Complex.normSq\n      (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) Q 0\n        (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) Q fun M =>\n          filteredCarrierFunction C U T (complexRankProjection j f) M)\n        N)\nin the application\n  a18UniformMean_eq_congr_fintype_irrel\n    PvNP.RealizableHardness.ActualTaggedConditionalGraphCount.finiteLinearMapFintype✝\n    PvNP.RealizableHardness.ActualTaggedConditionalGraphCount.finiteLinearMapFintype✝\n    (fun N =>\n      Complex.normSq\n        (complexLinearMapSelectedFilter (Selected (Submodule.map C.mkQ A) Q)\n          (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)\n          (0 + Q.subtype ∘ₗ N ∘ₗ (Submodule.map C.mkQ A).mkQ)))\n    (fun N =>\n      Complex.normSq\n        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) Q 0\n          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) Q fun M =>\n            filteredCarrierFunction C U T (complexRankProjection j f) M)\n          N))\n    hfunhc"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 685,
+    "column": 0,
+    "message": "(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:685:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached\n\nNote: Use `set_option maxHeartbeats <num>` to set the limit.\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command."
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 924,
+    "column": 84,
+    "message": "unexpected token ':='; expected ')', ',' or ':'",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:924:84: unexpected token ':='; expected ')', ',' or ':'"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 954,
+    "column": 8,
+    "message": "(kernel) unknown constant 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization.a22_line_parent_from_lowerIH'",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:954:8: (kernel) unknown constant 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization.a22_line_parent_from_lowerIH'\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization\n"
+  }
+]
