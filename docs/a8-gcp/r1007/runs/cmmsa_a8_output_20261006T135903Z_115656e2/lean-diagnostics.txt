@@ -1,0 +1,38 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OperatorLq.lean:68:62: unsolved goals
+n d r : ℕ
+q eps : ℝ
+hq : 1 ≤ q
+a : ℝ
+f : BinaryMatrix n (d + 1) → ℂ
+hf : UpToActualLqGlobal r q eps f
+hq0 : 0 < q
+hg : UpToActualLqGlobal r q (‖-↑a‖ * eps) fun x => -↑a * complexLineAverage f x
+ht : UpToActualLqGlobal r q (eps + ‖-↑a‖ * eps) fun M => f M + -↑a * complexLineAverage f M
+⊢ eps + eps * ‖a‖ = eps + eps * |a|
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OperatorLq.lean:72:2: Type mismatch: After simplification, term
+  ht
+ has type
+  @UpToActualLqGlobal n (d + 1) r q ((1 + |a|) * eps) fun M => f M + -(↑a * complexLineAverage f M)
+but is expected to have type
+  @UpToActualLqGlobal n (d + 1) r q ((1 + |a|) * eps) (complexLineIminusE a f)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OperatorLq.lean:169:10: Unknown identifier `hyperplaneReducedMatrixEquiv`
+
+Note: It is not possible to treat `hyperplaneReducedMatrixEquiv` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OperatorLq.lean:181:8: Unknown identifier `hyperplaneReducedMatrixEquiv`
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OperatorLq.lean:183:10: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OperatorLq.lean:169:54: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Some required targets logged failures:
+- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22OperatorLq

@@ -12,7 +12,7 @@ open BinaryMatrixTypedA15AdaptedGlobal BinaryMatrixTypedA15ReducedGlobal
 open BinaryMatrixTypedA15Reduced BinaryMatrixA15NestedLine
 open BinaryMatrixTypedA15Hyperplane BinaryMatrixTypedA15HyperplaneGlobal
 open BinaryMatrixCodomainA15
-open BinaryMatrixTypedA15HyperplaneReducedGlobal
+open BinaryMatrixTypedA15HyperplaneReducedGlobal BinaryMatrixTypedA15HyperplaneReduced
 open BinaryMatrixFirstDerivative BinaryMatrixLineA15
 open scoped BigOperators
 set_option autoImplicit false
@@ -66,10 +66,15 @@ theorem complexLineIminusE_LqGlobal {n d r : Nat} {q eps : Real} (hq : 1 ≤ q)
     (complexLineAverage_LqGlobal hq f hf) (-(a : Complex))
   have ht := UpToActualLqGlobal_add hq f _ hf hg
   have he : eps + ‖-(a : Complex)‖ * eps = (1 + |a|) * eps := by
-    rw [norm_neg, Complex.norm_real]
+    rw [norm_neg, Complex.norm_real, Real.norm_eq_abs]
     ring
   rw [he] at ht
-  simpa only [complexLineIminusE, sub_eq_add_neg, neg_mul] using ht
+  have hfun : (fun M ⇒ f M + -(a : Complex) * complexLineAverage f M) =
+      complexLineIminusE a f := by
+    funext M
+    simp only [complexLineIminusE, sub_eq_add_neg, neg_mul]
+  rw [hfun] at ht
+  exact ht
 
 /-- The complete A14 polynomial has the product of its two coefficient losses. -/
 theorem complexLineP_LqGlobal {n d r k : Nat} {q eps : Real} (hq : 1 ≤ q)
