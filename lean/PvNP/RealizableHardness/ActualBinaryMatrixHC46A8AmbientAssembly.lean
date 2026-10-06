@@ -261,6 +261,7 @@ theorem a8_ambient_two_base_actual_averaged_transport {n d : Nat}
       rw [← Finset.sum_div]
       field_simp [ne_of_gt hcardT, ne_of_gt hcardS]
 
+set_option maxHeartbeats 1600000 in
 /-- Each output pair, including zero and one-sided pairs, is transported to
 the actual ambient predecessor energies. Supported-window truncation is a
 later step and is not imposed as a stronger premise here. -/
