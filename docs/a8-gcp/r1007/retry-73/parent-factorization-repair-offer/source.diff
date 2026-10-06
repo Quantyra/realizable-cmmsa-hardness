@@ -1,0 +1,313 @@
+--- retry-72/ActualBinaryMatrixHC46A22ParentFactorization.lean
++++ retry-73/ActualBinaryMatrixHC46A22ParentFactorization.lean
+@@ -39,6 +39,90 @@
+   have hij : i = j := Subsingleton.elim _ _
+   cases hij
+   rfl
++
++private theorem a18UniformMean_le_fintype_irrel {α : Type*}
++    (i j : Fintype α) (g : α → Real) (b : Real)
++    (h : @a18UniformMean α i g ≤ b) : @a18UniformMean α j g ≤ b := by
++  rw [← a18UniformMean_fintype_irrel i j g]
++  exact h
++
++private theorem a18UniformMean_le_congr_fintype_irrel {α : Type*}
++    (i j : Fintype α) (g h : α → Real) (b : Real) (hgh : g = h)
++    (hb : @a18UniformMean α i h ≤ b) :
++    @a18UniformMean α j g ≤ b := by
++  rw [hgh]
++  exact a18UniformMean_le_fintype_irrel i j h b hb
++
++private theorem a18UniformMean_eq_congr_fintype_irrel {α : Type*}
++    (i j : Fintype α) (g h : α → Real) (hgh : g = h) :
++    @a18UniformMean α j g = @a18UniformMean α i h := by
++  rw [hgh]
++  exact (a18UniformMean_fintype_irrel i j h).symm
++
++private theorem complexLinearMapSelectedFilter_fintype_irrel
++    {D C : Type*} [AddCommGroup D] [Module F D]
++    [Module.Finite F D] [Module.Free F D]
++    [AddCommGroup C] [Module F C]
++    (i i' : Fintype (D →ₗ[F] C))
++    (j j' : Fintype (C →ₗ[F] D))
++    (P : (C →ₗ[F] D) → Prop) (f : (D →ₗ[F] C) → Complex)
++    (M : D →ₗ[F] C) :
++    @complexLinearMapSelectedFilter D C _ _ _ _ _ _ i j P f M =
++      @complexLinearMapSelectedFilter D C _ _ _ _ _ _ i' j' P f M := by
++  cases Subsingleton.elim i i'
++  cases Subsingleton.elim j j'
++  rfl
++
++private theorem complex_sum_fintype_irrel {α : Type*}
++    (i j : Fintype α) (u : α → Complex) :
++    (@Finset.univ α i).sum u = (@Finset.univ α j).sum u := by
++  have hij : i = j := Subsingleton.elim _ _
++  cases hij
++  rfl
++
++private theorem complex_card_fintype_irrel {α : Type*}
++    (i j : Fintype α) : @Fintype.card α i = @Fintype.card α j := by
++  have hij : i = j := Subsingleton.elim _ _
++  cases hij
++  rfl
++
++private theorem complexCarrierFourierCoeff_eq_complexLinearMapFourierCoeff
++    {n d : Nat} (A : Submodule F (V d)) (B : Submodule F (W n))
++    (g : ((V d ⧸ A) →ₗ[F] B) → Complex)
++    (Y : B →ₗ[F] (V d ⧸ A)) :
++    complexCarrierFourierCoeff A B g Y =
++      complexLinearMapFourierCoeff g Y := by
++  unfold complexCarrierFourierCoeff complexLinearMapFourierCoeff
++  apply congrArg₂ (fun x y : Complex => x / y)
++  · exact complex_sum_fintype_irrel _ _ _
++  · exact congrArg (fun k : Nat => (k : Complex))
++      (complex_card_fintype_irrel _ _)
++
++private theorem complexCarrierHybridFilter_eq_complexLinearMapSelectedFilter
++    {n d : Nat} (A₂ : Submodule F (V d)) (B₂ : Submodule F (W n))
++    (A₁₂ : Submodule F (V d ⧸ A₂)) (B₁₂ : Submodule F B₂)
++    (g : ((V d ⧸ A₂) →ₗ[F] B₂) → Complex)
++    (M : (V d ⧸ A₂) →ₗ[F] B₂) :
++    complexCarrierHybridFilter A₂ B₂ A₁₂ B₁₂ g M =
++      complexLinearMapSelectedFilter (Selected A₁₂ B₁₂) g M := by
++  unfold complexCarrierHybridFilter complexLinearMapSelectedFilter
++  let u : (B₂ →ₗ[F] (V d ⧸ A₂)) → Complex := fun Y =>
++    if Selected A₁₂ B₁₂ Y then
++      complexCarrierFourierCoeff A₂ B₂ g Y *
++        (BinaryMatrixA1Phase.traceCharacter Y M : Complex) else 0
++  calc
++    _ = ∑ Y : B₂ →ₗ[F] (V d ⧸ A₂), u Y :=
++      complex_sum_fintype_irrel _ _ _
++    _ = ∑ Y : B₂ →ₗ[F] (V d ⧸ A₂),
++          if Selected A₁₂ B₁₂ Y then
++            complexLinearMapFourierCoeff g Y *
++              (BinaryMatrixA1Phase.traceCharacter Y M : Complex) else 0 := by
++      apply Finset.sum_congr rfl
++      intro Y hY
++      by_cases h : Selected A₁₂ B₁₂ Y
++      · simp only [u, h, if_pos,
++          complexCarrierFourierCoeff_eq_complexLinearMapFourierCoeff]
++      · simp only [u, h, if_neg]
+ 
+ private theorem exists_mem_ne_zero_of_ne_bot {E : Type*} [AddCommGroup E]
+     [Module F E] (A : Submodule F E) (hA : A ≠ ⊥) :
+@@ -224,11 +308,7 @@
+   rw [hm, hP, hQ, hz] at hb
+   have he := a22_A1_composition_energy_eq f C A B H hCA hBH T 0
+   refine he.symm.trans_le ?_
+-  convert hb using 1
+-  all_goals first
+-    | exact a18UniformMean_fintype_irrel _ _ _
+-    | exact Subsingleton.elim _ _
+-    | rfl
++  exact a18UniformMean_le_fintype_irrel _ _ _ _ hb
+ 
+ 
+ /-- Strict all-spaces lower induction controls every original influence of
+@@ -361,7 +441,7 @@
+   let e : (D ⧸ A →ₗ[F] B) ≃ₗ[F]
+       (D' ⧸ A.map eD.symm.toLinearMap →ₗ[F] B.map eC.symm.toLinearMap) :=
+     LinearEquiv.arrowCongr eQ eB
+-  have hselected : ∀ Y : C →[F] D,
++  have hselected : ∀ Y : C →ₗ[F] D,
+       Selected (A.map eD.symm.toLinearMap) (B.map eC.symm.toLinearMap)
+           (frequencyReindexEquiv eD eC Y) ↔ Selected A B Y := by
+     intro Y
+@@ -388,13 +468,29 @@
+       (Selected (A.map eD.symm.toLinearMap) (B.map eC.symm.toLinearMap))
+       hselected f _
+   unfold a22IntrinsicEnergy a18UniformMean
+-  have hsum := Equiv.sum_comp e.toEquiv
+-    (fun N => Complex.normSq (complexLinearMapSelectedFilter
++  have hsum :
++      (∑ N : (D ⧸ A) →ₗ[F] B, Complex.normSq
++        (complexLinearMapSelectedFilter (Selected A B) f
++          (S + B.subtype.comp (N.comp A.mkQ)))) =
++      ∑ N : ((D' ⧸ A.map eD.symm.toLinearMap) →ₗ[F]
++          B.map eC.symm.toLinearMap), Complex.normSq
++        (complexLinearMapSelectedFilter
+       (Selected (A.map eD.symm.toLinearMap) (B.map eC.symm.toLinearMap))
+       (fun M => f ((mapReindexEquiv eD eC).symm M))
+       (mapReindexEquiv eD eC S + (B.map eC.symm.toLinearMap).subtype.comp
+-        (N.comp (A.map eD.symm.toLinearMap).mkQ))))
+-  simp only [hpoint] at hsum
++        (N.comp (A.map eD.symm.toLinearMap).mkQ))) := by
++    calc
++      _ = ∑ N : (D ⧸ A) →ₗ[F] B, Complex.normSq
++          (complexLinearMapSelectedFilter
++            (Selected (A.map eD.symm.toLinearMap) (B.map eC.symm.toLinearMap))
++            (fun M => f ((mapReindexEquiv eD eC).symm M))
++            (mapReindexEquiv eD eC S +
++              (B.map eC.symm.toLinearMap).subtype.comp
++                ((e N).comp (A.map eD.symm.toLinearMap).mkQ))) := by
++        apply Finset.sum_congr rfl
++        intro N hN
++        exact congrArg Complex.normSq (hpoint N).symm
++      _ = _ := Equiv.sum_comp e.toEquiv _
+   rw [← hsum, ← Fintype.card_congr e.toEquiv]
+ end Intrinsic
+ 
+@@ -428,14 +524,28 @@
+     exact hcost
+   have hb := original_influence_A1_relative_mean g hg
+     (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) A B 0 S hfinal
+-  simp only [a22IntrinsicEnergy, complexCarrierAffineRestrict,
+-    complexCarrierHybridFilter, complexCarrierFourierCoeff,
+-    complexLinearMapSelectedFilter, complexLinearMapFourierCoeff]
+-  convert hb using 1
+-  all_goals first
+-    | exact a18UniformMean_fintype_irrel _ _ _
+-    | exact Subsingleton.elim _ _
+-    | rfl
++  have hfun :
++      (fun N : ((V d ⧸ (⊥ : Submodule F (V d))) ⧸ A) →ₗ[F] B =>
++        Complex.normSq (complexLinearMapSelectedFilter (Selected A B)
++          (fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
++            (⊤ : Submodule F (W n)) 0 g M)
++          (S + B.subtype.comp (N.comp A.mkQ))) =
++      fun N => Complex.normSq (complexCarrierAffineRestrict
++        (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) A B S
++        (complexCarrierHybridFilter (⊥ : Submodule F (V d))
++          (⊤ : Submodule F (W n)) A B
++          (fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
++            (⊤ : Submodule F (W n)) 0 g M)) N) := by
++    funext N
++    rw [complexCarrierAffineRestrict]
++    exact (congrArg Complex.normSq
++      (complexCarrierHybridFilter_eq_complexLinearMapSelectedFilter
++        (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) A B
++        (fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
++          (⊤ : Submodule F (W n)) 0 g M)
++        (S + B.subtype.comp (N.comp A.mkQ)))).symm
++  unfold a22IntrinsicEnergy
++  exact a18UniformMean_le_congr_fintype_irrel _ _ _ _ _ hfun hb
+ 
+ 
+ section CoordinateInfluence
+@@ -475,7 +585,6 @@
+   have h0 : Module.finrank F A0 +
+       Module.finrank F ((⊤ : Submodule F (W n)) ⧸ B0) ≤ r := by
+     rw [hAdim, hBdim]
+-    exact hcost
+   have hb := a22_initial_intrinsic_from_original g hg A0 B0 S0 h0
+   have he := a22_intrinsic_energy_reindex eD eC A0 B0 S0 f0
+   have hf : (fun M => f0 ((mapReindexEquiv eD eC).symm M)) =
+@@ -665,24 +774,43 @@
+   have hb' : a22IntrinsicEnergy (A.map C.mkQ) Q 0
+       (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M) ≤
+       (2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2 := by
+-    simpa only [Submodule.map_id, LinearEquiv.refl_toLinearMap, map_zero]
++    simpa only [Submodule.map_id, LinearEquiv.refl_toLinearMap,
++      LinearEquiv.refl_symm, map_zero]
+       using he.trans_le hb
+   have hc := a22_A1_composition_energy_eq (complexRankProjection j f)
+     C A B U hCA (by simp [U]) T 0
++  have hfunhc :
++      (fun N : (((V d ⧸ C) ⧸ A.map C.mkQ) →ₗ[F] Q) =>
++        Complex.normSq (complexLinearMapSelectedFilter
++          (Selected (A.map C.mkQ) Q)
++          (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)
++          (0 + Q.subtype.comp (N.comp (A.map C.mkQ).mkQ)))) =
++      fun N => Complex.normSq (complexCarrierAffineRestrict C U
++        (A.map C.mkQ) Q 0
++        (complexCarrierHybridFilter C U (A.map C.mkQ) Q
++          (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)) N) := by
++    funext N
++    rw [complexCarrierAffineRestrict]
++    exact (congrArg Complex.normSq
++      (complexCarrierHybridFilter_eq_complexLinearMapSelectedFilter
++        C U (A.map C.mkQ) Q
++        (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)
++        (0 + Q.subtype.comp (N.comp (A.map C.mkQ).mkQ)))).symm
+   have hc' : a22IntrinsicEnergy (A.map C.mkQ) Q 0
+       (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M) =
++      a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict C U
++        (A.map C.mkQ) Q 0
++        (complexCarrierHybridFilter C U (A.map C.mkQ) Q
++          (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)) N)) := by
++    unfold a22IntrinsicEnergy
++    exact a18UniformMean_eq_congr_fintype_irrel _ _ _ _ hfunhc
++  have hc'' : a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict C U
++        (A.map C.mkQ) Q 0
++        (complexCarrierHybridFilter C U (A.map C.mkQ) Q
++          (fun M => filteredCarrierFunction C U T (complexRankProjection j f) M)) N)) =
+       carrierMean A B (fun M => Complex.normSq
+-        (filteredCarrierFunction A B T (complexRankProjection j f) M)) := by
+-    simpa only [a22IntrinsicEnergy, complexCarrierAffineRestrict,
+-      complexCarrierHybridFilter, complexCarrierFourierCoeff,
+-      complexLinearMapSelectedFilter, complexLinearMapFourierCoeff,
+-      LinearMap.zero_comp, LinearMap.comp_zero, add_zero] using hc
+-  refine hc'.symm.trans_le ?_
+-  convert hb' using 1
+-  all_goals first
+-    | exact a18UniformMean_fintype_irrel _ _ _
+-    | exact Subsingleton.elim _ _
+-    | rfl
++        (filteredCarrierFunction A B T (complexRankProjection j f) M)) := hc
++  exact hc''.symm.trans_le (hc'.symm.trans_le hb')
+ 
+ 
+ /-- Complete codomain-hyperplane branch, including every relative inner
+@@ -741,7 +869,8 @@
+     rw [Submodule.map_comap_eq, Submodule.range_subtype, inf_eq_right.mpr hBH]
+   have hadd := relative_endpoint_cost_add Z H (⊥ : Submodule F (V d ⧸ Z)) Q0
+   rw [hBrec] at hadd
+-  simp only [Submodule.comap_bot, Submodule.ker_mkQ, finrank_bot, houter] at hadd
++  have hker : Z.mkQ.ker = Z := Submodule.ker_mkQ _
++  rw [Submodule.comap_bot, hker, finrank_bot, houter] at hadd
+   change Module.finrank F (W n ⧸ B) =
+     1 + Module.finrank F (H ⧸ Q0) at hadd
+   have hinner : Module.finrank F (⊥ : Submodule F (V d ⧸ Z)) +
+@@ -782,21 +911,41 @@
+     simpa only [Submodule.map_bot, map_zero] using he.trans_le hb
+   have hc := a22_A1_composition_energy_eq (complexRankProjection j f)
+     Z Z B H le_rfl hBH T 0
++  have hfunhc :
++      (fun N : (((V d ⧸ Z) ⧸ (⊥ : Submodule F (V d ⧸ Z))) →ₗ[F] Q0) =>
++        Complex.normSq (complexLinearMapSelectedFilter
++          (Selected (⊥ : Submodule F (V d ⧸ Z)) Q0)
++          (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M)
++          (0 + Q0.subtype.comp
++            (N.comp (⊥ : Submodule F (V d ⧸ Z)).mkQ))) =
++      fun N => Complex.normSq (complexCarrierAffineRestrict Z H
++        (⊥ : Submodule F (V d ⧸ Z)) Q0 0
++        (complexCarrierHybridFilter Z H (⊥ : Submodule F (V d ⧸ Z)) Q0
++          (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M)) N) := by
++    funext N
++    rw [complexCarrierAffineRestrict]
++    exact (congrArg Complex.normSq
++      (complexCarrierHybridFilter_eq_complexLinearMapSelectedFilter
++        Z H (⊥ : Submodule F (V d ⧸ Z)) Q0
++        (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M)
++        (0 + Q0.subtype.comp
++          (N.comp (⊥ : Submodule F (V d ⧸ Z)).mkQ)))).symm
+   have hc' : a22IntrinsicEnergy (⊥ : Submodule F (V d ⧸ Z)) Q0 0
+       (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M) =
++      a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict Z H
++        (⊥ : Submodule F (V d ⧸ Z)) Q0 0
++        (complexCarrierHybridFilter Z H (⊥ : Submodule F (V d ⧸ Z)) Q0
++          (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M)) N)) := by
++    unfold a22IntrinsicEnergy
++    exact a18UniformMean_eq_congr_fintype_irrel _ _ _ _ hfunhc
++  have hc'' : a18UniformMean (fun N => Complex.normSq (complexCarrierAffineRestrict Z H
++        (⊥ : Submodule F (V d ⧸ Z)) Q0 0
++        (complexCarrierHybridFilter Z H (⊥ : Submodule F (V d ⧸ Z)) Q0
++          (fun M => filteredCarrierFunction Z H T (complexRankProjection j f) M)) N)) =
+       carrierMean Z B (fun M => Complex.normSq
+         (filteredCarrierFunction Z B T (complexRankProjection j f) M)) := by
+-    simpa only [Z, Submodule.map_bot, a22IntrinsicEnergy,
+-      complexCarrierAffineRestrict, complexCarrierHybridFilter,
+-      complexCarrierFourierCoeff, complexLinearMapSelectedFilter,
+-      complexLinearMapFourierCoeff, LinearMap.zero_comp,
+-      LinearMap.comp_zero, add_zero] using hc
+-  refine hc'.symm.trans_le ?_
+-  convert hb' using 1
+-  all_goals first
+-    | exact a18UniformMean_fintype_irrel _ _ _
+-    | exact Subsingleton.elim _ _
+-    | rfl
++    simpa only [Z, Q0, Submodule.map_bot] using hc
++  exact hc''.symm.trans_le (hc'.symm.trans_le hb')
+ 
+ 
+ /-- The full positive-parent input to original A22. The only induction
