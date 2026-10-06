@@ -1,0 +1,47 @@
+[
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 260,
+    "column": 0,
+    "message": "(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:260:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached\n\nNote: Use `set_option maxHeartbeats <num>` to set the limit.\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command."
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 819,
+    "column": 50,
+    "message": "unexpected token '/--'; expected ':='",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:819:50: unexpected token '/--'; expected ':='"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 819,
+    "column": 2,
+    "message": "Unknown identifier `exact`",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:819:2: Unknown identifier `exact`"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 713,
+    "column": 64,
+    "message": "unsolved goals",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:713:64: unsolved goals\nn d j p : ℕ\neps : ℝ\nf : BinaryMatrix n d → ℂ\nhj : 1 ≤ j\nhp : 2 ≤ p\nhg : UpToActualLqGlobal j (pConjugate p) eps f\nhIH :\n  ∀ {n' d' : ℕ} {eta : ℝ} (g : BinaryMatrix n' d' → ℂ),\n    UpToActualLqGlobal (j - 1) (pConjugate p) eta g →\n      OriginalActualInfluenceThrough (j - 1) (2 ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2) (complexRankProjection (j - 1) g)\nC A : Submodule F (V d)\nB : Submodule F (W n)\nhC : Module.finrank F ↥C = 1\nhCA : C ≤ A\nT : V d →ₗ[F] W n\nhcost : Module.finrank F ↥A + Module.finrank F (W n ⧸ B) ≤ j\nZ : Submodule F (V d) := ⊥\nU : Submodule F (W n) := ⊤\nL : Submodule F (V d ⧸ Z) := Submodule.map Z.mkQ C\nS : PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.V✝ d ⧸\n    ⊥ →ₗ[PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex.F✝]\n  ↥⊤ :=\n  bottomTopCarrierAmbientHomEquiv.symm T\nf0 : (PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.V✝ d ⧸\n      Z →ₗ[PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse.F✝]\n    ↥U) →\n  ℂ :=\n  fun M => filteredCarrierFunction Z U 0 f M\nhquotU : Module.finrank F (W n ⧸ U) = 0\nhzero : Module.finrank F ↥Z + Module.finrank F (W n ⧸ U) = 0\nhL : Module.finrank F ↥L = 1\nhf0 : UpToCarrierLqGlobal Z U j (pConjugate p) eps f0\neD : (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸\n    C) ≃ₗ[PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝]\n  (PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C :=\n  (nestedDomainEquiv Z C ⋯).symm\nP : Submodule PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.F✝\n  ((PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier.V✝ d ⧸ Z) ⧸ Submodule.map Z.mkQ C) :=\n  Submodule.map (↑eD) (Submodule.map C.mkQ A)\nQ : Submodule F ↥U := Submodule.comap U.subtype B\nhP : Submodule.map (↑eD.symm) P = Submodule.map C.mkQ A\nhPdim : Module.finrank F ↥P = Module.finrank F ↥(Submodule.map C.mkQ A)\nhArec : Submodule.comap C.mkQ (Submodule.map C.mkQ A) = A\nhBrec : Submodule.map U.subtype Q = B\nhouter : Module.finrank F ↥C + Module.finrank F (W n ⧸ U) = 1\nhadd :\n  Module.finrank F ↥A + Module.finrank F (W n ⧸ B) =\n    1 + (Module.finrank F ↥(Submodule.map C.mkQ A) + Module.finrank F (↥U ⧸ Q))\nhinner : Module.finrank F ↥P + Module.finrank F (↥U ⧸ Q) ≤ j - 1\ng1 : ((V d ⧸ Z) ⧸ L →ₗ[F] ↥U) → ℂ :=\n  fun N => typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)\nhb :\n  (a22IntrinsicEnergy P Q 0 fun N =>\n      typedComplexLineFilter U L hL (typedComplexRankProjection Z U j f0) (S + N ∘ₗ L.mkQ)) ≤\n    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2\nhe :\n  (a22IntrinsicEnergy (Submodule.map C.mkQ A) (Submodule.map (↑(LinearEquiv.refl F ↥U).symm) Q)\n      ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)) 0) fun M =>\n      filteredCarrierFunction C U T (complexRankProjection j f) M) =\n    a22IntrinsicEnergy P Q 0 g1\nhsource : typedComplexRankProjection Z U j f0 = fun M => filteredCarrierFunction Z U 0 (complexRankProjection j f) M\nhbase : U.subtype ∘ₗ S ∘ₗ Z.mkQ = T\nhmap : mapReindexEquiv eD (LinearEquiv.refl F ↥U) = lineCanonicalEquiv Z C U ⋯\nhfun :\n  (fun M => g1 ((mapReindexEquiv eD (LinearEquiv.refl F ↥U)).symm M)) = fun M =>\n    filteredCarrierFunction C U T (complexRankProjection j f) M\nhb' :\n  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>\n      filteredCarrierFunction C U T (complexRankProjection j f) M) ≤\n    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2\nhc :\n  (a18UniformMean fun N =>\n      Complex.normSq\n        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) 0\n          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) fun M =>\n            filteredCarrierFunction C U T (complexRankProjection j f) M)\n          N)) =\n    carrierMean A B fun M =>\n      Complex.normSq (filteredCarrierFunction A B (T + U.subtype ∘ₗ 0 ∘ₗ C.mkQ) (complexRankProjection j f) M)\nhc' :\n  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>\n      filteredCarrierFunction C U T (complexRankProjection j f) M) =\n    a18UniformMean fun N =>\n      Complex.normSq\n        (complexCarrierAffineRestrict C U (Submodule.map C.mkQ A) Q 0\n          (complexCarrierHybridFilter C U (Submodule.map C.mkQ A) Q fun M =>\n            filteredCarrierFunction C U T (complexRankProjection j f) M)\n          N)\n⊢ (carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)) ≤\n    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2"
+  },
+  {
+    "stage": 4,
+    "file": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean",
+    "line": 949,
+    "column": 50,
+    "message": "unexpected token '/--'; expected ':='",
+    "owned": true,
+    "exact_block": "error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:949:50: unexpected token '/--'; expected ':='\nSome required targets logged failures:\n- PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization\n"
+  }
+]

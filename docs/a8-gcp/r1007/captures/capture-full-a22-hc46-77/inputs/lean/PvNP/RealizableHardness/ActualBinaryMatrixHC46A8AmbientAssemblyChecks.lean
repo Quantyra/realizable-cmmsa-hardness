@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AmbientAssembly
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AmbientAssembly
+
+#check a8_ambient_two_base_actual_averaged_transport
+#print axioms a8_ambient_two_base_actual_averaged_transport
+#check a8_ambient_output_pair_le_actual_complement_sum
+#print axioms a8_ambient_output_pair_le_actual_complement_sum
+#check a8_ambient_output_pair_le_supported_complement_sum
+#print axioms a8_ambient_output_pair_le_supported_complement_sum
