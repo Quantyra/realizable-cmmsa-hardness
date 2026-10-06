@@ -5,7 +5,7 @@ sys.dont_write_bytecode=True
 here=Path(__file__).resolve().parent
 m=runpy.run_path(str(here/'controller.py'),run_name='a8_full_gate_import'); m['configure']()
 c=m['common']; run=m['PACKAGE']/'runs'/sys.argv[1]
-cap=m['PACKAGE']/'captures/capture-development-65'
+cap=m['PACKAGE']/'captures/capture-development-65b'
 manifest=json.loads((cap/'manifest.json').read_bytes())
 d=run/'remote-evidence'
 expected={n:r['sha256'] for n,r in manifest['project_sources'].items()}

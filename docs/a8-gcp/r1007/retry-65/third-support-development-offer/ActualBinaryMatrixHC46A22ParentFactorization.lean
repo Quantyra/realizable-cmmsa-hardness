@@ -1,0 +1,271 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A22OperatorLq
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46TypedA14Energy
+import PvNP.RealizableHardness.ActualTypedIntrinsicWitnessNaturality
+import PvNP.RealizableHardness.ActualTypedIntrinsicHyperplaneNaturality
+
+/-! Forward exact conditional-energy factorization for original A22. The A1
+identity is proved before any bound is supplied. Positive-order geometry covers
+both domain-line and codomain-hyperplane parents in every finite dimension. -/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
+open ActualBinaryMatrixHC46RealQNorm ActualBinaryMatrixHC46RealQTransport
+open ActualBinaryMatrixHC46A22OperatorLq ActualBinaryMatrixHC46A18OriginalGlobalInduction
+open BinaryMatrixFourier BinaryMatrixComplexA14 BinaryMatrixComplexA15
+open BinaryMatrixA1Complex BinaryMatrixA1NestedCarrier BinaryMatrixA1TypedFourier
+open ActualTypedABCanonicalDCollapse BinaryMatrixTypedA15Transport
+open BinaryMatrixTypedA14Line BinaryMatrixTypedA15Reduced
+open BinaryMatrixTypedA14Hyperplane BinaryMatrixTypedA15HyperplaneReduced
+open ActualBinaryMatrixHC46TypedA14Energy
+open scoped BigOperators
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- Full A1 conditional-energy identity, with no influence or globalness premise. -/
+theorem a22_A1_composition_energy_eq
+    {n d : Nat}
+    (f : BinaryMatrix n d → Complex)
+    (A₂ A₁ : Submodule F (V d)) (B₁ B₂ : Submodule F (W n))
+    (hA : A₂ ≤ A₁) (hB : B₁ ≤ B₂)
+    (T : V d →ₗ[F] W n)
+    (S : (V d ⧸ A₂) →ₗ[F] B₂) :
+    a18UniformMean (fun N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+        (B₁.comap B₂.subtype) =>
+      Complex.normSq (complexCarrierAffineRestrict A₂ B₂
+        (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+        (complexCarrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ)
+          (B₁.comap B₂.subtype)
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) N)) =
+      carrierMean A₁ B₁ (fun M => Complex.normSq
+        (filteredCarrierFunction A₁ B₁
+          (T + B₂.subtype.comp (S.comp A₂.mkQ)) f M)) := by
+  let e := nestedCarrierEquiv A₂ A₁ B₁ B₂ hA hB
+  let T' := T + B₂.subtype.comp (S.comp A₂.mkQ)
+  have hstep (N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+      (B₁.comap B₂.subtype)) :
+      complexCarrierAffineRestrict A₂ B₂ (A₁.map A₂.mkQ)
+          (B₁.comap B₂.subtype) S
+          (complexCarrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ)
+            (B₁.comap B₂.subtype)
+            (fun M => filteredCarrierFunction A₂ B₂ T f M)) N =
+        filteredCarrierFunction A₁ B₁ T' f (e N) := by
+    have h := manuscript_A1_complex A₂ A₁ B₁ B₂ hA hB T S
+      f N
+    simpa [complexCarrierAffineRestrict, filteredCarrierFunction, T', e]
+      using h
+  let g : ((V d ⧸ A₁) →ₗ[F] B₁) → Real := fun M =>
+    Complex.normSq (filteredCarrierFunction A₁ B₁ T' f M)
+  have hsum : (∑ N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+        (B₁.comap B₂.subtype),
+      Complex.normSq (complexCarrierAffineRestrict A₂ B₂
+        (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+        (complexCarrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ)
+          (B₁.comap B₂.subtype)
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) N)) =
+      ∑ M : (V d ⧸ A₁) →ₗ[F] B₁, g M := by
+    calc
+      _ = ∑ N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+          (B₁.comap B₂.subtype), g (e N) := by
+        apply Finset.sum_congr rfl
+        intro N hN
+        simp only [g, hstep]
+      _ = _ := Equiv.sum_comp e.toEquiv g
+  have hcard : Fintype.card (((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+      (B₁.comap B₂.subtype)) =
+      Fintype.card ((V d ⧸ A₁) →ₗ[F] B₁) := Fintype.card_congr e.toEquiv
+  have hmean : a18UniformMean (fun N : ((V d ⧸ A₂) ⧸ A₁.map A₂.mkQ) →ₗ[F]
+      (B₁.comap B₂.subtype) =>
+      Complex.normSq (complexCarrierAffineRestrict A₂ B₂
+        (A₁.map A₂.mkQ) (B₁.comap B₂.subtype) S
+        (complexCarrierHybridFilter A₂ B₂ (A₁.map A₂.mkQ)
+          (B₁.comap B₂.subtype)
+          (fun M => filteredCarrierFunction A₂ B₂ T f M)) N)) =
+      carrierMean A₁ B₁ (fun M => Complex.normSq (filteredCarrierFunction A₁ B₁ T'
+        f M)) := by
+    simp [a18UniformMean, carrierMean, hsum, hcard, g]
+  exact hmean
+
+
+/-- Every positive parent contains an actual order-one predecessor. -/
+theorem a22_exists_order_one_parent {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (hpositive : 0 < Module.finrank F A + Module.finrank F (W n ⧸ B)) :
+    ∃ (C : Submodule F (V d)) (H : Submodule F (W n)),
+      C ≤ A ∧ B ≤ H ∧ Module.finrank F C + Module.finrank F (W n ⧸ H) = 1 := by
+  by_cases hA : A = ⊥
+  · have hB : B ≠ ⊤ := by
+      intro ht
+      subst B
+      rw [hA] at hpositive
+      have hz := (⊤ : Submodule F (W n)).finrank_quotient_add_finrank
+      rw [finrank_top] at hz
+      simp only [finrank_bot] at hpositive
+      omega
+    obtain ⟨H⟩ := ActualMZ24HyperplaneSupport.exists_hyperplane_containing_of_ne_top B hB
+    have hd := H.val.val.finrank_quotient_add_finrank
+    have hh : Module.finrank F (W n) - Module.finrank F H.val.val = 1 := H.val.property
+    refine ⟨⊥, H.val.val, bot_le, H.property, ?_⟩
+    rw [finrank_bot]
+    omega
+  · obtain ⟨x, hx, hx0⟩ := Submodule.ne_bot_iff.mp hA
+    let C : Submodule F (V d) := F ∙ x
+    have hC : C ≤ A := Submodule.span_le.mpr (by
+      intro y hy
+      have he : y = x := Set.mem_singleton_iff.mp hy
+      simpa only [he] using hx)
+    have hdim : Module.finrank F C = 1 := finrank_span_singleton hx0
+    have hz := (⊤ : Submodule F (W n)).finrank_quotient_add_finrank
+    rw [finrank_top] at hz
+    refine ⟨C, ⊤, hC, le_top, ?_⟩
+    rw [hdim]
+    omega
+
+
+/-- Forward use of a proved reduced-carrier influence bound. This internal
+assembly lemma is applied only after the A14 witness and strict lower-level
+induction have established its reduced influence premise. -/
+theorem a22_parent_from_order_one_coordinate {n d j : Nat} {b : Real}
+    (f : BinaryMatrix n d → Complex)
+    (C A : Submodule F (V d)) (B H : Submodule F (W n))
+    (hCA : C ≤ A) (hBH : B ≤ H)
+    (T : V d →ₗ[F] W n)
+    (houter : Module.finrank F C + Module.finrank F (W n ⧸ H) = 1)
+    (hcost : Module.finrank F A + Module.finrank F (W n ⧸ B) ≤ j)
+    (hderived : OriginalActualInfluenceThrough (j - 1) b
+      (actualDerivativeCoordinate C H T f)) :
+    carrierMean A B (fun M ⇒ Complex.normSq
+      (filteredCarrierFunction A B T f M)) ≤ b := by
+  let P := (A.map C.mkQ).map (domainBasis C).equivFun.toLinearMap
+  let Q := (B.comap H.subtype).map (codomainBasis H).equivFun.toLinearMap
+  have hP : P.map (domainBasis C).equivFun.symm.toLinearMap = A.map C.mkQ := by
+    simp [P, Submodule.map_map]
+  have hQ : Q.map (codomainBasis H).equivFun.symm.toLinearMap = B.comap H.subtype := by
+    simp [Q, Submodule.map_map]
+  have hPA : Module.finrank F P = Module.finrank F (A.map C.mkQ) := by
+    exact ((Submodule.equivMapOfInjective (domainBasis C).equivFun.toLinearMap
+      (domainBasis C).equivFun.injective (A.map C.mkQ)).finrank_eq).symm
+  have hQB : Module.finrank F ((Fin (Module.finrank F H) → F) ⧸ Q) =
+      Module.finrank F (H ⧸ B.comap H.subtype) := by
+    exact (Submodule.Quotient.equiv Q (B.comap H.subtype)
+      (codomainBasis H).equivFun.symm hQ).finrank_eq
+  have hArec : (A.map C.mkQ).comap C.mkQ = A := by
+    rw [Submodule.comap_map_eq, Submodule.ker_mkQ, sup_eq_left.mpr hCA]
+  have hBrec : (B.comap H.subtype).map H.subtype = B := by
+    rw [Submodule.map_comap_eq, Submodule.range_subtype, inf_eq_left.mpr hBH]
+  have hadd := relative_endpoint_cost_add C H (A.map C.mkQ) (B.comap H.subtype)
+  rw [hArec, hBrec, houter] at hadd
+  have hinner : Module.finrank F P +
+      Module.finrank F ((Fin (Module.finrank F H) → F) ⧸ Q) ≤ j - 1 := by
+    rw [hPA, hQB]
+    omega
+  have hb := hderived P Q 0 hinner
+  have hm := actualDerivativeCoordinate_nestedMean C H T f P Q 0
+  have hz : carrierCoordinateBaseLift C H 0 = 0 := by
+    ext x
+    simp [carrierCoordinateBaseLift]
+  rw [hm, hP, hQ, hz] at hb
+  have he := a22_A1_composition_energy_eq f C A B H hCA hBH T 0
+  simpa using he.symm.trans_le hb
+
+
+/-- Strict all-spaces lower induction controls every original influence of
+an actual reduced line witness. This is derived from real-q operator bounds. -/
+theorem a22_line_witness_from_lowerIH {n d j p : Nat} {eps : Real}
+    (hj : 1 ≤ j) (hp : 2 ≤ p)
+    (hIH : ∀ {n' d' : Nat} {eta : Real} (g : BinaryMatrix n' d' → Complex),
+      UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1)
+        ((2 : Real) ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2)
+        (complexRankProjection (j - 1) g))
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (L : Submodule F (V d ⧸ A)) (hL : Module.finrank F L = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (hf : UpToCarrierLqGlobal A B j (pConjugate p) eps f) :
+    OriginalActualInfluenceThrough (j - 1)
+      ((2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2)
+      (complexRankProjection (j - 1) (fun X ⇒
+        typedLineReducedWitness (k := j - 1) B L hL T f
+          ((reducedMatrixEquiv B L).symm X))) := by
+  have hpR : (1 : Real) < p := by exact_mod_cast (by omega : 1 < p)
+  have hq : 1 ≤ pConjugate p := by
+    unfold pConjugate
+    rw [le_div_iff₀ (by linarith : (0 : Real) < p - 1)]
+    linarith
+  have hk : j - 1 + 1 = j := by omega
+  have heps : 0 ≤ eps := UpToActualLqGlobal_parameter_nonneg _
+    (UpToCarrierLqGlobal_line_coordinate A B L hL f hf)
+  have hw := a22_typed_line_witness_global (k := j - 1) hq A B L hL T f
+    (by simpa only [hk] using hf)
+  have hc := a22_A14_coefficient_le hj
+  have hnew : UpToActualLqGlobal (j - 1) (pConjugate p)
+      ((2 : Real) ^ (3 * j) * eps)
+      (fun X ⇒ typedLineReducedWitness (k := j - 1) B L hL T f
+        ((reducedMatrixEquiv B L).symm X)) := by
+    intro Q hQ
+    exact (hw Q hQ).trans (by
+      rw [hk]
+      exact mul_le_mul_of_nonneg_right hc heps)
+  have hb := hIH _ hnew
+  have he : (2 : Real) ^ (500 * (j - 1) ^ 2 * p) *
+      ((2 : Real) ^ (3 * j) * eps) ^ 2 =
+      (2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2 := by
+    have hexp : 500 * (j - 1) ^ 2 * p + (3 * j) * 2 =
+        500 * (j - 1) ^ 2 * p + 6 * j := by omega
+    rw [mul_pow, ← pow_mul, ← mul_assoc, ← pow_add, hexp]
+  rw [he] at hb
+  exact hb
+
+/-- Strict all-spaces lower induction controls every original influence of
+an actual reduced hyperplane witness. This is derived from real-q operator bounds. -/
+theorem a22_hyperplane_witness_from_lowerIH {n d j p : Nat} {eps : Real}
+    (hj : 1 ≤ j) (hp : 2 ≤ p)
+    (hIH : ∀ {n' d' : Nat} {eta : Real} (g : BinaryMatrix n' d' → Complex),
+      UpToActualLqGlobal (j - 1) (pConjugate p) eta g →
+      OriginalActualInfluenceThrough (j - 1)
+        ((2 : Real) ^ (500 * (j - 1) ^ 2 * p) * eta ^ 2)
+        (complexRankProjection (j - 1) g))
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (L : Submodule F B) (hL : Module.finrank F (B ⧸ L) = 1)
+    (T : (V d ⧸ A) →ₗ[F] B)
+    (f : ((V d ⧸ A) →ₗ[F] B) → Complex)
+    (hf : UpToCarrierLqGlobal A B j (pConjugate p) eps f) :
+    OriginalActualInfluenceThrough (j - 1)
+      ((2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2)
+      (complexRankProjection (j - 1) (fun X ⇒
+        typedHyperplaneReducedWitness (k := j - 1) B L hL T f
+          ((hyperplaneReducedMatrixEquiv L).symm X))) := by
+  have hpR : (1 : Real) < p := by exact_mod_cast (by omega : 1 < p)
+  have hq : 1 ≤ pConjugate p := by
+    unfold pConjugate
+    rw [le_div_iff₀ (by linarith : (0 : Real) < p - 1)]
+    linarith
+  have hk : j - 1 + 1 = j := by omega
+  have heps : 0 ≤ eps := UpToActualLqGlobal_parameter_nonneg _
+    (UpToCarrierLqGlobal_hyperplane_coordinate A B L hL f hf)
+  have hw := a22_typed_hyperplane_witness_global (k := j - 1) hq A B L hL T f
+    (by simpa only [hk] using hf)
+  have hc := a22_A14_coefficient_le hj
+  have hnew : UpToActualLqGlobal (j - 1) (pConjugate p)
+      ((2 : Real) ^ (3 * j) * eps)
+      (fun X ⇒ typedHyperplaneReducedWitness (k := j - 1) B L hL T f
+        ((hyperplaneReducedMatrixEquiv L).symm X)) := by
+    intro Q hQ
+    exact (hw Q hQ).trans (by
+      rw [hk]
+      exact mul_le_mul_of_nonneg_right hc heps)
+  have hb := hIH _ hnew
+  have he : (2 : Real) ^ (500 * (j - 1) ^ 2 * p) *
+      ((2 : Real) ^ (3 * j) * eps) ^ 2 =
+      (2 : Real) ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2 := by
+    have hexp : 500 * (j - 1) ^ 2 * p + (3 * j) * 2 =
+        500 * (j - 1) ^ 2 * p + 6 * j := by omega
+    rw [mul_pow, ← pow_mul, ← mul_assoc, ← pow_add, hexp]
+  rw [he] at hb
+  exact hb
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization
