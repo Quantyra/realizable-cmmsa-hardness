@@ -1,0 +1,102 @@
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:177:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:366:39: Application type mismatch: The argument
+  Y
+has type
+  C →ₑ[id] D
+but is expected to have type
+  C →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] D
+in the application
+  (frequencyReindexEquiv eD eC) Y
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:366:57: Application type mismatch: The argument
+  Y
+has type
+  C →ₑ[id] D
+but is expected to have type
+  C →ₗ[PvNP.RealizableHardness.BinaryMatrixNestedSelectorA1.F✝] D
+in the application
+  Selected A B Y
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:368:44: Application type mismatch: The argument
+  Y
+has type
+  C →ₑ[id] D
+but is expected to have type
+  C →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] D
+in the application
+  selected_reindex_mapped eD eC A B Y
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:397:2: `simp` made no progress
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:402:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:487:4: No goals to be solved
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:450:8: (kernel) unknown constant 'PvNP.RealizableHardness.ActualBinaryMatrixHC46A22ParentFactorization.a22_initial_intrinsic_from_original'
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:668:4: Type mismatch: After simplification, term
+  Eq.trans_le he hb
+ has type
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) (Submodule.map (↑(LinearEquiv.refl F ↥U).symm) Q) 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+but is expected to have type
+  (a22IntrinsicEnergy (Submodule.map C.mkQ A) Q 0 fun M =>
+      filteredCarrierFunction C U T (complexRankProjection j f) M) ≤
+    2 ^ (500 * (j - 1) ^ 2 * p + 6 * j) * eps ^ 2
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:676:4: Type mismatch: After simplification, term
+  hc
+ has type
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (∑
+          x ∈
+            @Finset.univ
+              (↥U →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝]
+                PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸ C)
+              (PvNP.RealizableHardness.BinaryMatrixA1TypedFourier.backwardFintype✝ C U),
+          if Selected (Submodule.map C.mkQ A) (Submodule.comap U.subtype B) x then
+            (∑ x_1,
+                  filteredCarrierFunction C U T (complexRankProjection j f) x_1 *
+                    ↑(BinaryMatrixA1Phase.traceCharacter x x_1)) /
+                ↑(Fintype.card
+                    (PvNP.RealizableHardness.BinaryMatrixA1Complex.V✝ d ⧸
+                        C →ₗ[PvNP.RealizableHardness.BinaryMatrixA1Complex.F✝]
+                      ↥U)) *
+              ↑(BinaryMatrixA1Phase.traceCharacter x
+                  (0 + (Submodule.comap U.subtype B).subtype ∘ₗ N ∘ₗ (Submodule.map C.mkQ A).mkQ))
+          else 0)) =
+    carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)
+but is expected to have type
+  (a18UniformMean fun N =>
+      Complex.normSq
+        (∑
+          x ∈
+            @Finset.univ (↥U →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] V d ⧸ C)
+              PvNP.RealizableHardness.ActualTaggedConditionalGraphCount.finiteLinearMapFintype✝,
+          if Selected (Submodule.map C.mkQ A) Q x then
+            (∑ x_1,
+                  filteredCarrierFunction C U T (complexRankProjection j f) x_1 *
+                    ↑(BinaryMatrixA1Phase.traceCharacter x x_1)) /
+                ↑(Fintype.card (V d ⧸ C →ₗ[PvNP.RealizableHardness.ActualTypedFourierEquivNaturality.F✝] ↥U)) *
+              ↑(BinaryMatrixA1Phase.traceCharacter x (0 + Q.subtype ∘ₗ N ∘ₗ (Submodule.map C.mkQ A).mkQ))
+          else 0)) =
+    carrierMean A B fun M => Complex.normSq (filteredCarrierFunction A B T (complexRankProjection j f) M)
+
+error: lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean:745:2: 'change' tactic failed, pattern
+  Module.finrank F (W n ⧸ B) = 1 + Module.finrank F (↥H ⧸ Q0)
+is not definitionally equal to target
+  Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ ↥Z.mkQ.ker +
+      Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝
+        (PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.W✝ n ⧸ B) =
+    1 + (0 + Module.finrank PvNP.RealizableHardness.ActualBinaryMatrixHC46A18OriginalGlobalInduction.F✝ (↥H ⧸ Q0))
