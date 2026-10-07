@@ -5,9 +5,13 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { defaults,DEST,save } from './migrate.mjs';
 import { sha } from './archive.mjs';
+import { authenticatedCatalog,acceptActivation } from './custody.mjs';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import {decodeCatalog} from './catalog-bytes.mjs';
 const home=os.homedir(),here=path.dirname(fileURLToPath(import.meta.url)),read=p=>fs.readFile(p,'utf8').then(JSON.parse);
 const check=(ok,reason)=>{if(!ok){const e=Error();e.safeReason=reason;throw e;}};
-async function pinned(file) {const bytes=await fs.readFile(file);return {catalog_file:file,catalog_sha256:sha(bytes),catalog:JSON.parse(bytes)};}
+async function pinned(file) {const bytes=await fs.readFile(file);return {catalog_file:file,catalog_sha256:sha(bytes),catalog:decodeCatalog(bytes)};}
 async function backup(file) {
   const bytes=await fs.readFile(file),history=path.join(home,'.quantyra/migration-history/archive-aws-migration-20261006');await fs.mkdir(history,{recursive:true});
   const preserved=path.join(history,path.basename(file)+'.'+sha(bytes)+'.original');
@@ -15,12 +19,22 @@ async function backup(file) {
   check(sha(await fs.readFile(preserved))===sha(bytes),'local-tool-backup-mismatch');return {file,preserved,sha256:sha(bytes)};
 }
 async function main() {
-  const coreFile=path.join(path.dirname(defaults.catalog),'research-archive-catalog.quantyra.json'),core=await pinned(coreFile),r=await read(path.join(defaults.state,'verify-destination/verification.json'));
-  check(core.catalog.bucket===DEST&&r.complete&&r.members===core.catalog.members.length&&core.catalog.chunks.every(x=>r.chunks.some(y=>y.version_id===x.version_id&&y.ciphertext_sha256===x.sha256&&y.tar_sha256===x.tar_sha256)),'core-not-authenticated');
+  // Root owns the acceptance commit and its independent report. This author
+  // never creates either. Consume immutable committed bytes, not an argv bool.
+  const args=process.argv.slice(2);check(args.length===2&&args[0]==='--root-acceptance-commit'&&/^[a-f0-9]{40}$/.test(args[1]),'root-acceptance-commit-required');
+  const parent='C:/Users/dfred/Desktop/Projects/IGH/Quantyra-Planning',git=promisify(execFile),fromRoot=async name=>(await git('git',['show',args[1]+':docs/aws-migration-2026-10-06/'+name],{cwd:parent,maxBuffer:16*1024**2,windowsHide:true})).stdout;
+  const acceptance=JSON.parse(await fromRoot('archive-root-acceptance.json')),independentBytes=await fromRoot('archive-repair-independent-verification.json');
+  const independent=JSON.parse(independentBytes);check(independent.type==='archive-root-independent-verification-v1'&&independent.complete===true&&independent.versions===205,'root-independent-verification-required');
+  const packetBytes=await fs.readFile(path.join(defaults.state,'repair/fullscope-packet.json')),packet=JSON.parse(packetBytes);check(independent.packet_sha256===sha(packetBytes),'root-independent-packet-mismatch');
+  for(const pin of packet.artifacts){check(sha(await fs.readFile(pin.file))===pin.sha256,'accepted-evidence-file-changed');}
+  const coreFile=path.join(defaults.state,'repair/core-successor.json'),core=await pinned(coreFile),r=await read(path.join(defaults.state,'repair/core-authentication.json'));
+  check(core.catalog.bucket===DEST,'core-account-mismatch');authenticatedCatalog(core.catalog,core.catalog_sha256,r);
   const discovery=await read(path.join(defaults.state,'recovery/discovery.json')),activation=await read(path.join(defaults.state,'recovery/activate-receipt.json'));
   check(activation.complete&&activation.catalogs.length===44&&discovery.full_44_directory_set,'recovery-not-activated');
-  const recovery=[];for(const x of discovery.catalogs){const file=path.join(defaults.state,'recovery/successor-catalogs',path.posix.basename(x.catalog_key)),p=await pinned(file),n=Number(path.posix.basename(file).match(/directory-(\d\d)/)[1]);check(p.catalog.bucket===DEST&&typeof p.catalog.selected_directory==='string','recovery-successor-account-mismatch');recovery.push({directory:n,catalog_file:file,catalog_sha256:p.catalog_sha256,source_catalog_sha256:x.catalog_sha256,selected_directory:p.catalog.selected_directory.replace(/^realizable-cmmsa-hardness\//,'')});}
-  const registry={status:'verified-quantyra-archive-migration',core:{catalog_file:coreFile,catalog_sha256:core.catalog_sha256,source_catalog_sha256:sha(await fs.readFile(defaults.catalog))},recovery:recovery.sort((a,b)=>a.directory-b.directory)};
+  const recovery=[];for(const x of discovery.catalogs){const file=path.join(defaults.state,'recovery/successor-catalogs',path.posix.basename(x.catalog_key)+'.gz'),p=await pinned(file),n=Number(path.posix.basename(file).match(/directory-(\d\d)/)[1]);check(p.catalog.bucket===DEST&&typeof p.catalog.selected_directory==='string','recovery-successor-account-mismatch');authenticatedCatalog(p.catalog,p.catalog_sha256,await read(path.join(defaults.state,'recovery/verify-destination-'+n,'verification.json')));recovery.push({directory:n,catalog_file:file,catalog_sha256:p.catalog_sha256,source_catalog_sha256:x.catalog_sha256,selected_directory:p.catalog.selected_directory.replace(/^realizable-cmmsa-hardness\//,'')});}
+  const pins=[{directory:0,catalog_file:coreFile,catalog_sha256:core.catalog_sha256,member_catalog_sha256:r.member_catalog_sha256},...await Promise.all(recovery.sort((a,b)=>a.directory-b.directory).map(async x=>({directory:x.directory,catalog_file:x.catalog_file,catalog_sha256:x.catalog_sha256,member_catalog_sha256:(await read(path.join(defaults.state,'recovery/verify-destination-'+x.directory,'verification.json'))).member_catalog_sha256})))];
+  acceptActivation(packet,sha(packetBytes),acceptance,pins,sha(Buffer.from(independentBytes)));
+  const registry={status:'verified-quantyra-archive-migration',root_acceptance_commit:args[1],fullscope_packet_sha256:sha(packetBytes),core:{catalog_file:coreFile,catalog_sha256:core.catalog_sha256,source_catalog_sha256:sha(await fs.readFile(defaults.catalog))},recovery:recovery.sort((a,b)=>a.directory-b.directory)};
   await save(path.join(defaults.state,'active-restore-registry.json'),registry);
   const original=path.join(home,'.local/bin/restore-quantyra-archive.mjs'),history=await backup(original),script=path.join(here,'active-restore.mjs');
   const wrapper=`// Quantyra AWS migration active restore; historical tool retained in protected custody.\nimport {spawn} from 'node:child_process';\nconst child=spawn(process.execPath,[${JSON.stringify(script)},...process.argv.slice(2)],{stdio:'inherit',windowsHide:true});\nchild.on('error',()=>{process.stderr.write('Restore entry unavailable\\n');process.exitCode=1;});\nchild.on('exit',code=>{process.exitCode=code??1;});\n`;

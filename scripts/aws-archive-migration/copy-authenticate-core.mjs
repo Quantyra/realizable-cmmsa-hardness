@@ -13,6 +13,7 @@ const send=(c,n,a)=>c.send(new S3[n+'Command'](a)),read=p=>fs.readFile(p,'utf8')
 const check=(ok,reason)=>{if(!ok){const e=Error();e.safeReason=reason;throw e;}};
 const dest={Bucket:DEST,ExpectedBucketOwner:'063280428495'},state=defaults.state,lock=path.join(state,'copy-core.lock');
 async function main() {
+  check(false,'legacy-core-actor-disabled-use-repair-copy-at-safe-boundary');
   await preflight(d);
   const policy=await read(path.join(state,'temporary-copy-policy.json')),installed=await send(d,'GetBucketPolicy',dest);check(samePolicy(policy,JSON.parse(installed.Policy)),'copy-bridge-mismatch');
   const bytes=await fs.readFile(defaults.catalog),c=JSON.parse(bytes),{chunks,members}=validate(c),catalogHash=sha(bytes);

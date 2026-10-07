@@ -10,6 +10,7 @@ import { fromIni } from '@aws-sdk/credential-providers';
 import { SOURCE, DEST, defaults, preflight, inventory, hashBody, save, successor, successorCompatible, orderedRows } from './migrate.mjs';
 import { sha } from './archive.mjs';
 import { samePolicy } from './policy.mjs';
+import {removeBridgeSafely} from './custody.mjs';
 const cfg=profile=>({region:'us-east-1',credentials:fromIni({profile}),maxAttempts:3});
 const s=new S3.S3Client(cfg('cyint-ea-prod')),d=new S3.S3Client(cfg('quantyra'));
 const check=(ok,reason)=>{if(!ok){const e=Error();e.safeReason=reason;throw e;}};
@@ -45,6 +46,7 @@ async function cancelRelay() {
   console.log(JSON.stringify({aborted_incomplete_destination_uploads:(r.Uploads||[]).length}));
 }
 async function copy(core) {
+  check(false,'legacy-copy-disabled-use-repair-copy-single-writer');
   await preflight(d);const installed=await send(d,'GetBucketPolicy',destArgs),policy=await read(policyFile);check(samePolicy(JSON.parse(installed.Policy),policy),'bridge-not-verified');
   const snapshot=await read(path.join(defaults.state,'source-versions.json')),live=await inventory(s,SOURCE,'485386182336'),filter=r=>!core||r.key.startsWith('migrations/surface-migration-20261007/');
   const rows=live.filter(filter);check(JSON.stringify(rows)===JSON.stringify(snapshot.rows.filter(filter)),'source-inventory-changed');check(!rows.some(r=>r.kind!=='object'||r.bytes>5*1024**3),'relay-required-for-large-object-or-marker');
@@ -82,8 +84,8 @@ async function copy(core) {
   await save(path.join(defaults.state,core?'copy-core-receipt.json':'copy-all-receipt.json'),{at:new Date().toISOString(),scope:core?'surface-migration-prefix':'whole-research-bucket',versions:rows.length,bytes:rows.reduce((n,r)=>n+r.bytes,0),complete:true});
 }
 async function removeBridge() {
-  await preflight(d);await policyPermissions();const expected=await read(policyFile),actual=await send(d,'GetBucketPolicy',destArgs);
-  check(samePolicy(JSON.parse(actual.Policy),expected),'policy-changed-do-not-remove');
-  await send(d,'DeleteBucketPolicy',destArgs);await save(path.join(defaults.state,'temporary-copy-policy-removal.json'),{at:new Date().toISOString(),removed:true});console.log('Temporary copy-only bridge removed');
+  await preflight(d);await policyPermissions();const expected=await read(policyFile);
+  const receipt=await removeBridgeSafely({get:async()=>{try{return JSON.parse((await send(d,'GetBucketPolicy',destArgs)).Policy);}catch(e){if(e.name==='NoSuchBucketPolicy')return null;throw e;}},remove:()=>send(d,'DeleteBucketPolicy',destArgs),expected,same:samePolicy});
+  await save(path.join(defaults.state,'repair/temporary-copy-policy-removal.json'),{at:new Date().toISOString(),...receipt,code_sha256:sha(await fs.readFile(new URL('server-copy.mjs',import.meta.url)))});console.log('Temporary copy-only bridge absence read back');
 }
 const mode=process.argv[2];(async()=>{if(mode==='bridge')await bridge();else if(mode==='cancel-relay')await cancelRelay();else if(mode==='copy-core')await copy(true);else if(mode==='copy-all')await copy(false);else if(mode==='remove-bridge')await removeBridge();else throw Error();})().catch(async e=>{const r={at:new Date().toISOString(),mode,error:e.name,safe_reason:e.safeReason??null,http_status:e.$metadata?.httpStatusCode??null};await save(path.join(defaults.state,'server-copy-'+mode+'-failure.json'),r).catch(()=>{});console.error(JSON.stringify(r));process.exitCode=1;});

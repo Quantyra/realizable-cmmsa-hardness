@@ -134,6 +134,7 @@ export async function verifyCatalog(client,c,keyFile,state,restorePath,exactCata
 }
 async function main() {
   const mode=process.argv[2];check(['discover','preflight','provision','copy','copy-core','verify-source','verify-destination','activate'].includes(mode),'Unknown mode');
+  check(!['copy','copy-core','activate'].includes(mode),'Legacy mutation disabled use repair-copy and root-bound installer');
   const s=new S3.S3Client(config('cyint-ea-prod')),d=new S3.S3Client(config('quantyra'));
   await identity('cyint-ea-prod',SOURCE_ACCOUNT);await identity('quantyra',DEST_ACCOUNT);
   const catalogBytes=await fs.readFile(defaults.catalog),c=JSON.parse(catalogBytes);check(c.bucket===SOURCE,'Historical catalog source mismatch');validate(c);

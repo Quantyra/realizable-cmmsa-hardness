@@ -4,8 +4,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { fromIni } from '@aws-sdk/credential-providers';
-import { validate, verifyChunk } from './archive.mjs';
+import { validate, verifyChunk,sha } from './archive.mjs';
 import { defaults, DEST, SOURCE, hashBody } from './migrate.mjs';
+import {decodeCatalog} from './catalog-bytes.mjs';
 
 export async function checkedTarget(root,relative) {
   const target=path.join(root,...relative.split('/'));let current=root;
@@ -13,7 +14,7 @@ export async function checkedTarget(root,relative) {
   return target;
 }
 export async function restore(o,client) {
-  const c=JSON.parse(await fs.readFile(o.catalog,'utf8')),{chunks,members}=validate(c),member=members.get(o.path);
+  const raw=await fs.readFile(o.catalog),c=decodeCatalog(raw),{chunks,members}=validate(c),member=members.get(o.path);
   if(!member || member.hardlink!=null || member.bytes>1048576)throw Error('Select one regular member of at most 1 MiB');
   if(![SOURCE,DEST].includes(c.bucket))throw Error('Unexpected bucket');
   const required=new Set([member.chunk]);let changed;
@@ -33,7 +34,7 @@ export async function restore(o,client) {
     const check=await hashBody((await import('node:fs')).createReadStream(temp));if(check.bytes!==member.bytes||check.sha256!==member.sha256)throw Error('Restored bytes differ');
     await fs.mkdir(path.dirname(target),{recursive:true});await checkedTarget(root,member.path);
     await fs.copyFile(temp,target,constants.COPYFILE_EXCL);
-    return {mode:'restored',chunks:required.size,bytes:check.bytes,sha256:check.sha256};
+    return {mode:'restored',chunks:required.size,bytes:check.bytes,sha256:check.sha256,bucket:c.bucket,catalog_sha256:sha(raw),member_metadata_sha256:sha(Buffer.from(JSON.stringify(member))),exact_versions:[...chunks.values()].filter(x=>required.has(x.number)).map(x=>({key:x.key,version_id:x.version_id,ciphertext_sha256:x.sha256,tar_sha256:x.tar_sha256}))};
   } finally {
     key.fill(0);if(path.dirname(scratch)!==root || !(await fs.lstat(scratch)).isDirectory() || (await fs.lstat(scratch)).isSymbolicLink())throw Error('Unsafe scratch cleanup');await fs.rm(scratch,{recursive:true,force:true});
   }

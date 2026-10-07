@@ -7,6 +7,7 @@ import { sha,validate } from './archive.mjs';
 import { restore } from './restore.mjs';
 import { S3Client } from '@aws-sdk/client-s3';
 import { fromIni } from '@aws-sdk/credential-providers';
+import {decodeCatalog} from './catalog-bytes.mjs';
 const o={},values={'--catalog':'catalog','--key-file':'keyFile','--workspace-root':'workspaceRoot','--profile':'profile'},flags={'--dry-run':'dryRun','--list':'list','--verify-only':'verifyOnly'};
 async function main() {
   const a=process.argv.slice(2);for(let i=0;i<a.length;i++){if(values[a[i]]&&a[i+1]&&!a[i+1].startsWith('--'))o[values[a[i]]]=a[++i];else if(flags[a[i]])o[flags[a[i]]]=true;else if(a[i]==='--path'&&a[i+1]&&!a[i+1].startsWith('--'))(o.paths??=[]).push(a[++i]);else throw Error();}
@@ -18,7 +19,7 @@ async function main() {
   const entry=[registry.core,...registry.recovery].find(x=>x.source_catalog_sha256===fingerprint||x.catalog_sha256===fingerprint);
   if(!entry)throw Error();catalog=entry.catalog_file;
   const bytes=await fs.readFile(catalog);if(sha(bytes)!==entry.catalog_sha256)throw Error();
-  const c=JSON.parse(bytes);if(c.bucket!==DEST||c.profile!=='quantyra')throw Error();const {members}=validate(c);
+  const c=decodeCatalog(bytes);if(c.bucket!==DEST||c.profile!=='quantyra')throw Error();const {members}=validate(c);
   if(o.dryRun||o.list) {
     const selected=[...members.values()].filter(m=>!o.paths?.length||o.paths.some(p=>m.path===p.replace(/\/$/,'')||m.path.startsWith(p.replace(/\/$/,'')+'/')));
     if(!selected.length)throw Error();console.log(JSON.stringify({mode:o.list?'list':'dry-run',members:selected.length,bytes:selected.reduce((n,m)=>n+m.bytes,0),profile:'quantyra'}));return;

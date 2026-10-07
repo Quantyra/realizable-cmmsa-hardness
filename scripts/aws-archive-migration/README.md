@@ -45,7 +45,7 @@ node scripts/aws-archive-migration/bounded-restore.mjs destination
 node scripts/aws-archive-migration/migrate.mjs verify-destination
 ```
 
-After the core pass, transfer the complete stabilized research bucket and verify the additional recovery catalogs. The server-side generic copier supports objects up to 5 GiB and stops for delete markers or larger objects; use the relay for those cases. All copied objects receive exact new version IDs and byte/hash verification. Recovery discovery downloads bounded exact-version catalogs internally, verifies their schema and records hashes. The recovered 44-directory set is complete only when all 44 catalogs are present and authenticated. The original recovery catalogs retain their source references as historical evidence; successor catalogs are separate protected artifacts.
+After the core pass, transfer the complete stabilized research bucket and verify the additional recovery catalogs. The server-side generic copier supports objects up to 5 GiB and stops for delete markers or larger objects; use the relay for those cases. All copied objects receive exact new version IDs and byte/hash verification. Recovery discovery downloads bounded exact-version catalogs internally, verifies their schema and records hashes. The recovered 44-directory set is complete only when all 44 catalogs are present and authenticated. Shared encrypted objects are streamed once per exact destination version and complete member/type/link/hash signature; matching later references reuse that in-memory authenticated evidence. A changed member vector or version forces a fresh stream. The original recovery catalogs retain their source references as historical evidence; successor catalogs are separate protected artifacts.
 
 ```powershell
 node scripts/aws-archive-migration/migrate.mjs discover
@@ -65,4 +65,12 @@ After both catalog sets are activated, `node scripts/aws-archive-migration/insta
 
 Root owns the retirement decision: require stable all-version inventory coverage, destination hashes and visibility, all authenticated catalog chunks/members, a real bounded destination restore, retained key custody, active consumer/reference verification, removal of the temporary bridge, and explicit disposition of every additional archive. Never infer retirement eligibility from fixture tests, a partial progress file, or the original 52-object estimate.
 
+Root's independent all-object command is `node scripts/aws-archive-migration/verify-version-mapping.mjs`: it compares live source/destination version coverage and visibility, reads every object's headers/tags, and streams every exact destination version against the preserved SHA-256 mapping. `--metadata-only` skips byte streams and is suitable for a quick final source-quiescence and consumer-configuration gate; it is not a byte-verification receipt. Independent authenticated core/recovery passes use the commands above. These checks perform no AWS writes or source retirement.
+
 AWS contracts: [versioned CopyObject and new destination version IDs](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html), [multipart copy threshold](https://docs.aws.amazon.com/AmazonS3/latest/userguide/copy-object.html), and [cross-account IAM simulation](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html). These tools use direct checks and actual object reads in addition to simulation.
+# Repair workflow supersedes legacy execution commands
+
+The independent NO-GO review requires the F1–F4 gates in [REPAIR.md](REPAIR.md).
+Use that workflow for resumption and cutover. The installer requires a committed
+root acceptance of the exact full205 packet; author proof cannot activate it.
+The earlier commands below document the original preparation and partial run.

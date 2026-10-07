@@ -1,0 +1,39 @@
+{
+  "story": "S3154",
+  "recorded_at": "2026-10-07T10:40:00Z",
+  "validation": {
+    "command": "npm test (scripts/aws-archive-migration)",
+    "tests": 24,
+    "passed": 24,
+    "failed": 0,
+    "synthetic_regressions": [
+      "F1 missing root acceptance; stale exact/canonical/member catalog evidence; unauthenticated/empty chunks",
+      "F2 duplicate source identity; two historical sources to one destination; incomplete coverage; distinct identical-byte versions",
+      "F3 lost CopyObject reply; latest/historical reconciliation ordering; bound retained duplicate receipt",
+      "F4 source and destination terminal instability; policy absence readback and already-absent idempotency",
+      "deterministic compressed successor catalogs preserve member metadata"
+    ],
+    "actual_installer_without_root_commit": "rejected before local writes",
+    "git_diff_check": "passed"
+  },
+  "original_independent_review": {
+    "verdict": "NO-GO",
+    "sha256": "f44fe16a590816cebec2acb205f4a5441c24d1711ba98f69ea55306a7b3ac150",
+    "modified_by_author": false
+  },
+  "execution": {
+    "original_actor_6716_at_resume": "absent; original lock and checkpoints preserved",
+    "copy_actor": 6852,
+    "controller": 13356,
+    "root_acceptance": false,
+    "active_restore_switch": false,
+    "source_deletion_or_revocation": false,
+    "fullscope_completion": "pending live writer/controller",
+    "completed_terminal_receipts_required_before_acceptance": true
+  },
+  "privacy": {
+    "keys_or_credentials_in_git": false,
+    "catalog_member_paths_or_payloads_in_git": false,
+    "historical_catalogs_and_keys_changed": false
+  }
+}

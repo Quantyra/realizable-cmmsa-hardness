@@ -13,6 +13,8 @@ import { sha, validate, verifyChunk } from './archive.mjs';
 import { inventory, transfer, successor, successorCompatible, orderedRows, transferMarker, SOURCE, DEST } from './migrate.mjs';
 import { restore } from './restore.mjs';
 import { samePolicy } from './policy.mjs';
+import { verifyCached } from './verification-cache.mjs';
+import { sameHeaders,sameTags } from './verify-version-mapping.mjs';
 
 async function fixture() {
   const key=randomBytes(32),data=Buffer.from('archive custody fixture\n'),name='realizable-cmmsa-hardness/evidence/test.log';
@@ -96,4 +98,19 @@ test('active consumer redirects historical catalogs to hash-pinned Quantyra succ
     const env={...process.env,USERPROFILE:dir};const r=spawnSync(process.execPath,args,{env,encoding:'utf8',windowsHide:true});assert.equal(r.status,0,r.stderr);assert.equal(JSON.parse(r.stdout).profile,'quantyra');assert.equal(JSON.parse(r.stdout).members,2);assert(!r.stdout.includes(f.name));
     await fs.writeFile(current,'{}');const bad=spawnSync(process.execPath,args,{env,encoding:'utf8',windowsHide:true});assert.equal(bad.status,1);assert(!bad.stdout);assert(!bad.stderr.includes(f.name));
   } finally {f.key.fill(0);await fs.rm(dir,{recursive:true,force:true});}
+});
+test('shared chunks reuse only identical version and complete member identities',async()=>{
+  const f=await fixture(),dir=await fs.mkdtemp(path.join(os.tmpdir(),'qarc-test-')),cache=new Map();let calls=0;
+  try {
+    const keyFile=path.join(dir,'key');await fs.writeFile(keyFile,f.key);
+    const client={send:async()=>{calls++;return {Body:fragmented(f.envelope)};}};
+    const one=await verifyCached(client,f.c,keyFile,path.join(dir,'one'),cache),two=await verifyCached(client,f.c,keyFile,path.join(dir,'two'),cache);assert.equal(one.streamed_chunks,1);assert.equal(two.reused_chunks,1);assert.equal(calls,1);
+    const changed=structuredClone(f.c);changed.members[0].sha256='0'.repeat(64);changed.members[1].sha256='0'.repeat(64);await assert.rejects(verifyCached(client,changed,keyFile,path.join(dir,'changed'),cache));assert.equal(calls,2);
+    const newVersion=structuredClone(f.c);newVersion.chunks[0].version_id='different';await verifyCached(client,newVersion,keyFile,path.join(dir,'version'),cache);assert.equal(calls,3);
+  } finally {f.key.fill(0);await fs.rm(dir,{recursive:true,force:true});}
+});
+test('header/tag comparison ignores ordering and detects meaningful metadata changes',()=>{
+  assert(sameHeaders({Metadata:{a:'1',b:'2'},ContentType:'application/octet-stream'},{Metadata:{b:'2',a:'1'},ContentType:'application/octet-stream'}));
+  assert(!sameHeaders({ContentEncoding:'gzip'},{ContentEncoding:'identity'}));assert(!sameHeaders({Metadata:{owner:'a'}},{Metadata:{owner:'b'}}));
+  assert(sameTags({TagSet:[{Key:'a',Value:'1'},{Key:'b',Value:'2'}]},{TagSet:[{Key:'b',Value:'2'},{Key:'a',Value:'1'}]}));assert(!sameTags({TagSet:[{Key:'a',Value:'1'}]},{TagSet:[{Key:'a',Value:'2'}]}));
 });
