@@ -1,0 +1,4 @@
+import PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy
+
+#check PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.ranked_selected_filters_projection_energy
+#print axioms PvNP.RealizableHardness.ActualTypedABRankedProjectionEnergy.ranked_selected_filters_projection_energy

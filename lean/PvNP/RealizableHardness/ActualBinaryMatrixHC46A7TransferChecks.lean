@@ -75,6 +75,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #check a7_a9_multiplicity_le
 #check a7_a8_a9_room
 #check a7_a8_a9_exponent_fits
+#check a7_predecessor_choice_injective
+#check a7_predecessor_fiber_le
 
 #print axioms a7_constant_of_degree_zero
 #print axioms a7_q_eq_zero_order
@@ -142,6 +144,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A7Transfer
 #print axioms a7_a9_multiplicity_le
 #print axioms a7_a8_a9_room
 #print axioms a7_a8_a9_exponent_fits
+#print axioms a7_predecessor_choice_injective
+#print axioms a7_predecessor_fiber_le
 
 -- A7 ingredients committed on 2026-10-03.
 #check a7_positive_share_sum

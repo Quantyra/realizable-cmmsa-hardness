@@ -3,5 +3,11 @@ import PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget
 open PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget
 
 #check liftCarrierRestriction
+#check liftCarrierMatrix
+#check liftCarrierMatrix_sub_mulVec
+#check liftCarrierMatrix_mem_fibre_iff
+#check carrierFibreQuotientHomEquiv
+#print axioms carrierFibreQuotientHomEquiv
 #check liftCarrierRestriction_order
+#print axioms liftCarrierMatrix_mem_fibre_iff
 #print axioms liftCarrierRestriction_order

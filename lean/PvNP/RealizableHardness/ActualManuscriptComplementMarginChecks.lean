@@ -1,0 +1,20 @@
+import PvNP.RealizableHardness.ActualManuscriptComplementForceInput
+
+namespace PvNP.RealizableHardness.ActualManuscriptComplementMarginChecks
+
+open PvNP.RealizableHardness.ActualManuscriptComplementMargin
+open PvNP.RealizableHardness.ActualManuscriptComplementForceInput
+
+#check manuscriptSuccessScale
+#check manuscriptRho
+#check manuscriptSuccessScale_eq_successMargin
+#check eight_mul_scale_margin_le_half
+#check margin_le_half_of_four_scale_le
+#check actual_manuscript_q_complement_input
+
+#print axioms manuscriptSuccessScale_eq_successMargin
+#print axioms eight_mul_scale_margin_le_half
+#print axioms margin_le_half_of_four_scale_le
+#print axioms actual_manuscript_q_complement_input
+
+end PvNP.RealizableHardness.ActualManuscriptComplementMarginChecks

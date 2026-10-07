@@ -1,0 +1,7 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18IntrinsicAverageSpecialization
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18IntrinsicAverageSpecialization
+
+#check ambient_average_eq_intrinsic_bottomTop
+
+#print axioms ambient_average_eq_intrinsic_bottomTop

@@ -10,3 +10,7 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17ParentFibreBridge
 #print axioms carrierAmbientLiftFibreEquiv_normalizedMean
 #check liftCarrierMatrix_mem_actual_fibre
 #print axioms liftCarrierMatrix_mem_actual_fibre
+#check carrierAmbientLiftFibreEquiv_apply
+#print axioms carrierAmbientLiftFibreEquiv_apply
+#check liftCarrierMatrix_normalizedMean
+#print axioms liftCarrierMatrix_normalizedMean

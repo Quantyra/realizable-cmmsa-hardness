@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46QuotientCoordinates
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46QuotientCoordinates
+
+#check quotientCoordinateEquiv
+#print axioms quotientCoordinateEquiv
+#check quotient_finrank_eq_finrank_sub_one
+#print axioms quotient_finrank_eq_finrank_sub_one
+#check lineQuotientCoordinateEquiv
+#print axioms lineQuotientCoordinateEquiv

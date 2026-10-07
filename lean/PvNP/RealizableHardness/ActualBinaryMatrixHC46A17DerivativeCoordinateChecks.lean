@@ -1,0 +1,18 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17DerivativeCoordinate
+
+#check carrierFunctionCoordinate
+#print axioms carrierFunctionCoordinate
+#check actual_global_iff_typed_global
+#print axioms actual_global_iff_typed_global
+#check actual_global_to_typed_global
+#print axioms actual_global_to_typed_global
+#check actualDerivativeCoordinate
+#print axioms actualDerivativeCoordinate
+#check actual_derivative_global_iff_typed
+#print axioms actual_derivative_global_iff_typed
+#check actualDerivativeCoordinate_top_eq_fixedDomainDerivativeCoordinate
+#print axioms actualDerivativeCoordinate_top_eq_fixedDomainDerivativeCoordinate
+#check actualAffineRestriction_order_formula
+#print axioms actualAffineRestriction_order_formula

@@ -2,6 +2,21 @@ import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
 
 open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
 
+#check functionalKernelInAmbient
+#check quotient_factor_kernel_eq_image
+#print axioms quotient_factor_kernel_eq_image
+#check quotient_image_A_eq_span
+#print axioms quotient_image_A_eq_span
+#check quotient_factor_kernel_eq_span
+#print axioms quotient_factor_kernel_eq_span
+#check quotientSectionCoordinates_of_restricted_functional
+#print axioms quotientSectionCoordinates_of_restricted_functional
+#check restrictedFunctionalAppendSamplingEquiv
+#print axioms restrictedFunctionalAppendSamplingEquiv
+#check restrictedFunctionalAppendSampling_sum
+#print axioms restrictedFunctionalAppendSampling_sum
+#check restrictedFunctionalAppendSampling_mean
+#print axioms restrictedFunctionalAppendSampling_mean
 #check quotientSampleOutput
 #check quotientSampleOutput_section
 #check quotientSampleOutput_newColumn
@@ -9,6 +24,8 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18QuotientSamplingLaw
 #check quotientSampleOutput_range_expanded
 #check quotientSectionCoordinateEquiv
 #print axioms quotientSectionCoordinateEquiv
+#check quotientSectionCoordinates_of_kernel_line
+#print axioms quotientSectionCoordinates_of_kernel_line
 #check expandedCodomainCoordinateMap
 #check expandedCodomainReconstructionEquiv
 #print axioms expandedCodomainReconstructionEquiv

@@ -1,0 +1,21 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A9ActualFiber
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A9ActualFiber
+
+#check A9NormalizedInitialMap
+#check a9_normalized_restriction_preimage_existsUnique
+#check a9_normalized_map_eq_determined
+#check a9NormalizedToDatum_map
+#check a9_normalized_actual_fiber_equiv
+#check a9_normalized_actual_fiber_rank
+#check a9_normalized_actual_fiber_rank_eq
+#check a9_normalized_actual_fiber_card
+
+#print axioms a9_normalized_restriction_preimage_existsUnique
+#print axioms a9_normalized_map_eq_determined
+#print axioms a9_normalized_actual_fiber_equiv
+#print axioms a9_normalized_actual_fiber_rank
+#print axioms a9_normalized_actual_fiber_rank_eq
+#print axioms a9_normalized_actual_fiber_card
+
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A9ActualFiber

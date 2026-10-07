@@ -1,0 +1,27 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalEnergy
+
+#check actualA18Average
+#check restrictedFunctionals_nonempty_of_ne_zero
+#print axioms restrictedFunctionals_nonempty_of_ne_zero
+#check actualA18SourceSample
+#check actualA18SourceSample_eq_base_add
+#print axioms actualA18SourceSample_eq_base_add
+#check complex_product_average_eq_iterated
+#print axioms complex_product_average_eq_iterated
+#check actualA18Average_eq_sourceCoordinates
+#print axioms actualA18Average_eq_sourceCoordinates
+#check actualA18Average_eq_average_sourceLineMean
+#print axioms actualA18Average_eq_average_sourceLineMean
+#check normSq_complex_product_average_le
+#print axioms normSq_complex_product_average_le
+#check real_finite_mean_swap
+#print axioms real_finite_mean_swap
+#check actualA18SourceLineMean
+#check actualA18_source_restricted_mean_energy_le_two
+#print axioms actualA18_source_restricted_mean_energy_le_two
+#check actualA18Average_normSq_le_sourceMean
+#print axioms actualA18Average_normSq_le_sourceMean
+#check actualA18_parent_fibre_energy_le_two_inside
+#print axioms actualA18_parent_fibre_energy_le_two_inside

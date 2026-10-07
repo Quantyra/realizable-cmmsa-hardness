@@ -6,7 +6,18 @@ open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceConditioning
 #check outsideColumnSigmaEquiv
 #check outsideColumnSigma_sum
 #check outsideColumnSigma_mean
+#check actualOutsideColumnFiberCoordinates
+#check evaluationFiberEquiv
+#check outsideColumn_card_half
+#check restrictedFunctional_quotient_vector_ne_zero
+#check restrictedFunctional_outsideColumn_card_half
+#check restrictedFunctional_outsideColumn_mean_le_two
 #print axioms spanExtension_eq_of_codim_one
 #print axioms outsideColumnSigmaEquiv
 #print axioms outsideColumnSigma_sum
 #print axioms outsideColumnSigma_mean
+#print axioms actualOutsideColumnFiberCoordinates
+#print axioms outsideColumn_card_half
+#print axioms restrictedFunctional_quotient_vector_ne_zero
+#print axioms restrictedFunctional_outsideColumn_card_half
+#print axioms restrictedFunctional_outsideColumn_mean_le_two

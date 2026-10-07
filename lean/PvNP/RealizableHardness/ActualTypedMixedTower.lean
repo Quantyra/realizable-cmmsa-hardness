@@ -38,7 +38,7 @@ inductive ActualTypedMixedTower :
     (D : Type u) → (C : Type v) →
     [AddCommGroup D] → [Module F D] → [Fintype D] →
     [AddCommGroup C] → [Module F C] → [Fintype C] →
-    ((D →ₗ[F] C) → Complex) → Nat → Type (max u v)
+    ((D →ₗ[F] C) → Complex) → Nat → Type (max u v + 1)
   | done {D : Type u} {C : Type v}
       [AddCommGroup D] [Module F D] [Fintype D]
       [AddCommGroup C] [Module F C] [Fintype C]
@@ -73,7 +73,7 @@ theorem length_le_total_finrank {D C : Type*}
     [AddCommGroup D] [Module F D] [Fintype D]
     [AddCommGroup C] [Module F C] [Fintype C]
     {f : (D →ₗ[F] C) → Complex} {k : Nat}
-    (tower : ActualTypedMixedTower D C f k) :
+    (tower : _root_.PvNP.RealizableHardness.ActualTypedMixedTower.ActualTypedMixedTower D C f k) :
     k ≤ Module.finrank F D + Module.finrank F C := by
   induction tower with
   | done f => simp

@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A17CodomainBranch
+
+#check actual_A17_codomain_branch
+#print axioms actual_A17_codomain_branch

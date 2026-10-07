@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+
+open PvNP.RealizableHardness.ActualTypedABProjectionEnergy
+
+#check typedComplexRankProjection_energy_le
+#print axioms typedComplexRankProjection_energy_le
