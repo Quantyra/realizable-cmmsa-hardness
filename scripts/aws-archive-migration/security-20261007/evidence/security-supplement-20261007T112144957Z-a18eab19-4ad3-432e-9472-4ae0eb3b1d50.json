@@ -1,0 +1,125 @@
+{
+  "type": "archive-destination-https-security-supplement-v1",
+  "at": "2026-10-07T11:21:53.453Z",
+  "complete": true,
+  "original_fullscopepacket_sha256": "713abbeaeb65c456a1ba333ed0d8c77f7da8ba756085b42cd4493653ecd648ce",
+  "controller_pid": 13356,
+  "controller_absent": true,
+  "writer_absent": true,
+  "locks_absent": true,
+  "phase": "author-complete-awaiting-root-acceptance",
+  "fullscopepacket_sha256": "713abbeaeb65c456a1ba333ed0d8c77f7da8ba756085b42cd4493653ecd648ce",
+  "pins_checked": 305,
+  "bridge_removal_sha256": "775dcaf10131bfc54cd447c1e86c669c1846d778fcb16aa5f60e96c529d0bc94",
+  "expected_owner": "063280428495",
+  "bucket": "quantyra-research-archive-063280428495-us-east-1",
+  "principal": {
+    "Account": "063280428495",
+    "Arn": "arn:aws:iam::063280428495:user/ServiceAdmin"
+  },
+  "operation": "installed",
+  "sdk_mutation_attempts": 1,
+  "lost_reply": false,
+  "policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "QuantyraArchiveHTTPSOnly20261007",
+        "Effect": "Deny",
+        "Principal": "*",
+        "Action": "s3:*",
+        "Resource": [
+          "arn:aws:s3:::quantyra-research-archive-063280428495-us-east-1",
+          "arn:aws:s3:::quantyra-research-archive-063280428495-us-east-1/*"
+        ],
+        "Condition": {
+          "Bool": {
+            "aws:SecureTransport": "false"
+          }
+        }
+      }
+    ]
+  },
+  "finalpolicy_sha256": "3a8f8bb9233f7ed4d90f1dda6369e642c178bfad4dc1f64e5a9dfbfb768f0012",
+  "readback_sha256": "f407693e120141750b15772332a3c65725abf2bc32f98ca5c948bbd9338e5cc5",
+  "readback": {
+    "metadata": {
+      "identity": {
+        "Account": "063280428495",
+        "Arn": "arn:aws:iam::063280428495:user/ServiceAdmin"
+      },
+      "expected_owner": "063280428495",
+      "bucket": "quantyra-research-archive-063280428495-us-east-1",
+      "region": "us-east-1",
+      "versioning": {
+        "Status": "Enabled"
+      },
+      "public_blocks": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "ownership": {
+        "Rules": [
+          {
+            "ObjectOwnership": "BucketOwnerEnforced"
+          }
+        ]
+      },
+      "encryption": {
+        "Rules": [
+          {
+            "ApplyServerSideEncryptionByDefault": {
+              "SSEAlgorithm": "AES256"
+            },
+            "BucketKeyEnabled": false,
+            "BlockedEncryptionTypes": {
+              "EncryptionType": [
+                "SSE-C"
+              ]
+            }
+          }
+        ]
+      },
+      "acl": {
+        "Owner": {
+          "ID": "ee5d8e6229dfef6455ed86e8e31d5f7460a48797f82a8396f4ff9d3ad36540a6"
+        },
+        "Grants": [
+          {
+            "Permission": "FULL_CONTROL",
+            "Grantee": {
+              "Type": "CanonicalUser",
+              "ID": "ee5d8e6229dfef6455ed86e8e31d5f7460a48797f82a8396f4ff9d3ad36540a6"
+            }
+          }
+        ]
+      }
+    },
+    "https_deny": true,
+    "source_migration_grants": false,
+    "statements": 1,
+    "public": false
+  },
+  "permissions": [
+    {
+      "action": "s3:GetBucketPolicy",
+      "decision": "allowed"
+    },
+    {
+      "action": "s3:PutBucketPolicy",
+      "decision": "allowed"
+    }
+  ],
+  "code_sha256": {
+    "control.mjs": "2e463a4745cc042dde341d7cb1b9a38d9094cfc27ae73c3ccd31023dcb206e02",
+    "cli.mjs": "f11da8f43388ef696d38bed189a45e316e0ea473706a5be8b7cdabbd0c98a411",
+    "test.mjs": "81a2c80b74679ef7e7ae7afacf408d0a2d1957cd3cca61073c32af2fc3bc748e",
+    "README.md": "462f22f25318ee57fbda3a04722b3434971c02c7d4e8b9dcd6916c84c0387d4d"
+  },
+  "source_mutations": 0,
+  "original_packet_unchanged": true,
+  "root_acceptance": false,
+  "source_eligibility": "HOLD"
+}

@@ -1,0 +1,100 @@
+{
+  "type": "archive-https-readonly-check-v1",
+  "at": "2026-10-07T11:22:18.349Z",
+  "metadata": {
+    "identity": {
+      "Account": "063280428495",
+      "Arn": "arn:aws:iam::063280428495:user/ServiceAdmin"
+    },
+    "expected_owner": "063280428495",
+    "bucket": "quantyra-research-archive-063280428495-us-east-1",
+    "region": "us-east-1",
+    "versioning": {
+      "Status": "Enabled"
+    },
+    "public_blocks": {
+      "BlockPublicAcls": true,
+      "IgnorePublicAcls": true,
+      "BlockPublicPolicy": true,
+      "RestrictPublicBuckets": true
+    },
+    "ownership": {
+      "Rules": [
+        {
+          "ObjectOwnership": "BucketOwnerEnforced"
+        }
+      ]
+    },
+    "encryption": {
+      "Rules": [
+        {
+          "ApplyServerSideEncryptionByDefault": {
+            "SSEAlgorithm": "AES256"
+          },
+          "BucketKeyEnabled": false,
+          "BlockedEncryptionTypes": {
+            "EncryptionType": [
+              "SSE-C"
+            ]
+          }
+        }
+      ]
+    },
+    "acl": {
+      "Owner": {
+        "ID": "ee5d8e6229dfef6455ed86e8e31d5f7460a48797f82a8396f4ff9d3ad36540a6"
+      },
+      "Grants": [
+        {
+          "Permission": "FULL_CONTROL",
+          "Grantee": {
+            "Type": "CanonicalUser",
+            "ID": "ee5d8e6229dfef6455ed86e8e31d5f7460a48797f82a8396f4ff9d3ad36540a6"
+          }
+        }
+      ]
+    }
+  },
+  "policy_present": true,
+  "policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "QuantyraArchiveHTTPSOnly20261007",
+        "Effect": "Deny",
+        "Principal": "*",
+        "Action": "s3:*",
+        "Resource": [
+          "arn:aws:s3:::quantyra-research-archive-063280428495-us-east-1",
+          "arn:aws:s3:::quantyra-research-archive-063280428495-us-east-1/*"
+        ],
+        "Condition": {
+          "Bool": {
+            "aws:SecureTransport": "false"
+          }
+        }
+      }
+    ]
+  },
+  "owned_https_baseline": true,
+  "source_or_migration_grants_present": false,
+  "boundary": {
+    "ready": true,
+    "controller_pid": 13356,
+    "controller_absent": true,
+    "writer_absent": true,
+    "locks_absent": true,
+    "phase": "author-complete-awaiting-root-acceptance",
+    "fullscopepacket_sha256": "713abbeaeb65c456a1ba333ed0d8c77f7da8ba756085b42cd4493653ecd648ce",
+    "pins_checked": 305,
+    "bridge_removal_sha256": "775dcaf10131bfc54cd447c1e86c669c1846d778fcb16aa5f60e96c529d0bc94"
+  },
+  "code_sha256": {
+    "control.mjs": "2e463a4745cc042dde341d7cb1b9a38d9094cfc27ae73c3ccd31023dcb206e02",
+    "cli.mjs": "f11da8f43388ef696d38bed189a45e316e0ea473706a5be8b7cdabbd0c98a411",
+    "test.mjs": "81a2c80b74679ef7e7ae7afacf408d0a2d1957cd3cca61073c32af2fc3bc748e",
+    "README.md": "462f22f25318ee57fbda3a04722b3434971c02c7d4e8b9dcd6916c84c0387d4d"
+  },
+  "cloud_mutations": 0,
+  "source_eligibility": "HOLD"
+}
