@@ -1,0 +1,1 @@
+const forbid=()=>{throw Error('REVIEW_REAL_NETWORK_FORBIDDEN')}; for(const m of ['net','tls']){const x=require('node:'+m);x.connect=forbid;x.createConnection=forbid;} for(const m of ['http','https']){const x=require('node:'+m);x.request=forbid;x.get=forbid;} globalThis.fetch=forbid;

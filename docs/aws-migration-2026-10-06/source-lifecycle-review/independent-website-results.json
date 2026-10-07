@@ -1,0 +1,134 @@
+[
+  {
+    "name": "W1-uncommitted-packet-accepted",
+    "reproduced": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\aws-migration-2026-10-06\\source-lifecycle-review\\synthetic-temp\\website-production-packet-EYoDbI",
+    "gateSha256": "1e0bcff90905d8ccbe2dba9916f656340dd0333bc19e1d4bdebc8854eaa6df34",
+    "phase": "release"
+  },
+  {
+    "name": "W2-expired-at-physical-send",
+    "reproduced": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\aws-migration-2026-10-06\\source-lifecycle-review\\synthetic-temp\\website-production-packet-GCvfQs",
+    "sends": 1,
+    "atWireExpired": true,
+    "virtualClock": 1791382536923,
+    "gateExpiresAt": "2026-10-07T14:15:36.922Z"
+  },
+  {
+    "name": "W3-success-returned-after-terminal-expiry",
+    "reproduced": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\aws-migration-2026-10-06\\source-lifecycle-review\\synthetic-temp\\website-production-packet-5fMKn4",
+    "state": "observed",
+    "mutations": 1,
+    "expiredOnReturn": true
+  },
+  {
+    "name": "W4-stale-source-bucket-absence",
+    "reproduced": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\aws-migration-2026-10-06\\source-lifecycle-review\\synthetic-temp\\website-production-packet-aHufje",
+    "reportedAbsent": true,
+    "resourceRecreatedDuringSweep": true,
+    "lastSourceCalls": [
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "GetDistribution"
+      },
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "ListDistributions"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "SimulatePrincipalPolicy"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "GetUserPolicy"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "SimulatePrincipalPolicy"
+      },
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "GetDistribution"
+      }
+    ]
+  },
+  {
+    "name": "W4-stale-source-certificate-absence",
+    "reproduced": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\aws-migration-2026-10-06\\source-lifecycle-review\\synthetic-temp\\website-production-packet-TBXDjB",
+    "reportedAbsent": true,
+    "resourceRecreatedDuringSweep": true,
+    "lastSourceCalls": [
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "GetDistribution"
+      },
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "ListDistributions"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "SimulatePrincipalPolicy"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "GetUserPolicy"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "SimulatePrincipalPolicy"
+      },
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "GetDistribution"
+      }
+    ]
+  },
+  {
+    "name": "W5-denied-resource-result-accepted",
+    "reproduced": true,
+    "returned": {
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::quantyra-website/_local/fonts/6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7psDc-375ef097b45f6e70.ttf",
+      "decision": "allowed"
+    }
+  },
+  {
+    "name": "W6-unversioned-delete-permission-mismatch",
+    "reproduced": true,
+    "bucketVersioning": {},
+    "denyNotAction": [
+      "s3:Get*",
+      "s3:List*",
+      "s3:DeleteObjectVersion",
+      "s3:DeleteBucket"
+    ],
+    "simulatedActions": [
+      "s3:DeleteObjectVersion"
+    ],
+    "documentation": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/DeletingObjects.html",
+    "liveDeletionAttempted": false
+  },
+  {
+    "name": "negative-control-expired-loader-blocked",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\docs\\aws-migration-2026-10-06\\source-lifecycle-review\\synthetic-temp\\website-production-packet-nA6dhu"
+  }
+]

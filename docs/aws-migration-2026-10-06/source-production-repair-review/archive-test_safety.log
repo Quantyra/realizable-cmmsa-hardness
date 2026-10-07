@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import runpy,socket; socket.socket=lambda *a,**k: (_ for _ in ()).throw(AssertionError('REVIEW_REAL_SOCKET_FORBIDDEN')); runpy.run_path('C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\scripts\\aws-archive-migration\\source-retirement\\test_safety.py',run_name='__main__')
+                                                                                                                             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_safety.py", line 9, in <module>
+    from unittest.mock import patch
+  File "unittest\mock.py", line 27, in <module>
+  File "asyncio\__init__.py", line 8, in <module>
+  File "asyncio\base_events.py", line 34, in <module>
+  File "ssl.py", line 978, in <module>
+TypeError: function() argument 'code' must be code, not str

@@ -1,0 +1,49 @@
+✔ production collector GETs exact versions/hashes and bounded controls; partial pagination/unknown keys fail closed (436.7552ms)
+✔ gate loader requires out-of-band hashes, material receipts and every bound byte; accepted release packet is runnable (11269.245ms)
+✔ root producer shutdown needs complete stopped inventory and actual bound proof, not a boolean (815.5505ms)
+✔ receipt traversal/symlink escapes and lone Boolean evidence rejected (1306.9364ms)
+✔ CLI default is local; absent/disabled root gate rejects execute before any AWS factory call (284.4252ms)
+✖ real CLI validates without writes, then executes an independently bound accepted gate using production adapter ports (1269.7632ms)
+✔ installed freeze differs from historical policy; existing source cyint receives no Put exception or new role (3.3184ms)
+✔ actual pinned SDK read transport serializes IAM VersionId/owner/resource policy and disallows mutation through read path (377.8936ms)
+✔ actual SDK null cleanup sends VersionId, owner and ETag once; missing null-version guard blocks before transport (69.6994ms)
+✔ production destructive adapter observes installed policy, denied Put/name creation, shutdown controls and live target before disable; control drift prevents send (12592.7682ms)
+✔ policy-edit date transition needs exact root continuity/install journal; it cannot authorize bucket recreation (3524.8488ms)
+✔ production read/STS/mutation clients share the same resolved credentials even if the profile provider later changes (116.0225ms)
+✔ check-only CLI rejects any execution flag before cloud import or credentials (377.4655ms)
+✔ release preserves origin/config and fresh ETag; replay observes without another send (175.8863ms)
+✔ lost reply after applied update is reconciled read-only; unapplied lost reply cannot retry (170.9763ms)
+✔ deployment waiting survives restart without retransmitting update (195.6921ms)
+✔ wrong principal, alias/origin drift, new versions, metadata and namespace drift all block first wire (531.8059ms)
+✔ authorization expires during fresh reads, before send and before terminal success (159.9267ms)
+✔ evidence tamper and cross-resource permissions fail closed (106.9807ms)
+✔ null-version deletion requires live target, actual shutdown and effective freeze; recreated objects cannot be deleted again (492.7027ms)
+✔ disable does not proceed with live proof missing and bucket delete needs every observed key (78.6532ms)
+✔ unapplied ambiguous null deletion stays blocked across restart; changed authorization cannot replay (175.4578ms)
+✔ journal corruption and exclusive lock prevent all sends (70.4039ms)
+✔ full mocked retirement orders deployment/absence, exact object deletions and certificate; recreated bucket blocks replay (33177.8061ms)
+✔ single physical request under SDK timeout, throttling, regional redirects and success (239.6477ms)
+✔ DNS disposition requires retired cert, healthy destination, exact Describe match and suppression gate (16.1273ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 25
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37225.96
+
+✖ failing tests:
+
+test at scripts\aws-migration\source-lifecycle\integration.test.mjs:158:1
+✖ real CLI validates without writes, then executes an independently bound accepted gate using production adapter ports (1269.7632ms)
+  Error: HistoricalJournalDestinationForbidden
+      at requireThat (file:///C:/Users/dfred/Desktop/Projects/Quantyra-Website/scripts/aws-migration/source-lifecycle/core.mjs:9:58)
+      at main (file:///C:/Users/dfred/Desktop/Projects/Quantyra-Website/scripts/aws-migration/source-lifecycle/lifecycle.mjs:125:3)
+      at TestContext.<anonymous> (file:///C:/Users/dfred/Desktop/Projects/Quantyra-Website/scripts/aws-migration/source-lifecycle/integration.test.mjs:164:25)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

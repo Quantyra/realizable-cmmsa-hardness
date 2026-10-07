@@ -1,0 +1,186 @@
+[
+  {
+    "name": "R1-successful-204-freeze-transition-rejected",
+    "reproduced": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-jfhF7e",
+    "accepted_200_commits": {
+      "evidence": "edf7a736829fa16a1693db8e73e696c38a41b13d",
+      "gate": "03ff615dc45a54cd98c9a3dd483ae1c515fc3523"
+    },
+    "rejected_204_commits": {
+      "evidence": "4456f960e5de94c7034b735beaf2266e5b329319",
+      "gate": "2050a2848b98b37c90a55b22d73ff8f85deab368"
+    },
+    "actual_response_status": 204,
+    "reason": "SourceFreezeOnlyInstallationJournalRequired"
+  },
+  {
+    "name": "W2-warmed-TLS-expiry-rejected",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-Wv5d12",
+    "credentialResolutions": 1,
+    "physicalHttpEnds": 0
+  },
+  {
+    "name": "W2-warmed-TLS-bound-bytes-rejected",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-VWZGuQ",
+    "credentialResolutions": 1,
+    "physicalHttpEnds": 0
+  },
+  {
+    "name": "R2-related-certificate-undisclosed-EC_prime256v1",
+    "reproduced": true,
+    "extraCertificate": {
+      "CertificateArn": "arn:aws:acm:us-east-1:485386182336:certificate/synthetic-extra",
+      "DomainName": "quantyra.org",
+      "KeyAlgorithm": "EC_prime256v1",
+      "SubjectAlternativeNameSummaries": [],
+      "HasAdditionalSubjectAlternativeNames": false
+    },
+    "extraActuallyExists": true,
+    "collectorReturnedSuccess": true,
+    "openingClosingInputs": [
+      {
+        "CertificateStatuses": [
+          "PENDING_VALIDATION",
+          "ISSUED",
+          "INACTIVE",
+          "EXPIRED",
+          "VALIDATION_TIMED_OUT",
+          "REVOKED",
+          "FAILED"
+        ]
+      },
+      {
+        "CertificateStatuses": [
+          "PENDING_VALIDATION",
+          "ISSUED",
+          "INACTIVE",
+          "EXPIRED",
+          "VALIDATION_TIMED_OUT",
+          "REVOKED",
+          "FAILED"
+        ]
+      }
+    ],
+    "fixtureMode": "Synthetic ACM applies documented key-type filtering; extra SAN Describe only if requested",
+    "fullSourceWrites": 0
+  },
+  {
+    "name": "R2-related-certificate-undisclosed-www-primary",
+    "reproduced": true,
+    "extraCertificate": {
+      "CertificateArn": "arn:aws:acm:us-east-1:485386182336:certificate/synthetic-extra",
+      "DomainName": "www.quantyra.org",
+      "KeyAlgorithm": "RSA_2048",
+      "SubjectAlternativeNameSummaries": [],
+      "HasAdditionalSubjectAlternativeNames": false
+    },
+    "extraActuallyExists": true,
+    "collectorReturnedSuccess": true,
+    "openingClosingInputs": [
+      {
+        "CertificateStatuses": [
+          "PENDING_VALIDATION",
+          "ISSUED",
+          "INACTIVE",
+          "EXPIRED",
+          "VALIDATION_TIMED_OUT",
+          "REVOKED",
+          "FAILED"
+        ]
+      },
+      {
+        "CertificateStatuses": [
+          "PENDING_VALIDATION",
+          "ISSUED",
+          "INACTIVE",
+          "EXPIRED",
+          "VALIDATION_TIMED_OUT",
+          "REVOKED",
+          "FAILED"
+        ]
+      }
+    ],
+    "fixtureMode": "Synthetic ACM applies documented key-type filtering; extra SAN Describe only if requested",
+    "fullSourceWrites": 0
+  },
+  {
+    "name": "R2-related-certificate-undisclosed-truncated-SAN",
+    "reproduced": true,
+    "extraCertificate": {
+      "CertificateArn": "arn:aws:acm:us-east-1:485386182336:certificate/synthetic-extra",
+      "DomainName": "unrelated.example.org",
+      "KeyAlgorithm": "RSA_2048",
+      "SubjectAlternativeNameSummaries": [],
+      "HasAdditionalSubjectAlternativeNames": true
+    },
+    "extraActuallyExists": true,
+    "collectorReturnedSuccess": true,
+    "openingClosingInputs": [
+      {
+        "CertificateStatuses": [
+          "PENDING_VALIDATION",
+          "ISSUED",
+          "INACTIVE",
+          "EXPIRED",
+          "VALIDATION_TIMED_OUT",
+          "REVOKED",
+          "FAILED"
+        ]
+      },
+      {
+        "CertificateStatuses": [
+          "PENDING_VALIDATION",
+          "ISSUED",
+          "INACTIVE",
+          "EXPIRED",
+          "VALIDATION_TIMED_OUT",
+          "REVOKED",
+          "FAILED"
+        ]
+      }
+    ],
+    "fixtureMode": "Synthetic ACM applies documented key-type filtering; extra SAN Describe only if requested",
+    "fullSourceWrites": 0
+  },
+  {
+    "name": "R2-default-filtered-DNS-inventory-marked-complete",
+    "reproduced": true,
+    "request": {
+      "CertificateStatuses": [
+        "PENDING_VALIDATION",
+        "ISSUED",
+        "INACTIVE",
+        "EXPIRED",
+        "VALIDATION_TIMED_OUT",
+        "REVOKED",
+        "FAILED"
+      ]
+    },
+    "proof": {
+      "schema": 1,
+      "kind": "SourceCertificateAbsent",
+      "certificateArn": "arn:aws:acm:us-east-1:485386182336:certificate/d0b6eecb-bd1c-437d-a82f-fadf99895aa7",
+      "identity": {
+        "Account": "485386182336",
+        "Arn": "arn:aws:iam::485386182336:user/cyint-ea"
+      },
+      "describe": {
+        "error": "ResourceNotFoundException",
+        "requestId": "synthetic-old-absent",
+        "httpStatusCode": 400
+      },
+      "inventory": {
+        "complete": true,
+        "certificates": [],
+        "requestIds": [
+          "synthetic-default-filtered"
+        ]
+      },
+      "startedAt": 1791389343511,
+      "completedAt": 1791389343512
+    }
+  }
+]

@@ -1,0 +1,175 @@
+[
+  {
+    "name": "W1-uncommitted-packet-rejected",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-4QKFGe"
+  },
+  {
+    "name": "W2-expired-at-physical-send-rejected",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-9GLCqb",
+    "sends": 0,
+    "atWireExpired": false,
+    "virtualClock": 1791389538297,
+    "gateExpiresAt": "2026-10-07T16:12:18.296Z"
+  },
+  {
+    "name": "W3-terminal-expiry-success-rejected",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-DmcR9k",
+    "state": "observed",
+    "mutations": 1,
+    "expiredOnReturn": true
+  },
+  {
+    "name": "W4-source-bucket-recreation-rejected",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-9rI5R2",
+    "reportedAbsent": true,
+    "resourceRecreatedDuringSweep": true,
+    "lastSourceCalls": [
+      {
+        "side": "source",
+        "service": "s3",
+        "command": "GetBucketTagging"
+      },
+      {
+        "side": "source",
+        "service": "s3",
+        "command": "GetBucketLifecycleConfiguration"
+      },
+      {
+        "side": "source",
+        "service": "s3",
+        "command": "GetBucketReplication"
+      },
+      {
+        "side": "source",
+        "service": "s3",
+        "command": "GetBucketNotificationConfiguration"
+      },
+      {
+        "side": "source",
+        "service": "s3",
+        "command": "GetBucketLocation"
+      },
+      {
+        "side": "source",
+        "service": "s3",
+        "command": "ListObjectsV2"
+      },
+      {
+        "side": "source",
+        "service": "s3",
+        "command": "ListObjectVersions"
+      },
+      {
+        "side": "source",
+        "service": "s3",
+        "command": "ListMultipartUploads"
+      }
+    ]
+  },
+  {
+    "name": "W4-source-certificate-recreation-rejected",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-PtQy06",
+    "reportedAbsent": true,
+    "resourceRecreatedDuringSweep": true,
+    "lastSourceCalls": [
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "GetDistribution"
+      },
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "ListDistributions"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "SimulatePrincipalPolicy"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "GetUserPolicy"
+      },
+      {
+        "side": "source",
+        "service": "iam",
+        "command": "SimulatePrincipalPolicy"
+      },
+      {
+        "side": "source",
+        "service": "cloudfront",
+        "command": "GetDistribution"
+      },
+      {
+        "side": "source",
+        "service": "acm",
+        "command": "DescribeCertificate"
+      }
+    ]
+  },
+  {
+    "name": "W5-denied-resource-result-rejected",
+    "passed": true
+  },
+  {
+    "name": "W6-unversioned-contract-repaired",
+    "passed": true,
+    "requests": [
+      {
+        "PolicySourceArn": "arn:aws:iam::485386182336:user/cyint-ea",
+        "CallerArn": "arn:aws:iam::485386182336:user/cyint-ea",
+        "ActionNames": [
+          "s3:DeleteObject"
+        ],
+        "ResourceArns": [
+          "arn:aws:s3:::quantyra-website/_local/fonts/6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7psDc-375ef097b45f6e70.ttf"
+        ],
+        "ResourcePolicy": "{\"Statement\":[{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"arn:aws:s3:::quantyra-website/*\",\"Sid\":\"PublicReadForWebsiteObjects\"},{\"Effect\":\"Deny\",\"NotAction\":[\"s3:Get*\",\"s3:List*\",\"s3:DeleteObject\",\"s3:DeleteObjectVersion\",\"s3:DeleteBucket\"],\"Principal\":\"*\",\"Resource\":[\"arn:aws:s3:::quantyra-website\",\"arn:aws:s3:::quantyra-website/*\"],\"Sid\":\"LifecycleDenyAllNonReadExceptKnownCleanup\"},{\"Action\":[\"s3:DeleteObject\",\"s3:DeleteObjectVersion\",\"s3:DeleteBucket\"],\"Condition\":{\"ArnNotEquals\":{\"aws:PrincipalArn\":\"arn:aws:iam::485386182336:user/cyint-ea\"}},\"Effect\":\"Deny\",\"Principal\":\"*\",\"Resource\":[\"arn:aws:s3:::quantyra-website\",\"arn:aws:s3:::quantyra-website/*\"],\"Sid\":\"LifecycleCleanupOnlyExactSourcePrincipal\"},{\"Action\":[\"s3:DeleteObject\",\"s3:DeleteObjectVersion\"],\"Effect\":\"Deny\",\"NotResource\":[\"arn:aws:s3:::quantyra-website/_local/fonts/6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7psDc-375ef097b45f6e70.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xK3dSBYKcSV-LCoeQqfX1RYOo3qNq7g-0f8c8aa113eedcc5.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZY4lCdi18E-ad2cd9ff42f19303.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZYokSdi18E-d39d6a283e4d3223.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZZMkidi18E-929b098b14af1f76.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZZclSdi18E-3b5faf7eae897f6c.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZZklydi18E-227d956991f9ffc7.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i54rwmRdr-d74c3e28627f7071.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i94_wmRdr-234a89a9e938fae9.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3ig4vwmRdr-9870a5a08f6a2fc6.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3ik4zwmRdr-6da60a354e72cccb.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3iu4nwmRdr-076373b8a4f43435.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZT1eTyccP-82917b9e7fb91dd8.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCTyccP-fc24ed1ce91acce8.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/ga6saw1J5X9T9RW6j9bNfFIMZhhWnFTyNZIQD1-_FXP0RgnaOg9MYBNLg_cGrq4-06e6883c77380fbb.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/ga6saw1J5X9T9RW6j9bNfFIMZhhWnFTyNZIQD1-_FXP0RgnaOg9MYBOshPcGrq4-a7c46015c532ec46.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0Rk0ZjWV4exQ-d1fd2e5b1649c686.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0Rk5hkWV4exQ-f8d1a9171c337324.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0Rk8ZkWV4exQ-4c79d5a0842c5f33.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0RkxhjWV4exQ-ed662527b5d89e2b.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0RkyFjWV4exQ-fec10c07e8d49596.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4uaVc-752861471b80e668.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsgH1x4uaVc-6ae3735aec1ffd55.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgshZ1x4uaVc-d6e89474e83cf10c.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsiH0B4uaVc-b7991209e59499d0.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4uaVc-720e47b49539ffcb.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/noto-serif-source-sans-pro.css\",\"arn:aws:s3:::quantyra-website/_local/fonts/open-sans.css\",\"arn:aws:s3:::quantyra-website/_local/images/abundance-1024x576-4b844e6d2136e9e1.png\",\"arn:aws:s3:::quantyra-website/_local/images/beyond-the-obstacle-8b8ebe4a4d1d8a9a.bin\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-414b9aac820efbc1.png\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-74ea2c3869ca2919.png\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-7c64090f73dfe69d.png\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-9f012aba4f9ce07c.png\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-c84bb38d374708b8.png\",\"arn:aws:s3:::quantyra-website/_local/images/environmental-nonprofit-22-fdc7d1f1bf9f5d61.jpg\",\"arn:aws:s3:::quantyra-website/_local/images/environmental-nonprofit-28-6d00af507aa2cddd.jpg\",\"arn:aws:s3:::quantyra-website/_local/images/food-1-300x300-342f61e80cf59f0a.png\",\"arn:aws:s3:::quantyra-website/_local/images/food-2-bee331a15be4ef6f.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-6371066b0072e496.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-a2892939e51bbca8.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-a413eab98557489d.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-f9ab62092ca05c89.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-fecffa4c0370e695.png\",\"arn:aws:s3:::quantyra-website/_local/images/health-1-e048ceea830c6772.png\",\"arn:aws:s3:::quantyra-website/_local/images/house-1024x1024-471c8bce0e394804.png\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-1201540-17ec272c14ee25dd.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-1546168-e3cfc3b87e1c5efb.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-1556381-660d1146088840b9.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-2399840-83dd51b04f5b8307.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-416528-778f3e408e539a41.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-4386467-03905d5205d7dc93.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pills-1024x1024-b7f4b73b8cdec99d.png\",\"arn:aws:s3:::quantyra-website/_local/images/shelter-1-b59d4bf9a6d71492.png\",\"arn:aws:s3:::quantyra-website/_local/images/tech-1-1-300x300-503e847199e85a39.png\",\"arn:aws:s3:::quantyra-website/_local/images/tech-1024x576-566fddad549bee11.png\",\"arn:aws:s3:::quantyra-website/_local/images/the-art-of-connection-d679018dbb8495e9.bin\",\"arn:aws:s3:::quantyra-website/_local/images/water-1-d5888c0394dece26.png\",\"arn:aws:s3:::quantyra-website/_local/images/water-scarcity-793629bc0909bce8.bin\",\"arn:aws:s3:::quantyra-website/_static/index.html\",\"arn:aws:s3:::quantyra-website/access-to-healthcare/index.html\",\"arn:aws:s3:::quantyra-website/access-to-shelter/index.html\",\"arn:aws:s3:::quantyra-website/access-to-technology/index.html\",\"arn:aws:s3:::quantyra-website/comments/feed/index.html\",\"arn:aws:s3:::quantyra-website/feed/index.html\",\"arn:aws:s3:::quantyra-website/food-scarcity/index.html\",\"arn:aws:s3:::quantyra-website/how-we-research/index.html\",\"arn:aws:s3:::quantyra-website/index.html\",\"arn:aws:s3:::quantyra-website/mission-and-vision/index.html\",\"arn:aws:s3:::quantyra-website/mission/index.html\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/assets/favicon.ico\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/assets/quantyra-icon-180.png\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/assets/quantyra-icon-32.png\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/assets/quantyra-primary-dark.png\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/styles.css\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/favicon.ico\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/quantyra-icon-180.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/quantyra-icon-32.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/quantyra-monochrome-dark.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/quantyra-primary-dark.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/styles.css\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/assets/favicon.ico\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/assets/quantyra-icon-180.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/assets/quantyra-icon-32.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/assets/quantyra-primary-dark.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/styles.css\",\"arn:aws:s3:::quantyra-website/research/index.html\",\"arn:aws:s3:::quantyra-website/support/index.html\",\"arn:aws:s3:::quantyra-website/water-scarcity/index.html\",\"arn:aws:s3:::quantyra-website/wp-content/et-cache/233/et-core-unified-deferred-233.min.css\",\"arn:aws:s3:::quantyra-website/wp-content/mu-plugins/wpcomsh/jetpack_vendor/automattic/jetpack-newsletter/build/reader-link.css\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/gutenberg/build/scripts/hooks/index.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/gutenberg/build/scripts/i18n/index.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/gutenberg/build/scripts/vendors/react-jsx-runtime.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/gutenberg/build/scripts/vendors/react.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/jetpack/jetpack_vendor/automattic/jetpack-videopress/build/divi-editor/index.css\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/jetpack/jetpack_vendor/automattic/jetpack-videopress/build/divi-editor/index.js\",\"arn:aws:s3:::quantyra-website/wp-content/themes/Divi/core/admin/js/common.js\",\"arn:aws:s3:::quantyra-website/wp-content/themes/Divi/js/scripts.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/uploads/2023/11/full-logo-removebg-preview.png\",\"arn:aws:s3:::quantyra-website/wp-includes/js/dist/vendor/wp-polyfill.min.js\",\"arn:aws:s3:::quantyra-website/wp-includes/js/jquery/jquery-migrate.min.js\",\"arn:aws:s3:::quantyra-website/wp-includes/js/jquery/jquery.min.js\",\"arn:aws:s3:::quantyra-website/wp-json/index.html\",\"arn:aws:s3:::quantyra-website/wp-json/oembed/1.0/embed\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/102\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/233\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/344\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/60\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/82\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/95\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/99\"],\"Principal\":\"*\",\"Sid\":\"LifecycleCleanupOnlyKnownKeys\"},{\"Action\":[\"s3:DeleteObject\",\"s3:DeleteObjectVersion\"],\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::485386182336:user/cyint-ea\"},\"Resource\":\"arn:aws:s3:::quantyra-website/*\",\"Sid\":\"LifecycleAllowExactUnversionedCleanup\"},{\"Action\":\"s3:DeleteBucket\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::485386182336:user/cyint-ea\"},\"Resource\":\"arn:aws:s3:::quantyra-website\",\"Sid\":\"LifecycleAllowEmptyBucketCleanup\"}],\"Version\":\"2012-10-17\"}",
+        "ResourceOwner": "arn:aws:iam::485386182336:root",
+        "ContextEntries": [
+          {
+            "ContextKeyName": "aws:PrincipalArn",
+            "ContextKeyType": "string",
+            "ContextKeyValues": [
+              "arn:aws:iam::485386182336:user/cyint-ea"
+            ]
+          }
+        ]
+      },
+      {
+        "PolicySourceArn": "arn:aws:iam::485386182336:user/cyint-ea",
+        "CallerArn": "arn:aws:iam::485386182336:user/cyint-ea",
+        "ActionNames": [
+          "s3:DeleteObjectVersion"
+        ],
+        "ResourceArns": [
+          "arn:aws:s3:::quantyra-website/_local/fonts/6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7psDc-375ef097b45f6e70.ttf"
+        ],
+        "ResourcePolicy": "{\"Statement\":[{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"arn:aws:s3:::quantyra-website/*\",\"Sid\":\"PublicReadForWebsiteObjects\"},{\"Effect\":\"Deny\",\"NotAction\":[\"s3:Get*\",\"s3:List*\",\"s3:DeleteObject\",\"s3:DeleteObjectVersion\",\"s3:DeleteBucket\"],\"Principal\":\"*\",\"Resource\":[\"arn:aws:s3:::quantyra-website\",\"arn:aws:s3:::quantyra-website/*\"],\"Sid\":\"LifecycleDenyAllNonReadExceptKnownCleanup\"},{\"Action\":[\"s3:DeleteObject\",\"s3:DeleteObjectVersion\",\"s3:DeleteBucket\"],\"Condition\":{\"ArnNotEquals\":{\"aws:PrincipalArn\":\"arn:aws:iam::485386182336:user/cyint-ea\"}},\"Effect\":\"Deny\",\"Principal\":\"*\",\"Resource\":[\"arn:aws:s3:::quantyra-website\",\"arn:aws:s3:::quantyra-website/*\"],\"Sid\":\"LifecycleCleanupOnlyExactSourcePrincipal\"},{\"Action\":[\"s3:DeleteObject\",\"s3:DeleteObjectVersion\"],\"Effect\":\"Deny\",\"NotResource\":[\"arn:aws:s3:::quantyra-website/_local/fonts/6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7psDc-375ef097b45f6e70.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xK3dSBYKcSV-LCoeQqfX1RYOo3qNq7g-0f8c8aa113eedcc5.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZY4lCdi18E-ad2cd9ff42f19303.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZYokSdi18E-d39d6a283e4d3223.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZZMkidi18E-929b098b14af1f76.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZZclSdi18E-3b5faf7eae897f6c.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZZklydi18E-227d956991f9ffc7.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i54rwmRdr-d74c3e28627f7071.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i94_wmRdr-234a89a9e938fae9.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3ig4vwmRdr-9870a5a08f6a2fc6.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3ik4zwmRdr-6da60a354e72cccb.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3iu4nwmRdr-076373b8a4f43435.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZT1eTyccP-82917b9e7fb91dd8.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCTyccP-fc24ed1ce91acce8.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/ga6saw1J5X9T9RW6j9bNfFIMZhhWnFTyNZIQD1-_FXP0RgnaOg9MYBNLg_cGrq4-06e6883c77380fbb.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/ga6saw1J5X9T9RW6j9bNfFIMZhhWnFTyNZIQD1-_FXP0RgnaOg9MYBOshPcGrq4-a7c46015c532ec46.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0Rk0ZjWV4exQ-d1fd2e5b1649c686.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0Rk5hkWV4exQ-f8d1a9171c337324.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0Rk8ZkWV4exQ-4c79d5a0842c5f33.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0RkxhjWV4exQ-ed662527b5d89e2b.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memQYaGs126MiZpBA-UFUIcVXSCEkx2cmqvXlWq8tWZ0Pw86hd0RkyFjWV4exQ-fec10c07e8d49596.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4uaVc-752861471b80e668.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsgH1x4uaVc-6ae3735aec1ffd55.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgshZ1x4uaVc-d6e89474e83cf10c.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsiH0B4uaVc-b7991209e59499d0.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4uaVc-720e47b49539ffcb.ttf\",\"arn:aws:s3:::quantyra-website/_local/fonts/noto-serif-source-sans-pro.css\",\"arn:aws:s3:::quantyra-website/_local/fonts/open-sans.css\",\"arn:aws:s3:::quantyra-website/_local/images/abundance-1024x576-4b844e6d2136e9e1.png\",\"arn:aws:s3:::quantyra-website/_local/images/beyond-the-obstacle-8b8ebe4a4d1d8a9a.bin\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-414b9aac820efbc1.png\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-74ea2c3869ca2919.png\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-7c64090f73dfe69d.png\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-9f012aba4f9ce07c.png\",\"arn:aws:s3:::quantyra-website/_local/images/cropped-cropped-quantyra-removebg-preview-c84bb38d374708b8.png\",\"arn:aws:s3:::quantyra-website/_local/images/environmental-nonprofit-22-fdc7d1f1bf9f5d61.jpg\",\"arn:aws:s3:::quantyra-website/_local/images/environmental-nonprofit-28-6d00af507aa2cddd.jpg\",\"arn:aws:s3:::quantyra-website/_local/images/food-1-300x300-342f61e80cf59f0a.png\",\"arn:aws:s3:::quantyra-website/_local/images/food-2-bee331a15be4ef6f.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-6371066b0072e496.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-a2892939e51bbca8.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-a413eab98557489d.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-f9ab62092ca05c89.png\",\"arn:aws:s3:::quantyra-website/_local/images/full-logo-removebg-preview-fecffa4c0370e695.png\",\"arn:aws:s3:::quantyra-website/_local/images/health-1-e048ceea830c6772.png\",\"arn:aws:s3:::quantyra-website/_local/images/house-1024x1024-471c8bce0e394804.png\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-1201540-17ec272c14ee25dd.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-1546168-e3cfc3b87e1c5efb.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-1556381-660d1146088840b9.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-2399840-83dd51b04f5b8307.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-416528-778f3e408e539a41.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pexels-photo-4386467-03905d5205d7dc93.jpeg\",\"arn:aws:s3:::quantyra-website/_local/images/pills-1024x1024-b7f4b73b8cdec99d.png\",\"arn:aws:s3:::quantyra-website/_local/images/shelter-1-b59d4bf9a6d71492.png\",\"arn:aws:s3:::quantyra-website/_local/images/tech-1-1-300x300-503e847199e85a39.png\",\"arn:aws:s3:::quantyra-website/_local/images/tech-1024x576-566fddad549bee11.png\",\"arn:aws:s3:::quantyra-website/_local/images/the-art-of-connection-d679018dbb8495e9.bin\",\"arn:aws:s3:::quantyra-website/_local/images/water-1-d5888c0394dece26.png\",\"arn:aws:s3:::quantyra-website/_local/images/water-scarcity-793629bc0909bce8.bin\",\"arn:aws:s3:::quantyra-website/_static/index.html\",\"arn:aws:s3:::quantyra-website/access-to-healthcare/index.html\",\"arn:aws:s3:::quantyra-website/access-to-shelter/index.html\",\"arn:aws:s3:::quantyra-website/access-to-technology/index.html\",\"arn:aws:s3:::quantyra-website/comments/feed/index.html\",\"arn:aws:s3:::quantyra-website/feed/index.html\",\"arn:aws:s3:::quantyra-website/food-scarcity/index.html\",\"arn:aws:s3:::quantyra-website/how-we-research/index.html\",\"arn:aws:s3:::quantyra-website/index.html\",\"arn:aws:s3:::quantyra-website/mission-and-vision/index.html\",\"arn:aws:s3:::quantyra-website/mission/index.html\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/assets/favicon.ico\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/assets/quantyra-icon-180.png\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/assets/quantyra-icon-32.png\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/assets/quantyra-primary-dark.png\",\"arn:aws:s3:::quantyra-website/releases/mission-method-research-support-2026-10-05/styles.css\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/favicon.ico\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/quantyra-icon-180.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/quantyra-icon-32.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/quantyra-monochrome-dark.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/assets/quantyra-primary-dark.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-2026-10-05/styles.css\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/assets/favicon.ico\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/assets/quantyra-icon-180.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/assets/quantyra-icon-32.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/assets/quantyra-primary-dark.png\",\"arn:aws:s3:::quantyra-website/releases/three-divisions-logo-2026-10-05/styles.css\",\"arn:aws:s3:::quantyra-website/research/index.html\",\"arn:aws:s3:::quantyra-website/support/index.html\",\"arn:aws:s3:::quantyra-website/water-scarcity/index.html\",\"arn:aws:s3:::quantyra-website/wp-content/et-cache/233/et-core-unified-deferred-233.min.css\",\"arn:aws:s3:::quantyra-website/wp-content/mu-plugins/wpcomsh/jetpack_vendor/automattic/jetpack-newsletter/build/reader-link.css\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/gutenberg/build/scripts/hooks/index.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/gutenberg/build/scripts/i18n/index.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/gutenberg/build/scripts/vendors/react-jsx-runtime.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/gutenberg/build/scripts/vendors/react.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/jetpack/jetpack_vendor/automattic/jetpack-videopress/build/divi-editor/index.css\",\"arn:aws:s3:::quantyra-website/wp-content/plugins/jetpack/jetpack_vendor/automattic/jetpack-videopress/build/divi-editor/index.js\",\"arn:aws:s3:::quantyra-website/wp-content/themes/Divi/core/admin/js/common.js\",\"arn:aws:s3:::quantyra-website/wp-content/themes/Divi/js/scripts.min.js\",\"arn:aws:s3:::quantyra-website/wp-content/uploads/2023/11/full-logo-removebg-preview.png\",\"arn:aws:s3:::quantyra-website/wp-includes/js/dist/vendor/wp-polyfill.min.js\",\"arn:aws:s3:::quantyra-website/wp-includes/js/jquery/jquery-migrate.min.js\",\"arn:aws:s3:::quantyra-website/wp-includes/js/jquery/jquery.min.js\",\"arn:aws:s3:::quantyra-website/wp-json/index.html\",\"arn:aws:s3:::quantyra-website/wp-json/oembed/1.0/embed\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/102\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/233\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/344\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/60\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/82\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/95\",\"arn:aws:s3:::quantyra-website/wp-json/wp/v2/pages/99\"],\"Principal\":\"*\",\"Sid\":\"LifecycleCleanupOnlyKnownKeys\"},{\"Action\":[\"s3:DeleteObject\",\"s3:DeleteObjectVersion\"],\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::485386182336:user/cyint-ea\"},\"Resource\":\"arn:aws:s3:::quantyra-website/*\",\"Sid\":\"LifecycleAllowExactUnversionedCleanup\"},{\"Action\":\"s3:DeleteBucket\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::485386182336:user/cyint-ea\"},\"Resource\":\"arn:aws:s3:::quantyra-website\",\"Sid\":\"LifecycleAllowEmptyBucketCleanup\"}],\"Version\":\"2012-10-17\"}",
+        "ResourceOwner": "arn:aws:iam::485386182336:root",
+        "ContextEntries": [
+          {
+            "ContextKeyName": "aws:PrincipalArn",
+            "ContextKeyType": "string",
+            "ContextKeyValues": [
+              "arn:aws:iam::485386182336:user/cyint-ea"
+            ]
+          }
+        ]
+      }
+    ],
+    "liveDeletionAttempted": false
+  },
+  {
+    "name": "negative-control-expired-loader-blocked",
+    "passed": true,
+    "fixture": "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\tmp\\spr\\website-production-packet-PQBrkg"
+  }
+]
