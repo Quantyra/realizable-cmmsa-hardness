@@ -191,7 +191,8 @@ def _run_locked(adapter, allowlist, authorize, journal=None, execute=False):
     else:
         require(source is not None and not source['rows'], 'BUCKET_NOT_EMPTY')
         auth()
-        journal.append('intent', 'bucket', BUCKET)
+        marker = adapter.before_bucket_intent() if hasattr(adapter, 'before_bucket_intent') else None
+        journal.append('intent', 'bucket', BUCKET, bucket_continuity=marker)
         auth()
         bucket_reply, bucket_lost = {}, False
         try:

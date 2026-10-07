@@ -4,7 +4,7 @@ import json
 import socket
 from pathlib import Path
 from safety import *
-from inventory import configuration, full_inventory, version_metadata
+from inventory import configuration, full_inventory, version_metadata, bucket_continuity
 from policy import source_freeze, destination_custody, policy_value
 from permission import evaluate, require_allowed, simulate_one
 from aws import Mutator
@@ -42,8 +42,13 @@ class ProductionAdapter:
             inv = full_inventory(self.aws.client('s3', account), bucket, account)
         except Exception as e:
             if account == SOURCE and getattr(e, 'response', {}).get('Error', {}).get('Code') == 'NoSuchBucket':
+                require(bucket_continuity(self.aws.client('s3', account), bucket, account) is None,
+                        'SOURCE_BUCKET_MARKER_REAPPEARED')
                 return None
             raise
+        marker = bucket_continuity(self.aws.client('s3', account), bucket, account)
+        require(marker == self.baseline['configuration'][account]['bucket_continuity'],
+                'BUCKET_CONTINUITY_DRIFT')
         owner = self.baseline['configuration'][account]['get_bucket_acl']['Owner']['ID']
         require(all(r['owner'] == owner for r in inv['rows']), 'CURRENT_VERSION_OWNER')
         return inv
@@ -124,13 +129,31 @@ class ProductionAdapter:
 
     def _mutator(self, row):
         require(self.execute, 'CHECK_ONLY_MUTATION_REFUSED')
+        self.mutation_target = row
         self.root.authorize()
         self.focused_permissions(row)
         require(self.aws.identity(SOURCE) == PRINCIPALS[SOURCE], 'MUTATION_PRINCIPAL_DRIFT')
         if self.mutator is None:
-            self.mutator = Mutator(self.aws.sessions[SOURCE], self.root.authorize)
-        self.root.authorize()
+            self.mutator = Mutator(self.aws.sessions[SOURCE], self.wire_authorize)
+        # Apply the production state guard also to explicit test transport seams.
+        self.mutator.authorize = self.wire_authorize
+        self.wire_authorize()
         return self.mutator
+
+    def before_bucket_intent(self):
+        state = self.source_state()
+        require(state is not None and not state['rows'] and not state['markers'] and not state['uploads'],
+                'BUCKET_NOT_EMPTY_BEFORE_INTENT')
+        self.root.authorize()
+        return self.baseline['configuration'][SOURCE]['bucket_continuity']
+
+    def wire_authorize(self):
+        self.root.authorize()
+        state = self.source_state()
+        require(state is not None, 'SOURCE_BUCKET_CONTINUITY_LOST_AT_SEND')
+        if self.mutation_target == 'bucket':
+            require(not state['rows'] and not state['markers'] and not state['uploads'], 'BUCKET_NOT_EMPTY_AT_SEND')
+        self.root.authorize()
 
     def delete_version(self, row):
         require(row in self.a['rows'], 'MUTATION_ALLOWLIST_SCOPE')

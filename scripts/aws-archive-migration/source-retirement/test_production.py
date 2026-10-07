@@ -67,6 +67,13 @@ class S3:
         if self.absent:
             raise api_error('NoSuchBucket')
 
+    def list_buckets(self, **kw):
+        assert kw['Prefix'] == self.bucket and kw['BucketRegion'] == 'us-east-1'
+        m = self.config['bucket_continuity']
+        return {'Owner': {'ID': m['canonical_owner']}, 'Buckets': [] if self.absent else
+                [{'Name': self.bucket, 'BucketRegion': 'us-east-1',
+                  'CreationDate': datetime.fromisoformat(m['creation_date'])}]}
+
     def list_object_versions(self, **kw):
         self.args(kw); assert 'Prefix' not in kw
         return {'Name': self.bucket, 'IsTruncated': False,
@@ -138,6 +145,12 @@ class Bundle:
         git(self.repo, 'config', 'user.email', 'fixture@example.invalid')
         git(self.repo, 'config', 'user.name', 'Synthetic independent root')
         self.base = json.loads((HERE/'evidence/current-metadata-observation.json').read_bytes())
+        for account in (SOURCE, DEST):
+            c = self.base['configuration'][account]
+            c['bucket_continuity'] = {'bucket': c['bucket'], 'expected_owner': account,
+                'canonical_owner': c['get_bucket_acl']['Owner']['ID'], 'region': 'us-east-1',
+                'creation_date': '2026-10-01T00:00:00+00:00'}
+        pre = copy.deepcopy(self.base)
         for account, policy in [(SOURCE, source_freeze()), (DEST, destination_custody())]:
             self.base['configuration'][account]['get_bucket_policy']['Policy'] = json.dumps(policy, separators=(',', ':'))
         now = datetime.now(timezone.utc) - timedelta(seconds=1)
@@ -145,6 +158,10 @@ class Bundle:
         common = {'packet_sha256': PACKET, 'allowlist_sha256': digest((HERE/'evidence/bound-allowlist.json').read_bytes()),
                   'reviewer_role': 'root-independent-verifier', 'observed_at': self.issued, 'valid_until': self.expires}
         self.proofs = {name: {'type': t, **common} for name, t in PROOF_TYPES.items()}
+        # Synthetic policy installation legitimately changes the mutable marker.
+        self.base['configuration'][SOURCE]['bucket_continuity']['creation_date'] = '2026-10-02T00:00:00+00:00'
+        pre['started_at'] = pre['completed_at'] = (now - timedelta(seconds=3)).isoformat()
+        self.base['started_at'] = self.base['completed_at'] = (now - timedelta(seconds=1)).isoformat()
         self.proofs['baseline'] = self.base
         self.proofs['hash_scope'].update(versions=205, encrypted_chunks=105, recovery_catalogs=44,
             authentication_proof_sha256='a'*64, version_metadata_sha256=digest(self.base['version_metadata']),
@@ -191,6 +208,32 @@ class Bundle:
         self.proofs['ownership']['attribution_receipts'] = [receipt]
         self.proofs['dependencies']['findings'][0]['receipt_sha256'] = receipt['sha256']
         self.proofs['code_review']['transport_receipt_sha256'] = receipt['sha256']
+        def extra(name, value):
+            pin = {'path': PREFIX + 'fixture-' + name + '.json', 'sha256': digest(encoded(value))}
+            self.write(pin['path'], encoded(value)); return pin
+        before = pre['configuration'][SOURCE]['bucket_continuity']
+        after = self.base['configuration'][SOURCE]['bucket_continuity']
+        transition = {'type': 'archive-actual-freeze-transition-journal-v1', 'bucket': BUCKET,
+            'principal': PRINCIPALS[SOURCE], 'operation': 'PutBucketPolicy', 'request_id': 'synthetic-freeze',
+            'readback_request_id': 'synthetic-readback', 'policy_sha256': digest(source_freeze()),
+            'prefreeze_marker': before, 'postfreeze_marker': after,
+            'prefreeze_configuration_sha256': digest(pre['configuration'][SOURCE]),
+            'postfreeze_configuration_sha256': digest(self.base['configuration'][SOURCE]),
+            'allowlist_sha256': common['allowlist_sha256'], 'versions': A['rows'],
+            'no_delete_or_recreate_observed': True,
+            'started_at': (now-timedelta(seconds=2)).isoformat(),
+            'completed_at': (now-timedelta(seconds=2)).isoformat()}
+        extra_pins = [extra('prefreeze', pre), extra('freeze-journal', transition)]
+        for kind in ('creator-shutdown', 'name-guard'):
+            extra_pins.append(extra(kind, {'type': 'archive-' + kind + '-operating-v1', 'bucket': BUCKET,
+                'reviewer_role': 'root-independent-verifier', 'actual_command': 'synthetic-' + kind,
+                'control_custodians': ['synthetic-root'], 'observed_state': 'effective',
+                'observed_at': pre['started_at'], 'valid_until': self.expires}))
+        self.proofs['bucket_continuity'].update(decision='ACCEPT', bucket=BUCKET, versions=A['rows'],
+            control_custodians=['synthetic-root'], prefreeze_marker=before, postfreeze_marker=after,
+            prefreeze_observation=extra_pins[0], freeze_journal=extra_pins[1],
+            creator_shutdown_receipt=extra_pins[2], name_guard_receipt=extra_pins[3],
+            postfreeze_observation={'path': PREFIX + 'fixture-baseline.json', 'sha256': digest(encoded(self.base))})
         if change:
             change(self.proofs)
         pointers = {}
@@ -200,7 +243,7 @@ class Bundle:
         evidence = []
         for kind, names in KIND_PROOFS.items():
             att = {'type': 'archive-retirement-attestation-v1', 'kind': kind, 'decision': 'ACCEPT', **common,
-                   'underlying_proofs': [pointers[name] for name in sorted(names)] + [receipt]}
+                   'underlying_proofs': [pointers[name] for name in sorted(names)] + [receipt] + (extra_pins if kind == 'producer-quiescence' else [])}
             path = PREFIX + 'fixture-accept-' + kind + '.json'; self.write(path, encoded(att))
             evidence.append({'kind': kind, 'path': path, 'sha256': digest(encoded(att))})
         self.write(PREFIX + 'archive-source-retirement-allowlist.json', (HERE/'evidence/bound-allowlist.json').read_bytes())
@@ -281,6 +324,56 @@ class IntegrationTests(unittest.TestCase):
             self.journal.append('intent', 'version', identity, destination_version=row['destination_version'])
             self.journal.append('confirmed', 'version', identity, observed_absent=True)
         self.aws.s3[SOURCE].inv['rows'] = []
+
+    def test_replacement_before_first_empty_bucket_intent(self):
+        self.prior_version_deletions()
+        self.aws.s3[SOURCE].config['bucket_continuity']['creation_date'] = '2026-10-07T14:00:00+00:00'
+        with self.assertRaisesRegex(Stop, 'CONFIGURATION_DRIFT|BUCKET_CONTINUITY_DRIFT'):
+            self.execute()
+        self.assertEqual(self.sends, [])
+        self.assertFalse(self.journal.find('bucket', BUCKET, 'intent'))
+
+    def test_replacement_marker_at_actual_signed_send(self):
+        self.prior_version_deletions()
+        m = Mutator(self.aws.sessions[SOURCE], self.root.authorize)
+        m.client._endpoint.http_session.send = self.wire
+        def drift(**kw):
+            self.aws.s3[SOURCE].config['bucket_continuity']['creation_date'] = '2026-10-07T14:00:00+00:00'
+        m.client.meta.events.register('before-sign.s3.DeleteBucket', drift)
+        self.adapter.mutator = m
+        with patch.object(socket, 'socket', side_effect=AssertionError('REAL_SOCKET_FORBIDDEN')):
+            with self.assertRaisesRegex(Stop, 'BUCKET_CONTINUITY_DRIFT'):
+                run(self.adapter, A, self.authorize, self.journal, True)
+        self.assertEqual(self.sends, [])
+        self.assertTrue(self.journal.find('bucket', BUCKET, 'intent'))
+        self.assertFalse(self.journal.find('bucket', BUCKET, 'confirmed'))
+
+    def test_marker_drift_in_closing_and_reconciliation(self):
+        self.prior_version_deletions()
+        self.execute()
+        self.aws.s3[SOURCE].absent = False
+        self.aws.s3[SOURCE].config['bucket_continuity']['creation_date'] = '2026-10-07T14:00:00+00:00'
+        with self.assertRaisesRegex(Stop, 'CONFIGURATION_DRIFT|BUCKET_CONTINUITY_DRIFT'):
+            self.execute()
+        self.assertEqual(len(self.sends), 1)
+
+    def test_policy_marker_change_requires_separate_root_transition(self):
+        self.assertNotEqual(self.root.proofs['bucket_continuity']['prefreeze_marker'],
+                            self.root.proofs['bucket_continuity']['postfreeze_marker'])
+        d = Path(self.temp.name)/'negative'; d.mkdir()
+        b = Bundle(d, lambda p: p['bucket_continuity'].update(postfreeze_marker=p['bucket_continuity']['prefreeze_marker']))
+        with self.assertRaisesRegex(Stop, 'ROOT_ACTUAL_FREEZE_TRANSITION_REQUIRED'):
+            b.loader()
+
+    def test_missing_creator_nameguard_and_unaccepted_journal_reject(self):
+        for field in ('creator_shutdown_receipt', 'name_guard_receipt', 'freeze_journal'):
+            with self.subTest(field=field):
+                d = Path(self.temp.name)/field[:2]; d.mkdir()
+                def change(p):
+                    p['bucket_continuity'][field] = {**p['bucket_continuity'][field], 'sha256': 'b'*64}
+                b = Bundle(d, change)
+                with self.assertRaisesRegex(Stop, 'CONTINUITY_RECEIPT_NOT_ACCEPTED'):
+                    b.loader()
 
     def test_real_adapter_full205_endpoint_success(self):
         result = self.execute()

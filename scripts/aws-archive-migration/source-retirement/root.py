@@ -14,6 +14,7 @@ SUPPLEMENT = 'ba9a2880792fc6f1e59ca5bdd95ac4d76276638ddeef747fdb1e814a07914a65'
 BOUND_ALLOWLIST = '5856b4c5b62173c5e4fb0f7a3e24299d75414fa2365d3b1d14cd05f0768c2ea8'
 ROOT_GATE_PATH = 'docs/aws-migration-2026-10-06/archive-source-retirement-root-gate.json'
 PROOF_TYPES = {
+    'bucket_continuity': 'archive-root-reviewed-bucket-continuity-v1',
     'baseline': 'archive-retirement-readonly-observation-v1',
     'permission': 'archive-exact-retirement-permission-proof-v1',
     'hash_scope': 'archive-independent-hash-reuse-v1',
@@ -30,7 +31,7 @@ PROOF_TYPES = {
 KIND_PROOFS = {
     'archive-independent-acceptance': {'baseline', 'hash_scope', 'archive_acceptance'},
     'installed-restore-consumer': {'consumer'}, 'global-dns-live-website': {'website'},
-    'whole-source-ownership': {'ownership'}, 'producer-quiescence': {'producer_shutdown', 'source_freeze', 'permission'},
+    'whole-source-ownership': {'ownership'}, 'producer-quiescence': {'producer_shutdown', 'source_freeze', 'permission', 'bucket_continuity'},
     'destination-retention-custody': {'destination_custody'},
     'active-dependencies': {'dependencies'}, 'retirement-code-review': {'code_review'},
 }
@@ -88,6 +89,59 @@ def concrete_proofs(g, a, read):
         require(digest(c) == g[('source' if account == SOURCE else 'destination') + '_configuration_sha256'],
                 'BASELINE_CONFIGURATION_PIN')
     compare_version_metadata(a, baseline['version_metadata'], baseline['configuration'])
+    continuity = proofs['bucket_continuity']
+    require(continuity['reviewer_role'] == 'root-independent-verifier' and
+            continuity['decision'] == 'ACCEPT' and continuity['bucket'] == BUCKET and
+            continuity['allowlist_sha256'] == g['allowlist_sha256'] and
+            continuity['packet_sha256'] == PACKET and continuity['versions'] == a['rows'] and
+            continuity['postfreeze_observation'] == pointers['baseline'] and
+            continuity['control_custodians'] and continuity['valid_until'] == g['expires_at'] and
+            timestamp(g['issued_at']) - 300 <= timestamp(continuity['observed_at']) <= timestamp(g['issued_at']),
+            'ROOT_BUCKET_CONTINUITY_ACCEPTANCE_REQUIRED')
+    def accepted_blob(pin):
+        data = read(g['evidence_commit'], pin['path'])
+        require(digest(data) == pin['sha256'] and pin['sha256'] in accepted_receipts,
+                'CONTINUITY_RECEIPT_NOT_ACCEPTED')
+        return json.loads(data)
+    pre = accepted_blob(continuity['prefreeze_observation'])
+    transition = accepted_blob(continuity['freeze_journal'])
+    require(pre['type'] == PROOF_TYPES['baseline'] and pre['identities'] == PRINCIPALS,
+            'PREFREEZE_OBSERVATION_REQUIRED')
+    for account, field in [(SOURCE, 'source_version'), (DEST, 'destination_version')]:
+        c = pre['configuration'][account]
+        compare_inventory(pre['inventories'][account], a['rows'], field, c['get_bucket_acl']['Owner']['ID'])
+    compare_version_metadata(a, pre['version_metadata'], pre['configuration'])
+    require(pre['version_metadata'] == baseline['version_metadata'], 'FREEZE_METADATA_TRANSITION_DRIFT')
+    before = pre['configuration'][SOURCE]['bucket_continuity']
+    after = baseline['configuration'][SOURCE]['bucket_continuity']
+    for marker in (before, after):
+        require(marker['bucket'] == BUCKET and marker['expected_owner'] == SOURCE and
+                marker['canonical_owner'] == baseline['configuration'][SOURCE]['get_bucket_acl']['Owner']['ID'] and
+                marker['region'] == 'us-east-1' and timestamp(marker['creation_date']) > 0,
+                'ROOT_BUCKET_MARKER_SCOPE')
+    require(continuity['prefreeze_marker'] == before and continuity['postfreeze_marker'] == after and
+            transition['type'] == 'archive-actual-freeze-transition-journal-v1' and
+            transition['bucket'] == BUCKET and transition['principal'] == PRINCIPALS[SOURCE] and
+            transition['operation'] == 'PutBucketPolicy' and transition['request_id'] and
+            transition['readback_request_id'] and transition['policy_sha256'] == digest(source_freeze()) and
+            transition['prefreeze_marker'] == before and transition['postfreeze_marker'] == after and
+            transition['prefreeze_configuration_sha256'] == digest(pre['configuration'][SOURCE]) and
+            transition['postfreeze_configuration_sha256'] == digest(baseline['configuration'][SOURCE]) and
+            transition['allowlist_sha256'] == g['allowlist_sha256'] and transition['versions'] == a['rows'] and
+            transition['no_delete_or_recreate_observed'] is True and
+            timestamp(pre['completed_at']) <= timestamp(transition['started_at']) <=
+            timestamp(transition['completed_at']) <= timestamp(baseline['started_at']) <=
+            timestamp(baseline['completed_at']) <= timestamp(g['issued_at']),
+            'ROOT_ACTUAL_FREEZE_TRANSITION_REQUIRED')
+    for field in ('creator_shutdown_receipt', 'name_guard_receipt'):
+        receipt = accepted_blob(continuity[field])
+        require(receipt['type'] == 'archive-' + field.replace('_receipt', '').replace('_', '-') + '-operating-v1' and
+                receipt['bucket'] == BUCKET and receipt['reviewer_role'] == 'root-independent-verifier' and
+                receipt['actual_command'] and receipt['control_custodians'] and
+                receipt['observed_state'] == 'effective' and
+                timestamp(receipt['observed_at']) <= timestamp(pre['started_at']) and
+                timestamp(receipt['valid_until']) >= timestamp(g['expires_at']),
+                'ACTUAL_CREATOR_SHUTDOWN_NAME_GUARD_REQUIRED')
     scope = hash_reuse_scope(a, proofs['hash_scope'])
     from permission import require_allowed
     require_allowed(proofs['permission']['proof'], a)

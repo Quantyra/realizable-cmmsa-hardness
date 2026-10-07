@@ -1,0 +1,577 @@
+test_ambiguous_real_endpoint_no_retry_on_restart (__main__.IntegrationTests.test_ambiguous_real_endpoint_no_retry_on_restart) ... ERROR
+test_artifact_checker_rejects_unsafe_path (__main__.IntegrationTests.test_artifact_checker_rejects_unsafe_path) ... ERROR
+test_cli_execute_reaches_production_adapter_under_valid_root (__main__.IntegrationTests.test_cli_execute_reaches_production_adapter_under_valid_root) ... ERROR
+test_closing_namespace_relist_catches_reappearance (__main__.IntegrationTests.test_closing_namespace_relist_catches_reappearance) ... ERROR
+test_current_pid_readonly_probe_reports_live (__main__.IntegrationTests.test_current_pid_readonly_probe_reports_live) ... ERROR
+test_denied_real_simulation_check_only (__main__.IntegrationTests.test_denied_real_simulation_check_only) ... ERROR
+test_destination_loss_after_last_dependency (__main__.IntegrationTests.test_destination_loss_after_last_dependency) ... ERROR
+test_expiry_at_actual_endpoint_zero_sends (__main__.IntegrationTests.test_expiry_at_actual_endpoint_zero_sends) ... ERROR
+test_lost_reply_real_endpoint_observed_absence (__main__.IntegrationTests.test_lost_reply_real_endpoint_observed_absence) ... ERROR
+test_marker_drift_in_closing_and_reconciliation (__main__.IntegrationTests.test_marker_drift_in_closing_and_reconciliation) ... ERROR
+test_metadata_drift_actual_adapter (__main__.IntegrationTests.test_metadata_drift_actual_adapter) ... ERROR
+test_missing_creator_nameguard_and_unaccepted_journal_reject (__main__.IntegrationTests.test_missing_creator_nameguard_and_unaccepted_journal_reject) ... ERROR
+test_mutable_gate_not_committed_bytes (__main__.IntegrationTests.test_mutable_gate_not_committed_bytes) ... ERROR
+test_original_allowlist_cannot_be_rebound_by_root (__main__.IntegrationTests.test_original_allowlist_cannot_be_rebound_by_root) ... ERROR
+test_permission_truncation_and_resource_omission (__main__.IntegrationTests.test_permission_truncation_and_resource_omission) ... ERROR
+test_policy_drift_before_target_simulation_blocks (__main__.IntegrationTests.test_policy_drift_before_target_simulation_blocks) ... ERROR
+test_policy_marker_change_requires_separate_root_transition (__main__.IntegrationTests.test_policy_marker_change_requires_separate_root_transition) ... ERROR
+test_real_adapter_full205_endpoint_success (__main__.IntegrationTests.test_real_adapter_full205_endpoint_success) ... ERROR
+test_recreated_empty_bucket_after_complete (__main__.IntegrationTests.test_recreated_empty_bucket_after_complete) ... ERROR
+test_replacement_before_first_empty_bucket_intent (__main__.IntegrationTests.test_replacement_before_first_empty_bucket_intent) ... ERROR
+test_replacement_marker_at_actual_signed_send (__main__.IntegrationTests.test_replacement_marker_at_actual_signed_send) ... ERROR
+test_root_check_uses_permissions_no_writes (__main__.IntegrationTests.test_root_check_uses_permissions_no_writes) ... ERROR
+test_root_flags_without_real_producer_contract_block (__main__.IntegrationTests.test_root_flags_without_real_producer_contract_block) ... ERROR
+test_source_put_global_denied_has_no_executor_exception (__main__.IntegrationTests.test_source_put_global_denied_has_no_executor_exception) ... ERROR
+test_state_symlink_refused_before_journal_read (__main__.IntegrationTests.test_state_symlink_refused_before_journal_read) ... ERROR
+test_uncommitted_shutdown_receipt_hash_blocks (__main__.IntegrationTests.test_uncommitted_shutdown_receipt_hash_blocks) ... ERROR
+
+======================================================================
+ERROR: test_ambiguous_real_endpoint_no_retry_on_restart (__main__.IntegrationTests.test_ambiguous_real_endpoint_no_retry_on_restart)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_artifact_checker_rejects_unsafe_path (__main__.IntegrationTests.test_artifact_checker_rejects_unsafe_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_cli_execute_reaches_production_adapter_under_valid_root (__main__.IntegrationTests.test_cli_execute_reaches_production_adapter_under_valid_root)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_closing_namespace_relist_catches_reappearance (__main__.IntegrationTests.test_closing_namespace_relist_catches_reappearance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_current_pid_readonly_probe_reports_live (__main__.IntegrationTests.test_current_pid_readonly_probe_reports_live)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_denied_real_simulation_check_only (__main__.IntegrationTests.test_denied_real_simulation_check_only)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_destination_loss_after_last_dependency (__main__.IntegrationTests.test_destination_loss_after_last_dependency)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_expiry_at_actual_endpoint_zero_sends (__main__.IntegrationTests.test_expiry_at_actual_endpoint_zero_sends)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_lost_reply_real_endpoint_observed_absence (__main__.IntegrationTests.test_lost_reply_real_endpoint_observed_absence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_marker_drift_in_closing_and_reconciliation (__main__.IntegrationTests.test_marker_drift_in_closing_and_reconciliation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_metadata_drift_actual_adapter (__main__.IntegrationTests.test_metadata_drift_actual_adapter)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_missing_creator_nameguard_and_unaccepted_journal_reject (__main__.IntegrationTests.test_missing_creator_nameguard_and_unaccepted_journal_reject)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_mutable_gate_not_committed_bytes (__main__.IntegrationTests.test_mutable_gate_not_committed_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_original_allowlist_cannot_be_rebound_by_root (__main__.IntegrationTests.test_original_allowlist_cannot_be_rebound_by_root)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_permission_truncation_and_resource_omission (__main__.IntegrationTests.test_permission_truncation_and_resource_omission)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_policy_drift_before_target_simulation_blocks (__main__.IntegrationTests.test_policy_drift_before_target_simulation_blocks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_policy_marker_change_requires_separate_root_transition (__main__.IntegrationTests.test_policy_marker_change_requires_separate_root_transition)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_real_adapter_full205_endpoint_success (__main__.IntegrationTests.test_real_adapter_full205_endpoint_success)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_recreated_empty_bucket_after_complete (__main__.IntegrationTests.test_recreated_empty_bucket_after_complete)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_replacement_before_first_empty_bucket_intent (__main__.IntegrationTests.test_replacement_before_first_empty_bucket_intent)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_replacement_marker_at_actual_signed_send (__main__.IntegrationTests.test_replacement_marker_at_actual_signed_send)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_root_check_uses_permissions_no_writes (__main__.IntegrationTests.test_root_check_uses_permissions_no_writes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_root_flags_without_real_producer_contract_block (__main__.IntegrationTests.test_root_flags_without_real_producer_contract_block)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_source_put_global_denied_has_no_executor_exception (__main__.IntegrationTests.test_source_put_global_denied_has_no_executor_exception)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_state_symlink_refused_before_journal_read (__main__.IntegrationTests.test_state_symlink_refused_before_journal_read)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+======================================================================
+ERROR: test_uncommitted_shutdown_receipt_hash_blocks (__main__.IntegrationTests.test_uncommitted_shutdown_receipt_hash_blocks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 284, in setUp
+    self.root = self.bundle.loader()
+                ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\test_production.py", line 272, in loader
+    return RootLoader(self.gate, self.hash, self.commit, self.gate_commit, self.repo)
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 244, in __init__
+    self.allowlist_bytes = self.git.read(commit, gate['root_allowlist_path'])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\root.py", line 59, in read
+    require(result.returncode == 0 and len(result.stdout) <= 16 * 1024 * 1024,
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\Desktop\Projects\realizable-cmmsa-hardness\scripts\aws-archive-migration\source-retirement\safety.py", line 28, in require
+    raise Stop(code)
+safety.Stop: COMMITTED_PROOF_UNAVAILABLE_OR_TOO_LARGE
+
+----------------------------------------------------------------------
+Ran 26 tests in 139.673s
+
+FAILED (errors=26)

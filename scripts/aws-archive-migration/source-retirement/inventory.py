@@ -72,6 +72,33 @@ def version_metadata(client, bucket, owner, key, version):
             'head': head, 'tags': sorted(tags['TagSet'], key=lambda x: (x['Key'], x['Value'])), 'acl': acl}
 
 
+def bucket_continuity(client, bucket, owner):
+    """Mutable drift witness, never an immutable bucket instance identifier."""
+    args = {'Prefix': bucket, 'BucketRegion': 'us-east-1', 'MaxBuckets': 1000}
+    seen, matches = set(), []
+    for _ in range(MAX_PAGES):
+        r = client.list_buckets(**args)
+        require(r.get('Owner', {}).get('ID'), 'BUCKET_MARKER_OWNER_MISSING')
+        for b in r.get('Buckets', []):
+            require(b['Name'].startswith(bucket), 'BUCKET_MARKER_RESPONSE_SCOPE')
+            if b['Name'] == bucket:
+                date = b.get('CreationDate')
+                require(hasattr(date, 'isoformat') and date.tzinfo is not None and
+                        b.get('BucketRegion') == 'us-east-1', 'BUCKET_MARKER_MISSING')
+                matches.append({'bucket': bucket, 'expected_owner': owner,
+                                'canonical_owner': r['Owner']['ID'], 'region': b['BucketRegion'],
+                                'creation_date': date.isoformat()})
+        token = r.get('ContinuationToken')
+        if not token:
+            break
+        require(token not in seen, 'BUCKET_MARKER_PAGINATION')
+        seen.add(token); args['ContinuationToken'] = token
+    else:
+        require(False, 'BUCKET_MARKER_PAGE_BOUND')
+    require(len(matches) <= 1, 'BUCKET_MARKER_DUPLICATE')
+    return matches[0] if matches else None
+
+
 def configuration(client, bucket, owner):
     args = {'Bucket': bucket, 'ExpectedBucketOwner': owner}
     operations = {
@@ -96,6 +123,10 @@ def configuration(client, bucket, owner):
             if code not in absent_codes:
                 raise
             result[operation] = {'absent': True, 'code': code}
+    marker = bucket_continuity(client, bucket, owner)
+    require(marker is not None and marker['canonical_owner'] == result['get_bucket_acl']['Owner']['ID'],
+            'BUCKET_CONTINUITY_OWNER')
+    result['bucket_continuity'] = marker
     require(result['get_bucket_location'].get('LocationConstraint') in (None, 'us-east-1'), 'REGION_DRIFT')
     require(result['get_bucket_versioning'].get('Status') == 'Enabled', 'VERSIONING_REQUIRED')
     # Other configuration is pinned exactly and needs substantive root disposition.

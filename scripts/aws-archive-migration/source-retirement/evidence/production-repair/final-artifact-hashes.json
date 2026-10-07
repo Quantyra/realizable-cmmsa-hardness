@@ -1,0 +1,551 @@
+{
+  "code_sha256": {
+    "adapter.py": "d8914dab620cb983ce49783cbb39db81f1102a1b305d88badf5073d402d2459d",
+    "aws.py": "272b6d02b212276cc2ce37b0f3910a659e88b257743cb0bbc215190bd032be8f",
+    "bind-proof.mjs": "d67f8b25aa4d5fdfcfe2c6097708ced53178ce3594daedc15df04bf7b6f97d7f",
+    "cli.py": "8ef53cb893efc78361f6bee8deed95d42f02bea79579a6b7b813d63047ee26bf",
+    "inventory.py": "bc4cc4d337b88cf8158320851e0fbd95725e2d5ed8498988ad95e9918c475713",
+    "permission.py": "0bde3e1deef1e1f281e8032dc4f66eda615fd2a03e6f0a3c0f0a3fc57437deb8",
+    "policy.py": "dae4892d18121c387345db271af22df5298b57dae09f78439ea695cff092dfa3",
+    "process_probe.py": "9fb55da58a5f702e6d5e392e091031b68844f0bafb58cc20007e056fb86b9413",
+    "retirement.py": "c4de20474173ef25ab5938cd2093ce8bb98de1229c5a558168c96b45adc7c859",
+    "root.py": "e1bbc6def70b7443e777c34509a3f1d47d4d8e735dfe664fcf2e49e247b91fef",
+    "safety.py": "e3a44060101f57cce0a5cdc144075f53044462f52a7103163f0692924598179b",
+    "test_endpoints.py": "2b301bd94d99eddc0e1cd0b82dc0693d2bf6e99dd16df58df3a8203fcaceaa86",
+    "test_production.py": "4f0dad4f915a7cca30882e6a77932e11f9295567eed424f91b4941692d0c7f9b",
+    "test_safety.py": "5442fdb7fd6d04387508816e6425930ede860ae6e50a5eeebe52203feeb6c0f6",
+    "test_transport.py": "45dfc3def5729f11e83cb98f59079376e98c9e4a3ba247115ecc8fc0dce7be41",
+    "validate.py": "732a34c001e2be19d38aea627554a35e8aab16cc4e398073e028df9a10d73163"
+  },
+  "runtime_witness": "runtime-final4.json",
+  "validation": "final4-verification.json",
+  "previous_evidence_rechecked_unchanged": true,
+  "retained_review_fixtures_rechecked": 193,
+  "files": [
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\adapter.py",
+      "bytes": 8142,
+      "sha256": "d8914dab620cb983ce49783cbb39db81f1102a1b305d88badf5073d402d2459d"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\aws.py",
+      "bytes": 5131,
+      "sha256": "272b6d02b212276cc2ce37b0f3910a659e88b257743cb0bbc215190bd032be8f"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\bind-proof.mjs",
+      "bytes": 5183,
+      "sha256": "d67f8b25aa4d5fdfcfe2c6097708ced53178ce3594daedc15df04bf7b6f97d7f"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\cli.py",
+      "bytes": 8583,
+      "sha256": "8ef53cb893efc78361f6bee8deed95d42f02bea79579a6b7b813d63047ee26bf"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\COMPLETION.md",
+      "bytes": 12638,
+      "sha256": "df4d2b29af0d2ccf1c2d3cbaa7be8be0ef55755c351ddf958a33c071087ebdd3"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\dependency-attestation-preparation.json",
+      "bytes": 2157,
+      "sha256": "7de91275022319c33331296226fe9b0dfdb5b492a2833e200de21f5beb5fe804"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\destination-custody-proposal.json",
+      "bytes": 2592,
+      "sha256": "2b5a449bcda4ab7993dac4cdfb8f4263633b8237c431fb8849e15c16b7133688"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\disabled-root-gate.json",
+      "bytes": 2112,
+      "sha256": "a2ff4c3df601b942a8f27062ee3d993a4e072fe24fc0ebfeb7bbb7cfb02b654d"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\bound-allowlist.json",
+      "bytes": 168305,
+      "sha256": "5856b4c5b62173c5e4fb0f7a3e24299d75414fa2365d3b1d14cd05f0768c2ea8"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\completion-artifact-hashes.json",
+      "bytes": 4280,
+      "sha256": "2dce2b635d47a801a9caa0cead0671350d429cf9ca58bb996e4c9b04fce6e7d5"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\completion-live-observation.json",
+      "bytes": 489487,
+      "sha256": "147062f77420c5f499ddbe558afa3546a4c7c122633d25008cc2990c428bf478"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\completion-live-permissions.json",
+      "bytes": 354849,
+      "sha256": "6243c22ca059153486e63646bcb7d131cca2d2857544b1a6e165f16c0838fe79"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\completion-policy-validation.json",
+      "bytes": 4075,
+      "sha256": "5f50550514ab219df15694a4bd023da39c17d5c7936794117ee3f835e809a3f5"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\completion-sdk-inspection.json",
+      "bytes": 616,
+      "sha256": "fc4b17484759843cbda4d68dbf580a5243beccfc65fd987912b6609612376849"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\completion-test-results-final.json",
+      "bytes": 2267,
+      "sha256": "d33a57fea5f881c5cb8d39ed826a2237d4f266c7ff25f85d6b267dbe8c863f66"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\completion-test-results.json",
+      "bytes": 2267,
+      "sha256": "f6a82525da8c8a4a53fa2aef09182782df34ff84b6945e0d88f093d340ab06d6"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\current-metadata-observation.json",
+      "bytes": 487838,
+      "sha256": "cc1472cf717544492b3594633fc919c7b273b5a012508a1738a403fac49e6531"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\local-proof-inventory.json",
+      "bytes": 938,
+      "sha256": "a317783cf262aac500cb8ccd66e6ae7a13e2a2254815098be79a560a4a18e13f"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\metadata-preservation.json",
+      "bytes": 1279,
+      "sha256": "9ed562b3be8ac9a0558a026f862ef89d2cad307b5ca440b7718c42a91097eac0"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\preparation-artifact-hashes.json",
+      "bytes": 2386,
+      "sha256": "b2a890111893a74813337eda00ea70dab41e928ed4b5806af8bc744b441a243f"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\.gitignore",
+      "bytes": 29,
+      "sha256": "7f2718df34dc1765339c1845930002ab9fcd3c1f46831c04ba44da65ac754fcc"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\before.json",
+      "bytes": 46517,
+      "sha256": "95582e0d2a3e94607f3ec42ef3f1d664628e14e6b91532c3c6c53bc188eab3a2"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\commit-scoped.py",
+      "bytes": 2630,
+      "sha256": "3fc105fbc40c8130255f2cf45340eec464721e6c75456079cacbdcfa04c88cb1"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\endpoints-final.log",
+      "bytes": 395,
+      "sha256": "0e32a7511a10d3a44d1ea24c89a8ba652ab18a07abf5af8c4308611e847ff9ad"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\endpoints-final2.log",
+      "bytes": 396,
+      "sha256": "30cf1df7636acf8a79e03b51bffc235309462f1009811b1018357f683ce9c76e"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\endpoints-final3.log",
+      "bytes": 395,
+      "sha256": "a206f853e1895809877238ecc46d842454288fe94d963e69dca351f318db37fb"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\endpoints-initial.log",
+      "bytes": 1286,
+      "sha256": "b63d239e7a84c5bccb2b7273e9e20d4db58b7e8d71982e66822f5364b8e010ef"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\endpoints-second.log",
+      "bytes": 21866,
+      "sha256": "240040925da73d0e47af2a191218fc0bba45bd0ffe0fd5406d41b9c0086174b3"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\endpoints-third.log",
+      "bytes": 1486,
+      "sha256": "c906a9fe2bc6687be88dba2e93612db4afddf729f15eefb257654dc0ea7aa3de"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\final2-verification.json",
+      "bytes": 7856,
+      "sha256": "463e3468ab8a74e9e2502f6b05612a6203d1619cbfd0cfe2b82f75a33ff8aed0"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\final3-verification.json",
+      "bytes": 7871,
+      "sha256": "b1a1abaebd864c3d30bc2511f489e91e35122825194518157021d467f2e46de9"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\final4-verification.json",
+      "bytes": 8320,
+      "sha256": "0c826b0149040642d968220051dc101b64a5314b028c7b8fe199439763d4b809"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\fixture-path-repair.json",
+      "bytes": 286,
+      "sha256": "e32d6da7cb63207cc9ef64c20f3ed188c525eb1037bc98866ecc12f707b4de17"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-final3-results.json",
+      "bytes": 948,
+      "sha256": "0962eeb4ae860c6d8963d62ec6082782d02a63fe85db4830ab7003de7190c20e"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-final4-results.json",
+      "bytes": 948,
+      "sha256": "0962eeb4ae860c6d8963d62ec6082782d02a63fe85db4830ab7003de7190c20e"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-recreated-final3-results.json",
+      "bytes": 976,
+      "sha256": "8e9f26a8aca60f4b622b976859c3dc7e031f1b3a356e6c99cb29265574c30ce2"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-recreated-final4-results.json",
+      "bytes": 976,
+      "sha256": "e1618a63ba96c67bdc59dc752abb2a5fac609b84b3b8bb4fd17992a3c34aaa3b"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-recreated-repaired-final3.py",
+      "bytes": 3889,
+      "sha256": "17475e9f910fb9120f6791900cc3d384ce1aa98476bf0225aedcda7643ff5d57"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-recreated-repaired-final4.py",
+      "bytes": 3889,
+      "sha256": "d6a9f83a4a6410dc414798cbad5be9515523e35528be70189054961ba5216dad"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-recreated-repaired.py",
+      "bytes": 3882,
+      "sha256": "edf495cc2814950e1f4e8cd3af6934c187999155911252854e8e7e27c75d1933"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-recreated-results.json",
+      "bytes": 976,
+      "sha256": "9bac0e805fe9f0e2b1ff6f67fc65496081de592d0aea5b22c00679cf3b3173d4"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-repaired-final3.py",
+      "bytes": 5025,
+      "sha256": "e8a6f8edab8ab26912832cac706b7df0f797d7a3d9b02c21d77874cef870b468"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-repaired-final4.py",
+      "bytes": 5025,
+      "sha256": "c2025f9f359e7d038fff60c205254c6d27b15ea33feb49a5885c428e0f84d1fb"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-repaired.py",
+      "bytes": 5109,
+      "sha256": "a35fdeba3a4bb7e40aca80a694a128e334e4874b26148b33172b711d07d45a2b"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-archive-results.json",
+      "bytes": 948,
+      "sha256": "0962eeb4ae860c6d8963d62ec6082782d02a63fe85db4830ab7003de7190c20e"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-endpoint-final2.log",
+      "bytes": 663,
+      "sha256": "b18fd822a7358e66398a1284a2483042b60ff77bd581e5c5ec97dd0c6170f36b"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-endpoint-final3.log",
+      "bytes": 663,
+      "sha256": "16daa8097ab310e6eaee9cb051bed79c6fc4e5639c06203a76c85dbdc2e82eaa"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-endpoint-final4.log",
+      "bytes": 663,
+      "sha256": "8404fdb3d5715ca9ff9f4816ddf8073df8590f2d1ae7b089d7db19628ceefa5f"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-replacement-final2.log",
+      "bytes": 914,
+      "sha256": "7ebd1f57bda72c3615d1b6b81024af1bae1d730c867ac82b0f6b4b307c6d05f1"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-replacement-final3.log",
+      "bytes": 914,
+      "sha256": "b71e5a827ee62deb6cb02929662423f924f119f6379e25fd07919cff64c382e7"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\independent-replacement-final4.log",
+      "bytes": 914,
+      "sha256": "914062f6a430a7a2c3279ffe6844c10596344c8c7d7f24ac24c185c283864122"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\line-ending-normalization.json",
+      "bytes": 1864,
+      "sha256": "da09b8f18d531e08811f5c00396ef7f7d947889e3f33f8a924514137137bc735"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\manifest-sealing-initial-failure.txt",
+      "bytes": 185,
+      "sha256": "cf2c43dae7fe73d2f281bf4198bcf8aed6d46ef0986328271cf77631e65d9949"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\mapping-removal-receipt.json",
+      "bytes": 241,
+      "sha256": "7911ffc70332e87e1cab69edfea29de904ea8ca455ebee445cec9c7d5684a796"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\negative-fixture-short-path-fix.json",
+      "bytes": 475,
+      "sha256": "8c56c97da18c864c25fac7bfc94c90a23d251d1a5cf51f09dbbb582af114f842"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\negative-fixture-short-path-pretest.log",
+      "bytes": 104,
+      "sha256": "071ff29f0b53f2856fa44ae0fade14a5fc19bec08bb81100fad26aaa8f1fd8df"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\new-fixture-hashes.json",
+      "bytes": 45232,
+      "sha256": "32b4691f1b441bbd62696309c73fb12b041ba015948e22687f08a8aa69ef09e0"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\offline-default-final2.log",
+      "bytes": 339,
+      "sha256": "4b261183d20c7937454f5dff9ad304bba6398280397df8ba52dd33002526ab11"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\offline-default-final3.log",
+      "bytes": 339,
+      "sha256": "4b261183d20c7937454f5dff9ad304bba6398280397df8ba52dd33002526ab11"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\offline-default-final4.log",
+      "bytes": 339,
+      "sha256": "4b261183d20c7937454f5dff9ad304bba6398280397df8ba52dd33002526ab11"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\original305-binder-final2.log",
+      "bytes": 861,
+      "sha256": "e4dd07e66e82658865e374dae9d680afe070d8aafc0f3477e26c2b1839774e7f"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\original305-binder-final3.log",
+      "bytes": 861,
+      "sha256": "ab173062626897da6a6d8a0b8e3841e888d844a081858b14d1fb791a89cbe0ce"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\original305-binder-final4.log",
+      "bytes": 861,
+      "sha256": "a320fb6ce202b1aff16666dbfc8ed3a57854108d032f0ee08754a40ff34a03ca"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\preservation-check.json",
+      "bytes": 130691,
+      "sha256": "27fe9d2e9b2db66bd1b7a35c335621abf62d80a266b3e0f16edb02ee3b81abd9"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\production-final.log",
+      "bytes": 48650,
+      "sha256": "419182c6cfadda3dbe4d31164f14a1f893169cd4a415763f55f20af8ce82be6f"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\production-final2.log",
+      "bytes": 7601,
+      "sha256": "2f1fe238293187f3ec8e84b636c45b716e41a954c3451f851ed4178a0b4f71cf"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\production-final3.log",
+      "bytes": 6494,
+      "sha256": "3f3e8683ef8b8f86b7bc234b02676335e5c8ff5c01f3c0c5fe4fcaa90dd9c92a"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\production-final4.log",
+      "bytes": 3755,
+      "sha256": "f12a9bde15c6ac6cc976c972fa9ffaf34eeac5292eb07acfbe672701d0b1b8d2"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\production-smoke.log",
+      "bytes": 828,
+      "sha256": "72ad0c59aa062b25b4af8b35bc10b22dbbb81b0eb9c6459209dc3a69ab8cf543"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\replacement-initial.log",
+      "bytes": 2692,
+      "sha256": "ab86fb829ae48e2a7a85be7210ca11015fd2e3578ea12616cf953adf5834afe6"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\run-verification-final2.py",
+      "bytes": 2558,
+      "sha256": "f0c18baef6d8a81414fd7a955644579db3b94244e48c7e7b5f2762c800484d35"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\run-verification-final3.py",
+      "bytes": 2572,
+      "sha256": "364a9cce5fda28318001687450d27d90ff96a527b7d5758c2fda1ade628971bf"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\run-verification-final4.py",
+      "bytes": 3403,
+      "sha256": "585595d9ab764aac1e80525db38e5f2bc2d6a0ed1e32edf719886b18693b6426"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\run-verification.py",
+      "bytes": 2579,
+      "sha256": "55ee02201453ff9787458355d2f2b3dc343eccb0ca230150f1c455bcad607acf"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\runtime-file-hashes-final.json",
+      "bytes": 645420,
+      "sha256": "fa63c7698e7b26708a1bd666a2c0189403d68b7a1796d9488ed19d50bc2ec706"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\runtime-file-hashes.json",
+      "bytes": 645263,
+      "sha256": "8a6b052c39834dd99c6d2ad801e35734ad0945c339e11afd2e1ac7936291b0a3"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\runtime-final4.json",
+      "bytes": 1861,
+      "sha256": "a222247ae6a83ab6e12ad13b9045d014c75a967c694bea7fb35a5883ab7d605e"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\safety-final.log",
+      "bytes": 4953,
+      "sha256": "f0150dced3045ae25a36a7208543f667dfd57cf5096c812a228a776bfd597313"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\safety-final2.log",
+      "bytes": 4953,
+      "sha256": "8460c622b6aab99fca79bd93efdf53ea9d39d5401154c505911cb396b9fd4650"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\safety-final3.log",
+      "bytes": 4953,
+      "sha256": "f803a7e2e8f5e8a60a3acfa71c1c0ef960e674c77f4406694b9e90e9b254d369"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\test-fixture-correction.json",
+      "bytes": 630,
+      "sha256": "f610fe8778398f3d84522098b8e4c0b805984a3f73beecdfa1d00be4590035dd"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\transport-final.log",
+      "bytes": 273,
+      "sha256": "e6f524ea609ca8d78d024b409f7e2cc6e7aa377560ed37991385b8c1ab874ba9"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\transport-final2.log",
+      "bytes": 273,
+      "sha256": "a8b2b0148be70dabd1ed863409eb7fd0f4efce6f3b7777277d32bf311b96affd"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\transport-final3.log",
+      "bytes": 273,
+      "sha256": "0d18dddf5698e3f0c03e435f962431bedb7de0849e3cfb038d751cc58de23617"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\transport-initial.log",
+      "bytes": 90470,
+      "sha256": "125ca86ee9c0866356b72aadf434fb71de361d62dd5c4d217bbd0c5a5b268267"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\transport-second.log",
+      "bytes": 26284,
+      "sha256": "28a5bfdaa53900b1da84335e7652233117801ac185b64ef30f2b7d3a216b2b14"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\transport-third.log",
+      "bytes": 1232,
+      "sha256": "f2471258e29641eb3d907f9ec9fdf00248a21434ecbe3312e34c3b0e02b8a001"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\production-repair\\verification-driver-initial-failure.txt",
+      "bytes": 204,
+      "sha256": "7ad0134cab92b66324d61f19955e8340297ea97c33a3367dede205d5384ae227"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\evidence\\test-results.json",
+      "bytes": 1523,
+      "sha256": "1c90aec008e88029715177cf98b5df426192ad574b4df14f996a3dd0dddd880f"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\inventory.py",
+      "bytes": 12007,
+      "sha256": "bc4cc4d337b88cf8158320851e0fbd95725e2d5ed8498988ad95e9918c475713"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\permission.py",
+      "bytes": 4311,
+      "sha256": "0bde3e1deef1e1f281e8032dc4f66eda615fd2a03e6f0a3c0f0a3fc57437deb8"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\policy.py",
+      "bytes": 2539,
+      "sha256": "dae4892d18121c387345db271af22df5298b57dae09f78439ea695cff092dfa3"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\process_probe.py",
+      "bytes": 1229,
+      "sha256": "9fb55da58a5f702e6d5e392e091031b68844f0bafb58cc20007e056fb86b9413"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\README.md",
+      "bytes": 9254,
+      "sha256": "12f96bbcf8d9daebfaa4d60ce3a290385e179ff86f6a7d7dd297b4148d53acca"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\REPAIR.md",
+      "bytes": 4685,
+      "sha256": "6b9fce15ceb4644d63d6b01150b07a9bbea3cef02ce58aa28c411328a8aae303"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\retirement.py",
+      "bytes": 12082,
+      "sha256": "c4de20474173ef25ab5938cd2093ce8bb98de1229c5a558168c96b45adc7c859"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\root.py",
+      "bytes": 17975,
+      "sha256": "e1bbc6def70b7443e777c34509a3f1d47d4d8e735dfe664fcf2e49e247b91fef"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\safety.py",
+      "bytes": 9734,
+      "sha256": "e3a44060101f57cce0a5cdc144075f53044462f52a7103163f0692924598179b"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\source-freeze-proposal.json",
+      "bytes": 1851,
+      "sha256": "e682e3f6252f8cc310eade22ed0ecdbcb9cfea7c9609c37be8712ab7c1ee76b9"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\test_endpoints.py",
+      "bytes": 5973,
+      "sha256": "2b301bd94d99eddc0e1cd0b82dc0693d2bf6e99dd16df58df3a8203fcaceaa86"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\test_production.py",
+      "bytes": 31781,
+      "sha256": "4f0dad4f915a7cca30882e6a77932e11f9295567eed424f91b4941692d0c7f9b"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\test_safety.py",
+      "bytes": 20922,
+      "sha256": "5442fdb7fd6d04387508816e6425930ede860ae6e50a5eeebe52203feeb6c0f6"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\test_transport.py",
+      "bytes": 3167,
+      "sha256": "45dfc3def5729f11e83cb98f59079376e98c9e4a3ba247115ecc8fc0dce7be41"
+    },
+    {
+      "file": "scripts\\aws-archive-migration\\source-retirement\\validate.py",
+      "bytes": 1440,
+      "sha256": "732a34c001e2be19d38aea627554a35e8aab16cc4e398073e028df9a10d73163"
+    }
+  ]
+}
