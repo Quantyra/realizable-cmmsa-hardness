@@ -58,6 +58,15 @@ def immutable(file, value):
         os.fsync(f.fileno())
 
 
+def validate_local_path(file):
+    file = Path(file).absolute()
+    for p in (file, *file.parents):
+        require(not p.is_symlink() and not (hasattr(p, 'is_junction') and p.is_junction()),
+                'STATE_REPARSE_POINT_REFUSED')
+        if p.exists():
+            require(not (getattr(p.lstat(), 'st_file_attributes', 0) & 0x400), 'STATE_REPARSE_POINT_REFUSED')
+
+
 @contextmanager
 def execution_lock(directory):
     file = Path(directory) / 'execution.lock'
@@ -142,6 +151,7 @@ class Journal:
     """Exclusive writer required. Torn bytes are preserved and block all progress."""
     def __init__(self, file, gate_hash, allowlist_hash):
         self.file = Path(file)
+        validate_local_path(self.file)
         self.binding = {'gate_sha256': gate_hash, 'allowlist_sha256': allowlist_hash}
         self.events = []
         if self.file.exists():
@@ -178,6 +188,7 @@ class Journal:
                 e['identity'] == identity and e['kind'] == kind]
 
     def append(self, kind, operation, identity, **details):
+        validate_local_path(self.file)
         p = {'sequence': len(self.events), 'previous': self.events[-1]['sha256'] if self.events else None,
              'binding': self.binding, 'kind': kind, 'operation': operation,
              'identity': identity, 'at': iso(), 'details': details}

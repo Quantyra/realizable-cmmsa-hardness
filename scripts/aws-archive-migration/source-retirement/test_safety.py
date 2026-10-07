@@ -431,7 +431,7 @@ class DurableAndScopeTests(unittest.TestCase):
     def test_execute_cli_disabled_before_aws(self):
         import cli
         with patch.object(sys, 'argv', ['cli.py', 'execute']):
-            with self.assertRaisesRegex(Stop, 'EXECUTION_DISABLED'):
+            with self.assertRaisesRegex(Stop, 'ROOT_GATE_DISABLED'):
                 cli.main()
 
 

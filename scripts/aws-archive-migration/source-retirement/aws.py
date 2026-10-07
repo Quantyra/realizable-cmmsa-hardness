@@ -8,7 +8,8 @@ def no_retry(*args, **kwargs):
 
 def guard_mutation_client(c):
     import botocore
-    require(botocore.__version__ == '1.43.108', 'UNREVIEWED_SDK')
+    import boto3
+    require(botocore.__version__ == boto3.__version__ == '1.43.108', 'UNREVIEWED_SDK')
     require(c.meta.config.retries.get('total_max_attempts') == 1 and
             c._endpoint._needs_retry is no_retry, 'SINGLE_WIRE_GUARD_CHANGED')
     return c
@@ -35,7 +36,8 @@ class AWS:
         self.cache = {}
 
     def client(self, service, account):
-        require(service in ('s3', 'sts') and account in self.sessions, 'READ_API_SCOPE')
+        require((service in ('s3', 'sts') or (service == 'iam' and account == SOURCE))
+                and account in self.sessions, 'READ_API_SCOPE')
         key = service, account
         if key not in self.cache:
             self.cache[key] = self.sessions[account].client(service, region_name='us-east-1', config=self.config)
@@ -47,15 +49,25 @@ class AWS:
         return r['Arn']
 
 
-class FutureMutator:
-    """Not constructed by CLI. Integration needs fresh independent review and root gate."""
-    def __init__(self, session):
+class Mutator:
+    """Constructed lazily after root preflight. TTL/pins checked at actual send."""
+    def __init__(self, session, authorize):
         self.client = single_wire_client(session)
+        self.authorize = authorize
+        for operation in ('DeleteObject', 'DeleteBucket'):
+            self.client.meta.events.register_first('before-send.s3.' + operation, self.before_send,
+                                                   unique_id='archive-root-final-wire-gate-' + operation)
+
+    def before_send(self, **kwargs):
+        guard_mutation_client(self.client)
+        self.authorize()
 
     def delete_version(self, row):
+        self.authorize()
         return guard_mutation_client(self.client).delete_object(
             Bucket=BUCKET, ExpectedBucketOwner=SOURCE, Key=row['key'],
             VersionId=row['source_version'], IfMatch=row['source_etag'])
 
     def delete_bucket(self):
+        self.authorize()
         return guard_mutation_client(self.client).delete_bucket(Bucket=BUCKET, ExpectedBucketOwner=SOURCE)

@@ -10,7 +10,7 @@ HERE = Path(__file__).resolve().parent
 pins = {p.name: digest(p.read_bytes()) for p in HERE.iterdir() if p.suffix in ('.py', '.mjs')}
 started = iso()
 results = []
-for name in ('test_safety.py', 'test_transport.py'):
+for name in ('test_safety.py', 'test_transport.py', 'test_production.py'):
     r = subprocess.run([sys.executable, '-B', str(HERE/name)], capture_output=True)
     output = r.stdout + r.stderr
     results.append({'suite': name, 'exit_code': r.returncode, 'output_sha256': digest(output),
@@ -22,5 +22,5 @@ receipt = {'type': 'archive-retirement-synthetic-validation-v1', 'started_at': s
            'completed_at': iso(), 'code_sha256': pins, 'results': results,
            'real_cloud_requests': 0, 'real_socket_requests': 0, 'real_mutations': 0,
            'payload_downloads': 0, 'source_eligibility': 'HOLD'}
-immutable(HERE/'evidence/test-results.json', receipt)
+immutable(HERE/'evidence/completion-test-results-final.json', receipt)
 raise SystemExit(0 if all(r['exit_code'] == 0 for r in results) else 1)

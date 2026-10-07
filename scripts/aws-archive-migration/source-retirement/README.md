@@ -1,5 +1,11 @@
 # Archive source retirement preparation — S3152/S3154/S3156/E003
 
+Historical preparation contract at e59e16e018fd1e5378ac8dfb980ae0a4249c6308.
+The production integration supersedes its disabled-CLI and adapter-gap statements;
+use [COMPLETION.md](COMPLETION.md) for current commands and contracts. Historical
+preparation receipts and that commit remain intact. The current gate is still
+disabled and no source action is eligible.
+
 Preparation only. Source eligibility is HOLD. `cli.py` defaults to an offline
 check and rejects `execute` before creating an AWS session. No command applies
 the producer freeze, creates root acceptance, switches consumers, revokes an

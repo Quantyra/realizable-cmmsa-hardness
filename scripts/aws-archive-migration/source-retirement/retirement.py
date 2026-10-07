@@ -1,8 +1,4 @@
-"""Future execution state machine. Only injected synthetic adapters run today.
-
-The shipped CLI never invokes this engine. No IAM, key, local archive or
-destination mutation exists. Adapter integration is a separate reviewed change.
-"""
+"""Root-gated production state machine; default CLI mode remains offline."""
 from pathlib import Path
 from safety import SOURCE, DEST, BUCKET, TARGET, PRINCIPALS, Journal, execution_lock, digest, iso, require
 
@@ -82,7 +78,7 @@ def _run_locked(adapter, allowlist, authorize, journal=None, execute=False):
         adapter.dependencies()  # Root accepted producer shutdown and dependencies.
         return auth()
 
-    def proof():
+    def proof(target=None):
         g = auth()
         hash_reuse_scope(allowlist, adapter.hash_scope())
         require(digest(adapter.hash_scope()) == g['hash_reuse_scope_sha256'], 'HASH_SCOPE_PIN')
@@ -93,13 +89,15 @@ def _run_locked(adapter, allowlist, authorize, journal=None, execute=False):
                         journal.find('bucket', BUCKET, 'intent'), 'UNEXPECTED_BUCKET_ABSENCE')
             else:
                 require(digest(c) == g[f'{name}_configuration_sha256'], 'CONFIGURATION_DRIFT')
-        p = permissions(adapter.permissions(), [f'arn:aws:s3:::{BUCKET}/{r["key"]}' for r in rows])
+        focused = getattr(adapter, 'focused_permissions', None)
+        p = permissions(focused(target) if target is not None and focused else adapter.permissions(),
+                        [f'arn:aws:s3:::{BUCKET}/{r["key"]}' for r in rows])
         require(digest(p) == g['permission_proof_sha256'], 'PERMISSION_PROOF_CHANGED')
         require(adapter.hash_scope()['version_metadata_sha256'] == g['version_metadata_sha256'],
                 'METADATA_PROOF_BINDING')
         return auth()
 
-    def state():
+    def state(metadata_rows=None, closing=False):
         source = adapter.source_state()
         destination = adapter.destination_state()
         require(not destination['markers'] and not destination['uploads'], 'DESTINATION_EXTRAS')
@@ -126,8 +124,15 @@ def _run_locked(adapter, allowlist, authorize, journal=None, execute=False):
             require(not (found and confirmed), 'CONFIRMED_VERSION_REAPPEARED')
             # Fresh exact-version metadata must compare to the accepted complete
             # header/tag/ACL baseline; hashes are independently accepted scope reuse.
-            adapter.metadata(row, found)
-        auth()
+            if metadata_rows is None or row in metadata_rows:
+                adapter.metadata(row, found)
+        if closing:
+            # Close the lengthy metadata sweep with both full namespaces again.
+            require(adapter.source_state() == source, 'SOURCE_CHANGED_DURING_CLOSING_METADATA')
+            require(adapter.destination_state() == destination, 'DESTINATION_CHANGED_DURING_CLOSING_METADATA')
+            authorize()  # No remote sweep after the last closing data observation.
+        else:
+            auth()
         return source, destination, present
 
     deps()
@@ -137,19 +142,21 @@ def _run_locked(adapter, allowlist, authorize, journal=None, execute=False):
         deps()  # Long dependency sweep first, then close with full data observations.
         proof()
         started = iso()
-        state()
-        auth()
+        state(closing=True)
+        authorize()
         return {'mode': 'check-only', 'started_at': started, 'completed_at': iso(),
                 'distributed_atomicity': False, 'mutations': 0, 'permissions_checked': True}
 
     for row in rows:
         identity = [row['key'], row['source_version']]
-        deps()
-        proof()
-        _, _, present = state()
-        exists = (row['key'], row['source_version'], row['bytes']) in present
         if journal.find('version', identity, 'confirmed'):
-            continue  # state() already re-observed absence and destination proof.
+            # Initial state() just proved every confirmed absence against current
+            # full source inventory; final closure repeats all destination proofs.
+            continue
+        deps()
+        proof(row)
+        _, _, present = state([row])
+        exists = (row['key'], row['source_version'], row['bytes']) in present
         if journal.find('version', identity, 'intent'):
             require(not exists, 'AMBIGUOUS_VERSION_DELETE_NO_RETRY')
             journal.append('confirmed', 'version', identity, observed_absent=True,
@@ -159,17 +166,21 @@ def _run_locked(adapter, allowlist, authorize, journal=None, execute=False):
         auth()
         journal.append('intent', 'version', identity, destination_version=row['destination_version'])
         auth()  # Even fsync latency can cross expiry.
+        reply, lost_reply = {}, False
         try:
             reply = adapter.delete_version(row)
             require(reply.get('VersionId') == row['source_version'] and not reply.get('DeleteMarker'),
                     'UNEXPECTED_DELETE_REPLY')
         except Exception:
             # Preserve intent. Readback may establish absence but must never resend.
-            pass
-        _, _, present = state()
+            lost_reply = True
+            if not isinstance(reply, dict):
+                reply = {}
+        _, _, present = state([row])
         require((row['key'], row['source_version'], row['bytes']) not in present,
                 'AMBIGUOUS_VERSION_DELETE_NO_RETRY')
-        journal.append('confirmed', 'version', identity, observed_absent=True)
+        journal.append('confirmed', 'version', identity, observed_absent=True, lost_reply=lost_reply,
+                       request_id=reply.get('ResponseMetadata', {}).get('RequestId'))
         auth()
 
     deps()
@@ -182,24 +193,29 @@ def _run_locked(adapter, allowlist, authorize, journal=None, execute=False):
         auth()
         journal.append('intent', 'bucket', BUCKET)
         auth()
+        bucket_reply, bucket_lost = {}, False
         try:
-            adapter.delete_bucket()
+            bucket_reply = adapter.delete_bucket()
+            if not isinstance(bucket_reply, dict):
+                bucket_reply, bucket_lost = {}, True
         except Exception:
-            pass
+            bucket_lost = True
         require(adapter.source_state() is None, 'AMBIGUOUS_BUCKET_DELETE_NO_RETRY')
         auth()
     if not journal.find('bucket', BUCKET, 'confirmed'):
-        journal.append('confirmed', 'bucket', BUCKET, observed_absent=True)
+        journal.append('confirmed', 'bucket', BUCKET, observed_absent=True,
+                       lost_reply=locals().get('bucket_lost', False),
+                       request_id=locals().get('bucket_reply', {}).get('ResponseMetadata', {}).get('RequestId'))
     # Final dependencies/permissions/configuration BEFORE closing data observations.
     deps()
     proof()
     started = iso()
-    source, destination, present = state()
+    source, destination, present = state(closing=True)
     require(source is None and not present, 'SOURCE_STILL_PRESENT')
-    auth()
+    authorize()
     observation = {'started_at': started, 'completed_at': iso(), 'distributed_atomicity': False,
                    'source_bucket_absent': True, 'destination_versions': len(destination['rows']),
                    'identities': PRINCIPALS}
     journal.append('terminal', 'bucket', BUCKET, observation=observation)
-    auth()  # A terminal journal event alone is never a returned success receipt.
+    authorize()  # A terminal journal event alone is never a returned success receipt.
     return {'mode': 'execute', 'observation': observation}
