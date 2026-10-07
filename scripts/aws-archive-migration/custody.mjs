@@ -15,7 +15,8 @@ export function mappingCoverage(source,mapping,destination,retained=[]){
 }
 export function authenticatedCatalog(c,rawHash,r){
   validate(c);requireThat(r.complete===true&&r.bucket===c.bucket&&r.catalog_sha256===rawHash&&r.catalog_canonical_sha256===digest(c)&&r.member_catalog_sha256===digest(c.members)&&r.members===c.members.length&&r.chunks.length===c.chunks.length,'catalog-evidence-mismatch');
-  const ids=new Set();for(const x of c.chunks){const id=JSON.stringify([x.key,x.version_id]);requireThat(!ids.has(id),'duplicate-catalog-object');ids.add(id);const a=r.chunks.filter(y=>y.key===x.key&&y.version_id===x.version_id);requireThat(a.length===1&&a[0].authenticated===true&&a[0].bytes===x.bytes&&a[0].ciphertext_sha256===x.sha256&&a[0].tar_sha256===x.tar_sha256,'chunk-evidence-mismatch');}return true;
+  const memberCounts=new Map();for(const m of c.members)memberCounts.set(m.chunk,(memberCounts.get(m.chunk)??0)+1);
+  const ids=new Set();for(const x of c.chunks){const id=JSON.stringify([x.key,x.version_id]);requireThat(!ids.has(id),'duplicate-catalog-object');ids.add(id);const a=r.chunks.filter(y=>y.key===x.key&&y.version_id===x.version_id);requireThat(a.length===1&&a[0].authenticated===true&&a[0].bytes===x.bytes&&a[0].members===memberCounts.get(x.number)&&a[0].ciphertext_sha256===x.sha256&&a[0].tar_sha256===x.tar_sha256,'chunk-evidence-mismatch');}return true;
 }
 export function acceptActivation(packet,packetHash,acceptance,catalogPins,independentHash){
   requireThat(packet.type==='archive-author-fullscope-v1'&&packet.complete===true&&packet.versions===205&&packet.core_chunks===51&&packet.recovery_unique_chunks===54&&packet.recovery_catalogs===44&&packet.restore?.verified===true&&packet.bridge?.absent===true,'fullscope-not-complete');

@@ -20,5 +20,6 @@ test('F1 exact byte hash, canonical/member metadata and authenticated chunk iden
   assert.throws(()=>authenticatedCatalog(c,hash,{...r,catalog_canonical_sha256:'b'.repeat(64)}),/catalog-evidence/);
   const changed=structuredClone(c);changed.members[0].sha256='c'.repeat(64);assert.throws(()=>authenticatedCatalog(changed,hash,r),/catalog-evidence/);
   assert.throws(()=>authenticatedCatalog(c,hash,{...r,chunks:[{...r.chunks[0],authenticated:false}]}),/chunk-evidence/);
+  assert.throws(()=>authenticatedCatalog(c,hash,{...r,chunks:[{...r.chunks[0],members:0}]}),/chunk-evidence/);
   assert.throws(()=>authenticatedCatalog({...c,chunks:[]},hash,{...r,chunks:[]}),/Invalid catalog/);
 });
