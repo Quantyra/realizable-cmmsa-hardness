@@ -18,7 +18,15 @@ def main():
     packet = Path(row['path']).read_bytes()
     if hashlib.sha256(packet).hexdigest().upper() != row['sha256']:
         raise ValueError('Packet changed')
-    folder = ROOT/f'{lens}-{number:02d}'; folder.mkdir()
+    folder = ROOT/f'{lens}-{number:02d}'
+    if len(sys.argv) == 4:
+        if (lens, number, sys.argv[3]) != ('complexity', 5, 'retry-02'):
+            raise ValueError('Unknown exclusive retry')
+        failed = json.loads((folder/'stdout.json').read_bytes())
+        if int((folder/'native-exit.txt').read_text()) != 1 or failed.get('api_error_status') != 429:
+            raise ValueError('Original quota failure not preserved')
+        folder = ROOT/f'{lens}-{number:02d}-retry-02'
+    folder.mkdir()
     prompt = f'You are the independent {lens} reviewer.\n'.encode() + packet
     (folder/'prompt.txt').write_bytes(prompt)
     command = ['C:/Users/dfred/.local/bin/claude.exe', '--print', '--model', 'claude-opus-5-5[1m]', '--output-format', 'json', '--tools', '', '--no-session-persistence']

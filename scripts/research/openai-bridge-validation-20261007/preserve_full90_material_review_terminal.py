@@ -19,6 +19,13 @@ def main():
     row = manifest['packets'][number-1]
     packet = Path(row['path']).read_bytes()
     folder = ROOT/f'{lens}-{number:02d}'
+    if len(sys.argv) == 4:
+        if (lens, number, sys.argv[3]) != ('complexity', 5, 'retry-02'):
+            raise ValueError('Unknown exclusive retry')
+        failed = json.loads((folder/'stdout.json').read_bytes())
+        if int((folder/'native-exit.txt').read_text()) != 1 or failed.get('api_error_status') != 429:
+            raise ValueError('Original quota failure not preserved')
+        folder = ROOT/f'{lens}-{number:02d}-retry-02'
     prompt = (folder/'prompt.txt').read_bytes()
     if sha(packet) != row['sha256'] or prompt != f'You are the independent {lens} reviewer.\n'.encode() + packet:
         raise ValueError('Review input scope changed')
