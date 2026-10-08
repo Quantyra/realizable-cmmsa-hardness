@@ -69,9 +69,13 @@ def main(resume=False):
         previous = sorted(p for p in (ROOT/'staging-controls').glob('*/commands.json') if p.parent != folder)
         if not previous: raise RuntimeError('No original staging failure receipt')
         failed = previous[-1]
-        last = json.loads(failed.read_bytes())[-1]
-        if last['native_exit'] != 1 or last['argv'][1:4] != ['compute','ssh',VM] or '--command=mkdir '+STAGE not in last['argv']:
+        prior_commands = json.loads(failed.read_bytes())
+        last = prior_commands[-1]
+        remote_commands = [arg for arg in last['argv'] if arg.startswith('--command=')]
+        if last['native_exit'] != 1 or last['argv'][1:4] != ['compute','ssh',VM] or len(remote_commands) != 1 or not remote_commands[0].startswith('--command=python3 -c ') or STAGE not in remote_commands[0]:
             raise RuntimeError('Expected terminal transport failure absent')
+        if not any(row['native_exit'] == 0 and row['argv'][1:5] == ['compute','instances','start',VM] for row in prior_commands):
+            raise RuntimeError('Original dedicated start unproven; no repeat start')
     else:
         cloud(['compute','instances','start',VM])
     after = describe()
