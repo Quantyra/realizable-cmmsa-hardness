@@ -15,6 +15,7 @@ STAGE = '/home/dfredriksen_quantyra_org/full83-builder02-bootstrap-v2'
 VM = 'quantyra-lean-builder-02'
 VM_ID = '7237681467779354904'
 NAMES = ('extract_builder02_dependencies.py','verify_builder02.py','builder02_worker.py')
+EXTRA_LOCAL_CONTROLS = ()
 
 def save(path,value):
     path.parent.mkdir(parents=True,exist_ok=True)
@@ -110,6 +111,8 @@ def main(execute=False):
     if {line.split()[1].rsplit('/',1)[1]:line.split()[0].upper() for line in out.decode().splitlines()} != expected: raise RuntimeError('Staged control/capsule drift')
     _,out,_=control.cloud(['compute','ssh',VM,'--tunnel-through-iap','--command=cat '+STAGE+'/dependency-preflight.json'])
     remote=json.loads(out)
+    if remote['prepared_workspace'] != '/home/dfredriksen_quantyra_org/'+ROOT.name+'-prepared':
+        raise RuntimeError('Prepared resource workspace mismatch')
     for field,category in [('package_sources_verified','package_sources'),('core_sources_verified','core_sources'),('warm_objects_verified','objects')]:
         if remote[field] != len(manifest['cache_provenance'][category]): raise RuntimeError('Incomplete dependency verification')
     if remote['gcp_identity']['id'] != VM_ID or remote['compiler_sha256'] != manifest['cache_provenance']['compiler']['sha256']: raise RuntimeError('Dependency identity mismatch')
@@ -118,9 +121,10 @@ def main(execute=False):
         print(json.dumps(dict(preflight=str(check),passed=True,launch_called=False))); return 0
     marker=ROOT/'launch-once.json'
     run='cmmsa_a8_output_'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'_'+uuid.uuid4().hex[:8]
-    save(marker,dict(run=run,preflight=str(check),controller_sha256=digest(__file__),remote_controls=expected))
+    save(marker,dict(run=run,preflight=str(check),controller_sha256=digest(__file__),remote_controls=expected,
+                     extra_local_controls={name:digest(Path(__file__).with_name(name)) for name in EXTRA_LOCAL_CONTROLS}))
     executed=check/'executed-controls'; executed.mkdir()
-    for name in (*NAMES,'builder02_controller.py'):
+    for name in (*NAMES,'builder02_controller.py',*EXTRA_LOCAL_CONTROLS):
         shutil.copyfile(Path(__file__).with_name(name),executed/name)
     code,_,_=control.cloud(['compute','ssh',VM,'--tunnel-through-iap','--command=python3 -B '+STAGE+'/builder02_worker.py '+STAGE+' '+run],timeout=4350,allow_failure=True)
     archive='/home/dfredriksen_quantyra_org/'+run+'_evidence.tar.gz'

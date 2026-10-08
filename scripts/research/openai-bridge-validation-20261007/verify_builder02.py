@@ -10,7 +10,7 @@ import tarfile
 def digest(path):
     with Path(path).open('rb') as stream: return hashlib.file_digest(stream,'sha256').hexdigest().upper()
 
-def verify(stage):
+def verify(stage,resource_tag='full83-resource02'):
     if sys.platform != 'linux': raise RuntimeError('GCP Linux required')
     stage = Path(stage).resolve(strict=True)
     binding = json.loads((stage/'resource-binding.json').read_bytes())
@@ -18,7 +18,8 @@ def verify(stage):
         if digest(stage/name) != pin: raise RuntimeError('Capsule drift: '+name)
     home = Path.home().resolve()
     if str(home) != '/home/dfredriksen_quantyra_org': raise RuntimeError('Unexpected home')
-    work = home/'full83-resource02-prepared'
+    if resource_tag not in ('full83-resource02','full84-resource02-warning-clean'): raise RuntimeError('Unexpected resource tag')
+    work = home/(resource_tag+'-prepared')
     if work.exists(): raise RuntimeError('Prepared workspace already exists; inspect it before continuing')
     work.mkdir()
     with tarfile.open(stage/'input-archive.tar.gz','r:gz') as archive:
@@ -49,8 +50,8 @@ def verify(stage):
         package_sources_verified=len(cache['package_sources']),core_sources_verified=len(cache['core_sources']),
         warm_objects_verified=len(cache['objects']),compiler_sha256=digest(compiler),
         disk_available_bytes=shutil.disk_usage(home).free,compiler_invoked=False,launch_clearance=False,
-        prepared_workspace=str(work))
+        prepared_workspace=str(work),resource_tag=resource_tag)
     (stage/'dependency-preflight.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps(receipt,indent=2))
 
-if __name__ == '__main__': verify(sys.argv[1])
+if __name__ == '__main__': verify(*sys.argv[1:])

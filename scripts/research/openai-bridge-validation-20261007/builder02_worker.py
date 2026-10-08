@@ -31,7 +31,9 @@ def execute(stage, run):
     binding = json.loads((stage/'resource-binding.json').read_bytes())
     preflight = json.loads((stage/'dependency-preflight.json').read_bytes())
     home = Path.home().resolve()
-    prepared = home/'full83-resource02-prepared'
+    resource_tag=preflight.get('resource_tag','full83-resource02')
+    if resource_tag not in ('full83-resource02','full84-resource02-warning-clean'): raise RuntimeError('Unexpected resource tag')
+    prepared = home/(resource_tag+'-prepared')
     if preflight['prepared_workspace'] != str(prepared): raise RuntimeError('Prepared workspace mismatch')
     if digest(prepared/'cloud_capture.py') != binding['helper_sha256']: raise RuntimeError('Helper drift')
     if digest(prepared/'capture-manifest.json') != binding['files']['capture-manifest.json']: raise RuntimeError('Manifest drift')
@@ -65,7 +67,7 @@ def execute(stage, run):
     for rel,pin in manifest['cache_provenance']['objects'].items():
         if digest(warm/rel) != pin: raise RuntimeError('Warm cache drift: '+rel)
     helper['source_pins'](prepared,manifest)
-    marker = home/'full83-resource02-launch-once.json'
+    marker = home/(resource_tag+'-launch-once.json')
     with marker.open('x') as stream:
         json.dump(dict(run=run,host=identity,binding=binding,utc=datetime.now(timezone.utc).isoformat()),stream,indent=2)
     work = home/run
