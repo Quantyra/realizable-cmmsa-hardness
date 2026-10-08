@@ -5,6 +5,8 @@ from pathlib import Path
 import sys
 
 ROOT = Path('C:/Users/dfred/.quantyra/builder02/full90-material-resource02/consumption-v1/qualification/material-review-packets-v1')
+REPORT_DESTINATION = Path(__file__).parent/'full90-material-review-reports'
+RECEIPT_SCHEMA = 'full90-independent-material-packet-terminal-v1'
 
 
 def sha(data):
@@ -44,12 +46,12 @@ def main():
     for tool in ('webSearchRequests',):
         if usage[tool] != 0:
             raise ValueError('Unexpected external tool')
-    destination = Path(__file__).parent/'full90-material-review-reports'
+    destination = REPORT_DESTINATION
     destination.mkdir(exist_ok=True)
     base = destination/f'{lens}-{number:02d}'
     with base.with_suffix('.md').open('x', encoding='utf-8') as output:
         output.write(report['result']+'\n')
-    receipt = {'schema': 'full90-independent-material-packet-terminal-v1', 'lens': lens, 'packet': number,
+    receipt = {'schema': RECEIPT_SCHEMA, 'lens': lens, 'packet': number,
                'packet_sha256': row['sha256'], 'prompt_sha256': sha(prompt),
                'raw_stdout_path': str(folder/'stdout.json'), 'raw_stdout_sha256': sha(raw),
                'raw_stderr_sha256': sha((folder/'stderr.txt').read_bytes()),
