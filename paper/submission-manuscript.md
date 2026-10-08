@@ -121,6 +121,16 @@ by itself this unconditional star-projection PCP. The targeted literature
 assessment found no exact subsumer, but does not certify novelty or priority.
 [MZ, MZ24, BKM](../SOURCES.md).
 
+OpenAI's September 23, 2026 preprints present nearby results on Unique
+Games and perfect-completeness 2-to-1 Games. Their source-hardness and
+Grassmann/shortcode artifacts are candidate references for individual
+ingredients. They do not by themselves supply the exact realizable CMMSA
+star sampler, degree/overlap restrictions, alphabet-soundness tradeoff,
+encoded runtime, or bounded-advice learning transfer used here. Those
+bridges remain unverified. Our comparison is a bounded literature screen
+and does not certify novelty or priority.
+[OAIUG, OAI2to1](../SOURCES.md).
+
 Slack variables, AND products, concentration, weight rounding, secret
 sharing, and the star compilation are established techniques. The new
 argument is their quantitative composition with the modified repetition,
