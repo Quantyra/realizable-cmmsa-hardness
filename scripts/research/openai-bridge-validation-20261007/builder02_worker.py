@@ -14,6 +14,16 @@ import urllib.error
 import urllib.request
 from verify_builder02 import digest
 
+def require_no_external_ip(opener=None):
+    opener=opener or urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    request=urllib.request.Request('http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip',headers={'Metadata-Flavor':'Google'})
+    try:
+        with opener.open(request,timeout=10) as response:
+            if response.headers.get('Metadata-Flavor') != 'Google' or response.read().strip():
+                raise RuntimeError('External IP remains attached or metadata response is unauthenticated')
+    except urllib.error.HTTPError as error:
+        if error.code != 404: raise
+
 def execute(stage, run):
     if sys.platform != 'linux': raise RuntimeError('GCP Linux required')
     if not re.fullmatch(r'cmmsa_a8_output_\d{8}T\d{6}Z_[a-f0-9]{8}',run): raise ValueError('Invalid run')
@@ -30,14 +40,7 @@ def execute(stage, run):
     identity = helper['require_gcp'](manifest)
     if identity['id'] != '7237681467779354904' or identity['name'] != 'quantyra-lean-builder-02': raise RuntimeError('Dedicated host mismatch')
     if identity['machine_type'].rsplit('/',1)[-1] != 'e2-highmem-8': raise RuntimeError('Dedicated machine type mismatch')
-    opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
-    request=urllib.request.Request('http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/',headers={'Metadata-Flavor':'Google'})
-    try:
-        with opener.open(request,timeout=10) as response:
-            if response.headers.get('Metadata-Flavor') != 'Google' or response.read().strip():
-                raise RuntimeError('External access configuration remains attached')
-    except urllib.error.HTTPError as error:
-        if error.code != 404: raise
+    require_no_external_ip()
     if shutil.disk_usage(home).free < 40*1024**3: raise RuntimeError('Insufficient remote storage')
     memory = dict(line.split(':',1) for line in Path('/proc/meminfo').read_text().splitlines())
     if int(memory['MemAvailable'].split()[0])*1024 < 48*1024**3: raise RuntimeError('Insufficient available RAM')
