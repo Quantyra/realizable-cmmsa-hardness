@@ -90,17 +90,27 @@ private def typeDagJson (e : Expr) : Json :=
     ("expr_nodes", Json.arr s.exprNodes), ("level_nodes", Json.arr s.levelNodes)]
 '''
 
-def main():
-    validate_successor()
+def validate_predecessor():
     parent = ROOT/'consumption-v1'
     marker = json.loads((parent/'launch-once.json').read_bytes())
     check = Path(marker['preflight'])
     terminal = json.loads((check/'terminal-custody.json').read_bytes())
     stop = json.loads((check/'vm-termination.json').read_bytes())
+    if terminal['run'] != marker['run'] or stop['run'] != marker['run']:
+        raise RuntimeError('Predecessor run identity differs')
     if terminal['probe_terminal']['probe_native_exit'] != 137 or stop['independent']['status'] != 'TERMINATED':
         raise RuntimeError('Required terminal failure and termination absent')
+    if str(stop['independent']['id']) != '7237681467779354904' or stop['independent']['name'] != 'quantyra-lean-builder-02':
+        raise RuntimeError('Foreign predecessor resource')
+    if terminal['probe_terminal']['project_sources_preserved'] != 319 or terminal['probe_terminal']['compiled_objects_preserved'] != 645:
+        raise RuntimeError('Predecessor preservation incomplete')
     custody = terminal['custody']
     verify_local_custody(custody['short_path'], custody['repository_path'], custody['remote_sha256'], custody['bytes'])
+    return custody
+
+def main():
+    validate_successor()
+    custody = validate_predecessor()
     old_readiness = json.loads((ROOT/'consumption-preparation/readiness.json').read_bytes())
     with tarfile.open(ROOT/'consumption-preparation/tooling.tar.gz') as archive:
         files = {m.name: archive.extractfile(m).read() for m in archive.getmembers()}
