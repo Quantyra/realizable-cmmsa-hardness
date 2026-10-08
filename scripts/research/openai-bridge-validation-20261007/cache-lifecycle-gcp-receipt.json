@@ -1,0 +1,145 @@
+{
+  "root": "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f",
+  "failure": null,
+  "cleanup_failures": [],
+  "all_owned_mounts_released": true,
+  "commands": [
+    [
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "mount",
+          "--bind",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/warm",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/alpha/cache-mount/lower"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "mount",
+          "-o",
+          "remount,bind,ro",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/alpha/cache-mount/lower"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "mount",
+          "-t",
+          "overlay",
+          "overlay",
+          "-o",
+          "lowerdir=/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/alpha/cache-mount/lower,upperdir=/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/alpha/cache-mount/upper,workdir=/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/alpha/cache-mount/work",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/alpha/.lake"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "umount",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/alpha/.lake"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "umount",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/alpha/cache-mount/lower"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    [
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "mount",
+          "--bind",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/warm",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/beta/cache-mount/lower"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "mount",
+          "-o",
+          "remount,bind,ro",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/beta/cache-mount/lower"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "mount",
+          "-t",
+          "overlay",
+          "overlay",
+          "-o",
+          "lowerdir=/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/beta/cache-mount/lower,upperdir=/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/beta/cache-mount/upper,workdir=/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/beta/cache-mount/work",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/beta/.lake"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "umount",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/beta/.lake"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "sudo",
+          "-n",
+          "umount",
+          "/home/dfredriksen_quantyra_org/cmmsa-cache-lifecycle_20261008T014122Z_d3e52a8f/beta/cache-mount/lower"
+        ],
+        "native_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  ],
+  "component_sha256": "9256289aef69536982929d3582b4309e05db4b963de9944c9202ae38adc15d82",
+  "fixture_preserved": true,
+  "production_cache_touched": false,
+  "lean_invoked": false,
+  "vm_power_operations": false
+}
