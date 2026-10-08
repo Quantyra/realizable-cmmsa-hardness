@@ -3,13 +3,15 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 import subprocess
+import shlex
+import sys
 from full90_consumption_controller import ROOT, STAGE, VM, VM_ID, ready
 from full90_builder02_controller import local_gates
 from finalize_builder02_bootstrap import SDK, FLAGS
 from custody_checks import digest
 
 
-def main():
+def main(resume=False):
     loaded, runner, binding = ready()
     local_gates(loaded['common'], loaded)
     folder = ROOT/'staging-controls'/datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
@@ -59,15 +61,22 @@ def main():
     if not any(row['account'] == 'dfredriksen@quantyra.org' and row['status'] == 'ACTIVE' for row in auth):
         raise RuntimeError('Required active account absent')
     before = describe()
-    if before['status'] != 'TERMINATED':
+    if before['status'] != ('RUNNING' if resume else 'TERMINATED'):
         raise RuntimeError('Dedicated VM already running or transitioning; inspect before new start')
     if (ROOT/'launch-once.json').exists():
         raise RuntimeError('Full90 attempt already exists; retain original handle')
-    cloud(['compute','instances','start',VM])
+    if resume:
+        failed = ROOT/'staging-controls/20261008T132751743120Z/commands.json'
+        last = json.loads(failed.read_bytes())[-1]
+        if last['native_exit'] != 1 or last['argv'][1:4] != ['compute','ssh',VM] or '--command=mkdir '+STAGE not in last['argv']:
+            raise RuntimeError('Expected terminal transport failure absent')
+    else:
+        cloud(['compute','instances','start',VM])
     after = describe()
     if after['status'] != 'RUNNING': raise RuntimeError('Dedicated start not proven')
+    directory_check = 'from pathlib import Path; p=Path('+repr(STAGE)+'); assert not p.exists() or not any(p.iterdir()), "Nonempty staging directory: inspect before transfer"; p.mkdir(exist_ok=True)'
     cloud(['compute','ssh',VM,'--tunnel-through-iap',
-           '--command=mkdir '+STAGE])
+           '--command=python3 -c '+shlex.quote(directory_check)])
     paths = [str(ROOT/'green-binding.json'), str(ROOT.parent/'consumption-preparation-v1-dag/tooling.tar.gz'), str(Path(__file__).with_name('full90_consumption_worker.py'))]
     cloud(['compute','scp',*paths,VM+':'+STAGE+'/', '--tunnel-through-iap'])
     cloud(['compute','ssh',VM,'--tunnel-through-iap',
@@ -78,7 +87,8 @@ def main():
     final = describe()
     receipt = {'before': before, 'after': final, 'authentication': auth,
                'worker_preflight': preflight, 'compiler_invoked': False,
-               'launch_clearance': False, 'other_vm_modified': False}
+               'launch_clearance': False, 'other_vm_modified': False,
+               'resumed_after_preserved_transport_failure': resume}
     (folder/'staged.json').write_text(json.dumps(receipt, indent=2)+'\n', encoding='utf-8')
     local_gates(loaded['common'], loaded)
     print(json.dumps({'staging_receipt': str(folder/'staged.json'), 'prepared': True,
@@ -86,4 +96,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if sys.argv[1:] not in ([], ['--resume-staging']): raise SystemExit('Default or --resume-staging')
+    main(sys.argv[1:] == ['--resume-staging'])
