@@ -1,6 +1,7 @@
 """Snapshot exact completed report scope; missing reports forbid full coverage."""
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 BASE = Path('C:/Users/dfred/.quantyra/builder02/full90-material-resource02/consumption-v1/qualification')
@@ -48,7 +49,11 @@ def main():
                   all_packet_terminals_present=not missing,
                   root_inspection_and_findings_reconciliation_separate=True,
                   integrated_review_complete=False, accepted=False)
-    target = BASE/'material-review-coverage-snapshot-v1.json'
+    version = sys.argv[1] if len(sys.argv) == 2 else 'v1'
+    assert version in ('v1', 'v2')
+    if version == 'v2':
+        assert not missing and all(files == required for files in coverage.values())
+    target = BASE/f'material-review-coverage-snapshot-{version}.json'
     with target.open('x', encoding='utf-8') as output:
         json.dump(result,output,indent=2); output.write('\n')
     print(json.dumps(dict(completed=len(completed),missing=missing,
