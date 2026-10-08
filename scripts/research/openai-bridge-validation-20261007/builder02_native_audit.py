@@ -11,7 +11,7 @@ from custody_checks import digest, verify_local_custody
 
 FINISHER_SHA='AE79CB1B154685AF9DB0E43885225F49C7EB750C5F6F5A8D2B5595ED3EEE7156'
 
-def rebound_owners(original_owners,repair,old_source,new_source):
+def rebound_owners(original_owners,repair,old_source,new_source,expected_count=13):
     owners=json.loads(json.dumps(original_owners))
     def declaration_line(source,name):
         matches=list(re.finditer(r'(?m)^[ \t]*(?:(?:private|protected|noncomputable|public)[ \t]+)*(?:theorem|lemma|def|abbrev)[ \t]+'+re.escape(name)+r'\b',source))
@@ -26,16 +26,18 @@ def rebound_owners(original_owners,repair,old_source,new_source):
         row['current_capture_sha256']=repair['new_sha256']
         row['current_owner_line']=declaration_line(new_source,name)
         changed.append(row['qualified'])
-    if len(changed)!=13: raise RuntimeError('Unexpected repaired owner scope')
+    if len(changed)!=expected_count: raise RuntimeError('Unexpected repaired owner scope')
     return owners
 
 def main(resource_root=None):
     root=Path(resource_root) if resource_root is not None else ROOT
-    successor=root.name in ('full84-resource02-warning-clean','full85-resource02')
-    if root not in (ROOT,ROOT.parent/'full84-resource02-warning-clean',ROOT.parent/'full85-resource02'): raise RuntimeError('Unexpected resource root')
+    successor=root.name in ('full84-resource02-warning-clean','full85-resource02','full86-resource02')
+    if root not in (ROOT,ROOT.parent/'full84-resource02-warning-clean',ROOT.parent/'full85-resource02',ROOT.parent/'full86-resource02'): raise RuntimeError('Unexpected resource root')
     repair=None
     if successor:
-        if root.name=='full85-resource02':
+        if root.name=='full86-resource02':
+            from full86_controller import validate_successor
+        elif root.name=='full85-resource02':
             from full85_controller import validate_successor
         else:
             from full84_controller import validate_successor
@@ -58,9 +60,15 @@ def main(resource_root=None):
     inner=json.loads((root/'capture-manifest.json').read_bytes())
     original=json.loads((cap/'inputs/capture-manifest.json').read_bytes())
     normalized=json.loads(json.dumps(inner)); normalized['vm']=original['vm']
+    changed_sources=[]
     if successor:
-        normalized['project_sources'][repair['source']]=original['project_sources'][repair['source']]
-        manifest['project_sources'][repair['source']]=inner['project_sources'][repair['source']]
+        changed_sources=[rel for rel in original['project_sources'] if inner['project_sources'][rel]!=original['project_sources'][rel]]
+        expected_files={'lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean'}
+        if root.name=='full86-resource02': expected_files.add('lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OriginalInduction.lean')
+        if set(changed_sources)!=expected_files: raise RuntimeError('Unexpected cumulative repaired source scope')
+        for rel in changed_sources:
+            normalized['project_sources'][rel]=original['project_sources'][rel]
+            manifest['project_sources'][rel]=inner['project_sources'][rel]
     if normalized != original: raise RuntimeError('Capsule differs beyond authorized resource/source binding')
     finisher=HERE/'finish-native.py'
     if digest(finisher) != FINISHER_SHA: raise RuntimeError('Frozen qualification control drift')
@@ -78,10 +86,11 @@ def main(resource_root=None):
     owners=json.loads(owner_path.read_bytes())
     if successor:
         with tarfile.open(root/'input-archive.tar.gz','r:gz') as capsule:
-            new_source=capsule.extractfile(repair['source']).read().decode('utf-8')
-        old_source=(cap/'inputs'/repair['source']).read_text(encoding='utf-8')
-        owner_repair=dict(repair,old_sha256=original['project_sources'][repair['source']]['sha256'])
-        owners=rebound_owners(owners,owner_repair,old_source,new_source)
+            for rel in changed_sources:
+                new_source=capsule.extractfile(rel).read().decode('utf-8')
+                old_source=(cap/'inputs'/rel).read_text(encoding='utf-8')
+                owner_repair=dict(source=rel,old_sha256=original['project_sources'][rel]['sha256'],new_sha256=inner['project_sources'][rel]['sha256'])
+                owners=rebound_owners(owners,owner_repair,old_source,new_source,10 if rel.endswith('OriginalInduction.lean') else 13)
         owners['owner_hash_parent_capture']=cap.name
         owners['source_repair_sha256']=digest(root/'source-repair.json')
         c.write_new(run/'resource-current-axiom-owner-identities.json',c.json_bytes(owners))
