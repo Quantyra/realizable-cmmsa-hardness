@@ -15,7 +15,7 @@ STAGE = '/home/dfredriksen_quantyra_org/full91-source-size-builder02-stage'
 VM = 'quantyra-lean-builder-02'
 VM_ID = '7237681467779354904'
 NAMES = ('extract_builder02_dependencies.py','full91_verify.py','full91_worker.py')
-EXTRA_LOCAL_CONTROLS = ('full91_capture_gates.py','prepare_builder02_full91.py','full91_postprocess.py')
+EXTRA_LOCAL_CONTROLS = ('full91_capture_gates.py','prepare_builder02_full91.py','full91_native_audit.py','full91_postprocess.py')
 
 def save(path,value):
     path.parent.mkdir(parents=True,exist_ok=True)

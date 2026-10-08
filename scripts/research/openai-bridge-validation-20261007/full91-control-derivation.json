@@ -17,13 +17,13 @@
       "parent": "full90_builder02_controller.py",
       "parent_sha256": "00A0234B041A4190A1F1AC6F2CE3DF7B4296716AA8CD24F243D2C1F0FB8D3DAF",
       "successor": "full91_builder02_controller.py",
-      "successor_sha256": "8F8640D399AA570120A3BD0F9C9A11900A2326299B437F8D39A6E18385540D99"
+      "successor_sha256": "3E20D73B6BEAB906370888C301908C85B8AA7FC0B8D2846B61E5DC59630ADECF"
     },
     {
       "parent": "stage_full90_builder02.py",
       "parent_sha256": "4B3ED6C8A4954CB40E9352CAE46C3E875118FCA6FB2E751CAD38121248DE202C",
       "successor": "stage_full91_builder02.py",
-      "successor_sha256": "9941827E9528068AA5FD5E147F690880458D84E1C0887DE41AA7D281BAE691B8"
+      "successor_sha256": "0CE8C691B3E1C68FEA6797EE4535A0AB764C74125FF194499D75479FCBC5AF4E"
     }
   ],
   "retained_guards": [
@@ -40,6 +40,15 @@
   ],
   "cloud_operations_performed": false,
   "local_compilation": false,
-  "qualified_native_finisher_pending": true,
-  "accepted": false
+  "qualified_native_finisher_pending": false,
+  "accepted": false,
+  "native_qualification_authored_not_executed": true,
+  "additional_control_changes": {
+    "staging": "Explicit recovery of the preserved failed IAP connection on the same running VM; no repeat start; absent staging/prepared/launch-marker gates",
+    "native_audit": "Unchanged original172 finisher tail; additive sources included in owned closure and warning checks; all six expansion profiles and three new object hashes checked separately"
+  },
+  "additional_controls": {
+    "full91_native_audit.py": "840B9D0AA0A486F8DF2C25400A7AD342996375975DCE71AB026EA433D0C39D40",
+    "full91_postprocess.py": "DFBC423A2EFCDCE8C0ABA73BAB301B1F6E5EB4F19EEBD9E68C9930A635428185"
+  }
 }

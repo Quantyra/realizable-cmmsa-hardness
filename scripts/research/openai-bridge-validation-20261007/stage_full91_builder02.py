@@ -3,13 +3,14 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 import subprocess
+import sys
 from full91_capture_gates import validate_successor
 from full91_builder02_controller import ROOT, STAGE, VM, VM_ID, NAMES, context, local_gates
 from finalize_builder02_bootstrap import SDK, FLAGS
 from custody_checks import digest
 
 
-def main():
+def main(resume=False):
     validate_successor()
     loaded, runner = context()
     local_gates(loaded['common'], loaded)
@@ -60,11 +61,21 @@ def main():
     if not any(row['account'] == 'dfredriksen@quantyra.org' and row['status'] == 'ACTIVE' for row in auth):
         raise RuntimeError('Required active account absent')
     before = describe()
-    if before['status'] != 'TERMINATED':
+    if before['status'] != ('RUNNING' if resume else 'TERMINATED'):
         raise RuntimeError('Dedicated VM already running or transitioning; inspect before new start')
     if (ROOT/'launch-once.json').exists():
         raise RuntimeError('Full90 attempt already exists; retain original handle')
-    cloud(['compute','instances','start',VM])
+    if resume:
+        prior = ROOT/'staging-controls'/'20261008T215751614819Z'/'commands.json'
+        previous = json.loads(prior.read_bytes())
+        if previous[-1]['native_exit'] != 1 or previous[-1]['argv'][1:4] != ['compute','ssh',VM]:
+            raise RuntimeError('Original staging failure identity changed')
+        if not any(r['argv'][1:5] == ['compute','instances','start',VM] and r['native_exit'] == 0 for r in previous):
+            raise RuntimeError('Original dedicated start unproven')
+        cloud(['compute','ssh',VM,'--tunnel-through-iap',
+               '--command=set -e; test ! -e '+STAGE+'; test ! -e /home/dfredriksen_quantyra_org/'+ROOT.name+'-prepared; test ! -e /home/dfredriksen_quantyra_org/'+ROOT.name+'-launch-once.json'])
+    else:
+        cloud(['compute','instances','start',VM])
     after = describe()
     if after['status'] != 'RUNNING': raise RuntimeError('Dedicated start not proven')
     cloud(['compute','ssh',VM,'--tunnel-through-iap',
@@ -89,4 +100,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if sys.argv[1:] not in ([], ['--resume-staging']):
+        raise SystemExit('Default staging or --resume-staging required')
+    main(sys.argv[1:] == ['--resume-staging'])

@@ -7,8 +7,12 @@ from prepare_builder02_full91 import OUTPUT
 
 def main(action):
     validate_successor()
+    if action == 'audit':
+        import full91_native_audit
+        full91_native_audit.main(OUTPUT)
+        return
     if action != 'terminate':
-        raise ValueError('Use terminate; independent additive native qualification is separate')
+        raise ValueError('Use terminate or audit')
     import terminate_builder02_after_custody as termination
     from full91_builder02_controller import audit_terminal
     termination.ROOT = OUTPUT
