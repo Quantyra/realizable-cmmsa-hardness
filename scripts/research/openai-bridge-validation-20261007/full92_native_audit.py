@@ -127,7 +127,30 @@ def main(resource_root=None):
         tail=tail.replace(old,new)
     c.write_new(run/'executed-original-finisher.py',finisher.read_bytes())
     c.write_new(run/'executed-qualified-tail.py',tail.encode())
-    namespace=dict(Counter=Counter,json=json,re=re,c=c,m=m,HERE=HERE,run=run,cap=cap,manifest=manifest,d=d,
+    # The frozen capture has no additive source paths. Supply only those
+    # missing reads from separately hash-verified immutable successor inputs.
+    overlay = run/'additive-capture-source-overlay'
+    overlay.mkdir()
+    with tarfile.open(root/'input-archive.tar.gz','r:gz') as inputs:
+        for rel in additive['added_sources']:
+            data = inputs.extractfile(rel).read()
+            import hashlib
+            if hashlib.sha256(data).hexdigest().upper() != inner['project_sources'][rel]['sha256']:
+                raise RuntimeError('Additive capture overlay source drift')
+            path = overlay/rel
+            path.parent.mkdir(parents=True,exist_ok=True)
+            with path.open('xb') as output: output.write(data)
+    class InputReads:
+        def __truediv__(self,rel):
+            return overlay/rel if str(rel) in additive['added_sources'] else cap/'inputs'/rel
+    class CaptureReads:
+        name = cap.name
+        def __truediv__(self,rel):
+            return InputReads() if str(rel) == 'inputs' else cap/rel
+    save(run/'additive-capture-read-binding.json',dict(original_capture=str(cap),
+         added_source_sha256={rel:inner['project_sources'][rel]['sha256'] for rel in additive['added_sources']},
+         original_capture_modified=False, original_finisher_tail_modified=False))
+    namespace=dict(Counter=Counter,json=json,re=re,c=c,m=m,HERE=HERE,run=run,cap=CaptureReads(),manifest=manifest,d=d,
                    load=load,save=save,cache=cache,objects=objects,final=final,custody=custody)
     # The original warning seals, owner pins, 172 profiles, object closure and
     # green criterion are executed unchanged; only two output paths are rebound.
