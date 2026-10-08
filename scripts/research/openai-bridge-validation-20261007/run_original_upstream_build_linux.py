@@ -53,7 +53,8 @@ def main():
     destination = ROOT/'original-selected-build-v2'
     destination.mkdir()
     env = dict(os.environ, PATH=str(toolchain/'bin')+':/usr/bin:/bin')
-    command = [str(toolchain/'bin/lake'),'build',*manifest['roots']]
+    # Pinned Lake 5.0.0 help confirms this builds locally without network caches.
+    command = [str(toolchain/'bin/lake'),'--no-cache','build',*manifest['roots']]
     (destination/'command.json').write_text(json.dumps(dict(argv=command, version=version))+'\n')
     with (destination/'stdout.txt').open('xb') as out, (destination/'stderr.txt').open('xb') as err:
         child = subprocess.Popen(command, cwd=ROOT/'lean', env=env, stdout=out, stderr=err)
