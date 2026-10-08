@@ -1,0 +1,27 @@
+"""Exact import-only successor scope, including failed-parent settled custody."""
+import json
+from custody_checks import digest
+from prepare_builder02 import sha
+from prepare_builder02_full92 import PARENT, OUTPUT, capsule, parent_custody, validate_repair
+
+
+def validate_successor():
+    from full91_capture_gates import validate_successor as validate_parent
+    validate_parent()
+    parent_custody()
+    binding = json.loads((OUTPUT / 'resource-binding.json').read_bytes())
+    assert binding['parent_resource_binding_sha256'] == digest(PARENT / 'resource-binding.json')
+    assert binding['source_expansion_sha256'] == digest(OUTPUT / 'source-expansion.json')
+    for name, pin in binding['files'].items():
+        assert digest(OUTPUT / name) == pin
+    old = capsule(PARENT / 'input-archive.tar.gz')
+    new = capsule(OUTPUT / 'input-archive.tar.gz')
+    validate_repair(old, new)
+    assert new['capture-manifest.json'] == (OUTPUT / 'capture-manifest.json').read_bytes()
+    assert binding['auxiliary_inputs'] == {n: sha(new[n]) for n in binding['auxiliary_inputs']}
+    print(json.dumps({'full92_import_only_repair_verified': True, 'sources': 322,
+                      'profiles': 178, 'local_compilation': False, 'launch_clearance': False}))
+
+
+if __name__ == '__main__':
+    validate_successor()
