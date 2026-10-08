@@ -31,11 +31,14 @@ def rebound_owners(original_owners,repair,old_source,new_source):
 
 def main(resource_root=None):
     root=Path(resource_root) if resource_root is not None else ROOT
-    successor=root.name=='full84-resource02-warning-clean'
-    if root not in (ROOT,ROOT.parent/'full84-resource02-warning-clean'): raise RuntimeError('Unexpected resource root')
+    successor=root.name in ('full84-resource02-warning-clean','full85-resource02')
+    if root not in (ROOT,ROOT.parent/'full84-resource02-warning-clean',ROOT.parent/'full85-resource02'): raise RuntimeError('Unexpected resource root')
     repair=None
     if successor:
-        from full84_controller import validate_successor
+        if root.name=='full85-resource02':
+            from full85_controller import validate_successor
+        else:
+            from full84_controller import validate_successor
         validate_successor()
         repair=json.loads((root/'source-repair.json').read_bytes())
     marker=json.loads((root/'launch-once.json').read_bytes())
@@ -77,7 +80,9 @@ def main(resource_root=None):
         with tarfile.open(root/'input-archive.tar.gz','r:gz') as capsule:
             new_source=capsule.extractfile(repair['source']).read().decode('utf-8')
         old_source=(cap/'inputs'/repair['source']).read_text(encoding='utf-8')
-        owners=rebound_owners(owners,repair,old_source,new_source)
+        owner_repair=dict(repair,old_sha256=original['project_sources'][repair['source']]['sha256'])
+        owners=rebound_owners(owners,owner_repair,old_source,new_source)
+        owners['owner_hash_parent_capture']=cap.name
         owners['source_repair_sha256']=digest(root/'source-repair.json')
         c.write_new(run/'resource-current-axiom-owner-identities.json',c.json_bytes(owners))
     load=lambda path:owners if successor and path==owner_path else json.loads(path.read_bytes())

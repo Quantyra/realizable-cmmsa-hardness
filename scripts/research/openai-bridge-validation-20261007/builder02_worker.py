@@ -32,7 +32,7 @@ def execute(stage, run):
     preflight = json.loads((stage/'dependency-preflight.json').read_bytes())
     home = Path.home().resolve()
     resource_tag=preflight.get('resource_tag','full83-resource02')
-    if resource_tag not in ('full83-resource02','full84-resource02-warning-clean'): raise RuntimeError('Unexpected resource tag')
+    if resource_tag not in ('full83-resource02','full84-resource02-warning-clean','full85-resource02'): raise RuntimeError('Unexpected resource tag')
     prepared = home/(resource_tag+'-prepared')
     if preflight['prepared_workspace'] != str(prepared): raise RuntimeError('Prepared workspace mismatch')
     if digest(prepared/'cloud_capture.py') != binding['helper_sha256']: raise RuntimeError('Helper drift')
