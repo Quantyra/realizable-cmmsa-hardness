@@ -1,0 +1,135 @@
+{
+  "schema": "full93-owned-warning-source-candidate-v1",
+  "parent_resource": "C:\\Users\\dfred\\.quantyra\\builder02\\full92-source-size-profile-resource02",
+  "parent_archive_sha256": "9CAD295E7A2F3E2708AB3B55C7155ADE5F83DE97DAB609F33196AB840409473B",
+  "sources": [
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualSelectedComplementSourceSizeAppendMoment.lean",
+      "old_sha256": "89E2609C8C632B31456A6F14928C8F507D62E58F0A74BB3772BF689C3DFB7297",
+      "new_sha256": "D4B86B565B267499622FE21E4D9E2F5D5E9261FB9A99711A105646F84DA75817",
+      "bytes": 11971,
+      "edits": [
+        {
+          "line": 143,
+          "before": "        have hsum := hd.1\n",
+          "after": "        have _hsum := hd.1\n"
+        },
+        {
+          "line": 144,
+          "before": "        have hbudget := hd.2\n",
+          "after": "        have _hbudget := hd.2\n"
+        },
+        {
+          "line": 243,
+          "before": "        have hsum := hd.1\n",
+          "after": "        have _hsum := hd.1\n"
+        },
+        {
+          "line": 244,
+          "before": "        have hbudget := hd.2\n",
+          "after": "        have _hbudget := hd.2\n"
+        }
+      ],
+      "exact_inverse_byte_parity": true,
+      "theorem_statements_retained_modulo_hC_binder_name": true
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualSelectedComplementSourceSizeAnalyticMoment.lean",
+      "old_sha256": "C12D3784FEA6F1A46FD07C9718E39D36859E0645A261ECE185DD520D7C69EC41",
+      "new_sha256": "293A17C90F3BB341E4E544FC5238A8069AA7EB8A87AAB5D44140F31B70F1FF87",
+      "bytes": 66543,
+      "edits": [
+        {
+          "line": 36,
+          "before": "  \u2200 {n d h r i p : Nat} {eta : Real} (hEven : d = 2 * h)\n",
+          "after": "  \u2200 {n d h r i p : Nat} {eta : Real} (_hEven : d = 2 * h)\n"
+        },
+        {
+          "line": 47,
+          "before": "    (basisInv : \u2200 (M : BinaryMatrix n (c + s)) (U V : BinaryMatrix (c + s) (c + s)),\n",
+          "after": "    (_basisInv : \u2200 (M : BinaryMatrix n (c + s)) (U V : BinaryMatrix (c + s) (c + s)),\n"
+        },
+        {
+          "line": 49,
+          "before": "    (hEven : c + s = 2 * h) (hi : i \u2264 c + s)\n",
+          "after": "    (_hEven : c + s = 2 * h) (_hi : i \u2264 c + s)\n"
+        },
+        {
+          "line": 50,
+          "before": "    (hRho : 0 < rho)\n",
+          "after": "    (_hRho : 0 < rho)\n"
+        },
+        {
+          "line": 51,
+          "before": "    (hc : (c : Real) = 2 * (1 - rho) * h)\n",
+          "after": "    (_hc : (c : Real) = 2 * (1 - rho) * h)\n"
+        },
+        {
+          "line": 52,
+          "before": "    (hs : (s : Real) = 2 * rho * h)\n",
+          "after": "    (_hs : (s : Real) = 2 * rho * h)\n"
+        },
+        {
+          "line": 53,
+          "before": "    (hHeight : sourceHeightCutoff rho \u2264 h),\n",
+          "after": "    (_hHeight : sourceHeightCutoff rho \u2264 h),\n"
+        },
+        {
+          "line": 166,
+          "before": "        \u00b7 simp [hrank]\n",
+          "after": "        \u00b7 simp\n"
+        },
+        {
+          "line": 241,
+          "before": "    (F : BinaryMatrix n d \u2192 Real) (C : Real) (hC : 0 \u2264 C)\n",
+          "after": "    (F : BinaryMatrix n d \u2192 Real) (C : Real) (_hC : 0 \u2264 C)\n"
+        },
+        {
+          "line": 512,
+          "before": "        _ = _ := by field_simp [hden.ne'] <;> ring\n",
+          "after": "        _ = _ := by field_simp [hden.ne']\n"
+        },
+        {
+          "line": 582,
+          "before": "  letI : Nonempty\n",
+          "after": "  let : Nonempty\n"
+        },
+        {
+          "line": 598,
+          "before": "    simp [ActualFixedFunctionalBinaryMatrixMoment.CoordinateAmbient,\n",
+          "after": "    simp [ActualFixedFunctionalBinaryMatrixMoment.CoordinateAmbient]\n"
+        },
+        {
+          "line": 599,
+          "before": "      Module.finrank_pi]\n",
+          "after": "\n"
+        },
+        {
+          "line": 906,
+          "before": "      2 ^ q = 2 ^ ((q - 1) + 1) := by congr 1 <;> omega\n",
+          "after": "      2 ^ q = 2 ^ ((q - 1) + 1) := by congr 1; omega\n"
+        },
+        {
+          "line": 1116,
+          "before": "    simp [ActualOrdinaryStarMatchingFiber.MatchesStar, T0,\n",
+          "after": "    simp [ActualOrdinaryStarMatchingFiber.MatchesStar, T0]\n"
+        },
+        {
+          "line": 1117,
+          "before": "      centerMatchBit, leafMatchBit]\n",
+          "after": "\n"
+        }
+      ],
+      "exact_inverse_byte_parity": true,
+      "theorem_statements_retained_modulo_hC_binder_name": true
+    }
+  ],
+  "observed_owned_warning_headers": 21,
+  "all_contract_guards_retained": true,
+  "source_row_and_arity_roles_unchanged": true,
+  "new_linter_options_added": false,
+  "native_warning_clearance_unverified": true,
+  "local_compilation": false,
+  "accepted": false,
+  "launch_clearance": false
+}
