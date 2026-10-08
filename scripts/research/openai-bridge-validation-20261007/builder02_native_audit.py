@@ -11,10 +11,36 @@ from custody_checks import digest, verify_local_custody
 
 FINISHER_SHA='AE79CB1B154685AF9DB0E43885225F49C7EB750C5F6F5A8D2B5595ED3EEE7156'
 
-def main():
-    marker=json.loads((ROOT/'launch-once.json').read_bytes())
+def rebound_owners(original_owners,repair,old_source,new_source):
+    owners=json.loads(json.dumps(original_owners))
+    def declaration_line(source,name):
+        matches=list(re.finditer(r'(?m)^[ \t]*(?:(?:private|protected|noncomputable|public)[ \t]+)*(?:theorem|lemma|def|abbrev)[ \t]+'+re.escape(name)+r'\b',source))
+        if len(matches)!=1: raise RuntimeError('Ambiguous/missing requested source declaration')
+        return source[:matches[0].start()].count('\n')+1
+    changed=[]
+    for row in owners['requests']:
+        if row['owner_file']!=repair['source']: continue
+        name=row['qualified'].rsplit('.',1)[-1]
+        if row['current_capture_sha256']!=repair['old_sha256'] or declaration_line(old_source,name)!=row['current_owner_line']:
+            raise RuntimeError('Original owner identity mismatch')
+        row['current_capture_sha256']=repair['new_sha256']
+        row['current_owner_line']=declaration_line(new_source,name)
+        changed.append(row['qualified'])
+    if len(changed)!=13: raise RuntimeError('Unexpected repaired owner scope')
+    return owners
+
+def main(resource_root=None):
+    root=Path(resource_root) if resource_root is not None else ROOT
+    successor=root.name=='full84-resource02-warning-clean'
+    if root not in (ROOT,ROOT.parent/'full84-resource02-warning-clean'): raise RuntimeError('Unexpected resource root')
+    repair=None
+    if successor:
+        from full84_controller import validate_successor
+        validate_successor()
+        repair=json.loads((root/'source-repair.json').read_bytes())
+    marker=json.loads((root/'launch-once.json').read_bytes())
     check=Path(marker['preflight']).resolve(strict=True)
-    if not check.is_relative_to((ROOT/'checks').resolve()): raise RuntimeError('Foreign check root')
+    if not check.is_relative_to((root/'checks').resolve()): raise RuntimeError('Foreign check root')
     receipt=json.loads((check/'terminal-custody.json').read_bytes())
     termination=json.loads((check/'vm-termination.json').read_bytes())
     if receipt['run'] != marker['run'] or termination['run'] != marker['run'] or not termination['custody_verified_before_stop']:
@@ -26,9 +52,13 @@ def main():
     m,runner=context(); c=m['common']; local_gates(c,m)
     HERE=m['HERE']; cap=c.PACKAGE/'captures/capture-full-a22-hc46-83'
     manifest=json.loads((cap/'manifest.json').read_bytes())
-    inner=json.loads((ROOT/'capture-manifest.json').read_bytes())
+    inner=json.loads((root/'capture-manifest.json').read_bytes())
     original=json.loads((cap/'inputs/capture-manifest.json').read_bytes())
-    if {**inner,'vm':original['vm']} != original: raise RuntimeError('Capsule differs beyond authorized resource binding')
+    normalized=json.loads(json.dumps(inner)); normalized['vm']=original['vm']
+    if successor:
+        normalized['project_sources'][repair['source']]=original['project_sources'][repair['source']]
+        manifest['project_sources'][repair['source']]=inner['project_sources'][repair['source']]
+    if normalized != original: raise RuntimeError('Capsule differs beyond authorized resource/source binding')
     finisher=HERE/'finish-native.py'
     if digest(finisher) != FINISHER_SHA: raise RuntimeError('Frozen qualification control drift')
     run=check/'qualified-native'/marker['run']; run.mkdir(parents=True,exist_ok=False)
@@ -41,7 +71,16 @@ def main():
                 raise RuntimeError('Unsafe evidence entry')
             target=d/member.name; target.parent.mkdir(parents=True,exist_ok=True)
             with target.open('xb') as output: output.write(archive.extractfile(member).read())
-    load=lambda path:json.loads(path.read_bytes())
+    owner_path=HERE/'current-axiom-owner-identities.json'
+    owners=json.loads(owner_path.read_bytes())
+    if successor:
+        with tarfile.open(root/'input-archive.tar.gz','r:gz') as capsule:
+            new_source=capsule.extractfile(repair['source']).read().decode('utf-8')
+        old_source=(cap/'inputs'/repair['source']).read_text(encoding='utf-8')
+        owners=rebound_owners(owners,repair,old_source,new_source)
+        owners['source_repair_sha256']=digest(root/'source-repair.json')
+        c.write_new(run/'resource-current-axiom-owner-identities.json',c.json_bytes(owners))
+    load=lambda path:owners if successor and path==owner_path else json.loads(path.read_bytes())
     save=lambda path,value:c.write_new(path,c.json_bytes(value))
     expected={name:row['sha256'] for name,row in manifest['project_sources'].items()}
     expected.update({name:row['sha256'] for name,row in manifest['configs'].items()})
@@ -57,7 +96,7 @@ def main():
         raise RuntimeError('Frozen compiler/cache comparison failed')
     save(run/'cache-comparison.json',comparison)
     save(run/'qualified-resource-preconditions.json',dict(custody=custody,termination=termination,
-        original_capture_preserved=True,only_resource_binding_changed=True,local_preservation_verified=True,
+        original_capture_preserved=True,only_resource_binding_changed=not successor,source_repair=repair,local_preservation_verified=True,
         frozen_finisher_sha256=FINISHER_SHA,local_compilation=False))
     text=finisher.read_text()
     tail=text[text.index('baseline=load('):]
@@ -73,6 +112,10 @@ def main():
     # The original warning seals, owner pins, 172 profiles, object closure and
     # green criterion are executed unchanged; only two output paths are rebound.
     exec(compile(tail,str(finisher)+'::resource02-qualification','exec'),namespace)
+    if successor:
+        save(run/'successor-native-report.json',dict(namespace['summary'],resource_capture=root.name,
+            parent_capture=cap.name,source_repair_sha256=digest(root/'source-repair.json'),
+            rebound_axiom_owner_identities_sha256=digest(run/'resource-current-axiom-owner-identities.json')))
     local_gates(c,m)
 
 if __name__ == '__main__': main()
