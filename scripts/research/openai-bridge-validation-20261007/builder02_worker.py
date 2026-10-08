@@ -10,6 +10,8 @@ import subprocess
 import sys
 import tarfile
 import traceback
+import urllib.error
+import urllib.request
 from verify_builder02 import digest
 
 def execute(stage, run):
@@ -27,6 +29,15 @@ def execute(stage, run):
     helper = runpy.run_path(str(prepared/'cloud_capture.py'),run_name='dedicated_prelaunch')
     identity = helper['require_gcp'](manifest)
     if identity['id'] != '7237681467779354904' or identity['name'] != 'quantyra-lean-builder-02': raise RuntimeError('Dedicated host mismatch')
+    if identity['machine_type'].rsplit('/',1)[-1] != 'e2-highmem-8': raise RuntimeError('Dedicated machine type mismatch')
+    opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    request=urllib.request.Request('http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/',headers={'Metadata-Flavor':'Google'})
+    try:
+        with opener.open(request,timeout=10) as response:
+            if response.headers.get('Metadata-Flavor') != 'Google' or response.read().strip():
+                raise RuntimeError('External access configuration remains attached')
+    except urllib.error.HTTPError as error:
+        if error.code != 404: raise
     if shutil.disk_usage(home).free < 40*1024**3: raise RuntimeError('Insufficient remote storage')
     memory = dict(line.split(':',1) for line in Path('/proc/meminfo').read_text().splitlines())
     if int(memory['MemAvailable'].split()[0])*1024 < 48*1024**3: raise RuntimeError('Insufficient available RAM')
@@ -40,6 +51,14 @@ def execute(stage, run):
     if subprocess.run(['systemctl','is-active','--quiet','quantyra-idle-shutdown.timer']).returncode:
         raise RuntimeError('Dedicated idle safety timer must be restored before launch')
     warm = home/manifest['cache_provenance']['run']
+    toolchain = home/'.elan/toolchains/leanprover--lean4---v4.34.0-rc2'
+    if digest(toolchain/'bin/lean') != manifest['cache_provenance']['compiler']['sha256']:
+        raise RuntimeError('Compiler identity drift')
+    for category,root in [('package_sources',warm),('core_sources',toolchain)]:
+        for rel,pin in manifest['cache_provenance'][category].items():
+            path=root/rel
+            if not path.resolve(strict=True).is_relative_to(root.resolve()) or digest(path) != pin:
+                raise RuntimeError(category+' drift: '+rel)
     for rel,pin in manifest['cache_provenance']['objects'].items():
         if digest(warm/rel) != pin: raise RuntimeError('Warm cache drift: '+rel)
     helper['source_pins'](prepared,manifest)
@@ -57,7 +76,7 @@ def execute(stage, run):
         if result.returncode: raise RuntimeError('Owned cache copy failed')
         offline=work/'offline-bin'; offline.mkdir()
         shim=offline/'git'
-        shim.write_text('#!/usr/bin/env bash\ncase "$1" in clone|fetch|pull|ls-remote) exit 93;; esac\nexec /usr/bin/git "$@"\n')
+        shim.write_text('#!/usr/bin/env bash\nfor argument in "$@"; do case "$argument" in clone|fetch|pull|push|ls-remote|submodule) exit 93;; esac; done\nexec /usr/bin/git "$@"\n')
         shim.chmod(0o755)
         env=dict(os.environ); env['PATH']=str(offline)+':'+str(home/'.elan/bin')+':'+env['PATH']
         (evidence/'resource-binding.json').write_bytes((stage/'resource-binding.json').read_bytes())
