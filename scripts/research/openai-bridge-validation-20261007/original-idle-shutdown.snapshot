@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+state=/var/lib/quantyra-idle-shutdown
+now=$(date +%s)
+mkdir -p "$state"
+
+# Builds, package installation, and interactive SSH sessions all count as activity.
+if pgrep -x lean >/dev/null || pgrep -x lake >/dev/null || pgrep -x git >/dev/null || \
+   pgrep -x apt >/dev/null || pgrep -x apt-get >/dev/null || pgrep -x dpkg >/dev/null || \
+   pgrep -x curl >/dev/null || pgrep -x tar >/dev/null || pgrep -x zstd >/dev/null || \
+   who | grep -q .; then
+  printf '%s\n' "$now" >"$state/last-active"
+  exit 0
+fi
+
+if [[ ! -f "$state/last-active" ]]; then
+  printf '%s\n' "$now" >"$state/last-active"
+  exit 0
+fi
+last=$(cat "$state/last-active")
+if (( now - last >= 2700 )); then
+  logger -t quantyra-idle-shutdown '45 minutes idle; powering off'
+  /sbin/shutdown -h now
+fi
