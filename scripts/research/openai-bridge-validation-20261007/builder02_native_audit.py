@@ -31,11 +31,13 @@ def rebound_owners(original_owners,repair,old_source,new_source,expected_count=1
 
 def main(resource_root=None):
     root=Path(resource_root) if resource_root is not None else ROOT
-    successor=root.name in ('full84-resource02-warning-clean','full85-resource02','full86-resource02','full87-resource02')
-    if root not in (ROOT,ROOT.parent/'full84-resource02-warning-clean',ROOT.parent/'full85-resource02',ROOT.parent/'full86-resource02',ROOT.parent/'full87-resource02'): raise RuntimeError('Unexpected resource root')
+    successor=root.name in ('full84-resource02-warning-clean','full85-resource02','full86-resource02','full87-resource02','full88-resource02')
+    if root not in (ROOT,ROOT.parent/'full84-resource02-warning-clean',ROOT.parent/'full85-resource02',ROOT.parent/'full86-resource02',ROOT.parent/'full87-resource02',ROOT.parent/'full88-resource02'): raise RuntimeError('Unexpected resource root')
     repair=None
     if successor:
-        if root.name=='full87-resource02':
+        if root.name=='full88-resource02':
+            from full88_controller import validate_successor
+        elif root.name=='full87-resource02':
             from full87_controller import validate_successor
         elif root.name=='full86-resource02':
             from full86_controller import validate_successor
@@ -66,7 +68,7 @@ def main(resource_root=None):
     if successor:
         changed_sources=[rel for rel in original['project_sources'] if inner['project_sources'][rel]!=original['project_sources'][rel]]
         expected_files={'lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22ParentFactorization.lean'}
-        if root.name in ('full86-resource02','full87-resource02'): expected_files.add('lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OriginalInduction.lean')
+        if root.name in ('full86-resource02','full87-resource02','full88-resource02'): expected_files.add('lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46A22OriginalInduction.lean')
         if set(changed_sources)!=expected_files: raise RuntimeError('Unexpected cumulative repaired source scope')
         for rel in changed_sources:
             normalized['project_sources'][rel]=original['project_sources'][rel]
