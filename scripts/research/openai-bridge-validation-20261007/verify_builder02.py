@@ -18,7 +18,7 @@ def verify(stage,resource_tag='full83-resource02'):
         if digest(stage/name) != pin: raise RuntimeError('Capsule drift: '+name)
     home = Path.home().resolve()
     if str(home) != '/home/dfredriksen_quantyra_org': raise RuntimeError('Unexpected home')
-    if resource_tag not in ('full83-resource02','full84-resource02-warning-clean','full85-resource02','full86-resource02','full87-resource02','full88-resource02'): raise RuntimeError('Unexpected resource tag')
+    if resource_tag not in ('full83-resource02','full84-resource02-warning-clean','full85-resource02','full86-resource02','full87-resource02','full88-resource02','full89-resource02'): raise RuntimeError('Unexpected resource tag')
     work = home/(resource_tag+'-prepared')
     if work.exists(): raise RuntimeError('Prepared workspace already exists; inspect it before continuing')
     work.mkdir()
