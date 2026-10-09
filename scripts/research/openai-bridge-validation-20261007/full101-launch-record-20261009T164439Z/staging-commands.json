@@ -1,0 +1,184 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "auth",
+      "list",
+      "--filter=status:ACTIVE",
+      "--format=json(account,status)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "C63009EDEEF41892ACDE6B0F4FB7D0F98473F54E84F2F6B1FEED6ABF6BC8D1B9",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:41:25.935455+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "8CBAECBB888C1E7EFD9DD2A00F88E50BD6ABE02D81A14C888900117A973DAE9B",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:41:31.140917+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "start",
+      "quantyra-lean-builder-02",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "AA572764B0FAA83876905D17D79A37D55C8D50AD36610FC1DDC20559A8F00C32",
+    "utc": "2026-10-09T16:41:49.402766+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:41:53.480822+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=mkdir /home/dfredriksen_quantyra_org/full101-spectral-original-application-builder02-stage",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:42:22.993914+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "scp",
+      "C:\\Users\\dfred\\.quantyra\\builder02\\full101-spectral-original-application-resource02\\input-archive.tar.gz",
+      "C:\\Users\\dfred\\.quantyra\\builder02\\full101-spectral-original-application-resource02\\capture-manifest.json",
+      "C:\\Users\\dfred\\.quantyra\\builder02\\full101-spectral-original-application-resource02\\resource-binding.json",
+      "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\extract_builder02_dependencies.py",
+      "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full101_verify.py",
+      "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full101_worker.py",
+      "quantyra-lean-builder-02:/home/dfredriksen_quantyra_org/full101-spectral-original-application-builder02-stage/",
+      "--tunnel-through-iap",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "038450AE644B7F198559D2921C7C4F1136A7D90D4A7520B44DAC06B38F431C2B",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:42:38.572517+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=set -e; date +%s | sudo tee /var/lib/quantyra-idle-shutdown/last-active; sudo systemctl start quantyra-idle-shutdown.timer; systemctl is-active quantyra-idle-shutdown.timer",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "D183363FC7AAAAC3511FCC8D9BB22D9242904C62230A365EF9C2AABBCB97906F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:42:49.734147+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=python3 -B /home/dfredriksen_quantyra_org/full101-spectral-original-application-builder02-stage/full101_verify.py /home/dfredriksen_quantyra_org/full101-spectral-original-application-builder02-stage full101-spectral-original-application-resource02",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "0C121D8A26CC0D036249C960D4EC223A09D58703AF7A1D534050AE68A851CF86",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:43:20.084511+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=cat /home/dfredriksen_quantyra_org/full101-spectral-original-application-builder02-stage/dependency-preflight.json",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "0C121D8A26CC0D036249C960D4EC223A09D58703AF7A1D534050AE68A851CF86",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:43:33.658467+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-09T16:43:39.411254+00:00"
+  }
+]
