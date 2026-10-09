@@ -510,6 +510,9 @@ In particular the weaker bound used below is valid:
 \begin{proof}
 We reconstruct the finite-character calculation behind MZ Lemma~4.7
 and MZ24 Lemmas~A.10--A.13 for their actual sampling laws.
+MZ24 Lemma~A.13 states the weaker eigenvalue bound, rather than the exact
+eigenvalue and energy identities below. Those identities are a direct finite
+reconstruction for the specified sampling laws; no novelty is claimed.
 Use $\langle F,H\rangle=\mathbb E[F\overline H]$ and let $J_0$ be
 the inclusion of the first $c$ coordinates. The ordinary adjoint of
 $\mathcal T$ is fixed-coordinate pullback, but for basis-invariant $F$
