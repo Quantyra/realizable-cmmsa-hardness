@@ -1,0 +1,41 @@
+{
+  "schema": "actual-unconditional-append-Spectral47-proof-route-v2",
+  "carrier": "BinaryMatrix n (c+s) over ZMod 2; all matrices including deficient/zero-dimensional cases",
+  "hypothesis": "F invariant under all right matrices U,V with U*V=V*U=1",
+  "operator": "actual unconditional appendAverage, not uniform/rank-one noise",
+  "frequency_level": "rankProjection i; i <= c+s",
+  "candidate_matrix_orbit": "spectral-matrix-orbit-candidate-v1/BinaryMatrixRightOrbit.lean",
+  "candidate_Fourier_covariance": "spectral-matrix-orbit-candidate-v1/BinaryMatrixRightFourierCovariance.lean",
+  "candidate_both_native_unverified": true,
+  "qualified_generic_helper_source_sha256": "8864F1152CF47819087237E2151134EBE4766ED06AA0603E44A9DCE095A73EE7",
+  "routes": [
+    {
+      "name": "image-frequency-fibres",
+      "steps": [
+        "Establish Fourier coefficients constant on equal Matrix.toLin image ranges.",
+        "Count the rank-i frequency fibre over fixed image W as frames(c+s,i) by a verified surjective-map/transpose-injective-frame equivalence.",
+        "Prove appendZeroFrequency preserves the exact image W, not merely its rank.",
+        "Use actual append coefficient identity and Parseval to express post energy as frames(c,i)/frames(c+s,i) times full level energy.",
+        "Prove ratio <= 2^(-i*s), with i>c giving zero and i=0 retaining empty products."
+      ]
+    },
+    {
+      "name": "uniform-right-basis-kernel-frames",
+      "steps": [
+        "Reindex Fourier energy under a uniform finite right-basis equivalence and use full Fourier covariance.",
+        "Prove last s columns of a uniform full binary basis form a uniform ordered independent s-frame.",
+        "For a rank-i frequency map Y, tail-zero iff the tail frame lies in ker(Matrix.toLin Y), whose dimension is c+s-i.",
+        "Count the tail-zero probability as frames(c+s-i,s)/frames(c+s,s).",
+        "Prove this probability <= 2^(-i*s), handling kernel dimension < s as zero.",
+        "Prove double finite mean reindexing and actual append Parseval give the same energy bound."
+      ]
+    }
+  ],
+  "both_routes_require_universal_Lean_cardinality_distribution_and_energy_proofs": true,
+  "weak_contract_transfer": "Nonnegative full level energy and 2^(-i*s) <= 2^(-i*(s-1)) imply the displayed Spectral47 RHS after adding its nonnegative 3*2^(i-n) term; retain every original contract parameter.",
+  "bounded_dual_count_receipt_sha256": "76527030F52E41DE34BF688D25903BB6EC97ACEE5321BBBFBAF0F49445AC8426",
+  "bounded_evidence_does_not_prove_universal_math": true,
+  "universal_Spectral47_inhabitant_proven": false,
+  "full_goal_complete": false,
+  "accepted": false
+}
