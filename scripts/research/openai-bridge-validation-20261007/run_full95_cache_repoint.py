@@ -12,8 +12,8 @@ REMOTE = '/home/dfredriksen_quantyra_org/full95-cache-repoint-v1'
 
 
 def main(action):
-    if action not in ('plan', 'execute'):
-        raise ValueError('Use plan or execute')
+    if action not in ('plan', 'execute', 'collect-plan', 'collect-receipt'):
+        raise ValueError('Use plan, execute, collect-plan or collect-receipt')
     validate_successor()
     loaded, runner = context()
     local_gates(loaded['common'], loaded)
@@ -44,16 +44,23 @@ def main(action):
         raise RuntimeError('Repoint control drift')
     with (folder / 'executed-repoint-control.py').open('xb') as stream:
         stream.write(source.read_bytes())
-    code, out, _ = control.cloud(['compute', 'ssh', VM, '--tunnel-through-iap',
-                                 '--command=python3 -B ' + REMOTE + '/' + source.name + ' --' + action],
-                                timeout=600, allow_failure=True)
-    if code:
-        raise RuntimeError('Same cache-repoint operation failed; preserve and inspect ' + str(folder))
-    name = 'plan.json' if action == 'plan' else 'receipt.json'
-    _, raw, _ = control.cloud(['compute', 'ssh', VM, '--tunnel-through-iap', '--command=cat ' + REMOTE + '/' + name])
-    value = json.loads(raw)
-    with (folder / name).open('xb') as stream:
-        stream.write(raw)
+    if action in ('plan', 'execute'):
+        code, out, _ = control.cloud(['compute', 'ssh', VM, '--tunnel-through-iap',
+                                     '--command=python3 -B ' + REMOTE + '/' + source.name + ' --' + action],
+                                    timeout=600, allow_failure=True)
+        if code:
+            raise RuntimeError('Same cache-repoint operation failed; preserve and inspect ' + str(folder))
+    name = 'plan.json' if action in ('plan', 'collect-plan') else 'receipt.json'
+    # Large JSON stdout crashed the Windows SSH client after a successful
+    # planning operation. Retrieve the existing file, without repeating it.
+    _, raw, _ = control.cloud(['compute', 'ssh', VM, '--tunnel-through-iap',
+                              '--command=sha256sum ' + REMOTE + '/' + name])
+    expected_pin = raw.decode().split()[0].upper()
+    control.cloud(['compute', 'scp', VM + ':' + REMOTE + '/' + name,
+                   str(folder / name), '--tunnel-through-iap'], timeout=300)
+    if digest(folder / name) != expected_pin:
+        raise RuntimeError('Retrieved JSON identity mismatch')
+    value = json.loads((folder / name).read_bytes())
     receipt = {'action': action, 'VM': state, 'control_sha256': pin, 'remote_control': REMOTE,
                'local_result': str(folder / name), 'result_sha256': digest(folder / name),
                'compiler_invoked': False, 'VM_power_operation': False, 'accepted': False}
