@@ -19,6 +19,16 @@ def main():
         raise RuntimeError('Original terminal already collected; inspect it')
     folder = check / 'recovery-controls-v1'
     folder.mkdir()
+    with (folder / 'executed-recovery.py').open('xb') as output:
+        output.write(Path(__file__).read_bytes())
+    commands = json.loads((check / 'commands.json').read_bytes())
+    saved = commands[-1]
+    saved_stdout = check / saved['stdout_path']
+    if saved['index'] != 3 or digest(saved_stdout) != saved['stdout_sha256']:
+        raise RuntimeError('Original worker report identity changed')
+    reported = json.loads(saved_stdout.read_bytes())
+    if reported['terminal']['run'] != marker['run']:
+        raise RuntimeError('Original terminal run mismatch')
     records = []
     evidence = '/home/dfredriksen_quantyra_org/' + marker['run'] + '_evidence'
     archive = evidence + '.tar.gz'
@@ -82,6 +92,10 @@ def main():
 
     while True:
         code, out = ssh('cat ' + evidence + '/dedicated-worker-terminal.json')
+        if code or not out.strip():
+            # Startup IAP may close before the first read. Retry only the read;
+            # do not repeat VM start or execute any worker.
+            code, out = ssh('cat ' + evidence + '/dedicated-worker-terminal.json')
         if code == 0 and out.strip():
             try:
                 terminal = json.loads(out)
@@ -93,6 +107,8 @@ def main():
                 continue
             if terminal['run'] != marker['run'] or terminal['host']['id'] != VM_ID or terminal['host']['name'] != VM:
                 raise RuntimeError('Foreign worker terminal')
+            if terminal != reported['terminal']:
+                raise RuntimeError('Original saved worker terminal changed')
             break
         rows = observe_worker()
         if not rows:
@@ -110,6 +126,8 @@ def main():
         if code == 0 and len(out.decode().splitlines()) == 2:
             lines = out.decode().splitlines()
             pin, size = lines[0].split()[0].upper(), int(lines[1])
+            if pin != reported['sha256'] or size != reported['size']:
+                raise RuntimeError('Original completed archive identity changed')
             break
         print('Same terminal worker archive still pending; no new launch', flush=True)
         time.sleep(10)
