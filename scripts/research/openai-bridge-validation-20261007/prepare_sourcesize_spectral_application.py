@@ -7,7 +7,7 @@ import tarfile
 
 HERE = Path(__file__).parent
 PARENT = Path('C:/Users/dfred/.quantyra/builder02/full100-matrix-fourier-bullet-repair-resource02')
-ROOT = HERE / 'sourcesize-spectral-application-candidate-v1'
+ROOT = HERE / 'sourcesize-spectral-application-candidate-v2'
 PREFIX = 'lean/PvNP/RealizableHardness/'
 NS = 'PvNP.RealizableHardness.ActualSelectedComplementSourceSizeSpectralApplication'
 
@@ -48,8 +48,7 @@ def main():
                      ' I copies U A C T f\n    base sourceHeightCutoff hsel hA r hrd e he hfail\n'
                      '    ((PvNP.RealizableHardness.SourceSizeContractBridge.spectral47_contract_iff\n'
                      '      sourceHeightCutoff).mp\n'
-                     '      (PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant.\n'
-                     '        spectral47_exact_contract_inhabitant sourceHeightCutoff))\n'
+                     '      (PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant.spectral47_exact_contract_inhabitant sourceHeightCutoff))\n'
                      '    a ha' + (' hkDyadic hkm' if dyadic else '') + '\n')
             statements.append(transformed + proof)
             records.append(dict(source=rel, source_sha256=sha(data), theorem=name,
@@ -67,15 +66,22 @@ def main():
             '\nopen PvNP.RealizableHardness.ActualSelectedComplementSourceSizeAnalyticMoment\n'
             'set_option autoImplicit false\nnoncomputable section\n'
             'attribute [local instance] Classical.propDecidable\n\n' +
-            '\n'.join(statements) + '\nend\nend ' + NS + '\n').encode()
+            '\n'.join(statements) + '\ntheorem sourceSize_spectral47_inhabited (cutoff : Real → Nat) :\n'
+            '    PvNP.RealizableHardness.ActualSelectedComplementSourceSizeAnalyticMoment.Spectral47ExactContract cutoff :=\n'
+            '  (PvNP.RealizableHardness.SourceSizeContractBridge.spectral47_contract_iff cutoff).mp\n'
+            '    (PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant.spectral47_exact_contract_inhabitant cutoff)\n'
+            '\nend\nend ' + NS + '\n').encode()
     checks = ('import ' + NS + '\n\n' + '\n'.join(
         '#check ' + NS + '.' + r['candidate_theorem'] + '\n#print axioms ' + NS + '.' + r['candidate_theorem']
         for r in records) + '\n\nexample (cutoff : Real → Nat) :\n'
-        '    PvNP.RealizableHardness.ActualSelectedComplementSourceSizeAnalyticMoment.\n'
-        '      Spectral47ExactContract cutoff :=\n'
+        '    PvNP.RealizableHardness.ActualSelectedComplementSourceSizeAnalyticMoment.Spectral47ExactContract cutoff :=\n'
         '  (PvNP.RealizableHardness.SourceSizeContractBridge.spectral47_contract_iff cutoff).mp\n'
-        '    (PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant.\n'
-        '      spectral47_exact_contract_inhabitant cutoff)\n').encode()
+        '    (PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant.spectral47_exact_contract_inhabitant cutoff)\n'
+        '#print axioms ' + NS + '.sourceSize_spectral47_inhabited\n'
+        '#print axioms PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant.spectral47_exact_contract_inhabitant\n'
+        '#print axioms PvNP.RealizableHardness.ActualBinaryMatrixHC46OriginalExactInhabitant.original_HC46_exact\n'
+        '#print axioms PvNP.RealizableHardness.ActualSelectedComplementSourceSizeOriginalApplication.selected_actual_material_moment_bound_original\n'
+        '#print axioms PvNP.RealizableHardness.ActualSelectedComplementManuscriptDyadicMoment.selected_actual_material_moment_bound_original_at_dyadic_exponent\n').encode()
     ROOT.mkdir(exist_ok=True)
     files = []
     for name, data in [('ActualSelectedComplementSourceSizeSpectralApplication.lean', body),
@@ -84,13 +90,16 @@ def main():
         stripped = re.sub(r'/\-.*?\-/|--[^\n]*', '', data.decode(), flags=re.S)
         assert not re.search(r'\b(?:sorry|admit|axiom)\b', stripped)
         assert not re.search(r'^\s*-[ \t]+', stripped, re.M)
+        assert not re.search(r'[A-Za-z0-9_]\.\s+\w', stripped)
         path = ROOT / name
         if path.exists():
             assert path.read_bytes() == data
         else:
             path.write_bytes(data)
         files.append(dict(path=PREFIX + name, bytes=len(data), sha256=sha(data)))
-    record = dict(schema='sourcesize-spectral-application-candidate-v1',
+    record = dict(schema='sourcesize-spectral-application-candidate-v2',
+                  preserved_v1='sourcesize-spectral-application-candidate-v1',
+                  repair='join four split qualified names; add named inhabitant and direct dependency axiom checks',
                   derivations=records, files=files, independent_rows_preserved=True,
                   only_type_change='rename and remove hSpectral; every other premise/conclusion unchanged',
                   frozen_full101_modified=False, native_verified=False, compiler_invoked=False,
