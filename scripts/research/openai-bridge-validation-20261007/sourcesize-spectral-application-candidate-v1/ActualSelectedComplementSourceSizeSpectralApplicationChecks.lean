@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.ActualSelectedComplementSourceSizeSpectralApplication
+
+#check PvNP.RealizableHardness.ActualSelectedComplementSourceSizeSpectralApplication.selected_actual_material_moment_bound_original_spectral_discharged
+#print axioms PvNP.RealizableHardness.ActualSelectedComplementSourceSizeSpectralApplication.selected_actual_material_moment_bound_original_spectral_discharged
+#check PvNP.RealizableHardness.ActualSelectedComplementSourceSizeSpectralApplication.selected_actual_material_moment_bound_original_at_dyadic_exponent_spectral_discharged
+#print axioms PvNP.RealizableHardness.ActualSelectedComplementSourceSizeSpectralApplication.selected_actual_material_moment_bound_original_at_dyadic_exponent_spectral_discharged
+
+example (cutoff : Real → Nat) :
+    PvNP.RealizableHardness.ActualSelectedComplementSourceSizeAnalyticMoment.
+      Spectral47ExactContract cutoff :=
+  (PvNP.RealizableHardness.SourceSizeContractBridge.spectral47_contract_iff cutoff).mp
+    (PvNP.RealizableHardness.ActualFiniteAppendSpectral47ExactInhabitant.
+      spectral47_exact_contract_inhabitant cutoff)
