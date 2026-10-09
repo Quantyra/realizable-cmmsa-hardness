@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/dfredriksen_quantyra_org/full103-spectral-owned-warning-repair-builder02-stage/full103_verify.py", line 78, in <module>
+    if __name__ == '__main__': verify(*sys.argv[1:])
+                               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dfredriksen_quantyra_org/full103-spectral-owned-warning-repair-builder02-stage/full103_verify.py", line 46, in verify
+    raise RuntimeError('Full90 fresh memory/storage gate failed')
+RuntimeError: Full90 fresh memory/storage gate failed
+
+Recommendation: To check for possible causes of SSH connectivity issues and get
+recommendations, rerun the ssh command with the --troubleshoot option.
+
+gcloud compute ssh quantyra-lean-builder-02 --project=quantyra-lean-cert-20260915 --zone=us-central1-a --troubleshoot
+
+Or, to investigate an IAP tunneling issue:
+
+gcloud compute ssh quantyra-lean-builder-02 --project=quantyra-lean-cert-20260915 --zone=us-central1-a --troubleshoot --tunnel-through-iap
+
+ERROR: (gcloud.compute.ssh) [C:\Users\dfred\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\sdk\plink.exe] exited with return code [1].
