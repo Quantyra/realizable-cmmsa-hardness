@@ -1,0 +1,177 @@
+import Mathlib.LinearAlgebra.Matrix.Rank
+import Mathlib.LinearAlgebra.Matrix.ToLin
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Tactic
+import PvNP.RealizableHardness.ActualFiniteAppendImageWeighted
+import PvNP.RealizableHardness.ActualFiniteAppendSpectral47
+import PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator
+
+/-!
+Exact bridge between the retained fixed-image surjection predicate and the
+zero appended Fourier block used by the actual unconditional append operator.
+-/
+namespace PvNP.RealizableHardness.ActualFiniteAppendImageTailBridge
+
+open PvNP.RealizableHardness.ActualFiniteBinaryImageFibres
+open PvNP.RealizableHardness.ActualFiniteAppendImageWeighted
+open PvNP.RealizableHardness.ActualFiniteAppendSpectral47
+open PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator
+open PvNP.RealizableHardness.ActualFixedFunctionalBinaryMatrixMoment
+open PvNP.RealizableHardness.BinaryMatrixFourier
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Appending a zero block is exactly vanishing on the appended domain
+summand. This is stated for the same unconditional matrix append map. -/
+theorem appendRightInjection_single {c s : Nat} (j : Fin s) :
+    appendRightInjection c s (Pi.single j (1 : ZMod 2)) =
+      Pi.single (finSumFinEquiv (Sum.inr j)) 1 := by
+  ext k
+  change Sum.elim (0 : Coord c) (Pi.single j (1 : ZMod 2))
+      (finSumFinEquiv.symm k) =
+    (Pi.single (finSumFinEquiv (Sum.inr j)) (1 : ZMod 2) : Coord (c + s)) k
+  rcases hk : finSumFinEquiv.symm k with a | a
+  · have hk' : k = finSumFinEquiv (Sum.inl a) := by
+      have he := congrArg finSumFinEquiv hk
+      simpa using he
+    have hne : finSumFinEquiv (Sum.inl a) ≠ finSumFinEquiv (Sum.inr j) := by
+      intro he
+      have hval := congrArg Fin.val he
+      have ha := a.isLt
+      have hj := j.isLt
+      simp at hval
+      omega
+    have hne' : Fin.castAdd s a ≠ Fin.natAdd c j := by
+      simpa only [finSumFinEquiv_apply_left, finSumFinEquiv_apply_right] using hne
+    simp [hk, hk', hne', Pi.single_apply]
+  · have hk' : k = finSumFinEquiv (Sum.inr a) := by
+      have he := congrArg finSumFinEquiv hk
+      simpa using he
+    simp [hk, hk', Pi.single_apply]
+
+theorem appendBinaryMatrix_mulVecLin_comp_right {n c s : Nat}
+    (Y : BinaryMatrix n c) (W : BinaryMatrix n s) :
+    (appendBinaryMatrix Y W).mulVecLin.comp (appendRightInjection c s) =
+      W.mulVecLin := by
+  apply LinearMap.ext
+  intro x
+  have hx : x = ∑ j : Fin s, x j • Pi.single j 1 := by
+    funext j
+    simp [Pi.single_apply, eq_comm, Finset.sum_ite_eq']
+  rw [hx]
+  simp only [map_sum, map_smul]
+  apply Finset.sum_congr rfl
+  intro j hj
+  have hsingle :
+      (appendBinaryMatrix Y W).mulVecLin.comp (appendRightInjection c s)
+          (Pi.single j (1 : ZMod 2)) =
+        W.mulVecLin (Pi.single j 1) := by
+    apply funext
+    intro i
+    change (appendBinaryMatrix Y W).mulVec
+        (appendRightInjection c s (Pi.single j (1 : ZMod 2))) i =
+      W.mulVec (Pi.single j 1) i
+    rw [appendRightInjection_single]
+    rw [Matrix.mulVec_single_one, Matrix.mulVec_single_one]
+    let yarr := (ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n c).symm Y
+    let warr := (ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n s).symm W
+    have hcols := ActualFixedFunctionalAppendOperator.appendBinaryMatrix_columns yarr warr
+    have hcolArray : (appendBinaryMatrix Y W).col =
+        (ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n (c + s)).symm
+          (appendBinaryMatrix Y W) := by
+      funext k
+      ext l
+      rfl
+    have hcol : (appendBinaryMatrix Y W).col (Fin.natAdd c j) = W.col j := by
+      funext l
+      rw [hcolArray]
+      have hentry := congrFun (congrFun hcols (Sum.inr j)) l
+      calc
+        _ = ((ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv
+            n (c + s)).symm
+              (appendBinaryMatrix
+                ((ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n c) yarr)
+                ((ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv n s) warr)))
+              (finSumFinEquiv (Sum.inr j)) l := by
+                simp [yarr, warr, appendBinaryMatrix, appendBinaryMatrixEquiv,
+                  appendCoordinateArrayEquiv,
+                  ActualFixedFunctionalBinaryMatrixMoment.coordinateArrayBinaryMatrixEquiv,
+                  finSumFinEquiv_apply_right]
+        _ = MatrixGrassmannMoment.concatenate yarr warr (Sum.inr j) l := hentry
+        _ = W l j := by
+          change W l j = W l j
+          rfl
+    simpa [hcol]
+  exact congrArg (fun z : Coord n => x j • z) hsingle
+
+theorem appendMatrix_tail_comp_zero_iff {n c s : Nat}
+    (Y : BinaryMatrix n c) (W : BinaryMatrix n s) :
+    (appendBinaryMatrix Y W).mulVecLin.comp (appendRightInjection c s) = 0 ↔ W = 0 := by
+  rw [appendBinaryMatrix_mulVecLin_comp_right]
+  constructor
+  · intro h
+    ext i j
+    have hcol : W.col j = 0 := by
+      have hz := LinearMap.ext_iff.mp h (Pi.single j (1 : ZMod 2))
+      simpa [Matrix.mulVecLin_apply, Matrix.mulVec_single_one] using hz
+    simpa [Matrix.col] using congrFun hcol i
+  · intro hW
+    subst W
+    simp
+
+/-- For a matrix `Z`, its appended Fourier block vanishes exactly when its
+linear map kills the appended coordinate injection. -/
+theorem appendedFrequencyPart_zero_iff_kills {n c s : Nat}
+    (Z : BinaryMatrix n (c + s)) :
+    appendedFrequencyPart Z = 0 ↔
+      Z.mulVecLin.comp (appendRightInjection c s) = 0 := by
+  let e := appendBinaryMatrixEquiv n c s
+  let Y := (e.symm Z).1
+  let W := (e.symm Z).2
+  have hZ : appendBinaryMatrix Y W = Z := by
+    change e (e.symm Z) = Z
+    exact e.apply_symm_apply Z
+  have hpart : appendedFrequencyPart (appendBinaryMatrix Y W) = W := by
+    change ((appendBinaryMatrixEquiv n c s).symm
+      (appendBinaryMatrixEquiv n c s (Y, W))).2 = W
+    simpa using congrArg Prod.snd
+      ((appendBinaryMatrixEquiv n c s).symm_apply_apply (Y, W))
+  rw [← hZ, hpart]
+  exact (appendMatrix_tail_comp_zero_iff Y W).symm
+
+/-- The weighted module's retained predicate is the actual spectral surviving
+predicate on every fixed image fibre. -/
+theorem retained_iff_appendedFrequencyPart_zero {n c s i : Nat}
+    (E : Submodule (ZMod 2) (Coord n))
+    (hE : Module.finrank (ZMod 2) E = i)
+    (A : MatrixImageFibre n (c + s) i E) :
+    (matrixImageFibreEquivSurjections E hE A).val.comp
+        (appendRightInjection c s) = 0 ↔
+      appendedFrequencyPart A.val = 0 := by
+  have hrestrict :
+      (matrixImageFibreEquivSurjections E hE A).val =
+        A.val.mulVecLin.codRestrict E (fun x => by
+          have hrange : LinearMap.range A.val.mulVecLin ≤ E := le_of_eq A.property.2
+          exact hrange (LinearMap.mem_range_self _ x)) := by
+    rfl
+  rw [hrestrict]
+  constructor
+  · intro h
+    have hk : A.val.mulVecLin.comp (appendRightInjection c s) = 0 := by
+      apply LinearMap.ext
+      intro x
+      have hx := LinearMap.ext_iff.mp h x
+      simpa [LinearMap.codRestrict_apply] using congrArg Subtype.val hx
+    exact (appendedFrequencyPart_zero_iff_kills A.val).mpr hk
+  · intro h
+    have hk := (appendedFrequencyPart_zero_iff_kills A.val).mp h
+    apply LinearMap.ext
+    intro x
+    apply Subtype.ext
+    have hx := LinearMap.ext_iff.mp hk x
+    simpa [LinearMap.codRestrict_apply] using hx
+
+end
+end PvNP.RealizableHardness.ActualFiniteAppendImageTailBridge
