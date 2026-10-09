@@ -23,13 +23,13 @@ FOLDERS = ['full89-review-reports', 'full90-material-review-reports', 'full90-ma
 LENSES = ['proof-adversarial', 'complexity', 'non-claims']
 
 
-def main():
+def main(extra_names=(), output_name='spectral-prerequisite-review-coverage-v2.json'):
     index_path = ROOT / 'qualification/review-sources/source-index.json'
     index = json.loads(index_path.read_bytes())
     sources = {r['path']: r for r in index['project_bodies']}
     selected = {p: r for p, r in sources.items()
-                if Path(p).stem in NAMES or Path(p).stem.startswith(PREFIXES)}
-    assert NAMES <= {Path(p).stem for p in selected}
+                if Path(p).stem in NAMES.union(extra_names) or Path(p).stem.startswith(PREFIXES)}
+    assert NAMES.union(extra_names) <= {Path(p).stem for p in selected}
     coverage = {p: {lens: [] for lens in LENSES} for p in selected}
     receipts = []
     for folder in FOLDERS:
@@ -76,7 +76,7 @@ def main():
                  fresh_rereading_claimed=False, native_full101_or_successor_verified=False,
                  manuscript_or_runtime_accepted=False, overall_GO=False)
     data = (json.dumps(value, indent=2) + '\n').encode()
-    out = HERE / 'spectral-prerequisite-review-coverage-v2.json'
+    out = HERE / output_name
     if out.exists():
         assert out.read_bytes() == data
     else:
