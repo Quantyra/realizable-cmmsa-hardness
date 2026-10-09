@@ -1,0 +1,219 @@
+{
+  "schema": "full101-owned-warning-repair-candidate-v1",
+  "parent_run": "cmmsa_a8_output_20261009T164439Z_83c3fbf9",
+  "parent_qualification_sha256": "A5862FECD8CEFA7E219772CC660C6D6A6EE77A49D4D25B7610E8F4D9E4C346AD",
+  "files": [
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean",
+      "original_sha256": "10242EF87526FCEDA64B834F816034D2C3F8CEEBEE0311017FA84F343673A55F",
+      "sha256": "BA136FC5CA364B14F76447954F47EDE670930B042F1EA8276A11675B50C76C2F",
+      "bytes": 8251,
+      "edits": [
+        {
+          "original_line": 80,
+          "before": "  letI : Fintype {A : Matrix (Fin i) (Fin d) (ZMod 2) //\n",
+          "after": "  let : Fintype {A : Matrix (Fin i) (Fin d) (ZMod 2) //\n"
+        },
+        {
+          "original_line": 115,
+          "before": "      letI : IsEmpty (Frame (BinaryCoordinateSpace d) i) := \u27e8fun f => by\n",
+          "after": "      let : IsEmpty (Frame (BinaryCoordinateSpace d) i) := \u27e8fun f => by\n"
+        }
+      ],
+      "all_declaration_headers_preserved": true,
+      "no_linter_disable_added": true
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteBinaryImageOrbit.lean",
+      "original_sha256": "D2BF441593DDE51A8DAD1B2414B8D098A6B2E9913C24E765D1C4397556B383CC",
+      "sha256": "C5670FFEEB817549AF3E8F1FBDCBFA1C9FDEC372AEA3836E0B0C15A72E38594B",
+      "bytes": 3443,
+      "edits": [
+        {
+          "original_line": 49,
+          "before": "      simp only [map_add, smul_add]\n",
+          "after": "      simp only [map_add]\n"
+        },
+        {
+          "original_line": 59,
+          "before": "    simp [hr_app]\n",
+          "after": "    simp\n"
+        }
+      ],
+      "all_declaration_headers_preserved": true,
+      "no_linter_disable_added": true
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteAppendSpectral47.lean",
+      "original_sha256": "1240DCAC934609D098BE4EBBE56EA800B4E0E3B053DE28FE33E71A6AB2F8AC9B",
+      "sha256": "371FD673C07AC5DDDD6EE66B62D50EFDD0E1A7F6C27AABB7212779CE948F25CC",
+      "bytes": 15762,
+      "edits": [
+        {
+          "original_line": 210,
+          "before": "  \u00b7 simp [appendedFrequencyPart, baseFrequencyPart, hW]\n",
+          "after": "  \u00b7 simp [appendedFrequencyPart, hW]\n"
+        },
+        {
+          "original_line": 353,
+          "before": "    \u00b7 simp [hW, Finset.sum_ite_eq', hZ]\n",
+          "after": "    \u00b7 simp [hW, hZ]\n"
+        }
+      ],
+      "all_declaration_headers_preserved": true,
+      "no_linter_disable_added": true
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteBinaryImageFibres.lean",
+      "original_sha256": "E9A75321F80A6C3452BE95FC6A04E73F23C50724AE35F1973C4BABC124464E98",
+      "sha256": "0C1610A6228FE4EC2D28374F027607591970652C6428B55DB570BF34E0366945",
+      "bytes": 10696,
+      "edits": [
+        {
+          "original_line": 74,
+          "before": "  \u00b7 change (imageSurjectionMatrix f).rank = i\n",
+          "after": "  \u00b7\n"
+        },
+        {
+          "original_line": 78,
+          "before": "  \u00b7 change LinearMap.range (imageSurjectionMatrix f).mulVecLin = E\n",
+          "after": "  \u00b7\n"
+        },
+        {
+          "original_line": 102,
+          "before": "    simp [restrictMatrixToImage, LinearMap.codRestrict_apply]\n",
+          "after": "    simp [restrictMatrixToImage]\n"
+        },
+        {
+          "original_line": 212,
+          "before": "    simp only [map_add, LinearMap.comp_apply] at this\n",
+          "after": "    simp only [map_add] at this\n"
+        },
+        {
+          "original_line": 224,
+          "before": "        simp [appendLeftProjection, appendRightInjection, appendDomainEquiv] <;>\n",
+          "after": "        simp [appendLeftProjection, appendRightInjection, appendDomainEquiv] ;\n"
+        },
+        {
+          "original_line": 225,
+          "before": "          funext j <;> rfl\n",
+          "after": "          funext j ; rfl\n"
+        },
+        {
+          "original_line": 240,
+          "before": "    simp only [map_add, LinearMap.comp_apply] at this\n",
+          "after": "    simp only [map_add] at this\n"
+        }
+      ],
+      "all_declaration_headers_preserved": true,
+      "no_linter_disable_added": true
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteAppendImageWeighted.lean",
+      "original_sha256": "0E2FE0E1A75B0CCC8E4955D97C0BE3973C0309B63D5A4224F342B05992ED66F8",
+      "sha256": "861C56776D34B7D5D3EA0CF3C083294F8C2D50D49524D05DDD015FCCCEBE75BE",
+      "bytes": 6332,
+      "edits": [
+        {
+          "original_line": 111,
+          "before": "          simp [frameProduct, Finset.prod_mul_distrib, pow_mul, Nat.mul_comm]\n",
+          "after": "          simp [frameProduct, Finset.prod_mul_distrib, pow_mul]\n"
+        },
+        {
+          "original_line": 136,
+          "before": "  letI : Fintype (RetainedMatrixImageFibre (c := c) (s := s) E hE) :=\n",
+          "after": "  let : Fintype (RetainedMatrixImageFibre (c := c) (s := s) E hE) :=\n"
+        }
+      ],
+      "all_declaration_headers_preserved": true,
+      "no_linter_disable_added": true
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteAppendImageTailBridge.lean",
+      "original_sha256": "6AAF48726F3DD52964E9E9D8337FE3BE6DB0A0FA4A93E1A7DEE348AEBC4E70AD",
+      "sha256": "645F266BEE2D451D8E6CBD2D5663F33B7B2563BD9D1742413DFBB7546E737F52",
+      "bytes": 7327,
+      "edits": [
+        {
+          "original_line": 48,
+          "before": "    simp [hk, hk', hne', Pi.single_apply]\n",
+          "after": "    simp [hk', hne']\n"
+        },
+        {
+          "original_line": 52,
+          "before": "    simp [hk, hk', Pi.single_apply]\n",
+          "after": "    simp [hk', Pi.single_apply]\n"
+        },
+        {
+          "original_line": 62,
+          "before": "    simp [Pi.single_apply, eq_comm, Finset.sum_ite_eq']\n",
+          "after": "    simp [Pi.single_apply]\n"
+        },
+        {
+          "original_line": 106,
+          "before": "    simpa [hcol]\n",
+          "after": "    simp [hcol]\n"
+        },
+        {
+          "original_line": 139,
+          "before": "    simpa using congrArg Prod.snd\n",
+          "after": "    simp\n"
+        },
+        {
+          "original_line": 140,
+          "before": "      ((appendBinaryMatrixEquiv n c s).symm_apply_apply (Y, W))\n",
+          "after": ""
+        }
+      ],
+      "all_declaration_headers_preserved": true,
+      "no_linter_disable_added": true
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteAppendImagePerImageEnergy.lean",
+      "original_sha256": "B3CBD9FD3DCE4E296432C1D3C8C3803CC4E16BFFA70AFFAFC0D8521CCDE0BE9A",
+      "sha256": "56D96C2C381C0AC61241554FD03C1516EF310D3462AFE14903B98DE9CFBF9352",
+      "bytes": 5715,
+      "edits": [
+        {
+          "original_line": 68,
+          "before": "  have hconst : \u2200 A : MatrixImageFibre n d i E,\n",
+          "after": "  have _ := hE\n  have hconst : \u2200 A : MatrixImageFibre n d i E,\n"
+        }
+      ],
+      "all_declaration_headers_preserved": true,
+      "no_linter_disable_added": true
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteAppendGlobalImageEnergy.lean",
+      "original_sha256": "9C230734F7770458B0CA49D510042A5AA70E80C9142840E802F5B212DF9CA02E",
+      "sha256": "2B2A6AFB0ABC6645D494062686945825C9B185F092662979C17E6A8B16568CB7",
+      "bytes": 16989,
+      "edits": [
+        {
+          "original_line": 68,
+          "before": "  letI : Finite (Submodule (ZMod 2) (Coord n)) :=\n",
+          "after": "  let : Finite (Submodule (ZMod 2) (Coord n)) :=\n"
+        },
+        {
+          "original_line": 241,
+          "before": "  classical\n",
+          "after": "  classical\n  have _ := basisInv\n"
+        },
+        {
+          "original_line": 242,
+          "before": "  letI : IsEmpty (RetainedMatrixImageFibre (c := c) (s := s) E hE) :=\n",
+          "after": "  let : IsEmpty (RetainedMatrixImageFibre (c := c) (s := s) E hE) :=\n"
+        }
+      ],
+      "all_declaration_headers_preserved": true,
+      "no_linter_disable_added": true
+    }
+  ],
+  "remaining_repairs": [],
+  "all26_native_warning_headers_addressed": true,
+  "complete_warning_repair_unproven_until_native_run": true,
+  "compiler_invoked": false,
+  "native_verified": false,
+  "frozen_full101_modified": false,
+  "accepted": false
+}
