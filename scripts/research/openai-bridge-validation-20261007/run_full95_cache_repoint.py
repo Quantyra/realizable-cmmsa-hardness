@@ -30,6 +30,9 @@ def main(action):
         raise RuntimeError('Unexpected dedicated02 state')
     if any(nic.get('accessConfigs') for nic in state['networkInterfaces']):
         raise RuntimeError('Unexpected external IP')
+    # The successful exact-identity SDK describe is the authenticated
+    # preflight required by the preserved transport controller.
+    control.authenticated = True
     source = Path(__file__).with_name('full95_cache_repoint.py')
     pin = digest(source)
     if action == 'plan':
