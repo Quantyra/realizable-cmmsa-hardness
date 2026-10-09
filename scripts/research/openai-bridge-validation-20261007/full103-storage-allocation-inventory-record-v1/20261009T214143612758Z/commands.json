@@ -1,0 +1,32 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=ps -eo pid,etimes,pcpu,pmem,comm,args",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0
+  }
+]
