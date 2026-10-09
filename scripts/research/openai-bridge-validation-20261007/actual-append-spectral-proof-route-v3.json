@@ -1,0 +1,52 @@
+{
+  "schema": "actual-unconditional-append-Spectral47-proof-route-v3",
+  "parent_route": "actual-append-spectral-proof-route-v2.json",
+  "cardinality_API_audit": "actual-append-spectral-cardinality-api-audit-v1.json",
+  "cardinality_API_audit_sha256": "662F3AC07FB7D7F12BD815F1EDC3E0A65140A045E1D624C7A1F1821A37D2F520",
+  "cardinality_source_sha256": "AC31F64E47BA76F80C1C9BAB4E58645175A13C23C9175449C41ACD22B1E44F1F",
+  "dependency_context": "The existing frozen CMMSA Mathlib package source pins",
+  "carrier": "All BinaryMatrix n (c+s) over ZMod 2, including deficient and zero-dimensional maps",
+  "hypothesis": "F invariant under all right paired-inverse matrices U,V with U*V=V*U=1",
+  "operator": "Actual unconditional appendAverage",
+  "frame_count": "frames(d,k) = product over j<k of (2^d - 2^j), with natural subtraction",
+  "source_APIs": [
+    "card_linearIndependent for k <= finrank(V)",
+    "LinearIndependent.fintype_card_le_finrank for the impossible k>finrank(V) branch",
+    "Matrix.card_GL_field for full-basis cardinality"
+  ],
+  "primary_route": {
+    "name": "uniform-right-basis-kernel-frames",
+    "steps": [
+      "Finish native qualification and body review of the exact matrix right-orbit and Fourier covariance candidates.",
+      "Specialize the existing universal frame-cardinality theorem to ZMod 2 and the full domain/kernel vector spaces, including finrank and empty-frame cases.",
+      "Prove GL acts transitively on independent ordered s-frames by basis extension or the transpose/surjective-map transport. A bijection between restriction fibres then proves the last s columns of a uniform full basis have uniform frame distribution.",
+      "For frequency Y of rank i<=d=c+s, tail-zero after a right basis change is equivalent to its tail frame lying in ker(Matrix.toLin Y). Rank-nullity gives kernel dimension d-i.",
+      "Use the verified cardinality API to express that probability as frames(d-i,s)/frames(d,s); if i>c, no independent s-frame fits in the kernel, so the probability is zero.",
+      "Use exact Fourier covariance, rank preservation, actual append coefficient identities and Parseval. Reindex a double finite average to obtain post-level energy = this probability times full-level energy.",
+      "For i<=c, each positive factor ratio is <=2^(-i), giving probability <=2^(-i*s). Handle i=0, s=0 and dimension-zero products explicitly.",
+      "Transfer the stronger gain to the original weaker Spectral47 right-hand side using nonnegative full energy and nonnegative ambient error; retain every original parameter and guard."
+    ],
+    "all_distribution_and_energy_bridges_still_require_universal_Lean_proofs": true
+  },
+  "alternate_image_fibre_route_retained": {
+    "source": "actual-append-spectral-proof-route-v2.json",
+    "gain": "frames(c,i)/frames(c+s,i)",
+    "remaining_equivalence": "Surjective maps onto a fixed image versus transpose-injective independent frames",
+    "same_image_not_just_same_rank_required": true
+  },
+  "helper_increment_route_assessment": {
+    "helpers_assessed": ["generic same-range domain orbit", "actual matrix right orbit", "Fourier right-basis covariance"],
+    "assessment": "These helpers advance exact coefficient invariance; the pinned Mathlib API supplies the universal counting ingredient. The full route still targets the actual original append obligation, with distribution, rank/kernel, Parseval, universal gain and contract transports explicitly open.",
+    "no_noise_operator_substitution": true,
+    "no_source_row_or_profile_scope_narrowing": true,
+    "numeric_NO_source_sampler_selection_runtime_and_publication_gates_unchanged": true
+  },
+  "matrix_and_Fourier_candidates": "full100-matrix-fourier-bullet-repair-v1",
+  "candidate_fullscope_native_qualification_pending": true,
+  "new_cardinality_specialization_native_verified": false,
+  "uniform_frame_distribution_proven": false,
+  "actual_append_energy_bound_proven": false,
+  "universal_Spectral47_inhabitant_proven": false,
+  "full_goal_complete": false,
+  "accepted": false
+}

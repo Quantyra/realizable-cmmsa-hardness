@@ -1,0 +1,68 @@
+{
+  "schema": "actual-append-spectral-pinned-cardinality-API-audit-v1",
+  "pinned_manifest_sha256": "39CA9EDB48C35171FC878ED7301456C1D7C0BC5BCDF27F47FE96798040E5779D",
+  "sources": [
+    {
+      "source_path": "C:\\Users\\dfred\\.quantyra\\builder02\\full97-spectral-bridge-utf8-section-repair-resource02\\consumption-v1\\qualification\\review-sources\\external\\Mathlib\\LinearAlgebra\\Matrix\\GeneralLinearGroup\\Card.lean",
+      "package_relative_path": ".lake/packages/mathlib/Mathlib/LinearAlgebra/Matrix/GeneralLinearGroup/Card.lean",
+      "sha256": "AC31F64E47BA76F80C1C9BAB4E58645175A13C23C9175449C41ACD22B1E44F1F",
+      "bytes": 4219,
+      "declarations": [
+        {
+          "name": "card_linearIndependent",
+          "line": 40,
+          "statement": "theorem card_linearIndependent {k : ℕ} (hk : k ≤ n) :\n    Nat.card { s : Fin k → V // LinearIndependent K s } =\n      ∏ i : Fin k, (q ^ n - q ^ i.val) := by"
+        },
+        {
+          "name": "card_GL_field",
+          "line": 99,
+          "statement": "theorem card_GL_field :\n    Nat.card (GL (Fin n) 𝔽) = ∏ i : (Fin n), (q ^ n - q ^ (i : ℕ)) := by"
+        }
+      ]
+    },
+    {
+      "source_path": "C:\\Users\\dfred\\.quantyra\\builder02\\full97-spectral-bridge-utf8-section-repair-resource02\\consumption-v1\\qualification\\review-sources\\external\\Mathlib\\LinearAlgebra\\Dimension\\Finite.lean",
+      "package_relative_path": ".lake/packages/mathlib/Mathlib/LinearAlgebra/Dimension/Finite.lean",
+      "sha256": "6A43D6F27D70C5D68867072ED1873C20B2FE9B63DB11128031CC1015AA12940B",
+      "bytes": 23314,
+      "declarations": [
+        {
+          "name": "fintype_card_le_finrank",
+          "line": 161,
+          "statement": "theorem fintype_card_le_finrank [Module.Finite R M]\n    {ι : Type*} [Fintype ι] {b : ι → M} (h : LinearIndependent R b) :\n    Fintype.card ι ≤ finrank R M := by"
+        }
+      ]
+    }
+  ],
+  "source_identity_verified": true,
+  "APIs": [
+    "card_linearIndependent",
+    "Matrix.card_GL_field",
+    "LinearIndependent.fintype_card_le_finrank"
+  ],
+  "frame_count_assumptions": [
+    "DivisionRing K",
+    "AddCommGroup V",
+    "Module K V",
+    "Fintype K",
+    "Finite V",
+    "k <= Module.finrank K V"
+  ],
+  "available_source_result": "Nat.card independent ordered k-frames = product over Fin k of (card(K)^finrank(V) - card(K)^j)",
+  "zero_case_source_result": "An independent finite family has card(index) <= finrank; larger frames are impossible",
+  "planned_specialization": "K=ZMod 2, V=(Fin d -> ZMod 2) or kernel of Matrix.toLin frequency map",
+  "required_remaining_bridges": [
+    "Native specializations including dimension/zero cases",
+    "Uniform full-basis tail pushforward to independent frames",
+    "Tail-zero equivalence to frames in the actual frequency kernel",
+    "Actual append coefficient/Parseval/finite-mean energy bridge",
+    "Universal gain bound and transfer retaining the full original Spectral47 contract"
+  ],
+  "new_CMMSA_specialization_native_verified": false,
+  "uniform_distribution_proven": false,
+  "actual_append_energy_bound_proven": false,
+  "universal_Spectral47_inhabitant_proven": false,
+  "compiler_invoked": false,
+  "full_goal_complete": false,
+  "accepted": false
+}
