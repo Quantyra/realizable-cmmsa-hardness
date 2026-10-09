@@ -45,6 +45,11 @@ def additions():
     return sources, requests
 
 
+# The cumulative bridge request list is consumed by the inherited native audit.
+from prepare_builder02_full100 import REQUESTS as PRIOR_BRIDGE_REQUESTS
+REQUESTS = PRIOR_BRIDGE_REQUESTS + additions()[1]
+
+
 def make_successor(old):
     sources, requests = additions()
     new = dict(old)

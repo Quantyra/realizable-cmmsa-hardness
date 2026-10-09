@@ -1,0 +1,139 @@
+{
+  "schema": "full101-exact-parent-execution-control-derivation-v1",
+  "records": [
+    {
+      "source": "full100_verify.py",
+      "source_sha256": "27E842AB71935A01401F922155F82AB0C47FBBDF44F3C8E389BF135C4A9B5FE7",
+      "target": "full101_verify.py",
+      "target_sha256": "AA8E2CCA0CEEE0DC9F6C1A2BD758AB5ACE7E547693CE3328A4E59B98204F2B08",
+      "path_module_binding_replacements": {
+        "full100-matrix-fourier-bullet-repair": "full101-spectral-original-application",
+        "full100": "full101"
+      },
+      "explicit_scope_changes": [
+        {
+          "old": "len(manifest['project_sources']) != 327 or len(manifest['requested_axioms']) != 192 or manifest['requested_axioms'][-8:]",
+          "new": "len(manifest['project_sources']) != 340 or len(manifest['requested_axioms']) != 251 or manifest['requested_axioms'][-59:]"
+        }
+      ]
+    },
+    {
+      "source": "full100_worker.py",
+      "source_sha256": "64C7B4EB191AEE324335D92AC8DB6AA76EA7429594B3DD3EFEDC00695B1393BC",
+      "target": "full101_worker.py",
+      "target_sha256": "ED36B088D56F2E103D376FF66953AFC3D743D3385866E2ABE1067FC27E3D936D",
+      "path_module_binding_replacements": {
+        "full100-matrix-fourier-bullet-repair": "full101-spectral-original-application",
+        "full100": "full101"
+      },
+      "explicit_scope_changes": []
+    },
+    {
+      "source": "full100_builder02_controller.py",
+      "source_sha256": "DFFD0A8143225B7A32C3A9BAEE0CC69994B536F712E31682D1FB8A32248A0517",
+      "target": "full101_builder02_controller.py",
+      "target_sha256": "E273E4D9387E7DC92CBA680AB2083A8FAC8E15755EDFF161C9044701669B7772",
+      "path_module_binding_replacements": {
+        "full100-matrix-fourier-bullet-repair": "full101-spectral-original-application",
+        "full100": "full101"
+      },
+      "explicit_scope_changes": [
+        {
+          "old": "Full192 standard-axiom scope",
+          "new": "Full251 standard-axiom scope"
+        },
+        {
+          "old": "remote['project_sources_verified'] != 327",
+          "new": "remote['project_sources_verified'] != 340"
+        },
+        {
+          "old": "len(manifest['requested_axioms']) != 192",
+          "new": "len(manifest['requested_axioms']) != 251"
+        },
+        {
+          "old": "'derive_full101_execution_controls.py','prepare_full101_bullet_candidates.py')",
+          "new": "'derive_full101_execution_controls.py','prepare_full101_spectral_application.py','recover_existing_spectral_candidate.py')"
+        }
+      ]
+    },
+    {
+      "source": "stage_full100_builder02.py",
+      "source_sha256": "A7AF85463959792B070991D2D81BDA587B16855ACCE3729250F45BAC2558AEDF",
+      "target": "stage_full101_builder02.py",
+      "target_sha256": "C901677296CF6E6B18764EFF0919DD4D3E3351E459792A464C18E4679FB37B6B",
+      "path_module_binding_replacements": {
+        "full100-matrix-fourier-bullet-repair": "full101-spectral-original-application",
+        "full100": "full101"
+      },
+      "explicit_scope_changes": []
+    },
+    {
+      "source": "full100_postprocess.py",
+      "source_sha256": "7EB0D18CEB3D40A7E6E66C928DE4349584B9D4DCD6FB102730DBEBEC61A50CBF",
+      "target": "full101_postprocess.py",
+      "target_sha256": "75474AF6DA66B199734FA783754C92473926079B604CAFB22AB90FA3FCBE7872",
+      "path_module_binding_replacements": {
+        "full100-matrix-fourier-bullet-repair": "full101-spectral-original-application",
+        "full100": "full101"
+      },
+      "explicit_scope_changes": []
+    },
+    {
+      "source": "full100_native_audit.py",
+      "source_sha256": "29DF2E0E34A35B3F0D4B9CB2A90C2F7559A72EF5841B1B6090E7798A4916831C",
+      "target": "full101_native_audit.py",
+      "target_sha256": "2AF75A354DD72A095427E30E5F204B168E3B3BF4D6AF607351B0039AC1C3DC0F",
+      "path_module_binding_replacements": {
+        "full100-matrix-fourier-bullet-repair": "full101-spectral-original-application",
+        "full100": "full101"
+      },
+      "explicit_scope_changes": [
+        {
+          "old": "len(additive['added_sources']) != 8",
+          "new": "len(additive['added_sources']) != 21"
+        },
+        {
+          "old": "normalized['stages'][4]=original['stages'][4]",
+          "new": "normalized['stages'][4]=original['stages'][4]\n        normalized['stages'][5]=original['stages'][5]\n        normalized['owned_sources']=original['owned_sources']\n        normalized['external_imports']=original['external_imports']"
+        },
+        {
+          "old": "expanded_requested_axiom_count=192",
+          "new": "expanded_requested_axiom_count=251"
+        },
+        {
+          "old": "universal_Spectral47_inhabitant_proven=False)",
+          "new": "universal_Spectral47_inhabitant_proven=False, universal_Spectral47_inhabitant_native_verified=expanded['full101_expanded_native_gates_green'], actual_selected_leaf_spectral_application_native_verified=expanded['full101_expanded_native_gates_green'], exact_manuscript_eigenvalue_and_G_Phi_laws_closed=False)"
+        }
+      ]
+    },
+    {
+      "source": "test_full100_terminal.py",
+      "source_sha256": "61D9238572EB13E761EFA00981230AA9880818E6B01E6CCB5A83F71855165B7E",
+      "target": "test_full101_terminal.py",
+      "target_sha256": "979206F63281B468F93659DDEF5E26526824D0D48C70C2DA0B2CE85430DBD631",
+      "path_module_binding_replacements": {
+        "full100-matrix-fourier-bullet-repair": "full101-spectral-original-application",
+        "full100": "full101"
+      },
+      "explicit_scope_changes": [
+        {
+          "old": "Full192 standard-axiom scope",
+          "new": "Full251 standard-axiom scope"
+        }
+      ]
+    }
+  ],
+  "source_scope": 340,
+  "required_profiles": 251,
+  "inherited_sources": 327,
+  "inherited_profiles": 192,
+  "new_profile_suffix": 59,
+  "cumulative_added_sources": 21,
+  "seven_stages_preserved": true,
+  "authentication_storage_memory_process_network_idle_exclusive_custody_termination_algorithms_preserved": true,
+  "manuscript_and_runtime_obligations_remain_open": true,
+  "compiler_invoked": false,
+  "cloud_operation": false,
+  "launch_clearance": false,
+  "accepted": false
+}
