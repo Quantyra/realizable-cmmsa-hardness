@@ -34,7 +34,7 @@ def main():
         exact_inverse_parity=True, statement_hypotheses_and_proof_route_preserved=True,
         failed_Full98_inputs_untouched=True, compiler_invoked=False, native_verified=False,
         universal_Spectral47_inhabitant_proven=False, accepted=False)
-    (target / 'derivation.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+    (target / 'derivation.json').write_bytes((json.dumps(receipt, indent=2) + '\n').encode('utf-8'))
     print(json.dumps(receipt, indent=2))
 
 if __name__ == '__main__':
