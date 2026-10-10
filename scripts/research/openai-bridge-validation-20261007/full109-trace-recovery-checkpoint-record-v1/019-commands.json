@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\trace-cache-allocation-inspections-v1\\20261010T115056168593Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "59067",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c '\"\"\"Read-only allocation inventory; does not assert byte equality or recovery clearance.\"\"\"\nimport json\nimport re\nimport sys\nimport urllib.request\nfrom collections import defaultdict\nfrom pathlib import Path\n\nHOME = Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"')\n\n\ndef main():\n    assert sys.platform == '\"'\"'linux'\"'\"' and Path.home().resolve() == HOME\n    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))\n    def metadata(key):\n        request = urllib.request.Request('\"'\"'http://metadata.google.internal/computeMetadata/v1/instance/'\"'\"'+key,\n                                         headers={'\"'\"'Metadata-Flavor'\"'\"': '\"'\"'Google'\"'\"'})\n        with opener.open(request, timeout=10) as response:\n            assert response.headers.get('\"'\"'Metadata-Flavor'\"'\"') == '\"'\"'Google'\"'\"'\n            return response.read().decode()\n    assert metadata('\"'\"'id'\"'\"') == '\"'\"'7237681467779354904'\"'\"'\n    assert metadata('\"'\"'name'\"'\"') == '\"'\"'quantyra-lean-builder-02'\"'\"'\n    runs = []\n    for run in sorted(HOME.glob('\"'\"'cmmsa_a8_output_*'\"'\"')):\n        if not re.fullmatch(r'\"'\"'cmmsa_a8_output_\\d{8}T\\d{6}Z_[a-f0-9]{8}'\"'\"', run.name) or run.is_symlink():\n            continue\n        packages = run/'\"'\"'.lake/packages'\"'\"'\n        if not packages.is_dir() or packages.is_symlink():\n            continue\n        groups = defaultdict(lambda: dict(files=0, allocated_bytes=0, logical_bytes=0))\n        for path in packages.rglob('\"'\"'*'\"'\"'):\n            try:\n                if path.is_symlink() or not path.is_file():\n                    continue\n                info = path.stat()\n            except FileNotFoundError:\n                continue  # A concurrently running, separately guarded recovery may rename a duplicate.\n            rel = path.relative_to(packages)\n            category = '\"'\"'build'\"'\"' if {'\"'\"'.lake'\"'\"', '\"'\"'build'\"'\"'} <= set(rel.parts) else '\"'\"'other'\"'\"'\n            key = category+'\"'\"':'\"'\"'+path.suffix\n            row = groups[key]\n            row['\"'\"'files'\"'\"'] += 1\n            row['\"'\"'allocated_bytes'\"'\"'] += info.st_blocks*512\n            row['\"'\"'logical_bytes'\"'\"'] += info.st_size\n        runs.append(dict(run=run.name, groups=dict(groups)))\n    print(json.dumps(dict(vm='\"'\"'quantyra-lean-builder-02'\"'\"', id='\"'\"'7237681467779354904'\"'\"', runs=runs,\n                          read_only=True, concurrent_snapshot=True, byte_equality_verified=False,\n                          recovery_clearance=False, compiler_invoked=False)))\n\n\nif __name__ == '\"'\"'__main__'\"'\"':\n    main()\n'"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "228A88288A649C394359426B658C6391E49E32096A0A65E5753ED09373C8A87C",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
