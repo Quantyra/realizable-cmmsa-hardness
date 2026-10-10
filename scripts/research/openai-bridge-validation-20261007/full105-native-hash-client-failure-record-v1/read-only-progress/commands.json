@@ -1,0 +1,54 @@
+[
+  {
+    "index": 0,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,networkInterfaces)",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T01:42:22+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 5788,
+    "finished_utc": "2026-10-10T01:42:39+00:00",
+    "native_exit": 0,
+    "timed_out": false,
+    "seconds": 16.760269899998093,
+    "stdout_path": "control/000.stdout",
+    "stderr_path": "control/000.stderr",
+    "stdout_sha256": "D6ABDD5CF676B8E9DFD2255894572BDD8B3C00F107D9F93759512A3F99102C02",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "index": 1,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=python3 -B -c 'from pathlib import Path; import json; r=Path('\"'\"'/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261010T013228Z_d7e7d223_evidence'\"'\"'); print(json.dumps(dict(run='\"'\"'cmmsa_a8_output_20261010T013228Z_d7e7d223'\"'\"', exits={p.name:p.read_text() for p in r.glob('\"'\"'*.native-exit'\"'\"')}, active_process=json.loads((r/'\"'\"'active-process.json'\"'\"').read_bytes()) if (r/'\"'\"'active-process.json'\"'\"').exists() else None, worker_terminal=json.loads((r/'\"'\"'dedicated-worker-terminal.json'\"'\"').read_bytes()) if (r/'\"'\"'dedicated-worker-terminal.json'\"'\"').exists() else None)))'",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T01:42:39+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 19416,
+    "finished_utc": "2026-10-10T01:43:16+00:00",
+    "native_exit": 0,
+    "timed_out": false,
+    "seconds": 36.89623289999872,
+    "stdout_path": "control/001.stdout",
+    "stderr_path": "control/001.stderr",
+    "stdout_sha256": "AC0D57B366C4FDF07A3759A80CF558AE183310018CE684F7259C6F80022D8B1E",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
