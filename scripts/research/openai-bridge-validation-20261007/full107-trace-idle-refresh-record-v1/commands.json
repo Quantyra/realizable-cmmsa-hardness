@@ -1,0 +1,54 @@
+[
+  {
+    "index": 0,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T06:07:32+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 2868,
+    "finished_utc": "2026-10-10T06:07:35+00:00",
+    "native_exit": 0,
+    "timed_out": false,
+    "seconds": 2.5269832000049064,
+    "stdout_path": "control/000.stdout",
+    "stderr_path": "control/000.stderr",
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "index": 1,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=set -e; date +%s | sudo tee /var/lib/quantyra-idle-shutdown/last-active; sudo systemctl start quantyra-idle-shutdown.timer; systemctl is-active quantyra-idle-shutdown.timer",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T06:07:35+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 5852,
+    "finished_utc": "2026-10-10T06:07:43+00:00",
+    "native_exit": 0,
+    "timed_out": false,
+    "seconds": 8.14943810000841,
+    "stdout_path": "control/001.stdout",
+    "stderr_path": "control/001.stderr",
+    "stdout_sha256": "5D8342DF54C04912B086D9C95793EE399DF5B0915EFA4C98676BFBE4CF987BA2",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
