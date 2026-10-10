@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+    "compute",
+    "ssh",
+    "quantyra-lean-builder-02",
+    "--account=dfredriksen@quantyra.org",
+    "--project=quantyra-lean-cert-20260915",
+    "--zone=us-central1-a",
+    "--quiet",
+    "--tunnel-through-iap",
+    "--command=df -B1 /home/dfredriksen_quantyra_org; cat /proc/meminfo; ps -eo pid,comm; systemctl is-active quantyra-idle-shutdown.timer"
+  ],
+  "native_exit": 0,
+  "stdout_sha256": "524E2F0ED4601FFAE9EACF192B41C6CE750BA89E69B5249124F31F38BCD47E4D",
+  "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+}
