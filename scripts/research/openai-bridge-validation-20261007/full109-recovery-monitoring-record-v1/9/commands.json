@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\recovery-idle-keeper-controls-v1\\20261010T105445853256Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "64888",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c 'import json,os,subprocess,time,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('\"'\"'http://metadata.google.internal/computeMetadata/v1/instance/id'\"'\"',headers={'\"'\"'Metadata-Flavor'\"'\"':'\"'\"'Google'\"'\"'})\nwith o.open(r,timeout=10) as s:\n assert s.headers.get('\"'\"'Metadata-Flavor'\"'\"')=='\"'\"'Google'\"'\"' and s.read().decode()=='\"'\"'7237681467779354904'\"'\"'\nhome=Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"');assert Path.home().resolve()==home\nevents=[]\nwhile True:\n assert not (home/'\"'\"'full109-exact-crosslevel-warning-repair-resource02-launch-once.json'\"'\"').exists()\n pids=[]\n for entry in Path('\"'\"'/proc'\"'\"').iterdir():\n  if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\n  try:args=(entry/'\"'\"'cmdline'\"'\"').read_bytes().split(b'\"'\"'\\0'\"'\"')\n  except (FileNotFoundError,PermissionError):continue\n  if any(arg.endswith(('\"'\"'/full109_storage_cache_repoint_v'\"'\"'+str(n)+'\"'\"'.py'\"'\"').encode()) for n in range(4,9) for arg in args) and b'\"'\"'--execute'\"'\"' in args:pids.append(int(entry.name))\n if not pids:break\n now=int(time.time())\n touched=subprocess.run(['\"'\"'sudo'\"'\"','\"'\"'tee'\"'\"','\"'\"'/var/lib/quantyra-idle-shutdown/last-active'\"'\"'],input=(str(now)+'\"'\"'\\n'\"'\"').encode(),capture_output=True,check=True)\n assert touched.stdout.strip()==str(now).encode()\n active=subprocess.run(['\"'\"'systemctl'\"'\"','\"'\"'is-active'\"'\"','\"'\"'quantyra-idle-shutdown.timer'\"'\"'],capture_output=True,check=True)\n assert active.stdout.strip()==b'\"'\"'active'\"'\"'\n events.append(dict(epoch=now,exact_recovery_pids=pids,timer_active=True))\n time.sleep(60)\nprint(json.dumps(dict(events=events,all_recovery_processes_terminal=True,only_idle_activity_updated=True,timer_disabled=False,vm_power_operation=False,compiler_invoked=False)))\n'"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "1BD550C5785C156F7970D7320BDF9180E7C6406CFFD3FA450B962BFBAB561F72",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
