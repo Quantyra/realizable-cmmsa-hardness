@@ -65,13 +65,18 @@ def main():
                   manuscript_PDF_rebuilt=False, visual_QA=False,
                   mathematical_acceptance=False, novelty_clearance=False)
     destination = ROOT/'paper/mz24-compiled-citation-numbering-2026-10-09.json'
-    if sys.argv[1:] == ['--repaired-source']:
-        build = Path('C:/Users/dfred/.quantyra/manuscript-builds/transcription-repair-20261009-v4')
+    if sys.argv[1:] in (['--repaired-source'], ['--current-draft']):
+        current_draft = sys.argv[1:] == ['--current-draft']
+        build = Path('C:/Users/dfred/.quantyra/manuscript-builds') / (
+            'disclosure-notation-repair-20261009-v5' if current_draft
+            else 'transcription-repair-20261009-v4')
         pins = json.loads((build/'source-pins.json').read_bytes())
+        assert len(pins) == 7
         for row in pins:
             current = ROOT/row['file']
-            if current.exists():
-                assert sha(current.read_bytes()) == row['sha256'], row['file']
+            raw = current.read_bytes() if current.is_file() else subprocess.check_output(
+                ['git', 'show', 'HEAD:' + row['file']], cwd=ROOT)
+            assert sha(raw) == row['sha256'], row['file']
         terminal = json.loads((build/'build-terminal.json').read_bytes())
         pdf = (build/'output/pdf/realizable-hardness.pdf').read_bytes()
         assert terminal['native_exit'] == 0 and terminal['pdf_sha256'] == sha(pdf)
@@ -79,6 +84,12 @@ def main():
                       manuscript_PDF_rebuilt=True, manuscript_PDF_sha256=sha(pdf),
                       inherited_visual_acceptance=False)
         destination = ROOT/'paper/mz24-compiled-citation-numbering-repaired-source-2026-10-09.json'
+        if current_draft:
+            assert len(PdfReader(build/'output/pdf/realizable-hardness.pdf').pages) == 32
+            record.update(schema='mz24-compiled-citation-numbering-current-draft-v3',
+                          manuscript_PDF_pages=32, all_seven_source_pins_verified=True,
+                          build_directory=str(build), visual_QA=False)
+            destination = ROOT/'paper/mz24-compiled-citation-numbering-current-draft-2026-10-09.json'
     elif sys.argv[1:]:
         raise ValueError('Unknown scope')
     with destination.open('x', encoding='utf-8', newline='\n') as output:
