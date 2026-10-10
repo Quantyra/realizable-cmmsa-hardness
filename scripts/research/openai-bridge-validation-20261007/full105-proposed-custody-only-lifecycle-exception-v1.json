@@ -1,0 +1,98 @@
+{
+  "schema": "full105-proposed-custody-only-lifecycle-exception-v1",
+  "run": "cmmsa_a8_output_20261010T013228Z_d7e7d223",
+  "VM": "quantyra-lean-builder-02",
+  "VM_ID": "7237681467779354904",
+  "native_archive_sha256": "B32CC340F54A682CE0905E9923CD03A8CB0A97CD7E02C4A00FE4E5CEC415D782",
+  "native_archive_bytes": 39705754,
+  "verified_chunks": [
+    {
+      "run": "cmmsa_a8_output_20261010T013228Z_d7e7d223",
+      "offset": 0,
+      "bytes": 4194304,
+      "archive_sha256": "B32CC340F54A682CE0905E9923CD03A8CB0A97CD7E02C4A00FE4E5CEC415D782",
+      "chunk_sha256": "5D2929D8C30604E113CB68BED60A404A59A98D81365E0F1F54848CC75D24FC50"
+    },
+    {
+      "run": "cmmsa_a8_output_20261010T013228Z_d7e7d223",
+      "offset": 4194304,
+      "bytes": 4194304,
+      "archive_sha256": "B32CC340F54A682CE0905E9923CD03A8CB0A97CD7E02C4A00FE4E5CEC415D782",
+      "chunk_sha256": "42B43FDBE58B55D2926A149C3BA5AAF958BC31C1D72002D9782B2023A6D299C8"
+    },
+    {
+      "run": "cmmsa_a8_output_20261010T013228Z_d7e7d223",
+      "offset": 8388608,
+      "bytes": 4194304,
+      "archive_sha256": "B32CC340F54A682CE0905E9923CD03A8CB0A97CD7E02C4A00FE4E5CEC415D782",
+      "chunk_sha256": "7BC1604A41F641859FA6DF841976DB048A7DCA7E9E09CABBA6A3BB8FBF10219E"
+    },
+    {
+      "run": "cmmsa_a8_output_20261010T013228Z_d7e7d223",
+      "offset": 12582912,
+      "bytes": 4194304,
+      "archive_sha256": "B32CC340F54A682CE0905E9923CD03A8CB0A97CD7E02C4A00FE4E5CEC415D782",
+      "chunk_sha256": "F91D6A79B5584BE1CB1D91D358B41E71225C1B700CBC8A32B29C91DCAF70BEAB"
+    },
+    {
+      "run": "cmmsa_a8_output_20261010T013228Z_d7e7d223",
+      "offset": 16777216,
+      "bytes": 4194304,
+      "archive_sha256": "B32CC340F54A682CE0905E9923CD03A8CB0A97CD7E02C4A00FE4E5CEC415D782",
+      "chunk_sha256": "472CF0E486A497CBA6021EE0F0B764AE28DFFE965E55BE1D2023550CA192DAA7"
+    },
+    {
+      "run": "cmmsa_a8_output_20261010T013228Z_d7e7d223",
+      "offset": 20971520,
+      "bytes": 4194304,
+      "archive_sha256": "B32CC340F54A682CE0905E9923CD03A8CB0A97CD7E02C4A00FE4E5CEC415D782",
+      "chunk_sha256": "F596AF06DDB22FC0902D7391525B9D1C83E0870927743975D194EA078F43248A"
+    }
+  ],
+  "remaining_bytes": 14539930,
+  "guard_source": "scripts\\research\\openai-bridge-validation-20261007\\terminate_builder02_after_custody.py",
+  "exception_needed": [
+    "complete-two-copy custody before controlled stop",
+    "fresh SSH process inspection before controlled stop"
+  ],
+  "reason": "Native compile terminal0 before guest shutdown. Guest stops SSH and remains hung in shutdown while API RUNNING. Four remaining archive ranges cannot be retrieved through SSH.",
+  "proposed_commands": [
+    [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "stop",
+      "quantyra-lean-builder-02",
+      "--async",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "start",
+      "quantyra-lean-builder-02",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ]
+  ],
+  "sequence": [
+    "Revalidate exact VM ID/name/zone/account, same immutable native terminal/capture/archive pins and guest-shutdown evidence",
+    "If still hung and explicitly approved, complete dedicated02 shutdown without deleting disks or modifying metadata",
+    "Independently verify TERMINATED; start the same VM for custody only",
+    "Fresh identity/no-external-IP/process/idle checks and read-only full archive SHA/size verification",
+    "Reuse six verified ranges and retrieve only four missing ranges; full two-copy custody",
+    "Original guarded post-custody termination and native qualification; preserve earlier lifecycle exception truthfully"
+  ],
+  "compiler_restarted": false,
+  "original_controls_modified": false,
+  "builder01_modified": false,
+  "persistent_disk_deletion": false,
+  "approved": false,
+  "executed": false
+}
