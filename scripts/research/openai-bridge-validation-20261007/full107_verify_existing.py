@@ -62,7 +62,7 @@ def verify(stage,resource_tag='full83-resource02'):
         raise RuntimeError('Dedicated idle timer inactive')
     auxiliary = {name:digest(work/name) for name in binding['auxiliary_inputs']}
     if auxiliary != binding['auxiliary_inputs']: raise RuntimeError('Fresh harness identity drift')
-    if len(manifest['project_sources']) != 346 or len(manifest['requested_axioms']) != 260 or manifest['requested_axioms'][-6:] != binding['additional_profiles']: raise RuntimeError('Additive source/profile scope drift')
+    if len(manifest['project_sources']) != 346 or len(manifest['requested_axioms']) != 260 or manifest['requested_axioms'][-3:] != binding['additional_profiles']: raise RuntimeError('Additive source/profile scope drift')
     cache = manifest['cache_provenance']
     warm = home/cache['run']
     toolchain = home/'.elan/toolchains/leanprover--lean4---v4.34.0-rc2'
