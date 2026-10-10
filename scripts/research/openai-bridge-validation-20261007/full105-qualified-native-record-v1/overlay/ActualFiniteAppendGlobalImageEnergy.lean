@@ -1,0 +1,398 @@
+import Mathlib.LinearAlgebra.Matrix.Rank
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Tactic
+import PvNP.RealizableHardness.ActualFiniteAppendImagePerImageEnergy
+import PvNP.RealizableHardness.ActualFiniteAppendImageTailBridge
+import PvNP.RealizableHardness.ActualFiniteAppendSpectral47
+import PvNP.RealizableHardness.ActualFiniteBinaryImageFibres
+
+/-!
+Globalize fixed-image append energy by partitioning rank-i matrices according
+to their actual range.  Every coefficient comparison remains within one
+fixed image subspace; no constancy across distinct images is assumed.
+-/
+namespace PvNP.RealizableHardness.ActualFiniteAppendGlobalImageEnergy
+
+open scoped BigOperators
+open PvNP.RealizableHardness.ActualFiniteAppendImagePerImageEnergy
+open PvNP.RealizableHardness.ActualFiniteAppendImageTailBridge
+open PvNP.RealizableHardness.ActualFiniteAppendImageWeighted
+open PvNP.RealizableHardness.ActualFiniteAppendSpectral47
+open PvNP.RealizableHardness.ActualFiniteBinaryImageFibres
+open PvNP.RealizableHardness.ActualFixedFunctionalAppendOperator
+open PvNP.RealizableHardness.BinaryMatrixFourier
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+private theorem cast_family_value {ι : Type*} {F : ι → Type*} {α : Type*}
+    (value : ∀ i, F i → α) {i j : ι} (h : i = j) (x : F i) :
+    value j (cast (congrArg F h) x) = value i x := by
+  cases h
+  rfl
+
+private theorem sum_ite_eq_subtype_sum {α : Type*} {M : Type*}
+    [Fintype α] [AddCommMonoid M] (p : α → Prop) [DecidablePred p]
+    (f : α → M) :
+    (∑ x, if p x then f x else 0) = ∑ x : {x // p x}, f x.1 := by
+  classical
+  calc
+    (∑ x, if p x then f x else 0) =
+        ∑ x ∈ (Finset.univ : Finset α).filter p, f x := by
+          rw [Finset.sum_filter]
+    _ = ∑ x : {x // p x}, f x.1 := by
+      simpa only [Finset.subtype_univ] using
+        (Finset.sum_subtype_eq_sum_filter
+          (s := (Finset.univ : Finset α)) (p := p) f).symm
+
+private theorem subtype_sum_eq_sum_filter_univ {α : Type*} {M : Type*}
+    [Fintype α] [DecidableEq α] [AddCommMonoid M]
+    (p : α → Prop) [DecidablePred p] (f : α → M) :
+    (∑ x : {x // p x}, f x.1) =
+      ∑ x ∈ (Finset.univ : Finset α).filter p, f x := by
+  classical
+  calc
+    (∑ x : {x // p x}, f x.1) = ∑ x, if p x then f x else 0 := by
+      symm
+      exact sum_ite_eq_subtype_sum p f
+    _ = ∑ x ∈ (Finset.univ : Finset α).filter p, f x := by
+      symm
+      rw [Finset.sum_filter]
+
+/-- Image-subspace indices of rank `i` in the ambient coordinate space. -/
+abbrev RankImageSubspaces (n i : Nat) :=
+  {E : Submodule (ZMod 2) (Coord n) // Module.finrank (ZMod 2) E = i}
+
+instance rankImageSubspacesFinite {n i : Nat} : Finite (RankImageSubspaces n i) := by
+  let : Finite (Submodule (ZMod 2) (Coord n)) :=
+    Finite.of_injective (fun E => (E : Set (Coord n))) SetLike.coe_injective
+  unfold RankImageSubspaces
+  infer_instance
+
+noncomputable instance rankImageSubspacesFintype {n i : Nat} :
+    Fintype (RankImageSubspaces n i) := Fintype.ofFinite _
+
+/-- Rank-i matrices with their image subspace recorded as an index. -/
+abbrev RankMatrixType (n d i : Nat) :=
+  {Z : BinaryMatrix n d // Z.rank = i}
+
+/-- The matrix-to-image map, with rank transferred to the subspace index. -/
+def rankMatrixImageEquivSigma {n d i : Nat} :
+    RankMatrixType n d i ≃
+      Σ E : RankImageSubspaces n i, MatrixImageFibre n d i E.1 where
+  toFun Z := by
+    let E : RankImageSubspaces n i :=
+      ⟨LinearMap.range Z.1.mulVecLin, by
+        change Module.finrank (ZMod 2) (LinearMap.range Z.1.mulVecLin) = i
+        simpa [Matrix.rank] using Z.2⟩
+    exact ⟨E, ⟨Z.1, Z.2, rfl⟩⟩
+  invFun p := ⟨p.2.1, p.2.2.1⟩
+  left_inv Z := by
+    apply Subtype.ext
+    rfl
+  right_inv p := by
+    let E' : RankImageSubspaces n i :=
+      ⟨LinearMap.range p.2.1.mulVecLin, by
+        change Module.finrank (ZMod 2) (LinearMap.range p.2.1.mulVecLin) = i
+        simpa [Matrix.rank] using p.2.2.1⟩
+    have hE : p.1 = E' := by
+      apply Subtype.ext
+      exact p.2.2.2.symm
+    refine Sigma.ext hE.symm ?_
+    let e := congrArg (fun E : RankImageSubspaces n i =>
+      MatrixImageFibre n d i E.1) hE
+    exact heq_of_eq_cast e (by
+      apply Subtype.ext
+      exact (cast_family_value
+        (fun E (A : MatrixImageFibre n d i E.1) => A.1) hE p.2).symm)
+
+/-- Every rank-i matrix sum splits exactly into finite sums over image
+subspaces and their fixed-image matrix fibres. -/
+theorem sum_rank_matrices_by_image {n d i : Nat}
+    (g : BinaryMatrix n d → Real) :
+    (∑ Z : RankMatrixType n d i, g Z.1) =
+      ∑ E : RankImageSubspaces n i,
+        ∑ A : MatrixImageFibre n d i E.1, g A.1 := by
+  classical
+  calc
+    (∑ Z : RankMatrixType n d i, g Z.1) =
+        ∑ Z : RankMatrixType n d i,
+          (fun p : Σ E : RankImageSubspaces n i,
+            MatrixImageFibre n d i E.1 => g p.2.1)
+            (rankMatrixImageEquivSigma Z) := by
+              apply Finset.sum_congr rfl
+              intro Z hZ
+              rfl
+    _ = ∑ p : Σ E : RankImageSubspaces n i, MatrixImageFibre n d i E.1,
+          g p.2.1 :=
+            Equiv.sum_comp rankMatrixImageEquivSigma
+              (fun p : Σ E : RankImageSubspaces n i,
+                MatrixImageFibre n d i E.1 => g p.2.1)
+    _ = ∑ E : RankImageSubspaces n i,
+          ∑ A : MatrixImageFibre n d i E.1, g A.1 := by
+            simp only [Fintype.sum_sigma]
+
+/-- Rank-i matrix sum selected by the actual append tail-zero predicate splits
+into retained fibres for each fixed image. -/
+theorem sum_retained_matrices_by_image {n c s i : Nat}
+    (g : BinaryMatrix n (c + s) → Real) :
+    (∑ Z : RankMatrixType n (c + s) i,
+        if appendedFrequencyPart Z.1 = 0 then g Z.1 else 0) =
+      ∑ E : RankImageSubspaces n i,
+        ∑ A : RetainedMatrixImageFibre (c := c) (s := s) E.1 E.2,
+          g A.1.1 := by
+  classical
+  -- Reindex the surviving subtype directly.  The image component is always
+  -- the range of this same matrix, and the second component is precisely the
+  -- retained predicate transported by the tail bridge.
+  let Surviving : Type :=
+    {Z : RankMatrixType n (c + s) i // appendedFrequencyPart Z.1 = 0}
+  let Fibred : Type :=
+    Σ E : RankImageSubspaces n i,
+      RetainedMatrixImageFibre (c := c) (s := s) E.1 E.2
+  let e : Surviving ≃ Fibred := by
+    classical
+    refine
+      { toFun := fun Z => ?_
+        invFun := fun p => ?_
+        left_inv := ?_
+        right_inv := ?_ }
+    · let A : MatrixImageFibre n (c + s) i
+          (LinearMap.range Z.1.1.mulVecLin) :=
+        ⟨Z.1.1, Z.1.2, rfl⟩
+      let E : RankImageSubspaces n i :=
+        ⟨LinearMap.range Z.1.1.mulVecLin, by
+          change Module.finrank (ZMod 2)
+            (LinearMap.range Z.1.1.mulVecLin) = i
+          simpa [Matrix.rank] using Z.1.2⟩
+      have hret : (matrixImageFibreEquivSurjections E.1 E.2 A).val.comp
+          (appendRightInjection c s) = 0 := by
+        exact (retained_iff_appendedFrequencyPart_zero E.1 E.2 A).2 Z.2
+      exact ⟨E, ⟨A, hret⟩⟩
+    ·
+      let A : MatrixImageFibre n (c + s) i p.1.1 := p.2.1
+      have hzero : appendedFrequencyPart A.1 = 0 :=
+        (retained_iff_appendedFrequencyPart_zero p.1.1 p.1.2 A).mp p.2.2
+      exact ⟨⟨A.1, A.2.1⟩, hzero⟩
+    · intro Z
+      apply Subtype.ext
+      apply Subtype.ext
+      rfl
+    · intro p
+      let E' : RankImageSubspaces n i :=
+        ⟨LinearMap.range p.2.1.1.mulVecLin, by
+          change Module.finrank (ZMod 2)
+            (LinearMap.range p.2.1.1.mulVecLin) = i
+          simpa [Matrix.rank] using p.2.1.2.1⟩
+      have hE : p.1 = E' := by
+        apply Subtype.ext
+        exact p.2.1.2.2.symm
+      refine Sigma.ext hE.symm ?_
+      let e := congrArg (fun E : RankImageSubspaces n i =>
+        RetainedMatrixImageFibre (c := c) (s := s) E.1 E.2) hE
+      exact heq_of_eq_cast e (by
+        apply Subtype.ext
+        apply Subtype.ext
+        exact (cast_family_value
+          (fun E (A : RetainedMatrixImageFibre (c := c) (s := s) E.1 E.2) => A.1.1)
+          hE p.2).symm)
+  have hsum :
+      (∑ Z : RankMatrixType n (c + s) i,
+        if appendedFrequencyPart Z.1 = 0 then g Z.1 else 0) =
+       ∑ Z : Surviving, g Z.1.1 := by
+    classical
+    simpa [Surviving] using
+      (sum_ite_eq_subtype_sum
+        (fun Z : RankMatrixType n (c + s) i => appendedFrequencyPart Z.1 = 0)
+        (fun Z => g Z.1))
+  rw [hsum]
+  calc
+    (∑ Z : Surviving, g Z.1.1) =
+        ∑ Z : Surviving, (fun A : Fibred => g A.2.1.1) (e Z) := by
+          apply Finset.sum_congr rfl
+          intro Z hZ
+          rfl
+    _ = ∑ A : Fibred, g A.2.1.1 :=
+          Equiv.sum_comp e (fun A : Fibred => g A.2.1.1)
+    _ = ∑ E : RankImageSubspaces n i,
+          ∑ A : RetainedMatrixImageFibre (c := c) (s := s) E.1 E.2,
+            g A.1.1 := by
+          change (∑ p : Σ E : RankImageSubspaces n i,
+              RetainedMatrixImageFibre (c := c) (s := s) E.1 E.2,
+                g p.2.1.1) = _
+          simp only [Fintype.sum_sigma]
+
+/-- For an empty matrix fibre the corresponding retained fibre is empty too,
+so no representative or coefficient constancy witness is needed. -/
+theorem per_image_energy_ratio_of_empty {n c s i : Nat}
+    (E : Submodule (ZMod 2) (Coord n))
+    (hE : Module.finrank (ZMod 2) E = i)
+    (F : BinaryMatrix n (c + s) → Real)
+    (basisInv : ∀ (M : BinaryMatrix n (c + s))
+      (U V : BinaryMatrix (c + s) (c + s)),
+        U * V = 1 → V * U = 1 → F (M * U) = F M)
+    (hEmpty : IsEmpty (MatrixImageFibre n (c + s) i E)) :
+    (∑ A : RetainedMatrixImageFibre (c := c) (s := s) E hE,
+        (fourierCoeff (rankProjection i F) A.1.1) ^ 2) ≤
+      (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        ∑ A : MatrixImageFibre n (c + s) i E,
+          (fourierCoeff (rankProjection i F) A.1) ^ 2 := by
+  classical
+  have _ := basisInv
+  let : IsEmpty (RetainedMatrixImageFibre (c := c) (s := s) E hE) :=
+    ⟨fun A => hEmpty.false A.1⟩
+  simp
+
+/-- Representative-free fixed-image energy comparison. -/
+theorem per_image_energy_ratio {n c s i : Nat}
+    (E : Submodule (ZMod 2) (Coord n))
+    (hE : Module.finrank (ZMod 2) E = i)
+    (hi : i ≤ c + s)
+    (F : BinaryMatrix n (c + s) → Real)
+    (basisInv : ∀ (M : BinaryMatrix n (c + s))
+      (U V : BinaryMatrix (c + s) (c + s)),
+        U * V = 1 → V * U = 1 → F (M * U) = F M) :
+    (∑ A : RetainedMatrixImageFibre (c := c) (s := s) E hE,
+        (fourierCoeff (rankProjection i F) A.1.1) ^ 2) ≤
+      (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        ∑ A : MatrixImageFibre n (c + s) i E,
+          (fourierCoeff (rankProjection i F) A.1) ^ 2 := by
+  classical
+  by_cases hEmpty : IsEmpty (MatrixImageFibre n (c + s) i E)
+  · exact per_image_energy_ratio_of_empty E hE F basisInv hEmpty
+  · have hne : Nonempty (MatrixImageFibre n (c + s) i E) := by
+      by_contra hn
+      exact hEmpty ⟨fun A => hn ⟨A⟩⟩
+    exact per_image_fourier_energy_ratio E hE hi F basisInv (Classical.choice hne)
+
+/-- Summing the fixed-image estimates over all rank-i image subspaces gives
+the global retained Fourier energy estimate. The index split is exact and
+does not compare coefficients attached to different images. -/
+theorem rank_i_retained_energy_le {n c s i : Nat}
+    (hi : i ≤ c + s)
+    (F : BinaryMatrix n (c + s) → Real)
+    (basisInv : ∀ (M : BinaryMatrix n (c + s))
+      (U V : BinaryMatrix (c + s) (c + s)),
+        U * V = 1 → V * U = 1 → F (M * U) = F M) :
+    (∑ Z : RankMatrixType n (c + s) i,
+        if appendedFrequencyPart Z.1 = 0 then
+          (fourierCoeff (rankProjection i F) Z.1) ^ 2 else 0) ≤
+      (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        ∑ Z : RankMatrixType n (c + s) i,
+          (fourierCoeff (rankProjection i F) Z.1) ^ 2 := by
+  classical
+  rw [sum_retained_matrices_by_image
+      (g := fun Z => (fourierCoeff (rankProjection i F) Z) ^ 2),
+    sum_rank_matrices_by_image
+      (g := fun Z => (fourierCoeff (rankProjection i F) Z) ^ 2)]
+  calc
+    (∑ E : RankImageSubspaces n i,
+        ∑ A : RetainedMatrixImageFibre (c := c) (s := s) E.1 E.2,
+          (fourierCoeff (rankProjection i F) A.1.1) ^ 2) ≤
+      ∑ E : RankImageSubspaces n i,
+        (2 : Real) ^ (-((i : Real) * (s : Real))) *
+          ∑ A : MatrixImageFibre n (c + s) i E.1,
+            (fourierCoeff (rankProjection i F) A.1) ^ 2 := by
+      apply Finset.sum_le_sum
+      intro E hE
+      exact per_image_energy_ratio E.1 E.2 hi F basisInv
+    _ = (2 : Real) ^ (-((i : Real) * (s : Real))) *
+          ∑ E : RankImageSubspaces n i,
+            ∑ A : MatrixImageFibre n (c + s) i E.1,
+              (fourierCoeff (rankProjection i F) A.1) ^ 2 := by
+      rw [Finset.mul_sum]
+
+/-- Actual unconditional append energy is bounded by the surviving
+rank-i coefficient mass, and therefore by the same rank-i mass times the
+exact frame-product attenuation. -/
+theorem append_rank_projection_energy_le {n c s i : Nat}
+    (hi : i ≤ c + s)
+    (F : BinaryMatrix n (c + s) → Real)
+    (basisInv : ∀ (M : BinaryMatrix n (c + s))
+      (U V : BinaryMatrix (c + s) (c + s)),
+        U * V = 1 → V * U = 1 → F (M * U) = F M) :
+    uniformMean (fun M : BinaryMatrix n c =>
+      (appendAverage (rankProjection i F) M) ^ 2) ≤
+      (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        ∑ Z ∈ (Finset.univ : Finset (BinaryMatrix n (c + s))).filter
+            (fun Z => Z.rank = i),
+          (fourierCoeff F Z) ^ 2 := by
+  classical
+  have hglobal := rank_i_retained_energy_le hi F basisInv
+  have hglobalF :
+      (∑ Z : RankMatrixType n (c + s) i,
+        if appendedFrequencyPart Z.1 = 0 then
+          (fourierCoeff F Z.1) ^ 2 else 0) ≤
+      (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        ∑ Z : RankMatrixType n (c + s) i,
+          (fourierCoeff F Z.1) ^ 2 := by
+    have hleft :
+        (∑ Z : RankMatrixType n (c + s) i,
+          if appendedFrequencyPart Z.1 = 0 then
+            (fourierCoeff (rankProjection i F) Z.1) ^ 2 else 0) =
+        ∑ Z : RankMatrixType n (c + s) i,
+          if appendedFrequencyPart Z.1 = 0 then
+            (fourierCoeff F Z.1) ^ 2 else 0 := by
+      apply Finset.sum_congr rfl
+      intro Z hZ
+      rw [fourierCoeff_rankProjection, Z.2]
+      simp
+    have hright :
+        (∑ Z : RankMatrixType n (c + s) i,
+          (fourierCoeff (rankProjection i F) Z.1) ^ 2) =
+        ∑ Z : RankMatrixType n (c + s) i,
+          (fourierCoeff F Z.1) ^ 2 := by
+      apply Finset.sum_congr rfl
+      intro Z hZ
+      rw [fourierCoeff_rankProjection, Z.2]
+      simp
+    rw [← hleft, ← hright]
+    exact hglobal
+  have hfilter :
+      (∑ Z ∈ (Finset.univ : Finset (BinaryMatrix n (c + s))).filter
+          (fun Z => Z.rank = i),
+        if appendedFrequencyPart Z = 0 then (fourierCoeff F Z) ^ 2 else 0) =
+      ∑ Z : RankMatrixType n (c + s) i,
+        if appendedFrequencyPart Z.1 = 0 then (fourierCoeff F Z.1) ^ 2 else 0 := by
+    change (∑ Z ∈ (Finset.univ : Finset (BinaryMatrix n (c + s))).filter
+        (fun Z => Z.rank = i),
+        if appendedFrequencyPart Z = 0 then (fourierCoeff F Z) ^ 2 else 0) =
+      (∑ Z : {Z : BinaryMatrix n (c + s) // Z.rank = i},
+        if appendedFrequencyPart Z.1 = 0 then (fourierCoeff F Z.1) ^ 2 else 0)
+    exact (subtype_sum_eq_sum_filter_univ
+      (fun Z : BinaryMatrix n (c + s) => Z.rank = i)
+      (fun Z => if appendedFrequencyPart Z = 0 then (fourierCoeff F Z) ^ 2 else 0)).symm
+  have hallfilter :
+      (∑ Z ∈ (Finset.univ : Finset (BinaryMatrix n (c + s))).filter
+          (fun Z => Z.rank = i),
+        (fourierCoeff F Z) ^ 2) =
+      ∑ Z : RankMatrixType n (c + s) i,
+        (fourierCoeff F Z.1) ^ 2 := by
+    change (∑ Z ∈ (Finset.univ : Finset (BinaryMatrix n (c + s))).filter
+        (fun Z => Z.rank = i), (fourierCoeff F Z) ^ 2) =
+      (∑ Z : {Z : BinaryMatrix n (c + s) // Z.rank = i},
+        (fourierCoeff F Z.1) ^ 2)
+    exact (subtype_sum_eq_sum_filter_univ
+      (fun Z : BinaryMatrix n (c + s) => Z.rank = i)
+      (fun Z => (fourierCoeff F Z) ^ 2)).symm
+  calc
+    uniformMean (fun M : BinaryMatrix n c =>
+        (appendAverage (rankProjection i F) M) ^ 2) =
+      ∑ Z ∈ (Finset.univ : Finset (BinaryMatrix n (c + s))).filter
+          (fun Z => Z.rank = i),
+        if appendedFrequencyPart Z = 0 then (fourierCoeff F Z) ^ 2 else 0 :=
+          appendAverage_rankProjection_energy_eq F
+    _ = ∑ Z : RankMatrixType n (c + s) i,
+          if appendedFrequencyPart Z.1 = 0 then
+            (fourierCoeff F Z.1) ^ 2 else 0 := hfilter
+    _ ≤ (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        ∑ Z : RankMatrixType n (c + s) i,
+          (fourierCoeff F Z.1) ^ 2 := hglobalF
+    _ = (2 : Real) ^ (-((i : Real) * (s : Real))) *
+        ∑ Z ∈ (Finset.univ : Finset (BinaryMatrix n (c + s))).filter
+            (fun Z => Z.rank = i),
+          (fourierCoeff F Z) ^ 2 := by rw [← hallfilter]
+
+end
+end PvNP.RealizableHardness.ActualFiniteAppendGlobalImageEnergy
