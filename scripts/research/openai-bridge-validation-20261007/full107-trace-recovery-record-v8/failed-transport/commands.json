@@ -1,0 +1,80 @@
+[
+  {
+    "index": 0,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,networkInterfaces)",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T07:08:39+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 13800,
+    "finished_utc": "2026-10-10T07:08:45+00:00",
+    "native_exit": 0,
+    "timed_out": false,
+    "seconds": 5.846142399997916,
+    "stdout_path": "control/000.stdout",
+    "stderr_path": "control/000.stderr",
+    "stdout_sha256": "D6ABDD5CF676B8E9DFD2255894572BDD8B3C00F107D9F93759512A3F99102C02",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "index": 1,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=sha256sum /home/dfredriksen_quantyra_org/full107-trace-cache-repoint-v8/full107_trace_cache_repoint_v8.py",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T07:08:45+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 6796,
+    "finished_utc": "2026-10-10T07:08:57+00:00",
+    "native_exit": 0,
+    "timed_out": false,
+    "seconds": 12.67507040000055,
+    "stdout_path": "control/001.stdout",
+    "stderr_path": "control/001.stderr",
+    "stdout_sha256": "3634DFFBE118BD98F34E1A2A39327BB692C4DE3FCB63FFBD693863AA62ACFCC9",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "index": 2,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=python3 -B /home/dfredriksen_quantyra_org/full107-trace-cache-repoint-v8/full107_trace_cache_repoint_v8.py --execute",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T07:08:57+00:00",
+    "timeout_seconds": 600,
+    "local_control_pid": 16748,
+    "finished_utc": "2026-10-10T07:20:48+00:00",
+    "native_exit": 1,
+    "timed_out": false,
+    "seconds": 710.9874191999988,
+    "stdout_path": "control/002.stdout",
+    "stderr_path": "control/002.stderr",
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "33E511D47A37A307323963213A5D59B1EDC63AD038D9B8CC5DFA2C350368625E"
+  }
+]
