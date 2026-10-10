@@ -1,0 +1,16 @@
+WARNING: 
+
+To increase the performance of the tunnel, consider installing NumPy. For instructions,
+please see https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
+
+Testing if tunnel connection works.
+ERROR: [0] Error during local connection to [('127.0.0.1', 55466)]: [WinError 10053] An established connection was aborted by the software in your host machine
+Traceback (most recent call last):
+  File "C:\Users\dfred\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\..\lib\googlecloudsdk\command_lib\compute\iap_tunnel.py", line 814, in RunReceiveLocalData
+    data = conn.recv(utils.SUBPROTOCOL_MAX_DATA_FRAME_SIZE)
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+ERROR: [1] Error during local connection to [('127.0.0.1', 55468)]: [WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\dfred\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\..\lib\googlecloudsdk\command_lib\compute\iap_tunnel.py", line 814, in RunReceiveLocalData
+    data = conn.recv(utils.SUBPROTOCOL_MAX_DATA_FRAME_SIZE)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host

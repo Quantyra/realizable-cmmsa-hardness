@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\native-progress-inspections-v1\\20261010T111412287039Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "55461",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c 'import json,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('\"'\"'http://metadata.google.internal/computeMetadata/v1/instance/id'\"'\"',headers={'\"'\"'Metadata-Flavor'\"'\"':'\"'\"'Google'\"'\"'})\nwith o.open(r,timeout=10) as s:\n assert s.headers.get('\"'\"'Metadata-Flavor'\"'\"')=='\"'\"'Google'\"'\"' and s.read().decode()=='\"'\"'7237681467779354904'\"'\"'\nhome=Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"');assert Path.home().resolve()==home\nrun='\"'\"'cmmsa_a8_output_20261010T110328Z_0d5c26f4'\"'\"'\nmarker=json.loads((home/'\"'\"'full109-exact-crosslevel-warning-repair-resource02-launch-once.json'\"'\"').read_bytes())\nassert marker['\"'\"'run'\"'\"']==run and marker['\"'\"'host'\"'\"']['\"'\"'id'\"'\"']=='\"'\"'7237681467779354904'\"'\"'\nfolder=home/(run+'\"'\"'_evidence'\"'\"');stages=[];actions={}\nfor number in range(7):\n path=folder/('\"'\"'stage-'\"'\"'+str(number)+'\"'\"'.native-exit'\"'\"')\n if path.is_file():\n  value=path.read_text().strip()\n  if value:stages.append(dict(stage=number,native_exit=int(value)))\nfor action in ('\"'\"'begin'\"'\"','\"'\"'compile'\"'\"','\"'\"'finish'\"'\"'):\n path=folder/(action+'\"'\"'.native-exit'\"'\"')\n if path.is_file():\n  value=path.read_text().strip()\n  if value:actions[action]=int(value)\nprint(json.dumps(dict(run=run,stages=stages,actions=actions,\n guest_terminal_present=(folder/'\"'\"'dedicated-worker-terminal.json'\"'\"').is_file(),\n read_only=True,worker_replayed=False,qualified=False,accepted=False)))\n'"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "521FB9726CF6C5937C9FEF2F8607A441ABB1408691DC3D8B14300E49F612CABF",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
