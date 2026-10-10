@@ -28,6 +28,11 @@ def main():
     try:
         for number in (4, 5, 6, 7, 8):
             assert not (ROOT/'launch-once.json').exists()
+            refresh = [sys.executable, '-B', '-X', 'utf8', str(HERE/'refresh_full107_trace_idle.py')]
+            with (folder/f'scope{number}.idle.stdout').open('xb') as out, (folder/f'scope{number}.idle.stderr').open('xb') as err:
+                refresh_code = subprocess.run(refresh, stdout=out, stderr=err).returncode
+            if refresh_code:
+                raise RuntimeError(f'Scope{number} idle refresh failed; no new transaction invoked')
             command = [sys.executable, '-B', '-X', 'utf8', str(HERE/f'run_full107_trace_cache_repoint_v{number}.py'), 'execute']
             (folder/f'scope{number}.command.json').write_text(json.dumps(command)+'\n')
             with (folder/f'scope{number}.stdout').open('xb') as out, (folder/f'scope{number}.stderr').open('xb') as err:
