@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\trace-resource-inspections-v1\\20261010T113744781862Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "55572",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c 'import json,os,shutil,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('\"'\"'http://metadata.google.internal/computeMetadata/v1/instance/id'\"'\"',headers={'\"'\"'Metadata-Flavor'\"'\"':'\"'\"'Google'\"'\"'})\nwith o.open(r,timeout=10) as s:\n assert s.headers.get('\"'\"'Metadata-Flavor'\"'\"')=='\"'\"'Google'\"'\"' and s.read().decode()=='\"'\"'7237681467779354904'\"'\"'\nhome=Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"');assert Path.home().resolve()==home\nassert not (home/'\"'\"'full109-consumption-v3-launch-once.json'\"'\"').exists()\npids=[]\nfor entry in Path('\"'\"'/proc'\"'\"').iterdir():\n if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\n try:name=(entry/'\"'\"'comm'\"'\"').read_text().strip()\n except (FileNotFoundError,PermissionError):continue\n if name in ('\"'\"'lean'\"'\"','\"'\"'lake'\"'\"','\"'\"'cp'\"'\"','\"'\"'tar'\"'\"'):pids.append(dict(pid=int(entry.name),name=name))\nmem=int(next(line.split()[1] for line in Path('\"'\"'/proc/meminfo'\"'\"').read_text().splitlines() if line.startswith('\"'\"'MemAvailable:'\"'\"')))*1024\nprint(json.dumps(dict(disk_available_bytes=shutil.disk_usage(home).free,available_memory_bytes=mem,\n active_compiler_or_copy=pids,trace_once_present=False,read_only=True,trace_executed=False)))\n'"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "CFD602532773D1E47AF9C4D12105407FD41833FA2D61F75C8213236B9AC1D079",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
