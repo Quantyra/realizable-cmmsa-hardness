@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/dfredriksen_quantyra_org/full105-consumption-v3-stage/full105_consumption_v3_worker.py", line 153, in <module>
+    raise SystemExit(execute(sys.argv[1], sys.argv[2:] == ['--execute']))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dfredriksen_quantyra_org/full105-consumption-v3-stage/full105_consumption_v3_worker.py", line 59, in execute
+    raise RuntimeError('Insufficient remote storage')
+RuntimeError: Insufficient remote storage
+
+Recommendation: To check for possible causes of SSH connectivity issues and get
+recommendations, rerun the ssh command with the --troubleshoot option.
+
+gcloud compute ssh quantyra-lean-builder-02 --project=quantyra-lean-cert-20260915 --zone=us-central1-a --troubleshoot
+
+Or, to investigate an IAP tunneling issue:
+
+gcloud compute ssh quantyra-lean-builder-02 --project=quantyra-lean-cert-20260915 --zone=us-central1-a --troubleshoot --tunnel-through-iap
+
+ERROR: (gcloud.compute.ssh) [C:\Users\dfred\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\sdk\plink.exe] exited with return code [1].

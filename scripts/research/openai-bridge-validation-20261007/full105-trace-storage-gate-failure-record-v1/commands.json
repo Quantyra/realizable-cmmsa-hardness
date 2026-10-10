@@ -1,0 +1,145 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "auth",
+      "list",
+      "--filter=status:ACTIVE",
+      "--format=json(account,status)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "C63009EDEEF41892ACDE6B0F4FB7D0F98473F54E84F2F6B1FEED6ABF6BC8D1B9",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-10T02:32:04.209385+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "8CBAECBB888C1E7EFD9DD2A00F88E50BD6ABE02D81A14C888900117A973DAE9B",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-10T02:32:22.660822+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "start",
+      "quantyra-lean-builder-02",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "C5EF0563F324E5FCAB5A5BAB1584469454D2D0A33DDF56F518D8238F6722154B",
+    "utc": "2026-10-10T02:33:00.112505+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-10T02:33:16.995982+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=python3 -c 'from pathlib import Path; p=Path('\"'\"'/home/dfredriksen_quantyra_org/full105-consumption-v3-stage'\"'\"'); assert not p.exists() or not any(p.iterdir()), \"Nonempty staging directory: inspect before transfer\"; p.mkdir(exist_ok=True)'",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-10T02:33:52.385731+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "scp",
+      "C:\\Users\\dfred\\.quantyra\\builder02\\full105-actual-consumer-exact-energy-repair-resource02\\consumption-v3\\green-binding.json",
+      "C:\\Users\\dfred\\.quantyra\\builder02\\full105-actual-consumer-exact-energy-repair-resource02\\consumption-preparation-v1-dag\\tooling.tar.gz",
+      "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full105_consumption_v3_worker.py",
+      "quantyra-lean-builder-02:/home/dfredriksen_quantyra_org/full105-consumption-v3-stage/",
+      "--tunnel-through-iap",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "C4880631A47B27B4D0828BF034621AC44C23A057C0AA12CC4A3ADAD82CA2D88A",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-10T02:34:34.280683+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=set -e; date +%s | sudo tee /var/lib/quantyra-idle-shutdown/last-active; sudo systemctl start quantyra-idle-shutdown.timer; systemctl is-active quantyra-idle-shutdown.timer",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "1C6DCA3F69E740FD92136DB9639E379D0B237485B6A46FEE3408835501670709",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-10T02:35:09.055170+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=python3 -B /home/dfredriksen_quantyra_org/full105-consumption-v3-stage/full105_consumption_v3_worker.py /home/dfredriksen_quantyra_org/full105-consumption-v3-stage",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 1,
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "0DE4201D3F5248178841D8C4D5BE2CC3159A18F54415C31F25FB997E0836B46C",
+    "utc": "2026-10-10T02:35:48.720526+00:00"
+  }
+]
