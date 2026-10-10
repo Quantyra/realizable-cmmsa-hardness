@@ -202,3 +202,31 @@ its logs are preserved under ignored
 No public release, submission authorization, DOI change or completed Lean proof
 is implied. The conditional paper-specific Lean consolidation handoff above
 still applies only after full proof finalization.
+
+
+## Current reviewed draft layout (2026-10-09)
+
+The current attribution/notation/disclosure revision builds as **32 pages**,
+617,041 bytes, SHA256
+`3A25A4CFEFFB213F3AE4FB7934BCFFC3BDB3CC99300C6F9D1C55B5110E5C606E`.
+Exact source pins, PDF and complete three-pass pdfLaTeX/BibTeX logs are retained
+in `../scripts/research/openai-bridge-validation-20261007/draft-disclosure-notation-repair-build-v5/`.
+The independent reviewer inspected all32 pages and accepts visual layout,
+transcription and explicit draft disclosure with minor findings. Full report
+and actual terminal/context evidence are retained in
+`../scripts/research/openai-bridge-validation-20261007/draft-independent-visual-content-report-v5/`.
+
+Remaining minor findings include some mixed inline minus typography, inherited
+Holder spelling, one theorem-number page break and explanatory wording for
+internal formal-run labels. Bibliography URL spacing is readable; six underfull
+notices remain, with no overfull boxes or unresolved references. The old31-page
+PDFs and rejection/repair lineage remain historical artifacts, and their QA
+is not silently reused against this32-page PDF. Fresh author all-page QA remains
+pending for this exact revision.
+
+This is a proposed informal argument under continuing review. Conditional
+Full105 formal interfaces do not establish source/selection/sampler witnesses,
+encoded runtime, the manuscript's native exact operator laws or the whole
+hardness/learning result. Mathematical acceptance, complete Lean certification,
+novelty clearance, final provider review and publication remain open. No public
+release, submission or announcement is authorized by this draft-layout milestone.
