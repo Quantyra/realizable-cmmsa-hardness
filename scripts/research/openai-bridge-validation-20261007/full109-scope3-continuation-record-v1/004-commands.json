@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\scope3-remaining-only-controls-v1\\20261010T103230099538Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "59232",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c '\"\"\"GCP-only continuation of independently verified interrupted scope3, no replay.\"\"\"\nimport hashlib\nimport importlib.util\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport stat\n\nHOME=Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"')\nCONTROL=HOME/'\"'\"'full109-storage-cache-repoint-v3'\"'\"'\nSOURCE_SHA='\"'\"'4D0FD1669D999F7583369CBAC94411F8449CE2C15CA12C39E63306B7A54184AC'\"'\"'\nPLAN_SHA='\"'\"'9B2779606C54C2531688B7CC209E32F7C7AAFA75CFB8C88F5ACACF1CD3AEF581'\"'\"'\nPARTIAL_SHA='\"'\"'B2B8FEFC2A7CBF7A004B3590AB2821505995314D87DA36F52789E9B2F9169B3C'\"'\"'\nCOMPLETED=18781\ndef digest(path):\n    with path.open('\"'\"'rb'\"'\"') as stream:return hashlib.file_digest(stream,'\"'\"'sha256'\"'\"').hexdigest().upper()\ndef validate_rows(plan,old,canonical):\n    assert len(plan['\"'\"'rows'\"'\"'])==19233\n    for index,row in enumerate(plan['\"'\"'rows'\"'\"']):\n        rel=Path(row['\"'\"'relative'\"'\"']);assert not rel.is_absolute() and '\"'\"'..'\"'\"' not in rel.parts\n        path=old/rel;dest=canonical/rel;backup=path.with_name(path.name+'\"'\"'.full95-repoint-backup'\"'\"')\n        assert dest.resolve(strict=True).is_relative_to(canonical)\n        assert dest.stat().st_size==row['\"'\"'bytes'\"'\"'] and digest(dest)==row['\"'\"'sha256'\"'\"']\n        assert not backup.exists() and not backup.is_symlink()\n        if index<COMPLETED:\n            assert path.is_symlink() and path.readlink()==dest\n            assert path.resolve(strict=True)==dest.resolve(strict=True)\n        else:\n            assert not path.is_symlink() and path.resolve(strict=True).is_relative_to(old)\n            info=path.stat()\n            assert stat.S_ISREG(info.st_mode) and info.st_nlink==1\n            assert info.st_size==row['\"'\"'bytes'\"'\"'] and digest(path)==row['\"'\"'sha256'\"'\"']\ndef write_new(path,value):\n    with path.open('\"'\"'x'\"'\"') as stream:json.dump(value,stream,indent=2);stream.write('\"'\"'\\n'\"'\"')\ndef main():\n    source=CONTROL/'\"'\"'full109_storage_cache_repoint_v3.py'\"'\"'\n    assert digest(source)==SOURCE_SHA\n    spec=importlib.util.spec_from_file_location('\"'\"'original_scope3'\"'\"',source)\n    original=importlib.util.module_from_spec(spec);spec.loader.exec_module(original)\n    old,canonical=original.guards()\n    for entry in Path('\"'\"'/proc'\"'\"').iterdir():\n        if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\n        try:args=(entry/'\"'\"'cmdline'\"'\"').read_bytes().split(b'\"'\"'\\0'\"'\"')\n        except (FileNotFoundError,PermissionError):continue\n        assert not (any(arg.endswith(b'\"'\"'/full109_storage_cache_repoint_v3.py'\"'\"') for arg in args) and b'\"'\"'--execute'\"'\"' in args)\n    assert digest(CONTROL/'\"'\"'plan.json'\"'\"')==PLAN_SHA\n    assert digest(CONTROL/'\"'\"'partial-execution.json'\"'\"')==PARTIAL_SHA\n    assert not (CONTROL/'\"'\"'receipt.json'\"'\"').exists()\n    once=json.loads((CONTROL/'\"'\"'execute-once.json'\"'\"').read_bytes())\n    assert once==dict(plan_sha256=PLAN_SHA,compiler_invoked=False)\n    plan=json.loads((CONTROL/'\"'\"'plan.json'\"'\"').read_bytes())\n    partial=json.loads((CONTROL/'\"'\"'partial-execution.json'\"'\"').read_bytes())\n    assert plan['\"'\"'old_root'\"'\"']==str(old) and plan['\"'\"'canonical_root'\"'\"']==str(canonical)\n    assert partial['\"'\"'applied'\"'\"']==plan['\"'\"'rows'\"'\"'][:18780]\n    for key in ('\"'\"'warm_files_written'\"'\"','\"'\"'source_or_project_object_files_changed'\"'\"','\"'\"'failed_evidence_archive_changed'\"'\"','\"'\"'compiler_invoked'\"'\"'):\n        assert partial[key] is False\n    validate_rows(plan,old,canonical)\n    folder=CONTROL/'\"'\"'remaining-only-v1'\"'\"';folder.mkdir(exist_ok=False)\n    write_new(folder/'\"'\"'continue-once.json'\"'\"',dict(plan_sha256=PLAN_SHA,partial_sha256=PARTIAL_SHA,\n        independently_verified_completed_rows=COMPLETED,remaining_rows=452,original_execute_replayed=False))\n    applied=[]\n    for row in plan['\"'\"'rows'\"'\"'][COMPLETED:]:\n        path=old/row['\"'\"'relative'\"'\"'];dest=canonical/row['\"'\"'relative'\"'\"']\n        assert not path.is_symlink() and digest(path)==row['\"'\"'sha256'\"'\"'] and digest(dest)==row['\"'\"'sha256'\"'\"']\n        backup=path.with_name(path.name+'\"'\"'.full95-repoint-backup'\"'\"')\n        assert not backup.exists() and not backup.is_symlink()\n        path.rename(backup)\n        try:\n            path.symlink_to(dest)\n            assert digest(path)==row['\"'\"'sha256'\"'\"'] and digest(dest)==row['\"'\"'sha256'\"'\"']\n        except BaseException:\n            if path.is_symlink():path.unlink()\n            backup.rename(path)\n            raise\n        backup.unlink();applied.append(row)\n        temporary=folder/'\"'\"'progress.next.json'\"'\"'\n        temporary.write_text(json.dumps(dict(applied_remaining=applied),indent=2)+'\"'\"'\\n'\"'\"')\n        temporary.replace(folder/'\"'\"'progress.json'\"'\"')\n    assert len(applied)==452 and digest(CONTROL/'\"'\"'partial-execution.json'\"'\"')==PARTIAL_SHA\n    assert digest(HOME/(original.RUN+'\"'\"'_evidence.tar.gz'\"'\"'))==original.ARCHIVE_SHA\n    for row in plan['\"'\"'rows'\"'\"']:\n        path=old/row['\"'\"'relative'\"'\"'];dest=canonical/row['\"'\"'relative'\"'\"']\n        assert path.is_symlink() and path.readlink()==dest and digest(path)==row['\"'\"'sha256'\"'\"']\n    receipt=dict(partial)\n    receipt.update(applied=plan['\"'\"'rows'\"'\"'],disk_after_bytes=shutil.disk_usage(HOME).free,\n        content_identity_verified_after_repoint=True,reversible_by_copying_identical_canonical_bytes=True,\n        interrupted_original_preserved=True,original_partial_sha256=PARTIAL_SHA,\n        original_plan_sha256=PLAN_SHA,independently_verified_preexisting_rows=COMPLETED,\n        remaining_rows_applied=len(applied),original_execute_replayed=False)\n    assert receipt['\"'\"'disk_after_bytes'\"'\"']>receipt['\"'\"'disk_before_bytes'\"'\"']\n    write_new(folder/'\"'\"'receipt.json'\"'\"',receipt)\n    print(json.dumps(dict(receipt_sha256=digest(folder/'\"'\"'receipt.json'\"'\"'),receipt=receipt,\n        remaining_rows_applied=len(applied),original_execute_replayed=False,compiler_invoked=False)))\n\nif __name__=='\"'\"'__main__'\"'\"':main()\n'"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "CDDFC5507B353EC4B87D09EA4B68DDD0F1A2EB19EB300366172E5222408949CF",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
