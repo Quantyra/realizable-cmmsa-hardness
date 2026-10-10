@@ -1,0 +1,172 @@
+# Non-claims review: Full107 exact-product energy milestone (packet 2 of 2)
+
+The two fresh files are sound. Together, the three new exports form a coherent exact-product energy milestone. Overall GO is still barred because R14 (HIGH) remains open. I found no new HIGH finding.
+
+I used no tools, made no writes, and ran no Lean, Lake or subagents. Every hash comparison below is a string comparison of values supplied in the packet; I recomputed nothing. Compile results, axiom profiles, trace and custody facts come from the qualified receipts. I read all 39 prior reports and carry their findings forward unchanged unless a row below says otherwise.
+
+## Verdicts
+
+| Scope | Verdict |
+|---|---|
+| **Soundness of the two fresh files** | **Sound.** I found no soundness, orientation, quantifier, normalization, cast or vacuity defect. |
+| **Native translation** | **Closed** for the guarded frame duality, the exact s-factor product identity, and the product-form energy law for the actual unconditional append. All three exports have standard profiles. **Still open:** the G/Φ completion and marginal laws, the operator eigen-relation Φχ_Y = λ_iχ_Y with independent B and C, the invariant-first adjoint, a single packaged cross-level identity, and the complex-general form. |
+| **Conditional SourceSize/HC46/dyadic/selected-leaf integration** | **GO-WITH-NOTES, conditional, unchanged.** The material bytes are identical. The new law is a root and is not consumed by any export. |
+| **Overall readiness** | **No GO.** R14 (HIGH) is open, as are the numeric, source, runtime, upstream, certification and publication gates. |
+| **Manuscript, novelty, priority** | **No acceptance.** |
+
+**Required fresh bodies skipped: none.**
+
+## 1. Coverage
+
+**Fresh bodies, read line by line:**
+- `ActualFiniteFrameProductDuality.lean`. Its header SHA (39E80A82…5DCE) equals the native `source_sha256` and the reuse-audit fresh pin. Its object hash is 6A0ADC71…0CFC1.
+- `ActualFiniteFrameProductDualityChecks.lean`. Header SHA DAF94EDB…532D. Object hash 5E1E6799…D093.
+- I kept source and object hash categories separate throughout.
+
+**Parent bodies supplied in this packet, re-checked at the interfaces the new exports touch:**
+- `ActualFiniteAppendExactImageEnergy` (the `append_rank_projection_energy_eq_frame_ratio` statement and its binders).
+- `ActualFiniteAppendGlobalImageEnergy`, `ActualFiniteBinaryImageFibres`, `ActualFiniteBinarySurjectionCounting`, `ActualFiniteAppendSpectral47ExactInhabitant`, and `SourceSizeSpectralApplication` together with its Checks file.
+- From `ActualBinaryGrassmannSamplingBounds`, the `cast_frameProduct` unfolding. It confirms `frameProduct n k = ∏ j : Fin k, (2^n − 2^j)` in ℕ.
+- Mathlib `Algebra/BigOperators/Fin.lean`. `Fin.prod_univ_castSucc` and `Fin.prod_univ_succ` have exactly the shapes the proof uses.
+
+**Inherited, not re-derived:** the other supplied parents (the Complexitylib, tagged, star, sampler and covering families). They are covered by identity reuse over 8269 unchanged contexts.
+
+**Pinned trust or identity tier only (bodies not supplied here):** `GrassmannCounting`, `BinaryMatrixFourier`, Mathlib `Finset.prod_div_distrib`, `div_eq_div_iff`, `Nat.cast_sub`, `Nat.mul_sub_right_distrib` and `Nat.eq_of_mul_eq_mul_left`.
+
+I am not claiming a fresh reread of all 346 bodies. Packet 1 carries the other supplied files, so per-lens integration needs both reports plus the root reconciliation.
+
+## 2. Declaration audit of `ActualFiniteFrameProductDuality`
+
+Throughout, G(n,k) is `frameProduct n k`.
+
+| Declaration | Finding |
+|---|---|
+| `frame_zero` (private) | If n < k, the factor at j = n is 2^n − 2^n = 0. This is a genuine zero, not a truncation artifact. ✓ |
+| `frame_pos` (private) | If k ≤ n, every factor has j < k ≤ n, so 2^j < 2^n. ✓ |
+| `frame_append` | G(n,k+1) = G(n,k)·(2^n − 2^k), split at the last index. ✓ |
+| `frame_diagonal` | G(n+1,k+1) = (2^(n+1) − 1)·2^k·G(n,k). The j = 0 factor is 2^(n+1) − 1, and the shifted factors are 2(2^n − 2^j). `Nat.mul_sub_right_distrib` holds unconditionally in ℕ, so there is no hidden non-truncation premise. Zero factors (j ≥ n) agree on both sides. ✓ |
+| `width_shift` | Requires s ≤ n+1, used only for 2^s·2^(n+1−s) = 2^(n+1). It cancels the positive 2^s. At s = n+1 both sides are 0, which is consistent. ✓ |
+| `frame_duality_nat` | Proves G(c,i)·G(c+s,s) = G(c+s,i)·G(c+s−i,s) by induction on i, generalizing c. Checked by hand:<br>• i = 0: both sides are G(c+s,s).<br>• (i+1, c = 0): the guard forces s ≥ i+1. Both G(0,i+1) and G(s−(i+1),s) are genuine zeros.<br>• (i+1, c+1): diagonal recurrence on both rank counts, then the width shift at n = c+s, then the induction hypothesis. The algebra closes. |
+| `frameProduct_ratio_duality` | Both denominators are positive (i ≤ c+s and s ≤ c+s). `div_eq_div_iff` followed by a cast of the ℕ identity. The truncated c+s−i appears only as a natural-number index, never as a real subtraction. ✓ |
+| `cast_frame` (private) | `Nat.cast_sub` is used only under 2^j ≤ 2^n with j < k ≤ n. ✓ |
+| `frameProduct_ratio_eq_product` | Two cases:<br>• i ≤ c: then s ≤ c+s−i, factorwise casts are valid, and `prod_div_distrib` applies.<br>• i > c: the zero is taken from the real factor at j = c+s−i < s, together with G(c+s−i,s) = 0. The proof never casts truncated factors individually, as the argument requires. ✓ |
+| `append_rank_projection_energy_eq_product` | Rewrites the Full105 ratio law using the product identity. It keeps an arbitrary real F, `basisInv` over all matrices with paired two-sided inverses, `hi : i ≤ c+s`, and each carrier's own `uniformMean`. ✓ |
+| Header banner ("Uncompiled successor candidate") | **Low (stale).** It contradicts the native receipt. The non-claims sentence in the same banner is accurate. |
+| Checks file | **Info.** It contains only `#check` and `#print axioms`, which produce build-log output, not evidence. |
+
+### Boundary and orientation checklist
+
+| Case | Behaviour |
+|---|---|
+| s = 0 | The guard forces i ≤ c, so the ratio is 1, matching the empty product. The argument's warning (with s = 0 and i > c, Lean's 0/0 = 0 ≠ 1) is genuinely excluded by `hi`. |
+| c = 0 | If i = 0, the ratio is 1. If i ≥ 1, it is 0 through the zero branch. |
+| i = 0 | Every factor is (2^d − 2^j)/(2^d − 2^j) = 1, and every denominator is nonzero. |
+| c < i ≤ c+s | Exactly zero on both sides. |
+| i > n | Both energies are 0. λ_i is a finite real number but is not shown to be attained by any operator on a nonzero vector. |
+| Positive denominators | 2^(c+s) − 2^j > 0 for every j < s ≤ c+s. |
+| Orientation | Post-append energy = λ_i · full energy, with λ_i = ∏_{j<s}(2^(d−i) − 2^j)/(2^d − 2^j). This is not reversed and matches the manuscript's T-energy statement. |
+
+### Cross-checks
+
+- Bounded examples from `candidate.json`, recomputed by hand: (c,s,i) = (1,1,1) → 1/3; (2,1,1) → 3/7; (2,1,2) → 1/7; (1,2,1) → 3/7·2/6 = 1/7. Frame counts G(3,3) = 168 and G(2,2) = 6. These are smoke checks only.
+- `candidate.json` lists `ActualFiniteFrameProductDuality.lean` at 7058 bytes with SHA FD14D19B…, and `native_verified: false`. That record describes the historical Full106 bytes. The current file is 7056 bytes with SHA 39E80A82…. A 2-byte difference is consistent with the stated `prod_div_distrib` arity repair, but the diff was not supplied (ID-107a, Info).
+
+### Coherence of the milestone
+
+The three exports chain without gaps:
+- the guarded duality,
+- then the product identity, which is derived from the duality,
+- then the energy law, which is the native Full105 ratio law rewritten with the product.
+
+There is no extra premise, no Booleanity assumption, no rank filter on sampled data, and no source-height or ρ input.
+
+## 3. Native translation status
+
+- **Moved from open to native:** NC105-3, C105-05 and X3 (the λ_i product and H-factorization). These are now closed at the energy-identity level.
+- **Still argument-level only, and must not be cited as formalized:**
+  - GL completion counts;
+  - the uniform marginals of R and C;
+  - the Φ law with independent unrestricted B and full-row-rank C;
+  - the kernel-frame eigen-relation for Φ;
+  - the invariant-first adjoint ⟨TK,H⟩ = ⟨K,GH⟩;
+  - one theorem stating ⟨T P_iF, T P_jF⟩ = δ_ij λ_i ‖P_iF‖². Its pieces are native separately: Full90 orthogonality plus this law.
+  - the complex-general form.
+- **Flags:** `exact_manuscript_eigenvalue_and_G_Phi_laws_closed: false` should now be split, because the product-energy law is closed and G/Φ is not. `universal_Spectral47_inhabitant_proven: false` next to `…native_verified: true` remains ambiguous. Both are Low label issues.
+
+## 4. Conditional integration (unchanged bytes)
+
+These carry forward from earlier rounds:
+- `Instance N rows` keeps the source row count independent of the leaf arity m.
+- The same I, copies, U, A, C, T and f are used throughout. One `Tc` serves `hfail`, the PR premise and the moment.
+- c+s = 2h ≤ 2J, with `hdim`, `hD` and `hsmall` derived.
+- HC46 is discharged by `original_HC46_exact` at `hEven := hsplit`.
+- Spectral47 is discharged for the SourceSize original and dyadic original exports (Full105 F1). The legacy exports and the non-original exports that still take hHC as a parameter keep `hSpectral` (F1-r, Low).
+- The dyadic route accepts a caller-chosen P ≥ 4m. P ≥ mT is admitted only when P is dyadic and T ≥ 4.
+- The actual append experiment is not replaced by uniform or rank-one noise, and the source and star families are not narrowed.
+
+**Material RHS not tightened.** `selected_actual_analytic_rhs` still uses the weaker 2^(−i(s−1)) + 3·2^(i−n) factor. The exact λ_i law is not consumed, and the material bound must not be presented as tightened.
+
+**Prior conditional law.** The earlier real frame-ratio law, and this product law, remain conditional on the invariance, inverse and rank premises. "Unconditional" in the export name refers to the append operator, not to the theorem. The new law supplies no source, sampler, selection or global-table witness.
+
+**Custody and bookkeeping (consistent where checkable):**
+
+| Quantity | Change |
+|---|---|
+| Roots | 257 + 3 = 260 |
+| Focused roots | 89 + 3 = 92 |
+| Sources | 344 + 2 = 346 |
+| Modules | 216 + 1 = 217 |
+| Objects | 695 + 4 = 699 |
+| Trace nodes | 8269 → 8298 (+29) |
+| External boundaries | 2762 → 2767 (+5) |
+
+The +29 nodes are plausible (3 roots, 7 private lemmas, auxiliary nodes, and new Fin and Field big-operator constants) but are not enumerated (ID-107b, Info). The relation between 566 unchanged objects and 699 actual objects is still unreconciled (carried ADD-1).
+
+## 5. Findings
+
+| ID | Severity | Declaration | Disposition and action |
+|---|---|---|---|
+| PD-1 | Verified | the three exports and seven private helpers | Sound and native. |
+| PD-2 | Closed (was Medium) | λ_i product / H-factorization (NC105-3 / C105-05 / X3) | Native at the energy level. |
+| PD-3 | Medium (open) | G/Φ, Φ eigen-relation, adjoint, packaged cross-level identity, complex form | Prove natively, or keep the manuscript explicitly limited to the energy law. |
+| PD-4 | Low | Duality file header | Stale "uncompiled" wording; fix in the next revision. |
+| PD-5 | Low | Native flags | Split the eigenvalue/G-Φ flag; rename the inhabitant flag. |
+| ID-107a | Info | `candidate.json` vs current bytes | Supply the Full106→Full107 diff. |
+| ID-107b | Info | +29 nodes / +5 boundaries | Enumerate them during replay. |
+| PD-6 | Info (non-claim) | Duality identity | Classical q-analogue counting; no novelty. MZ24 A.13 states only the weaker bound, so the exact law is a reconstruction. |
+| Carried | Medium | Fidelity to Lemma 4.7 / inert cutoff; numeric NO / `hfail` / e / scalars; joint witnesses; source, star and robust8S; pre-draw table; sampler; reduction and learning | Open. |
+| Carried | Low | F1-r, stale banners, legacy hash field, inherited warning certification | Open. |
+| **R14** | **HIGH** | Encoded reduction / runtime | Open; bars overall GO. |
+
+## 6. Safe conditional claim
+
+This rests on pinned kernel and library trust, the Full107 qualified receipts (260 standard profiles, seven stage exits of 0, an 8298-node trace with nothing unresolved, and two verified custody copies) and identity reuse.
+
+> For all c, s and i with i ≤ c+s, G(c,i)/G(c+s,i) = G(c+s−i,s)/G(c+s,s) = ∏_{j<s}(2^(c+s−i) − 2^j)/(2^(c+s) − 2^j). For every real F that is invariant under all paired-inverse right actions, the unconditional append satisfies E[(A_s P_iF)²] = λ_i · E[(P_iF)²] with exactly that λ_i.
+
+The SourceSize and dyadic material bounds stand unchanged. They are free of HC46 and Spectral47 premises, and remain conditional on `hsel`, `hA`, `hrd`, `he`, `hfail` and `ha` (plus `hkDyadic` and `hkm` for the dyadic variant).
+
+**Not claimed:**
+- G/Φ, Φ eigen-relation, adjoint, packaged cross-level identity, or the complex form;
+- fidelity to Lemma 4.7;
+- a tightened material RHS;
+- numeric NO or any witnesses;
+- source, star, sampler, reduction, runtime or learning results;
+- upstream transports;
+- replay or warning certification;
+- novelty or priority;
+- providers, citations, BibTeX, TeX, PDF or the manuscript;
+- overall GO.
+
+## Remaining to-do
+
+1. Prove natively the GL completion counts and marginals, the Φ law with independent B and C, the kernel-frame eigen-relation, the invariant-first adjoint, and a packaged cross-level identity, or restrict the manuscript wording.
+2. Lemma 4.7 / MZ24 A.13 crosswalk: the inert cutoff, the unused guards and slack, and attribution of the exact λ_i as a reconstruction. Optionally, a tightened material RHS that consumes λ_i, followed by a fresh trace and review.
+3. F1-r: supersede or wrap the spectral-conditional legacy and hHC-parametric exports.
+4. Numeric NO: a certified scalar consumer, a useful e with `hfail`, choices of base and cutoff, and an effective L₀.
+5. Joint witness for I, copies, U, A and `hsel`; source, star and robust8S; the pre-draw global table; the physical sampler; encoded sampling and reduction.
+6. R14: a runtime proof and learning.
+7. Upstream post-audit, then exact CMMSA transports.
+8. Custody: the Full106→Full107 diff, enumeration of the +29 nodes, the 566/699 reconciliation, and a fresh-checkout source and object replay that also covers `GrassmannCounting` and `BinaryMatrixFourier`.
+9. Hygiene: stale banners, flag names, the legacy hash field, and inherited warning certification.
+10. Final provider, novelty, citation, BibTeX, TeX, PDF and manuscript gates.

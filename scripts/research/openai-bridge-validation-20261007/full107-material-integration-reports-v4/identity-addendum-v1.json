@@ -1,0 +1,88 @@
+{
+  "schema": "full107-product-repair-and-native-delta-identity-v1",
+  "original_full106_archive_sha256": "72F7486618A153782F803A4F436D2D4E353E328CB3411F0E254BF7D63287EB66",
+  "old_source_sha256": "FD14D19BBB408F88E185920EA1C1D089818431ED500CB616516B5CBFDB85F0F6",
+  "current_source_sha256": "39E80A821DE4B51E8AC2A74CF9A0967D7CD3EA45D730E7DD47C0B2C144245DCE",
+  "exact_single_API_arity_change_verified": true,
+  "full_diff": "--- Full106\n+++ Full107\n@@ -129,7 +129,7 @@\n   rw [frameProduct_ratio_duality hi]\n   by_cases hpos : i \u2264 c\n   \u00b7 rw [cast_frame (show s \u2264 c + s - i by omega), cast_frame (show s \u2264 c + s by omega)]\n-    exact (Finset.prod_div_distrib _ _ _).symm\n+    exact (Finset.prod_div_distrib _ _).symm\n   \u00b7 have empty := frame_zero (n := c + s - i) (k := s) (by omega)\n     rw [empty]\n     simp only [Nat.cast_zero, zero_div]\n",
+  "added_native_nodes": {
+    "Fin.prod_univ_castSucc": "27F54C653BC0B003FF6F7079074579360DD356CBA24741F3D6B4B2CEF5C2ECA4",
+    "Fin.prod_univ_succ": "86989E4190895DAE085AF75D447B939BFBCC90CF4C952DC0C71E9C7510EA595A",
+    "Finset.prod_natCast": "D9820DFC0D9E212AE39F1B206C4B41486DC6372366A4BB491C434CB00332AD51",
+    "Nat.mul_sub_right_distrib": "B3098614C35CF3AEAA1F187F89C9B9069AF31CB580BAEF9008D126FC80F4A778",
+    "PvNP.RealizableHardness.ActualFiniteFrameProductDuality.append_rank_projection_energy_eq_product": "824BFAF9051FFBCC556164DC70F3C67515E7F8D31208EBDC16F53BAEF3D4FDEF",
+    "PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frameProduct_ratio_duality": "5A5EB4CE03261F0AA59D79867CD87E1AC2EA3F7456DDB02665D5DDC759AF498E",
+    "PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frameProduct_ratio_duality._proof_1_1": "AF617867FA393752DC83DD92CEA4520EC4B7CAA02E4B60EA7C2D9ACA1EB0893C",
+    "PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frameProduct_ratio_eq_product": "DCC06F04CB72039ECE7974343885D0FA8C3DEEDC689B94FB027B9B1F75D10DA1",
+    "PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frameProduct_ratio_eq_product._proof_1_1": "4516C4BDC916F4F847A8DF0EC511D11711521FA5251CBDF579CBE66FDCAFFEEC",
+    "PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frameProduct_ratio_eq_product._proof_1_2": "A95529CEEA2CFEFCCA28C93A6A96DF66B08937721E5955520750C98E5774F4AB",
+    "PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frameProduct_ratio_eq_product._proof_1_3": "72630CAD6A3ACB9B7B6FACC773EDF4ACB0F85D47C34DAA8A1AAE022E7142A0E6",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.cast_frame": "5B371A53D174A514CD2FFBA65D6835866C6F7A632CBE73C25D3CE05085933126",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.cast_frame._proof_1_1": "B0D4CBA8B8281509ECE9D5A9C4B18EC4899EF0416400CA2F055D8D8665B5631A",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_append": "F407C28C3BCB0B27B01E187B60748A2443C611C367A14F4F18EC150837FF6B4A",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_diagonal": "BC365D32FD713116AC562BC3A89788964FEA6D854BEF3D7E468EE494D3801FCF",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_duality_nat": "527D3BBDA0C39C40CD2A15E746D8854F743A0593004378DC8C6050785C6925AC",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_duality_nat._proof_1_1": "AEBA97A4BF6D47253FA838E491D34756259023080BE4441F29DC9E6679790EC0",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_duality_nat._proof_1_2": "AF01CA6F0065AE6A2C5A3CA5D1D3375904371E7B21A3A4027729BAF1FC071132",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_duality_nat._proof_1_3": "D140D1E2DF17CC7DB522EBBECFF6EA17B56856EB3E3058D234CBC9E3C5936B3A",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_duality_nat._proof_1_4": "91B93B0404C232A74282BFB79BE7D26FD907841F124D05B4E7D57A2B38C5E158",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_duality_nat._proof_1_5": "2B3D027A4C818E83CD672D0B90ADE854566DA6235C71702D41A78E7B6B55FA16",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_duality_nat._proof_1_6": "3C536FE71E66391BC66F7AD93C8018D7F26CB0205EABEDD74C9A68218AF5CA00",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_duality_nat._proof_1_7": "11A57DABB24A9E56019767D5118621D4CA6E1FAE85368B08829D15AFD7529C71",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_pos": "625279587258FFC1C63AB7BDB25ED694775CBDE6BA5189FE95B15C08EA2A325A",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_pos._proof_1_1": "92F99420D2D9D002C304BB5021EB9157A2212701CC1A40FE48088A2C46AC08AF",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.frame_zero": "EDFABA8A6EDB4CD8797E4309881B3BD83E91E8A94C5565AB806CBC01F8BEFD52",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.width_shift": "D73BE8FF4EA18287750905C6AB78A498114DDB9040D3B92CB25BFA06A0295CE3",
+    "_private.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.0.PvNP.RealizableHardness.ActualFiniteFrameProductDuality.width_shift._proof_1_1": "F55E85EE2E132C7F1CBC2A5BF8EA47DD58117FC1DDF2C704013B42AD46CC8685",
+    "div_eq_div_iff": "B8F532E31049E01436F457C103936DD423B39E7961C363C5B9E35DF03AA04B24"
+  },
+  "added_external_boundaries": {
+    "Fin.prod_univ_castSucc": {
+      "module": "Mathlib.Algebra.BigOperators.Fin",
+      "kind": "theorem",
+      "body_available": true,
+      "disposition": "external kernel/library boundary; source review disposition pending"
+    },
+    "Fin.prod_univ_succ": {
+      "module": "Mathlib.Algebra.BigOperators.Fin",
+      "kind": "theorem",
+      "body_available": true,
+      "disposition": "external kernel/library boundary; source review disposition pending"
+    },
+    "Finset.prod_natCast": {
+      "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "kind": "theorem",
+      "body_available": true,
+      "disposition": "external kernel/library boundary; source review disposition pending"
+    },
+    "Nat.mul_sub_right_distrib": {
+      "module": "Init.Data.Nat.Basic",
+      "kind": "theorem",
+      "body_available": true,
+      "disposition": "external kernel/library boundary; source review disposition pending"
+    },
+    "div_eq_div_iff": {
+      "module": "Mathlib.Algebra.GroupWithZero.Units.Basic",
+      "kind": "theorem",
+      "body_available": true,
+      "disposition": "external kernel/library boundary; source review disposition pending"
+    }
+  },
+  "private_declarations": [
+    "frame_zero",
+    "frame_pos",
+    "frame_append",
+    "frame_diagonal",
+    "width_shift",
+    "frame_duality_nat",
+    "cast_frame"
+  ],
+  "public_exports": [
+    "frameProduct_ratio_duality",
+    "frameProduct_ratio_eq_product",
+    "append_rank_projection_energy_eq_product"
+  ],
+  "supplied_to_original_reviewers": false,
+  "new_semantic_acceptance": false,
+  "fresh_checkout_replay": false
+}
