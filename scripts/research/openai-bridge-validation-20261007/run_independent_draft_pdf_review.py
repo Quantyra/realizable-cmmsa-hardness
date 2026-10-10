@@ -21,6 +21,10 @@ def main():
     pdf = (root/'output/pdf/realizable-hardness.pdf').read_bytes()
     sha = lambda b: hashlib.sha256(b).hexdigest().upper()
     assert sha(pdf) == expected_pdf
+    sys.path.insert(0, 'C:/Users/dfred/.quantyra/tools/pdf-audit-pypdf')
+    from pypdf import PdfReader
+    page_count = len(PdfReader(root/'output/pdf/realizable-hardness.pdf').pages)
+    notice_count = (root/'tmp/pdfs/pdflatex-pass-3.log').read_text().count('Underfull')
     pins = json.loads((root/'source-pins.json').read_bytes())
     bodies = []
     for row in pins:
@@ -40,7 +44,12 @@ exact product/G-Phi/adjoint manuscript native identities remain open. No overall
 Use no tools, writes, Lean, Lake, network or subagents. If PDF visual content is
 unavailable, say INCOMPLETE and do not invent page coverage. Give separate visual,
 transcription, claims-boundary and overall verdicts with concrete findings.
-''' + ''.join(bodies)
+'''.replace('31 PDF pages', f'{page_count} PDF pages').replace('Eight bibliography', f'{notice_count} bibliography') + ''.join(bodies)
+    if root.name == 'disclosure-notation-repair-20261009-v5':
+        previous = Path(__file__).parent/'draft-independent-visual-content-report-v4'
+        prompt += '\nPRIOR COMPLETE REVIEW\n'+(previous/'report.md').read_text(encoding='utf-8')
+        prompt += '\nROOT DISPOSITION\n'+(previous/'root-disposition.json').read_text(encoding='utf-8')
+        prompt += '\nDo not equate missing Lean translation with refutation of an informal proof. Assess whether the new explicit draft status accurately retains all open source/runtime/formal/novelty gates, and whether notation repairs preserve the same statements. No overall proof acceptance requested.\n'
     content = [dict(type='document', source=dict(type='base64', media_type='application/pdf',
                                                data=base64.b64encode(pdf).decode())),
                dict(type='text', text=prompt)]

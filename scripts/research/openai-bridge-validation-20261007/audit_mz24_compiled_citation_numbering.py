@@ -48,7 +48,9 @@ def main():
                          sha256=sha(pdf.read_bytes()), pages=106, statements=entries))
     assert rows[0]['sha256'] != rows[1]['sha256']
     bib = subprocess.check_output(['git', 'show', 'HEAD:paper/references.bib'], cwd=ROOT)
-    assert b'ECCC TR24-027, revision 1, 13 May 2026' in bib
+    entry = re.search(rb'@misc\{MZ24,(.*?)\n\}', bib, re.S).group(1)
+    assert b'year={2026}' in entry
+    assert re.search(rb'ECCC TR24-027, revision 1, 13 May(?: 2026)?\}', entry)
     assert b'https://eccc.weizmann.ac.il/report/2024/027/revision/1/download/' in bib
     manuscript = (ROOT/'paper/submission-manuscript.md').read_bytes()
     assert b'Lemmas~A.17--A.18' in manuscript
@@ -63,6 +65,22 @@ def main():
                   manuscript_PDF_rebuilt=False, visual_QA=False,
                   mathematical_acceptance=False, novelty_clearance=False)
     destination = ROOT/'paper/mz24-compiled-citation-numbering-2026-10-09.json'
+    if sys.argv[1:] == ['--repaired-source']:
+        build = Path('C:/Users/dfred/.quantyra/manuscript-builds/transcription-repair-20261009-v4')
+        pins = json.loads((build/'source-pins.json').read_bytes())
+        for row in pins:
+            current = ROOT/row['file']
+            if current.exists():
+                assert sha(current.read_bytes()) == row['sha256'], row['file']
+        terminal = json.loads((build/'build-terminal.json').read_bytes())
+        pdf = (build/'output/pdf/realizable-hardness.pdf').read_bytes()
+        assert terminal['native_exit'] == 0 and terminal['pdf_sha256'] == sha(pdf)
+        record.update(schema='mz24-compiled-citation-numbering-repaired-source-v2',
+                      manuscript_PDF_rebuilt=True, manuscript_PDF_sha256=sha(pdf),
+                      inherited_visual_acceptance=False)
+        destination = ROOT/'paper/mz24-compiled-citation-numbering-repaired-source-2026-10-09.json'
+    elif sys.argv[1:]:
+        raise ValueError('Unknown scope')
     with destination.open('x', encoding='utf-8', newline='\n') as output:
         json.dump(record, output, indent=2); output.write('\n')
     print(json.dumps(dict(citation_numbering_matches=True, pdfs=len(rows),

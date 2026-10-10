@@ -37,7 +37,7 @@ def math(s):
  s=re.sub(r'\blog2\b',lambda m:r'\log_2',s)
  for f in ['log','ln','min','max','dim','Pr','Omega']:
   s=re.sub(r'(?<![A-Za-z\\])'+f+r'(?![A-Za-z])',lambda m:'\\'+f,s)
- for f in ['SD','codim','Grass','Zoom','sum']:
+ for f in ['SD','codim','Grass','Zoom','sum','label','Bin']:
   s=re.sub(r'(?<![A-Za-z\\])'+f+r'(?![A-Za-z])',lambda m:r'\operatorname{'+f+'}',s)
  s=s.replace('in ',r'\in ')
  s=re.sub(r'\b(adv|zoom|new|outer|learn)\b',lambda m:r'\mathrm{'+m[0]+'}',s)
@@ -93,6 +93,9 @@ special={
  'ln 2<=1':r'\ln 2\le1',
  'ln 12<=11':r'\ln 12\le11',
  "P'(good Q)":r"P'(\mathrm{good}\ Q)",
+ 'Q subset L':r'Q\subseteq L', 'L subset W':r'L\subseteq W',
+ 'Q subset V':r'Q\subseteq V', 'Q intersect H_U={0}':r'Q\cap H_U=\{0\}',
+ 'W intersect V':r'W\cap V',
  'p_V':r'p_V',
  '2^N_0':r'2^{N_0}',
  'L=a-2 ceil(log2(a+1))-c_U':r'L=a-2\lceil\log_2(a+1)\rceil-c_U',
@@ -115,7 +118,7 @@ special={
  'Pr[D>T | Q]':r'\Pr[D>T\mid Q]',
  'sum_{i=0}^{a-1} 2^(i-dim(V))':r'\sum_{i=0}^{a-1}2^{i-\dim V}',
   'T1':r'T_1','T2':r'T_2','p0':r'p_0',
- 'loglog(J)':r'\log_2\log_2 J','binomial':None,
+ 'loglog(J)':r'\operatorname{loglog}J','binomial':None,
 }
 def inline(s):
  s=' '.join(s.split())
@@ -181,6 +184,8 @@ def inline(s):
   for j,v in enumerate(stash):s=s.replace(f'@@{j}@@',v)
  assert '@@' not in s,s
  s=s.replace(r'\)*\(',r'\)\(\cdot\)\(')
+ s=s.replace(r'\)-\(',r'-')
+ s=re.sub(r'(?<![A-Za-z0-9])([0-9]+)-\\\(',lambda m:r'\('+m[1]+'-',s)
  return s
 lines=src.splitlines();out=[];ledger=[];i=0;di=0;theorem=None;abstract=False;listopen=False;sec=0
 skip_header={0,1,2}
@@ -191,7 +196,7 @@ while i<len(lines):
   out.append(r'\begin{abstract}');abstract=True;i+=1;continue
  if line.startswith('## '):
   if abstract:
-   out += [r'\end{abstract}',r'\noindent\textbf{Keywords:} hardness of approximation; monotone formulas; realizable learning; PCPs.',r'\paragraph{Status.} Local submission draft based on the archived version 0.1.0. The full Lean formalization is incomplete; no formal certification is claimed. This paper has not been submitted or announced.']
+   out += [r'\end{abstract}',r'\noindent\textbf{Keywords:} hardness of approximation; monotone formulas; realizable learning; PCPs.',r'\paragraph{Status.} Local submission draft based on the archived version 0.1.0. This presents a proposed informal argument under continuing review. Full105 has conditional scoped acceptance only. Full source/selection/sampler and encoded-runtime obligations remain open; native exact product, G/\(\Phi\), adjoint and packaged cross-level identities are incomplete. Complete formal certification, novelty clearance and publication acceptance are not claimed. This paper has not been submitted or announced.']
    abstract=False
   sec+=1;out.append('\\section{'+esc(line[3:])+'}\\label{sec:'+str(sec)+'}');i+=1;continue
  if line.startswith('### '):out.append('\\subsection{'+esc(line[4:])+'}');i+=1;continue

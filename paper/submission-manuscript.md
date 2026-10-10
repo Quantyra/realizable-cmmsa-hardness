@@ -4,11 +4,12 @@ Quantyra Research | 9 October 2026 | Local submission draft based on archived ve
 
 ## Abstract
 
-For every sufficiently large fixed leaf bound L, we prove randomized
+For every sufficiently large fixed leaf bound L, we present a proposed
+randomized
 polynomial-time many-one NP-hardness of realizable Collection Minimum
 Monotone Satisfying Assignment with weight gap L^(1-o(1)) and NO
 satisfaction threshold o(1). The corresponding bounded-advice learning
-statement follows through Hirahara--Nanashima's transfer. This establishes
+statement follows through Hirahara--Nanashima's transfer. The target is
 the epsilon=0 strengthening asked in Section 7 of their June 23, 2026
 revision. We combine their star-projection compilation with
 Minzer--Zheng's Grassmann PCP machinery, an altered repetition parameter
@@ -1354,6 +1355,14 @@ YES witness ensure that the learning error parameter is exactly zero.
 This completes both proofs.
 
 ## Research and review disclosure
+
+Draft verification status: this is a proposed informal argument under
+continuing review. Full105 has conditional scoped acceptance only. Full
+source/selection/sampler and encoded-runtime obligations remain open. Native
+exact product, G/Phi, adjoint and packaged cross-level identities remain
+incomplete; this does not by itself refute the separate informal arguments.
+Complete formal certification, novelty clearance and publication acceptance
+are not claimed.
 
 This manuscript was developed through AI-assisted mathematical derivation,
 source challenge, independent agent mathematical review, dependency audit,
