@@ -1,0 +1,54 @@
+[
+  {
+    "index": 0,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,networkInterfaces,lastStartTimestamp,lastStopTimestamp)",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T02:10:56+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 10824,
+    "finished_utc": "2026-10-10T02:11:06+00:00",
+    "native_exit": 0,
+    "timed_out": false,
+    "seconds": 10.586147000001802,
+    "stdout_path": "control/000.stdout",
+    "stderr_path": "control/000.stderr",
+    "stdout_sha256": "E2D49BC510B484A5F8653414731670B74D5AE0D7F5E4027928A3B1D7527FA084",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "index": 1,
+    "argv": [
+      "C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=set -e; date +%s | sudo tee /var/lib/quantyra-idle-shutdown/last-active; sudo systemctl start quantyra-idle-shutdown.timer; systemctl is-active quantyra-idle-shutdown.timer; ps -eo pid=,comm=; sha256sum /home/dfredriksen_quantyra_org/cmmsa_a8_output_20261010T013228Z_d7e7d223_evidence.tar.gz; stat -c %s /home/dfredriksen_quantyra_org/cmmsa_a8_output_20261010T013228Z_d7e7d223_evidence.tar.gz",
+      "--quiet",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--account=dfredriksen@quantyra.org"
+    ],
+    "started_utc": "2026-10-10T02:11:06+00:00",
+    "timeout_seconds": 120,
+    "local_control_pid": 3172,
+    "finished_utc": "2026-10-10T02:11:25+00:00",
+    "native_exit": 0,
+    "timed_out": false,
+    "seconds": 19.07852030000504,
+    "stdout_path": "control/001.stdout",
+    "stderr_path": "control/001.stderr",
+    "stdout_sha256": "DBF78A91E32D1C1BA89148093F6C3823CD56E95F0F4E902EE8102B88620C62FE",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
