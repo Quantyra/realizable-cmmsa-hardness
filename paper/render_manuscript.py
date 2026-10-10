@@ -92,6 +92,7 @@ special={
  '1/epsilon<=P':r'1/\epsilon\le P',
  'ln 2<=1':r'\ln 2\le1',
  'ln 12<=11':r'\ln 12\le11',
+ "P'(good Q)":r"P'(\mathrm{good}\ Q)",
  'p_V':r'p_V',
  '2^N_0':r'2^{N_0}',
  'L=a-2 ceil(log2(a+1))-c_U':r'L=a-2\lceil\log_2(a+1)\rceil-c_U',
@@ -119,13 +120,13 @@ special={
 def inline(s):
  s=' '.join(s.split())
  s=s.replace('](../SOURCES.md)','](SOURCES.md)').replace('](../REVIEW.md)','](REVIEW.md)')
- s=re.sub(r'\[([^\]]+)\]\(SOURCES\.md\)',lambda m:r'\cite{OAIUG,OAI2to1}' if 'OAIUG' in m[1] else (r'\cite{HN,Hir22}' if 'HN' in m[1] else (r'\cite{MZ,MZ24,BKM}' if 'MZ' in m[1] else 'the bibliography')),s)
+ s=re.sub(r'\[([^\]]+)\]\(SOURCES\.md\)',lambda m:r'\cite{OAIUG,OAI2to1}' if 'OAIUG' in m[1] else (r'\cite[Definitions 1.2/1.7, Theorems 1.3/1.8, Section 7]{HN}; \cite{Hir22}' if 'HN' in m[1] else (r'\cite{MZ,MZ24,BKM}' if 'MZ' in m[1] else 'the bibliography')),s)
  s=s.replace('[MANUSCRIPT.md](MANUSCRIPT.md)','this manuscript').replace('[REVIEW.md](REVIEW.md)','the companion review disclosures').replace('[SOURCES.md](SOURCES.md)','the bibliography')
  s=re.sub(r'Theorem 1(?![0-9]|\.[0-9])',lambda m:r'Theorem~\ref{thm:main}',s);s=re.sub(r'Corollary 2(?![0-9]|\.[0-9])',lambda m:r'Corollary~\ref{cor:learn}',s)
  stash=[]
  def hold(v):
   stash.append(v);return f'@@{len(stash)-1}@@'
- s=re.sub(r'Theorem~\\ref\{thm:main\}|Corollary~\\ref\{cor:learn\}|\\cite\{[^}]+\}',lambda m:hold(m[0]),s)
+ s=re.sub(r'Theorem~\\ref\{thm:main\}|Corollary~\\ref\{cor:learn\}|\\cite(?:\[[^\]]+\])?\{[^}]+\}',lambda m:hold(m[0]),s)
  for a,b in sorted(special.items(),key=lambda kv:-len(kv[0])):
   if b is None:continue
   pat=r'(?<![A-Za-z0-9_])'+re.escape(a)+r'(?![A-Za-z0-9_])'
@@ -140,14 +141,17 @@ def inline(s):
   word=mo[0];j=i+len(word)
   if i>0 and s[i-1].isalpha():out.append(esc(word));i=j;continue
   ismath=word in variables or (word[0].isdigit() and j<len(s) and s[j] in '^_')
+  if word=='label':ismath=False
   if word in ['a','i','e','s','t','w','x','f','g','n','b','c','d','q','r','m','h']:
    # 'a' as English article is never italicized unless syntactically mathematical.
    if word=='a' and (j>=len(s) or s[j] not in '_^=<>+'):
     nextword=re.match(r'\s+([A-Za-z]+)',s[j:]);ismath=bool(nextword and nextword[1] in ['for','denotes'])
     ismath=ismath or bool(re.search(r'(?:cap|most|large|than|guessing|first|probability|within)\s+$',s[:i])) or (i>0 and s[i-1] in '-/=') or s[j:j+10].startswith('-subspace') or s[j:j+4]==',c,d'
+    if nextword and nextword[1] in ['factor','common','uniform','gamma']:ismath=False
+    if s[j:j+2]==',c':ismath=True
   if word in ['floor','ceil','sqrt'] and (j>=len(s) or s[j]!='('):ismath=False
   if word=='s' and i>0 and s[i-1]=="'":ismath=False
-  if word=='A' and j<len(s) and s[j]==' ':ismath=bool(re.match(r' (?:h\b|depends\b|does\b)',s[j:]))
+  if word=='A' and j<len(s) and s[j]==' ':ismath=bool(re.match(r' (?:h\b|depends\b|does\b|before\b)',s[j:]))
   if ismath:
    # Include subscripts/exponents and immediate function arguments.
    while j<len(s):
@@ -202,7 +206,9 @@ while i<len(lines):
  elif line.startswith('    '):
   block=[]
   while i<len(lines) and (lines[i].startswith('    ') or (not lines[i].strip() and i+1<len(lines) and lines[i+1].startswith('    '))):block.append(lines[i]);i+=1
-  out.append('\\begin{equation}\\label{eq:'+str(di+1)+'}\n'+displays[di]+'\n\\end{equation}');di+=1
+  display=displays[di]
+  if di in [0,29]:display=display.rstrip('.')+','
+  out.append('\\begin{equation}\\label{eq:'+str(di+1)+'}\n'+display+'\n\\end{equation}');di+=1
  elif line.startswith('|'):
   rows=[]
   while i<len(lines) and lines[i].startswith('|'):
@@ -220,7 +226,8 @@ while i<len(lines):
    if not lines[i].strip() and (i+1>=len(lines) or not lines[i+1].startswith('   ')):break
    block.append(lines[i]);i+=1
   text=' '.join(x.strip() for x in block);text=re.sub(r'^\d+\. ','',text)
-  out.append('\\paragraph{Imported contract.} '+inline(text))
+  number=re.match(r'^(\d+)\. ',lines[start])[1]
+  out.append('\\paragraph{Imported contract '+number+'.} '+inline(text))
  elif line.startswith('* '):
   out.append(r'\begin{itemize}')
   while i<len(lines) and lines[i].startswith('* '):
@@ -254,7 +261,7 @@ tex=tex.replace('KMS Definition 4.5',r'KMS~\cite{KMS}, Definition 4.5',1)
 tex=tex.replace('\\section{Explicit-list exception lemma}',r'\section{Explicit-list exception lemma}')
 # Mark the central stand-alone lemma and its complete proof without changing text.
 tex=tex.replace('Input: ',r'\begin{lemma}[Finite-list completeness repair]\label{lem:repair} Input: ',1)
-tex=tex.replace('In the YES case, take an original witness',r'The resulting list has at most \(L+1\) leaves per formula. In the YES case an assignment of normalized weight at most \(t\) satisfies every formula. In the NO case every assignment of normalized weight at most \(\sigma_{\mathrm{new}}t\) satisfies strictly less than \(\Gamma_{\mathrm{new}}\) of the list.\end{lemma}\begin{proof} In the YES case, take an original witness',1)
+tex=tex.replace('of the list.\n\nIn the YES case, take an original witness',r'of the list.\end{lemma}\begin{proof} In the YES case, take an original witness',1)
 tex=tex.replace('No SAT, optimum, or counting oracle is used.', 'No SAT, optimum, or counting oracle is used.',1)
 tex=tex.replace('sampling precedes it.','sampling precedes it.\\end{proof}',1)
 # Add navigational cross-references, keeping them explicitly editorial.
@@ -262,5 +269,5 @@ tex=tex.replace(r'We now prove the parameter extension and the remaining composi
 tex=tex.replace('This completes both proofs.',r'This completes the proofs of Theorem~\ref{thm:main} and Corollary~\ref{cor:learn}.\hfill$\square$')
 tex=re.sub(r'\{([^{}]+)\\brack ([^{}]+)\}_2',lambda m:r'\genfrac{[}{]}{0pt}{}{'+m[1]+'}{'+m[2]+'}_2',tex)
 (ROOT/'paper'/'body.tex').write_text(tex,encoding='utf-8',newline='\n')
-(ROOT/'paper'/'correspondence.json').write_text(json.dumps({'source':SOURCE.as_posix(),'source_sha256':hashlib.sha256(src.encode()).hexdigest(),'source_lines':len(lines),'display_count':di,'mapping':ledger},indent=2)+'\n',encoding='utf-8',newline='\n')
+(ROOT/'paper'/'correspondence.json').write_text(json.dumps({'source':SOURCE.as_posix(),'source_sha256':hashlib.sha256(src.encode()).hexdigest(),'source_lines':len(lines),'display_count':di,'mapping':ledger,'literal_latex_source_lines':[{'line':j+1,'sha256':hashlib.sha256(line.encode()).hexdigest()} for j,line in enumerate(lines) if any(row['source_start_line']<=j+1<=row['source_end_line'] and lines[row['source_start_line']-1]=='```latex' for row in ledger)],'editorial_transformations':{'keywords':'renderer metadata; no mathematical claim','status':'renderer disclosure: incomplete formalization and unsubmitted draft','lemma1_conclusion':'explicit canonical source paragraph; theorem environment is editorial','navigation':'renderer-added named references to existing lemma/sections','closing_sentence':'This completes both proofs expanded to theorem/corollary labels','numbering':{'source_Corollary_2':'PDF Corollary 1 (separate corollary counter)'}}},indent=2)+'\n',encoding='utf-8',newline='\n')
 print('Rendered body',len(tex),'characters',di,'displays',len(ledger),'source spans')

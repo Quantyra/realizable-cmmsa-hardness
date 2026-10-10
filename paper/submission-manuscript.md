@@ -1,6 +1,6 @@
 # Realizable Nearlinear-Gap Hardness for Small Monotone Formulas
 
-Quantyra Research | 12 September 2026 | Local submission draft based on archived version 0.1.0
+Quantyra Research | 9 October 2026 | Local submission draft based on archived version 0.1.0
 
 ## Abstract
 
@@ -281,6 +281,11 @@ raw weight lambda/M; divide every weight by 1+lambda. Set
 
     t = (s + lambda epsilon)/(1+lambda),
     sigma_new = floor(sigma/4), Gamma_new = 2 Gamma.
+
+The resulting list has at most L+1 leaves per formula. In the YES case an
+assignment of normalized weight at most t satisfies every formula. In the
+NO case every assignment of normalized weight at most sigma_new t satisfies
+strictly less than Gamma_new of the list.
 
 In the YES case, take an original witness and enable exactly the exception
 bits for its failed list indices. Its raw weight is at most s+lambda epsilon,

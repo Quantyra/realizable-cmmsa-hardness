@@ -4,23 +4,27 @@ import base64
 import hashlib
 import json
 import subprocess
+import sys
 
 ROOT = Path('C:/Users/dfred/.quantyra/manuscript-builds/spectral-attribution-20261009-v3')
 
 
 def main():
-    folder = ROOT/'independent-visual-content-review-v2'
-    prior = ROOT/'independent-visual-content-review-v1'
-    assert int((prior/'native-exit.txt').read_text()) == 1
-    assert '--input-format=stream-json requires output-format=stream-json' in (prior/'stderr.txt').read_text()
+    root = Path(sys.argv[1]) if len(sys.argv) == 3 else ROOT
+    expected_pdf = sys.argv[2] if len(sys.argv) == 3 else 'CBA8E3A3B98B9A71D9C8558297803FD6BBF24F5D665F482AB2A821CBB0D0EBA4'
+    folder = root/('independent-visual-content-review-v1' if root != ROOT else 'independent-visual-content-review-v2')
+    if root == ROOT:
+        prior = ROOT/'independent-visual-content-review-v1'
+        assert int((prior/'native-exit.txt').read_text()) == 1
+        assert '--input-format=stream-json requires output-format=stream-json' in (prior/'stderr.txt').read_text()
     folder.mkdir(exist_ok=False)
-    pdf = (ROOT/'output/pdf/realizable-hardness.pdf').read_bytes()
+    pdf = (root/'output/pdf/realizable-hardness.pdf').read_bytes()
     sha = lambda b: hashlib.sha256(b).hexdigest().upper()
-    assert sha(pdf) == 'CBA8E3A3B98B9A71D9C8558297803FD6BBF24F5D665F482AB2A821CBB0D0EBA4'
-    pins = json.loads((ROOT/'source-pins.json').read_bytes())
+    assert sha(pdf) == expected_pdf
+    pins = json.loads((root/'source-pins.json').read_bytes())
     bodies = []
     for row in pins:
-        body = (ROOT/row['file']).read_bytes()
+        body = (root/row['file']).read_bytes()
         assert len(body) == row['bytes'] and sha(body) == row['sha256']
         bodies.append('\nFILE '+row['file']+' SHA256 '+row['sha256']+'\n'+body.decode('utf-8'))
     prompt = '''You are the independent all-page visual and source-to-PDF content reviewer.
