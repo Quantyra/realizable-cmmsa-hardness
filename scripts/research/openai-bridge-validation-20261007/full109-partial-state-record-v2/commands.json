@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\openssh-partial-inspections-v2\\20261010T102820618094Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "58939",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c 'import hashlib,json,os,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('\"'\"'http://metadata.google.internal/computeMetadata/v1/instance/id'\"'\"',headers={'\"'\"'Metadata-Flavor'\"'\"':'\"'\"'Google'\"'\"'})\nwith o.open(r,timeout=10) as s:\n assert s.headers.get('\"'\"'Metadata-Flavor'\"'\"')=='\"'\"'Google'\"'\"' and s.read().decode()=='\"'\"'7237681467779354904'\"'\"'\nhome=Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"');assert Path.home().resolve()==home\nfolder=home/'\"'\"'full109-storage-cache-repoint-v3'\"'\"';receipt=folder/'\"'\"'receipt.json'\"'\"';partial=folder/'\"'\"'partial-execution.json'\"'\"'\npids=[]\nfor entry in Path('\"'\"'/proc'\"'\"').iterdir():\n if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\n try:args=(entry/'\"'\"'cmdline'\"'\"').read_bytes().split(b'\"'\"'\\0'\"'\"')\n except (FileNotFoundError,PermissionError):continue\n if any(arg.endswith(b'\"'\"'/full109_storage_cache_repoint_v3.py'\"'\"') for arg in args) and b'\"'\"'--execute'\"'\"' in args:pids.append(int(entry.name))\nresult=dict(receipt_present=receipt.is_file(),partial_present=partial.is_file(),recovery_pids=pids,read_only=True,compiler_invoked=False)\nif receipt.is_file():\n data=receipt.read_bytes();value=json.loads(data);result.update(receipt_sha256=hashlib.sha256(data).hexdigest().upper(),applied_rows=len(value['\"'\"'applied'\"'\"']),disk_after_bytes=value['\"'\"'disk_after_bytes'\"'\"'])\n\nassert not pids and not receipt.exists(), '\"'\"'Existing final receipt/process; inspect separately'\"'\"'\nplan_path=folder/'\"'\"'plan.json'\"'\"';plan_bytes=plan_path.read_bytes();plan=json.loads(plan_bytes)\npartial_bytes=partial.read_bytes();part=json.loads(partial_bytes)\nassert part['\"'\"'applied'\"'\"']==plan['\"'\"'rows'\"'\"'][:len(part['\"'\"'applied'\"'\"'])]\nassert len(plan['\"'\"'rows'\"'\"'])==19233\nold=Path(plan['\"'\"'old_root'\"'\"']);canonical=Path(plan['\"'\"'canonical_root'\"'\"'])\nassert old==home/'\"'\"'cmmsa_a8_output_20261010T081548Z_260bb38e/.lake/packages'\"'\"'\nassert canonical==home/'\"'\"'cmmsa_a8_output_20261007T230522Z_6af6dc24/.lake/packages'\"'\"'\nstates=[]\nfor index,row in enumerate(plan['\"'\"'rows'\"'\"']):\n rel=Path(row['\"'\"'relative'\"'\"']);assert not rel.is_absolute() and '\"'\"'..'\"'\"' not in rel.parts\n path=old/rel;dest=canonical/rel;backup=path.with_name(path.name+'\"'\"'.full95-repoint-backup'\"'\"')\n assert dest.resolve(strict=True).is_relative_to(canonical)\n assert dest.stat().st_size==row['\"'\"'bytes'\"'\"']\n assert hashlib.sha256(dest.read_bytes()).hexdigest().upper()==row['\"'\"'sha256'\"'\"']\n assert not backup.exists() and not backup.is_symlink(), '\"'\"'Boundary backup requires separate inspection'\"'\"'\n if path.is_symlink():\n  assert path.readlink()==dest and path.resolve(strict=True)==dest.resolve(strict=True)\n  state='\"'\"'completed-symlink'\"'\"'\n else:\n  assert path.resolve(strict=True).is_relative_to(old)\n  info=path.stat();assert info.st_nlink==1 and info.st_size==row['\"'\"'bytes'\"'\"']\n  assert hashlib.sha256(path.read_bytes()).hexdigest().upper()==row['\"'\"'sha256'\"'\"']\n  state='\"'\"'remaining-regular'\"'\"'\n if index<len(part['\"'\"'applied'\"'\"']):assert state=='\"'\"'completed-symlink'\"'\"'\n states.append(state)\ncompleted=states.count('\"'\"'completed-symlink'\"'\"')\nassert states==['\"'\"'completed-symlink'\"'\"']*completed+['\"'\"'remaining-regular'\"'\"']*(len(states)-completed)\nassert len(part['\"'\"'applied'\"'\"'])<=completed<=len(part['\"'\"'applied'\"'\"'])+1\nresult.update(plan_sha256=hashlib.sha256(plan_bytes).hexdigest().upper(),\n partial_sha256=hashlib.sha256(partial_bytes).hexdigest().upper(),\n recorded_applied_rows=len(part['\"'\"'applied'\"'\"']),verified_completed_rows=completed,\n remaining_rows=len(states)-completed,all_row_states_verified=True,\n boundary_backups_present=False,partial_receipt=part,row_states=states,\n execute_once=json.loads((folder/'\"'\"'execute-once.json'\"'\"').read_bytes()))\nprint(json.dumps(result))\n'"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "2745BB09E4F0368E641C06D7105B8CE2B64BA8928A9873258B2136F8BF7F463D",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
