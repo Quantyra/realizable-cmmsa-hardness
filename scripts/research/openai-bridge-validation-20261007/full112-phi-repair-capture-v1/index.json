@@ -1,0 +1,41 @@
+{
+  "schema": "full112-phi-exact-repair-capture-v1",
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full112-phi-repair-v1\\ARGUMENT-AND-API-MAP.md",
+      "copy": "ARGUMENT-AND-API-MAP.md",
+      "bytes": 4571,
+      "sha256": "355170DD28A1A57AC9E747DB79B68E3A3F951D1F7839E66D5BC654C207295A90"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full112-phi-repair-v1\\ExactPhiEigenrelation.lean",
+      "copy": "ExactPhiEigenrelation.lean",
+      "bytes": 19090,
+      "sha256": "6E784A3BA94EDF55A4919E78DC82DA2D140EECBD894E5507F17696DC9785D51F"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full112-phi-repair-v1\\ExactPhiEigenrelationChecks.lean",
+      "copy": "ExactPhiEigenrelationChecks.lean",
+      "bytes": 828,
+      "sha256": "E0EFF56684477F10E76326E1FDF16BB489A1F1F45342F54FD012847E64E5E1FB"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full112-phi-repair-v1\\manifest.json",
+      "copy": "manifest.json",
+      "bytes": 1565,
+      "sha256": "30C0EAE15B5DFF9064E95A73D02E3D5EE8DB54A067A3E967ED336D0B455317B3"
+    }
+  ],
+  "source": "lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean",
+  "old_sha256": "4AFB8BB4E49FFABF67783DDCEB83859C73280828FDC3060B8ABFC0D20BD0A75B",
+  "new_sha256": "6E784A3BA94EDF55A4919E78DC82DA2D140EECBD894E5507F17696DC9785D51F",
+  "parent_run": "cmmsa_a8_output_20261011T035621Z_498f7ba6",
+  "parent_native_archive_sha256": "29A942FBF1594E1C09EC34ECE58DB02F1742E8B9FDCDA0E88B3084E3F4B7F192",
+  "parent_input_sha256": "3D04E683FF88B4A5CA389F07AA64583436EAC27B31FDFC9406453021021939EF",
+  "exact_diff": "--- Full111/ExactPhiEigenrelation.lean\n+++ Full112/ExactPhiEigenrelation.lean\n@@ -85,12 +85,12 @@\n     ext i\n     have hij := congrFun (congrFun h i) j\n     simpa [Matrix.mul_apply, Matrix.transpose_apply,\n-      Matrix.mulVecLin_apply, Matrix.mulVec] using hij\n+      Matrix.mulVecLin_apply, Matrix.mulVec, dotProduct] using hij\n   · intro h\n     ext i j\n     have hij := congrFun (h j) i\n     simpa [Matrix.mul_apply, Matrix.transpose_apply,\n-      Matrix.mulVecLin_apply, Matrix.mulVec] using hij\n+      Matrix.mulVecLin_apply, Matrix.mulVec, dotProduct] using hij\n \n private theorem row_li_iff_kernel_subtype_li {n d s : Nat}\n     (Y : BinaryMatrix n d) (C : BinaryMatrix s d)\n@@ -201,13 +201,13 @@\n     rw [card_frame hs', hker]\n   · have hd : d - Y.rank < s := Nat.lt_of_not_ge hs\n     have hcard : Fintype.card (Frame (LinearMap.ker Y.mulVecLin) s) = 0 := by\n-      haveI : IsEmpty (Frame (LinearMap.ker Y.mulVecLin) s) := ⟨fun f => by\n+      have hEmpty : IsEmpty (Frame (LinearMap.ker Y.mulVecLin) s) := ⟨fun f => by\n         have hle : s ≤ Module.finrank (ZMod 2)\n             (LinearMap.ker Y.mulVecLin) := by\n           simpa using f.property.fintype_card_le_finrank\n         rw [hker] at hle\n         exact (Nat.not_le_of_gt hd) hle⟩\n-      simp\n+      exact Fintype.card_eq_zero_iff.mpr hEmpty\n     have hprod : frameProduct (d - Y.rank) s = 0 := by\n       unfold frameProduct\n       let j : Fin s := ⟨d - Y.rank, hd⟩\n@@ -362,7 +362,6 @@\n   have hden : (frameProduct d s : Real) ≠ 0 := by\n     exact_mod_cast (Nat.ne_of_gt (frameProduct_pos_here hs))\n   field_simp [hcardB, hcardC, hden]\n-  ring\n \n private theorem matrix_rank_le_width {n d : Nat} (Y : BinaryMatrix n d) :\n     Y.rank ≤ d := by\n",
+  "root_read_complete_diff_and_argument_map": true,
+  "declarations_imports_checks_preserved": true,
+  "capture_control_sha256": "950F19003B8008036424A13A8A6D632022E064F1DC022C0B9FE4CC6696895374",
+  "compiler_invoked": false,
+  "accepted": false
+}
