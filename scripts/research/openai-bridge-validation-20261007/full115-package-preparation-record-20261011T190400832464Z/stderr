@@ -1,0 +1,37 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,runpy;sys.path.insert(0,sys.argv[1]);runpy.run_path(sys.argv[2],run_name="__main__")
+                                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\prepare_builder02_full115.py", line 124, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\prepare_builder02_full115.py", line 64, in main
+    validate_successor()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full114_capture_gates.py", line 10, in validate_successor
+    parent_gate()
+    ~~~~~~~~~~~^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full113_capture_gates.py", line 10, in validate_successor
+    parent_gate()
+    ~~~~~~~~~~~^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full112_capture_gates.py", line 10, in validate_successor
+    parent_gate()
+    ~~~~~~~~~~~^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full111_capture_gates.py", line 10, in validate_successor
+    parent_gate()
+    ~~~~~~~~~~~^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full110_capture_gates.py", line 30, in validate_successor
+    parent_native_custody()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\prepare_builder02_full110.py", line 52, in parent_native_custody
+    verify_local_custody(custody['short_path'], custody['repository_path'], NATIVE_PIN, custody['bytes'])
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\custody_checks.py", line 18, in verify_local_custody
+    if paths[0].resolve() == paths[1].resolve() or paths[0].samefile(paths[1]):
+                                                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "pathlib\_abc.py", line 605, in samefile
+  File "pathlib\_local.py", line 515, in stat
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'C:\\a8gcp\\0d5c26f4.tar.gz'

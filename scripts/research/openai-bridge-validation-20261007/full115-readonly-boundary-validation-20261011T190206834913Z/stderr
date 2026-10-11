@@ -1,0 +1,24 @@
+test_altered_stdout_rejected (test_full115_terminal.EvidenceBoundary.test_altered_stdout_rejected) ... ok
+test_builder01_evidence_rejected (test_full115_terminal.EvidenceBoundary.test_builder01_evidence_rejected) ... ok
+test_different_stage_command_rejected (test_full115_terminal.EvidenceBoundary.test_different_stage_command_rejected) ... ok
+test_green_claim_without_axiom_profiles_rejected (test_full115_terminal.EvidenceBoundary.test_green_claim_without_axiom_profiles_rejected) ... ok
+test_missing_additive_profile_rejected (test_full115_terminal.EvidenceBoundary.test_missing_additive_profile_rejected) ... ok
+test_nonstandard_additive_profile_rejected (test_full115_terminal.EvidenceBoundary.test_nonstandard_additive_profile_rejected) ... ok
+test_red_native_result_stays_red (test_full115_terminal.EvidenceBoundary.test_red_native_result_stays_red) ... ok
+setUpClass (test_full115_full_scope_terminal_v2.FullScopeEvidenceBoundary) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_full115_full_scope_terminal_v2.FullScopeEvidenceBoundary)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\test_full115_full_scope_terminal_v2.py", line 32, in setUpClass
+    cls.manifest = json.loads((controller.ROOT / 'capture-manifest.json').read_bytes())
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "pathlib\_abc.py", line 625, in read_bytes
+  File "pathlib\_local.py", line 537, in open
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\dfred\\.quantyra\\builder02\\full115-exact-real-complex-operators-repair5-resource02\\capture-manifest.json'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.546s
+
+FAILED (errors=1)
