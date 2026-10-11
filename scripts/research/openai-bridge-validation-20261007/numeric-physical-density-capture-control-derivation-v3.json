@@ -1,0 +1,42 @@
+{
+  "parent_sha256": "05FE31E1C0F0EA918C80CC867F75F6B11886EDB692EDD92D00F0CAF7C7875BF2",
+  "successor_sha256": "D158E1542B36B068DA4E49134F96AED78796813BCD9F9BCDF5FA08541162F260",
+  "replacements": [
+    {
+      "before": "Preserve a rejected static offer without altering it or running Lean.",
+      "after": "Capture the repaired physical offer, preserving exact statements; no Lean.",
+      "count": 1
+    },
+    {
+      "before": "9D232267CE3283B3F48D4BCC1864B95A5EA49775A6AB680C2AF76374E7742B57",
+      "after": "AFE315D9624AA98DE833288E5208ACBDADEE9B9446FBC55C646AA2791316BE4B",
+      "count": 1
+    },
+    {
+      "before": "offer = HERE / 'numeric-physical-density-offer-v1'",
+      "after": "offer = HERE / 'numeric-physical-density-offer-v2'",
+      "count": 1
+    },
+    {
+      "before": "assert len(mismatches) == 1",
+      "after": "assert mismatches == []",
+      "count": 1
+    },
+    {
+      "before": "    target = HERE / 'numeric-physical-density-capture-v1'",
+      "after": "    prior = HERE / 'numeric-physical-density-capture-v1'\n    assert sha((prior / 'index.json').read_bytes()) == 'D2A3345EE79FE99DCC8A8BEA7CB8AB57C9DB363088E4B9FB50C8EE7CF78DE2E4'\n    old = (prior / source.name).read_bytes()\n    assert sha(old) == 'EE6AAB9BA57C1889BD7AF74737886C8D76E74CB16E30F9A71DDA7E9505677A94'\n    expected = old.decode('utf-8').replace('\\r\\n', '\\n')\n    for directive in ('import', 'open'):\n        anchor = directive + ' PvNP.RealizableHardness.ActualTaggedFixedUDensityForce\\n'\n        extra = ''.join(directive + ' PvNP.RealizableHardness.' + name + '\\n' for name in\n            ['ActualTaggedConcreteStarLaw', 'ActualTaggedFixedTableAcceptance', 'ActualTaggedPresentedSelection', 'ActualFiniteLaw'])\n        assert expected.count(anchor) == 1\n        expected = expected.replace(anchor, anchor + extra)\n    removed = [\n        '    have hbig : 10 * m * b <= b * q := by\\n      calc\\n        10 * m * b = b * (10 * m) := by ring\\n        _ <= b * q := Nat.mul_le_mul_left b hq\\n',\n        '  have h1000q : 1000 * q <= h := by omega\\n']\n    for part in removed:\n        assert expected.count(part) == 1\n        expected = expected.replace(part, '')\n    assert source.read_text(encoding='utf-8') == expected\n    assert checks.read_bytes() == (prior / checks.name).read_bytes()\n    assert all((HERE / 'numeric-physical-density-offer-v1' / r['copy']).read_bytes() == (prior / r['copy']).read_bytes()\n               for r in json.loads((prior / 'index.json').read_bytes())['files'])\n    target = HERE / 'numeric-physical-density-capture-v2'",
+      "count": 1
+    },
+    {
+      "before": "static_review_concerns=[\n            'Manifest has stale explicit-height capture-index hash; actual capture source hash matches.',\n            'Unqualified carrier/table/mass names require opens or qualification for ActualTaggedConcreteStarLaw, ActualTaggedFixedTableAcceptance, ActualTaggedPresentedSelection and ActualFiniteLaw.'\n        ],",
+      "after": "static_review_concerns=[], public_signatures_checks_and_remaining_bodies_unchanged=True,\n        root_read_complete_diff_and_successor_map_manifest=True,\n        metadata_errata=['Map attributes numericRankThreshold to ExplicitHeight; its defining namespace is ActualNumericSourceHeight, opened by the source.'],",
+      "count": 1
+    },
+    {
+      "before": "repair_requested=True",
+      "after": "repair_requested=False",
+      "count": 1
+    }
+  ],
+  "compiler_invoked": false
+}

@@ -1,0 +1,7 @@
+import PvNP.RealizableHardness.ActualNumericPhysicalDensity
+
+#check PvNP.RealizableHardness.ActualNumericPhysicalDensity.physicalScoreExponent
+#check PvNP.RealizableHardness.ActualNumericPhysicalDensity.selected_ordered_carriers_nonempty
+#print axioms PvNP.RealizableHardness.ActualNumericPhysicalDensity.selected_ordered_carriers_nonempty
+#check PvNP.RealizableHardness.ActualNumericPhysicalDensity.selected_physical_density
+#print axioms PvNP.RealizableHardness.ActualNumericPhysicalDensity.selected_physical_density
