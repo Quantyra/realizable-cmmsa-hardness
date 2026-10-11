@@ -1,0 +1,22 @@
+{
+  "parent": "inspect_full113_recovery_capacity_v1.py",
+  "parent_sha256": "00F3B1D3D56BB2E9FCE8E4376C1DF9E4CE96AA46B05CD24DDD48630E03CB0019",
+  "target": "inspect_full113_recovery_capacity_v2.py",
+  "target_sha256": "FF817B9DAD38B93CC22B97CABEC27BA2C854C1254DEE140E1D1EBAB5E7D788A3",
+  "scope": "read-only settled Full83 through Full98",
+  "exact_replacements": [
+    {
+      "old": "range(99, 113)",
+      "new": "range(83, 99)"
+    },
+    {
+      "old": "capacity-inspections-v1",
+      "new": "capacity-inspections-v2"
+    },
+    {
+      "old": " for p in root.rglob('*'):\n  if p.is_symlink() or not p.is_file():continue\n  rel=p.relative_to(root)\n  if not p.name.endswith(('.olean','.olean.private','.olean.server','.ilean')):continue\n  if not {'.lake','build','lib','lean'}<=set(rel.parts):continue\n  st=p.stat()\n  if st.st_nlink!=1:continue\n  if 0<st.st_size<65536:count+=1;allocated+=st.st_blocks*512\n  elif st.st_size>=65536:large_count+=1;large_allocated+=st.st_blocks*512",
+      "new": " for parent,dirs,files in os.walk(root,followlinks=False):\n  if not {'.lake','build','lib','lean'}<=set(Path(parent).relative_to(root).parts):continue\n  for name in files:\n   if not name.endswith(('.olean','.olean.private','.olean.server','.ilean')):continue\n   p=Path(parent)/name\n   st=p.lstat()\n   if not __import__('stat').S_ISREG(st.st_mode) or st.st_nlink!=1:continue\n   if 0<st.st_size<65536:count+=1;allocated+=st.st_blocks*512\n   elif st.st_size>=65536:large_count+=1;large_allocated+=st.st_blocks*512"
+    }
+  ],
+  "compiler_invoked": false
+}

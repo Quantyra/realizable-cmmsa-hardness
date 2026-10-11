@@ -1,0 +1,42 @@
+{
+  "parent": "preserve_compress_full113_prior_text_v2.py",
+  "parent_sha256": "7194055D25D55351872CCB523B5B228A3A020F1F4F4DD9B8D569D136CE668E9D",
+  "target": "compress_full113_retained_original_text_v1.py",
+  "target_sha256": "59A9E2A74383A1B0C0E66C0333BB850C485A467A9DBE9A1C8F8FCBD1BF39A9F5",
+  "exact_replacements": [
+    {
+      "old": "\"\"\"Preserve exact settled text originals, then compress without changing their bytes.\"\"\"",
+      "new": "\"\"\"Physically compress retained settled text; preserve every original file and logical byte.\"\"\""
+    },
+    {
+      "old": "if logical + path.stat().st_size > 120 * 1024**2:",
+      "new": "if logical + path.stat().st_size > 512 * 1024**2:"
+    },
+    {
+      "old": "1536 * 1024**2 + logical + 8 * 1024**2",
+      "new": "1536 * 1024**2 + 8 * 1024**2"
+    },
+    {
+      "old": "full113-prior-text-preserved-lossless-v2",
+      "new": "full113-retained-original-text-lossless-v1"
+    },
+    {
+      "old": "    archive = target / 'complete-originals.tar.gz'\n    with archive.open('xb') as raw:\n        with gzip.GzipFile(filename='', mode='wb', fileobj=raw, mtime=0) as compressed:\n            with tarfile.open(fileobj=compressed, mode='w') as tar:\n                for row in selected:\n                    data = Path(row['original']).read_bytes()\n                    assert len(data) == row['bytes'] and hashlib.sha256(data).hexdigest().upper() == row['sha256']\n                    member = tarfile.TarInfo(row['member']); member.size = len(data); member.mode = 0o644\n                    tar.addfile(member, io.BytesIO(data))\n    with tarfile.open(archive, 'r:gz') as tar:\n        assert len(tar.getmembers()) == len(selected)\n        for row in selected:\n            assert tar.extractfile(row['member']).read() == Path(row['original']).read_bytes()\n    archive_pin = digest(archive)\n    (target / 'custody-before-compression.json').open('x').write(json.dumps(dict(files=selected,\n        payload=dict(file=archive.name, bytes=archive.stat().st_size, sha256=archive_pin), every_original_roundtrip_equal=True), indent=2) + '\\n')\n",
+      "new": "    # NTFS physical compression retains each original path and its complete bytes.\n    # No deletion, move, content rewrite, or archive replacement is performed.\n"
+    },
+    {
+      "old": "    assert digest(archive) == archive_pin\n",
+      "new": ""
+    },
+    {
+      "old": "complete_unique_originals_preserved_before_compression=True",
+      "new": "all_original_files_retained_in_place=True"
+    },
+    {
+      "old": "print(json.dumps(dict(folder=str(target), files=len(selected), payload_bytes=archive.stat().st_size,\n        payload_sha256=archive_pin, free_before=before, free_after=after)), flush=True)",
+      "new": "print(json.dumps(dict(folder=str(target), files=len(selected), free_before=before, free_after=after)), flush=True)"
+    }
+  ],
+  "boundary": "Only reversible NTFS physical compression; every original file remains in place and complete logical bytes are checked before/after. No archive cleanup or new custody claim.",
+  "files_deleted": false
+}

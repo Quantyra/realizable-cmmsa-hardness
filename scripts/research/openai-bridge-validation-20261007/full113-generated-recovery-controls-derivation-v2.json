@@ -1,0 +1,129 @@
+{
+  "records": [
+    {
+      "source": "run_full113_cache_recovery_v1.py",
+      "source_sha256": "8FDEB50E70A3406CD3C80154A5E3C550552BBC0805B77C6413781DF55F953537",
+      "target": "run_full113_cache_recovery_v2.py",
+      "target_sha256": "898D94D6069D7A26622003A2697025DC218FAA239809FE9E30873A8F6418A2A4",
+      "exact_replacements": [
+        {
+          "old": "            assert path.name.endswith(('.olean', '.olean.private', '.olean.server', '.ilean'))\n            assert {'.lake', 'build', 'lib', 'lean'} <= set(path.parts)",
+          "new": "            if scope['kind'] in ('lean-large', 'lean-small'):\n                assert path.name.endswith(('.olean', '.olean.private', '.olean.server', '.ilean'))\n                assert {'.lake', 'build', 'lib', 'lean'} <= set(path.parts)\n                assert (row['bytes'] >= 65536) if scope['kind'] == 'lean-large' else (0 < row['bytes'] < 65536)\n            else:\n                assert scope['kind'] == 'generated' and row['bytes'] >= 65536\n                generated_ir = {'.lake', 'build', 'ir'} <= set(path.parts) and path.name.endswith(('.c', '.c.o.export', '.setup.json'))\n                generated_lean_ir = {'.lake', 'build', 'lib', 'lean'} <= set(path.parts) and path.name.endswith('.ir')\n                generated_bin = path.as_posix() in ('batteries/.lake/build/bin/runLinter', 'mathlib/.lake/build/bin/cache')\n                assert generated_ir or generated_lean_ir or generated_bin",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "source": "audit_full113_cache_recovery_v1.py",
+      "source_sha256": "58468071186A5C07223AE461332B8CCF04D2A5E473A34956A2B0600A93766FD8",
+      "target": "audit_full113_cache_recovery_v2.py",
+      "target_sha256": "71573E81279C540754B8064625BD06FCF920CEC3E40EC9EB2B3375D3E6DCFCA5",
+      "exact_replacements": [
+        {
+          "old": "run_full113_cache_recovery_v1",
+          "new": "run_full113_cache_recovery_v2",
+          "occurrences": 1
+        },
+        {
+          "old": "complete-audit-v1",
+          "new": "complete-audit-v2",
+          "occurrences": 1
+        },
+        {
+          "old": "full113-selected-settled-cache-recovery-audit-v1",
+          "new": "full113-selected-settled-cache-recovery-audit-v2",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "source": "stage_full113_after_recovery_openssh_v1.py",
+      "source_sha256": "391F62E26EA0D329FD23C390F7B505C1C145D3812B6A6DA2B9B51A2602B09982",
+      "target": "stage_full113_after_recovery_openssh_v2.py",
+      "target_sha256": "E613270A7033525A44FE2955703D9032131D0F084FA6FF55DCC8507A1DB23B35",
+      "exact_replacements": [
+        {
+          "old": "audit_full113_cache_recovery_v1",
+          "new": "audit_full113_cache_recovery_v2",
+          "occurrences": 2
+        }
+      ]
+    },
+    {
+      "source": "preserve_full113_recovery_v1.py",
+      "source_sha256": "F78D9A42A08079A2489EA1F2C2BB4371AF89F8B178A9DDF437AB134C219420C9",
+      "target": "preserve_full113_recovery_v2.py",
+      "target_sha256": "E8AD71D721C6CEBAA2E7AD9383481EAB21BC1C5A7423382427CB4661B65E5121",
+      "exact_replacements": [
+        {
+          "old": "run_full113_cache_recovery_v1",
+          "new": "run_full113_cache_recovery_v2",
+          "occurrences": 2
+        },
+        {
+          "old": "audit_full113_cache_recovery_v1",
+          "new": "audit_full113_cache_recovery_v2",
+          "occurrences": 2
+        },
+        {
+          "old": "'inspect_full113_recovery_capacity_v2.py',",
+          "new": "'inspect_full113_recovery_capacity_v2.py', 'inspect_full113_generated_cache_capacity_v1.py',",
+          "occurrences": 1
+        },
+        {
+          "old": "ROOT / 'capacity-inspections-v2'):",
+          "new": "ROOT / 'capacity-inspections-v2', ROOT / 'generated-capacity-inspections-v1'):",
+          "occurrences": 1
+        },
+        {
+          "old": "full113-complete-recovery-phase-custody-v1",
+          "new": "full113-complete-recovery-phase-custody-v2",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "source": "validate_full113_openssh_controls_v1.py",
+      "source_sha256": "A74B8C0258BCDA218471655ACB033B0D2FA1AEF7FB1CBD17E579F8398665EBDC",
+      "target": "validate_full113_openssh_controls_v2.py",
+      "target_sha256": "9C66E6A85071BE6F96DF06B14B70AB36530A201849E2E2353B2FE28424E76112",
+      "exact_replacements": [
+        {
+          "old": "stage_full113_after_recovery_openssh_v1",
+          "new": "stage_full113_after_recovery_openssh_v2",
+          "occurrences": 1
+        },
+        {
+          "old": "audit_full113_cache_recovery_v1",
+          "new": "audit_full113_cache_recovery_v2",
+          "occurrences": 1
+        },
+        {
+          "old": "full113-openssh-control-validation-",
+          "new": "full113-openssh-control-validation-v2-",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "source": "run_full113_resume_step_v4.py",
+      "source_sha256": "1ADEF41AEF05E2E3FD83129117B06946872CB0D513A0902E0D8175D8860B322F",
+      "target": "run_full113_resume_step_v5.py",
+      "target_sha256": "3DF1BCA7351828D7D07A222F041BAC1300BA463645872DC6C874C6145069399F",
+      "exact_replacements": [
+        {
+          "old": "'inspect_full113_generated_cache_capacity_v1.py'",
+          "new": "'inspect_full113_generated_cache_capacity_v1.py', 'run_full113_cache_recovery_v2.py', 'audit_full113_cache_recovery_v2.py', 'stage_full113_after_recovery_openssh_v2.py', 'preserve_full113_recovery_v2.py'",
+          "occurrences": 1
+        }
+      ]
+    }
+  ],
+  "new_artifact_scope": "Only paired hash-identical generated dependency build artifacts under .lake/packages",
+  "no_Lean_source_or_project_artifact_change": true,
+  "no_canonical_cache_write": true,
+  "all_once_terminal_archive_source_quiescence_and_byte_guards_preserved": true,
+  "minimum_disk_GiB": 40,
+  "minimum_local_MiB": 1536,
+  "compiler_invoked": false
+}
