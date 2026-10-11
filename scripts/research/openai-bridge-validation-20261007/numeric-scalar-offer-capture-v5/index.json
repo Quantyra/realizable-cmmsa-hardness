@@ -1,0 +1,106 @@
+{
+  "original_directory": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-numeric-no-scalar-candidate-v5",
+  "files": [
+    {
+      "path": "ActualNumericNoScalar.lean",
+      "bytes": 37950,
+      "sha256": "8AE08AC67F689AA7A5CD5CFB91C42EDF735D73D5BAE7CB194E24B4624129DE43"
+    },
+    {
+      "path": "ActualNumericNoScalarChecks.lean",
+      "bytes": 444,
+      "sha256": "0DDDD4867F3B45B04D8E3F083FCDB1F14DFB5E7B8FEA912FDCD153C1A0087EDA"
+    },
+    {
+      "path": "ARGUMENT-MAP.md",
+      "bytes": 5336,
+      "sha256": "1DAA19086A0A4866D0119C74F379FFC773661BA6E36B9ABD3FED8E01C258775D"
+    },
+    {
+      "path": "OFFER-MANIFEST.json",
+      "bytes": 3292,
+      "sha256": "8A454DBE406C70E25F8D1B05D887ECB93A43E5840CB919C64C8B1D19D223888E"
+    }
+  ],
+  "lexical_preflight": [
+    {
+      "path": "ActualNumericNoScalar.lean",
+      "bytes": 37950,
+      "sha256": "8AE08AC67F689AA7A5CD5CFB91C42EDF735D73D5BAE7CB194E24B4624129DE43",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualNumericNoScalarChecks.lean",
+      "bytes": 444,
+      "sha256": "0DDDD4867F3B45B04D8E3F083FCDB1F14DFB5E7B8FEA912FDCD153C1A0087EDA",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "prior_capture_index_sha256": "EAFBA265074B4CE67C89086E7A4AC99CD889560F56C9535F0496F3DCEEA84EE3",
+  "dependencies": [
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualSelectedComplementManuscriptDyadicMoment.lean",
+      "bytes": 19470,
+      "sha256": "AF3E380A36C45AED61FE5C2A81637AA6C9BBB8C0F83160FB386BA23F5475A705"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualSelectedComplementSourceSizeAnalyticMoment.lean",
+      "bytes": 66532,
+      "sha256": "03FB0A5DE3FD2E7E150645825165D2E30CFCE60BD34765BF7D6623E3A6D2D3D1"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualMaximalPairLadder.lean",
+      "bytes": 13004,
+      "sha256": "D61DF4001A90D5F5CF56B756151212F2EC1DDC8E10A64D919F0E046993E3FA81"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46FourierA16.lean",
+      "bytes": 15817,
+      "sha256": "21E062E1FE12023D981810AF3C06A9D463F25FB568B6ECF10F8B3396CD16A045"
+    }
+  ],
+  "dependency_archive_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+  "mathlib_api_archive": {
+    "path": "C:/Users/dfred/.quantyra/builder02/full110-exact-real-complex-operators-resource02/checks/20261011T025155646923Z/qualified-native/cmmsa_a8_output_20261011T025221Z_7046a7c0/remote-evidence/package-sources.tar.gz",
+    "bytes": 28053685,
+    "sha256": "C908338E462358BCDB6AC40EC21C7AF6D053435C5E9BF70EF399FC8C3FB2E37D",
+    "read_only_inspected_members": [
+      ".lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      ".lake/packages/mathlib/Mathlib/Algebra/Order/GroupWithZero/Defs.lean"
+    ]
+  },
+  "mathlib_api_members": [
+    {
+      "member": ".lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "bytes": 50134,
+      "sha256": "5F4970FE329B14615CA6CFA3E0DCB0CF9D2017C98D2E3501237412AA2474E70B"
+    },
+    {
+      "member": ".lake/packages/mathlib/Mathlib/Algebra/Order/GroupWithZero/Defs.lean",
+      "bytes": 22609,
+      "sha256": "01A908236DC99E5040CB487165C1A73FBD4E495D44183E6465F86B42F744DC02"
+    }
+  ],
+  "complete_source_review_by_full_v4_and_exact_v5_diff": true,
+  "complete_checks_and_argument_map_read": true,
+  "complete_source_diff": "--- v4\n+++ v5\n@@ -40,7 +40,7 @@\n \n private theorem powTwo_neg (x : Real) : powTwo (-x) = 1 / powTwo x := by\n   unfold powTwo\n-  rw [Real.rpow_neg (by norm_num : (2 : Real) \u2260 0)]\n+  rw [Real.rpow_neg (by norm_num : (0 : Real) \u2264 2) x, one_div]\n \n private theorem powTwo_mono {x y : Real} (h : x \u2264 y) :\n     powTwo x \u2264 powTwo y := by\n@@ -379,8 +379,15 @@\n             (2 : Real) ^ m * e0 ^ (m - 2 / T)) =\n         (2 : Real) ^ (2 * m) * ((r + 1 : Nat) : Real) ^ m *\n           (2 : Real) ^ (500 * m * r ^ 2 * k) * e0 ^ (m - 2 / T) := by\n-      rw [\u2190 Real.rpow_natCast, \u2190 Real.rpow_natCast]\n-      ring\n+      have hdouble : (2 : Real) ^ m * (2 : Real) ^ m = (2 : Real) ^ (2 * m) := by\n+        calc\n+          _ = (2 : Real) ^ (m + m) := by rw [\u2190 pow_add]\n+          _ = (2 : Real) ^ (2 * m) := by congr 1 <;> omega\n+      calc\n+        _ = ((2 : Real) ^ m * (2 : Real) ^ m) *\n+            (((r + 1 : Nat) : Real) ^ m *\n+              (2 : Real) ^ (500 * m * r ^ 2 * k) * e0 ^ (m - 2 / T)) := by ring\n+        _ = _ := by rw [hdouble]\n     calc\n       _ \u2264 2 * ((2 : Real) ^ m *\n           (beta ^ (1 - 1 / T) *\n@@ -400,11 +407,6 @@\n       2 * ((2 : Real) ^ m * a ^ m * beta) \u2264\n         (2 : Real) ^ m * powTwo (-(20 / 3 : Real) * m * h) := by\n     have hrhoEq : (r : Real) * rho = 10 * (m : Real) := hrhoR\n-    have hExp :\n-        (m : Real) + 1 - ((2 : Real) / 3) * (r : Real) * rho * h * m \u2264\n-          (m : Real) - ((20 : Real) / 3) * m * h := by\n-      rw [hrhoEq]\n-      nlinarith [hh]\n     have haPow : a ^ m = powTwo (-((2 : Real) / 3) * (r : Real) * rho * h * m) := by\n       dsimp [a, powTwo]\n       rw [\u2190 Real.rpow_natCast, \u2190 Real.rpow_mul (by norm_num : 0 \u2264 (2 : Real))]\n@@ -415,14 +417,51 @@\n     have hcoeff :\n         (2 : Real) ^ (m + 1) * powTwo (-((2 : Real) / 3) * (r : Real) * rho * h * m) \u2264\n           (2 : Real) ^ m * powTwo (-(20 / 3 : Real) * m * h) := by\n-      rw [show (2 : Real) ^ (m + 1) = (2 : Real) ^ m * 2 by ring]\n-      rw [show powTwo (-((2 : Real) / 3) * (r : Real) * rho * h * m) =\n-        powTwo ((-((2 : Real) / 3) * (r : Real) * rho * h * m)) by rfl]\n-      have := powTwo_mono hExp\n-      dsimp [powTwo] at this \u22a2\n-      nlinarith [this]\n-    calc\n-      _ = (2 : Real) ^ (m + 1) * a ^ m * beta := by ring\n+      have hmR2 : 2 \u2264 (m : Real) := by exact_mod_cast hm\n+      have hhR1 : 1 \u2264 (h : Real) := by\n+        exact_mod_cast (Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hh))\n+      have hmMinus1 : 1 \u2264 (m : Real) - 1 := by linarith\n+      have hmh : 2 \u2264 (m : Real) * (h : Real) := by\n+        calc\n+          2 = 2 * 1 := by ring\n+          _ \u2264 (m : Real) * 1 := mul_le_mul_of_nonneg_right hmR2 (by norm_num)\n+          _ \u2264 (m : Real) * (h : Real) :=\n+            mul_le_mul_of_nonneg_left hhR1 (by positivity)\n+      have hgap : 2 \u2264 (m : Real) * (h : Real) * ((m : Real) - 1) := by\n+        calc\n+          2 \u2264 (m : Real) * (h : Real) := hmh\n+          _ \u2264 (m : Real) * (h : Real) * ((m : Real) - 1) := by\n+            exact mul_le_mul_of_nonneg_left hmMinus1 (by positivity)\n+      have hExpStrong :\n+          -((2 : Real) / 3) * (r : Real) * rho * h * m + 1 \u2264\n+            -(20 / 3 : Real) * m * h := by\n+        rw [hrhoR]\n+        nlinarith [hgap]\n+      have hTwoPow : (2 : Real) ^ (m + 1) = (2 : Real) ^ m * 2 := by\n+        rw [pow_succ]\n+        ring\n+      have hShift :\n+          powTwo (-((2 : Real) / 3) * (r : Real) * rho * h * m + 1) =\n+            2 * powTwo (-((2 : Real) / 3) * (r : Real) * rho * h * m) := by\n+        rw [powTwo_add]\n+        norm_num [powTwo]\n+      have hbaseCoeff :\n+          2 * powTwo (-((2 : Real) / 3) * (r : Real) * rho * h * m) \u2264\n+            powTwo (-(20 / 3 : Real) * m * h) := by\n+        calc\n+          _ = powTwo (-((2 : Real) / 3) * (r : Real) * rho * h * m + 1) := hShift.symm\n+          _ \u2264 _ := powTwo_mono hExpStrong\n+      rw [hTwoPow]\n+      -- The preceding rewrite exposes the exact factor `2 * powTwo exp`.\n+      calc\n+        _ = (2 : Real) ^ m *\n+            (2 * powTwo (-((2 : Real) / 3) * (r : Real) * rho * h * m)) := by ring\n+        _ \u2264 (2 : Real) ^ m * powTwo (-(20 / 3 : Real) * m * h) :=\n+          mul_le_mul_of_nonneg_left hbaseCoeff (by positivity)\n+    calc\n+      _ = (2 : Real) ^ (m + 1) * a ^ m * beta := by\n+        rw [pow_succ]\n+        ring\n       _ \u2264 (2 : Real) ^ (m + 1) * a ^ m := by nlinarith [pow_nonneg haPos.le m]\n       _ \u2264 (2 : Real) ^ m * powTwo (-(20 / 3 : Real) * m * h) := by\n           simpa [haPow] using hcoeff\n@@ -619,12 +658,15 @@\n         (eps / 8 * powTwo (-(m * s : Real)) * beta) \u2264\n           (2 * K * beta ^ (-(1 / T)) * e0 ^ (m - 2 / T)) * beta := by\n       calc\n-        _ \u2264 selectedLowHC46NormBound (d := d) (r := r) (p := k) (2 * eRat) := hLowLower\n+        _ \u2264 2 * ((2 : Real) ^ m *\n+            (beta ^ (1 - ((k : Real) / (m : Real))\u207b\u00b9) *\n+              (selectedLowHC46NormBound (d := d) (r := r) (p := k)\n+                (2 * eRat)) ^ m)) := hLowLower\n         _ \u2264 2 * K * (beta * beta ^ (-(1 / T))) * e0 ^ (m - 2 / T) := hlow\n         _ = _ := by ring\n     have hcancel : eps / 8 * powTwo (-(m * s : Real)) \u2264\n         2 * K * beta ^ (-(1 / T)) * e0 ^ (m - 2 / T) :=\n-      (mul_le_mul_iff_right\u2264 hbetaPos).mp htotal\n+      (mul_le_mul_iff_left\u2080 hbetaPos).mp htotal\n     have hcancel8 : eps * powTwo (-(m * s : Real)) \u2264\n         16 * K * beta ^ (-(1 / T)) * e0 ^ (m - 2 / T) := by\n       nlinarith [hcancel]\n@@ -671,9 +713,9 @@\n     have hbaseNeg :\n         ((1 / 4 : Real) * powTwo (-(2 * (m + 1 : Real) * h))) ^ (-(1 / T)) =\n           1 / (((1 / 4 : Real) * powTwo (-(2 * (m + 1 : Real) * h))) ^ (1 / T)) := by\n-      rw [Real.rpow_neg (ne_of_gt hbasePos)]\n+      rw [Real.rpow_neg hbasePos.le (1 / T), one_div]\n     have hbetaNeg : beta ^ (-(1 / T)) = 1 / (beta ^ (1 / T)) := by\n-      rw [Real.rpow_neg (ne_of_gt hbetaPos)]\n+      rw [Real.rpow_neg hbetaPos.le (1 / T), one_div]\n     have hmono : beta ^ (-(1 / T)) \u2264\n         ((1 / 4 : Real) * powTwo (-(2 * (m + 1 : Real) * h))) ^ (-(1 / T)) := by\n       rw [hbetaNeg, hbaseNeg]\n@@ -738,8 +780,9 @@\n     apply (div_le_div_iff\u2080 heps0 hSpos).2\n     nlinarith [heps]\n   have hSInv : 1 / S = powTwo (2 * (1 - 1000 * rho) * m * h) := by\n-    dsimp [S, powTwo]\n-    rw [\u2190 Real.rpow_neg (by norm_num : (2 : Real) \u2260 0)]\n+    dsimp [S]\n+    rw [powTwo_neg]\n+    field_simp [ne_of_gt (powTwo_pos (2 * (1 - 1000 * rho) * m * h))]\n   have hbounded :\n       16 * K * powTwo (m * s : Real) * beta ^ (-(1 / T)) *\n         e0 ^ ((m : Real) - 2 / T) / eps \u2264\n@@ -780,7 +823,7 @@\n         (1 / S) =\n       powTwo (logTwo (16 * K) + 2 / T - scalarLambda m rho T * (h : Real) -\n         4000 * rho ^ 2 * h / T) := by\n-    rw [\u2190 powTwo_logTwo (by positivity : 0 < 16 * K), hQuarter, hE0pow, hSInv]\n+    rw [\u2190 powTwo_logTwo (by positivity : 0 < 16 * K), hQuarter, hSInv]\n     rw [\u2190 powTwo_add, \u2190 powTwo_add, \u2190 powTwo_add, \u2190 powTwo_add, \u2190 powTwo_add]\n     congr 1\n     rw [hsReal]\n",
+  "preserved_stale_manifest_offer_label": "actual-numeric-no-scalar-candidate-v4",
+  "actual_offer_directory": "actual-numeric-no-scalar-candidate-v5",
+  "stale_label_changes_no_source_identity": true,
+  "immutable_capture": true,
+  "development_candidate": true,
+  "routine_tactic_API_coercion_repairs_may_remain": true,
+  "compiler_invoked": false,
+  "native_verified": false,
+  "accepted": false,
+  "full_goal_complete": false,
+  "remaining": [
+    "GCP translation diagnostics and all native/axiom/review gates",
+    "Same-instance material/finite-maximum/parameter integration",
+    "Effective common cutoff, source/table/sampler and lower signal"
+  ]
+}

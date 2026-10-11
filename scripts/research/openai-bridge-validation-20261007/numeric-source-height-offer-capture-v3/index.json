@@ -1,0 +1,79 @@
+{
+  "original_directory": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-numeric-source-height-candidate-v3",
+  "files": [
+    {
+      "path": "ActualNumericSourceHeight.lean",
+      "bytes": 7621,
+      "sha256": "98661E33A9C272CB983368B60C12BF7AA7BE833076A5545CAB1CDF4917209BDF"
+    },
+    {
+      "path": "ActualNumericSourceHeightChecks.lean",
+      "bytes": 537,
+      "sha256": "99E2D2D905A2680057EA67E0FECDD40AB31E34A1AC730EACCE8DE6A4E0C4E097"
+    },
+    {
+      "path": "ARGUMENT-MAP.md",
+      "bytes": 2506,
+      "sha256": "2809865EE12401B69D5B7202E21854348A84AC28B9F29F9631DD6CA4FA64EC2A"
+    },
+    {
+      "path": "OFFER-MANIFEST.json",
+      "bytes": 3454,
+      "sha256": "307B5EF9050BFFFACFF84C17A7A985659E369D4A9284CB8BE05BB437D7209C14"
+    }
+  ],
+  "dependencies": [
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualSelectedSpectralParameters.lean",
+      "bytes": 5389,
+      "sha256": "78FB8DF0B635E950ED087C3598530B328AD25EC5AC4B2DBF556CBE433A46E582"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/SamplerParameters.lean",
+      "bytes": 4148,
+      "sha256": "4DA1946FED5522A9BFFE90CFE086352CD3874F73D515C220B6B8955E187B556D"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualStarFixedRhoDimensionGuard.lean",
+      "bytes": 7049,
+      "sha256": "E832F40F32C4C8E07F9E0FF53ABCB3469441010F2A54A95E3DC09A0E54833575"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualCmmsaParameterReconciliation.lean",
+      "bytes": 7688,
+      "sha256": "BBC17BCB96869E98DEE33FDA8128C97436392C57A4B1F62B63B5F8AAE10ECC22"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualCmmsaAdmissibilitySelector.lean",
+      "bytes": 10339,
+      "sha256": "455B9C1EFDBB64B0CA06E3CFB284EA59F6DFA37F5CBEE239FC2872D0A85FF11B"
+    }
+  ],
+  "dependency_archive_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+  "lexical_preflight": [
+    {
+      "path": "ActualNumericSourceHeight.lean",
+      "bytes": 7621,
+      "sha256": "98661E33A9C272CB983368B60C12BF7AA7BE833076A5545CAB1CDF4917209BDF",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualNumericSourceHeightChecks.lean",
+      "bytes": 537,
+      "sha256": "99E2D2D905A2680057EA67E0FECDD40AB31E34A1AC730EACCE8DE6A4E0C4E097",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "prior_capture_index_sha256": "374929947B78070E4A207892AF5A8D0E16DED611BD8B51D5F3863680FB351344",
+  "exact_added_theorem": "\n/-- Every supplied enlarged floor eventually has an actual selected output,\nwith the same numeric tail guards and an arbitrarily prescribed lower bound\non m. This does not construct a joint source/table/lower-signal witness. -/\ntheorem selected_numeric_parameters_eventually\n    (base : Nat \u2192 Nat) (cutoff : Real \u2192 Nat) (A M : Nat) (hA : 1 \u2264 A) :\n    \u2203 L0, \u2200 L, L0 \u2264 L \u2192 \u2203 m : Nat,\n      selector\n        (fun j => max (analyticSourceHeightFloor (numericSourceBase base) cutoff j) (j + 2)) L =\n          (m : WithBot Nat) \u2227\n      M \u2264 m \u2227 numericRankThreshold m \u2264 hBlock L m \u2227\n      20 * m \u2264 leafK m (hBlock L m) \u2227 1 \u2264 leafK m (hBlock L m) - 1 \u2227\n      leafT m (hBlock L m) + leafK m (hBlock L m) +\n          numericRankThreshold m * (leafK m (hBlock L m) - 1) + 3 \u2264\n        2 * blocks A (hBlock L m) := by\n  obtain \u27e8L0, hlarge\u27e9 := selector_unbounded\n    (fun j => max (analyticSourceHeightFloor (numericSourceBase base) cutoff j) (j + 2)) M\n  refine \u27e8L0, ?_\u27e9\n  intro L hL\n  obtain \u27e8m, hsel, hM, _\u27e9 := hlarge L hL\n  rcases selected_numeric_height base cutoff hsel with \u27e8_, hrank, _, _, _\u27e9\n  exact \u27e8m, hsel, hM, hrank, selected_numeric_tail_parameters base cutoff hA hsel\u27e9\n\n",
+  "root_read_pinned_selector_body": true,
+  "same_floor_eventual_selection_argument_reviewed": true,
+  "immutable_capture": true,
+  "compiler_invoked": false,
+  "native_verified": false,
+  "accepted": false
+}
