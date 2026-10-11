@@ -1,0 +1,33 @@
+{
+  "source": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\inspect_full109_live_trace_v1.py",
+  "source_sha256": "86676B708182ABBA74182AABE0311D2C7C578993780EED8DA5F50F3CB5701317",
+  "target": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\inspect_full110_native_progress_v1.py",
+  "target_sha256": "47173A353AD24BA57C7187643521197342D67C296D963336C00011056E169499",
+  "exact_replacements": [
+    [
+      "from full109_builder02_controller import ROOT",
+      "from full110_builder02_controller import ROOT"
+    ],
+    [
+      "from full109_capture_gates import validate_successor",
+      "from full110_capture_gates import validate_successor"
+    ],
+    [
+      "cmmsa_a8_output_20261010T110328Z_0d5c26f4",
+      "cmmsa_a8_output_20261011T025221Z_7046a7c0"
+    ],
+    [
+      "'live-trace-inspections-v1'",
+      "'live-native-inspections-v1'"
+    ]
+  ],
+  "original_remote_script": "import json,os,shutil,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('http://metadata.google.internal/computeMetadata/v1/instance/id',headers={'Metadata-Flavor':'Google'})\nwith o.open(r,timeout=10) as s:\n assert s.headers.get('Metadata-Flavor')=='Google' and s.read().decode()=='7237681467779354904'\nhome=Path('/home/dfredriksen_quantyra_org');assert Path.home().resolve()==home\nmarker=json.loads((home/'full109-consumption-v3-launch-once.json').read_bytes())\nassert marker['run']=='cmmsa_a8_output_20261010T110328Z_0d5c26f4'\nroot=home/'full109-consumption-v3-evidence'\nrows={}\nfor name in ('active-process.json','probe.native-exit','terminal.json'):\n p=root/name\n if p.exists():rows[name]=p.read_text()\nsizes={name:(root/name).stat().st_size for name in ('probe.stdout','probe.stderr') if (root/name).exists()}\npids=[]\nfor entry in Path('/proc').iterdir():\n if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\n try:name=(entry/'comm').read_text().strip();args=(entry/'cmdline').read_bytes().replace(bytes([0]),b' ').decode(errors='replace')\n except (FileNotFoundError,PermissionError):continue\n if name in ('lean','lake') or (name=='python3' and 'full109_consumption_v3_worker.py' in args):pids.append(dict(pid=int(entry.name),name=name,argv=args))\nprint(json.dumps(dict(run=marker['run'],records=rows,output_bytes=sizes,live_processes=pids,disk_available_bytes=shutil.disk_usage(home).free,archive_present=(home/'full109-consumption-v3-evidence.tar.gz').exists(),read_only=True,trace_replayed=False)))\n",
+  "new_remote_script": "import base64,hashlib,json,os,shutil,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('http://metadata.google.internal/computeMetadata/v1/instance/id',headers={'Metadata-Flavor':'Google'})\nwith o.open(r,timeout=10) as response:\n assert response.headers.get('Metadata-Flavor')=='Google' and response.read().decode()=='7237681467779354904'\nhome=Path('/home/dfredriksen_quantyra_org');assert Path.home().resolve()==home\nmarker=json.loads((home/'full110-exact-real-complex-operators-resource02-launch-once.json').read_bytes())\nassert marker['run']=='cmmsa_a8_output_20261011T025221Z_7046a7c0'\nroot=home/(marker['run']+'_evidence')\nrecords={}\nfor name in ('active-process.json','begin.native-exit','compile.native-exit','finish.native-exit','aggregate.native-exit','dedicated-worker-terminal.json'):\n p=root/name\n if p.exists():records[name]=p.read_text()\nstages=[];streams={}\nfor number in range(1,8):\n p=root/('stage-'+str(number)+'.command.json')\n if p.exists():stages.append(json.loads(p.read_bytes()))\nfor p in sorted(root.iterdir()):\n if p.is_file() and p.suffix in ('.stdout','.stderr'):\n  assert p.stat().st_size<=16*1024**2,'Unbounded stream; no truncation permitted'\n  data=p.read_bytes()\n  streams[p.name]=dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest().upper(),base64=base64.b64encode(data).decode())\npids=[]\nfor entry in Path('/proc').iterdir():\n if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\n try:name=(entry/'comm').read_text().strip();args=(entry/'cmdline').read_bytes().replace(bytes([0]),b' ').decode(errors='replace')\n except (FileNotFoundError,PermissionError):continue\n if name in ('lean','lake') or (name=='python3' and ('full110_worker.py' in args or marker['run'] in args)):pids.append(dict(pid=int(entry.name),name=name,argv=args))\nprint(json.dumps(dict(run=marker['run'],records=records,stages=stages,streams=streams,live_processes=pids,disk_available_bytes=shutil.disk_usage(home).free,archive_present=(home/(marker['run']+'_evidence.tar.gz')).exists(),read_only=True,compiler_replayed=False,observed_snapshots_not_authoritative_terminal_custody=True)))\n",
+  "old_output": "            print(json.dumps(dict(folder=str(folder), inspection=result, host_key_fingerprint=fingerprint)), flush=True)\n",
+  "new_output": "            decoded = folder / 'observed-streams'; decoded.mkdir()\n            for name, row in result['streams'].items():\n                assert Path(name).name == name\n                data = base64.b64decode(row['base64'], validate=True)\n                assert len(data) == row['bytes'] and hashlib.sha256(data).hexdigest().upper() == row['sha256']\n                (decoded / name).open('xb').write(data)\n            print(json.dumps(dict(folder=str(folder), run=result['run'], stage_exits=[r['native_exit'] for r in result['stages']], live_processes=result['live_processes'], observed_streams=len(result['streams']), disk_available_bytes=result['disk_available_bytes'], authoritative_terminal_custody=False)), flush=True)\n",
+  "native_run": "cmmsa_a8_output_20261011T025221Z_7046a7c0",
+  "read_only_guest": true,
+  "host_key_authentication_preserved": true,
+  "complete_observed_streams_without_truncation": true,
+  "compiler_invoked": false
+}
