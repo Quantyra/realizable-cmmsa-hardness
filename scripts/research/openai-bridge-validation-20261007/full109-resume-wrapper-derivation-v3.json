@@ -1,0 +1,24 @@
+{
+  "parent_sha256": "7054F47FE08876172986FAC29639C634AE429B466FBA5AC23E43DDAC15641E34",
+  "successor_sha256": "FDE21855EE7282821D7E1BB9A7A11A48369883F1A298BC5CE3A82112F498E48F",
+  "replacements": [
+    [
+      "import sys\n",
+      "import sys\nimport uuid\n"
+    ],
+    [
+      "    'audit_full109_pending_trace_plans_v2.py',",
+      "    'audit_full109_pending_trace_plans_v2.py',\n    'prepare_full109_consumption_review_sources.py',\n    'audit_full109_prior_review_reuse_v1.py',\n    'prepare_full109_material_integration_v1.py',\n    'run_full109_material_integration_v1.py',"
+    ],
+    [
+      "datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')",
+      "(datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')+'-'+uuid.uuid4().hex[:12])"
+    ],
+    [
+      "    (folder / source.name).write_bytes(source.read_bytes())",
+      "    (folder / source.name).write_bytes(source.read_bytes())\n    (folder / 'wrapper.snapshot.py').write_bytes(Path(__file__).read_bytes())"
+    ]
+  ],
+  "native_output_capture_and_terminal_handling_unchanged": true,
+  "compiled_inputs_changed": false
+}
