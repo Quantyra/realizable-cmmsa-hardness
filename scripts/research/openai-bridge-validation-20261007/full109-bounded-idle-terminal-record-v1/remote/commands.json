@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\trace-staging-idle-lease-v1\\20261011T001648918869Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "58961",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c 'import json,subprocess,time,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('\"'\"'http://metadata.google.internal/computeMetadata/v1/instance/id'\"'\"',headers={'\"'\"'Metadata-Flavor'\"'\"':'\"'\"'Google'\"'\"'})\nwith o.open(r,timeout=10) as s:\n assert s.headers.get('\"'\"'Metadata-Flavor'\"'\"')=='\"'\"'Google'\"'\"' and s.read().decode()=='\"'\"'7237681467779354904'\"'\"'\nhome=Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"');assert Path.home().resolve()==home\nevents=[];deadline=time.monotonic()+3600\nwhile time.monotonic()<deadline and not (home/'\"'\"'full109-consumption-v3-launch-once.json'\"'\"').exists():\n now=int(time.time())\n p=subprocess.run(['\"'\"'sudo'\"'\"','\"'\"'tee'\"'\"','\"'\"'/var/lib/quantyra-idle-shutdown/last-active'\"'\"'],input=(str(now)+'\"'\"'\\n'\"'\"').encode(),capture_output=True,check=True)\n assert p.stdout.strip()==str(now).encode()\n p=subprocess.run(['\"'\"'systemctl'\"'\"','\"'\"'is-active'\"'\"','\"'\"'quantyra-idle-shutdown.timer'\"'\"'],capture_output=True,check=True);assert p.stdout.strip()==b'\"'\"'active'\"'\"'\n events.append(now);time.sleep(60)\nprint(json.dumps(dict(refresh_epochs=events,maximum_seconds=3600,timer_disabled=False,compiler_invoked=False,vm_power_operation=False)))\n'"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "9603C651290EB95B80BF21E4C216ECBDAA567CBE7A9E19205B0B941493D16788",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
