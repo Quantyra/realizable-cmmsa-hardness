@@ -1,0 +1,45 @@
+{
+  "records": [
+    {
+      "source": "test_full110_full_scope_terminal.py",
+      "source_sha256": "02BFBB59C8451B7976C1136FB1AC2A418B0C8FF01D0FB68D29F407A3A0241E1D",
+      "target": "test_full110_full_scope_terminal_v2.py",
+      "target_sha256": "25E83D513DDBE82D46E320BD1AD128747732F4122E365015C826EA63DC32240B",
+      "exact_replacements": [
+        [
+          "profiles = [name for name in manifest['requested_axioms'] if name != missing_profile]",
+          "profile_names = list(dict.fromkeys(manifest['requested_axioms'] + list(common.REQUESTED_AXIOMS)))\n        profiles = [name for name in profile_names if name != missing_profile]"
+        ],
+        [
+          "self.assertEqual(result['axiom_profiles'], 347)",
+          "self.assertEqual(result['axiom_profiles'], len(set(self.manifest['requested_axioms']) | set(common.REQUESTED_AXIOMS)))"
+        ],
+        [
+          "missing_profile=self.manifest['requested_axioms'][0]",
+          "missing_profile=next(name for name in self.manifest['requested_axioms'] if name in common.REQUESTED_AXIOMS)"
+        ]
+      ]
+    },
+    {
+      "source": "validate_full110_execution_controls_v2.py",
+      "source_sha256": "0226477ABFD79359A5A58E3429BDEC713D940F2DF3DEFBD488531BBC4DF0F478",
+      "target": "validate_full110_execution_controls_v3.py",
+      "target_sha256": "F7C79ADEA2788E82BCC19A728AA0CCC882D93B547948439E6D0DD3CB375B634F",
+      "exact_replacements": [
+        [
+          "validate_full110_execution_controls_v2.py",
+          "validate_full110_execution_controls_v3.py"
+        ],
+        [
+          "test_full110_full_scope_terminal",
+          "test_full110_full_scope_terminal_v2"
+        ]
+      ]
+    }
+  ],
+  "original_failure": "full110-execution-control-validation-20261011T013726Z-2d7ad87c",
+  "reason": "Synthetic fixture omitted five historical common.require_profiles exports outside the requested347 list; successor supplies all original common requirements without weakening the production gate",
+  "production_controls_changed": false,
+  "cloud_operation": false,
+  "lean_executed": false
+}

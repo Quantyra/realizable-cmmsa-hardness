@@ -1,0 +1,24 @@
+{
+  "source": "validate_full110_execution_controls_v1.py",
+  "source_sha256": "87326F8E5637E937C9AF18D82042A9432FD72CD709E9A8B5FF265C069CB67B01",
+  "target": "validate_full110_execution_controls_v2.py",
+  "target_sha256": "0226477ABFD79359A5A58E3429BDEC713D940F2DF3DEFBD488531BBC4DF0F478",
+  "exact_replacements": [
+    [
+      "validate_full110_execution_controls_v1.py",
+      "validate_full110_execution_controls_v2.py"
+    ],
+    [
+      "'import full110_capture_gates as task;task.validate_successor()'",
+      "\"import sys;sys.path.insert(0,'.');import full110_capture_gates as task;task.validate_successor()\""
+    ],
+    [
+      "[sys.executable, '-B', '-X', 'utf8', '-m', 'unittest', '-v',\n                 'test_full110_terminal', 'test_full110_full_scope_terminal']",
+      "[sys.executable, '-B', '-X', 'utf8', '-c',\n                 \"import sys,unittest;sys.path.insert(0,'.');unittest.main(module=None,argv=['unittest','-v','test_full110_terminal','test_full110_full_scope_terminal'])\"]"
+    ]
+  ],
+  "original_failure": "full110-execution-control-validation-20261011T013700Z-95be8fcb",
+  "reason": "Embedded Python requires explicit current-directory import path; original ModuleNotFoundError preserved",
+  "cloud_operation": false,
+  "lean_executed": false
+}
