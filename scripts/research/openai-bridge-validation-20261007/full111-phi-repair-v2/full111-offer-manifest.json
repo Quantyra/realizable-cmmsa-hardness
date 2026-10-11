@@ -1,0 +1,37 @@
+{
+  "schema": "full111-phi-repair-offer-v2",
+  "parent_offer": "full111-phi-repair-v1",
+  "parent_source_sha256": "273517878B1235255A0F476940D43DAC9FA9193C2CF71357F4DD3280354B3430",
+  "files": {
+    "ExactPhiEigenrelation-v4.lean": {
+      "bytes": 19030,
+      "sha256": "4AFB8BB4E49FFABF67783DDCEB83859C73280828FDC3060B8ABFC0D20BD0A75B"
+    },
+    "ExactPhiEigenrelationChecks-v4.lean": {
+      "bytes": 828,
+      "sha256": "E0EFF56684477F10E76326E1FDF16BB489A1F1F45342F54FD012847E64E5E1FB"
+    },
+    "ARGUMENT-AND-API-MAP-v4.md": {
+      "bytes": 3359,
+      "sha256": "6F31E7F2302D4C3A30C4397DC9D1F00ED6BB54374DBA68710DEA6F7964A75509"
+    }
+  },
+  "imports": [
+    "PvNP.RealizableHardness.ActualFiniteAppendSpectral47",
+    "PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting",
+    "PvNP.RealizableHardness.ActualFiniteFrameProductDuality",
+    "PvNP.RealizableHardness.ExactAppendOperatorContracts"
+  ],
+  "repairs": [
+    "remove the redundant local `haveI : Fintype S := Fintype.ofFinite S` shadow in phiAverage_character_eigen; the module-level local instance for Fintype.ofFinite already supplies the subtype instance, so Fintype.card S reduces through the same synthesized instance as importedSurvivor_card and avoids the diagnostic mismatch between local `this` and Subtype.fintype"
+  ],
+  "static_checks": {
+    "preflight": "lean_source_static_preflight_v2.inspect_bytes",
+    "lexical_preflight_passed": true,
+    "bare_question_mark_guard_passed": true,
+    "lean_or_lake_run": false,
+    "gcp_run": false,
+    "native_acceptance_claimed": false
+  },
+  "status": "source-only repaired offer; uncompiled and unreviewed"
+}
