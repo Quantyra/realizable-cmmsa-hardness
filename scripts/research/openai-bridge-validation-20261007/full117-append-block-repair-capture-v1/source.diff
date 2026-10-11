@@ -1,0 +1,139 @@
+--- Full116
++++ Full117
+@@ -48,7 +48,7 @@
+     RectangularGLRowCompletion.inversePairTranspose,
+     RectangularGLRowCompletion.canonicalPrefixMatrix,
+     RectangularGLRowCompletion.canonicalPrefixMap,
+-    Matrix.transpose_mul, Matrix.mul_apply, LinearMap.toMatrix']
++    Matrix.transpose_mul, Matrix.mul_apply, LinearMap.toMatrix', Pi.single_apply]
+ 
+ /-- The direct bottom-row restriction is the selected-row map on the stored
+ inverse coordinate of the paired GL carrier. -/
+@@ -61,7 +61,8 @@
+     RectangularGLSelectedRows.selectedRowsMap,
+     RectangularGLSelectedRows.bottomRowsMatrix,
+     RectangularGLSelectedRows.bottomRowsMap,
+-    LastRows, Matrix.mul_apply, LinearMap.toMatrix']
++    RectangularGLSelectedRows.inversePairSwap,
++    LastRows, Matrix.mul_apply, LinearMap.toMatrix', Pi.single_apply]
+ 
+ /-- The first-column GL marginal stated for the direct block-restriction
+ matrix consumed by the pointwise append identity. -/
+@@ -95,11 +96,11 @@
+     (g : BinaryMatrix s (c + s) → Real) :
+     (∑ p : InversePair (c + s), g (LastRows p.1.2)) /
+         (Fintype.card (InversePair (c + s)) : Real) =
+-      (∑ C : FullRowFrame s (c + s), g C.1) /
+-        (Fintype.card (FullRowFrame s (c + s)) : Real) := by
++      (∑ C : ExactAppendOperatorContracts.FullRowFrame s (c + s), g C.1) /
++        (Fintype.card (ExactAppendOperatorContracts.FullRowFrame s (c + s)) : Real) := by
+   classical
+   have hbottom := RectangularGLSelectedRows.bottom_inverse_rows_uniform_mean
+-    (fun C : FullRowFrame s (c + s) => g C.1)
++    (fun C : ExactAppendOperatorContracts.FullRowFrame s (c + s) => g C.1)
+   have hmap :
+       (∑ p : InversePair (c + s),
+         g (LastRows p.1.2)) =
+@@ -128,9 +129,7 @@
+     (V : BinaryMatrix (c + s) (c + s)) :
+     appendBinaryMatrix X B * V = X * FirstRows V + B * LastRows V := by
+   ext i j
+-  simp only [Matrix.mul_apply, Matrix.add_apply, FirstRows, LastRows,
+-    ActualAppendFourierCrossLevelOrthogonality.appendBinaryMatrix_apply_castAdd,
+-    ActualAppendFourierCrossLevelOrthogonality.appendBinaryMatrix_apply_natAdd]
++  simp only [Matrix.mul_apply, Matrix.add_apply, FirstRows, LastRows]
+   rw [← Equiv.sum_comp finSumFinEquiv, Fintype.sum_sum_type]
+   simp [finSumFinEquiv]
+ 
+@@ -152,7 +151,7 @@
+     simpa [U, V, R, S, A, C] using h.symm.trans p.2.1
+   have hM : M = M * (R * A) + M * (S * C) := by
+     calc
+-      M = M * 1 := by simp
++      M = M * (1 : BinaryMatrix (c + s) (c + s)) := by simp
+       _ = M * (R * A + S * C) := by rw [hblock]
+       _ = M * (R * A) + M * (S * C) := Matrix.mul_add _ _ _
+   calc
+@@ -163,7 +162,7 @@
+       abel
+     _ = M + (B * C - M * (S * C)) := by rw [← hM]
+     _ = M + (B - M * S) * C := by
+-      rw [sub_mul, Matrix.mul_assoc]
++      rw [Matrix.sub_mul, Matrix.mul_assoc]
+   
+ /-- Invariance is applied to the same full matrix and the stored paired
+ inverse. The conclusion is pointwise in unrestricted B. -/
+@@ -184,10 +183,8 @@
+     BinaryMatrix n s ≃ BinaryMatrix n s where
+   toFun B := B - T
+   invFun B := B + T
+-  left_inv B := by ext i j <;> simp [sub_eq_add_neg, add_assoc, add_left_comm,
+-    add_comm]
+-  right_inv B := by ext i j <;> simp [sub_eq_add_neg, add_assoc, add_left_comm,
+-    add_comm]
++  left_inv B := sub_add_cancel B T
++  right_inv B := add_sub_cancel_right B T
+ 
+ /-- For each fixed paired inverse, the append average equals the independent
+ unrestricted-B conditional Phi average at the bottom rows of its inverse.
+@@ -233,16 +230,11 @@
+       ∑ b : B, ∑ a : A, g a b := by
+     rw [Fintype.sum_prod_type]
+     exact Finset.sum_comm
+-  have hA : (Fintype.card A : Real) ≠ 0 := by
+-    exact_mod_cast (Fintype.card_ne_zero : Fintype.card A ≠ 0)
+-  have hB : (Fintype.card B : Real) ≠ 0 := by
+-    exact_mod_cast (Fintype.card_ne_zero : Fintype.card B ≠ 0)
+   have hsumDiv :
+       (∑ b : B, (∑ a : A, g a b) / (Fintype.card A : Real)) =
+         (∑ b : B, ∑ a : A, g a b) / (Fintype.card A : Real) := by
+     rw [Finset.sum_div]
+-  rw [hsum, Fintype.card_prod, hsumDiv]
+-  field_simp
++  rw [hsum, Fintype.card_prod, Nat.cast_mul, hsumDiv, div_div]
+ 
+ /-- The same normalized product law with the opposite nesting order. -/
+ theorem normalized_product_mean_first {A B : Type*} [Fintype A] [Fintype B]
+@@ -265,17 +257,17 @@
+ theorem phiAverage_eq_rowConditionalMean {n c s : Nat}
+     (F : BinaryMatrix n (c + s) → Real) (M : BinaryMatrix n (c + s)) :
+     phiAverage (s := s) F M =
+-      (∑ C : FullRowFrame s (c + s),
++      (∑ C : ExactAppendOperatorContracts.FullRowFrame s (c + s),
+         BinaryMatrixFourier.uniformMean (fun B : BinaryMatrix n s =>
+           F (M + B * C.1))) /
+-        (Fintype.card (FullRowFrame s (c + s)) : Real) := by
+-  classical
+-  letI : Nonempty (FullRowFrame s (c + s)) :=
++        (Fintype.card (ExactAppendOperatorContracts.FullRowFrame s (c + s)) : Real) := by
++  classical
++  haveI : Nonempty (ExactAppendOperatorContracts.FullRowFrame s (c + s)) :=
+     ⟨⟨bottomRowsMatrix c s, bottomRowsMap_surjective c s⟩⟩
+   unfold phiAverage BinaryMatrixFourier.uniformMean
+   simpa [BinaryMatrixFourier.uniformMean] using
+     (normalized_product_mean
+-      (fun B : BinaryMatrix n s => fun C : FullRowFrame s (c + s) =>
++      (fun B : BinaryMatrix n s => fun C : ExactAppendOperatorContracts.FullRowFrame s (c + s) =>
+         F (M + B * C.1)))
+ 
+ /-- Candidate exact G(TF)=Phi(F) theorem on the actual finite frame carriers.
+@@ -292,7 +284,7 @@
+       {R : BinaryMatrix (c + s) c //
+         Function.Injective (Matrix.toLin' R)} → Real :=
+     fun R => appendAverage F (M * R.1)
+-  let gRow : FullRowFrame s (c + s) → Real := fun C =>
++  let gRow : ExactAppendOperatorContracts.FullRowFrame s (c + s) → Real := fun C =>
+     BinaryMatrixFourier.uniformMean (fun B : BinaryMatrix n s =>
+       F (M + B * C.1))
+   have hcolumn :=
+@@ -348,8 +340,8 @@
+     _ = (∑ p : InversePair (c + s), gRow
+           (RectangularGLSelectedRows.bottomInverseRowsMap p)) /
+           (Fintype.card (InversePair (c + s)) : Real) := hconditional
+-    _ = (∑ C : FullRowFrame s (c + s), gRow C) /
+-          (Fintype.card (FullRowFrame s (c + s)) : Real) := by
++    _ = (∑ C : ExactAppendOperatorContracts.FullRowFrame s (c + s), gRow C) /
++          (Fintype.card (ExactAppendOperatorContracts.FullRowFrame s (c + s)) : Real) := by
+           simpa [gRow] using hbottom
+     _ = phiAverage (s := s) F M := hphi.symm
+ 
