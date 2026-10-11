@@ -1,0 +1,12 @@
+import PvNP.RealizableHardness.ActualRefreshProgress
+
+#check PvNP.RealizableHardness.ActualRefreshProgress.zoomFinset
+#check PvNP.RealizableHardness.ActualRefreshProgress.zoomFinsetEquiv
+#check PvNP.RealizableHardness.ActualRefreshProgress.agreeingZoomFinsetEquiv
+#print axioms PvNP.RealizableHardness.ActualRefreshProgress.zoom_card_eq_finset
+#print axioms PvNP.RealizableHardness.ActualRefreshProgress.agreesOn_iff_target_eq
+#print axioms PvNP.RealizableHardness.ActualRefreshProgress.agreeingZoom_card_eq_matchCount
+#print axioms PvNP.RealizableHardness.ActualRefreshProgress.agreement_cast_eq_matchCount_ratio
+#print axioms PvNP.RealizableHardness.ActualRefreshProgress.matchCount_refresh_partition
+#print axioms PvNP.RealizableHardness.ActualRefreshProgress.matchCount_mono
+#print axioms PvNP.RealizableHardness.ActualRefreshProgress.refreshed_inverse_original_agreement_and_growth

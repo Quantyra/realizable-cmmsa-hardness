@@ -1,0 +1,108 @@
+--- Full115
++++ Full116
+@@ -115,11 +115,27 @@
+   · intro w
+     apply Subtype.ext
+     apply Subtype.ext
+-    ext <;> simp [Matrix.mul_assoc, hTS, hST]
++    apply Prod.ext
++    · calc
++        (w.1.1.1 * T) * S = w.1.1.1 * (T * S) := by rw [Matrix.mul_assoc]
++        _ = w.1.1.1 * 1 := by rw [hTS]
++        _ = w.1.1.1 := by simp
++    · calc
++        T * (S * w.1.1.2) = (T * S) * w.1.1.2 := by rw [← Matrix.mul_assoc]
++        _ = 1 * w.1.1.2 := by rw [hTS]
++        _ = w.1.1.2 := by simp
+   · intro w
+     apply Subtype.ext
+     apply Subtype.ext
+-    ext <;> simp [Matrix.mul_assoc, hTS, hST]
++    apply Prod.ext
++    · calc
++        (w.1.1.1 * S) * T = w.1.1.1 * (S * T) := by rw [Matrix.mul_assoc]
++        _ = w.1.1.1 * 1 := by rw [hST]
++        _ = w.1.1.1 := by simp
++    · calc
++        S * (T * w.1.1.2) = (S * T) * w.1.1.2 := by rw [← Matrix.mul_assoc]
++        _ = 1 * w.1.1.2 := by rw [hST]
++        _ = w.1.1.2 := by simp
+ 
+ noncomputable def selectedFiber_equiv {k d : Nat}
+     (P X Y : BinaryMatrix k d)
+@@ -145,6 +161,26 @@
+   right_inv w := by
+     apply Subtype.ext
+     rfl
++
++private noncomputable def selectedMap_fiber_equiv {k d : Nat}
++    (P : BinaryMatrix k d) (hP : Function.Surjective (Matrix.toLin' P))
++    (X Y : FullRowFrame k d) :
++    RectangularFrameFiberAverage.Fiber (selectedRowsMap P hP) X ≃
++      RectangularFrameFiberAverage.Fiber (selectedRowsMap P hP) Y := by
++  let hX : RectangularFrameFiberAverage.Fiber (selectedRowsMap P hP) X ≃
++      SelectedFiber P X.1 := selectedMapFiberEquiv P hP X
++  let hXY : SelectedFiber P X.1 ≃ SelectedFiber P Y.1 :=
++    selectedFiber_equiv P X.1 Y.1 X.2 Y.2
++  let hY : RectangularFrameFiberAverage.Fiber (selectedRowsMap P hP) Y ≃
++      SelectedFiber P Y.1 := selectedMapFiberEquiv P hP Y
++  exact hX.trans (hXY.trans hY.symm)
++
++private theorem selectedMap_fiber_card_eq {k d : Nat}
++    (P : BinaryMatrix k d) (hP : Function.Surjective (Matrix.toLin' P))
++    (X Y : FullRowFrame k d) :
++    Fintype.card (RectangularFrameFiberAverage.Fiber (selectedRowsMap P hP) X) =
++      Fintype.card (RectangularFrameFiberAverage.Fiber (selectedRowsMap P hP) Y) := by
++  exact Fintype.card_congr (selectedMap_fiber_equiv P hP X Y)
+ 
+ /-- The normalized selected-row marginal for every surjective selector P.
+ This specializes to first rows and to the bottom s rows without reindexing
+@@ -158,11 +194,8 @@
+       (∑ X : FullRowFrame k d, g X) /
+         (Fintype.card (FullRowFrame k d) : Real) := by
+   classical
+-  letI : Fintype (InversePair d) := Fintype.ofFinite _
+-  letI : Fintype (FullRowFrame k d) := Fintype.ofFinite _
+-  let f := selectedRowsMap P hP
++  let f : InversePair d → FullRowFrame k d := selectedRowsMap P hP
+   let X₀ : FullRowFrame k d := ⟨P, hP⟩
+-  letI : Nonempty (FullRowFrame k d) := ⟨X₀⟩
+   let k₀ := Fintype.card (RectangularFrameFiberAverage.Fiber f X₀)
+   have hf : Function.Surjective f := selectedRowsMap_surjective P hP
+   have hbase : Nonempty (RectangularFrameFiberAverage.Fiber f X₀) := by
+@@ -171,16 +204,28 @@
+   have hk₀ : 0 < k₀ := by
+     change 0 < Fintype.card (RectangularFrameFiberAverage.Fiber f X₀)
+     exact Fintype.card_pos_iff.mpr hbase
++  let hNonempty : Nonempty (FullRowFrame k d) := ⟨X₀⟩
+   have hcard : ∀ X : FullRowFrame k d,
+       Fintype.card (RectangularFrameFiberAverage.Fiber f X) = k₀ := by
+     intro X
+-    let e := (selectedMapFiberEquiv P hP X).trans
+-      ((selectedFiber_equiv P X.1 X₀.1 X.2 X₀.2).trans
+-        (selectedMapFiberEquiv P hP X₀).symm)
+-    simpa [k₀, f] using Fintype.card_congr e
+-  simpa [f] using
+-    (RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers
+-      f k₀ hk₀ hcard g)
++    change Fintype.card (RectangularFrameFiberAverage.Fiber (selectedRowsMap P hP) X) =
++      Fintype.card (RectangularFrameFiberAverage.Fiber (selectedRowsMap P hP) X₀)
++    exact selectedMap_fiber_card_eq P hP X X₀
++  have hcardNat : ∀ X : FullRowFrame k d,
++      Nat.card (RectangularFrameFiberAverage.Fiber f X) = k₀ := by
++    intro X
++    simpa only [← Nat.card_eq_fintype_card] using hcard X
++  have hmap :
++      (∑ U : InversePair d, g (f U)) / (Fintype.card (InversePair d) : Real) =
++        (∑ X : FullRowFrame k d, g X) / (Fintype.card (FullRowFrame k d) : Real) :=
++    @RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers
++      (InversePair d) (FullRowFrame k d)
++      inferInstance inferInstance hNonempty f k₀ hk₀
++      (by
++        intro X
++        simpa only [← Nat.card_eq_fintype_card] using hcardNat X)
++      g
++  exact hmap
+ 
+ /-- Direct bottom-s-row selector. -/
+ def bottomRowsMap (c s : Nat) :
