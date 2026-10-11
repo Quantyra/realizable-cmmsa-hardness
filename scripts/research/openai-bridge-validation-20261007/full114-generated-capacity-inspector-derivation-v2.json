@@ -1,0 +1,21 @@
+{
+  "source": "inspect_full114_generated_cache_capacity_v1.py",
+  "source_sha256": "1764A7583C26EF09D9B1C28D097B796E95184DB6E45E65D064285208F78A98D9",
+  "target": "inspect_full114_generated_cache_capacity_v2.py",
+  "target_sha256": "59AEE613D5B0AC7A7DFCF0F40F0CEA55D2C53E9A997A88F81BEDE837E861A0F6",
+  "exact_replacement": {
+    "old": "    with Session(folder / 'transport') as session:\n        result = json.loads(session.python(guest).read_bytes())\n        (folder / 'inspection.json').open('x').write(json.dumps(result, indent=2) + '\\n')\n        print(json.dumps(dict(folder=str(folder), inspection=result)), flush=True)",
+    "new": "    scopes = []\n    for number in (106, 107, 108, 113):\n        root, = [p for p in ROOT.parent.glob('full'+str(number)+'-*') if (p/'launch-once.json').is_file()]\n        marker = json.loads((root/'launch-once.json').read_bytes())\n        scopes.append(dict(number=number,run=marker['run'],manifest_sha256=__import__('hashlib').sha256((root/'capture-manifest.json').read_bytes()).hexdigest().upper()))\n    results = []\n    with Session(folder / 'transport') as session:\n        for scope in scopes:\n            exact = guest.replace('cmmsa_a8_output_20261011T060110Z_204d10cd',scope['run']).replace('46D726F1F8D4A1784B5EE4FF6ED6E02AF0EA183AD959A984C525B7F361821A2B',scope['manifest_sha256'])\n            result = json.loads(session.python(exact).read_bytes())\n            results.append(dict(**scope,inspection=result))\n            (folder / ('inspection-'+str(scope['number'])+'.json')).open('x').write(json.dumps(results[-1],indent=2)+'\\n')\n            print(json.dumps(dict(number=scope['number'],groups=result['groups'],disk_available_bytes=result['disk_available_bytes'])),flush=True)\n    (folder/'inspection.json').open('x').write(json.dumps(dict(scopes=results,read_only=True,compiler_invoked=False),indent=2)+'\\n')\n"
+  },
+  "path_label_change": [
+    "generated-capacity-inspections-v1",
+    "generated-capacity-inspections-v2"
+  ],
+  "scope": [
+    106,
+    107,
+    108,
+    113
+  ],
+  "read_only": true
+}

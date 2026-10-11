@@ -1,0 +1,64 @@
+{
+  "source": "derive_full113_cache_recovery_v1.py",
+  "source_sha256": "E360B93B95CEE0A5F8D4AE6698384847D443C8162A3FDCBC285520740EACA7ED",
+  "target": "derive_full114_cache_recovery_v1.py",
+  "target_sha256": "BD2B0409132EE76AB6AFFE763648DEDCC931776FE66823AB09BE39ABDBF70767",
+  "exact_replacements": [
+    {
+      "old": "full113-exact-real-complex-operators-repair3",
+      "new": "full114-exact-real-complex-operators-repair4",
+      "occurrences": 2
+    },
+    {
+      "old": "full113",
+      "new": "full114",
+      "occurrences": 5
+    },
+    {
+      "old": "Full113",
+      "new": "Full114",
+      "occurrences": 1
+    },
+    {
+      "old": "from full112_builder02_controller import ROOT, VM_ID",
+      "new": "from full113_builder02_controller import ROOT, VM_ID",
+      "occurrences": 1
+    },
+    {
+      "old": "20261011T054358477798Z",
+      "new": "20261011T062835769375Z",
+      "occurrences": 1
+    },
+    {
+      "old": "selected = [(112, 112, 'lean-large', 5 * 1024**3), ('112_small', 112, 'lean-small', 384 * 1024**2)]",
+      "new": "selected = [(113, 113, 'lean-large', 5 * 1024**3), ('113_small', 113, 'lean-small', 384 * 1024**2)]",
+      "occurrences": 1
+    },
+    {
+      "old": "for n in (109, 110, 111, 112)",
+      "new": "for n in (106, 107, 108, 113)",
+      "occurrences": 1
+    },
+    {
+      "old": "replace('Original Full111 native terminal drift', 'Original Full112 native terminal drift')",
+      "new": "replace('Original Full111 native terminal drift', 'Original Full113 native terminal drift')",
+      "occurrences": 1
+    },
+    {
+      "old": "\"'full111_verify.py', 'full112_verify.py', 'full114_verify.py'\"",
+      "new": "\"'full111_verify.py', 'full112_verify.py', 'full113_verify.py', 'full114_verify.py'\"",
+      "occurrences": 1
+    },
+    {
+      "old": "    scopes = []\n",
+      "new": "    actual_capacity, = (ROOT.parent / 'full114-exact-real-complex-operators-repair4-resource02/generated-capacity-inspections-v2').glob('*/inspection.json')\n    actual = json.loads(actual_capacity.read_bytes())\n    assert actual['read_only'] and not actual['compiler_invoked']\n    assert [row['number'] for row in actual['scopes']] == [106, 107, 108, 113]\n    assert all(sum(g['allocated_bytes'] for g in row['inspection']['groups'].values()) >= 1200 * 1024**2 for row in actual['scopes'])\n    scopes = []\n",
+      "occurrences": 1
+    },
+    {
+      "old": "older_generated_capacity_is_inference_from_same_warm_copy_and_requires_actual_plan_hashes=True,",
+      "new": "all_generated_scopes_have_actual_read_only_capacity_observation=True,\n        all_scope_capacity_observation=str(actual_capacity), all_scope_capacity_sha256=digest(actual_capacity),\n        actual_plan_content_hashes_still_required=True,",
+      "occurrences": 1
+    }
+  ],
+  "compiler_invoked": false
+}
