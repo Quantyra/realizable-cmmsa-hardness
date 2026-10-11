@@ -1,0 +1,100 @@
+{
+  "offer": "full115-rectangular-gl-repair-v2",
+  "status": "uncompiled source offer; root-owned compiler and custody",
+  "input": {
+    "diagnostic_packet": "full114-native-diagnostic-packet-v1",
+    "diagnostic_packet_index_sha256": "88B4D5C260CC78504DC33E717A18B3794FB02CC1DE5ADE1DCB28AEC4B5F85EF3",
+    "input_source": {
+      "bytes": 18136,
+      "sha256": "9409767AA9F0C6BC736B06CA73EF9D7B080A27EF96F6BAF4E41DA5019E7CD0C1"
+    },
+    "input_checks": {
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    },
+    "full114_input_archive": {
+      "path": "C:\\Users\\dfred\\.quantyra\\builder02\\full114-exact-real-complex-operators-repair4-resource02\\input-archive.tar.gz",
+      "sha256": "70FC4654130BA2BD9D1FFC79EA015F511E9BC7E4297D5D2DB6F62E42DC38CA04"
+    },
+    "diagnostic": "Full114 source error at RectangularGLRowCompletion.lean:282:51: hcard has a Fintype instance mismatch at uniformMean_map_of_equipotent_fibers."
+  },
+  "source": {
+    "file": "RectangularGLRowCompletion.lean",
+    "bytes": 18418,
+    "sha256": "9510001E77BC9DBE0E5F10A2562E39AF79540C3507AF3EB5D26FC9309D908A17"
+  },
+  "checks": {
+    "file": "RectangularGLRowCompletionChecks.lean",
+    "bytes": 1822,
+    "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB",
+    "unchanged_from_input": true
+  },
+  "project_dependencies": {
+    "lean/PvNP/RealizableHardness/BinaryMatrixRightOrbit.lean": {
+      "bytes": 2521,
+      "sha256": "409FD652E1F051E92688466EAC57BD6B85AF93866D5F5D4C9AA0152AB25286B0"
+    },
+    "lean/PvNP/RealizableHardness/RectangularFrameFiberAverage.lean": {
+      "bytes": 4413,
+      "sha256": "F1DBDBF44468D72573F2B15FACFFD3435A700B5AAB98362E2B70F217777C9B8F"
+    },
+    "lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean": {
+      "bytes": 8251,
+      "sha256": "BA136FC5CA364B14F76447954F47EDE670930B042F1EA8276A11675B50C76C2F"
+    }
+  },
+  "external_dependencies": [
+    {
+      "artifact": "Full114 package-sources.tar.gz",
+      "sha256": "494F97020D23F28340A2FC74049646C06BF07DF5E62EBA4FC4672C7704AB512D"
+    },
+    {
+      "module": "Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Card",
+      "bytes": 4219,
+      "sha256": "AC31F64E47BA76F80C1C9BAB4E58645175A13C23C9175449C41ACD22B1E44F1F"
+    }
+  ],
+  "change_boundary": {
+    "imports_unchanged": true,
+    "existing_declaration_headers_unchanged": true,
+    "checks_unchanged": true,
+    "heartbeat_cap": "unchanged local maxHeartbeats 400000",
+    "only_proof_change": "retain hcardNat and pass the Nat.card-to-Fintype.card conversion inline at the uniformMean_map_of_equipotent_fibers argument; remove the separately annotated hcardExpected declaration"
+  },
+  "validation": {
+    "utf8": "pass",
+    "bom": "absent",
+    "new_question_mark_glyphs": "none",
+    "lexical_lean_preflight": "passed via lean_source_static_preflight_v2.inspect_bytes for source and Checks; no Lean parser/compiler invoked",
+    "compiled": false,
+    "gcp": false,
+    "git": false
+  },
+  "claims_boundary": [
+    "No Lean acceptance or certification is claimed.",
+    "No public theorem statement, import, premise, or Checks profile changed.",
+    "The original Full114 failure and every prior offer remain preserved."
+  ],
+  "offered_files": {
+    "RectangularGLRowCompletion.lean": {
+      "file": "RectangularGLRowCompletion.lean",
+      "bytes": 18418,
+      "sha256": "9510001E77BC9DBE0E5F10A2562E39AF79540C3507AF3EB5D26FC9309D908A17"
+    },
+    "RectangularGLRowCompletionChecks.lean": {
+      "file": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    },
+    "PROOF-AND-API-MAP.md": {
+      "file": "PROOF-AND-API-MAP.md",
+      "bytes": 3996,
+      "sha256": "CEF2BEB7C6D5853AFF25D1B9D875D1B4D28510270CFB970C7B315397B9AAFDDA"
+    }
+  },
+  "parent_immutable_offer": {
+    "offer": "full115-rectangular-gl-repair-v1",
+    "capture_index_sha256": "40EE121FC808F3BF829733FC2A108C43BCD3C7D46FDF6CF88EF87159B4474E95",
+    "source_sha256": "32490329F5E11E19F7EC26D64A09143BCABE15836156B4656E2422382C0462E7"
+  }
+}

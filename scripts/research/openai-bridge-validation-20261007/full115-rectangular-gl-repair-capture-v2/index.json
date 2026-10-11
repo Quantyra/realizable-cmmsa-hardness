@@ -1,0 +1,65 @@
+{
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full115-rectangular-gl-repair-v2\\manifest.json",
+      "copy": "manifest.json",
+      "bytes": 4167,
+      "sha256": "2BED011B1A7C220466C224DEB667EE8836CBFD67B468396C86BDB136874C6E84"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full115-rectangular-gl-repair-v2\\PROOF-AND-API-MAP.md",
+      "copy": "PROOF-AND-API-MAP.md",
+      "bytes": 3996,
+      "sha256": "CEF2BEB7C6D5853AFF25D1B9D875D1B4D28510270CFB970C7B315397B9AAFDDA"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full115-rectangular-gl-repair-v2\\RectangularGLRowCompletion.lean",
+      "copy": "RectangularGLRowCompletion.lean",
+      "bytes": 18418,
+      "sha256": "9510001E77BC9DBE0E5F10A2562E39AF79540C3507AF3EB5D26FC9309D908A17"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full115-rectangular-gl-repair-v2\\RectangularGLRowCompletionChecks.lean",
+      "copy": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    }
+  ],
+  "source": "lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean",
+  "old_sha256": "9409767AA9F0C6BC736B06CA73EF9D7B080A27EF96F6BAF4E41DA5019E7CD0C1",
+  "new_sha256": "9510001E77BC9DBE0E5F10A2562E39AF79540C3507AF3EB5D26FC9309D908A17",
+  "parent_run": "cmmsa_a8_output_20261011T070000Z_135b1f28",
+  "parent_native_archive_sha256": "F94CD8899B40E42802B5294EF4EFD0189F9584EBE8E1FAEABCC5826FED8A56A3",
+  "exact_diff": "--- \n+++ \n@@ -272,6 +272,10 @@\n     change Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X) =\n       Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀)\n     exact rowPrefix_fiber_card_eq X X₀\n+  have hcardNat : ∀ X : FullRowFrame c (c + s),\n+      Nat.card (RectangularFrameFiberAverage.Fiber f X) = k := by\n+    intro X\n+    simpa only [← Nat.card_eq_fintype_card] using hcard X\n   have hmap :\n       (∑ p : InversePair (c + s), g (f p)) /\n           (Fintype.card (InversePair (c + s)) : Real) =\n@@ -279,7 +283,11 @@\n           (Fintype.card (FullRowFrame c (c + s)) : Real) :=\n     @RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers\n       (InversePair (c + s)) (FullRowFrame c (c + s))\n-      inferInstance inferInstance hNonempty f k hk hcard g\n+      inferInstance inferInstance hNonempty f k hk\n+      (by\n+        intro X\n+        simpa only [← Nat.card_eq_fintype_card] using hcardNat X)\n+      g\n   exact hmap\n \n /-- Injective column maps become surjective row maps after transpose. The\n",
+  "lexical_preflight": [
+    {
+      "path": "RectangularGLRowCompletion.lean",
+      "bytes": 18418,
+      "sha256": "9510001E77BC9DBE0E5F10A2562E39AF79540C3507AF3EB5D26FC9309D908A17",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "existing_statements_imports_checks_and_options_preserved": true,
+  "actual_project_and_mathlib_dependency_pins_verified": true,
+  "nat_card_api": {
+    "member": ".lake/packages/mathlib/Mathlib/SetTheory/Cardinal/Finite.lean",
+    "bytes": 16890,
+    "sha256": "B113177C5ED00662C73A8F3B04002B399C19F0D008920E52C1A6B6C7F16713BF"
+  },
+  "root_read_complete_diff_map_and_manifest": true,
+  "review_concern_resolved": "The conversion is now inline under the actual consumer argument expected type; native verification remains required.",
+  "metadata_errata": "None identified in this successor.",
+  "capture_control_sha256": "0EACD70D0A04AF377103479D48E39A3A44D27CDD13C036FE7DA105BB7DA6BEBD",
+  "compiler_invoked": false,
+  "accepted": false
+}

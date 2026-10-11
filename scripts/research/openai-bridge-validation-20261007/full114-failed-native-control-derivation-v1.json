@@ -1,0 +1,80 @@
+{
+  "source": "preserve_full113_failed_native_v1.py",
+  "source_sha256": "65C937E3AE7BB6C5BFE78BE0B10DFBDD95422F716012C8392FDF88C39B43C202",
+  "target": "preserve_full114_failed_native_v1.py",
+  "target_sha256": "6E1BD850B990E83B542560B9B9F0C7551608488F7F3076C77AE597F168B8E7EE",
+  "exact_replacements": [
+    {
+      "before": "from full113_builder02_controller",
+      "after": "from full114_builder02_controller",
+      "count": 1
+    },
+    {
+      "before": "WRAPPERS = [('20261011T060019892159Z-a518445d3c4b', 6268, 1),\n            ('20261011T061051861325Z-a8d7a017437e', 54737, 0),\n            ('20261011T061411319847Z-854fe75794fd', 14717, 1)]",
+      "after": "WRAPPERS = [('20261011T065854166238Z-8cecfbdd4661', 50327, 1),\n            ('20261011T070935848425Z-938618016202', 7602, 0),\n            ('20261011T071559885294Z-5e558ead0c97', 67155, 1),\n            ('20261011T065506658900Z-d2b8df53deed', 56798, 0)]",
+      "count": 1
+    },
+    {
+      "before": "def main():",
+      "after": "def main(inventory_only=False):",
+      "count": 1
+    },
+    {
+      "before": "cmmsa_a8_output_20261011T060110Z_204d10cd",
+      "after": "cmmsa_a8_output_20261011T070000Z_135b1f28",
+      "count": 1
+    },
+    {
+      "before": "60ED6FF40DAE28268D1C52EF5ECD78B354BA3E8FE347E5AFF14986C53BE36213",
+      "after": "F94CD8899B40E42802B5294EF4EFD0189F9584EBE8E1FAEABCC5826FED8A56A3",
+      "count": 1
+    },
+    {
+      "before": "native['owned_error_headers'] == 2 and native['owned_warning_headers'] == [0, 0, 0, 0, 1, 0, 0]",
+      "after": "native['owned_error_headers'] == 1 and native['owned_warning_headers'] == [0] * 7",
+      "count": 1
+    },
+    {
+      "before": "if handle == 14717:",
+      "after": "if handle == 67155:",
+      "count": 1
+    },
+    {
+      "before": "    total = sum(p.stat().st_size for p in paths)",
+      "after": "    idle = ROOT.parent / 'full113-exact-real-complex-operators-repair3-resource02/settled-cache-recovery-v1/idle-refresh-controls/20261011T065508310777Z'\n    assert json.loads((idle/'idle-refreshed.json').read_bytes())['idle_timer_active']\n    for command in json.loads((idle/'transport/commands.json').read_bytes()):\n        assert command['native_exit'] == 0\n        for stream in ('stdout', 'stderr'):\n            assert digest(Path(command[stream+'_path'])) == command[stream+'_sha256']\n    paths.update(p for p in idle.rglob('*') if p.is_file())\n    total = sum(p.stat().st_size for p in paths)\n    if inventory_only:\n        out = HERE/'full114-failed-native-readiness-v1'\n        out.mkdir(exist_ok=False)\n        (out/'.gitattributes').write_text('* -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol\\n')\n        (out/'control.snapshot.py').write_bytes(Path(__file__).read_bytes())\n        rows = [dict(original=str(p), bytes=p.stat().st_size, sha256=digest(p)) for p in sorted(paths)]\n        result = dict(files=rows, run=marker['run'], native_archive_sha256=custody['remote_sha256'],\n            original_handles=dict(native=50327, stop=7602, audit=67155, idle=56798),\n            original_exits=dict(native=1, stop=0, audit=1, idle=0), native_report=native,\n            independent_termination=stop['independent'], total_logical_bytes=total,\n            free_bytes=shutil.disk_usage(HERE).free, reserve_bytes=1536*1024**2,\n            archive_created=False, complete_portable_custody=False, all_originals_retained=True,\n            cleanup_authorization_received=False, files_deleted=False, compiler_invoked=False)\n        (out/'index.json').open('x').write(json.dumps(result,indent=2)+'\\n')\n        print(json.dumps(dict(folder=str(out), originals=len(rows), total_logical_bytes=total,\n            free_bytes=result['free_bytes'], archive_created=False)),flush=True)\n        return",
+      "count": 1
+    },
+    {
+      "before": "full113-resume-failed-native-v1",
+      "after": "full114-resume-failed-native-v1",
+      "count": 1
+    },
+    {
+      "before": "full113-complete-failed-native-stop-red-audit-custody-v1",
+      "after": "full114-complete-failed-native-stop-red-audit-custody-v1",
+      "count": 1
+    },
+    {
+      "before": "original_handles=dict(native=6268, stop=54737, audit=14717)",
+      "after": "original_handles=dict(native=50327, stop=7602, audit=67155, idle=56798)",
+      "count": 1
+    },
+    {
+      "before": "original_exits=dict(native=1, stop=0, audit=1)",
+      "after": "original_exits=dict(native=1, stop=0, audit=1, idle=0)",
+      "count": 1
+    },
+    {
+      "before": "All four complete original Full113 observations and transport streams are included here",
+      "after": "All three complete original Full114 observations and additional settled idle refresh transport streams are included here",
+      "count": 1
+    },
+    {
+      "before": "62e50da3:full113-native-diagnostic-packet-v1",
+      "after": "e0b53e9b:full114-native-diagnostic-packet-v1",
+      "count": 1
+    }
+  ],
+  "reserve_gate_unchanged": true,
+  "inventory_mode_does_not_claim_complete_custody": true
+}
