@@ -1,0 +1,23 @@
+import PvNP.RealizableHardness.ExactComplexAppendContinuation
+
+open PvNP.RealizableHardness.ExactComplexAppendContinuation
+
+#check complexFiniteMean
+#check complexFiniteMean_re
+#check complexFiniteMean_im
+#check complexFourierCoeff
+#check complexFourierCoeff_re
+#check complexFourierCoeff_im
+#check complexRankProjection
+#check complexRankProjection_re
+#check complexRankProjection_im
+#check complexAppendAverage
+#check complexAppendAverage_re
+#check complexAppendAverage_im
+#check complexRightInvariant_iff_components
+#check uniformMean_normSq_components
+#check complexAppend_rankProjection_energy_eq_product
+#check complexPhiAverage
+#check complexPhiAverage_re
+#check complexPhiAverage_im
+#check complexPhi_rankProjection_eigen

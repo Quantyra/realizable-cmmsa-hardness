@@ -1,0 +1,125 @@
+{
+  "original_directory": "exact-complex-append-candidate-v2",
+  "files": [
+    {
+      "path": "ExactComplexAppendContinuation.lean",
+      "bytes": 11511,
+      "sha256": "77E42370FD7B2DDD672A0AB43C85FC2322792CC3D2C6C3E788166FA76A7380F6"
+    },
+    {
+      "path": "Checks.lean",
+      "bytes": 730,
+      "sha256": "787B05754F21F65CB4C2597EFECB2F34489DB71DF1D14770552D1B6300A46C21"
+    },
+    {
+      "path": "argument-api-map.md",
+      "bytes": 4904,
+      "sha256": "65045EC4E70889FF7DD14C33066338680B53463DBFDFC2971BFC615849EEAD72"
+    },
+    {
+      "path": "offer-manifest.json",
+      "bytes": 797,
+      "sha256": "C24F0338B2C48BDF870F193C342021CCC297F601201904696F52C3C81EB8C595"
+    }
+  ],
+  "immutable_capture_acknowledged": true,
+  "root_read_complete_offer": true,
+  "previous_lexical_preflight": [
+    {
+      "path": "ExactComplexAppendContinuation.lean",
+      "bytes": 11511,
+      "sha256": "77E42370FD7B2DDD672A0AB43C85FC2322792CC3D2C6C3E788166FA76A7380F6",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false
+    },
+    {
+      "path": "Checks.lean",
+      "bytes": 730,
+      "sha256": "787B05754F21F65CB4C2597EFECB2F34489DB71DF1D14770552D1B6300A46C21",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false
+    }
+  ],
+  "previous_preflight_did_not_detect_ascii_question_mark_glyph_loss": true,
+  "actual_question_mark_source_lines": [
+    {
+      "line": 136,
+      "text": "    (F : BinaryMatrix n d ? Complex) :"
+    },
+    {
+      "line": 137,
+      "text": "    (? (M : BinaryMatrix n d) (U V : BinaryMatrix d d),"
+    },
+    {
+      "line": 138,
+      "text": "      U * V = 1 ? V * U = 1 ? F (M * U) = F M) ?"
+    },
+    {
+      "line": 139,
+      "text": "      RightInvariant (fun M => (F M).re) ?"
+    },
+    {
+      "line": 142,
+      "text": "  ? intro h"
+    },
+    {
+      "line": 144,
+      "text": "    ? exact congrArg Complex.re (h M U V hUV hVU)"
+    },
+    {
+      "line": 145,
+      "text": "    ? exact congrArg Complex.im (h M U V hUV hVU)"
+    },
+    {
+      "line": 146,
+      "text": "  ? rintro ?hRe, hIm? M U V hUV hVU"
+    },
+    {
+      "line": 192,
+      "text": "    {n c s i : Nat} (hi : i ? c + s)"
+    },
+    {
+      "line": 193,
+      "text": "    (F : BinaryMatrix n (c + s) ? Complex)"
+    },
+    {
+      "line": 194,
+      "text": "    (basisInv : ? (M : BinaryMatrix n (c + s))"
+    },
+    {
+      "line": 196,
+      "text": "      U * V = 1 ? V * U = 1 ? F (M * U) = F M) :"
+    },
+    {
+      "line": 199,
+      "text": "      (? j : Fin s,"
+    },
+    {
+      "line": 204,
+      "text": "  have hInvRe : ? (M : BinaryMatrix n (c + s))"
+    },
+    {
+      "line": 206,
+      "text": "      U * V = 1 ? V * U = 1 ?"
+    },
+    {
+      "line": 210,
+      "text": "  have hInvIm : ? (M : BinaryMatrix n (c + s))"
+    },
+    {
+      "line": 212,
+      "text": "      U * V = 1 ? V * U = 1 ?"
+    }
+  ],
+  "launch_admission": false,
+  "lean_executed": false,
+  "accepted": false,
+  "root_static_findings": [
+    "Literal ASCII question marks replaced arrows, quantifiers, logical connectives, product notation, inequalities and tactic bullets in 17 source lines.",
+    "Rank-projection component proofs rewrite coefficient re/im while still inside an unexpanded complex product.",
+    "Pointwise transport inside append/Phi function arguments requires binder-aware simplification.",
+    "Main energy proof requests component rewrites after hRight has already eliminated those occurrences.",
+    "Checks uses only #check; public source declarations need fresh axiom profiles in the eventual harness."
+  ],
+  "successor_must_be_separate": true
+}
