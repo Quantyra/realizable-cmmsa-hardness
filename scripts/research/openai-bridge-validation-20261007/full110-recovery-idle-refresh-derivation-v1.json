@@ -1,0 +1,47 @@
+{
+  "records": [
+    {
+      "source": "refresh_full109_trace_staging_idle_v1.py",
+      "source_sha256": "A4EFDD0739F69AFE3794E31092A55A5A6E821D1708DB27EB347510974CAD6146",
+      "target": "refresh_full110_recovery_idle_v1.py",
+      "target_sha256": "018D37706FB74F5CC69C0DDA4727C067B9D463F84A13E1A4BF8A6FADE14C8884",
+      "exact_replacements": [
+        [
+          "from full109_builder02_controller import",
+          "from full110_builder02_controller import"
+        ],
+        [
+          "from full109_capture_gates import validate_successor",
+          "from run_full110_settled_cache_recovery_v1 import settled"
+        ],
+        [
+          "    validate_successor()",
+          "    settled()"
+        ],
+        [
+          "ROOT/'consumption-v3'/'launch-once.json'",
+          "ROOT.parent/'full111-exact-real-complex-operators-repair-resource02'/'launch-once.json'"
+        ],
+        [
+          "ROOT/'consumption-v3'/'idle-refresh-controls'",
+          "ROOT/'settled-cache-recovery-v1'/'idle-refresh-controls'"
+        ]
+      ]
+    },
+    {
+      "source": "run_full110_resume_step_v2.py",
+      "source_sha256": "1E61CE325428D02F4E12C7E28E998082352FCDFC064C78A8FC44241FC2F7B96F",
+      "target": "run_full110_resume_step_v3.py",
+      "target_sha256": "2B7278F36CD47DA0CBC79BE8B58569A18CB0F94C289C6023917DA0607E872E5B",
+      "exact_replacements": [
+        [
+          "ALLOWED = {'run_full110_settled_cache_recovery_v1.py'}",
+          "ALLOWED = {'refresh_full110_recovery_idle_v1.py'}"
+        ]
+      ]
+    }
+  ],
+  "idle_timer_remains_enabled": true,
+  "single_activity_refresh_only": true,
+  "compiler_or_new_resource_or_power_operation": false
+}

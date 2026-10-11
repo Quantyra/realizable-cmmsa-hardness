@@ -1,0 +1,37 @@
+{
+  "source": "stage_full111_builder02.py",
+  "source_sha256": "83C00C2C2B9F1288B79D91C3C3A3BCFBFDC43111D3FD96A66EE76D6CAACB6732",
+  "target": "stage_full111_after_recovery_v1.py",
+  "target_sha256": "03AD90F5DEC364E8DDC27113055A7745292F17093FA4C463FB3CE29E1BA47A98",
+  "removed_admission_block": "    if before['status'] != ('RUNNING' if resume else 'TERMINATED'):\n        raise RuntimeError('Dedicated VM already running or transitioning; inspect before new start')\n    if (ROOT/'launch-once.json').exists():\n        raise RuntimeError('Full90 attempt already exists; retain original handle')\n    if resume:\n        prior_paths = sorted(p for p in (ROOT/'staging-controls').glob('*/commands.json') if p.parent != folder)\n        if not prior_paths: raise RuntimeError('No preserved prior staging attempt')\n        prior = prior_paths[-1]\n        previous = json.loads(prior.read_bytes())\n        if previous[-1]['native_exit'] != 1 or previous[-1]['argv'][1:4] != ['compute','ssh',VM]:\n            raise RuntimeError('Original staging failure identity changed')\n        if not any(r['argv'][1:5] == ['compute','instances','start',VM] and r['native_exit'] == 0 for r in previous):\n            raise RuntimeError('Original dedicated start unproven')\n        cloud(['compute','ssh',VM,'--tunnel-through-iap',\n               '--command=set -e; test ! -e '+STAGE+'; test ! -e /home/dfredriksen_quantyra_org/'+ROOT.name+'-prepared; test ! -e /home/dfredriksen_quantyra_org/'+ROOT.name+'-launch-once.json'])\n    else:\n        cloud(['compute','instances','start',VM])\n",
+  "replacement_admission_block": "    if before['status'] != 'RUNNING':\n        raise RuntimeError('Audited recovery VM is not RUNNING; preserve state')\n    if (ROOT/'launch-once.json').exists():\n        raise RuntimeError('Full111 attempt already exists; retain original handle')\n    recovery = validate_local_audit()\n    if str(recovery['state']['id']) != VM_ID:\n        raise RuntimeError('Recovery lifecycle identity mismatch')\n    recovery_path = AUDIT / 'audit.json'\n    (folder/'recovery-admission.json').open('x', encoding='utf-8').write(json.dumps(dict(\n        audit=str(recovery_path), sha256=digest(recovery_path), existing_owned_lifecycle=True,\n        VM_start_performed=False, all_seven_recovery_scopes_verified=True), indent=2)+'\\n')\n    cloud(['compute','ssh',VM,'--tunnel-through-iap',\n           '--command=set -e; test ! -e '+STAGE+'; test ! -e /home/dfredriksen_quantyra_org/'+ROOT.name+'-prepared; test ! -e /home/dfredriksen_quantyra_org/'+ROOT.name+'-launch-once.json'])\n",
+  "exact_replacements": [
+    [
+      "from custody_checks import digest",
+      "from custody_checks import digest\nfrom audit_full110_settled_cache_recovery_v1 import AUDIT, validate_local_audit"
+    ],
+    [
+      "def main(resume=False):",
+      "def main():"
+    ],
+    [
+      "    if sys.argv[1:] not in ([], ['--resume-staging']):\n        raise SystemExit('Default staging or --resume-staging required')\n    main(sys.argv[1:] == ['--resume-staging'])",
+      "    if sys.argv[1:]:\n        raise SystemExit('Fresh staging on audited recovery lifecycle requires no arguments')\n    main()"
+    ],
+    [
+      "\"\"\"Authorized dedicated02 start/transport/preflight; no compiler invocation.\"\"\"",
+      "\"\"\"Fresh transport/preflight on audited recovery lifecycle; no start or compiler.\"\"\""
+    ]
+  ],
+  "wrapper_source": "run_full111_resume_step_v1.py",
+  "wrapper_source_sha256": "2650B063C1F903D27DDEA98C7F34E709990F5FE9ECE5D909AE9D83697E3EACF6",
+  "wrapper_target": "run_full111_resume_step_v2.py",
+  "wrapper_target_sha256": "2B03D50984A59E073639CC5A715E1341D4A044C74A6069E755BD6CC101209876",
+  "wrapper_exact_replacement": [
+    "ALLOWED = {'stage_full111_builder02.py', 'full111_builder02_controller.py', 'full111_postprocess.py'}",
+    "ALLOWED = {'stage_full111_after_recovery_v1.py', 'audit_full110_settled_cache_recovery_v1.py'}"
+  ],
+  "unchanged_resource_and_native_preflight": true,
+  "fresh_remote_stage_prepared_and_launch_absence_required": true,
+  "VM_start_or_compiler_invoked": false
+}

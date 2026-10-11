@@ -1,0 +1,18 @@
+{
+  "source": "compress_full110_settled_native_metadata_v1.py",
+  "source_sha256": "19037F92A2448E0E58AB80555BF647665E1511A82BDBD640E7410FE674FD1829",
+  "target": "compress_full110_settled_native_metadata_v2.py",
+  "target_sha256": "004C4358307755E15BABF0C481D60FEADF2E91CA1DC037F1ED879EFDDEB544A6",
+  "exact_replacements": [
+    [
+      "        path = check / 'qualified-native' / marker['run'] / 'remote-evidence/package-object-before.json'\n        assert path.resolve(strict=True).is_relative_to(BASE.resolve())\n        with tarfile.open(receipt['custody']['repository_path'], 'r:gz') as archive:\n            assert archive.extractfile('package-object-before.json').read() == path.read_bytes()\n        paths.append(path)\n",
+      "        with tarfile.open(receipt['custody']['repository_path'], 'r:gz') as archive:\n            for name in ('cslib-tracked-diff.patch', 'capture-manifest.json', 'verified-cache-provenance.json',\n                         'package-source-hashes.json', 'core-object-before.json'):\n                path = check / 'qualified-native' / marker['run'] / 'remote-evidence' / name\n                assert path.resolve(strict=True).is_relative_to(BASE.resolve())\n                assert archive.extractfile(name).read() == path.read_bytes()\n                paths.append(path)\n"
+    ],
+    [
+      "full110-settled-native-metadata-lossless-v1",
+      "full110-settled-native-metadata-lossless-v2"
+    ]
+  ],
+  "logical_bytes_preserved": true,
+  "delete_operation": false
+}
