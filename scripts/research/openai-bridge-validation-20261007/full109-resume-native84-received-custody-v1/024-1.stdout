@@ -1,0 +1,56 @@
+{
+    "processes":  [
+                      {
+                          "ProcessId":  15972,
+                          "ParentProcessId":  13548,
+                          "Name":  "cmd.exe",
+                          "CommandLine":  "C:\\WINDOWS\\system32\\cmd.exe /c \"\"C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\gcloud.cmd\" compute scp quantyra-lean-builder-02:/home/dfredriksen_quantyra_org/full109-trace-cache-small-native84-v1/receipt.json C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\consumption-v3\\cache-repoint-controls\\20261011T001721041630Z\\receipt.json --tunnel-through-iap --quiet --project=quantyra-lean-cert-20260915 --zone=us-central1-a --account=dfredriksen@quantyra.org\"",
+                          "CreationDate":  "\/Date(1791679232263)\/"
+                      },
+                      {
+                          "ProcessId":  16992,
+                          "ParentProcessId":  15972,
+                          "Name":  "python.exe",
+                          "CommandLine":  "\"C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\..\\platform\\bundledpython\\python.exe\"  -S \"C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\..\\lib\\gcloud.py\" compute scp quantyra-lean-builder-02:/home/dfredriksen_quantyra_org/full109-trace-cache-small-native84-v1/receipt.json C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\consumption-v3\\cache-repoint-controls\\20261011T001721041630Z\\receipt.json --tunnel-through-iap --quiet --project=quantyra-lean-cert-20260915 --zone=us-central1-a --account=dfredriksen@quantyra.org ",
+                          "CreationDate":  "\/Date(1791679232844)\/"
+                      },
+                      {
+                          "ProcessId":  4836,
+                          "ParentProcessId":  16992,
+                          "Name":  "pscp.exe",
+                          "CommandLine":  "\"C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\sdk\\pscp.exe\" -legacy-stdio-prompts -i C:\\Users\\dfred\\.ssh\\google_compute_engine.ppk -proxycmd \"\\\"C:\\\\Users\\\\dfred\\\\AppData\\\\Local\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin\\\\..\\\\platform\\\\bundledpython\\\\python.exe\\\" \\\"-S\\\" \\\"C:\\\\Users\\\\dfred\\\\AppData\\\\Local\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin\\\\..\\\\lib\\\\gcloud.py\\\" compute start-iap-tunnel \\\"quantyra-lean-builder-02\\\" %port --listen-on-stdin \\\"--project=quantyra-lean-cert-20260915\\\" \\\"--zone=us-central1-a\\\" \\\"--verbosity=warning\\\"\" dfredriksen_quantyra_org@compute.7237681467779354904:/home/dfredriksen_quantyra_org/full109-trace-cache-small-native84-v1/receipt.json C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\consumption-v3\\cache-repoint-controls\\20261011T001721041630Z\\receipt.json",
+                          "CreationDate":  "\/Date(1791679248908)\/"
+                      },
+                      {
+                          "ProcessId":  15808,
+                          "ParentProcessId":  4836,
+                          "Name":  "python.exe",
+                          "CommandLine":  "\"C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\..\\platform\\bundledpython\\python.exe\" \"-S\" \"C:\\Users\\dfred\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin\\..\\lib\\gcloud.py\" compute start-iap-tunnel \"quantyra-lean-builder-02\" 22 --listen-on-stdin \"--project=quantyra-lean-cert-20260915\" \"--zone=us-central1-a\" \"--verbosity=warning\"",
+                          "CreationDate":  "\/Date(1791679249096)\/"
+                      }
+                  ],
+    "proxy_children":  [
+                           {
+                               "ProcessId":  10172,
+                               "ParentProcessId":  15808,
+                               "Name":  "conhost.exe",
+                               "CommandLine":  "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+                           }
+                       ],
+    "tcp":  [
+                {
+                    "OwningProcess":  15808,
+                    "State":  100,
+                    "LocalPort":  65459,
+                    "RemoteAddress":  "0.0.0.0",
+                    "RemotePort":  0
+                },
+                {
+                    "OwningProcess":  15808,
+                    "State":  5,
+                    "LocalPort":  65459,
+                    "RemoteAddress":  "142.251.210.142",
+                    "RemotePort":  443
+                }
+            ]
+}
