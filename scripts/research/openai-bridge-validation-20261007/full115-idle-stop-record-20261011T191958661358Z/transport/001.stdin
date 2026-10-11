@@ -1,0 +1,9 @@
+import json,os
+from pathlib import Path
+processes=[]
+for p in Path('/proc').iterdir():
+ if not p.name.isdigit() or int(p.name)==os.getpid():continue
+ try:n=(p/'comm').read_text().strip();a=(p/'cmdline').read_bytes().replace(bytes([0]),b' ').decode(errors='replace')
+ except (FileNotFoundError,PermissionError):continue
+ if n in ('lean','lake') or (n in ('python','python3') and ('cmmsa' in a or '_worker.py' in a or 'full115' in a)):processes.append(dict(pid=int(p.name),name=n,argv=a))
+print(json.dumps(dict(live_research_processes=processes,full115_launch_marker_exists=Path('/home/dfredriksen_quantyra_org/full115-exact-real-complex-operators-repair5-resource02-launch-once.json').exists(),full115_stage_exists=Path('/home/dfredriksen_quantyra_org/full115-exact-real-complex-operators-repair5-builder02-stage').exists())))
