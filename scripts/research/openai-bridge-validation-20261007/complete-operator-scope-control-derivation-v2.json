@@ -1,0 +1,53 @@
+{
+  "original": "prepare_exact_real_operator_scope_v1.py",
+  "original_sha256": "95E2A38E99B665EDFD2F1F7063288DF7ACB91D5BA7AA32739A2B640DED9C06E3",
+  "successor": "prepare_complete_operator_scope_v2.py",
+  "successor_sha256": "892D56612F03C3ED79E1E006B6340B7BC8F3721222CFCA59E5079B8CB2C9B196",
+  "replacements": [
+    {
+      "before": "full-scope real operator successor",
+      "after": "full-scope real/complex operator and Gram successor",
+      "count": 1
+    },
+    {
+      "before": "    for directory, field in [('operator-complete-offer-capture-v3', 'path'),\n                             ('phi-eigenrelation-offer-capture-v4', 'copy')]:\n        index = json.loads((HERE / directory / 'index.json').read_bytes())",
+      "after": "    for directory, field, pin in [('operator-complete-offer-capture-v3', 'path', '3D892EAA6A8BF5103F4C697FCB862287A69D51BD32301575B0B37E2013E38173'), ('phi-eigenrelation-offer-capture-v4', 'copy', '3423358517781BCA5AD6220B131216293B9D3E19DC61A84F2D67D21AB09EB056'), ('real-gram-offer-capture-v1', 'path', '169D5BF3439215ACFA83B24D7A42DF0E398C53A5AF352B88FB0EC3202B49AA65'), ('complex-operator-complete-offer-capture-v4', 'path', 'DB7B77C3618AB6E94ECD761FAA7117810B7B56EB454B552DD4B74FA966AF3683'), ('complex-gram-offer-capture-v2', 'path', '81DE316ECEFC4DBD34744933566FFB93221857A7AF2128D92842A2BC805EEE24')]:\n        index_bytes = (HERE / directory / 'index.json').read_bytes()\n        assert sha(index_bytes) == pin, 'Immutable capture index changed: ' + directory\n        index = json.loads(index_bytes)",
+      "count": 1
+    },
+    {
+      "before": "assert len(sources) == 13",
+      "after": "assert len(sources) == 21",
+      "count": 1
+    },
+    {
+      "before": "assert len(b['project_sources']) == 361",
+      "after": "assert len(b['project_sources']) == 369",
+      "count": 1
+    },
+    {
+      "before": "exact-real-operator-full-scope-proposal-v1",
+      "after": "complete-real-complex-operator-full-scope-proposal-v2",
+      "count": 2
+    },
+    {
+      "before": "complex_continuation_excluded_pending_source_repairs=True,",
+      "after": "exact_real_complex_operator_and_two_function_gram_source_offers=True,\n                  whole_complex_hypercontractivity_appendix_not_certified=True,",
+      "count": 1
+    }
+  ],
+  "capture_index_pins": {
+    "operator-complete-offer-capture-v3": "3D892EAA6A8BF5103F4C697FCB862287A69D51BD32301575B0B37E2013E38173",
+    "phi-eigenrelation-offer-capture-v4": "3423358517781BCA5AD6220B131216293B9D3E19DC61A84F2D67D21AB09EB056",
+    "real-gram-offer-capture-v1": "169D5BF3439215ACFA83B24D7A42DF0E398C53A5AF352B88FB0EC3202B49AA65",
+    "complex-operator-complete-offer-capture-v4": "DB7B77C3618AB6E94ECD761FAA7117810B7B56EB454B552DD4B74FA966AF3683",
+    "complex-gram-offer-capture-v2": "81DE316ECEFC4DBD34744933566FFB93221857A7AF2128D92842A2BC805EEE24"
+  },
+  "original_full109_parent348_261_configuration_and_native_gates_unchanged": true,
+  "only_offered_scope_and_capture_index_pin_admission_expanded": true,
+  "expected_project_sources": 369,
+  "expected_added_sources": 21,
+  "scope_validation_not_yet_executed": true,
+  "cloud_operation": false,
+  "lean_executed": false,
+  "accepted": false
+}
