@@ -1,0 +1,11 @@
+# Actual fixed-H side-extension source offer
+
+Status: uncompiled source offer; not kernel accepted, not a native result, and not a campaign milestone acceptance.
+
+This increment formally connects an arbitrary actual side full domain to an actual tagged presented leaf. It invokes `taggedDomainDraw_has_leaf` on `sideFullToTagged`; `taggedSelectedLeafLabel_respectsRows` supplies the source row equations; and `taggedSelectedDomainTable_apply` identifies the label with the canonical selected full-domain table. The public export has no row-compatibility hypothesis. It applies to the original fixed table and its selected representative.
+
+The shared route keeps all refresh intermediates in the fixed coordinate ambient. This H-side lemma applies only to final original-table agreement witnesses. It adds no validity or pushforward obligation for refreshed physical labels.
+
+The pinned Full114 source already proves `uniform_sideLeafTuple_pushforward`, `side_fixedCenter_acceptance_mass_eq_full`, `sideAccepts_iff_fullAccepts`, and the whole-carrier ordinary/full acceptance bridge. These provide the starting point for restricted conditioning. Exact remaining proof boundary: define the bounded full-domain event `D ≤ H ⊕ W'` and prove, under `ordinaryFullEquiv`, that it is equivalent to `R ≤ W'`; restrict the existing equivalence to those subtypes; identify the full and side agreement predicates using the common row-forced restriction on H and the same canonical table at domain `H+R`; then transfer numerator and denominator counts and cast the rational equality to `ℝ`. The bounded event must be nonempty by the original zoom witness. The whole-carrier pushforward does not by itself prove this arbitrary bounded Q-zoom transport. No public final side-extension/density theorem is claimed here.
+
+The Full114 archive is pinned as a source input only; that package is not accepted evidence. No Lean/Lake/GCP/Git command was run for this offer. Native compilation, axioms review, and the exact restricted zoom transport remain with the authorized native workflow.
