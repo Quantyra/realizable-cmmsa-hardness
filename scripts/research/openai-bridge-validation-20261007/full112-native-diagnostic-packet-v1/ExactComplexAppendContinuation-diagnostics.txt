@@ -1,0 +1,93 @@
+error: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:122:45: unsolved goals
+n c s : ℕ
+F : BinaryMatrix n (c + s) → ℂ
+M : BinaryMatrix n c
+⊢ (∑ x, (F (appendBinaryMatrix M x)).re) / ↑(Fintype.card (BinaryMatrix n s)) =
+    uniformMean fun B => (fun X => (F X).re) (appendBinaryMatrix M B)
+error: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:129:45: unsolved goals
+n c s : ℕ
+F : BinaryMatrix n (c + s) → ℂ
+M : BinaryMatrix n c
+⊢ (∑ x, (F (appendBinaryMatrix M x)).im) / ↑(Fintype.card (BinaryMatrix n s)) =
+    uniformMean fun B => (fun X => (F X).im) (appendBinaryMatrix M B)
+error: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:161:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Complex.normSq ?z
+in the target expression
+  (fun M => Complex.normSq (F M)) M = (F M).re ^ 2 + (F M).im ^ 2
+
+case e_a
+n d : ℕ
+F : BinaryMatrix n d → ℂ
+M : BinaryMatrix n d
+hM : M ∈ Finset.univ
+⊢ (fun M => Complex.normSq (F M)) M = (F M).re ^ 2 + (F M).im ^ 2
+error: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:222:17: don't know how to synthesize implicit argument `i`
+  @complexRankProjection_energy_components n (c + s) ?m.271 F
+context:
+n c s i : ℕ
+hi : i ≤ c + s
+F : BinaryMatrix n (c + s) → ℂ
+basisInv : ∀ (M : BinaryMatrix n (c + s)) (U V : BinaryMatrix (c + s) (c + s)), U * V = 1 → V * U = 1 → F (M * U) = F M
+hInvRe :
+  ∀ (M : BinaryMatrix n (c + s)) (U V : BinaryMatrix (c + s) (c + s)), U * V = 1 → V * U = 1 → (F (M * U)).re = (F M).re
+hInvIm :
+  ∀ (M : BinaryMatrix n (c + s)) (U V : BinaryMatrix (c + s) (c + s)), U * V = 1 → V * U = 1 → (F (M * U)).im = (F M).im
+hRe :
+  (uniformMean fun M => appendAverage (rankProjection i fun X => (F X).re) M ^ 2) =
+    (∏ j, (2 ^ (c + s - i) - 2 ^ ↑j) / (2 ^ (c + s) - 2 ^ ↑j)) *
+      uniformMean fun W => rankProjection i (fun X => (F X).re) W ^ 2
+hIm :
+  (uniformMean fun M => appendAverage (rankProjection i fun X => (F X).im) M ^ 2) =
+    (∏ j, (2 ^ (c + s - i) - 2 ^ ↑j) / (2 ^ (c + s) - 2 ^ ↑j)) *
+      uniformMean fun W => rankProjection i (fun X => (F X).im) W ^ 2
+hLeft :
+  (uniformMean fun M => Complex.normSq (complexAppendAverage (complexRankProjection i F) M)) =
+    (uniformMean fun M => (complexAppendAverage (complexRankProjection i F) M).re ^ 2) +
+      uniformMean fun M => (complexAppendAverage (complexRankProjection i F) M).im ^ 2
+⊢ ℕ
+error: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:222:7: failed to infer `have` declaration type
+error: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:203:57: unsolved goals
+n c s i : ℕ
+hi : i ≤ c + s
+F : BinaryMatrix n (c + s) → ℂ
+basisInv : ∀ (M : BinaryMatrix n (c + s)) (U V : BinaryMatrix (c + s) (c + s)), U * V = 1 → V * U = 1 → F (M * U) = F M
+hInvRe :
+  ∀ (M : BinaryMatrix n (c + s)) (U V : BinaryMatrix (c + s) (c + s)), U * V = 1 → V * U = 1 → (F (M * U)).re = (F M).re
+hInvIm :
+  ∀ (M : BinaryMatrix n (c + s)) (U V : BinaryMatrix (c + s) (c + s)), U * V = 1 → V * U = 1 → (F (M * U)).im = (F M).im
+hRe :
+  (uniformMean fun M => appendAverage (rankProjection i fun X => (F X).re) M ^ 2) =
+    (∏ j, (2 ^ (c + s - i) - 2 ^ ↑j) / (2 ^ (c + s) - 2 ^ ↑j)) *
+      uniformMean fun W => rankProjection i (fun X => (F X).re) W ^ 2
+hIm :
+  (uniformMean fun M => appendAverage (rankProjection i fun X => (F X).im) M ^ 2) =
+    (∏ j, (2 ^ (c + s - i) - 2 ^ ↑j) / (2 ^ (c + s) - 2 ^ ↑j)) *
+      uniformMean fun W => rankProjection i (fun X => (F X).im) W ^ 2
+hLeft :
+  (uniformMean fun M => Complex.normSq (complexAppendAverage (complexRankProjection i F) M)) =
+    (uniformMean fun M => (complexAppendAverage (complexRankProjection i F) M).re ^ 2) +
+      uniformMean fun M => (complexAppendAverage (complexRankProjection i F) M).im ^ 2
+⊢ (uniformMean fun M => Complex.normSq (complexAppendAverage (complexRankProjection i F) M)) =
+    (∏ j, (2 ^ (c + s - i) - 2 ^ ↑j) / (2 ^ (c + s) - 2 ^ ↑j)) *
+      uniformMean fun W => Complex.normSq (complexRankProjection i F W)
+warning: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:266:16: This simp argument is unused:
+  mul_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:272:16: This simp argument is unused:
+  mul_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im, zero_mul, add_zero, zero_add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean:272:36: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im, zero_mul, mul_zero, add_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
