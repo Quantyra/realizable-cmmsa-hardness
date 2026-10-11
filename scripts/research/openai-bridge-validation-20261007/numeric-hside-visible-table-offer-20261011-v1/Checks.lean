@@ -1,0 +1,3 @@
+import PvNP.RealizableHardness.ActualHSideVisibleTable
+
+#print axioms PvNP.RealizableHardness.ActualHSideVisibleTable.visible_table_eq_actual_full_zoom_table

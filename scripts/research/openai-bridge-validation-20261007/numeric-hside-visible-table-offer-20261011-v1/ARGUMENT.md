@@ -1,0 +1,9 @@
+# Actual full-zoom and visible-input table identity
+
+E002/S3137. Complete argument was recorded before translation in the existing numeric obligations note after Selected H-side leaf charge and route assessment. This source is uncompiled and unaccepted.
+
+For an internal 2h-dimensional leaf L of an original good question U, its actual coordinate inclusion maps it into global tagged-variable coordinates. Assume that image lies in visible space X and is transverse to both the original equation span and the fixed completion selected only from X. The captured visibleLeafTable_agrees_with_original then identifies the visible entry with the original globally selected canonical label on image(L)+H_U. The internal full-zoom table evaluates the same global table on image(H+L). Every row equation is supported in U, so the equation-span comap followed by the coordinate inclusion equals H_U. Map distributes over the subspace sum, identifying these domains. The actual included leaf vector is identical on both sides, proving pointwise entry equality.
+
+This supplies the exact same-table identity needed after the original-law/H-side agreement transport. The second-prover table still uses only X and globally fixed choices. Both transversality hypotheses remain visible; no equality on exceptional leaves, independent completion law, posterior bound or complete strategy is asserted. The original-H and completion-dependent exceptional probabilities must still be paid in the joint proof. Four parent interfaces match failed/unaccepted Full114 and both candidate dependencies have exact frozen pins. One public theorem has an axiom request. No local Lean or Lake ran.
+
+Remaining to-do list: authoritative kernel/axiom/warning verification, actual posterior/exception integration, legitimate decoder/source NO, runtime, replay and all mandatory independent/final certification gates.

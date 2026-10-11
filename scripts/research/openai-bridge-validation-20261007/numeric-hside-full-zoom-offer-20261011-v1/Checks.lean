@@ -1,0 +1,8 @@
+import PvNP.RealizableHardness.ActualHSideFullZoom
+
+#check PvNP.RealizableHardness.ActualHSideFullZoom.totalHLeafTable
+#check PvNP.RealizableHardness.ActualHSideFullZoom.sideDecodedPair
+#check PvNP.RealizableHardness.ActualHSideFullZoom.originalSideRestrictionRatio
+#print axioms PvNP.RealizableHardness.ActualHSideFullZoom.sideRestriction_iff_agreesOn
+#print axioms PvNP.RealizableHardness.ActualHSideFullZoom.originalSideRestrictionRatio_eq_transverse
+#print axioms PvNP.RealizableHardness.ActualHSideFullZoom.full_agreement_ge_original_side_sub_dyadic

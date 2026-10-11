@@ -1,0 +1,3 @@
+import PvNP.RealizableHardness.ActualSelectedHSideAgreement
+
+#print axioms PvNP.RealizableHardness.ActualSelectedHSideAgreement.selected_actual_hside_full_agreement

@@ -1,0 +1,11 @@
+# Actual H-side to full-zoom table identity
+
+E002/S3137. The complete mathematical argument was recorded before translation in the planning numeric obligations note, section 2026-10-11 Actual H-side to full-zoom table identity. Source is uncompiled and unaccepted.
+
+The total leaf table uses the same global canonical selected table on the image of H+L and restricts it to L. It is independent of advice K and successful complement A. The decoded pair uses the actual H+W' window and canonical RHS extension of g. Global SideLeaf transversality is equivalent to internal disjointness by injectivity of the actual coordinate inclusion, in both directions. Bounded SideLeaf and transverse full Zoom are therefore bijective on the underlying Grassmann leaf. Containment of H+L in a window containing H is equivalent to containment of L.
+
+Pointwise restriction agreement is the same functional equality on each included leaf vector. Reindexing that event and the whole bounded carrier proves equality of their count ratios. The original k=1 uniform SideLeaf event masses reduce to these counts because their common, nonzero carrier cardinality cancels. Empty bounded windows require no nonemptiness premise and use the existing zero-division convention. Substituting the previous full-zoom dyadic charge proves the final agreement lower bound on the same total table and actual decoder, with the dimension guards explicit.
+
+The ordinary-to-SideLeaf ratio is supplied separately by the frozen H9 candidate. Selected numerical guards, its actual successful ordinary witness, visible-input table equality, posterior errors and complete source decoder remain integration obligations. This source neither asserts equality on exceptional leaves nor certifies any parent. Eight source interfaces match the exact failed/unaccepted Full114 archive, and both new candidate dependencies have exact frozen hashes. Three public theorem axiom requests and three definition checks are provided. No Lean or Lake was executed locally.
+
+Remaining to-do list: authoritative GCP kernel/axiom/warning checks, ordinary witness and numeric specialization, completion/posterior decoder integration, source NO, runtime and all mandatory review/certification gates.
