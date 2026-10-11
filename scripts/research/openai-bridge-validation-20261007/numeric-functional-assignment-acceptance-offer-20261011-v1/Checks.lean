@@ -1,0 +1,26 @@
+import PvNP.RealizableHardness.ActualFunctionalAssignmentAcceptance
+
+open PvNP.RealizableHardness
+open ActualFunctionalAssignmentAcceptance
+
+#check OriginalSpace
+#check OriginalSupport
+#check OriginalH
+#check coordinateUnit
+#check coordinateUnitIn
+#check supportedVector_eq_sum_units
+#check functionalAssignment
+#check functional_eval_eq_finite_sum
+#check originalAssignment
+#check visibleAssignment
+#check every_original_extension_satisfies_tagged_equations
+#check actual_favorable_decoder_has_equation_accepting_extensions
+#check retainedAssignment
+#check actualRetainedToVisible
+#check retained_functional_restriction_iff_assignment_agreement
+
+#print axioms supportedVector_eq_sum_units
+#print axioms functional_eval_eq_finite_sum
+#print axioms every_original_extension_satisfies_tagged_equations
+#print axioms actual_favorable_decoder_has_equation_accepting_extensions
+#print axioms retained_functional_restriction_iff_assignment_agreement

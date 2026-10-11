@@ -1,0 +1,47 @@
+--- Full117
++++ Full118
+@@ -49,7 +49,7 @@
+     (∑ W : BinaryMatrix n (c + s), K W * H (FirstBlock W)) =
+       ∑ W : BinaryMatrix n (c + s),
+         K W * H (W * FirstColumns p.1.1) := by
+-  let e := rightMulEquiv p
++  let e := rightMulEquiv (n := n) p
+   have hreindex := (Equiv.sum_comp e
+     (fun W : BinaryMatrix n (c + s) => K W * H (FirstBlock W))).symm
+   calc
+@@ -101,9 +101,18 @@
+   have hsum :
+       (∑ p : BinaryMatrix n c × BinaryMatrix n s, g p.1 p.2) =
+         ∑ W : BinaryMatrix n (c + s), K W * H (FirstBlock W) := by
+-    simpa [g, e, FirstBlock, appendBinaryMatrix] using
+-      (Equiv.sum_comp e (fun W : BinaryMatrix n (c + s) =>
+-        K W * H (FirstBlock W)))
++    calc
++      (∑ p : BinaryMatrix n c × BinaryMatrix n s, g p.1 p.2) =
++          ∑ p : BinaryMatrix n c × BinaryMatrix n s,
++            K (e p) * H (FirstBlock (e p)) := by
++              apply Finset.sum_congr rfl
++              intro p _
++              change K (appendBinaryMatrix p.1 p.2) * H p.1 =
++                K (appendBinaryMatrix p.1 p.2) *
++                  H (FirstBlock (appendBinaryMatrix p.1 p.2))
++              rw [firstBlock_append]
++      _ = _ := Equiv.sum_comp e (fun W : BinaryMatrix n (c + s) =>
++        K W * H (FirstBlock W))
+   have hcard := Fintype.card_congr e
+   rw [hsum, hcard] at hpair
+   exact hpair.symm
+@@ -156,9 +165,11 @@
+               K W * H (FirstBlock W)) := by
+       rw [Fintype.sum_prod_type]
+       exact hdouble
+-    rw [hsum, Fintype.card_prod]
++    have hcard : (Fintype.card (InversePair (c + s)) : Real) ≠ 0 := by
++      exact_mod_cast (Fintype.card_ne_zero : Fintype.card (InversePair (c + s)) ≠ 0)
++    rw [hsum, Fintype.card_prod, Nat.cast_mul]
+     unfold BinaryMatrixFourier.uniformMean
+-    field_simp
++    exact mul_div_mul_left _ _ hcard
+   have hcol (W : BinaryMatrix n (c + s)) :
+       (∑ p : InversePair (c + s),
+         H (W * FirstColumns p.1.1)) /

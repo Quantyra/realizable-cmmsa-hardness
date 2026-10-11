@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualVaryingCoefficientBase
+
+#print axioms PvNP.RealizableHardness.ActualVaryingCoefficientBase.pointwiseCommonBase
+#print axioms PvNP.RealizableHardness.ActualVaryingCoefficientBase.pointwiseCommonBase_bounds
+#print axioms PvNP.RealizableHardness.ActualVaryingCoefficientBase.pointwise_completion_bound
+#print axioms PvNP.RealizableHardness.ActualVaryingCoefficientBase.selected_varying_completion_eventually

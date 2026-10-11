@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.ExactRestrictedAdjoint
+
+#check PvNP.RealizableHardness.ExactRestrictedAdjoint.prefix_weight_sum_right_action
+#print axioms PvNP.RealizableHardness.ExactRestrictedAdjoint.prefix_weight_sum_right_action
+
+#check PvNP.RealizableHardness.ExactRestrictedAdjoint.append_weighted_product_mean
+#print axioms PvNP.RealizableHardness.ExactRestrictedAdjoint.append_weighted_product_mean
+
+#check PvNP.RealizableHardness.ExactRestrictedAdjoint.weighted_prefix_mean_eq_gAverage
+#print axioms PvNP.RealizableHardness.ExactRestrictedAdjoint.weighted_prefix_mean_eq_gAverage
+
+#check PvNP.RealizableHardness.ExactRestrictedAdjoint.restricted_adjoint_exact
+#print axioms PvNP.RealizableHardness.ExactRestrictedAdjoint.restricted_adjoint_exact
