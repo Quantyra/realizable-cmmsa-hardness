@@ -1,0 +1,15 @@
+{
+  "original_tool_chunk": "ba777b",
+  "original_exit": 1,
+  "original_control_sha256": "297E7123A8201EBD4050B4E699B8666DE031F12B82858BFD509EC4A70CB6B6F5",
+  "error": "AssertionError: path.resolve(strict=True).is_relative_to(BASE)",
+  "failed_before_output_directory_or_any_compression": true,
+  "cause": "Complete custody includes satellite control JSON above the lower small-file threshold",
+  "successor": "compress_full114_recovery_settled_text_v2.py",
+  "successor_sha256": "BF50CA0FDF2431CD309F50B0EBBC6358D882137FEAB3A50F222FE85DE3690A27",
+  "exact_replacement": [
+    "                assert path.resolve(strict=True).is_relative_to(BASE)",
+    "                if not path.resolve(strict=True).is_relative_to(BASE):\n                    continue  # Preserve satellite control originals without physical changes."
+  ],
+  "scope": "Only settled builder02 originals; satellite control originals excluded"
+}

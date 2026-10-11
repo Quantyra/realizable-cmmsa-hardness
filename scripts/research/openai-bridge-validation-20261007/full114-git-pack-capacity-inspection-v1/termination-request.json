@@ -1,0 +1,18 @@
+{
+  "original_handle": 61808,
+  "processes": [
+    {
+      "ProcessId": 12180,
+      "ParentProcessId": 7404,
+      "CommandLine": "git pack-objects --stdout --delta-base-offset --window=50 --depth=50 --threads=2 --window-memory=256m"
+    },
+    {
+      "ProcessId": 10272,
+      "ParentProcessId": 12180,
+      "CommandLine": "git.exe pack-objects --stdout --delta-base-offset --window=50 --depth=50 --threads=2 --window-memory=256m"
+    }
+  ],
+  "reason": "Stop read-only broad reachable-object estimate: selected 31045 objects exceeds the loose-object scope; exact duplicate-archive preservation plan now provides the needed capacity alternative. No pack was written and no Git metadata is changed.",
+  "action": "Stop-Process -Id 10272",
+  "git_mutation": false
+}
