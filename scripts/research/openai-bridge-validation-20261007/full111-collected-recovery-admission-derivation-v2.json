@@ -1,0 +1,73 @@
+{
+  "records": [
+    {
+      "source": "audit_full110_settled_cache_recovery_v1.py",
+      "source_sha256": "CBAA06C711EC025F422C7C780EEEF84052697F7EEEECD2A96951F53F430EF2D9",
+      "target": "audit_full110_settled_cache_recovery_v2.py",
+      "target_sha256": "FAC1DA943976BA9DD34C3024BEB56A6C9515CC3A88D43D311A38184EFD193001",
+      "exact_replacements": [
+        [
+          "AUDIT = RECOVERY / 'complete-audit-v1'",
+          "AUDIT = RECOVERY / 'complete-audit-v2'",
+          1
+        ],
+        [
+          "unique_operation(number, 'execute')",
+          "execution_operation(number)",
+          2
+        ],
+        [
+          "def validate_local_audit():",
+          "def execution_operation(number):\n    if number != 90:\n        return unique_operation(number, 'execute')\n    original = RECOVERY / '20261011T033104479357Z'\n    wrapper = ROOT / 'research-resume-20261011/20261011T032930698566Z-1587aaca7c15'\n    command = json.loads((wrapper / 'command.json').read_bytes())\n    assert command['native_exit'] == 1 and command['pid'] == 12852\n    for stream in ('stdout', 'stderr'):\n        assert digest(wrapper / stream) == command[stream + '_sha256']\n    commands = json.loads((original / 'commands.json').read_bytes())\n    assert len(commands) == 10\n    assert [row['native_exit'] for row in commands] == [0] * 9 + [3221225477]\n    for row in commands:\n        assert not row['timed_out']\n        for stream in ('stdout', 'stderr'):\n            assert digest(original / row[stream + '_path']) == row[stream + '_sha256']\n    assert commands[8]['argv'][5] == '--command=python3 -B /home/dfredriksen_quantyra_org/full110-settled-cache-native90-v1/full110_settled_cache_native90_v1.py --execute'\n    assert commands[9]['argv'][5] == '--command=sha256sum /home/dfredriksen_quantyra_org/full110-settled-cache-native90-v1/receipt.json'\n    terminal = json.loads((original / 'control/008.stdout').read_bytes())\n    assert terminal['repointed_files'] == 19233 and not terminal['compiler_invoked']\n    assert terminal['receipt_sha256'] == '18722833D18CC01D6C14D35ED74424B1E872C98576A87F62E62BEBD1BA5386CE'\n    assert not (original / 'operation-90.json').exists()\n    path, collected = unique_operation(90, 'collect-receipt')\n    assert collected['result_sha256'] == terminal['receipt_sha256']\n    assert json.loads(Path(collected['local_result']).read_bytes())['disk_after_bytes'] == terminal['disk_after_bytes']\n    return path, collected\n\n\ndef validate_local_audit():",
+          1
+        ],
+        [
+          "'full110-all-seven-recovery-journal-audit-v1'",
+          "'full110-all-seven-recovery-journal-audit-v2'",
+          1
+        ],
+        [
+          "    AUDIT.mkdir(exist_ok=False)",
+          "    failure_index = HERE / 'full110-recovery-execution-interruption-v1/index.json'\n    failure = json.loads(failure_index.read_bytes())\n    assert failure['original_handle'] == 50622 and failure['original_exit'] == 1\n    register(failure_index)\n    for row in failure['files']:\n        path = failure_index.parent / row['copy']\n        assert digest(path) == row['sha256']\n        register(path)\n    AUDIT.mkdir(exist_ok=False)",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "stage_full111_after_recovery_v1.py",
+      "source_sha256": "03AD90F5DEC364E8DDC27113055A7745292F17093FA4C463FB3CE29E1BA47A98",
+      "target": "stage_full111_after_recovery_v2.py",
+      "target_sha256": "E7DFFF2F84F429F334CAFBC74804F3672BAD997011B8B44E5B8817DCE621E799",
+      "exact_replacements": [
+        [
+          "from audit_full110_settled_cache_recovery_v1 import",
+          "from audit_full110_settled_cache_recovery_v2 import",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "run_full111_resume_step_v2.py",
+      "source_sha256": "2B03D50984A59E073639CC5A715E1341D4A044C74A6069E755BD6CC101209876",
+      "target": "run_full111_resume_step_v3.py",
+      "target_sha256": "2575E40E7CBDE9FD82E24F6628F1C7D4D6867D50C5F4C080A6795176016848D1",
+      "exact_replacements": [
+        [
+          "stage_full111_after_recovery_v1.py",
+          "stage_full111_after_recovery_v2.py",
+          1
+        ],
+        [
+          "audit_full110_settled_cache_recovery_v1.py",
+          "audit_full110_settled_cache_recovery_v2.py",
+          1
+        ]
+      ]
+    }
+  ],
+  "preserved_original_controller_exit": 1,
+  "scope90_native_execution_exit": 0,
+  "scope90_receipt_collection_only": true,
+  "unchanged_complete_plan_receipt_journal_checks": true,
+  "audit_or_staging_or_compiler_executed": false
+}
