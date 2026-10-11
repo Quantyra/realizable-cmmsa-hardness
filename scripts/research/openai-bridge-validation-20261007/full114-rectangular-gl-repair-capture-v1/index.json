@@ -1,0 +1,82 @@
+{
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full114-rectangular-gl-repair-v2\\manifest.json",
+      "copy": "manifest.json",
+      "bytes": 3819,
+      "sha256": "6CCA7315885DC8A4D08CCF6A93F275FE8CDAE95ACA328B335BDB35C9DEE2C1BC"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full114-rectangular-gl-repair-v2\\PROOF-AND-API-MAP.md",
+      "copy": "PROOF-AND-API-MAP.md",
+      "bytes": 5781,
+      "sha256": "25576577DC1595196F162A885775DE5FDC9A5010D057E789E23CFA7AF9D6405B"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full114-rectangular-gl-repair-v2\\RectangularGLRowCompletion.lean",
+      "copy": "RectangularGLRowCompletion.lean",
+      "bytes": 18136,
+      "sha256": "9409767AA9F0C6BC736B06CA73EF9D7B080A27EF96F6BAF4E41DA5019E7CD0C1"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full114-rectangular-gl-repair-v2\\RectangularGLRowCompletionChecks.lean",
+      "copy": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    }
+  ],
+  "source": "lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean",
+  "old_sha256": "FD0E815F4A816C82EFA77CD0334E40BDC7AF28A7C1E23937CF6CCDA90A8BA1FD",
+  "new_sha256": "9409767AA9F0C6BC736B06CA73EF9D7B080A27EF96F6BAF4E41DA5019E7CD0C1",
+  "parent_run": "cmmsa_a8_output_20261011T060110Z_204d10cd",
+  "parent_native_archive_sha256": "60ED6FF40DAE28268D1C52EF5ECD78B354BA3E8FE347E5AFF14986C53BE36213",
+  "exact_diff": "--- Full113\n+++ Full114\n@@ -220,7 +220,25 @@\n     apply Subtype.ext\n     rfl\n \n-set_option maxHeartbeats 800000 in\n+private noncomputable def rowPrefix_fiber_equiv {c s : Nat}\n+    (X Y : FullRowFrame c (c + s)) :\n+    RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X ≃\n+      RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) Y := by\n+  let hX : RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X ≃\n+      PrefixFiber c s X.1 := rowPrefixFiberEquiv X\n+  let hXY : PrefixFiber c s X.1 ≃ PrefixFiber c s Y.1 :=\n+    prefix_fiber_equiv X.1 Y.1 X.2 Y.2\n+  let hY : RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) Y ≃\n+      PrefixFiber c s Y.1 := rowPrefixFiberEquiv Y\n+  exact hX.trans (hXY.trans hY.symm)\n+\n+private theorem rowPrefix_fiber_card_eq {c s : Nat}\n+    (X Y : FullRowFrame c (c + s)) :\n+    Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X) =\n+      Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) Y) := by\n+  exact Fintype.card_congr (rowPrefix_fiber_equiv X Y)\n+\n+set_option maxHeartbeats 400000 in\n /-- Exact normalized row-prefix marginal: the inverse-pair carrier is uniform,\n and the image is uniform over every full-row-rank rectangular matrix. The\n proof uses equal fibres from explicit transitivity and does not count a fibre\n@@ -232,7 +250,7 @@\n       (∑ X : FullRowFrame c (c + s), g X) /\n         (Fintype.card (FullRowFrame c (c + s)) : Real) := by\n   classical\n-  let f := rowPrefixMap c s\n+  let f : InversePair (c + s) → FullRowFrame c (c + s) := rowPrefixMap c s\n   let X₀ : FullRowFrame c (c + s) :=\n     ⟨canonicalPrefixMatrix c s, by\n       change Function.Surjective\n@@ -247,33 +265,21 @@\n   have hk : 0 < k := by\n     change 0 < Fintype.card (RectangularFrameFiberAverage.Fiber f X₀)\n     exact Fintype.card_pos_iff.mpr hbase\n-  letI : Nonempty (FullRowFrame c (c + s)) := ⟨X₀⟩\n+  let hNonempty : Nonempty (FullRowFrame c (c + s)) := ⟨X₀⟩\n   have hcard : ∀ X : FullRowFrame c (c + s),\n       Fintype.card (RectangularFrameFiberAverage.Fiber f X) = k := by\n     intro X\n-    have hXX₀ : PrefixFiber c s X.1 ≃ PrefixFiber c s X₀.1 :=\n-      prefix_fiber_equiv X.1 X₀.1 X.2 X₀.2\n-    have hFX : RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X ≃\n-        PrefixFiber c s X.1 := rowPrefixFiberEquiv X\n-    have hF₀ : RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀ ≃\n-        PrefixFiber c s X₀.1 := rowPrefixFiberEquiv X₀\n-    have hFib : RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X ≃\n-        RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀ :=\n-      hFX.trans (hXX₀.trans hF₀.symm)\n-    have hFibCard :\n-        Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X) =\n-          Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀) :=\n-      Fintype.card_congr hFib\n     change Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X) =\n       Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀)\n-    exact hFibCard\n+    exact rowPrefix_fiber_card_eq X X₀\n   have hmap :\n       (∑ p : InversePair (c + s), g (f p)) /\n           (Fintype.card (InversePair (c + s)) : Real) =\n         (∑ X : FullRowFrame c (c + s), g X) /\n           (Fintype.card (FullRowFrame c (c + s)) : Real) :=\n-    RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers\n-      f k hk hcard g\n+    @RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers\n+      (InversePair (c + s)) (FullRowFrame c (c + s))\n+      inferInstance inferInstance hNonempty f k hk hcard g\n   exact hmap\n \n /-- Injective column maps become surjective row maps after transpose. The\n",
+  "lexical_preflight": [
+    {
+      "path": "RectangularGLRowCompletion.lean",
+      "bytes": 18136,
+      "sha256": "9409767AA9F0C6BC736B06CA73EF9D7B080A27EF96F6BAF4E41DA5019E7CD0C1",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "structure": {
+    "existing_declarations_preserved": 21,
+    "added_private_helpers": {
+      "rowPrefix_fiber_equiv": {
+        "kind": "private noncomputable def",
+        "header": "private noncomputable def rowPrefix_fiber_equiv {c s : Nat}\n    (X Y : FullRowFrame c (c + s)) :\n    RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X ≃\n      RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) Y"
+      },
+      "rowPrefix_fiber_card_eq": {
+        "kind": "private theorem",
+        "header": "private theorem rowPrefix_fiber_card_eq {c s : Nat}\n    (X Y : FullRowFrame c (c + s)) :\n    Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X) =\n      Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) Y)"
+      }
+    },
+    "old_header_parser_not_used": "Recognize both := and where; do not absorb following declarations into a where-definition header."
+  },
+  "existing_statements_imports_and_checks_preserved": true,
+  "actual_full113_project_and_mathlib_dependency_pins_verified": true,
+  "root_read_complete_diff_and_map_and_manifest": true,
+  "bounded_heartbeat_change": {
+    "before": 800000,
+    "after": 400000,
+    "theorem": "row_prefix_uniform_mean"
+  },
+  "offer_metadata_errata": [
+    "Historical diagnostics field in offered manifest still says haveI; exact raw warning recommends ordinary let over letI, and repaired source uses let.",
+    "Offered map contains a lone carriage return before owPrefix_fiber_equiv; read as rowPrefix_fiber_equiv. No Lean source is affected."
+  ],
+  "capture_control_sha256": "DFD6A149ED00756D1195735DB26267DA287D8953488C2FC0F01732592628F6DD",
+  "structure_control_sha256": "3B0201C5B4BE9F2E5F9453DD0A2810318FA073B2484B25FBFF33CEC0A65F956A",
+  "compiler_invoked": false,
+  "accepted": false
+}

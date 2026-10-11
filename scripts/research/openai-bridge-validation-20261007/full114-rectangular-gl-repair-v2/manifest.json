@@ -1,0 +1,84 @@
+{
+  "offer": "full114-rectangular-gl-repair-v2",
+  "status": "uncompiled source offer; root-owned compiler and custody",
+  "source": {
+    "file": "RectangularGLRowCompletion.lean",
+    "input_sha256": "FD0E815F4A816C82EFA77CD0334E40BDC7AF28A7C1E23937CF6CCDA90A8BA1FD",
+    "input_bytes": 17838,
+    "candidate_sha256": "9409767AA9F0C6BC736B06CA73EF9D7B080A27EF96F6BAF4E41DA5019E7CD0C1",
+    "candidate_bytes": 18136
+  },
+  "checks": {
+    "file": "RectangularGLRowCompletionChecks.lean",
+    "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB",
+    "bytes": 1822,
+    "unchanged_from_input": true
+  },
+  "input": {
+    "diagnostic_packet": "full113-native-diagnostic-packet-v1",
+    "diagnostic_index_sha256": "DA68B27E6FC25D36F261862AFAE2057D9FDEB4C4BCFD725706D3CF21EFD26CF4",
+    "failed_native_custody_archive_sha256": "60ED6FF40DAE28268D1C52EF5ECD78B354BA3E8FE347E5AFF14986C53BE36213",
+    "failed_input_archive_sha256": "BE67B48A7D6AA2745A1D28B99953E29B5764686EECFE4EDCFA01908872DE7EC2",
+    "diagnostics": [
+      "row_prefix_uniform_mean timed out at whnf with maxHeartbeats 800000",
+      "dependent row_prefix_uniform_mean unknown at original line 365",
+      "style warning preferred haveI over letI at original line 250"
+    ]
+  },
+  "project_dependencies": [
+    {
+      "path": "lean/PvNP/RealizableHardness/BinaryMatrixRightOrbit.lean",
+      "bytes": 2521,
+      "sha256": "409FD652E1F051E92688466EAC57BD6B85AF93866D5F5D4C9AA0152AB25286B0"
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/RectangularFrameFiberAverage.lean",
+      "bytes": 4413,
+      "sha256": "F1DBDBF44468D72573F2B15FACFFD3435A700B5AAB98362E2B70F217777C9B8F"
+    },
+    {
+      "path": "lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean",
+      "bytes": 8251,
+      "sha256": "BA136FC5CA364B14F76447954F47EDE670930B042F1EA8276A11675B50C76C2F"
+    }
+  ],
+  "external_dependencies": [
+    {
+      "module": "Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Card",
+      "source_bytes": 4219,
+      "source_sha256": "AC31F64E47BA76F80C1C9BAB4E58645175A13C23C9175449C41ACD22B1E44F1F",
+      "package_sources_archive_sha256": "2DFA036C84860818068E8F5B64C203AE9F86A51DDB966B745B0743A988E50414",
+      "note": "Exact inspected Full112 package-source pin; parent must confirm same package body in selected Full113 environment."
+    }
+  ],
+  "repairs": [
+    "Factor equal-fiber equivalence and finite-cardinality transport into private helper declarations.",
+    "Keep codomain nonemptiness as an ordinary local let and pass it explicitly to avoid the source-owned letI style warning.",
+    "Reduce theorem-local heartbeat cap from 800000 to 400000 after factoring the proof."
+  ],
+  "claims_boundary": [
+    "No source theorem is claimed parsed or compiled.",
+    "No Full113 acceptance or final mathematical certification is claimed.",
+    "No premise, public theorem statement, import, or Checks profile is changed."
+  ],
+  "offered_files": {
+    "RectangularGLRowCompletion.lean": {
+      "bytes": 18136,
+      "sha256": "9409767AA9F0C6BC736B06CA73EF9D7B080A27EF96F6BAF4E41DA5019E7CD0C1"
+    },
+    "RectangularGLRowCompletionChecks.lean": {
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    },
+    "PROOF-AND-API-MAP.md": {
+      "bytes": 5781,
+      "sha256": "25576577DC1595196F162A885775DE5FDC9A5010D057E789E23CFA7AF9D6405B"
+    }
+  },
+  "v1_static_rejection": {
+    "record": "full114-gl-offer-static-rejection-v1",
+    "index_sha256": "933D8CD90B09EE955C3C424FD6E6BDC1B1B517D69A1C1576B3F8B12D41B5779C",
+    "finding": "rowPrefix_fiber_equiv returns Equiv in Type and must be a private noncomputable def",
+    "v1_preserved": true
+  }
+}

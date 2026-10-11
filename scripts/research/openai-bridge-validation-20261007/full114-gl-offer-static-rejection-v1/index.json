@@ -1,0 +1,43 @@
+{
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full114-rectangular-gl-repair-v1\\manifest.json",
+      "copy": "manifest.json",
+      "bytes": 3502,
+      "sha256": "38EA60EE6F0E3AF97F569F6A572D646AA0D57AE0CE7E8085015E3BB208386DDB"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full114-rectangular-gl-repair-v1\\PROOF-AND-API-MAP.md",
+      "copy": "PROOF-AND-API-MAP.md",
+      "bytes": 5188,
+      "sha256": "0EC2CA92C670FC94B390242AC694A84466C9799494868F98FF35A05D295D64F9"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full114-rectangular-gl-repair-v1\\RectangularGLRowCompletion.lean",
+      "copy": "RectangularGLRowCompletion.lean",
+      "bytes": 18126,
+      "sha256": "B863C6C1BD7FD3233C5D7F3C98163FF197CD6D6F257E59279640D66BB83287F3"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full114-rectangular-gl-repair-v1\\RectangularGLRowCompletionChecks.lean",
+      "copy": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    }
+  ],
+  "status": "static source-kind defect before compilation; exact offer preserved",
+  "findings": [
+    {
+      "source": "RectangularGLRowCompletion.lean",
+      "declaration": "rowPrefix_fiber_equiv",
+      "issue": "Declared as theorem but returns an Equiv in Type; offer a private noncomputable def instead, retaining the Prop-valued cardinality theorem."
+    },
+    {
+      "source": "PROOF-AND-API-MAP.md and manifest.json",
+      "issue": "The exact warning recommends let over letI, not haveI. Correct the diagnostic description."
+    }
+  ],
+  "compiler_invoked": false,
+  "immutable_compiler_input": false,
+  "accepted": false
+}
