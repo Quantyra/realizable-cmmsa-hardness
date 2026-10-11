@@ -1,0 +1,18 @@
+import PvNP.RealizableHardness.ExactPhiEigenrelation
+
+open PvNP.RealizableHardness.ExactAppendOperatorContracts
+open PvNP.RealizableHardness.BinaryMatrixFourier
+
+set_option autoImplicit false
+
+namespace PvNP.RealizableHardness.ExactPhiEigenrelationChecks
+
+#check PvNP.RealizableHardness.ExactPhiEigenrelation.phiAverage_character_eigen
+#check PvNP.RealizableHardness.ExactPhiEigenrelation.phiAverage_character_product
+#check PvNP.RealizableHardness.ExactPhiEigenrelation.phiAverage_rankProjection_eigen
+
+#print axioms PvNP.RealizableHardness.ExactPhiEigenrelation.phiAverage_character_eigen
+#print axioms PvNP.RealizableHardness.ExactPhiEigenrelation.phiAverage_character_product
+#print axioms PvNP.RealizableHardness.ExactPhiEigenrelation.phiAverage_rankProjection_eigen
+
+end PvNP.RealizableHardness.ExactPhiEigenrelationChecks

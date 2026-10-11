@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.RectangularGLSelectedRows
+
+#check PvNP.RealizableHardness.RectangularGLSelectedRows.selectedRowsMap_surjective
+#print axioms PvNP.RealizableHardness.RectangularGLSelectedRows.selectedRowsMap_surjective
+
+#check PvNP.RealizableHardness.RectangularGLSelectedRows.selected_rows_uniform_mean
+#print axioms PvNP.RealizableHardness.RectangularGLSelectedRows.selected_rows_uniform_mean
+
+#check PvNP.RealizableHardness.RectangularGLSelectedRows.bottom_rows_uniform_mean
+#print axioms PvNP.RealizableHardness.RectangularGLSelectedRows.bottom_rows_uniform_mean
+
+#check PvNP.RealizableHardness.RectangularGLSelectedRows.bottom_inverse_rows_uniform_mean
+#print axioms PvNP.RealizableHardness.RectangularGLSelectedRows.bottom_inverse_rows_uniform_mean

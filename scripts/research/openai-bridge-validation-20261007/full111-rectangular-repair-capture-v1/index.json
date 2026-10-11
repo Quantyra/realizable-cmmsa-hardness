@@ -1,0 +1,37 @@
+{
+  "schema": "full111-exact-failed-input-repair-capture-v1",
+  "scope": "rectangular",
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full111-rectangular-frame-repair-v1\\OFFER-MANIFEST.json",
+      "copy": "OFFER-MANIFEST.json",
+      "bytes": 2329,
+      "sha256": "BA8742953FB7239E946D2DBA08E6E91E30AF3E353673A55CF2F7BD0807D7164E"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full111-rectangular-frame-repair-v1\\RectangularFrameFiberAverage.lean",
+      "copy": "RectangularFrameFiberAverage.lean",
+      "bytes": 4413,
+      "sha256": "F1DBDBF44468D72573F2B15FACFFD3435A700B5AAB98362E2B70F217777C9B8F"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full111-rectangular-frame-repair-v1\\RectangularFrameFiberAverageChecks.lean",
+      "copy": "RectangularFrameFiberAverageChecks.lean",
+      "bytes": 802,
+      "sha256": "CB02EB2563A9D53438C3A1F58B71699D3E9ECAE70A5563DA661570F79B4E5518"
+    }
+  ],
+  "parent_run": "cmmsa_a8_output_20261011T025221Z_7046a7c0",
+  "parent_native_archive_sha256": "3CFE890E3B4666A64C4E80AA7890C974D1DAF97FE82E43753BED1F0E3E14CEB0",
+  "parent_input_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+  "source": "lean/PvNP/RealizableHardness/RectangularFrameFiberAverage.lean",
+  "old_sha256": "5F93279F44E22B3022C724FBD6C739163645494D74235CA3E8C8A29942C66038",
+  "new_sha256": "F1DBDBF44468D72573F2B15FACFFD3435A700B5AAB98362E2B70F217777C9B8F",
+  "exact_diff": "--- Full110/RectangularFrameFiberAverage.lean\n+++ full111-rectangular-frame-repair-v1/RectangularFrameFiberAverage.lean\n@@ -76,7 +76,7 @@\n       _ = ∑ b : B, Fintype.card (Fiber f b) := Fintype.card_sigma\n       _ = Fintype.card B * k := by\n         simp_rw [hcard]\n-        simp [Finset.sum_const, nsmul_eq_mul]\n+        simp [Finset.sum_const]\n   have hsum := sum_comp_eq_card_mul_sum f k hcard g\n   have hA : (Fintype.card A : Real) ≠ 0 := by\n     rw [htotal]\n@@ -94,7 +94,9 @@\n theorem card_binary_rectangular_frames (d c : Nat) (hc : c ≤ d) :\n     Fintype.card (Frame (Fin d → ZMod 2) c) = frameProduct d c := by\n   classical\n-  simpa using (card_frame (V := Fin d → ZMod 2) (a := c) hc)\n+  have hfinrank : c ≤ Module.finrank (ZMod 2) (Fin d → ZMod 2) := by\n+    simpa using hc\n+  simpa using (card_frame (V := Fin d → ZMod 2) (a := c) hfinrank)\n \n /-- Zero columns have exactly one full-column frame. This is the degenerate\n prefix case of the rectangular marginal, not an appeal to positive width. -/\n",
+  "declaration_headers_and_imports_preserved": true,
+  "existing_checks_preserved": true,
+  "capture_control_sha256": "07A1030C58EDE3047C3CE93F01120EF06DD0B62ED80BC4C98F6800913FC25D4A",
+  "local_Lean_invoked": false,
+  "GCP_verified": false,
+  "accepted": false
+}

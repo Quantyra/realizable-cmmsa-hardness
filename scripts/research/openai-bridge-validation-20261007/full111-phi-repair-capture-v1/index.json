@@ -1,0 +1,49 @@
+{
+  "schema": "full111-exact-failed-input-repair-capture-v1",
+  "scope": "phi",
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full111-phi-repair-v1\\ARGUMENT-AND-API-MAP-v4.md",
+      "copy": "ARGUMENT-AND-API-MAP-v4.md",
+      "bytes": 3359,
+      "sha256": "6F31E7F2302D4C3A30C4397DC9D1F00ED6BB54374DBA68710DEA6F7964A75509"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full111-phi-repair-v1\\ExactPhiEigenrelation-v4.lean",
+      "copy": "ExactPhiEigenrelation-v4.lean",
+      "bytes": 19072,
+      "sha256": "273517878B1235255A0F476940D43DAC9FA9193C2CF71357F4DD3280354B3430"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full111-phi-repair-v1\\ExactPhiEigenrelationChecks-v4.lean",
+      "copy": "ExactPhiEigenrelationChecks-v4.lean",
+      "bytes": 828,
+      "sha256": "E0EFF56684477F10E76326E1FDF16BB489A1F1F45342F54FD012847E64E5E1FB"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full111-phi-repair-v1\\full111-offer-manifest.json",
+      "copy": "full111-offer-manifest.json",
+      "bytes": 1727,
+      "sha256": "F5139010BA46BA74CF2CD6F059B010E71DE1447E9D60B6C129653066383B9A60"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full111-phi-repair-v1\\parent-v4-index.json",
+      "copy": "parent-v4-index.json",
+      "bytes": 1872,
+      "sha256": "3423358517781BCA5AD6220B131216293B9D3E19DC61A84F2D67D21AB09EB056"
+    }
+  ],
+  "parent_run": "cmmsa_a8_output_20261011T025221Z_7046a7c0",
+  "parent_native_archive_sha256": "3CFE890E3B4666A64C4E80AA7890C974D1DAF97FE82E43753BED1F0E3E14CEB0",
+  "parent_input_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+  "source": "lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean",
+  "old_sha256": "B1177090ABB0AFA8E09CD9505DD3AC78C9445656C8B20F4C86D66AF325B9CCEE",
+  "new_sha256": "273517878B1235255A0F476940D43DAC9FA9193C2CF71357F4DD3280354B3430",
+  "exact_diff": "--- Full110/ExactPhiEigenrelation.lean\n+++ full111-phi-repair-v1/ExactPhiEigenrelation.lean\n@@ -85,12 +85,12 @@\n     ext i\n     have hij := congrFun (congrFun h i) j\n     simpa [Matrix.mul_apply, Matrix.transpose_apply,\n-      Matrix.mulVecLin_apply] using hij\n+      Matrix.mulVecLin_apply, Matrix.mulVec] using hij\n   · intro h\n     ext i j\n     have hij := congrFun (h j) i\n     simpa [Matrix.mul_apply, Matrix.transpose_apply,\n-      Matrix.mulVecLin_apply] using hij\n+      Matrix.mulVecLin_apply, Matrix.mulVec] using hij\n \n private theorem row_li_iff_kernel_subtype_li {n d s : Nat}\n     (Y : BinaryMatrix n d) (C : BinaryMatrix s d)\n@@ -161,7 +161,8 @@\n       intro g hg j\n       have hsub : (∑ k : Fin s, g k • f.1 k) = 0 := by\n         apply Subtype.ext\n-        simpa [C] using hg\n+        ext l\n+        simpa [C, Matrix.row] using congrFun hg l\n       exact hfi g hsub j\n     refine ⟨C, ⟨(matrix_surjective_iff_rows_independent C).mpr hrows,\n       ?_⟩⟩\n@@ -200,7 +201,7 @@\n     rw [card_frame hs', hker]\n   · have hd : d - Y.rank < s := Nat.lt_of_not_ge hs\n     have hcard : Fintype.card (Frame (LinearMap.ker Y.mulVecLin) s) = 0 := by\n-      letI : IsEmpty (Frame (LinearMap.ker Y.mulVecLin) s) := ⟨fun f => by\n+      haveI : IsEmpty (Frame (LinearMap.ker Y.mulVecLin) s) := ⟨fun f => by\n         have hle : s ≤ Module.finrank (ZMod 2)\n             (LinearMap.ker Y.mulVecLin) := by\n           simpa using f.property.fintype_card_le_finrank\n@@ -288,7 +289,7 @@\n         (frameProduct d s : Real) * BinaryMatrixFourier.character Y M := by\n   classical\n   let S : Type := {C : FullRowFrame s d // Y * C.1.transpose = 0}\n-  letI : Fintype S := Fintype.ofFinite S\n+  haveI : Fintype S := Fintype.ofFinite S\n   have hcardB : (Fintype.card (BinaryMatrix n s) : Real) ≠ 0 := by\n     have hp : 0 < Fintype.card (BinaryMatrix n s) :=\n       Fintype.card_pos_iff.mpr ⟨0⟩\n@@ -309,12 +310,17 @@\n       (∑ C : FullRowFrame s d,\n         if Y * C.1.transpose = 0 then (1 : Real) else 0) =\n           (Fintype.card S : Real) := by\n-    simpa [S, Fintype.card_subtype] using\n-      (Finset.sum_boole\n-        (p := fun C : FullRowFrame s d => Y * C.1.transpose = 0)\n-        (s := Finset.univ) (R := Real))\n+    change (∑ C ∈ (Finset.univ : Finset (FullRowFrame s d)),\n+      if Y * C.1.transpose = 0 then (1 : Real) else 0) =\n+        (Fintype.card {C : FullRowFrame s d // Y * C.1.transpose = 0} : Real)\n+    rw [Fintype.card_subtype]\n+    exact Finset.sum_boole\n+      (p := fun C : FullRowFrame s d => Y * C.1.transpose = 0)\n+      (s := Finset.univ) (R := Real)\n   have hcardS : Fintype.card S = frameProduct (d - Y.rank) s := by\n-    exact importedSurvivor_card Y\n+    change Fintype.card\n+      {C : FullRowFrame s d // Y * C.1.transpose = 0} = _\n+    exact importedSurvivor_card (n := n) (d := d) (s := s) Y\n   have hnum :\n       (∑ p : BinaryMatrix n s × FullRowFrame s d,\n         BinaryMatrixFourier.character Y (M + p.1 * p.2.1)) =\n@@ -353,6 +359,7 @@\n       _ = _ := by rw [hsumSurvivors]\n   unfold phiAverage\n   rw [hnum, Fintype.card_prod, hcardS, fullRowFrame_card s d hs]\n+  push_cast\n   have hden : (frameProduct d s : Real) ≠ 0 := by\n     exact_mod_cast (Nat.ne_of_gt (frameProduct_pos_here hs))\n   field_simp [hcardB, hcardC, hden]\n",
+  "declaration_headers_and_imports_preserved": true,
+  "existing_checks_preserved": true,
+  "capture_control_sha256": "DA5B0C2EE649AFBF2B42ED2CF5E53C13A0F707E92ECF1DFFD4ED24088F94D8BB",
+  "local_Lean_invoked": false,
+  "GCP_verified": false,
+  "accepted": false
+}

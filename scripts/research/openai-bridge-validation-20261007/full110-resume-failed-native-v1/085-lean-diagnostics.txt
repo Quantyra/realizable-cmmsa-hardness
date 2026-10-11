@@ -1,0 +1,72 @@
+error: lean/PvNP/RealizableHardness/RectangularFrameFiberAverage.lean:97:57: Application type mismatch: The argument
+  hc
+has type
+  c ≤ d
+but is expected to have type
+  c ≤ Module.finrank (ZMod 2) (Fin d → ZMod 2)
+in the application
+  card_frame hc
+✔ [3523/3535] Built PvNP.RealizableHardness.ActualAppendProductCrossLevelIdentity (4.4s)
+✔ [3524/3535] Built PvNP.RealizableHardness.ExactAppendOperatorContracts (4.7s)
+✔ [3527/3535] Built PvNP.RealizableHardness.ActualSelectedComplementHC46OriginalApplication (5.1s)
+✔ [3528/3535] Built PvNP.RealizableHardness.ActualSelectedComplementSourceSizeOriginalApplication (5.4s)
+✔ [3529/3535] Built PvNP.RealizableHardness.ActualSelectedComplementManuscriptDyadicMoment (10s)
+✖ [3530/3535] Building PvNP.RealizableHardness.ExactPhiEigenrelation (10s)
+trace: .> LEAN_PATH=/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/Cli/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/batteries/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/Qq/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/aesop/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/importGraph/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/plausible/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/complexitylib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/mathlib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/packages/cslib/.lake/build/lib/lean:/home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/build/lib/lean /home/dfredriksen_quantyra_org/.elan/toolchains/leanprover--lean4---v4.34.0-rc2/bin/lean /home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean -o /home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/build/lib/lean/PvNP/RealizableHardness/ExactPhiEigenrelation.olean -i /home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/build/lib/lean/PvNP/RealizableHardness/ExactPhiEigenrelation.ilean -c /home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/build/ir/PvNP/RealizableHardness/ExactPhiEigenrelation.c --setup /home/dfredriksen_quantyra_org/cmmsa_a8_output_20261011T025221Z_7046a7c0/.lake/build/ir/PvNP/RealizableHardness/ExactPhiEigenrelation.setup.json --json
+
+error: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:87:4: Type mismatch: After simplification, term
+  hij
+ has type
+  @Eq (ZMod 2) (∑ j_1, Y i j_1 * C j j_1) 0
+but is expected to have type
+  @Eq (ZMod 2) (Matrix.mulVec Y (Matrix.row C j) i) 0
+
+error: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:92:4: Type mismatch: After simplification, term
+  hij
+ has type
+  @Eq (ZMod 2) (Matrix.mulVec Y (Matrix.row C j) i) 0
+but is expected to have type
+  @Eq (ZMod 2) (∑ j_1, Y i j_1 * C j j_1) 0
+
+error: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:164:8: Type mismatch: After simplification, term
+  hg
+ has type
+  @Eq (Fin d → ZMod 2) (∑ x, g x • Matrix.row (fun j k => ↑(↑f j) k) x) 0
+but is expected to have type
+  @Eq (Fin d → ZMod 2) (∑ x, g x • ↑(↑f x)) 0
+
+error: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:317:4: Type mismatch
+  importedSurvivor_card Y
+has type
+  @Fintype.card { C // Y * Matrix.transpose ↑C = 0 } (Subtype.fintype fun C => Y * Matrix.transpose ↑C = 0) =
+    frameProduct (d - Matrix.rank Y) ?m.203
+but is expected to have type
+  @Fintype.card S this = frameProduct (d - Matrix.rank Y) s
+info: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:359:2: Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+
+error: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:288:73: unsolved goals
+n d s : ℕ
+hs : s ≤ d
+Y M : BinaryMatrix n d
+S : Type := { C // Y * Matrix.transpose ↑C = 0 }
+this : Fintype S := Fintype.ofFinite S
+hcardB : ↑(Fintype.card (BinaryMatrix n s)) ≠ 0
+hcardC : ↑(Fintype.card (FullRowFrame s d)) ≠ 0
+hsumB :
+  ∀ (C : FullRowFrame s d),
+    ∑ B, character Y (B * ↑C) = ↑(Fintype.card (BinaryMatrix n s)) * if Y * Matrix.transpose ↑C = 0 then 1 else 0
+hsumSurvivors : (∑ C, if Y * Matrix.transpose ↑C = 0 then 1 else 0) = ↑(Fintype.card S)
+hcardS : Fintype.card S = frameProduct (d - Matrix.rank Y) s
+hnum : ∑ p, character Y (M + p.1 * ↑p.2) = ↑(Fintype.card (BinaryMatrix n s)) * character Y M * ↑(Fintype.card S)
+hden : ↑(frameProduct d s) ≠ 0
+⊢ ↑(Fintype.card (BinaryMatrix n s)) * character Y M * ↑(frameProduct (d - Matrix.rank Y) s) * ↑(frameProduct d s) =
+    character Y M * ↑(frameProduct (d - Matrix.rank Y) s) * ↑(Fintype.card (BinaryMatrix n s) * frameProduct d s)
+✔ [3535/3535] Built PvNP.RealizableHardness.ActualSelectedComplementSourceSizeSpectralApplication (4.7s)
+Some required targets logged failures:
+- PvNP.RealizableHardness.RectangularFrameFiberAverage
+- PvNP.RealizableHardness.ExactPhiEigenrelation

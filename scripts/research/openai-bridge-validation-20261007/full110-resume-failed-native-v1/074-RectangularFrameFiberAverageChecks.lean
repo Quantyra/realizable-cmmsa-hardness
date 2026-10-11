@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.RectangularFrameFiberAverage
+
+#check PvNP.RealizableHardness.RectangularFrameFiberAverage.sum_comp_eq_card_mul_sum
+#print axioms PvNP.RealizableHardness.RectangularFrameFiberAverage.sum_comp_eq_card_mul_sum
+
+#check PvNP.RealizableHardness.RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers
+#print axioms PvNP.RealizableHardness.RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers
+
+#check PvNP.RealizableHardness.RectangularFrameFiberAverage.card_binary_rectangular_frames
+#print axioms PvNP.RealizableHardness.RectangularFrameFiberAverage.card_binary_rectangular_frames
+
+#check PvNP.RealizableHardness.RectangularFrameFiberAverage.zero_width_frame_card
+#print axioms PvNP.RealizableHardness.RectangularFrameFiberAverage.zero_width_frame_card

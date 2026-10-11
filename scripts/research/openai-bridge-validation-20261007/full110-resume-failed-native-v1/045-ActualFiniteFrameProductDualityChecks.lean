@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualFiniteFrameProductDuality
+
+open PvNP.RealizableHardness.ActualFiniteFrameProductDuality
+
+#check frameProduct_ratio_duality
+#check frameProduct_ratio_eq_product
+#check append_rank_projection_energy_eq_product
+#print axioms frameProduct_ratio_duality
+#print axioms frameProduct_ratio_eq_product
+#print axioms append_rank_projection_energy_eq_product

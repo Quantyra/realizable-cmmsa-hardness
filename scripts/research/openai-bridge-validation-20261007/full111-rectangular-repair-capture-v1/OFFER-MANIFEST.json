@@ -1,0 +1,61 @@
+{
+  "offer": "full111-rectangular-frame-repair-v1",
+  "status": "uncompiled source repair; awaiting immutable capture",
+  "base": {
+    "path": "operator-complete-offer-capture-v3/RectangularFrameFiberAverage.lean",
+    "bytes": 4329,
+    "sha256": "5F93279F44E22B3022C724FBD6C739163645494D74235CA3E8C8A29942C66038"
+  },
+  "files": [
+    {
+      "path": "RectangularFrameFiberAverage.lean",
+      "bytes": 4413,
+      "sha256": "F1DBDBF44468D72573F2B15FACFFD3435A700B5AAB98362E2B70F217777C9B8F",
+      "utf8_no_bom": true,
+      "bare_question_mark_count": 0,
+      "lexical_preflight_v2_passed": true,
+      "lean_parse_or_compile_performed": false
+    },
+    {
+      "path": "RectangularFrameFiberAverageChecks.lean",
+      "bytes": 802,
+      "sha256": "CB02EB2563A9D53438C3A1F58B71699D3E9ECAE70A5563DA661570F79B4E5518",
+      "unchanged_from_base": true,
+      "utf8_no_bom": true,
+      "bare_question_mark_count": 0,
+      "lexical_preflight_v2_passed": true,
+      "lean_parse_or_compile_performed": false
+    }
+  ],
+  "exact_source_changes": [
+    {
+      "location": "sum_comp_eq_card_mul_sum, old line 79",
+      "old": "simp [Finset.sum_const, nsmul_eq_mul]",
+      "new": "simp [Finset.sum_const]",
+      "reason": "remove the native-reported unused simp argument"
+    },
+    {
+      "location": "card_binary_rectangular_frames, old line 97",
+      "old": "simpa using (card_frame (V := Fin d → ZMod 2) (a := c) hc)",
+      "new": "derive hfinrank : c ≤ Module.finrank (ZMod 2) (Fin d → ZMod 2) by simpa using hc, then apply card_frame with hfinrank",
+      "reason": "card_frame requires the frame width bound against finrank, not d directly"
+    }
+  ],
+  "preserved": {
+    "theorem_headers_and_hypotheses": true,
+    "checks_file": true,
+    "imports": [
+      "Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Card",
+      "PvNP.RealizableHardness.ActualFiniteFrameProductDuality"
+    ],
+    "qualified_project_dependency": {
+      "name": "ActualFiniteFrameProductDuality.lean",
+      "full109_record_path": "full109-qualified-native-record-v1/015-ActualFiniteFrameProductDuality.lean",
+      "bytes": 7056,
+      "sha256": "39E80A821DE4B51E8AC2A74CF9A0967D7CD3EA45D730E7DD47C0B2C144245DCE"
+    },
+    "all_other_source_bytes": true
+  },
+  "manifest_excludes_self_hash": true,
+  "no_lean_execution": true
+}

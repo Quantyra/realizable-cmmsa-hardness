@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import runpy,sys;sys.path.insert(0,sys.argv[1]);p=sys.argv[2];sys.argv=sys.argv[2:];runpy.run_path(p,run_name="__main__")
+                                                                                        ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full110_postprocess.py", line 21, in <module>
+    main(sys.argv[1])
+    ~~~~^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full110_postprocess.py", line 12, in main
+    full110_native_audit.main(OUTPUT)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full110_native_audit.py", line 178, in main
+    if any(objects.get(obj) is None for obj in added_objects.values()): raise RuntimeError('Added source object missing')
+                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Added source object missing

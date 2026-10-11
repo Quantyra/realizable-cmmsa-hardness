@@ -1,0 +1,30 @@
+{
+  "source": "capture_full111_repair_offers_v1.py",
+  "source_sha256": "07A1030C58EDE3047C3CE93F01120EF06DD0B62ED80BC4C98F6800913FC25D4A",
+  "target": "capture_full111_repair_offers_v3.py",
+  "target_sha256": "DA5B0C2EE649AFBF2B42ED2CF5E53C13A0F707E92ECF1DFFD4ED24088F94D8BB",
+  "exact_replacements": [
+    {
+      "old": "    folder_name, stem = SCOPES[scope]\n",
+      "new": "    assert scope == 'phi'\n    folder_name, stem = SCOPES[scope]\n",
+      "occurrences": 1
+    },
+    {
+      "old": "(offer / (stem + '.lean'))",
+      "new": "(offer / (stem + '-v4.lean'))",
+      "occurrences": 2
+    },
+    {
+      "old": "offer / (stem + 'Checks.lean')",
+      "new": "offer / (stem + 'Checks-v4.lean')",
+      "occurrences": 1
+    }
+  ],
+  "executed_v1_control_preserved": true,
+  "v2_original_tool_chunk": "b848d3",
+  "v2_native_exit": 1,
+  "v2_failure": "Expected one filename occurrence, found two",
+  "v2_target_created": false,
+  "v2_raw_stream_archive_claimed": false,
+  "v2_failed_control_sha256": "35B8AAAC249943BF01F27958C9F43BE46E5E48E34218AAA565F1BA0EA3EF8D39"
+}
