@@ -1,0 +1,89 @@
+{
+  "records": [
+    {
+      "source": "preserve_full113_staging_success_v1.py",
+      "source_commit": "9bb7bc3b",
+      "source_sha256": "957F3B6EAEE98A28F689F6B10A8D0614A4FC49010E29712CA0DA3AF9317D133B",
+      "target": "preserve_full114_staging_success_v1.py",
+      "target_sha256": "0C8F2EF0A66DF49D1D4A81EA337709357362E0E85783ED7BF49AECF3F7D5F43C",
+      "exact_replacements": [
+        {
+          "old": "full113",
+          "new": "full114",
+          "occurrences": 2
+        },
+        {
+          "old": "Full113",
+          "new": "Full114",
+          "occurrences": 1
+        },
+        {
+          "old": "def main():",
+          "new": "def main(original_handle):",
+          "occurrences": 1
+        },
+        {
+          "old": "    wrapper=ROOT/'research-resume-20261011/20261011T055824440777Z-68edc47ecf8b'",
+          "new": "    wrappers=[]\n    for candidate in (ROOT/'research-resume-20261011').iterdir():\n        command_path=candidate/'command.json'\n        if not command_path.is_file():continue\n        entry=json.loads(command_path.read_bytes())\n        if len(entry['argv'])>7 and Path(entry['argv'][7]).name=='stage_full114_after_recovery_openssh_v2.py':\n            assert entry['native_exit']==0;wrappers.append(candidate)\n    wrapper,=wrappers",
+          "occurrences": 1
+        },
+        {
+          "old": "original_handle=37563",
+          "new": "original_handle=original_handle",
+          "occurrences": 1
+        },
+        {
+          "old": "if __name__=='__main__':main()",
+          "new": "if __name__=='__main__':\n    import sys\n    main(int(sys.argv[1]))",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "source": "compress_full113_settled_custody_text_v2.py",
+      "source_commit": "9bb7bc3b",
+      "source_sha256": "B6087C0DEEE981CB8AF213777206CDE90339F213A945E9343F12DB20C76798A1",
+      "target": "compress_full114_recovery_settled_text_v1.py",
+      "target_sha256": "297E7123A8201EBD4050B4E699B8666DE031F12B82858BFD509EC4A70CB6B6F5",
+      "exact_replacements": [
+        {
+          "old": "import subprocess",
+          "new": "import subprocess\nimport sys",
+          "occurrences": 1
+        },
+        {
+          "old": "FOLDERS = ['full113-recovery-complete-record-v1']",
+          "new": "FOLDERS = ['full114-recovery-complete-record-v1']",
+          "occurrences": 1
+        },
+        {
+          "old": "assert head.startswith('8a12d3f8')",
+          "new": "assert len(sys.argv) == 2 and head == sys.argv[1]",
+          "occurrences": 1
+        },
+        {
+          "old": "row['bytes'] < 128000",
+          "new": "row['bytes'] < 8192",
+          "occurrences": 1
+        },
+        {
+          "old": "assert not path.parts[len(BASE.parts)].startswith('full113')",
+          "new": "assert path.parts[len(BASE.parts)].startswith(('full113-', 'full114-'))",
+          "occurrences": 1
+        },
+        {
+          "old": "full113-settled-custody-text-lossless-v2",
+          "new": "full114-recovery-settled-text-lossless-v1",
+          "occurrences": 1
+        },
+        {
+          "old": "active_full113_excluded=True",
+          "new": "only_completed_recovery_phase_originals_touched=True",
+          "occurrences": 1
+        }
+      ]
+    }
+  ],
+  "only_completed_preserved_originals_allowed": true,
+  "compiler_invoked": false
+}
