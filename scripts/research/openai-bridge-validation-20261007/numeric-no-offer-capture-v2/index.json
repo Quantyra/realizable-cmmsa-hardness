@@ -1,0 +1,101 @@
+{
+  "original_directory": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-numeric-no-candidate-v2",
+  "files": [
+    {
+      "path": "ActualNumericNo.lean",
+      "bytes": 17088,
+      "sha256": "C3F6EC5A18D923C7B415003944814541185638D7795A8B66995E6E3976EC7BD1",
+      "lexical_preflight_v2": {
+        "lexical_preflight_passed": true,
+        "lean_parse_or_compile_performed": false,
+        "bare_question_mark_guard_passed": true,
+        "utf8_no_bom": true
+      }
+    },
+    {
+      "path": "ActualNumericNoChecks.lean",
+      "bytes": 797,
+      "sha256": "2332A5238FEEFB67495324C495CE8FE8CC0436CA5EDEF25BFBF89ACE82DE41F2",
+      "lexical_preflight_v2": {
+        "lexical_preflight_passed": true,
+        "lean_parse_or_compile_performed": false,
+        "bare_question_mark_guard_passed": true,
+        "utf8_no_bom": true
+      }
+    },
+    {
+      "path": "ARGUMENT-MAP.md",
+      "bytes": 3619,
+      "sha256": "2AD16D1E47922D95FFFDD1308EF3975B0A210CCC7FEC3E84752EA40ED0AFEA8B",
+      "utf8_no_bom": true
+    },
+    {
+      "path": "OFFER-MANIFEST.json",
+      "bytes": 1193,
+      "sha256": "547D2E531F8D9A9E5EA2E47DE919B0A656F55E26563479324B59D2D8037C93DE"
+    }
+  ],
+  "lexical_preflight": [
+    {
+      "path": "ActualNumericNo.lean",
+      "bytes": 17088,
+      "sha256": "C3F6EC5A18D923C7B415003944814541185638D7795A8B66995E6E3976EC7BD1",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualNumericNoChecks.lean",
+      "bytes": 797,
+      "sha256": "2332A5238FEEFB67495324C495CE8FE8CC0436CA5EDEF25BFBF89ACE82DE41F2",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "prior_capture_index_sha256": "766266B66956E6ABA348B4A733B0DAB9B533B35D68AD2C8DBEADB8978E04C65D",
+  "exact_source_replacements": [
+    [
+      "ActualNumericNoCandidate",
+      "ActualNumericNo",
+      2
+    ],
+    [
+      "{V : Type*} [Fintype V]",
+      "{V : Type*} [AddCommGroup V] [Module F V] [Fintype V]",
+      5
+    ],
+    [
+      "\u2200 _W : BinaryMatrix n d, (1 : Real)",
+      "\u2211 _W : BinaryMatrix n d, (1 : Real)",
+      1
+    ],
+    [
+      "private theorem booleanRankEnergy_total_le_one",
+      "theorem booleanRankEnergy_total_le_one",
+      1
+    ]
+  ],
+  "complete_source_diff": "--- v1\n+++ v2\n@@ -9,7 +9,7 @@\n not choose the manuscript selector/sampler, prove the selected-star signal, or\n compare the complete material RHS with the final threshold.\n -/\n-namespace PvNP.RealizableHardness.ActualNumericNoCandidate\n+namespace PvNP.RealizableHardness.ActualNumericNo\n \n open PvNP.RealizableHardness.ActualMaximalPairLadder\n open PvNP.RealizableHardness.ActualSelectedComplementSourceSizeAnalyticMoment\n@@ -23,11 +23,11 @@\n \n private abbrev F := ZMod 2\n \n-private def submoduleCode {V : Type*} [Fintype V]\n+private def submoduleCode {V : Type*} [AddCommGroup V] [Module F V] [Fintype V]\n     (W : Submodule F V) : V \u2192 Bool :=\n   fun v => decide (v \u2208 W)\n \n-private theorem submoduleCode_injective {V : Type*} [Fintype V] :\n+private theorem submoduleCode_injective {V : Type*} [AddCommGroup V] [Module F V] [Fintype V] :\n     Function.Injective (submoduleCode (V := V)) := by\n   intro W W' h\n   apply Submodule.ext\n@@ -38,16 +38,16 @@\n     simp [hW, hW'] at hv \u22a2\n \n private noncomputable instance submodule_finite\n-    {V : Type*} [Fintype V] : Finite (Submodule F V) :=\n+    {V : Type*} [AddCommGroup V] [Module F V] [Fintype V] : Finite (Submodule F V) :=\n   Finite.of_injective (submoduleCode (V := V)) submoduleCode_injective\n \n-private theorem vector_subtype_finite {V : Type*} [Fintype V]\n+private theorem vector_subtype_finite {V : Type*} [AddCommGroup V] [Module F V] [Fintype V]\n     (W : Submodule F V) : Finite W :=\n   Finite.of_injective (fun x : W => (x : V)) (by\n     intro x y h\n     exact Subtype.ext h)\n \n-private theorem dual_finite {V : Type*} [Fintype V]\n+private theorem dual_finite {V : Type*} [AddCommGroup V] [Module F V] [Fintype V]\n     (W : Submodule F V) : Finite (Module.Dual F W) := by\n   letI : Finite W := vector_subtype_finite W\n   letI : Fintype W := Fintype.ofFinite W\n@@ -262,7 +262,7 @@\n   apply (div_le_one (by positivity)).2\n   calc\n     (\u2211 W : BinaryMatrix n d, BinaryMatrixFourier.indicator b W) \u2264\n-        \u2200 _W : BinaryMatrix n d, (1 : Real) := by\n+        \u2211 _W : BinaryMatrix n d, (1 : Real) := by\n       apply Finset.sum_le_sum\n       intro W hW\n       by_cases hb : b W = true <;> simp [BinaryMatrixFourier.indicator, hb]\n@@ -286,7 +286,7 @@\n     positivity\n   \u00b7 positivity\n \n-private theorem booleanRankEnergy_total_le_one {n d : Nat}\n+theorem booleanRankEnergy_total_le_one {n d : Nat}\n     (b : BinaryMatrix n d \u2192 Bool) :\n     (\u2211 i : Fin (d + 1), booleanRankEnergy b i) \u2264 1 := by\n   rw [booleanRankEnergy_total]\n@@ -403,4 +403,4 @@\n     _ = twoPow (-(r : Real) * (bdim : Real)) := by simp [t]\n \n end\n-end PvNP.RealizableHardness.ActualNumericNoCandidate\n+end PvNP.RealizableHardness.ActualNumericNo\n",
+  "source_namespace_and_nine_requests_aligned": true,
+  "prior_static_findings_repaired": true,
+  "complete_argument_map_read": true,
+  "prose_lost_glyphs_repaired": true,
+  "dependency_pins": {
+    "ActualMaximalPairLadder.lean": "D61DF4001A90D5F5CF56B756151212F2EC1DDC8E10A64D919F0E046993E3FA81",
+    "ActualBinaryMatrixHC46FourierA16.lean": "21E062E1FE12023D981810AF3C06A9D463F25FB568B6ECF10F8B3396CD16A045",
+    "ActualSelectedComplementSourceSizeAnalyticMoment.lean": "03FB0A5DE3FD2E7E150645825165D2E30CFCE60BD34765BF7D6623E3A6D2D3D1"
+  },
+  "dependency_archive_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+  "root_read_complete_offer_by_full_v1_body_and_exact_v2_diff": true,
+  "immutable_capture_acknowledged": true,
+  "lean_executed": false,
+  "native_verified": false,
+  "accepted": false,
+  "full_goal_complete": false,
+  "remaining": [
+    "GCP translation diagnostics and exact native/axiom/trace/body review",
+    "Same-instance explicit source floor, selector/sampler and lower signal",
+    "Complete conservative scalar comparison and numeric NO"
+  ]
+}

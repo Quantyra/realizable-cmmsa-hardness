@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualNumericNo
+
+#print axioms PvNP.RealizableHardness.ActualNumericNo.actualAgreementMaximum
+#print axioms PvNP.RealizableHardness.ActualNumericNo.indexed_agreement_le_max
+#print axioms PvNP.RealizableHardness.ActualNumericNo.actualAgreementMaximum_nonneg
+#print axioms PvNP.RealizableHardness.ActualNumericNo.actualAgreementMaximum_cast_le_of_failure
+#print axioms PvNP.RealizableHardness.ActualNumericNo.actualAgreementMaximum_gives_hfail
+#print axioms PvNP.RealizableHardness.ActualNumericNo.booleanRankEnergy_total
+#print axioms PvNP.RealizableHardness.ActualNumericNo.booleanRankEnergy_total_le_one
+#print axioms PvNP.RealizableHardness.ActualNumericNo.actualWeightedHighEnergy
+#print axioms PvNP.RealizableHardness.ActualNumericNo.actualWeightedHighEnergy_le
