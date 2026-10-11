@@ -1,0 +1,126 @@
+{
+  "original_directory": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-numeric-no-scalar-candidate-v3",
+  "files": [
+    {
+      "path": "ActualNumericNoScalar.lean",
+      "bytes": 30658,
+      "sha256": "D7CBB25CD4095BA47FCC2C5461C22779D7FBBA5432D3EFAD9EADE095A7D5EA88"
+    },
+    {
+      "path": "ActualNumericNoScalarChecks.lean",
+      "bytes": 444,
+      "sha256": "0DDDD4867F3B45B04D8E3F083FCDB1F14DFB5E7B8FEA912FDCD153C1A0087EDA"
+    },
+    {
+      "path": "ARGUMENT-MAP.md",
+      "bytes": 4371,
+      "sha256": "6F538965FEF922A7F592C57EED03C9A90A130E0038C90B6F54DE806B58A3BBCE"
+    },
+    {
+      "path": "OFFER-MANIFEST.json",
+      "bytes": 1765,
+      "sha256": "A0D4957209B0CF742FF48FE53A384FF80F7A25D8600EC510048C544AD25D1994"
+    }
+  ],
+  "dependencies": [
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualSelectedComplementManuscriptDyadicMoment.lean",
+      "bytes": 19470,
+      "sha256": "AF3E380A36C45AED61FE5C2A81637AA6C9BBB8C0F83160FB386BA23F5475A705"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualSelectedComplementSourceSizeAnalyticMoment.lean",
+      "bytes": 66532,
+      "sha256": "03FB0A5DE3FD2E7E150645825165D2E30CFCE60BD34765BF7D6623E3A6D2D3D1"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualMaximalPairLadder.lean",
+      "bytes": 13004,
+      "sha256": "D61DF4001A90D5F5CF56B756151212F2EC1DDC8E10A64D919F0E046993E3FA81"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46FourierA16.lean",
+      "bytes": 15817,
+      "sha256": "21E062E1FE12023D981810AF3C06A9D463F25FB568B6ECF10F8B3396CD16A045"
+    }
+  ],
+  "dependency_archive": "C:\\Users\\dfred\\.quantyra\\builder02\\full110-exact-real-complex-operators-resource02\\input-archive.tar.gz",
+  "dependency_archive_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+  "lexical_preflight": [
+    {
+      "path": "ActualNumericNoScalar.lean",
+      "bytes": 30658,
+      "sha256": "D7CBB25CD4095BA47FCC2C5461C22779D7FBBA5432D3EFAD9EADE095A7D5EA88",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualNumericNoScalarChecks.lean",
+      "bytes": 444,
+      "sha256": "0DDDD4867F3B45B04D8E3F083FCDB1F14DFB5E7B8FEA912FDCD153C1A0087EDA",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "complete_source_checks_and_argument_map_read": true,
+  "root_findings": [
+    {
+      "location": "hBetaLower",
+      "finding": "The attempted eps >= 1/4*4 is not implied. Combine eps >= S with its full exponent: S*2^(-c-ms) = 2^(-2*(m+1)*h+(1998*m+2)*rho*h), then use the positive correction. The current hExponent direction is reversed and rw [he0] has no occurrence."
+    },
+    {
+      "location": "hbetaPos",
+      "finding": "The positivity proof precedes heps0. Prove epsilon positivity first from heps and powTwo_pos."
+    },
+    {
+      "location": "hHC",
+      "finding": "r <= d is not a theorem premise and does not follow from the given local Nat inequalities. The finite-index envelope does not mathematically require r <= d; remove the unnecessary premise rather than inventing a bound."
+    },
+    {
+      "location": "hfrac",
+      "finding": "T is Real, so (T : Nat) is invalid. Cross multiply the positive Real denominators and use hPscale directly."
+    },
+    {
+      "location": "hLowPow",
+      "finding": "An upper bound does not prove nonnegativity of the low sum. Unfold the actual nonnegative sum. Chain pow_le_pow_left through hconst and hEtaPow; current rw [hconst] does not consume hpow."
+    },
+    {
+      "location": "hHigh",
+      "finding": "The displayed hfactor equality double-counts r. Correct exponent is 1-20*m*h+r+(4/3)*r*rho*h. hBpow is an inequality and cannot be used as a rewrite equality. Nat.cast_sub needs 1 <= s, derived from hbr."
+    },
+    {
+      "location": "hAbsorb",
+      "finding": "Exponent comparison -20/3*m*h <= -5-A-C*h is false since A+C*h = 20/3*m*h. Derive 32*D <= 2^(C*h), multiply by 2^(-20/3*m*h), and divide by 32. Current log_rpow rewrite targets a goal without a logarithm; rw [he0] has no occurrence."
+    },
+    {
+      "location": "hratio",
+      "finding": "powTwo_neg is referenced but never declared. Derive the ratio with explicit positive division, rpow subtraction and inverse identities; nlinarith cannot supply those transcendental identities."
+    },
+    {
+      "location": "hBetaUpper",
+      "finding": "Use monotonicity in the base with a nonpositive exponent; rpow_le_rpow_of_exponent_ge controls exponents at a fixed base and cannot consume hbase."
+    },
+    {
+      "location": "hproductEq",
+      "finding": "The displayed exact equality is false: the left exponent equals the right exponent minus 4000*rho^2*h/T. Preserve that correction in an equality, then bound it above by zero for the final inequality."
+    },
+    {
+      "location": "glyphs",
+      "finding": "Three occurrences of 0 left-arrow (2 : Real) and one (2 : Real) left-arrow 0 are invalid proposition glyphs, despite lexical preflight passing. Inspect all mathematical glyphs; lexical checks are not parsing."
+    },
+    {
+      "location": "source bridge",
+      "finding": "Check the exact actualWeightedHighEnergy definition and real/natural s-1 cast before rewriting; hsCast is used before unfolding the RHS that contains it."
+    }
+  ],
+  "root_mathematical_and_glyph_preflight_passed": false,
+  "immutable_capture": true,
+  "successor_required": true,
+  "compiler_input_admitted": false,
+  "lean_executed": false,
+  "native_verified": false,
+  "accepted": false,
+  "full_goal_complete": false
+}
