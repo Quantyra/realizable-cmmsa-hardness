@@ -1,0 +1,136 @@
+{
+  "records": [
+    {
+      "parent": "full111_settled_cache_native111_v2.py",
+      "parent_sha256": "3F128E5D01EEFC323575DF6166C3F2B5E1E885FB71EDAA186D3C2B0CD076A0AE",
+      "target": "full111_settled_cache_native111_tail_v4.py",
+      "sha256": "DEC0B164F3733453A49815137637BF5B487E136C8328A11A8EDF92353A636244",
+      "replacements": [
+        {
+          "old": "full111-settled-cache-native111-v2",
+          "new": "full111-settled-cache-native111_tail-v4",
+          "occurrences": 1
+        },
+        {
+          "old": "TARGET = 5 * 1024**3",
+          "new": "TARGET = 384 * 1024**2",
+          "occurrences": 1
+        },
+        {
+          "old": "def plan():\n    old, canonical = guards()\n",
+          "new": "def plan():\n    old, canonical = guards()\n    excluded_plan = HOME / 'full111-settled-cache-native111-v2/plan.json'\n    assert digest(excluded_plan) == '93767BDDEF4365598F0697C3672C9708532233750FA6EB19014BC6BB7657573A'\n    excluded_rows = json.loads(excluded_plan.read_bytes())['rows']\n    assert len(excluded_rows) == 9649 and all(row['bytes'] >= 65536 for row in excluded_rows)\n    excluded = {row['relative'] for row in excluded_rows}\n",
+          "occurrences": 1
+        },
+        {
+          "old": "        rel = path.relative_to(old)",
+          "new": "        rel = path.relative_to(old)\n        if rel.as_posix() in excluded:\n            continue",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "run_full111_settled_cache_openssh_v4.py",
+      "parent_sha256": "0A2FB0CD6AA12710EB98BE415DD84BA90D8FFDDC2361D0FC33E1A0E4BF654458",
+      "target": "run_full111_settled_cache_openssh_v5.py",
+      "sha256": "B7F8F94D01D58421180F5BD23D6CF5AD4C7C5FA93EF005CF4AAD9539187D67B7",
+      "replacements": [
+        {
+          "old": "NUMBERS = [111,96,97,98,109,110,'111_small']",
+          "new": "NUMBERS = [111,96,97,98,109,110,'111_small','111_tail']",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-settled-cache-recovery-derivation-v3.json",
+          "new": "full111-settled-cache-recovery-derivation-v4.json",
+          "occurrences": 1
+        },
+        {
+          "old": "if action == 'plan': scopes = scopes[4:]",
+          "new": "if action == 'plan': scopes = scopes[7:]",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-recovery-plans-openssh-record-v4",
+          "new": "full111-recovery-plans-openssh-record-v5",
+          "occurrences": 1
+        },
+        {
+          "old": "all_seven_plans_verified",
+          "new": "all_eight_plans_verified",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "audit_full111_settled_cache_recovery_v3.py",
+      "parent_sha256": "D7927C02E456F69E2E321ED9A32363FDCDD670DA893A6B5E395DF339193A5BC1",
+      "target": "audit_full111_settled_cache_recovery_v4.py",
+      "sha256": "711674BDA5ADBF57C886F0ABD269282C6F5A170FD934485ACB4F777450B61D32",
+      "replacements": [
+        {
+          "old": "run_full111_settled_cache_openssh_v4",
+          "new": "run_full111_settled_cache_openssh_v5",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-settled-cache-recovery-derivation-v3.json",
+          "new": "full111-settled-cache-recovery-derivation-v4.json",
+          "occurrences": 2
+        },
+        {
+          "old": "complete-audit-v3",
+          "new": "complete-audit-v4",
+          "occurrences": 1
+        },
+        {
+          "old": "seven-scope",
+          "new": "eight-scope",
+          "occurrences": 2
+        }
+      ]
+    },
+    {
+      "parent": "stage_full112_after_recovery_openssh_v3.py",
+      "parent_sha256": "E611C0360DF358238CF00527D3C251F6B363CC64C0123748EB1EFF02A16881B4",
+      "target": "stage_full112_after_recovery_openssh_v4.py",
+      "sha256": "6DFBD65CEAA50BB18EF721A940E5AA606532009DA466780C26604E9EC45EFF9F",
+      "replacements": [
+        {
+          "old": "audit_full111_settled_cache_recovery_v3",
+          "new": "audit_full111_settled_cache_recovery_v4",
+          "occurrences": 2
+        },
+        {
+          "old": "all_seven_recovery_scopes_verified",
+          "new": "all_eight_recovery_scopes_verified",
+          "occurrences": 1
+        },
+        {
+          "old": "seven-scope",
+          "new": "eight-scope",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "run_full112_resume_step_v6.py",
+      "parent_sha256": "82A119D42906F90A3B2CD1DF1613159F8FD3249DFEDC16FB1847AA545FA4A4EA",
+      "target": "run_full112_resume_step_v7.py",
+      "sha256": "5893ABB87ED11108F3E336204B9DD786285D95532E11876A476E7C1D9CD070E1",
+      "replacements": [
+        {
+          "old": "'preserve_full111_complete_recovery_plans_v4.py'}",
+          "new": "'preserve_full111_complete_recovery_plans_v4.py', 'run_full111_settled_cache_openssh_v5.py', 'audit_full111_settled_cache_recovery_v4.py', 'stage_full112_after_recovery_openssh_v4.py', 'preserve_full111_complete_recovery_plans_v5.py'}",
+          "occurrences": 1
+        }
+      ]
+    }
+  ],
+  "manifest_sha256": "6D21D69138DF65A609F0F953C2E06735279A8444EAA663206E61E84F7E22D809",
+  "disjoint_from_existing_large_and_small_plans": true,
+  "justification": "Allocated duplicate bytes are not net recovered bytes; replacement links consume allocation.",
+  "minimum_remote_GiB": 40,
+  "minimum_local_MiB": 1536,
+  "compiler_invoked": false,
+  "cloud_action": false
+}
