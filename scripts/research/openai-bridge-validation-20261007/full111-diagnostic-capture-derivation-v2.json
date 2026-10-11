@@ -1,0 +1,44 @@
+{
+  "schema": "full111-diagnostic-capture-derivation-v2",
+  "parent_sha256": "675882F0AB9EB046799EB7F6D081ABBBAE2227BD3C38A85022DE7ACBCDB1A615",
+  "target_sha256": "18A1C1CE8D7F71C95AF891D28270C9AEAEC5767B05E6FB20AE5C6DBE8677C743",
+  "exact_replacements": [
+    [
+      "full111-native-diagnostic-packet-v1",
+      "full111-native-diagnostic-packet-v2"
+    ],
+    [
+      "'terminal.json'",
+      "'dedicated-worker-terminal.json'"
+    ]
+  ],
+  "root_tool_observation": {
+    "original_capture_native_exit": 1,
+    "exception": "KeyError: filename 'terminal.json' not found",
+    "partial_original_files": [
+      {
+        "path": ".gitattributes",
+        "bytes": 58,
+        "sha256": "E5700FD76A3BE8CB4ADDFB6EE5C959D0E118926544F613E61545BA10A5A48DF3"
+      },
+      {
+        "path": "stage-4.stderr",
+        "bytes": 161,
+        "sha256": "937A847B153356C95F58BC347D44241677B7B12EBC61BE9D323EA0FC206F0AA9"
+      },
+      {
+        "path": "stage-4.stdout",
+        "bytes": 407630,
+        "sha256": "0629383138C11273282672629AFF385EB477B749F61CC51501F0037397B67703"
+      }
+    ],
+    "direct_tool_traceback_observed": true,
+    "direct_tool_traceback_archived": false,
+    "later_inline_derivation_exit": 1,
+    "inline_derivation_error": "PowerShell quoting produced an unterminated Python string; no file written",
+    "absent_successor_invocation_exit": 1,
+    "absent_successor_error": "ModuleNotFoundError; no compiler or cloud operation"
+  },
+  "failed_control_and_partial_output_preserved": true,
+  "compiler_invoked": false
+}

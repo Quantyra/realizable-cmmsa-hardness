@@ -1,0 +1,52 @@
+{
+  "review": "numeric-source-height-independent-static-review-v1",
+  "status": "read-only-adversarial-static-review",
+  "subject": {
+    "capture_index": "B/numeric-source-height-offer-capture-v3/index.json",
+    "capture_index_sha256": "7CD8C1D6463A39ECDE018F278360847F6874C3F8A2A3CB57FFC2D687B025C96D",
+    "source": "B/numeric-source-height-offer-capture-v3/ActualNumericSourceHeight.lean",
+    "source_bytes": 7621,
+    "source_sha256": "98661E33A9C272CB983368B60C12BF7AA7BE833076A5545CAB1CDF4917209BDF"
+  },
+  "dependencies": {
+    "archive": "C:/Users/dfred/.quantyra/builder02/full110-exact-real-complex-operators-resource02/input-archive.tar.gz",
+    "archive_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+    "verified_dependency_hashes_match_capture_index": true,
+    "reviewed_declarations": [
+      "ActualSelectedSpectralParameters.selected_spectral_parameters",
+      "ActualSelectedSpectralParameters.analyticSourceHeightFloor",
+      "ActualSelectedSpectralParameters.actualSelectedRho",
+      "ActualSelectedSpectralParameters.leafK_eq_two_mul_quotient",
+      "ActualSelectedSpectralParameters.leaf_split_total",
+      "ActualCmmsaAdmissibilitySelector.Admissible",
+      "ActualCmmsaAdmissibilitySelector.admissible_eventually",
+      "ActualCmmsaAdmissibilitySelector.selector_unbounded",
+      "ActualCmmsaAdmissibilitySelector.selector_spec",
+      "ActualCmmsaParameterReconciliation.bOf",
+      "ActualCmmsaParameterReconciliation.hBlock",
+      "ActualCmmsaParameterReconciliation.leafK",
+      "ActualCmmsaParameterReconciliation.leafT",
+      "SamplerParameters.blocks",
+      "SamplerParameters.numerator_lt_blocks"
+    ]
+  },
+  "findings": [],
+  "checked_arguments": {
+    "enlarged_floor": "For each j, numericSourceBase(base) j is max(base j, 10*j*bOf(j)); selected_spectral_parameters therefore yields both original base and numeric-rank threshold at the same selected m and hBlock.",
+    "fixed_tail_arithmetic": "With b=4000*m^2, q=h/b, b|h, and 10*m*b<=h, Nat.mod_add_div gives b*q=h and cancellation yields q>=10*m. Thus leafK=2*q>=20*m, leafK-1>=1, rank*(leafK-1)<=20*m*h, and h>=40000*m. The latter implies h>=20*m+5, enough for 2*h+20*m*h+3<=2*h^2. For A>=1, h^2<blocks A h, proving the requested 2*blocks tail bound.",
+    "real_dimension_and_rho": "The captured selected_spectral_parameters chain has the expected 12 conjuncts. Since rho=1/bOf(m), bOf(m)>=4000 gives 0<rho<=1/4000; numericRankThreshold(m)=10*m*bOf(m) then gives rank*rho=10*m. The c/s cast identities are forwarded from the same selector witness.",
+    "eventual_quantifiers": "selector_unbounded accepts arbitrary Nat->Nat source floors and any M. Its body picks w=max 256 M, applies admissible_eventually at that fixed w, and uses selector_spec maximality to obtain a selected m>=w for every L>=L0. The candidate applies it to the exact enlarged analytic floor and derives rank and tail guards from that same hsel/m/L. No earlier selector witness is transported.",
+    "api_and_conjunctions": "Checked the selected_spectral_parameters tuple order against each rcases pattern, the selector_unbounded return tuple against the eventual theorem construction, and the Real division/cast uses in rho and rank*rho. The exact API source bodies were read from the pinned archive; no local Lean was invoked."
+  },
+  "claim_boundaries": {
+    "joint_source_table_sampler_lower_signal": "Open; this numeric eventual selector theorem does not construct it.",
+    "effective_common_cutoff": "Open; arbitrary supplied cutoff functions are inputs, not a demonstrated common satisfying cutoff.",
+    "compiler_or_kernel_validation": "Not performed.",
+    "native_verification_or_acceptance": "Not claimed."
+  },
+  "verification": {
+    "dependency_member_hashes_recomputed_from_archive": true,
+    "lean_lake_gcp_git_invoked": false,
+    "source_or_capture_edited": false
+  }
+}

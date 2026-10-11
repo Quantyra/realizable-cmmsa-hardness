@@ -1,0 +1,144 @@
+error: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:87:4: Type mismatch: After simplification, term
+  hij
+ has type
+  @Eq (ZMod 2) (∑ j_1, Y i j_1 * C j j_1) 0
+but is expected to have type
+  @Eq (ZMod 2) ((fun j => Y i j) ⬝ᵥ Matrix.row C j) 0
+error: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:92:4: Type mismatch: After simplification, term
+  hij
+ has type
+  @Eq (ZMod 2) ((fun j => Y i j) ⬝ᵥ Matrix.row C j) 0
+but is expected to have type
+  @Eq (ZMod 2) (∑ j_1, Y i j_1 * C j j_1) 0
+warning: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:204:6: Try this: 
+  haveI̵
+
+The goal is a proposition, so `have` is preferred over `haveI`.
+The difference between `have` and `haveI` is that `haveI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+error: lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean:365:2: No goals to be solved
+error: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:171:2: unsolved goals
+case refine_7.snd
+c s : ℕ
+X Y : BinaryMatrix c (c + s)
+hX : Function.Surjective ⇑(Matrix.toLin' X)
+hY : Function.Surjective ⇑(Matrix.toLin' Y)
+hRange : (Matrix.toLin' X).range = (Matrix.toLin' Y).range
+T S : BinaryMatrix (c + s) (c + s)
+hTS : T * S = 1
+hST : S * T = 1
+hXY : X * T = Y
+w : PrefixFiber c s X
+i✝ j✝ : Fin (c + s)
+⊢ (T * (S * (↑↑w).2)) i✝ j✝ = (↑↑w).2 i✝ j✝
+error: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:175:2: unsolved goals
+case refine_8.snd
+c s : ℕ
+X Y : BinaryMatrix c (c + s)
+hX : Function.Surjective ⇑(Matrix.toLin' X)
+hY : Function.Surjective ⇑(Matrix.toLin' Y)
+hRange : (Matrix.toLin' X).range = (Matrix.toLin' Y).range
+T S : BinaryMatrix (c + s) (c + s)
+hTS : T * S = 1
+hST : S * T = 1
+hXY : X * T = Y
+w : PrefixFiber c s Y
+i✝ j✝ : Fin (c + s)
+⊢ (S * (T * (↑↑w).2)) i✝ j✝ = (↑↑w).2 i✝ j✝
+warning: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:174:41: This simp argument is unused:
+  hST
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Matrix.mul_assoc, hTS]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:178:36: This simp argument is unused:
+  hTS
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Matrix.mul_assoc, hST]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:218:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:219:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:227:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+error: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:207:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+error: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:289:2: Type mismatch: After simplification, term
+  hxy
+ has type
+  Matrix.vecMul x M = Matrix.vecMul y M
+but is expected to have type
+  (Matrix.transpose M).mulVec x = (Matrix.transpose M).mulVec y
+warning: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:342:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:343:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:344:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+error: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:362:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ p, g (columnPrefixMap p)
+in the target expression
+  (∑ p, g (columnPrefixMap p)) / ↑(Fintype.card (InversePair (c + s))) =
+    (∑ C, g C) / ↑(Fintype.card { M // Function.Injective ⇑(Matrix.toLin' M) })
+
+c s : ℕ
+g : { M // Function.Injective ⇑(Matrix.toLin' M) } → ℝ
+this✝¹ : Fintype (InversePair (c + s)) := Fintype.ofFinite (InversePair (c + s))
+this✝ : Fintype (FullRowFrame c (c + s)) := Fintype.ofFinite (FullRowFrame c (c + s))
+this : Fintype { M // Function.Injective ⇑(Matrix.toLin' M) } :=
+  Fintype.ofFinite { M // Function.Injective ⇑(Matrix.toLin' M) }
+tf : FullRowFrame c (c + s) ≃ { M // Function.Injective ⇑(Matrix.toLin' M) } := rowColumnFrameEquiv
+ti : InversePair (c + s) ≃ InversePair (c + s) := inversePairTranspose (c + s)
+hrow :
+  (∑ p, g (tf (rowPrefixMap c s p))) / ↑(Fintype.card (InversePair (c + s))) =
+    (∑ X, g (tf X)) / ↑(Fintype.card (FullRowFrame c (c + s)))
+hinput : ∑ p, g (columnPrefixMap p) = ∑ p, g (tf (rowPrefixMap c s p))
+houtput : ∑ R, g (tf R) = ∑ C, g C
+hcard : Fintype.card (FullRowFrame c (c + s)) = Fintype.card { M // Function.Injective ⇑(Matrix.toLin' M) }
+⊢ (∑ p, g (columnPrefixMap p)) / ↑(Fintype.card (InversePair (c + s))) =
+    (∑ C, g C) / ↑(Fintype.card { M // Function.Injective ⇑(Matrix.toLin' M) })

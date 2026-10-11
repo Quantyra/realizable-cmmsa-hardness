@@ -1,0 +1,100 @@
+{
+  "artifact": "numeric-explicit-height-argument-v1",
+  "type": "argument-only-independent-assessment",
+  "status": "conditional-composition-route; not a Lean or external acceptance result",
+  "pinned_interfaces": {
+    "source_height_candidate": {
+      "path": "B/numeric-source-height-offer-capture-v3/ActualNumericSourceHeight.lean",
+      "bytes": 7621,
+      "sha256": "98661E33A9C272CB983368B60C12BF7AA7BE833076A5545CAB1CDF4917209BDF"
+    },
+    "capture_index": {
+      "path": "B/numeric-source-height-offer-capture-v3/index.json",
+      "sha256": "7CD8C1D6463A39ECDE018F278360847F6874C3F8A2A3CB57FFC2D687B025C96D"
+    },
+    "dependency_archive_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+    "material_dyadic_caller": {
+      "path": "lean/PvNP/RealizableHardness/ActualSelectedComplementManuscriptDyadicMoment.lean",
+      "bytes": 19470,
+      "sha256": "AF3E380A36C45AED61FE5C2A81637AA6C9BBB8C0F83160FB386BA23F5475A705",
+      "declaration": "selected_actual_material_moment_bound_at_dyadic_exponent",
+      "relevant_constraints": [
+        "hkDyadic : exists q, k = 2^q",
+        "hkm : 4*m <= k"
+      ]
+    },
+    "eventual_selector": "ActualCmmsaAdmissibilitySelector.selector_unbounded"
+  },
+  "proposed_natural_functions": {
+    "for_m_ge_256": {
+      "b": "4000*m^2",
+      "rho": "1/b",
+      "r": "10*m*b = 40000*m^3",
+      "T": "4*(m+3)*b = 16000*m^2*(m+3)",
+      "x": "m*T",
+      "q": "the least natural q with x <= 2^q",
+      "k": "2^q",
+      "N": "4 + 2*m + m*(r+1) + 500*m*r^2*k",
+      "Hfinal": "2*b*(N+2)",
+      "Hnum": "max r (max (r+7) Hfinal)",
+      "baseNum": "fun j => max (base j) (Hnum j)",
+      "sourceHMin": "fun j => max (ActualSelectedSpectralParameters.analyticSourceHeightFloor baseNum cutoff j) (j+2)"
+    }
+  },
+  "checked_inequalities": [
+    {
+      "claim": "T satisfies the scalar caller's T guards",
+      "argument": "For m>=256 and rho=1/b, 4*(m+3)/(m*rho)=4*(m+3)*b/m <=4*(m+3)*b=T. Also T>=4."
+    },
+    {
+      "claim": "k satisfies all pinned dyadic material and scalar exponent guards",
+      "argument": "By construction m*T<=k and k=2^q. Since T>=4, 4*m<=m*T<=k, so the exact material theorem's hkm and hkDyadic hold. In particular 4<=k and the scalar hPscale follows after casting to Real."
+    },
+    {
+      "claim": "least-power rounding has the requested strict upper bound",
+      "argument": "For x=m*T>0, let q be the least exponent with x<=2^q. If q=0 then x=1 and k=1<2x; otherwise minimality gives 2^(q-1)<x, hence k<2x. This is computable by binary bit-length/round-up, without a linear search."
+    },
+    {
+      "claim": "the scalar final cutoff is strict at h>=Hfinal",
+      "argument": "The scalar lambda lemma gives lambda>=m*rho/2=m/(2*b)>0 under rho<=1/4000 and T>=4*(m+3)/(m*rho). Thus lambda*h>=m*(N+2). Since log2(16*K)<=N, T>=4, N>=4, and m>=256, log2(16*K)+2/T<=N+1/2<N+2<=m*(N+2). Therefore (log2(16*K)+2/T)/lambda<h."
+    },
+    {
+      "claim": "the absorption cutoff holds at h>=Hnum",
+      "argument": "C=(8/3)*m-2+(3996*m+2)*rho>=1 for m>=256. Also m<=r+1 and D=2^m+2^(r+1)<=2^(r+2), so log2(32*D)<=r+7. Hnum>=r+7 and h>=Hnum imply log2(32*D)<=C*h."
+    },
+    {
+      "claim": "the K logarithm is bounded by N",
+      "argument": "K=2^(2*m)*(r+1)^m*2^(500*m*r^2*k). Since r+1<=2^(r+1), (r+1)^m<=2^(m*(r+1)); hence 16*K<=2^N and log2(16*K)<=N."
+    },
+    {
+      "claim": "the explicit numeric floor has polynomial magnitude O(m^13)",
+      "argument": "For m>=256, m+3<=2*m, so T<=32000*m^3 and k<2*m*T<=64000*m^4. Also r=40000*m^3 and r+1<=40001*m^3. Consequently N<=5.2e16*m^11, N+2<=5.3e16*m^11, Hfinal=8000*m^2*(N+2)<=4.24e20*m^13, and Hnum=max(r,r+7,Hfinal)<=5e20*m^13. The nested max adds no degree."
+    },
+    {
+      "claim": "the remaining elementary scalar and tail premises are compatible",
+      "argument": "Hnum>=1. With rho<=1/4000, exponent 2*(1-1000*rho^2)*h>=1, so e0=2^(-2*(1-1000*rho^2)*h)<=1/2. The captured source-height theorem at the selected h gives rank threshold r<=h and b|h; its fixed tail theorem gives 20*m<=leafK, 1<=leafK-1, and the exact ambient block budget for every supplied samplerA>=1."
+    }
+  ],
+  "composition": {
+    "selector_floor": "Use sourceHMin above, which feeds baseNum into the exact analyticSourceHeightFloor and retains cutoff(1/bOf(j)); the outer j+2 selector floor is unchanged.",
+    "eventuality": "Pinned selector_unbounded applies to arbitrary supplied Nat->Nat source floors and M. For each supplied base/cutoff and samplerA>=1, it gives one L0 and, for every L>=L0, a selected m>=M. Apply the captured selected_numeric_height, selected_numeric_tail_parameters, and selected_numeric_real_parameters to that exact hsel/m/L. The numeric floor therefore composes without transporting a witness from another base or another L.",
+    "conditional_material_application": "For a same-instance source caller, choose the k above and pass hkDyadic and hkm to selected_actual_material_moment_bound_at_dyadic_exponent. This only supplies the material RHS interface when the caller already has its occurrence, tables, functional, hsel, hA, r, agreement bound, HC/spectral contracts, and positive a. It does not construct those objects or prove the selected-star signal."
+  },
+  "algorithm_and_claim_boundaries": {
+    "numeric_arithmetic": "b,r,T,N,Hfinal,Hnum and the rounded-up binary exponent q are computable from m using integer arithmetic. In binary encoding, these outputs have O(log m) bits and the power-of-two rounding takes O(log m) bit-length steps; their magnitudes are polynomial in m. In unary encoding, the numeric output length is O(m^13), still polynomial in the numeric parameter m.",
+    "relative_inputs": "base and cutoff are supplied functions. The floor is computable only relative to effective procedures/oracles for their values; no computability or size bound for those inputs is established here.",
+    "selector_threshold": "The pinned eventual-selector proof constructs an L0 from sourceHMin(w), w=max(256,M), through its explicit admissible_eventually bound. This can be evaluated relative to base/cutoff, but no polynomial-in-SAT-length bound is proved; the bound is very large.",
+    "not_established": [
+      "an effective common spectral/source cutoff satisfying all constraints",
+      "an inhabited same-instance source/table/sampler witness",
+      "the same-instance Boolean lower signal or beta/epsilon links",
+      "an end-to-end encoded reduction or its runtime bound",
+      "a full hardness theorem, native verification, or certification"
+    ]
+  },
+  "assessment": {
+    "mathematical_route": "No arithmetic obstruction found in the proposed constants; the explicit computable numeric floor is sufficient for the listed scalar cutoffs and exact material dyadic requirements.",
+    "important_correction": "The degree is O(m^13), not O(m^16): Hnum uses nested maxima, not multiplication by r+7.",
+    "lean_compiler_or_git_invoked": false
+  }
+}
