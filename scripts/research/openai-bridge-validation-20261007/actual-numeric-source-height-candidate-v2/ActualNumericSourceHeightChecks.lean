@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualNumericSourceHeight
+
+#print axioms PvNP.RealizableHardness.ActualNumericSourceHeight.selected_numeric_height
+#print axioms PvNP.RealizableHardness.ActualNumericSourceHeight.fixed_numeric_tail_parameters
+#print axioms PvNP.RealizableHardness.ActualNumericSourceHeight.selected_numeric_tail_parameters
+#print axioms PvNP.RealizableHardness.ActualNumericSourceHeight.selected_numeric_real_parameters
