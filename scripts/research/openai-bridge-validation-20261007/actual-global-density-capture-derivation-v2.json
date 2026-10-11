@@ -1,0 +1,33 @@
+{
+  "source": "capture_actual_global_density_offer_v1.py",
+  "source_sha256": "35DC9ED2F3945408509D7DB48C5EF87DB0E6F2483DDF63DF1E9958DBE9E32112",
+  "target": "capture_actual_global_density_offer_v2.py",
+  "target_sha256": "4E288239405A06CC8A96A62945776F88D64436F94181D9A469181D090F8C6DFB",
+  "exact_replacements": [
+    {
+      "old": "actual-global-density-bridge-offer-v1",
+      "new": "actual-global-density-bridge-offer-v2",
+      "occurrences": 1
+    },
+    {
+      "old": "actual-global-density-bridge-capture-v1",
+      "new": "actual-global-density-bridge-capture-v2",
+      "occurrences": 1
+    },
+    {
+      "old": "1060C3FEF1F711FDEC1CC439AF24A99749B1E796680B3EA261B93041C857E024",
+      "new": "B955D43ECEC27BDBEDAB4C5D618AC0FAC35A6AADCE531F2161996E9D80848802",
+      "occurrences": 1
+    },
+    {
+      "old": "        static_review_concerns=[\n          'ASCII sum binder syntax must be checked and replaced with actual Lean summation notation if unsupported.',\n          'Supply explicit (t := t) (h := h) (k := k) at all density/mass calls where phantom indices cannot be inferred; theorem statements must bind the intended leaf count.',\n          'Distribute the outer complement weight through every nested sum before sum_congr.',\n          'Convert the constant finite sum explicitly for the final pigeonhole lemma and provide its nonempty finset proof from derived hsideComp.'\n        ],capture_control_sha256=digest(__file__),compiler_invoked=False,accepted=False,repair_requested=True)\n",
+      "new": "        static_review_concerns=[],\n        root_read_complete_v1_and_v2_diff=True,\n        prior_five_static_concerns_addressed_at_source_level=True,\n        metadata_errata=['Map renders a dash and summation glyph as question marks in two prose locations; exact Lean source uses valid summation notation.'],\n        capture_control_sha256=digest(__file__),compiler_invoked=False,accepted=False,repair_requested=False)\n",
+      "occurrences": 1
+    },
+    {
+      "old": "    declared=re.findall",
+      "new": "    previous=HERE/'actual-global-density-bridge-offer-v1'\n    assert checks.read_bytes()==(previous/checks.name).read_bytes()\n    assert re.findall(r'(?m)^import .+$',source.read_text(encoding='utf-8'))==re.findall(r'(?m)^import .+$',(previous/source.name).read_text(encoding='utf-8'))\n    assert not re.search(r'(?m)^\\s*sum \\w+ :',source.read_text(encoding='utf-8'))\n    assert digest(HERE/'actual-global-density-bridge-capture-v1/index.json')=='42AA959FBBEDA4EA565F6360DF116669162EB82145853EFB1F8C25FC6CD01380'\n    declared=re.findall",
+      "occurrences": 1
+    }
+  ]
+}
