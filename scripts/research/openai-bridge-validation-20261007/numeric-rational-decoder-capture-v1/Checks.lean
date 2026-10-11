@@ -1,0 +1,5 @@
+import PvNP.RealizableHardness.ActualRationalDecoderThreshold
+
+#print axioms PvNP.RealizableHardness.ActualRationalDecoderThreshold.exists_uniform_rational_threshold
+#print axioms PvNP.RealizableHardness.ActualRationalDecoderThreshold.agreement_after_exception
+#print axioms PvNP.RealizableHardness.ActualRationalDecoderThreshold.ready_joint_success_from_real_threshold
