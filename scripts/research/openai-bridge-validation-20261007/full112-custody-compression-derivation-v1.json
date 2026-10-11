@@ -1,0 +1,30 @@
+{
+  "source": "compress_full111_committed_custody_v1.py",
+  "source_sha256": "70252E6869523FE34EF2540804D244B44EA8BB7B96A1F696AE5C75E3AF162FB2",
+  "target": "compress_full112_committed_custody_v1.py",
+  "target_sha256": "097C5A4696F885E551566C03FF344D75AC26FD83232B8EAD8FEDFF4A2FF1EBA9",
+  "exact_replacements": [
+    [
+      "head.startswith('5422a943')",
+      "head.startswith('4930801c')"
+    ],
+    [
+      "if not first.startswith(('full9', 'full10', 'full110')) or not any(x in first for x in ('record', 'checkpoint')):",
+      "if not first.startswith('full') or 'lossless' in first:"
+    ],
+    [
+      "assert len(selected) >= 20",
+      "assert len(selected) >= 1"
+    ],
+    [
+      "full111-committed-custody-lossless-v1",
+      "full112-committed-custody-lossless-v1"
+    ]
+  ],
+  "only_unchanged_committed_JSON_over_2MB_with_allocated_bytes_over_80_percent": true,
+  "maximum_files": 80,
+  "byte_identity_required_before_and_after": true,
+  "originals_deleted": false,
+  "inherited_dirt_excluded": true,
+  "compiler_invoked": false
+}

@@ -1,0 +1,111 @@
+{
+  "schema": "full112-settled-parent-recovery-preparation-v1",
+  "records": [
+    {
+      "parent": "derive_full110_settled_cache_recovery_v1.py",
+      "parent_commit": "adf1e917",
+      "parent_sha256": "6669ACD37910342CCD50E559B8446429C5B9153A2386CB152E6174911865691A",
+      "target": "derive_full111_settled_cache_recovery_v1.py",
+      "target_sha256": "52D988FFD6CB69210B10978E6D2DA3221B69047B81B9187C262741373FBEE4F6",
+      "exact_replacements": [
+        {
+          "old": "full111-exact-real-complex-operators-repair-resource02",
+          "new": "full112-exact-real-complex-operators-repair2-resource02",
+          "occurrences": 1
+        },
+        {
+          "old": "full111_verify.py",
+          "new": "full112_verify.py",
+          "occurrences": 1
+        },
+        {
+          "old": "full110",
+          "new": "full111",
+          "occurrences": 6
+        },
+        {
+          "old": "Full110",
+          "new": "Full111",
+          "occurrences": 1
+        },
+        {
+          "old": "(110, 90, 91, 92, 93, 94, 95)",
+          "new": "(111, 96, 97, 98)",
+          "occurrences": 1
+        },
+        {
+          "old": "number == 110",
+          "new": "number == 111",
+          "occurrences": 8
+        },
+        {
+          "old": "target = HERE /",
+          "new": "if number == 111:\n            replace('TARGET = 5 * 1024**3', 'TARGET = 8 * 1024**3')\n        target = HERE /",
+          "occurrences": 1
+        },
+        {
+          "old": "target_bytes=5 * 1024**3",
+          "new": "target_bytes=8 * 1024**3",
+          "occurrences": 1
+        },
+        {
+          "old": "seven settled runs",
+          "new": "four settled runs",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "run_full110_settled_cache_recovery_v1.py",
+      "parent_commit": "adf1e917",
+      "parent_sha256": "25F4DF4F7831BB5EB221F1CD0DF2514A9463BFC854392CD511D8EFEDC594818B",
+      "target": "run_full111_settled_cache_recovery_v1.py",
+      "target_sha256": "B6FAFF31935D669F09AE2BA324FC79E2B1D8E7263E9E946282A6915A9EE451AC",
+      "exact_replacements": [
+        {
+          "old": "full111-exact-real-complex-operators-repair-resource02",
+          "new": "full112-exact-real-complex-operators-repair2-resource02",
+          "occurrences": 1
+        },
+        {
+          "old": "full110",
+          "new": "full111",
+          "occurrences": 5
+        },
+        {
+          "old": "cmmsa_a8_output_20261011T025221Z_7046a7c0",
+          "new": "cmmsa_a8_output_20261011T035621Z_498f7ba6",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "run_full111_resume_step_v1.py",
+      "parent_commit": "adf1e917",
+      "parent_sha256": "2650B063C1F903D27DDEA98C7F34E709990F5FE9ECE5D909AE9D83697E3EACF6",
+      "target": "run_full111_resume_step_v4.py",
+      "target_sha256": "7E2CD91930FE3BC655FAE66ED5BBB57B55CB77F03FC650784F6B7D0BA1CF52DC",
+      "exact_replacements": [
+        {
+          "old": "ALLOWED = {'stage_full111_builder02.py', 'full111_builder02_controller.py', 'full111_postprocess.py'}",
+          "new": "ALLOWED = {'run_full111_settled_cache_recovery_v1.py', 'derive_full111_settled_cache_recovery_v1.py', 'refresh_full111_recovery_idle_v1.py'}",
+          "occurrences": 1
+        }
+      ]
+    }
+  ],
+  "intended_scopes": [
+    111,
+    96,
+    97,
+    98
+  ],
+  "intended_large_GiB": 8,
+  "intended_small_MiB": 896,
+  "same_byte_identity_and_quiescence_and_once_guards": true,
+  "source_and_project_objects_excluded": true,
+  "minimum_remote_GiB": 40,
+  "minimum_local_MiB": 1536,
+  "compiler_invoked": false,
+  "cloud_action_performed": false
+}

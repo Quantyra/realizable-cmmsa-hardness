@@ -1,0 +1,25 @@
+{
+  "parent": "compress_full112_committed_custody_v1.py",
+  "parent_sha256": "097C5A4696F885E551566C03FF344D75AC26FD83232B8EAD8FEDFF4A2FF1EBA9",
+  "target": "compress_full112_committed_custody_v2.py",
+  "target_sha256": "28362551F18A6C52FA90FC65DAC10740E17C5D2045A0D0A543A35C27C420E3E2",
+  "exact_replacements": [
+    [
+      "path.stat().st_size <= 2_000_000",
+      "path.stat().st_size <= 250_000"
+    ],
+    [
+      "reverse=True)[:80]",
+      "reverse=True)[:120]"
+    ],
+    [
+      "full112-committed-custody-lossless-v1",
+      "full112-committed-custody-lossless-v2"
+    ]
+  ],
+  "original_first_result_sha256": "9BD6F6293E786B383C10EF6CC91E48381E2148595D789307B4426D7379C858FF",
+  "original_first_execution_preserved": true,
+  "inherited_dirt_excluded": true,
+  "every_original_and_committed_byte_identity_required": true,
+  "files_deleted": false
+}

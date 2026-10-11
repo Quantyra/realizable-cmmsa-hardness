@@ -1,0 +1,50 @@
+{
+  "schema": "full112-rectangular-gl-exact-repair-capture-v1",
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full112-rectangular-gl-repair-v2\\ARGUMENT-MAP.md",
+      "copy": "ARGUMENT-MAP.md",
+      "bytes": 4642,
+      "sha256": "3DF634585AD6BD611B766055291AB83B4E7A329FD10DFDB17EC8EA1722E64666"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full112-rectangular-gl-repair-v2\\OFFER-MANIFEST.json",
+      "copy": "OFFER-MANIFEST.json",
+      "bytes": 4395,
+      "sha256": "E56B4BA7A035AFA019495E3F4342B27A4F53B5489CAEF9C33A4DBAAEE525B1AE"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full112-rectangular-gl-repair-v2\\RectangularGLRowCompletion.lean",
+      "copy": "RectangularGLRowCompletion.lean",
+      "bytes": 16858,
+      "sha256": "1E117431C3D55B88A2F1BE2E18C9FAA17ABAE94BC504A0490D4DDB0D80720993"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full112-rectangular-gl-repair-v2\\RectangularGLRowCompletionChecks.lean",
+      "copy": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    }
+  ],
+  "source": "lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean",
+  "old_sha256": "635DC130F5F697C6D93D90F6DA5F8A2E1380824A12D511A5952F802292A216FB",
+  "new_sha256": "1E117431C3D55B88A2F1BE2E18C9FAA17ABAE94BC504A0490D4DDB0D80720993",
+  "parent_run": "cmmsa_a8_output_20261011T035621Z_498f7ba6",
+  "parent_native_archive_sha256": "29A942FBF1594E1C09EC34ECE58DB02F1742E8B9FDCDA0E88B3084E3F4B7F192",
+  "parent_input_sha256": "3D04E683FF88B4A5CA389F07AA64583436EAC27B31FDFC9406453021021939EF",
+  "exact_diff": "--- Full111/RectangularGLRowCompletion.lean\n+++ Full112/RectangularGLRowCompletion.lean\n@@ -171,11 +171,27 @@\n   · intro w\n     apply Subtype.ext\n     apply Subtype.ext\n-    ext <;> simp [Matrix.mul_assoc, hTS, hST]\n+    apply Prod.ext\n+    · calc\n+        (w.1.1.1 * T) * S = w.1.1.1 * (T * S) := by rw [Matrix.mul_assoc]\n+        _ = w.1.1.1 * 1 := by rw [hTS]\n+        _ = w.1.1.1 := by simp\n+    · calc\n+        T * (S * w.1.1.2) = (T * S) * w.1.1.2 := by rw [← Matrix.mul_assoc]\n+        _ = 1 * w.1.1.2 := by rw [hTS]\n+        _ = w.1.1.2 := by simp\n   · intro w\n     apply Subtype.ext\n     apply Subtype.ext\n-    ext <;> simp [Matrix.mul_assoc, hTS, hST]\n+    apply Prod.ext\n+    · calc\n+        (w.1.1.1 * S) * T = w.1.1.1 * (S * T) := by rw [Matrix.mul_assoc]\n+        _ = w.1.1.1 * 1 := by rw [hST]\n+        _ = w.1.1.1 := by simp\n+    · calc\n+        S * (T * w.1.1.2) = (S * T) * w.1.1.2 := by rw [← Matrix.mul_assoc]\n+        _ = 1 * w.1.1.2 := by rw [hST]\n+        _ = w.1.1.2 := by simp\n \n /-- Chosen fibre equivalence, using classical choice only to select the\n transporter supplied by the same-range theorem. -/\n@@ -208,6 +224,7 @@\n and the image is uniform over every full-row-rank rectangular matrix. The\n proof uses equal fibres from explicit transitivity and does not count a fibre\n product formula. -/\n+set_option maxHeartbeats 400000 in\n theorem row_prefix_uniform_mean {c s : Nat}\n     (g : FullRowFrame c (c + s) → Real) :\n     (∑ p : InversePair (c + s), g (rowPrefixMap c s p)) /\n@@ -215,8 +232,6 @@\n       (∑ X : FullRowFrame c (c + s), g X) /\n         (Fintype.card (FullRowFrame c (c + s)) : Real) := by\n   classical\n-  letI : Fintype (InversePair (c + s)) := Fintype.ofFinite _\n-  letI : Fintype (FullRowFrame c (c + s)) := Fintype.ofFinite _\n   let f := rowPrefixMap c s\n   let X₀ : FullRowFrame c (c + s) :=\n     ⟨canonicalPrefixMatrix c s, by\n@@ -224,7 +239,6 @@\n         (Matrix.toLin' (LinearMap.toMatrix' (canonicalPrefixMap c s)))\n       rw [Matrix.toLin'_toMatrix']\n       exact canonicalPrefixMap_surjective c s⟩\n-  letI : Nonempty (FullRowFrame c (c + s)) := ⟨X₀⟩\n   let k := Fintype.card (RectangularFrameFiberAverage.Fiber f X₀)\n   have hf : Function.Surjective f := rowPrefixMap_surjective c s\n   have hbase : Nonempty (RectangularFrameFiberAverage.Fiber f X₀) := by\n@@ -286,7 +300,9 @@\n     Matrix.mulVec_injective_iff.mpr hcols\n   intro x y hxy\n   apply hmul\n-  simpa [Matrix.toLin'_apply'] using hxy\n+  change M.transpose.mulVecLin x = M.transpose.mulVecLin y at hxy\n+  change M.transpose.mulVec x = M.transpose.mulVec y at hxy\n+  exact hxy\n \n /-- Transpose identifies full-row and full-column frames in both directions. -/\n def rowColumnFrameEquiv {c d : Nat} :\n@@ -339,10 +355,6 @@\n         (Fintype.card {M : BinaryMatrix (c + s) c //\n           Function.Injective (Matrix.toLin' M)} : Real) := by\n   classical\n-  letI : Fintype (InversePair (c + s)) := Fintype.ofFinite _\n-  letI : Fintype (FullRowFrame c (c + s)) := Fintype.ofFinite _\n-  letI : Fintype {M : BinaryMatrix (c + s) c //\n-      Function.Injective (Matrix.toLin' M)} := Fintype.ofFinite _\n   let tf := rowColumnFrameEquiv (c := c) (d := c + s)\n   let ti := inversePairTranspose (c + s)\n   have hrow := row_prefix_uniform_mean\n",
+  "root_read_complete_diff_and_argument_map": true,
+  "preserved_stale_manifest_offer_label": "full112-rectangular-gl-repair-v1",
+  "declarations_imports_checks_preserved": true,
+  "mathlib_dependency_pins_reconciled_with_actual_full111_native_archive": true,
+  "bounded_heartbeat_change": {
+    "theorem": "row_prefix_uniform_mean",
+    "before": 200000,
+    "after": 400000,
+    "reason": "Actual Full111 deterministic whnf timeout",
+    "no_warning_suppression": true
+  },
+  "capture_control_sha256": "B0615CE7DC1CEF67AB04F592AA0E10BA1F984A034562893B6FBF7FBBC2DD79A3",
+  "compiler_invoked": false,
+  "accepted": false
+}
