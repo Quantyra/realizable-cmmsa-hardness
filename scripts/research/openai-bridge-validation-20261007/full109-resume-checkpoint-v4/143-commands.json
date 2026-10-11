@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\trace-recovery-progress-v2\\20261011T003415270024Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "64885",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c 'import json,os,shutil,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('\"'\"'http://metadata.google.internal/computeMetadata/v1/instance/id'\"'\"',headers={'\"'\"'Metadata-Flavor'\"'\"':'\"'\"'Google'\"'\"'})\nwith o.open(r,timeout=10) as s:\n assert s.headers.get('\"'\"'Metadata-Flavor'\"'\"')=='\"'\"'Google'\"'\"' and s.read().decode()=='\"'\"'7237681467779354904'\"'\"'\nhome=Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"');assert Path.home().resolve()==home\nrows=[]\nfor number in range(84,90):\n root=home/('\"'\"'full109-trace-cache-small-native'\"'\"'+str(number)+'\"'\"'-v1'\"'\"')\n row=dict(number=number,once=(root/'\"'\"'execute-once.json'\"'\"').exists(),receipt=(root/'\"'\"'receipt.json'\"'\"').exists())\n for name in ('\"'\"'receipt.json'\"'\"','\"'\"'partial-execution.json'\"'\"'):\n  path=root/name\n  if path.exists():\n   try:value=json.loads(path.read_bytes());row[name]=dict(applied=len(value['\"'\"'applied'\"'\"']),disk_after_bytes=value.get('\"'\"'disk_after_bytes'\"'\"'))\n   except json.JSONDecodeError:row[name]=dict(observation='\"'\"'concurrent receipt write; not terminal'\"'\"')\n rows.append(row)\npids=[]\nfor entry in Path('\"'\"'/proc'\"'\"').iterdir():\n if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\n try:name=(entry/'\"'\"'comm'\"'\"').read_text().strip();args=(entry/'\"'\"'cmdline'\"'\"').read_bytes().replace(bytes([0]),b'\"'\"' '\"'\"').decode(errors='\"'\"'replace'\"'\"')\n except (FileNotFoundError,PermissionError):continue\n if name in ('\"'\"'lean'\"'\"','\"'\"'lake'\"'\"') or (name=='\"'\"'python3'\"'\"' and '\"'\"'full109_trace_cache_small_native'\"'\"' in args):pids.append(dict(pid=int(entry.name),name=name,argv=args))\nprint(json.dumps(dict(rows=rows,live_processes=pids,disk_available_bytes=shutil.disk_usage(home).free,trace_once_present=(home/'\"'\"'full109-consumption-v3-launch-once.json'\"'\"').exists(),read_only=True)))\n'"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "8C62E3D46B8C888EDE8103595D22CEC47D93D3EDF0F53A2E4DD60E2654900EB3",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]
