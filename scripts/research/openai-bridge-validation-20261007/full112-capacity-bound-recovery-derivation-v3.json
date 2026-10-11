@@ -1,0 +1,156 @@
+{
+  "rows": [
+    {
+      "parent": "derive_full111_settled_cache_recovery_v2.py",
+      "parent_sha256": "A25900062FD3C405E132A57E9FA3890649508133B449BE3BE3463B48EB4107BA",
+      "target": "derive_full111_remaining_cache_helpers_v3.py",
+      "sha256": "B1584787B1CCD275A8CAB16C274599B884E645108AA11D5CEBC176429E58EDF9",
+      "replacements": [
+        {
+          "old": "for number in (111, 96, 97, 98, 99, 100, 101):",
+          "new": "for number in (109, 110, '111_small'):",
+          "occurrences": 1
+        },
+        {
+          "old": "resource = ROOT if number == 111 else",
+          "new": "resource = ROOT if number == '111_small' else",
+          "occurrences": 1
+        },
+        {
+          "old": "'-v2'",
+          "new": "'-v3'",
+          "occurrences": 1
+        },
+        {
+          "old": "'_v2.py'",
+          "new": "'_v3.py'",
+          "occurrences": 1
+        },
+        {
+          "old": "        target = HERE /",
+          "new": "        if number == '111_small':\n            replace('info.st_size >= 1', '1 <= info.st_size < 65536')\n            replace('TARGET = 896 * 1024**2', 'TARGET = 384 * 1024**2')\n        target = HERE /",
+          "occurrences": 1
+        },
+        {
+          "old": "target_bytes=5 * 1024**3 if number == 111 else 896 * 1024**2",
+          "new": "target_bytes=384 * 1024**2 if number == '111_small' else 896 * 1024**2",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-settled-cache-recovery-controls-v2",
+          "new": "full111-remaining-cache-helper-controls-v3",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-settled-cache-recovery-derivation-v2.json",
+          "new": "full111-remaining-cache-helper-derivation-v3.json",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "run_full111_settled_cache_openssh_v3.py",
+      "parent_sha256": "3050A5636C510D9F4617EB7FAB5F4A973EA0AA9A782BEB4C61BF51AE8059EA96",
+      "target": "run_full111_settled_cache_openssh_v4.py",
+      "sha256": "0A2FB0CD6AA12710EB98BE415DD84BA90D8FFDDC2361D0FC33E1A0E4BF654458",
+      "replacements": [
+        {
+          "old": "NUMBERS = [111,96,97,98,99,100,101]",
+          "new": "NUMBERS = [111,96,97,98,109,110,'111_small']",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-settled-cache-recovery-derivation-v2.json",
+          "new": "full111-settled-cache-recovery-derivation-v3.json",
+          "occurrences": 1
+        },
+        {
+          "old": "    assert [r['number'] for r in scopes] == NUMBERS",
+          "new": "    assert [r['number'] for r in scopes] == NUMBERS\n    partial = json.loads((HERE/'full111-four-plans-scope99-failure-record-v1/index.json').read_bytes())\n    assert partial['original_exit'] == 1 and partial['no_cache_execution_invoked']\n    for row in partial['files']: assert digest(HERE/'full111-four-plans-scope99-failure-record-v1'/row['copy']) == row['sha256']\n    if action == 'plan': scopes = scopes[4:]",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-recovery-plans-openssh-record-v3",
+          "new": "full111-recovery-plans-openssh-record-v4",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "audit_full111_settled_cache_recovery_v2.py",
+      "parent_sha256": "2ADDA4EC9D652BA0EB41456348C965447D1813A6D8104E9E47D95B03545BB55D",
+      "target": "audit_full111_settled_cache_recovery_v3.py",
+      "sha256": "D7927C02E456F69E2E321ED9A32363FDCDD670DA893A6B5E395DF339193A5BC1",
+      "replacements": [
+        {
+          "old": "run_full111_settled_cache_openssh_v3",
+          "new": "run_full111_settled_cache_openssh_v4",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-settled-cache-recovery-derivation-v2.json",
+          "new": "full111-settled-cache-recovery-derivation-v3.json",
+          "occurrences": 2
+        },
+        {
+          "old": "complete-audit-v2",
+          "new": "complete-audit-v3",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-seven-scope-recovery-audit-v2",
+          "new": "full111-seven-scope-recovery-audit-v3",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "stage_full112_after_recovery_openssh_v2.py",
+      "parent_sha256": "9EAC8629CDA0443D7BDBD87C4FEF8CB4DF57BD7D06679402250515AACE9B3A27",
+      "target": "stage_full112_after_recovery_openssh_v3.py",
+      "sha256": "E611C0360DF358238CF00527D3C251F6B363CC64C0123748EB1EFF02A16881B4",
+      "replacements": [
+        {
+          "old": "audit_full111_settled_cache_recovery_v2",
+          "new": "audit_full111_settled_cache_recovery_v3",
+          "occurrences": 2
+        }
+      ]
+    },
+    {
+      "parent": "run_full112_resume_step_v5.py",
+      "parent_sha256": "A9B44E825021B7D0CADAE79580AAE8B50D87304376859FE0FF4A399A6BA60A7E",
+      "target": "run_full112_resume_step_v6.py",
+      "sha256": "82A119D42906F90A3B2CD1DF1613159F8FD3249DFEDC16FB1847AA545FA4A4EA",
+      "replacements": [
+        {
+          "old": "'run_full112_native_openssh_v1.py'}",
+          "new": "'run_full112_native_openssh_v1.py', 'derive_full111_remaining_cache_helpers_v3.py', 'run_full111_settled_cache_openssh_v4.py', 'audit_full111_settled_cache_recovery_v3.py', 'stage_full112_after_recovery_openssh_v3.py', 'preserve_full111_complete_recovery_plans_v4.py'}",
+          "occurrences": 1
+        }
+      ]
+    }
+  ],
+  "observation_index_sha256": "FDC1112D69CC922544CAA679CC9317C1EE48D9337A8AD84D06F1B10938131B0D",
+  "preserved_existing_plan_scopes": [
+    111,
+    96,
+    97,
+    98
+  ],
+  "new_scopes": [
+    109,
+    110,
+    "111_small"
+  ],
+  "new_targets_MiB": [
+    896,
+    896,
+    384
+  ],
+  "full111_small_filter": "1 <= logical size < 65536; prior Full111 large plan requires >=65536",
+  "compiler_invoked": false,
+  "cloud_action": false,
+  "minimum_remote_GiB": 40,
+  "minimum_local_MiB": 1536
+}

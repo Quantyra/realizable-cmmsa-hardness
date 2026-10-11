@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import runpy,sys;sys.path.insert(0,sys.argv[1]);p=sys.argv[2];sys.argv=sys.argv[2:];runpy.run_path(p,run_name="__main__")
+                                                                                        ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\run_full111_settled_cache_openssh_v2.py", line 108, in <module>
+    main(sys.argv[1])
+    ~~~~^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\run_full111_settled_cache_openssh_v2.py", line 71, in main
+    session.python(preamble)
+    ~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full112_dedicated_openssh_v1.py", line 97, in python
+    return self.call([*self.ssh_argv, 'python3 -B -'], code.encode('utf-8'))
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\full112_dedicated_openssh_v1.py", line 50, in call
+    assert process.returncode == 0, 'Original transport failed; preserve and collect without replay'
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Original transport failed; preserve and collect without replay

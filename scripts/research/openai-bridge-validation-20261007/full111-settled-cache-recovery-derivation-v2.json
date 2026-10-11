@@ -1,0 +1,315 @@
+{
+  "schema": "full111-settled-cache-recovery-controls-v2",
+  "scopes": [
+    {
+      "number": 111,
+      "resource": "C:\\Users\\dfred\\.quantyra\\builder02\\full111-exact-real-complex-operators-repair-resource02",
+      "run": "cmmsa_a8_output_20261011T035621Z_498f7ba6",
+      "manifest_sha256": "24251BCA8C0A9231CD98D0B966B322DAD9123526D1340398982A0D5A54116865",
+      "archive_sha256": "29A942FBF1594E1C09EC34ECE58DB02F1742E8B9FDCDA0E88B3084E3F4B7F192",
+      "source": "full109_trace_cache_large_native109_v1.py",
+      "source_sha256": "8845F63E5F205AEDB5BBDCCDBA3163D5CE026AA5C3C44A7381B22244390807C2",
+      "helper": "full111_settled_cache_native111_v2.py",
+      "helper_sha256": "3F128E5D01EEFC323575DF6166C3F2B5E1E885FB71EDAA186D3C2B0CD076A0AE",
+      "remote_control": "/home/dfredriksen_quantyra_org/full111-settled-cache-native111-v2",
+      "target_bytes": 5368709120,
+      "exact_replacements": [
+        {
+          "old": "cmmsa_a8_output_20261010T110328Z_0d5c26f4",
+          "new": "cmmsa_a8_output_20261011T035621Z_498f7ba6"
+        },
+        {
+          "old": "7212F8D1D98A899BA54DC3498D3E47CC3B68AAB432B3BA3B68ABA74117B8E6B4",
+          "new": "24251BCA8C0A9231CD98D0B966B322DAD9123526D1340398982A0D5A54116865"
+        },
+        {
+          "old": "BD8EC70F9A138EBB5C3AC8E52B7732CF7CFE3D3E5C9B9F8CB3FB16FE37F21154",
+          "new": "29A942FBF1594E1C09EC34ECE58DB02F1742E8B9FDCDA0E88B3084E3F4B7F192"
+        },
+        {
+          "old": "full109-trace-cache-large-native109-v1",
+          "new": "full111-settled-cache-native111-v2"
+        },
+        {
+          "old": "    if (HOME / 'full109-consumption-v3-launch-once.json').exists():\n        raise RuntimeError('Full109 consumption trace already launched')\n",
+          "new": "    settled = HOME / 'cmmsa_a8_output_20261011T035621Z_498f7ba6_evidence/dedicated-worker-terminal.json'\n    if digest(settled) != 'F7B4332D6F0026583CC96F517F19BF6CF016A1F326D981F96233FEE29AE09277':\n        raise RuntimeError('Original Full111 native terminal drift')\n    if (HOME / 'full112-exact-real-complex-operators-repair2-resource02-launch-once.json').exists():\n        raise RuntimeError('Full111 compiler already launched')\n"
+        },
+        {
+          "old": "('_worker.py', 'cloud_capture.py', 'full109_verify.py')",
+          "new": "('_worker.py', 'cloud_capture.py', 'full109_verify.py', 'full111_verify.py', 'full112_verify.py')"
+        },
+        {
+          "old": "        (CONTROL / 'partial-execution.json').write_text(json.dumps(receipt, indent=2) + '\\n')",
+          "new": "        with (CONTROL / 'execution-journal.jsonl').open('a', encoding='utf-8') as journal:\n            journal.write(json.dumps(row) + '\\n')"
+        }
+      ]
+    },
+    {
+      "number": 96,
+      "resource": "C:\\Users\\dfred\\.quantyra\\builder02\\full96-spectral-orbit-contract-bridge-resource02",
+      "run": "cmmsa_a8_output_20261009T040701Z_db82b17d",
+      "manifest_sha256": "DB9FD9AA2B961BC2B05FB23B5EC6FC18C9B7A97BE022C70928445015464C62D1",
+      "archive_sha256": "BFD42A52C5F8C63421A7A5FEBF7B52F3958762A6D93C328525913CC4702B5341",
+      "source": "full109_trace_cache_small_native89_v1.py",
+      "source_sha256": "0C90D92321DFBAE6587BA3C8A1C4FCC79005BAFA2CD8BFCD10F40D2FEF22FDFA",
+      "helper": "full111_settled_cache_native96_v2.py",
+      "helper_sha256": "EEEAD36D5A04701724EC17AD28C6F7C0C58F2A4A4E9E9BE6E9EC5D440ECA74B2",
+      "remote_control": "/home/dfredriksen_quantyra_org/full111-settled-cache-native96-v2",
+      "target_bytes": 939524096,
+      "exact_replacements": [
+        {
+          "old": "cmmsa_a8_output_20261008T094623Z_e93b94e1",
+          "new": "cmmsa_a8_output_20261009T040701Z_db82b17d"
+        },
+        {
+          "old": "81813B3B53BC6112914005E65C4F41CCB96B9D5C0FC45D23D9E3E66B2AE11348",
+          "new": "DB9FD9AA2B961BC2B05FB23B5EC6FC18C9B7A97BE022C70928445015464C62D1"
+        },
+        {
+          "old": "0ECFA6657CEB08927A2ED197363DD2539A3319AC8F3945C02BB077AC67424A64",
+          "new": "BFD42A52C5F8C63421A7A5FEBF7B52F3958762A6D93C328525913CC4702B5341"
+        },
+        {
+          "old": "full109-trace-cache-small-native89-v1",
+          "new": "full111-settled-cache-native96-v2"
+        },
+        {
+          "old": "    if (HOME / 'full109-consumption-v3-launch-once.json').exists():\n        raise RuntimeError('Full109 trace already launched')\n",
+          "new": "    settled = HOME / 'cmmsa_a8_output_20261011T035621Z_498f7ba6_evidence/dedicated-worker-terminal.json'\n    if digest(settled) != 'F7B4332D6F0026583CC96F517F19BF6CF016A1F326D981F96233FEE29AE09277':\n        raise RuntimeError('Original Full111 native terminal drift')\n    if (HOME / 'full112-exact-real-complex-operators-repair2-resource02-launch-once.json').exists():\n        raise RuntimeError('Full111 compiler already launched')\n"
+        },
+        {
+          "old": "('_worker.py', 'cloud_capture.py', 'full109_verify.py')",
+          "new": "('_worker.py', 'cloud_capture.py', 'full109_verify.py', 'full111_verify.py', 'full112_verify.py')"
+        },
+        {
+          "old": "        (CONTROL / 'partial-execution.json').write_text(json.dumps(receipt, indent=2) + '\\n')",
+          "new": "        with (CONTROL / 'execution-journal.jsonl').open('a', encoding='utf-8') as journal:\n            journal.write(json.dumps(row) + '\\n')"
+        }
+      ]
+    },
+    {
+      "number": 97,
+      "resource": "C:\\Users\\dfred\\.quantyra\\builder02\\full97-spectral-bridge-utf8-section-repair-resource02",
+      "run": "cmmsa_a8_output_20261009T050952Z_3a6b1f17",
+      "manifest_sha256": "39CA9EDB48C35171FC878ED7301456C1D7C0BC5BCDF27F47FE96798040E5779D",
+      "archive_sha256": "693105513ECC569B34F027FC31FEC85B2C7747A7338CFDFF7CBE9CBE74E773E4",
+      "source": "full109_trace_cache_small_native89_v1.py",
+      "source_sha256": "0C90D92321DFBAE6587BA3C8A1C4FCC79005BAFA2CD8BFCD10F40D2FEF22FDFA",
+      "helper": "full111_settled_cache_native97_v2.py",
+      "helper_sha256": "4C52A095283CB0AA9CD93E981D222A94BAE8E907EB485FD59C63D6797C947971",
+      "remote_control": "/home/dfredriksen_quantyra_org/full111-settled-cache-native97-v2",
+      "target_bytes": 939524096,
+      "exact_replacements": [
+        {
+          "old": "cmmsa_a8_output_20261008T094623Z_e93b94e1",
+          "new": "cmmsa_a8_output_20261009T050952Z_3a6b1f17"
+        },
+        {
+          "old": "81813B3B53BC6112914005E65C4F41CCB96B9D5C0FC45D23D9E3E66B2AE11348",
+          "new": "39CA9EDB48C35171FC878ED7301456C1D7C0BC5BCDF27F47FE96798040E5779D"
+        },
+        {
+          "old": "0ECFA6657CEB08927A2ED197363DD2539A3319AC8F3945C02BB077AC67424A64",
+          "new": "693105513ECC569B34F027FC31FEC85B2C7747A7338CFDFF7CBE9CBE74E773E4"
+        },
+        {
+          "old": "full109-trace-cache-small-native89-v1",
+          "new": "full111-settled-cache-native97-v2"
+        },
+        {
+          "old": "    if (HOME / 'full109-consumption-v3-launch-once.json').exists():\n        raise RuntimeError('Full109 trace already launched')\n",
+          "new": "    settled = HOME / 'cmmsa_a8_output_20261011T035621Z_498f7ba6_evidence/dedicated-worker-terminal.json'\n    if digest(settled) != 'F7B4332D6F0026583CC96F517F19BF6CF016A1F326D981F96233FEE29AE09277':\n        raise RuntimeError('Original Full111 native terminal drift')\n    if (HOME / 'full112-exact-real-complex-operators-repair2-resource02-launch-once.json').exists():\n        raise RuntimeError('Full111 compiler already launched')\n"
+        },
+        {
+          "old": "('_worker.py', 'cloud_capture.py', 'full109_verify.py')",
+          "new": "('_worker.py', 'cloud_capture.py', 'full109_verify.py', 'full111_verify.py', 'full112_verify.py')"
+        },
+        {
+          "old": "        (CONTROL / 'partial-execution.json').write_text(json.dumps(receipt, indent=2) + '\\n')",
+          "new": "        with (CONTROL / 'execution-journal.jsonl').open('a', encoding='utf-8') as journal:\n            journal.write(json.dumps(row) + '\\n')"
+        }
+      ]
+    },
+    {
+      "number": 98,
+      "resource": "C:\\Users\\dfred\\.quantyra\\builder02\\full98-actual-matrix-fourier-bridge-resource02",
+      "run": "cmmsa_a8_output_20261009T071707Z_a70dde30",
+      "manifest_sha256": "31DE9C6EEA69FF3A503CE53AAD23A53434D928BF7104E5FCF58613C71B65CD7D",
+      "archive_sha256": "274E5E941CC6502A84299D29CD608457F5F1FE5B2A98593D6C72D24F057321AA",
+      "source": "full109_trace_cache_small_native89_v1.py",
+      "source_sha256": "0C90D92321DFBAE6587BA3C8A1C4FCC79005BAFA2CD8BFCD10F40D2FEF22FDFA",
+      "helper": "full111_settled_cache_native98_v2.py",
+      "helper_sha256": "95175178B5B392FA7479A566B0419D2FEBF74E6DA048813C717554A15A4CCC2D",
+      "remote_control": "/home/dfredriksen_quantyra_org/full111-settled-cache-native98-v2",
+      "target_bytes": 939524096,
+      "exact_replacements": [
+        {
+          "old": "cmmsa_a8_output_20261008T094623Z_e93b94e1",
+          "new": "cmmsa_a8_output_20261009T071707Z_a70dde30"
+        },
+        {
+          "old": "81813B3B53BC6112914005E65C4F41CCB96B9D5C0FC45D23D9E3E66B2AE11348",
+          "new": "31DE9C6EEA69FF3A503CE53AAD23A53434D928BF7104E5FCF58613C71B65CD7D"
+        },
+        {
+          "old": "0ECFA6657CEB08927A2ED197363DD2539A3319AC8F3945C02BB077AC67424A64",
+          "new": "274E5E941CC6502A84299D29CD608457F5F1FE5B2A98593D6C72D24F057321AA"
+        },
+        {
+          "old": "full109-trace-cache-small-native89-v1",
+          "new": "full111-settled-cache-native98-v2"
+        },
+        {
+          "old": "    if (HOME / 'full109-consumption-v3-launch-once.json').exists():\n        raise RuntimeError('Full109 trace already launched')\n",
+          "new": "    settled = HOME / 'cmmsa_a8_output_20261011T035621Z_498f7ba6_evidence/dedicated-worker-terminal.json'\n    if digest(settled) != 'F7B4332D6F0026583CC96F517F19BF6CF016A1F326D981F96233FEE29AE09277':\n        raise RuntimeError('Original Full111 native terminal drift')\n    if (HOME / 'full112-exact-real-complex-operators-repair2-resource02-launch-once.json').exists():\n        raise RuntimeError('Full111 compiler already launched')\n"
+        },
+        {
+          "old": "('_worker.py', 'cloud_capture.py', 'full109_verify.py')",
+          "new": "('_worker.py', 'cloud_capture.py', 'full109_verify.py', 'full111_verify.py', 'full112_verify.py')"
+        },
+        {
+          "old": "        (CONTROL / 'partial-execution.json').write_text(json.dumps(receipt, indent=2) + '\\n')",
+          "new": "        with (CONTROL / 'execution-journal.jsonl').open('a', encoding='utf-8') as journal:\n            journal.write(json.dumps(row) + '\\n')"
+        }
+      ]
+    },
+    {
+      "number": 99,
+      "resource": "C:\\Users\\dfred\\.quantyra\\builder02\\full99-matrix-fourier-bullet-repair-resource02",
+      "run": "cmmsa_a8_output_20261009T080216Z_9e248b8e",
+      "manifest_sha256": "98537853DEE1623F6455AD1FA75116FE65FC47134B061EEE3F93E3FE0EC418EF",
+      "archive_sha256": "C18468B03B793BF120B89A266622718FF299F082FF536B8D4D85A421A17C94BA",
+      "source": "full109_trace_cache_small_native89_v1.py",
+      "source_sha256": "0C90D92321DFBAE6587BA3C8A1C4FCC79005BAFA2CD8BFCD10F40D2FEF22FDFA",
+      "helper": "full111_settled_cache_native99_v2.py",
+      "helper_sha256": "417B5E16CDF3318584CAD07BA9602FED82FD4B109E21FDB97F8BB92E5A93ABE2",
+      "remote_control": "/home/dfredriksen_quantyra_org/full111-settled-cache-native99-v2",
+      "target_bytes": 939524096,
+      "exact_replacements": [
+        {
+          "old": "cmmsa_a8_output_20261008T094623Z_e93b94e1",
+          "new": "cmmsa_a8_output_20261009T080216Z_9e248b8e"
+        },
+        {
+          "old": "81813B3B53BC6112914005E65C4F41CCB96B9D5C0FC45D23D9E3E66B2AE11348",
+          "new": "98537853DEE1623F6455AD1FA75116FE65FC47134B061EEE3F93E3FE0EC418EF"
+        },
+        {
+          "old": "0ECFA6657CEB08927A2ED197363DD2539A3319AC8F3945C02BB077AC67424A64",
+          "new": "C18468B03B793BF120B89A266622718FF299F082FF536B8D4D85A421A17C94BA"
+        },
+        {
+          "old": "full109-trace-cache-small-native89-v1",
+          "new": "full111-settled-cache-native99-v2"
+        },
+        {
+          "old": "    if (HOME / 'full109-consumption-v3-launch-once.json').exists():\n        raise RuntimeError('Full109 trace already launched')\n",
+          "new": "    settled = HOME / 'cmmsa_a8_output_20261011T035621Z_498f7ba6_evidence/dedicated-worker-terminal.json'\n    if digest(settled) != 'F7B4332D6F0026583CC96F517F19BF6CF016A1F326D981F96233FEE29AE09277':\n        raise RuntimeError('Original Full111 native terminal drift')\n    if (HOME / 'full112-exact-real-complex-operators-repair2-resource02-launch-once.json').exists():\n        raise RuntimeError('Full111 compiler already launched')\n"
+        },
+        {
+          "old": "('_worker.py', 'cloud_capture.py', 'full109_verify.py')",
+          "new": "('_worker.py', 'cloud_capture.py', 'full109_verify.py', 'full111_verify.py', 'full112_verify.py')"
+        },
+        {
+          "old": "        (CONTROL / 'partial-execution.json').write_text(json.dumps(receipt, indent=2) + '\\n')",
+          "new": "        with (CONTROL / 'execution-journal.jsonl').open('a', encoding='utf-8') as journal:\n            journal.write(json.dumps(row) + '\\n')"
+        }
+      ]
+    },
+    {
+      "number": 100,
+      "resource": "C:\\Users\\dfred\\.quantyra\\builder02\\full100-matrix-fourier-bullet-repair-resource02",
+      "run": "cmmsa_a8_output_20261009T092534Z_c0fd3e11",
+      "manifest_sha256": "8E71DE454150DEAC5FE9F12B1DCCF8BA768D7788A70D5F159D436C2682D73D3D",
+      "archive_sha256": "66BFF34BC77A2A558BB06EDC6FE9382A2A8210804C56C9499F37218E102E8475",
+      "source": "full109_trace_cache_small_native89_v1.py",
+      "source_sha256": "0C90D92321DFBAE6587BA3C8A1C4FCC79005BAFA2CD8BFCD10F40D2FEF22FDFA",
+      "helper": "full111_settled_cache_native100_v2.py",
+      "helper_sha256": "A169D9DE96C3F687B5FCEC84D8B427AFB6F512659C833DA31E132914727C4565",
+      "remote_control": "/home/dfredriksen_quantyra_org/full111-settled-cache-native100-v2",
+      "target_bytes": 939524096,
+      "exact_replacements": [
+        {
+          "old": "cmmsa_a8_output_20261008T094623Z_e93b94e1",
+          "new": "cmmsa_a8_output_20261009T092534Z_c0fd3e11"
+        },
+        {
+          "old": "81813B3B53BC6112914005E65C4F41CCB96B9D5C0FC45D23D9E3E66B2AE11348",
+          "new": "8E71DE454150DEAC5FE9F12B1DCCF8BA768D7788A70D5F159D436C2682D73D3D"
+        },
+        {
+          "old": "0ECFA6657CEB08927A2ED197363DD2539A3319AC8F3945C02BB077AC67424A64",
+          "new": "66BFF34BC77A2A558BB06EDC6FE9382A2A8210804C56C9499F37218E102E8475"
+        },
+        {
+          "old": "full109-trace-cache-small-native89-v1",
+          "new": "full111-settled-cache-native100-v2"
+        },
+        {
+          "old": "    if (HOME / 'full109-consumption-v3-launch-once.json').exists():\n        raise RuntimeError('Full109 trace already launched')\n",
+          "new": "    settled = HOME / 'cmmsa_a8_output_20261011T035621Z_498f7ba6_evidence/dedicated-worker-terminal.json'\n    if digest(settled) != 'F7B4332D6F0026583CC96F517F19BF6CF016A1F326D981F96233FEE29AE09277':\n        raise RuntimeError('Original Full111 native terminal drift')\n    if (HOME / 'full112-exact-real-complex-operators-repair2-resource02-launch-once.json').exists():\n        raise RuntimeError('Full111 compiler already launched')\n"
+        },
+        {
+          "old": "('_worker.py', 'cloud_capture.py', 'full109_verify.py')",
+          "new": "('_worker.py', 'cloud_capture.py', 'full109_verify.py', 'full111_verify.py', 'full112_verify.py')"
+        },
+        {
+          "old": "        (CONTROL / 'partial-execution.json').write_text(json.dumps(receipt, indent=2) + '\\n')",
+          "new": "        with (CONTROL / 'execution-journal.jsonl').open('a', encoding='utf-8') as journal:\n            journal.write(json.dumps(row) + '\\n')"
+        }
+      ]
+    },
+    {
+      "number": 101,
+      "resource": "C:\\Users\\dfred\\.quantyra\\builder02\\full101-spectral-original-application-resource02",
+      "run": "cmmsa_a8_output_20261009T164439Z_83c3fbf9",
+      "manifest_sha256": "F92A06657DC5E0B9FFD541E2A3726DD6A823105C842A19065F3CA2B8F95E37FD",
+      "archive_sha256": "06C7EE43F26F9EBBB2A09FBE763565A81F7D8AF5C4144ADDBBE4BA53F720E158",
+      "source": "full109_trace_cache_small_native89_v1.py",
+      "source_sha256": "0C90D92321DFBAE6587BA3C8A1C4FCC79005BAFA2CD8BFCD10F40D2FEF22FDFA",
+      "helper": "full111_settled_cache_native101_v2.py",
+      "helper_sha256": "D5FED5A4BB78B23985D210470B7513D71AD5CE7E8D79E04464BECB5928535482",
+      "remote_control": "/home/dfredriksen_quantyra_org/full111-settled-cache-native101-v2",
+      "target_bytes": 939524096,
+      "exact_replacements": [
+        {
+          "old": "cmmsa_a8_output_20261008T094623Z_e93b94e1",
+          "new": "cmmsa_a8_output_20261009T164439Z_83c3fbf9"
+        },
+        {
+          "old": "81813B3B53BC6112914005E65C4F41CCB96B9D5C0FC45D23D9E3E66B2AE11348",
+          "new": "F92A06657DC5E0B9FFD541E2A3726DD6A823105C842A19065F3CA2B8F95E37FD"
+        },
+        {
+          "old": "0ECFA6657CEB08927A2ED197363DD2539A3319AC8F3945C02BB077AC67424A64",
+          "new": "06C7EE43F26F9EBBB2A09FBE763565A81F7D8AF5C4144ADDBBE4BA53F720E158"
+        },
+        {
+          "old": "full109-trace-cache-small-native89-v1",
+          "new": "full111-settled-cache-native101-v2"
+        },
+        {
+          "old": "    if (HOME / 'full109-consumption-v3-launch-once.json').exists():\n        raise RuntimeError('Full109 trace already launched')\n",
+          "new": "    settled = HOME / 'cmmsa_a8_output_20261011T035621Z_498f7ba6_evidence/dedicated-worker-terminal.json'\n    if digest(settled) != 'F7B4332D6F0026583CC96F517F19BF6CF016A1F326D981F96233FEE29AE09277':\n        raise RuntimeError('Original Full111 native terminal drift')\n    if (HOME / 'full112-exact-real-complex-operators-repair2-resource02-launch-once.json').exists():\n        raise RuntimeError('Full111 compiler already launched')\n"
+        },
+        {
+          "old": "('_worker.py', 'cloud_capture.py', 'full109_verify.py')",
+          "new": "('_worker.py', 'cloud_capture.py', 'full109_verify.py', 'full111_verify.py', 'full112_verify.py')"
+        },
+        {
+          "old": "        (CONTROL / 'partial-execution.json').write_text(json.dumps(receipt, indent=2) + '\\n')",
+          "new": "        with (CONTROL / 'execution-journal.jsonl').open('a', encoding='utf-8') as journal:\n            journal.write(json.dumps(row) + '\\n')"
+        }
+      ]
+    }
+  ],
+  "current_native_run": "cmmsa_a8_output_20261011T035621Z_498f7ba6",
+  "current_native_terminal_sha256": "F7B4332D6F0026583CC96F517F19BF6CF016A1F326D981F96233FEE29AE09277",
+  "parent_stop_sha256": "CD9090FFCD6F6806D3C3F1C35BB2BD5B285CB0687E969C068B8A89A5D2E57030",
+  "source_project_objects_canonical_cache_and_archives_excluded": true,
+  "complete_append_only_per_file_journal_and_final_receipt": true,
+  "current_byte_identity_required_before_and_after_every_repoint": true,
+  "minimum_disk_GiB": 40,
+  "minimum_local_MiB": 1536,
+  "cloud_action_performed": false
+}

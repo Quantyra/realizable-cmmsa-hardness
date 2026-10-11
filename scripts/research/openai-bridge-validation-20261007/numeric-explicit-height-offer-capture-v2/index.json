@@ -1,0 +1,72 @@
+{
+  "original_directory": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-numeric-explicit-height-candidate-v2",
+  "files": [
+    {
+      "path": "ActualNumericExplicitHeight.lean",
+      "bytes": 19498,
+      "sha256": "6BF6264EC0D3377FC53FFBB8C73C328F499C749C0D0EEABA25A3537815737DD4"
+    },
+    {
+      "path": "ActualNumericExplicitHeightChecks.lean",
+      "bytes": 1298,
+      "sha256": "423933F5DFBDFE85EFEEDDFD6D6DF7531CEF3091A0C0556F46E262CDDF8B57A5"
+    },
+    {
+      "path": "ARGUMENT-AND-API-MAP.md",
+      "bytes": 5914,
+      "sha256": "C03168B3632F196986257D2335B9BBF3D7149FFD6DB4EC7CCB6CA6A4F714398A"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 3998,
+      "sha256": "062E162E1F7F0C4242850A73266209667D2208259F8A186D58F871689C517AF0"
+    }
+  ],
+  "prior_captures": [
+    {
+      "folder": "numeric-source-height-offer-capture-v3",
+      "index_sha256": "7CD8C1D6463A39ECDE018F278360847F6874C3F8A2A3CB57FFC2D687B025C96D",
+      "source": "ActualNumericSourceHeight.lean",
+      "source_sha256": "98661E33A9C272CB983368B60C12BF7AA7BE833076A5545CAB1CDF4917209BDF"
+    },
+    {
+      "folder": "numeric-scalar-offer-capture-v6",
+      "index_sha256": "3EB1E16820BE3B30BF51C39907ADFFF443A4E03D178D5B6B840F61F98BDACBC9",
+      "source": "ActualNumericNoScalar.lean",
+      "source_sha256": "002998DCDBF10A2A145524078C6DA32545004D68C8A2AD45C2B34F6337B628FF"
+    }
+  ],
+  "lexical_preflight": [
+    {
+      "path": "ActualNumericExplicitHeight.lean",
+      "bytes": 19498,
+      "sha256": "6BF6264EC0D3377FC53FFBB8C73C328F499C749C0D0EEABA25A3537815737DD4",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualNumericExplicitHeightChecks.lean",
+      "bytes": 1298,
+      "sha256": "423933F5DFBDFE85EFEEDDFD6D6DF7531CEF3091A0C0556F46E262CDDF8B57A5",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "independently_verified_mathlib_members": [],
+  "root_static_findings": [
+    "Named proposition interfaces, explicit factor commutation and full max chain inspected.",
+    "hlarge hmulN still uses exact mul_le_mul_of_nonneg_right whose left side is 1*N; explicitly simplify one_mul to obtain declared N.",
+    "Map incorrectly says numericBase j <= numericHnum j; the used premise is r <= max(base j,Hnum j). Preserve and correct separately.",
+    "Complete source translation remains uncompiled; other tactic/coercion defects may remain."
+  ],
+  "full_source_review": "complete height source or prior full scalar source plus complete v6 diff",
+  "complete_argument_map_read": true,
+  "immutable_capture": true,
+  "development_candidate": true,
+  "compiler_invoked": false,
+  "native_verified": false,
+  "accepted": false,
+  "full_goal_complete": false
+}

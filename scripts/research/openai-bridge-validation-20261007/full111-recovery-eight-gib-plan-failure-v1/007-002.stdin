@@ -1,0 +1,12 @@
+import base64,hashlib,importlib.util,json
+from pathlib import Path
+root=Path('/home/dfredriksen_quantyra_org/full111-settled-cache-native111-v1')
+source=root/'full111_settled_cache_native111_v1.py'
+assert sorted(p.name for p in root.iterdir())==['full111_settled_cache_native111_v1.py']
+assert hashlib.sha256(source.read_bytes()).hexdigest().upper()=='A1887186016F777E291A116E9EA6F33585C4E26AA37755CAB23FE466765588B9'
+spec=importlib.util.spec_from_file_location('exact_recovery',source)
+module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+module.guards()
+assert not (root/'plan.json').exists() and not (root/'execute-once.json').exists()
+(root/'plan-request-once-v2.json').open('x').write('original planner did not invoke plan; first invocation via OpenSSH\n')
+module.plan()

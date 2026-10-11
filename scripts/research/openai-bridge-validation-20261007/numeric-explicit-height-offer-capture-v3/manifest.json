@@ -1,0 +1,103 @@
+{
+  "schema": "actual-numeric-explicit-height-offer-v3",
+  "status": "source-only uncompiled author offer; root static repair candidate",
+  "source_path": "lean/PvNP/RealizableHardness/ActualNumericExplicitHeight.lean",
+  "parent_source_height_capture": {
+    "directory": "numeric-source-height-offer-capture-v3",
+    "index_sha256": "7CD8C1D6463A39ECDE018F278360847F6874C3F8A2A3CB57FFC2D687B025C96D",
+    "source": "ActualNumericSourceHeight.lean",
+    "source_sha256": "98661E33A9C272CB983368B60C12BF7AA7BE833076A5545CAB1CDF4917209BDF"
+  },
+  "parent_scalar_capture": {
+    "directory": "numeric-scalar-offer-capture-v6",
+    "index_sha256": "3EB1E16820BE3B30BF51C39907ADFFF443A4E03D178D5B6B840F61F98BDACBC9",
+    "source": "ActualNumericNoScalar.lean",
+    "source_sha256": "002998DCDBF10A2A145524078C6DA32545004D68C8A2AD45C2B34F6337B628FF"
+  },
+  "repaired_from": {
+    "directory": "numeric-explicit-height-offer-capture-v2",
+    "index_sha256": "F8FEF0DB0122A47D24334A7663857FD04110B7C07D4E66D5C808605803C56E80",
+    "source_sha256": "6BF6264EC0D3377FC53FFBB8C73C328F499C749C0D0EEABA25A3537815737DD4"
+  },
+  "pinned_material_source": {
+    "archive_sha256": "C1702903ECC5F939B9504371D63F0D4313E192446971EF0DD7627F6E770F3C61",
+    "declaration": "ActualSelectedComplementManuscriptDyadicMoment.selected_actual_material_moment_bound_at_dyadic_exponent"
+  },
+  "pinned_mathlib_api_inspection": [
+    {
+      "member": ".lake/packages/mathlib/Mathlib/Data/Nat/Log.lean",
+      "sha256": "7990e6e80987dde2e0c79fbedd77521d1dba8b4285e06d20feb0d8ca96f62bd9",
+      "declarations": [
+        "Nat.clog_pos",
+        "Nat.pow_pred_clog_lt_self",
+        "Nat.le_pow_clog",
+        "Nat.succ_pred_eq_of_pos"
+      ]
+    },
+    {
+      "member": ".lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "sha256": "5f4970fe329b14615ca6cfa3e0dcb0cf9d2017c98d2e3501237412aa2474e70b",
+      "declarations": [
+        "Real.rpow_le_rpow_of_exponent_le",
+        "Real.rpow_neg",
+        "Real.log_rpow",
+        "Real.rpow_natCast",
+        "Real.rpow_add"
+      ]
+    }
+  ],
+  "files": {
+    "ActualNumericExplicitHeight.lean": {
+      "bytes": 19540,
+      "sha256": "b255244ae3d98413b943278a8c17e5099fab876573e8e62a530093955d898847"
+    },
+    "ActualNumericExplicitHeightChecks.lean": {
+      "bytes": 1298,
+      "sha256": "423933f5dfbdfe85efeeddfd6d6df7531cef3091a0c0556f46e262cddf8b57a5"
+    },
+    "ARGUMENT-AND-API-MAP.md": {
+      "bytes": 6139,
+      "sha256": "bc7625149e34cdada160b852057ecc4a018a9ffd9f369c9209768c774b0db27a"
+    }
+  },
+  "lexical_preflight": [
+    {
+      "path": "ActualNumericExplicitHeight.lean",
+      "bytes": 19540,
+      "sha256": "B255244AE3D98413B943278A8C17E5099FAB876573E8E62A530093955D898847",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualNumericExplicitHeightChecks.lean",
+      "bytes": 1298,
+      "sha256": "423933F5DFBDFE85EFEEDDFD6D6DF7531CEF3091A0C0556F46E262CDDF8B57A5",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "checks": [
+    "numericRank_le_Hnum",
+    "numericSourceBase_eq",
+    "numericKRoundGuards",
+    "numericK_rounding",
+    "numeric_floor_polynomial_bound",
+    "numericScalarCutoffGuards",
+    "numeric_scalar_cutoffs",
+    "selected_explicit_numeric_parameters_eventually"
+  ],
+  "compiler_or_lake_invoked": false,
+  "gcp_invoked": false,
+  "git_invoked": false,
+  "native_verified": false,
+  "accepted": false,
+  "open_claims": [
+    "joint source/table/lower-signal/physical-sampler instance",
+    "effective common spectral/source cutoff",
+    "polynomial selector threshold in SAT input length",
+    "complete encoded reduction and runtime"
+  ],
+  "root_capture_acknowledged": false
+}

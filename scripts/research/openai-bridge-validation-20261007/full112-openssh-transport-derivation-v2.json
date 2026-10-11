@@ -1,0 +1,33 @@
+{
+  "parent": "full112_dedicated_openssh_v1.py",
+  "parent_sha256": "9FE54DACA2871B0400008ECEC5685FE5053CE60043D4E3965BFF541922E74339",
+  "target": "full112_dedicated_openssh_v2.py",
+  "sha256": "F9B990765F4E4C1562BDC716FEDB89D5C8D1FE128DE5B228DE6FF48338F4605E",
+  "replacements": [
+    [
+      "def call(self, argv, data=None):",
+      "def call(self, argv, data=None, allow_failure=False, output_path=None):"
+    ],
+    [
+      "        with prefix.with_suffix('.stdout').open('xb') as out, prefix.with_suffix('.stderr').open('xb') as err:",
+      "        stdout_path = Path(output_path) if output_path is not None else prefix.with_suffix('.stdout')\n        with stdout_path.open('xb') as out, prefix.with_suffix('.stderr').open('xb') as err:"
+    ],
+    [
+      "            path = prefix.with_suffix('.'+stream)",
+      "            path = stdout_path if stream == 'stdout' else prefix.with_suffix('.stderr')"
+    ],
+    [
+      "        assert process.returncode == 0, 'Original transport failed; preserve and collect without replay'\n        return prefix.with_suffix('.stdout')",
+      "        assert process.returncode == 0 or allow_failure, 'Original transport failed; preserve and collect without replay'\n        return stdout_path"
+    ],
+    [
+      "    def ssh(self, command):\n        return self.call([*self.ssh_argv, command])",
+      "    def ssh(self, command, allow_failure=False, output_path=None):\n        return self.call([*self.ssh_argv, command], allow_failure=allow_failure, output_path=output_path)"
+    ]
+  ],
+  "native_nonzero_retained": true,
+  "no_command_replay": true,
+  "worker_and_compiler_commands_unchanged": true,
+  "compiler_invoked": false,
+  "cloud_action": false
+}

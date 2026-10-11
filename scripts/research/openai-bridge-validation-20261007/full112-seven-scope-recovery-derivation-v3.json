@@ -1,0 +1,115 @@
+{
+  "rows": [
+    {
+      "already_derived": "derive_full111_settled_cache_recovery_v2.py",
+      "sha256": "A25900062FD3C405E132A57E9FA3890649508133B449BE3BE3463B48EB4107BA",
+      "original_derivation": "derive_full112_seven_scope_recovery_v2.py",
+      "original_derivation_sha256": "30D2583071960497A4BA3EF4CBBAD6A4371EDEDEB35FFE2DC5C8AA839E7DB4B4"
+    },
+    {
+      "parent": "run_full111_settled_cache_openssh_v2.py",
+      "parent_sha256": "FF360FFA0CAAA149A4CADC88FC100BD02271E939491F431B487E9CF745E9FADC",
+      "target": "run_full111_settled_cache_openssh_v3.py",
+      "sha256": "3050A5636C510D9F4617EB7FAB5F4A973EA0AA9A782BEB4C61BF51AE8059EA96",
+      "replacements": [
+        {
+          "old": "RECOVERY = ROOT/'settled-cache-recovery-v1'",
+          "new": "RECOVERY = ROOT/'settled-cache-recovery-v2'",
+          "occurrences": 1
+        },
+        {
+          "old": "NUMBERS = [111,96,97,98]",
+          "new": "NUMBERS = [111,96,97,98,99,100,101]",
+          "occurrences": 1
+        },
+        {
+          "old": "commands = json.loads((RECOVERY/'20261011T043228243781Z/commands.json').read_bytes())",
+          "new": "commands = json.loads((ROOT/'settled-cache-recovery-v1/20261011T043228243781Z/commands.json').read_bytes())",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-settled-cache-recovery-derivation-v1.json",
+          "new": "full111-settled-cache-recovery-derivation-v2.json",
+          "occurrences": 1
+        },
+        {
+          "old": "    folder = RECOVERY/",
+          "new": "    prior_failure = json.loads((HERE/'full111-recovery-eight-gib-plan-failure-v1/index.json').read_bytes())\n    assert prior_failure['native_exit'] == 1 and prior_failure['no_cache_execution_invoked']\n    for row in prior_failure['files']: assert digest(HERE/'full111-recovery-eight-gib-plan-failure-v1'/row['copy']) == row['sha256']\n    RECOVERY.mkdir(parents=True, exist_ok=True)\n    folder = RECOVERY/",
+          "occurrences": 1
+        },
+        {
+          "old": "full111-recovery-plans-openssh-record-v2",
+          "new": "full111-recovery-plans-openssh-record-v3",
+          "occurrences": 1
+        },
+        {
+          "old": "all_four_plans_verified",
+          "new": "all_seven_plans_verified",
+          "occurrences": 1
+        },
+        {
+          "old": "                if number == 111:\n                    preamble += 'assert sorted(p.name for p in root.iterdir())==['+repr(source.name)+']\\n'\n                else:\n                    preamble += \"root.mkdir(exist_ok=False)\\nsource.open('xb').write(base64.b64decode(\"+repr(base64.b64encode(source.read_bytes()).decode())+\"))\\n\"\n",
+          "new": "                preamble += \"root.mkdir(exist_ok=False)\\nsource.open('xb').write(base64.b64decode(\"+repr(base64.b64encode(source.read_bytes()).decode())+\"))\\n\"\n",
+          "occurrences": 1
+        },
+        {
+          "old": "original planner did not invoke plan; first invocation via OpenSSH",
+          "new": "separate seven-scope plan; first invocation for new v2 helpers",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "compress_full112_committed_custody_v2.py",
+      "parent_sha256": "28362551F18A6C52FA90FC65DAC10740E17C5D2045A0D0A543A35C27C420E3E2",
+      "target": "compress_full112_committed_text_v3.py",
+      "sha256": "646D46DCC7E7C399C7ED4258B78154E158BDB94C47B1B343E62C55DF3C2EDB00",
+      "replacements": [
+        {
+          "old": "head.startswith('4930801c')",
+          "new": "head.startswith('eca22c39')",
+          "occurrences": 1
+        },
+        {
+          "old": "path.suffix != '.json' or path.stat().st_size <= 250_000",
+          "new": "path.suffix not in ('.stdout', '.stderr', '.txt', '.patch', '.lean', '.md', '') or path.stat().st_size <= 128_000",
+          "occurrences": 1
+        },
+        {
+          "old": "full112-committed-custody-lossless-v2",
+          "new": "full112-committed-text-lossless-v3",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "parent": "run_full112_resume_step_v3.py",
+      "parent_sha256": "C4A69528E1CFD52396CE452E900B829AD0B03A351395815065260384103262D5",
+      "target": "run_full112_resume_step_v4.py",
+      "sha256": "C3A0312BA353E12ACCFC5B34478266C1F6FF295FBBE2FC69C4BA8522EB650BC3",
+      "replacements": [
+        {
+          "old": "'run_full111_settled_cache_openssh_v2.py'}",
+          "new": "'run_full111_settled_cache_openssh_v2.py', 'run_full111_settled_cache_openssh_v3.py', 'derive_full111_settled_cache_recovery_v2.py'}",
+          "occurrences": 1
+        }
+      ]
+    }
+  ],
+  "failed_plan_preservation_sha256": "098715B71910FF3383B3EB98A11A5B9982EE94B9FD5A0BC592E99B3882872EFB",
+  "new_scopes": [
+    111,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101
+  ],
+  "large_target_GiB": 5,
+  "small_target_MiB": 896,
+  "remote_reserve_GiB": 40,
+  "local_reserve_MiB": 1536,
+  "compiler_invoked": false,
+  "cloud_action": false
+}

@@ -1,0 +1,71 @@
+{
+  "original_directory": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-numeric-explicit-height-candidate-v3",
+  "files": [
+    {
+      "path": "ActualNumericExplicitHeight.lean",
+      "bytes": 19540,
+      "sha256": "B255244AE3D98413B943278A8C17E5099FAB876573E8E62A530093955D898847"
+    },
+    {
+      "path": "ActualNumericExplicitHeightChecks.lean",
+      "bytes": 1298,
+      "sha256": "423933F5DFBDFE85EFEEDDFD6D6DF7531CEF3091A0C0556F46E262CDDF8B57A5"
+    },
+    {
+      "path": "ARGUMENT-AND-API-MAP.md",
+      "bytes": 6139,
+      "sha256": "BC7625149E34CDADA160B852057ECC4A018A9FFD9F369C9209768C774B0DB27A"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 3998,
+      "sha256": "8E7F41B1BB1E6E2754219370183DAA32CC8CF0E2E968D28F9CCB99C444101F3B"
+    }
+  ],
+  "prior_captures": [
+    {
+      "folder": "numeric-source-height-offer-capture-v3",
+      "index_sha256": "7CD8C1D6463A39ECDE018F278360847F6874C3F8A2A3CB57FFC2D687B025C96D",
+      "source": "ActualNumericSourceHeight.lean",
+      "source_sha256": "98661E33A9C272CB983368B60C12BF7AA7BE833076A5545CAB1CDF4917209BDF"
+    },
+    {
+      "folder": "numeric-scalar-offer-capture-v6",
+      "index_sha256": "3EB1E16820BE3B30BF51C39907ADFFF443A4E03D178D5B6B840F61F98BDACBC9",
+      "source": "ActualNumericNoScalar.lean",
+      "source_sha256": "002998DCDBF10A2A145524078C6DA32545004D68C8A2AD45C2B34F6337B628FF"
+    }
+  ],
+  "lexical_preflight": [
+    {
+      "path": "ActualNumericExplicitHeight.lean",
+      "bytes": 19540,
+      "sha256": "B255244AE3D98413B943278A8C17E5099FAB876573E8E62A530093955D898847",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualNumericExplicitHeightChecks.lean",
+      "bytes": 1298,
+      "sha256": "423933F5DFBDFE85EFEEDDFD6D6DF7531CEF3091A0C0556F46E262CDDF8B57A5",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "independently_verified_mathlib_members": [],
+  "root_static_findings": [
+    "The sole source change explicitly simplifies one_mul in hmulN; exact complete diff verified.",
+    "Argument map now correctly bounds r by max(base,Hnum), without bounding arbitrary base by Hnum.",
+    "Checks unchanged; full source read via v1 and exact v2/v3 differences. No native acceptance; tactic/coercion repairs may remain."
+  ],
+  "full_source_review": "complete height source or prior full scalar source plus complete v6 diff",
+  "complete_argument_map_read": true,
+  "immutable_capture": true,
+  "development_candidate": true,
+  "compiler_invoked": false,
+  "native_verified": false,
+  "accepted": false,
+  "full_goal_complete": false
+}
