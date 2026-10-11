@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualRefreshGoodCover
+
+#check PvNP.RealizableHardness.ActualRefreshGoodCover.originallyGood
+#check PvNP.RealizableHardness.ActualRefreshGoodCover.originalGoodZoomCover
+#check PvNP.RealizableHardness.ActualRefreshGoodCover.candidateOfExactBudget
+#print axioms PvNP.RealizableHardness.ActualRefreshGoodCover.good_zoom_subset_cover
+#print axioms PvNP.RealizableHardness.ActualRefreshGoodCover.candidateCoordinates_eq_zoom_inter
+#print axioms PvNP.RealizableHardness.ActualRefreshGoodCover.candidateZoom_eq_progress_zoom
+#print axioms PvNP.RealizableHardness.ActualRefreshGoodCover.preserving_refresh_match_bound
+#print axioms PvNP.RealizableHardness.ActualRefreshGoodCover.exists_density_halving_refresh_of_good_cover
+#print axioms PvNP.RealizableHardness.ActualRefreshGoodCover.good_cover_mass_lower_bound

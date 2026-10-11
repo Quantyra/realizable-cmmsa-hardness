@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualRefreshGaussian
+
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.gaussian_lower_exact
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.normalizedFrame_self_ge_quarter
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.gaussian_upper_four
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.actual_zoom_card_eq_gaussian
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.candidateZoom_card_eq_actual
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.candidate_zoom_card_lower_aux
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.candidate_zoom_card_lower
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.candidate_matchCount_le_of_preserving
+#print axioms PvNP.RealizableHardness.ActualRefreshGaussian.codim_subspace_card_le_gaussian

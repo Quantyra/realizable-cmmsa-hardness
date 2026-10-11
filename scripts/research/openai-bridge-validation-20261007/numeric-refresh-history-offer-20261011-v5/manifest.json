@@ -1,0 +1,35 @@
+{
+  "schema": "numeric-refresh-history-v5",
+  "status": "uncompiled actual Candidate cardinality translation candidate",
+  "story": "E002/S3137",
+  "workspace": "C:/Users/dfred/.quantyra/reviews/openai-bridge-validation-20261007",
+  "predecessor": {
+    "capture_index": "87EF362E0A5A11A87C5343971993C97DCF737F9102C3340B5940149B35300BE4",
+    "preserved_source_sha256": "9139E443DAE576293AE036D1248506E0534094DE4245A73CD0ED9B3B146E9448"
+  },
+  "files": {
+    "ActualRefreshCandidateCount.lean": "C3A9A9AC316497801B6DC89B67C667A78062EC5E88797250C164F1F14ADAAB69",
+    "ActualRefreshGaussian.lean": "9139E443DAE576293AE036D1248506E0534094DE4245A73CD0ED9B3B146E9448",
+    "ARGUMENT.md": "76C4742667A81BA7E4948468CB57866E3D931F89049B77CD99A70D8CAE6D0C11",
+    "Checks.lean": "08DA267D30E795D13B5A12DC6EE7BF10C83611ACB2025425F430224C1D93B274",
+    "CHECKS.md": "C09C447B7FAE9EE6B95973F7872431002BD6FD76DA0F0C685438EFD8CE82D1E1"
+  },
+  "dependencies": [
+    {"module": "ActualRefreshCandidates/ActualRefreshCandidates.lean", "sha256": "A755C9C92474792C82236CB87C066FC16BB29E19E095DF34075AEC852226B76C"},
+    {"module": "ActualRefreshGaussian/ActualRefreshGaussian.lean", "sha256": "9139E443DAE576293AE036D1248506E0534094DE4245A73CD0ED9B3B146E9448"},
+    {"module": "NumericRefreshTailOffer/ExactRefreshTail.lean", "sha256": "7B54EE1E137076B252C54C9268083412FE54C2FADC9705170FE4911400D4F538"},
+    {"module": "NumericRefreshFormalOffer/ExactRefresh.lean", "sha256": "B68497790D514D4941E70E68F9AEF4D10493C572C9039058EB347C3963CD2BF3"},
+    {"full114_archive_sha256": "70FC4654130BA2BD9D1FFC79EA015F511E9BC7E4297D5D2DB6F62E42DC38CA04", "mathlib_revision": "e06eff5f95374108acfaf19f1ff7473aa7771df2"}
+  ],
+  "axiom_requests": [
+    "ActualRefreshCandidateCount.encodeCandidate_injective",
+    "ActualRefreshCandidateCount.candidateCountFiber_card_le",
+    "ActualRefreshCandidateCount.candidate_card_le_bound"
+  ],
+  "claim_boundary": [
+    "Source candidate only; no Lean/GCP compile or kernel acceptance.",
+    "No conditional hcount premise is used in candidate_card_le_bound.",
+    "No preservation event, one-refresh cover, many-Q conclusion, or certification is claimed."
+  ],
+  "execution": {"local_lean": false, "gcp_run": false, "git": false}
+}

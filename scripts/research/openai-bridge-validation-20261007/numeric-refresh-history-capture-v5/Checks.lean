@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualRefreshCandidateCount
+
+#check PvNP.RealizableHardness.ActualRefreshCandidateCount.encodeCandidate
+#print axioms PvNP.RealizableHardness.ActualRefreshCandidateCount.encodeCandidate_injective
+#print axioms PvNP.RealizableHardness.ActualRefreshCandidateCount.candidateCountFiber_card_le
+#print axioms PvNP.RealizableHardness.ActualRefreshCandidateCount.candidate_card_le_bound

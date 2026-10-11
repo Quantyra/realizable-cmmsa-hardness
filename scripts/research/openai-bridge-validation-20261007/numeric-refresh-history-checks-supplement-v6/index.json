@@ -1,0 +1,36 @@
+{
+  "modules": [
+    {
+      "module": "ActualRefreshGaussian",
+      "source_sha256": "BF70B7ACA9E5874E01316BE5E3AD996C72C8FBB31CBE95D9CCF6A544B444CFD9",
+      "axiom_requests": [
+        "PvNP.RealizableHardness.ActualRefreshGaussian.gaussian_lower_exact",
+        "PvNP.RealizableHardness.ActualRefreshGaussian.normalizedFrame_self_ge_quarter",
+        "PvNP.RealizableHardness.ActualRefreshGaussian.gaussian_upper_four",
+        "PvNP.RealizableHardness.ActualRefreshGaussian.actual_zoom_card_eq_gaussian",
+        "PvNP.RealizableHardness.ActualRefreshGaussian.candidateZoom_card_eq_actual",
+        "PvNP.RealizableHardness.ActualRefreshGaussian.candidate_zoom_card_lower_aux",
+        "PvNP.RealizableHardness.ActualRefreshGaussian.candidate_zoom_card_lower",
+        "PvNP.RealizableHardness.ActualRefreshGaussian.candidate_matchCount_le_of_preserving",
+        "PvNP.RealizableHardness.ActualRefreshGaussian.codim_subspace_card_le_gaussian"
+      ],
+      "checks_file": "ActualRefreshGaussianChecks.lean",
+      "checks_sha256": "3ADB4E0EDF2EF4AB47AE54DE9EF4A0AD1FB49D7CDFE4A2CABC7AF68A3884F9C9"
+    },
+    {
+      "module": "ActualRefreshCandidateCount",
+      "source_sha256": "15D10B8A1C1E3010CBB4411D86ACD961B85BFD4BA9C3D11B4BBC5BA592BBE4ED",
+      "axiom_requests": [
+        "PvNP.RealizableHardness.ActualRefreshCandidateCount.encodeCandidate_injective",
+        "PvNP.RealizableHardness.ActualRefreshCandidateCount.candidateCountFiber_card_le",
+        "PvNP.RealizableHardness.ActualRefreshCandidateCount.candidate_card_le_bound",
+        "PvNP.RealizableHardness.ActualRefreshCandidateCount.allCandidateFreshFailures_mass_le_uniform"
+      ],
+      "checks_file": "ActualRefreshCandidateCountChecks.lean",
+      "checks_sha256": "927AEA96436AD6DE97C655E141E4FE40E3544C10960531D7327C06B2FF6D74E2"
+    }
+  ],
+  "offered_files_unchanged": true,
+  "compiler_invoked": false,
+  "accepted": false
+}
