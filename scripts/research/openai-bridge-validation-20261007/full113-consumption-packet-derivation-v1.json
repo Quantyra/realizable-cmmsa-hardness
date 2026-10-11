@@ -1,0 +1,85 @@
+{
+  "parent": "prepare_full108_consumption_packet.py",
+  "parent_commit": "56c1d1d3",
+  "parent_sha256": "151560DC270D1762913FAC3536F1E1A0DC3CC3703151201348D6054BB2E0CB35",
+  "target": "prepare_full113_consumption_packet.py",
+  "target_sha256": "E07A7BF8F479B26EC76DA1235D88328108720134A9C7EFA30D406BE7C76CBE16",
+  "exact_replacements": [
+    {
+      "old": "full108",
+      "new": "full113",
+      "occurrences": 3
+    },
+    {
+      "old": "Full108",
+      "new": "Full113",
+      "occurrences": 1
+    },
+    {
+      "old": "full107",
+      "new": "full109",
+      "occurrences": 1
+    },
+    {
+      "old": "from prepare_full113_crosslevel_product_scope import additions",
+      "new": "from prepare_complete_operator_scope_v2 import additions",
+      "occurrences": 1
+    },
+    {
+      "old": "sources, requests = additions()",
+      "new": "sources, requests, provenance = additions()",
+      "occurrences": 1
+    },
+    {
+      "old": "261",
+      "new": "347",
+      "occurrences": 11
+    },
+    {
+      "old": "93",
+      "new": "179",
+      "occurrences": 8
+    },
+    {
+      "old": "348",
+      "new": "369",
+      "occurrences": 3
+    },
+    {
+      "old": "260",
+      "new": "261",
+      "occurrences": 6
+    },
+    {
+      "old": "92",
+      "new": "93",
+      "occurrences": 5
+    },
+    {
+      "old": "346",
+      "new": "348",
+      "occurrences": 1
+    },
+    {
+      "old": "focused-ninety-three-consumer",
+      "new": "focused-one-hundred-seventy-nine-consumer",
+      "occurrences": 3
+    },
+    {
+      "old": "focused-ninety-two-consumer",
+      "new": "focused-ninety-three-consumer",
+      "occurrences": 2
+    },
+    {
+      "old": "    parent = PARENT/'consumption-preparation-v1-dag'",
+      "new": "    from full113_capture_gates import validate_successor\n    validate_successor()\n    parent = PARENT/'consumption-preparation-v1-dag'",
+      "occurrences": 1
+    }
+  ],
+  "expected_modules": 369,
+  "expected_full_roots": 347,
+  "expected_focused_roots": 179,
+  "cloud_operation": false,
+  "compiler_invoked": false,
+  "acceptance_claimed": false
+}
