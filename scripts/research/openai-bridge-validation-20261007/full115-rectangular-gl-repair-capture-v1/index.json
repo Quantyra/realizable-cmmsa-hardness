@@ -1,0 +1,65 @@
+{
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full115-rectangular-gl-repair-v1\\manifest.json",
+      "copy": "manifest.json",
+      "bytes": 4040,
+      "sha256": "49DD9E953795DD6F69F315448116F42A4DFB5B3926D084878D55AE76035481A9"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full115-rectangular-gl-repair-v1\\PROOF-AND-API-MAP.md",
+      "copy": "PROOF-AND-API-MAP.md",
+      "bytes": 3495,
+      "sha256": "26A79740915EA1FB502C9F8A78E913E336F840B68BA0A1D4D8985128A681EF3D"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full115-rectangular-gl-repair-v1\\RectangularGLRowCompletion.lean",
+      "copy": "RectangularGLRowCompletion.lean",
+      "bytes": 18528,
+      "sha256": "32490329F5E11E19F7EC26D64A09143BCABE15836156B4656E2422382C0462E7"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full115-rectangular-gl-repair-v1\\RectangularGLRowCompletionChecks.lean",
+      "copy": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    }
+  ],
+  "source": "lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean",
+  "old_sha256": "9409767AA9F0C6BC736B06CA73EF9D7B080A27EF96F6BAF4E41DA5019E7CD0C1",
+  "new_sha256": "32490329F5E11E19F7EC26D64A09143BCABE15836156B4656E2422382C0462E7",
+  "parent_run": "cmmsa_a8_output_20261011T070000Z_135b1f28",
+  "parent_native_archive_sha256": "F94CD8899B40E42802B5294EF4EFD0189F9584EBE8E1FAEABCC5826FED8A56A3",
+  "exact_diff": "--- \n+++ \n@@ -272,6 +272,14 @@\n     change Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X) =\n       Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀)\n     exact rowPrefix_fiber_card_eq X X₀\n+  have hcardNat : ∀ X : FullRowFrame c (c + s),\n+      Nat.card (RectangularFrameFiberAverage.Fiber f X) = k := by\n+    intro X\n+    simpa only [← Nat.card_eq_fintype_card] using hcard X\n+  have hcardExpected : ∀ X : FullRowFrame c (c + s),\n+      Fintype.card (RectangularFrameFiberAverage.Fiber f X) = k := by\n+    intro X\n+    simpa only [Nat.card_eq_fintype_card] using hcardNat X\n   have hmap :\n       (∑ p : InversePair (c + s), g (f p)) /\n           (Fintype.card (InversePair (c + s)) : Real) =\n@@ -279,7 +287,7 @@\n           (Fintype.card (FullRowFrame c (c + s)) : Real) :=\n     @RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers\n       (InversePair (c + s)) (FullRowFrame c (c + s))\n-      inferInstance inferInstance hNonempty f k hk hcard g\n+      inferInstance inferInstance hNonempty f k hk hcardExpected g\n   exact hmap\n \n /-- Injective column maps become surjective row maps after transpose. The\n",
+  "lexical_preflight": [
+    {
+      "path": "RectangularGLRowCompletion.lean",
+      "bytes": 18528,
+      "sha256": "32490329F5E11E19F7EC26D64A09143BCABE15836156B4656E2422382C0462E7",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "existing_statements_imports_checks_and_options_preserved": true,
+  "actual_project_and_mathlib_dependency_pins_verified": true,
+  "nat_card_api": {
+    "member": ".lake/packages/mathlib/Mathlib/SetTheory/Cardinal/Finite.lean",
+    "bytes": 16890,
+    "sha256": "B113177C5ED00662C73A8F3B04002B399C19F0D008920E52C1A6B6C7F16713BF"
+  },
+  "root_read_complete_diff_map_and_manifest": true,
+  "review_concern": "The separately annotated hcardExpected may reselect the same caller instance; the final conversion should be elaborated under the consumer argument expected type.",
+  "metadata_errata": "Map contains X? and ? b in explanatory prose; exact Lean source glyphs passed preflight.",
+  "capture_control_sha256": "BF945361EE31FF685C7FE5C4E430D4BB0B26DCC9886A9806D00E91A4615DE67C",
+  "compiler_invoked": false,
+  "accepted": false
+}

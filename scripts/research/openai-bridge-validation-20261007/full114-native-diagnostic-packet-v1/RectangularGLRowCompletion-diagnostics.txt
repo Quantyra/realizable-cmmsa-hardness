@@ -1,0 +1,16 @@
+error: lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean:282:51: Application type mismatch: The argument
+  hcard
+has type
+  ∀ (X : FullRowFrame c (c + s)),
+    @Fintype.card (RectangularFrameFiberAverage.Fiber f X)
+        (@Subtype.fintype (InversePair (c + s)) (fun a => f a = X) (fun a => Subtype.instDecidableEq (f a) X)
+          (Subtype.fintype fun p => p.1 * p.2 = 1 ∧ p.2 * p.1 = 1)) =
+      k
+but is expected to have type
+  ∀ (b : FullRowFrame c (c + s)),
+    @Fintype.card (RectangularFrameFiberAverage.Fiber f b)
+        (@Subtype.fintype (InversePair (c + s)) (fun a => f a = b) (fun a => Classical.propDecidable (f a = b))
+          inferInstance) =
+      k
+in the application
+  RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers f k hk hcard
