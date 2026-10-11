@@ -1,0 +1,185 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "auth",
+      "list",
+      "--filter=status:ACTIVE",
+      "--format=json(account,status)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "C63009EDEEF41892ACDE6B0F4FB7D0F98473F54E84F2F6B1FEED6ABF6BC8D1B9",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:49:33.583115+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:49:36.762524+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=set -e; test ! -e /home/dfredriksen_quantyra_org/full110-exact-real-complex-operators-builder02-stage; test ! -e /home/dfredriksen_quantyra_org/full110-exact-real-complex-operators-resource02-prepared; test ! -e /home/dfredriksen_quantyra_org/full110-exact-real-complex-operators-resource02-launch-once.json",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:49:47.588023+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:49:50.936621+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=mkdir /home/dfredriksen_quantyra_org/full110-exact-real-complex-operators-builder02-stage",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:49:58.869896+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "scp",
+      "C:\\Users\\dfred\\.quantyra\\builder02\\full110-exact-real-complex-operators-resource02\\input-archive.tar.gz",
+      "C:\\Users\\dfred\\.quantyra\\builder02\\full110-exact-real-complex-operators-resource02\\capture-manifest.json",
+      "C:\\Users\\dfred\\.quantyra\\builder02\\full110-exact-real-complex-operators-resource02\\resource-binding.json",
+      "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\extract_builder02_dependencies.py",
+      "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full110_verify.py",
+      "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full110_worker.py",
+      "quantyra-lean-builder-02:/home/dfredriksen_quantyra_org/full110-exact-real-complex-operators-builder02-stage/",
+      "--tunnel-through-iap",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "4E924BC38197BBBB04152BDD435A3BE7859D81983533F6BE95EC4E3BF496DAB8",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:50:14.262228+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=set -e; date +%s | sudo tee /var/lib/quantyra-idle-shutdown/last-active; sudo systemctl start quantyra-idle-shutdown.timer; systemctl is-active quantyra-idle-shutdown.timer",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "BC4299EAD2160ADBAD85986FF5F0B9D36588EDF2152D837AA85D803357FB08E2",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:50:25.751601+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=python3 -B /home/dfredriksen_quantyra_org/full110-exact-real-complex-operators-builder02-stage/full110_verify.py /home/dfredriksen_quantyra_org/full110-exact-real-complex-operators-builder02-stage full110-exact-real-complex-operators-resource02",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "F06A758A345F4610918BE94BD639B111D74307747728EA10CB6B749494CE3902",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:50:54.304511+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "ssh",
+      "quantyra-lean-builder-02",
+      "--tunnel-through-iap",
+      "--command=cat /home/dfredriksen_quantyra_org/full110-exact-real-complex-operators-builder02-stage/dependency-preflight.json",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "F06A758A345F4610918BE94BD639B111D74307747728EA10CB6B749494CE3902",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:51:01.754582+00:00"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "utc": "2026-10-11T02:51:04.073506+00:00"
+  }
+]

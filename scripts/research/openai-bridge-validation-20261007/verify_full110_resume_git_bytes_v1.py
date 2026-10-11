@@ -7,7 +7,7 @@ import sys
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
-ALLOWED = {'full110-resume-staging-failure-v1', 'numeric-no-offer-capture-v1',
+ALLOWED = {'full110-resume-staging-failure-v1', 'full110-resume-staging-success-v1', 'numeric-no-offer-capture-v1',
            'numeric-no-offer-capture-v2', 'actual-numeric-no-candidate-v1', 'actual-numeric-no-candidate-v2'}
 
 
