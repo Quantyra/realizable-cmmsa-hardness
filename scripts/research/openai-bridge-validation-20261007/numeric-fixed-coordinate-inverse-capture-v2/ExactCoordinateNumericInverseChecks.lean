@@ -1,0 +1,4 @@
+import PvNP.RealizableHardness.ExactCoordinateNumericInverse
+
+#check PvNP.RealizableHardness.ExactCoordinateNumericInverse.fixed_coordinate_real_inverse_agreement
+#print axioms PvNP.RealizableHardness.ExactCoordinateNumericInverse.fixed_coordinate_real_inverse_agreement

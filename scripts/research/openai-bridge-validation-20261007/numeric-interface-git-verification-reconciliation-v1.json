@@ -1,0 +1,8 @@
+{
+  "original_chunk": "4d679a",
+  "exit_code": 1,
+  "failure": "git show :path from deep subdirectory attempted to stat a duplicated long path and returned128 during INDEX byte verification. Staging and exact staged-file set check had already completed.",
+  "stderr": "<unknown>:137: SyntaxWarning: invalid escape sequence '\\ '\nwarning: CRLF will be replaced by LF in scripts/research/openai-bridge-validation-20261007/.gitattributes.\nThe file will have its original line endings in your working directory\nfatal: failed to stat 'scripts/research/openai-bridge-validation-20261007/:scripts/research/openai-bridge-validation-20261007/numeric-same-instance-composition-capture-v3/ExactNumericSameInstanceCompositionChecks.lean': Filename too long\nTraceback (most recent call last):\n  File \"<stdin>\", line 31, in <module>\n  File \"subprocess.py\", line 472, in check_output\n  File \"subprocess.py\", line 577, in run\nsubprocess.CalledProcessError: Command ['git', 'show', ':scripts/research/openai-bridge-validation-20261007/numeric-same-instance-composition-capture-v3/ExactNumericSameInstanceCompositionChecks.lean'] returned non-zero exit status 128.\n",
+  "resolution": "Use git cat-file --batch from repository root with stdin object names; verify all current blobs, then commit. Original failed author v1 retains its documented Python warning.",
+  "compiler_invoked": false
+}

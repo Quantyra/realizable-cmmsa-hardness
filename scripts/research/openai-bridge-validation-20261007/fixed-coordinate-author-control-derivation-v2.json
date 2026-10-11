@@ -1,0 +1,22 @@
+{
+  "original_control_sha256": "A7FB3C921507E85239E8DC3C04FC7273D6F63A5D74E4718994CD8E2B954E3A06",
+  "derived_control_sha256": "514A8E256D616DF7A987709C2F414FEEC3F15836DCED56F1931DEB37EB7F1217",
+  "parent_failed_capture_index_sha256": "7DD3A38794637AEED116E82A774315DBADAB5D3483809852CF8786FA6FB6E4F2",
+  "changes": [
+    {
+      "from": "statement = '''",
+      "to": "statement = r'''"
+    },
+    {
+      "from": "material = '''",
+      "to": "material = r'''"
+    },
+    {
+      "from": "numeric-fixed-coordinate-inverse-offer-v1",
+      "to": "numeric-fixed-coordinate-inverse-offer-v2"
+    }
+  ],
+  "inverse_repair_exact": true,
+  "reason": "Raw Python strings preserve both Lean conjunction backslash-newlines; material raw string removes Python invalid escape warning. No mathematical change intended.",
+  "compiler_invoked": false
+}

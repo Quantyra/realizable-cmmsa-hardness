@@ -1,0 +1,4 @@
+import PvNP.RealizableHardness.ExactNumericSameInstanceComposition
+
+#check PvNP.RealizableHardness.ExactNumericSameInstanceComposition.same_instance_real_inverse_agreement
+#print axioms PvNP.RealizableHardness.ExactNumericSameInstanceComposition.same_instance_real_inverse_agreement
