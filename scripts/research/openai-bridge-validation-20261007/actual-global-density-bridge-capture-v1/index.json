@@ -1,0 +1,65 @@
+{
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-global-density-bridge-offer-v1\\ActualGlobalDensityBridge.lean",
+      "copy": "ActualGlobalDensityBridge.lean",
+      "bytes": 11164,
+      "sha256": "8E434C280620A1350A15E509A6A907C0A9DCFCF8D8C583AA2EB9EDC1FB8AECA1"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-global-density-bridge-offer-v1\\ActualGlobalDensityBridgeChecks.lean",
+      "copy": "ActualGlobalDensityBridgeChecks.lean",
+      "bytes": 643,
+      "sha256": "00123B7B0E44C2C9190373F55A1F47A718FA875601703D19D38DB59160F810EF"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-global-density-bridge-offer-v1\\ARGUMENT-AND-API-MAP.md",
+      "copy": "ARGUMENT-AND-API-MAP.md",
+      "bytes": 4454,
+      "sha256": "673E8A26AAD8D75262DA74D9FDE658D7810C62EB8E7FFEC8E091E4013A4FEC49"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-global-density-bridge-offer-v1\\OFFER-MANIFEST.json",
+      "copy": "OFFER-MANIFEST.json",
+      "bytes": 2633,
+      "sha256": "1060C3FEF1F711FDEC1CC439AF24A99749B1E796680B3EA261B93041C857E024"
+    }
+  ],
+  "dependency_manifest_sha256": "1060C3FEF1F711FDEC1CC439AF24A99749B1E796680B3EA261B93041C857E024",
+  "project_dependencies_verified": 9,
+  "lexical_preflight": [
+    {
+      "path": "ActualGlobalDensityBridge.lean",
+      "bytes": 11164,
+      "sha256": "8E434C280620A1350A15E509A6A907C0A9DCFCF8D8C583AA2EB9EDC1FB8AECA1",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualGlobalDensityBridgeChecks.lean",
+      "bytes": 643,
+      "sha256": "00123B7B0E44C2C9190373F55A1F47A718FA875601703D19D38DB59160F810EF",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "requested_axioms": [
+    "PvNP.RealizableHardness.ActualGlobalDensityBridge.complementFullAcceptMass_le_transportedStarDensity",
+    "PvNP.RealizableHardness.ActualGlobalDensityBridge.exists_complement_with_star_density_ge"
+  ],
+  "all_public_theorems_requested": true,
+  "root_read_complete_source_checks_map_manifest": true,
+  "argument_scope": "General rational-threshold finite averaging for the same fixed tables and actual complement; one-way event inclusion retained",
+  "static_review_concerns": [
+    "ASCII sum binder syntax must be checked and replaced with actual Lean summation notation if unsupported.",
+    "Supply explicit (t := t) (h := h) (k := k) at all density/mass calls where phantom indices cannot be inferred; theorem statements must bind the intended leaf count.",
+    "Distribute the outer complement weight through every nested sum before sum_congr.",
+    "Convert the constant finite sum explicitly for the final pigeonhole lemma and provide its nonempty finset proof from derived hsideComp."
+  ],
+  "capture_control_sha256": "35DC9ED2F3945408509D7DB48C5EF87DB0E6F2483DDF63DF1E9958DBE9E32112",
+  "compiler_invoked": false,
+  "accepted": false,
+  "repair_requested": true
+}
