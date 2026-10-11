@@ -1,0 +1,64 @@
+{
+  "state": {
+    "id": "7237681467779354904",
+    "lastStartTimestamp": "2026-10-10T17:15:37.651-07:00",
+    "lastStopTimestamp": "2026-10-10T12:23:12.655-07:00",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/quantyra-lean-cert-20260915/zones/us-central1-a/machineTypes/e2-highmem-8",
+    "name": "quantyra-lean-builder-02",
+    "networkInterfaces": [
+      {
+        "fingerprint": "q2xwjDHZxm4=",
+        "kind": "compute#networkInterface",
+        "name": "nic0",
+        "network": "https://www.googleapis.com/compute/v1/projects/quantyra-lean-cert-20260915/global/networks/default",
+        "networkIP": "10.128.0.3",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/quantyra-lean-cert-20260915/regions/us-central1/subnetworks/default"
+      }
+    ],
+    "status": "RUNNING",
+    "zone": "https://www.googleapis.com/compute/v1/projects/quantyra-lean-cert-20260915/zones/us-central1-a"
+  },
+  "commands": [
+    {
+      "argv": [
+        "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+        "compute",
+        "instances",
+        "describe",
+        "quantyra-lean-builder-02",
+        "--format=json(name,id,status,zone,machineType,networkInterfaces,lastStartTimestamp,lastStopTimestamp)",
+        "--account=dfredriksen@quantyra.org",
+        "--project=quantyra-lean-cert-20260915",
+        "--zone=us-central1-a",
+        "--quiet"
+      ],
+      "native_exit": 0,
+      "finished_utc": "2026-10-11T02:14:12.512637+00:00",
+      "stdout_sha256": "7C98455F6A0650D2314BFAF68FA5A078BD95D3B404DB04B780CC86B57F4573E8",
+      "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "argv": [
+        "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+        "compute",
+        "instances",
+        "get-serial-port-output",
+        "quantyra-lean-builder-02",
+        "--port=1",
+        "--start=0",
+        "--account=dfredriksen@quantyra.org",
+        "--project=quantyra-lean-cert-20260915",
+        "--zone=us-central1-a",
+        "--quiet"
+      ],
+      "native_exit": 0,
+      "finished_utc": "2026-10-11T02:14:14.881044+00:00",
+      "stdout_sha256": "7EB70257593DA06F682A3DDDA54A9D260D4FC514F645237F5CA74B08F8DA61A6",
+      "stderr_sha256": "E301360AFDFA798722F35A9B460063427B596EA59182B120961750273FA3FD95"
+    }
+  ],
+  "read_only": true,
+  "compiler_invoked": false,
+  "vm_power_operation": false
+}

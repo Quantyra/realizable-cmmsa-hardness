@@ -1,0 +1,76 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces,tags,displayDevice,lastStartTimestamp,lastStopTimestamp)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "finished_utc": "2026-10-11T02:14:57.123796+00:00",
+    "stdout_sha256": "06F57D6B532D1CAC9819C4629991974637754DC2E3BC8DBA4DE9701711057934",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "network-interfaces",
+      "get-effective-firewalls",
+      "quantyra-lean-builder-02",
+      "--network-interface=nic0",
+      "--format=json",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "finished_utc": "2026-10-11T02:15:00.194206+00:00",
+    "stdout_sha256": "6FFFC8A089D13F31097B13A13BD9629A0C6E7E71AC2CCAD866CFE05F198B718D",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "get-guest-attributes",
+      "quantyra-lean-builder-02",
+      "--query-path=hostkeys/",
+      "--format=json",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 1,
+    "finished_utc": "2026-10-11T02:15:02.590943+00:00",
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "C26F7882C29FF5404474FFA76A30737EA239F017D3F56CB281A08E8CB63D86F3"
+  },
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "logging",
+      "read",
+      "resource.type=\"gce_instance\" AND resource.labels.instance_id=\"7237681467779354904\" AND timestamp>=\"2026-10-11T00:00:00Z\"",
+      "--limit=100",
+      "--format=json",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "finished_utc": "2026-10-11T02:15:04.993169+00:00",
+    "stdout_sha256": "FA4683C52264D0E528A5F8FEC23320C29822E043944F3E8DE0CCA45DCF78A330",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  }
+]

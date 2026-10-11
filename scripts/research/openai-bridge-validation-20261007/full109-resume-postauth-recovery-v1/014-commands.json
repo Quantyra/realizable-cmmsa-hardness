@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "C:/Users/dfred/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud.cmd",
+      "compute",
+      "instances",
+      "describe",
+      "quantyra-lean-builder-02",
+      "--format=json(name,id,status,zone,machineType,networkInterfaces)",
+      "--account=dfredriksen@quantyra.org",
+      "--project=quantyra-lean-cert-20260915",
+      "--zone=us-central1-a",
+      "--quiet"
+    ],
+    "native_exit": 0,
+    "stdout_sha256": "5E134E57855CCBC56CBD02AE287ECB2E41E3BA54EEC29EFDDBB2B6E4A44D891F",
+    "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "argv": [
+      "C:\\Windows\\System32\\OpenSSH\\ssh.exe",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "HostKeyAlgorithms=ssh-ed25519",
+      "-o",
+      "GlobalKnownHostsFile=NUL",
+      "-o",
+      "UserKnownHostsFile=C:\\Users\\dfred\\.quantyra\\builder02\\full109-exact-crosslevel-warning-repair-resource02\\readonly-receipt-native89-v1\\20261011T021323726374Z\\known_hosts",
+      "-o",
+      "HostKeyAlias=compute.7237681467779354904",
+      "-o",
+      "PasswordAuthentication=no",
+      "-o",
+      "KbdInteractiveAuthentication=no",
+      "-o",
+      "ConnectTimeout=30",
+      "-i",
+      "C:\\Users\\dfred\\.ssh\\google_compute_engine",
+      "-p",
+      "56100",
+      "-T",
+      "dfredriksen_quantyra_org@127.0.0.1",
+      "python3 -B -c 'import base64,hashlib,json,os,urllib.request\nfrom pathlib import Path\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\nr=urllib.request.Request('\"'\"'http://metadata.google.internal/computeMetadata/v1/instance/id'\"'\"',headers={'\"'\"'Metadata-Flavor'\"'\"':'\"'\"'Google'\"'\"'})\nwith o.open(r,timeout=10) as response:\n assert response.headers.get('\"'\"'Metadata-Flavor'\"'\"')=='\"'\"'Google'\"'\"' and response.read().decode()=='\"'\"'7237681467779354904'\"'\"'\nhome=Path('\"'\"'/home/dfredriksen_quantyra_org'\"'\"');assert Path.home().resolve()==home\nroot=Path('\"'\"'/home/dfredriksen_quantyra_org/full109-trace-cache-small-native89-v1'\"'\"')\nassert (root/'\"'\"'execute-once.json'\"'\"').is_file()\nassert hashlib.sha256((root/'\"'\"'full109_trace_cache_small_native89_v1.py'\"'\"').read_bytes()).hexdigest().upper()=='\"'\"'0C90D92321DFBAE6587BA3C8A1C4FCC79005BAFA2CD8BFCD10F40D2FEF22FDFA'\"'\"'\nfor entry in Path('\"'\"'/proc'\"'\"').iterdir():\n if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\n try:name=(entry/'\"'\"'comm'\"'\"').read_text().strip();args=(entry/'\"'\"'cmdline'\"'\"').read_bytes()\n except (FileNotFoundError,PermissionError):continue\n assert not (name=='\"'\"'python3'\"'\"' and b'\"'\"'full109_trace_cache_small_native89_v1.py'\"'\"' in args), '\"'\"'Original recovery still live'\"'\"'\ndata=(root/'\"'\"'receipt.json'\"'\"').read_bytes()\nassert hashlib.sha256(data).hexdigest().upper()=='\"'\"'17BDA840557AB015CD086F91E18D68CFB078343779521C57BF2A273F90EA64BA'\"'\"'\nvalue=json.loads(data);assert len(value['\"'\"'applied'\"'\"'])==19233\nprint(json.dumps(dict(receipt_sha256='\"'\"'17BDA840557AB015CD086F91E18D68CFB078343779521C57BF2A273F90EA64BA'\"'\"',raw_receipt_base64=base64.b64encode(data).decode(),read_only=True,execution_replayed=False,compiler_invoked=False)))\n'"
+    ],
+    "native_exit": 255,
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_sha256": "C30F13073077BA9F59397137BBCC2B3974E81DAEA34B1C2901DF5E11091BC1A1"
+  }
+]
