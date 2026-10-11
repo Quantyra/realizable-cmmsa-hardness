@@ -1,0 +1,16 @@
+{
+  "original_control": "preserve_compress_full113_prior_text_v1.py",
+  "original_sha256": "B62259990E29187795571EC667712FCFB0CCBDD92F2B186597E2520432B44680",
+  "original_tool_exit": 1,
+  "original_tool_chunk": "eeba88",
+  "failure": "Unlaunched full84-resource02 has no launch-once.json",
+  "failure_before_target_or_compression": true,
+  "successor": "preserve_compress_full113_prior_text_v2.py",
+  "successor_sha256": "7194055D25D55351872CCB523B5B228A3A020F1F4F4DD9B8D569D136CE668E9D",
+  "exact_change": {
+    "old": "        marker = json.loads((resource / 'launch-once.json').read_bytes())",
+    "new": "        if not (resource / 'launch-once.json').is_file():\n            continue  # Original unlaunched Full84 directory is not a settled native run.\n        marker = json.loads((resource / 'launch-once.json').read_bytes())"
+  },
+  "new_destination": "full113-prior-text-preserved-lossless-v2",
+  "no_original_deleted_or_rewritten": true
+}

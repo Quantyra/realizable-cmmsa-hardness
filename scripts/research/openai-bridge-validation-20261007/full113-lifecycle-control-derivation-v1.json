@@ -1,0 +1,100 @@
+{
+  "records": [
+    {
+      "source": "run_full111_settled_cache_recovery_v1.py",
+      "source_commit": "c56efdcb",
+      "source_sha256": "B6FAFF31935D669F09AE2BA324FC79E2B1D8E7263E9E946282A6915A9EE451AC",
+      "target": "run_full112_settled_cache_recovery_v1.py",
+      "target_sha256": "2B61820D2365371E29B87526895DD154C43C05A8580BCA5530326BDCEB3D6C31",
+      "exact_replacements": [
+        {
+          "old": "full112-exact-real-complex-operators-repair2",
+          "new": "full113-exact-real-complex-operators-repair3",
+          "occurrences": 1
+        },
+        {
+          "old": "full111",
+          "new": "full112",
+          "occurrences": 5
+        },
+        {
+          "old": "cmmsa_a8_output_20261011T035621Z_498f7ba6",
+          "new": "cmmsa_a8_output_20261011T051406Z_3ef6ddc2",
+          "occurrences": 1
+        },
+        {
+          "old": "assert action in ('boot', 'plan', 'execute', 'collect-plan', 'collect-receipt')",
+          "new": "assert action == 'boot', 'This derived control is admitted only for the once-guarded boot'",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "source": "full112_dedicated_openssh_v2.py",
+      "source_commit": "c56efdcb",
+      "source_sha256": "F9B990765F4E4C1562BDC716FEDB89D5C8D1FE128DE5B228DE6FF48338F4605E",
+      "target": "full113_dedicated_openssh_v2.py",
+      "target_sha256": "55C43FBFE7E6DF78ECD5D106F0FAFEEB7B86396A031C77710F2B513C381C85FB",
+      "exact_replacements": [
+        {
+          "old": "from full111_builder02_controller import VM, VM_ID",
+          "new": "from full113_builder02_controller import VM, VM_ID",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "source": "full112_openssh_control_v1.py",
+      "source_commit": "c56efdcb",
+      "source_sha256": "225B20414B6F6F51DBC0BC1C914A758BBC2FDD3FDECBCA63EFDAB3C49799ECB2",
+      "target": "full113_openssh_control_v1.py",
+      "target_sha256": "88AFA54521F0FE6CE341D5B591956E4CFAEE5EF89A8B5CAF2C108D9DB17E1B33",
+      "exact_replacements": [
+        {
+          "old": "full112",
+          "new": "full113",
+          "occurrences": 7
+        }
+      ]
+    },
+    {
+      "source": "terminate_full112_after_custody_openssh_v1.py",
+      "source_commit": "c56efdcb",
+      "source_sha256": "682958835509A35CFACB2B00FDC7D17C902FC824B7AC24870C704D67DE941672",
+      "target": "terminate_full113_after_custody_openssh_v1.py",
+      "target_sha256": "0183A35B1F7CB71360E067D5F0EB1D102822A6BBABF9A976F644058644E2A9EE",
+      "exact_replacements": [
+        {
+          "old": "full112",
+          "new": "full113",
+          "occurrences": 2
+        }
+      ]
+    },
+    {
+      "source": "run_full112_resume_step_v8.py",
+      "source_commit": "c56efdcb",
+      "source_sha256": "02D8CF26CA002BC23CEF9D10BEC0033634952349A8955DC0193EF5C081CBC6F0",
+      "target": "run_full113_resume_step_v2.py",
+      "target_sha256": "7D635FAC505B725D78EF8F5914725915D7D2808A060031979A12063D1D64E709",
+      "exact_replacements": [
+        {
+          "old": "ALLOWED = {'stage_full112_builder02.py', 'stage_full112_after_recovery_v1.py', 'full112_builder02_controller.py', 'full112_postprocess.py', 'preserve_full112_frozen_package_v1.py', 'inspect_full111_recovery_state_v1.py', 'run_full111_settled_cache_openssh_v2.py', 'run_full111_settled_cache_openssh_v3.py', 'derive_full111_settled_cache_recovery_v2.py', 'preserve_full111_seven_recovery_plans_v3.py', 'audit_full111_settled_cache_recovery_v2.py', 'stage_full112_after_recovery_openssh_v2.py', 'run_full112_native_openssh_v1.py', 'derive_full111_remaining_cache_helpers_v3.py', 'run_full111_settled_cache_openssh_v4.py', 'audit_full111_settled_cache_recovery_v3.py', 'stage_full112_after_recovery_openssh_v3.py', 'preserve_full111_complete_recovery_plans_v4.py', 'run_full111_settled_cache_openssh_v5.py', 'audit_full111_settled_cache_recovery_v4.py', 'stage_full112_after_recovery_openssh_v4.py', 'preserve_full111_complete_recovery_plans_v5.py', 'preserve_full111_complete_recovery_v4.py', 'terminate_full112_after_custody_openssh_v1.py'}",
+          "new": "ALLOWED = {'run_full112_settled_cache_recovery_v1.py', 'full113_postprocess.py', 'inspect_full113_recovery_capacity_v1.py', 'run_full113_native_openssh_v1.py', 'audit_full113_cache_recovery_v1.py', 'preserve_full113_recovery_v1.py', 'terminate_full113_after_custody_openssh_v1.py', 'preserve_full113_frozen_package_v1.py', 'run_full113_cache_recovery_v1.py', 'stage_full113_after_recovery_openssh_v1.py'}",
+          "occurrences": 1
+        },
+        {
+          "old": "from full112_builder02_controller import ROOT",
+          "new": "from full113_builder02_controller import ROOT",
+          "occurrences": 1
+        }
+      ]
+    }
+  ],
+  "VM_creation": false,
+  "other_VM_modified": false,
+  "threshold_changes": false,
+  "compiler_invoked": false,
+  "boot_performed": false,
+  "original_failed_operations_replayed": false
+}
