@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualNumericNoScalar
+
+#print axioms PvNP.RealizableHardness.ActualNumericNoScalar.selected_low_HC46_envelope
+#print axioms PvNP.RealizableHardness.ActualNumericNoScalar.selected_actual_rhs_eq_materialScalarRhs
+#print axioms PvNP.RealizableHardness.ActualNumericNoScalar.selected_actual_source_material_scalar
+#print axioms PvNP.RealizableHardness.ActualNumericNoScalar.conservative_material_scalar_contradiction

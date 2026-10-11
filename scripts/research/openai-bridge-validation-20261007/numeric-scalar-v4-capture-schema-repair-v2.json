@@ -1,0 +1,27 @@
+{
+  "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\capture_numeric_scalar_offer_v4.py",
+  "original_sha256": "21EE548C4184A03E3A6675DAAAF9BC52574CD5FFF6A4B828B08AC8589C446E1E",
+  "original_native_exit": 1,
+  "original_error": "KeyError: 'pinned_dependencies'",
+  "failure_before_capture_creation": true,
+  "direct_tool_output_not_archived": true,
+  "root_observation_not_raw_transcript": true,
+  "target": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\capture_numeric_scalar_offer_v4_schema_v2.py",
+  "target_sha256": "6BDFADD7A79E0E48DE30D9753BC9B7754CE43839B19B20C1B733A98F9486D910",
+  "exact_replacements": [
+    [
+      "    prior_offer = json.loads((prior / 'OFFER-MANIFEST.json').read_bytes())\n    assert offered['pinned_dependencies'] == prior_offer['pinned_dependencies']",
+      "    assert offered['dependencies'] == old['dependencies']\n    pins = {row['path']: row for row in offered['files']}\n    assert len(pins) == len(offered['files'])\n    assert offered['dependency_archive']['sha256'] == old['dependency_archive_sha256']"
+    ],
+    [
+      "pin = offered['files'][path.name]",
+      "pin = pins[path.name]"
+    ],
+    [
+      "set(offered['files']) |",
+      "set(pins) |"
+    ]
+  ],
+  "author_offer_unchanged": true,
+  "compiler_invoked": false
+}
