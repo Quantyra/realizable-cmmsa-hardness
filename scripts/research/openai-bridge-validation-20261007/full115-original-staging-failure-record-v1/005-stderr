@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import runpy,sys;sys.path.insert(0,sys.argv[1]);import full115_authorized_cleanup_custody_v1 as a;a.activate();p=sys.argv[2];sys.argv=sys.argv[2:];runpy.run_path(p,run_name="__main__")
+                                                                                                                                                       ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\stage_full115_builder02.py", line 107, in <module>
+    main(sys.argv[1:] == ['--resume-staging'])
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\stage_full115_builder02.py", line 83, in main
+    cloud(['compute','ssh',VM,'--tunnel-through-iap',
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           '--command=mkdir '+STAGE])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\stage_full115_builder02.py", line 48, in cloud
+    return call([SDK, *args, *FLAGS])
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\stage_full115_builder02.py", line 37, in call
+    raise RuntimeError('Staging command failed; preserve and inspect '+str(folder))
+RuntimeError: Staging command failed; preserve and inspect C:\Users\dfred\.quantyra\builder02\full115-exact-real-complex-operators-repair5-resource02\staging-controls\20261011T191436648302Z

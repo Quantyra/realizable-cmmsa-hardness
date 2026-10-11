@@ -1,0 +1,37 @@
+import PvNP.RealizableHardness.ActualCoordinateStarDensity
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.starAccepts_coordinate_iff
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.starAccepts_coordinate_iff
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.starDensity_coordinate_eq
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.starDensity_coordinate_eq
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackDecodedPair
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackDecodedPair
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackDecodedPair_finrank
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackDecodedPair_finrank
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackDecodedPair_codim
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackDecodedPair_codim
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackZoomEquiv
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackZoomEquiv
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackZoom_card_eq
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackZoom_card_eq
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreesOn_iff
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreesOn_iff
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreeingZoomEquiv
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreeingZoomEquiv
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreeingZoom_card_eq
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreeingZoom_card_eq
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreement_eq
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreement_eq
+
+#check PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreement_real_eq
+#print axioms PvNP.RealizableHardness.ActualCoordinateStarDensity.pullbackAgreement_real_eq
