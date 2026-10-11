@@ -68,8 +68,8 @@ Quantyra Research and none of A001's mathematical or Lean claims is imported.
 
 ## Submission issues remaining
 
-The full Lean proof and its audit are incomplete. The current 31-page PDF
-has completed author and independent all-page visual QA.
+The full Lean proof and its audit are incomplete. The current 32-page PDF
+has completed author and independent all-page visual QA with minor findings.
 The manuscript-wide content reconciliation and its editorial disposition have
 local agent reviews, bounded to their stated scope. No venue, submission category, author identity changes,
 submission authorization or public-announcement destination is selected by
@@ -166,7 +166,7 @@ consolidation as complete. This conditional handoff does not change proof
 claims or authorize publication, push, submission or release.
 
 
-## Current hypercontractivity submission candidate (2026-09-13)
+## Historical hypercontractivity submission candidate (2026-09-13)
 
 The complete finite binary hypercontractivity appendix and its inverse-lemma
 application were integrated and source-reviewed at commit
@@ -221,8 +221,21 @@ Holder spelling, one theorem-number page break and explanatory wording for
 internal formal-run labels. Bibliography URL spacing is readable; six underfull
 notices remain, with no overfull boxes or unresolved references. The old31-page
 PDFs and rejection/repair lineage remain historical artifacts, and their QA
-is not silently reused against this32-page PDF. Fresh author all-page QA remains
-pending for this exact revision.
+is not silently reused against this32-page PDF. The existing
+[author QA receipt](../scripts/research/openai-bridge-validation-20261007/draft-author-visual-qa-v5/author-qa.json)
+records inspection of all32 pages, with no skipped pages and the same minor
+findings. It was preserved at commit `94d700473598d87aafbf4419ba0c2e93ff98b12b`.
+
+The [current scoped citation audit](mz24-compiled-citation-numbering-current-draft-2026-10-09.json),
+preserved at `5995f14ff1cd2d4e5cea53196a470cdd6b256937`, binds this exact PDF
+and all seven build sources to the two distinct preserved MZ24 primary PDFs.
+It checks printed A.13/A.17/A.18 numbering and the stated version metadata;
+it does not clear every citation or establish novelty. A
+[custody reconciliation](../scripts/research/openai-bridge-validation-20261007/draft-v5-qa-citation-reconciliation-v1/reconciliation.json)
+reverified both existing receipts, all32 page-image hashes, all seven current
+source pins and six primary-PDF statement-number checks. The complete original
+page images are preserved alongside it. This corrects the earlier stale pending
+status; it is not a new visual or mathematical review.
 
 This is a proposed informal argument under continuing review. Conditional
 Full105 formal interfaces do not establish source/selection/sampler witnesses,
