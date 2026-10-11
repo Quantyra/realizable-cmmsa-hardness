@@ -1,0 +1,89 @@
+{
+  "original_directory": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\actual-numeric-no-scalar-candidate-v6",
+  "files": [
+    {
+      "path": "ActualNumericNoScalar.lean",
+      "bytes": 39395,
+      "sha256": "002998DCDBF10A2A145524078C6DA32545004D68C8A2AD45C2B34F6337B628FF"
+    },
+    {
+      "path": "ActualNumericNoScalarChecks.lean",
+      "bytes": 444,
+      "sha256": "0DDDD4867F3B45B04D8E3F083FCDB1F14DFB5E7B8FEA912FDCD153C1A0087EDA"
+    },
+    {
+      "path": "ARGUMENT-MAP.md",
+      "bytes": 6314,
+      "sha256": "EC8A941AE9A361F747FB2D453DA25B9BE1EEAB7E9092B20C6EB1BE066A96DD30"
+    },
+    {
+      "path": "OFFER-MANIFEST.json",
+      "bytes": 5196,
+      "sha256": "FDFFF8028BB33B3384DC7FB9FDA1960D6B2657854F0A6FBDBDDDC034188088B6"
+    }
+  ],
+  "prior_captures": [
+    {
+      "folder": "numeric-scalar-offer-capture-v5",
+      "index_sha256": "3026BCA76A941ED298733F3CCBC2AEDDA3C28BF196B977A7E9D3E0AF93C10701",
+      "source": "ActualNumericNoScalar.lean",
+      "source_sha256": "8AE08AC67F689AA7A5CD5CFB91C42EDF735D73D5BAE7CB194E24B4624129DE43"
+    }
+  ],
+  "lexical_preflight": [
+    {
+      "path": "ActualNumericNoScalar.lean",
+      "bytes": 39395,
+      "sha256": "002998DCDBF10A2A145524078C6DA32545004D68C8A2AD45C2B34F6337B628FF",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    },
+    {
+      "path": "ActualNumericNoScalarChecks.lean",
+      "bytes": 444,
+      "sha256": "0DDDD4867F3B45B04D8E3F083FCDB1F14DFB5E7B8FEA912FDCD153C1A0087EDA",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true
+    }
+  ],
+  "independently_verified_mathlib_members": [
+    {
+      "archive": "C:\\Users\\dfred\\.quantyra\\builder02\\full110-exact-real-complex-operators-resource02\\checks\\20261011T025155646923Z\\qualified-native\\cmmsa_a8_output_20261011T025221Z_7046a7c0\\remote-evidence\\package-sources.tar.gz",
+      "member": ".lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "bytes": 50134,
+      "sha256": "5F4970FE329B14615CA6CFA3E0DCB0CF9D2017C98D2E3501237412AA2474E70B"
+    },
+    {
+      "archive": "C:\\Users\\dfred\\.quantyra\\builder02\\full110-exact-real-complex-operators-resource02\\checks\\20261011T025155646923Z\\qualified-native\\cmmsa_a8_output_20261011T025221Z_7046a7c0\\remote-evidence\\package-sources.tar.gz",
+      "member": ".lake/packages/mathlib/Mathlib/Algebra/Order/GroupWithZero/Defs.lean",
+      "bytes": 22609,
+      "sha256": "01A908236DC99E5040CB487165C1A73FBD4E495D44183E6465F86B42F744DC02"
+    },
+    {
+      "archive": "C:\\Users\\dfred\\.quantyra\\builder02\\full111-exact-real-complex-operators-repair-resource02\\checks\\20261011T035555365938Z\\qualified-native\\cmmsa_a8_output_20261011T035621Z_498f7ba6\\remote-evidence\\package-sources.tar.gz",
+      "member": ".lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "bytes": 50134,
+      "sha256": "5F4970FE329B14615CA6CFA3E0DCB0CF9D2017C98D2E3501237412AA2474E70B"
+    },
+    {
+      "archive": "C:\\Users\\dfred\\.quantyra\\builder02\\full111-exact-real-complex-operators-repair-resource02\\checks\\20261011T035555365938Z\\qualified-native\\cmmsa_a8_output_20261011T035621Z_498f7ba6\\remote-evidence\\package-sources.tar.gz",
+      "member": ".lake/packages/mathlib/Mathlib/Algebra/Order/GroupWithZero/Defs.lean",
+      "bytes": 22609,
+      "sha256": "01A908236DC99E5040CB487165C1A73FBD4E495D44183E6465F86B42F744DC02"
+    }
+  ],
+  "root_static_findings": [
+    "Exact rpow strict-positivity and product-association repairs inspected; other translation defects may remain."
+  ],
+  "full_source_review": "complete height source or prior full scalar source plus complete v6 diff",
+  "complete_argument_map_read": true,
+  "immutable_capture": true,
+  "development_candidate": true,
+  "compiler_invoked": false,
+  "native_verified": false,
+  "accepted": false,
+  "full_goal_complete": false,
+  "complete_source_diff": "--- v5\n+++ v6\n@@ -240,6 +240,27 @@\n   let D := scalarD m r\n   have hmR : 0 < (m : Real) := by exact_mod_cast (by omega : 0 < m)\n   have hrhoRpos : 0 < (r : Real) * rho := by rw [hrhoR]; positivity\n+  have hrhoScaled (q : Real) :\n+      q * (r : Real) * rho = 10 * q * (m : Real) := by\n+    calc\n+      q * (r : Real) * rho = q * ((r : Real) * rho) := by ring\n+      _ = q * (10 * (m : Real)) := by rw [hrhoR]\n+      _ = 10 * q * (m : Real) := by ring\n+  have hrhoScaledNegTwoThirds :\n+      -((2 : Real) / 3) * (r : Real) * rho =\n+        -(20 / 3 : Real) * (m : Real) := by\n+    calc\n+      -((2 : Real) / 3) * (r : Real) * rho =\n+          10 * (-((2 : Real) / 3)) * (m : Real) :=\n+            hrhoScaled (-((2 : Real) / 3))\n+      _ = -(20 / 3 : Real) * (m : Real) := by ring\n+  have hrhoScaledFourThirds :\n+      ((4 : Real) / 3) * (r : Real) * rho =\n+        (40 / 3 : Real) * (m : Real) := by\n+    calc\n+      ((4 : Real) / 3) * (r : Real) * rho =\n+          10 * ((4 : Real) / 3) * (m : Real) := hrhoScaled ((4 : Real) / 3)\n+      _ = (40 / 3 : Real) * (m : Real) := by ring\n   have heps0 : 0 < eps := by\n     have hS : 0 < S := by dsimp [S, powTwo]; positivity\n     dsimp [S] at hS\n@@ -435,7 +456,7 @@\n       have hExpStrong :\n           -((2 : Real) / 3) * (r : Real) * rho * h * m + 1 \u2264\n             -(20 / 3 : Real) * m * h := by\n-        rw [hrhoR]\n+        rw [hrhoScaledNegTwoThirds]\n         nlinarith [hgap]\n       have hTwoPow : (2 : Real) ^ (m + 1) = (2 : Real) ^ m * 2 := by\n         rw [pow_succ]\n@@ -472,8 +493,11 @@\n       exact_mod_cast (Nat.cast_sub (show 1 \u2264 s by omega))\n     have hrb : (r : Real) * ((s - 1 : Nat) : Real) =\n         20 * (m : Real) * h - (r : Real) := by\n-      rw [hsRealNat, hsReal, hrhoR]\n-      ring\n+      rw [hsRealNat, hsReal]\n+      calc\n+        (r : Real) * (2 * rho * h - 1) =\n+            2 * ((r : Real) * rho) * h - (r : Real) := by ring\n+        _ = 20 * (m : Real) * h - (r : Real) := by rw [hrhoR]; ring\n     have haSq : a ^ 2 = powTwo (-(4 / 3 : Real) * (r : Real) * rho * h) := by\n       dsimp [a, powTwo]\n       rw [\u2190 Real.rpow_natCast, \u2190 Real.rpow_mul (by norm_num : 0 \u2264 (2 : Real))]\n@@ -507,8 +531,16 @@\n         -(r : Real) * ((s - 1 : Nat) : Real) +\n             (4 / 3 : Real) * (r : Real) * rho * h =\n           (r : Real) - (20 / 3 : Real) * m * h := by\n-      rw [hrb, hrhoR]\n-      ring\n+      calc\n+        -(r : Real) * ((s - 1 : Nat) : Real) +\n+            (4 / 3 : Real) * (r : Real) * rho * h =\n+          -((r : Real) * ((s - 1 : Nat) : Real)) +\n+            (4 / 3 : Real) * (r : Real) * rho * h := by ring\n+        _ = -(20 * (m : Real) * h - (r : Real)) +\n+            (4 / 3 : Real) * (r : Real) * rho * h := by rw [hrb]\n+        _ = (r : Real) - (20 / 3 : Real) * m * h := by\n+          rw [hrhoScaledFourThirds]\n+          ring\n     calc\n       2 * (B / a ^ 2) \u2264\n           2 * (powTwo (-(r : Real) * ((s - 1 : Nat) : Real)) /\n@@ -651,7 +683,7 @@\n         beta ^ (-(1 / T)) * e0 ^ (m - 2 / T) / eps := by\n     have hBetaSplit : beta ^ (1 - 1 / T) = beta * beta ^ (-(1 / T)) := by\n       rw [show 1 - 1 / T = 1 + (-(1 / T)) by ring]\n-      rw [Real.rpow_add (le_of_lt hbetaPos)]\n+      rw [Real.rpow_add hbetaPos]\n       simp\n     rw [hBetaSplit] at hlow\n     have htotal :\n"
+}

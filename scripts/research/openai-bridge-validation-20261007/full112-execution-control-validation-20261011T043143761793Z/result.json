@@ -1,0 +1,61 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "C:\\Users\\dfred\\QuantyraTools\\SpaceProofs\\python\\python.exe",
+        "-B",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys;sys.path.insert(0,sys.argv[1]);import full112_capture_gates as g;g.validate_successor()",
+        "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007",
+        "C:\\Users\\dfred\\.quantyra\\builder02\\full112-exact-real-complex-operators-repair2-resource02\\offline-synthetic-test-temp",
+        "C:\\Users\\dfred\\.quantyra\\builder02\\full112-exact-real-complex-operators-repair2-resource02"
+      ],
+      "pid": 14804,
+      "native_exit": 0,
+      "stdout_sha256": "D5B7F6961D9822B067FE81B1957FA38CCEAB8D8CAF28624EE7AC1444C24DFEE6",
+      "stderr_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "argv": [
+        "C:\\Users\\dfred\\QuantyraTools\\SpaceProofs\\python\\python.exe",
+        "-B",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys,tempfile,unittest;from pathlib import Path;sys.path.insert(0,sys.argv[1]);p=Path(sys.argv[2]).resolve(strict=True);assert p.is_relative_to(Path(sys.argv[3]).resolve(strict=True));tempfile.tempdir=str(p);s=unittest.defaultTestLoader.loadTestsFromNames(['test_full112_terminal','test_full112_full_scope_terminal_v2']);r=unittest.TextTestRunner(verbosity=2).run(s);sys.exit(0 if r.wasSuccessful() else 1)",
+        "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007",
+        "C:\\Users\\dfred\\.quantyra\\builder02\\full112-exact-real-complex-operators-repair2-resource02\\offline-synthetic-test-temp",
+        "C:\\Users\\dfred\\.quantyra\\builder02\\full112-exact-real-complex-operators-repair2-resource02"
+      ],
+      "pid": 15064,
+      "native_exit": 0,
+      "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "stderr_sha256": "EC2BE89D509A32CC8E119DA598E5133E11188338F353F2F236E914E43B820C97"
+    }
+  ],
+  "source_snapshots": {
+    "full112_capture_gates.py": "3B81DE1CDCA9F14572F9130C7A5F428E57535A94E542AD56649A5A548A295574",
+    "prepare_builder02_full112.py": "677B410CDEC5E3E2A3C6388FDC937B5DEAAB33C9DE560512C1B2893642126D75",
+    "derive_full112_execution_controls.py": "FA63D9D9BC5CB620D38FD0E26F6A46F396E47C08688A2E07691269A1EBEE737C",
+    "full112-execution-control-derivation-v1.json": "1A70665B6C81E28ECB3B972DD2251E65FF29BD1A74B2D44168EBAC50FB763DE4",
+    "full112_builder02_controller.py": "C5197A7BF13A08203DB5AC46C05978974F0E38E0CC6039AFECDE096876CF8FF0",
+    "full112_worker.py": "E1BCB9827BDEEE062BB53A0AB816275C2975720B684F3F90B9949DA216CF2B6E",
+    "full112_verify.py": "22F256DBA54C600F301D9DAACF7A4096C84F912EA7EED735A419DA5899DBBA81",
+    "full112_native_audit.py": "BE8E26EFF12578EA03299C8A3B14CB905BB6C1C8EC602C752D17FCE7A736E00D",
+    "full112_postprocess.py": "B830166847E72BEA749DBD9278346F9FA573D47E4E7820DB398C8D0B15CE9967",
+    "stage_full112_builder02.py": "7943B297DD7D450756CDF4A551861DBF8E6A7765D37A481CA09B852B40826B58",
+    "terminate_full112_builder02_after_custody.py": "6B8D17BF6D493AF9B5340F7BF4D4BE106F8F77E70743B54224810694A17E683C",
+    "test_full112_terminal.py": "64E7D7BE6CBBFF6A8296A4F1989A6A151B144D54A01A93C6DF20A13C71A32F27",
+    "test_full112_full_scope_terminal_v2.py": "E85505EB4DC67FBFE02079DFD7A7F861821310FC6EDD60657B86A9920B00E00B",
+    "run_full112_resume_step_v1.py": "6DD9D86675E5E3B6324BFD911CA877EE19FA0A84E96F43A03C1F6CAC2D885AC9",
+    "validate_full112_execution_controls_v1.py": "5FA5CC8321D1F09E0437D25B96D2343865D661FB9F10E1C0BDC8E6A62BCFF3B9"
+  },
+  "full369_full347_seven_stage_capture_verified": true,
+  "synthetic_tests_not_native_evidence": true,
+  "compiler_invoked": false,
+  "cloud_operation": false,
+  "launch_clearance": false,
+  "accepted": false
+}

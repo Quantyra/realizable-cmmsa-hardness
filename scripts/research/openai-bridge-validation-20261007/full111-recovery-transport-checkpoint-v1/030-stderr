@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import runpy,sys;sys.path.insert(0,sys.argv[1]);p=sys.argv[2];sys.argv=sys.argv[2:];runpy.run_path(p,run_name="__main__")
+                                                                                        ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\run_full111_settled_cache_recovery_v1.py", line 131, in <module>
+    main(sys.argv[1], [int(value) for value in sys.argv[2:]])
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\run_full111_settled_cache_recovery_v1.py", line 76, in main
+    _, raw, _ = control.cloud(['compute', 'ssh', VM, '--tunnel-through-iap', '--command=sha256sum ' + remote + '/' + source.name])
+                ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\resume-workspaces\full81\realizable-cmmsa-hardness\docs\a8-gcp\r1007\retry-83\controller.py", line 145, in cloud
+    return original_cloud(self,args,**kwargs)
+  File "C:\Users\dfred\.quantyra\resume-workspaces\full81\realizable-cmmsa-hardness\docs\a8-gcp\r1007\retry-15\controller.py", line 42, in cloud
+    return original_cloud(self,args,**kwargs)
+  File "C:\Users\dfred\.quantyra\resume-workspaces\full81\realizable-cmmsa-hardness\docs\a8-gcp\r1007\retry-14\controller.py", line 105, in cloud
+    result=original(self,args,**kwargs)
+  File "C:\Users\dfred\.quantyra\resume-workspaces\full81\realizable-cmmsa-hardness\docs\a8-gcp\r1007\runner.py", line 111, in cloud
+    raise RuntimeError("GCP command failed; raw control receipt " + prefix)
+RuntimeError: GCP command failed; raw control receipt control/003

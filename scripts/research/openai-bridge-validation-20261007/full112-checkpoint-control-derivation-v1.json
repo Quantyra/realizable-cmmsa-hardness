@@ -1,0 +1,77 @@
+{
+  "schema": "full112-checkpoint-control-derivation-v1",
+  "parent_commit": "7d26e6cc",
+  "rows": [
+    {
+      "parent": "preserve_full111_frozen_package_v1.py",
+      "parent_sha256": "55901B91F6F9C5888F24F2ED5199DF0E0F237D19B3E35E27EE3E11E6C69F8E15",
+      "target": "preserve_full112_frozen_package_v1.py",
+      "sha256": "56420EDBF25C38CA37DE2EEAFA806FA101F64D1E1C2BD2C64CF4F4026D233949",
+      "changes": [
+        [
+          "from prepare_builder02_full111 ",
+          "from prepare_builder02_full112 "
+        ],
+        [
+          "full111-execution-control-validation-20261011T031402428924Z",
+          "full112-execution-control-validation-20261011T043143761793Z"
+        ],
+        [
+          "full111-immutable-package-record-v1",
+          "full112-immutable-package-record-v1"
+        ],
+        [
+          "full111-frozen-two-source-repair-and-control-checks-v1",
+          "full112-frozen-two-source-repair-and-control-checks-v1"
+        ],
+        [
+          "original_preparation_tool_handle=41254",
+          "original_preparation_tool_handle=86509"
+        ],
+        [
+          "original_validation_tool_handle=98666",
+          "original_validation_tool_handle=91702"
+        ]
+      ]
+    },
+    {
+      "parent": "inspect_full111_native_progress_v1.py",
+      "parent_sha256": "EBC6CBD0AA19A6DE298B249FF8C1131E028E0B367AC121934E4D54A9DC35342B",
+      "target": "inspect_full111_recovery_state_v1.py",
+      "sha256": "08671AD7ED5E1515EABC3FF00C1ADEFA28B86BF90A28340B870F120423C3F7B1",
+      "changes": [
+        [
+          "    validate_successor()\n    loaded, _ = context()\n    local_gates(loaded['common'], loaded)\n",
+          "    failure = ROOT/'research-resume-20261011/20261011T042854525502Z-3c1895f34b07/command.json'\n    assert json.loads(failure.read_bytes())['native_exit'] == 1\n    assert json.loads((ROOT/'settled-cache-recovery-v1/boot-result.json').read_bytes())['after']['status'] == 'RUNNING'\n    # Read-only observation has no compiler or recovery admission authority.\n"
+        ],
+        [
+          "'live-native-inspections-v1'",
+          "'recovery-state-inspections-v1'"
+        ],
+        [
+          "            remote = \"import base64,hashlib,json,os,shutil,urllib.request\\nfrom pathlib import Path\\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\\nr=urllib.request.Request('http://metadata.google.internal/computeMetadata/v1/instance/id',headers={'Metadata-Flavor':'Google'})\\nwith o.open(r,timeout=10) as response:\\n assert response.headers.get('Metadata-Flavor')=='Google' and response.read().decode()=='7237681467779354904'\\nhome=Path('/home/dfredriksen_quantyra_org');assert Path.home().resolve()==home\\nmarker=json.loads((home/'full111-exact-real-complex-operators-repair-resource02-launch-once.json').read_bytes())\\nassert marker['run']=='cmmsa_a8_output_20261011T035621Z_498f7ba6'\\nroot=home/(marker['run']+'_evidence')\\nrecords={}\\nfor name in ('active-process.json','begin.native-exit','compile.native-exit','finish.native-exit','aggregate.native-exit','dedicated-worker-terminal.json'):\\n p=root/name\\n if p.exists():records[name]=p.read_text()\\nstages=[];streams={}\\nfor number in range(7):\\n p=root/('stage-'+str(number)+'.command.json')\\n if p.exists():stages.append(json.loads(p.read_bytes()))\\nfor p in sorted(root.iterdir()):\\n if p.is_file() and p.suffix in ('.stdout','.stderr'):\\n  assert p.stat().st_size<=16*1024**2,'Unbounded stream; no truncation permitted'\\n  data=p.read_bytes()\\n  streams[p.name]=dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest().upper(),base64=base64.b64encode(data).decode())\\npids=[]\\nfor entry in Path('/proc').iterdir():\\n if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\\n try:name=(entry/'comm').read_text().strip();args=(entry/'cmdline').read_bytes().replace(bytes([0]),b' ').decode(errors='replace')\\n except (FileNotFoundError,PermissionError):continue\\n if name in ('lean','lake') or (name=='python3' and ('full111_worker.py' in args or marker['run'] in args)):pids.append(dict(pid=int(entry.name),name=name,argv=args))\\nprint(json.dumps(dict(run=marker['run'],records=records,stages=stages,streams=streams,live_processes=pids,disk_available_bytes=shutil.disk_usage(home).free,archive_present=(home/(marker['run']+'_evidence.tar.gz')).exists(),read_only=True,compiler_replayed=False,observed_snapshots_not_authoritative_terminal_custody=True)))\\n\"",
+          "            remote = \"import hashlib,json,os,shutil,subprocess,time,urllib.request\\nfrom pathlib import Path\\no=urllib.request.build_opener(urllib.request.ProxyHandler({}))\\nr=urllib.request.Request('http://metadata.google.internal/computeMetadata/v1/instance/id',headers={'Metadata-Flavor':'Google'})\\nwith o.open(r,timeout=10) as response:\\n assert response.headers.get('Metadata-Flavor')=='Google' and response.read().decode()=='7237681467779354904'\\nhome=Path('/home/dfredriksen_quantyra_org');assert Path.home().resolve()==home\\nscopes=[]\\nfor number in (111,96,97,98):\\n root=home/('full111-settled-cache-native'+str(number)+'-v1')\\n files=[]\\n if root.exists():\\n  for p in sorted(root.iterdir()):\\n   assert p.is_file() and not p.is_symlink()\\n   data=p.read_bytes();files.append(dict(name=p.name,bytes=len(data),sha256=hashlib.sha256(data).hexdigest().upper()))\\n scopes.append(dict(number=number,exists=root.exists(),files=files))\\npids=[]\\nfor entry in Path('/proc').iterdir():\\n if not entry.name.isdigit() or int(entry.name)==os.getpid():continue\\n try:name=(entry/'comm').read_text().strip();args=(entry/'cmdline').read_bytes().replace(bytes([0]),b' ').decode(errors='replace')\\n except (FileNotFoundError,PermissionError):continue\\n if name in ('lean','lake','cp','tar') or (name=='python3' and any(t in args for t in ('_worker.py','settled_cache_native','cloud_capture.py'))):pids.append(dict(pid=int(entry.name),name=name,argv=args))\\ntimer=subprocess.run(['systemctl','is-active','quantyra-idle-shutdown.timer'],capture_output=True)\\nlast=Path('/var/lib/quantyra-idle-shutdown/last-active')\\nprint(json.dumps(dict(scopes=scopes,live_processes=pids,disk_available_bytes=shutil.disk_usage(home).free,\\n epoch=int(time.time()),idle_last_active=last.read_text() if last.exists() else None,\\n timer_exit=timer.returncode,timer_stdout=timer.stdout.decode(),timer_stderr=timer.stderr.decode(),\\n full112_launch_present=(home/'full112-exact-real-complex-operators-repair2-resource02-launch-once.json').exists(),\\n read_only=True,compiler_invoked=False,planner_replayed=False)))\\n\""
+        ],
+        [
+          "            decoded = folder / 'observed-streams'; decoded.mkdir()\n            for name, row in result['streams'].items():\n                assert Path(name).name == name\n                data = base64.b64decode(row['base64'], validate=True)\n                assert len(data) == row['bytes'] and hashlib.sha256(data).hexdigest().upper() == row['sha256']\n                (decoded / name).open('xb').write(data)\n            print(json.dumps(dict(folder=str(folder), run=result['run'], stage_exits=[r['native_exit'] for r in result['stages']], live_processes=result['live_processes'], observed_streams=len(result['streams']), disk_available_bytes=result['disk_available_bytes'], authoritative_terminal_custody=False)), flush=True)\n",
+          "            print(json.dumps(dict(folder=str(folder), inspection=result)), flush=True)\n"
+        ]
+      ]
+    },
+    {
+      "parent": "run_full112_resume_step_v1.py",
+      "parent_sha256": "6DD9D86675E5E3B6324BFD911CA877EE19FA0A84E96F43A03C1F6CAC2D885AC9",
+      "target": "run_full112_resume_step_v2.py",
+      "sha256": "ECF7F91A7683B2D67E5D37A6C5B796F9696D201A4EB78D63876B19FA62DA125E",
+      "changes": [
+        [
+          "ALLOWED = {'stage_full112_builder02.py', 'full112_builder02_controller.py', 'full112_postprocess.py'}",
+          "ALLOWED = {'stage_full112_builder02.py', 'stage_full112_after_recovery_v1.py', 'full112_builder02_controller.py', 'full112_postprocess.py', 'preserve_full112_frozen_package_v1.py', 'inspect_full111_recovery_state_v1.py'}"
+        ]
+      ]
+    }
+  ],
+  "compiler_invoked": false,
+  "cloud_operation": false,
+  "recovery_or_launch_clearance": false
+}
