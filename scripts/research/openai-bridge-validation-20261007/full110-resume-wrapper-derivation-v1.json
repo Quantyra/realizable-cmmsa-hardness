@@ -1,0 +1,25 @@
+{
+  "source": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\run_full109_resume_step_v4.py",
+  "source_sha256": "76667AA95A905126DAB5D84A508777ADC5AE16EF21F2BAFC5570DCF5BA83B3B6",
+  "output": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\run_full110_resume_step_v1.py",
+  "output_sha256": "AE67D5179EB39A557409369613C92598F405B82980FCF481ACE7D5259C71339D",
+  "replacements": [
+    {
+      "old": "ALLOWED = {\n    'boot_full109_trace_recovery_v3.py',\n    'collect_full109_native89_receipt_v1.py',\n    'audit_full109_complete_trace_recovery_v4.py',\n    'inspect_full109_trace_recovery_progress_v2.py',\n    'refresh_full109_trace_staging_idle_v1.py',\n    'inspect_full109_trace_resources_v1.py',\n    'audit_full109_trace_cache_small_v1.py',\n    'audit_full109_trace_cache_large_v2.py',\n    'audit_full109_pending_trace_plans_v2.py',\n    'prepare_full109_consumption_review_sources.py',\n    'audit_full109_prior_review_reuse_v1.py',\n    'prepare_full109_material_integration_v1.py',\n    'run_full109_material_integration_v1.py',\n    'full109_consumption_v3_controller.py',\n    'terminate_full109_consumption_v3.py',\n    'qualify_full109_consumption_v3.py',\n    'maintain_full109_trace_staging_idle_lease_v1.py',\n} | {f'run_full109_trace_cache_small_native{n}_v1.py' for n in range(84, 90)}\n",
+      "new": "ALLOWED = {'stage_full110_builder02.py', 'full110_builder02_controller.py', 'full110_postprocess.py'}\n"
+    },
+    {
+      "old": "from full109_builder02_controller import ROOT",
+      "new": "from full110_builder02_controller import ROOT"
+    },
+    {
+      "old": "'research-resume-20261010'",
+      "new": "'research-resume-20261011'"
+    }
+  ],
+  "complete_stdout_stderr_and_terminal_retained": true,
+  "compiler_controls_changed": false,
+  "frozen_capture_changed": false,
+  "compiler_invoked": false,
+  "launch_clearance": false
+}

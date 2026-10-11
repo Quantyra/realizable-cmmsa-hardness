@@ -1,0 +1,35 @@
+{
+  "source": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\compress_full109_settled_graphs_v1.py",
+  "source_sha256": "77E721DB54941A6BEB17F6440278E8CA92649393E2C3D43EA9304398DAB7099F",
+  "target": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\compress_full109_settled_graphs_v3.py",
+  "target_sha256": "66F803B5A8B4CDB57332404AE08515A2F0C530620136D80FFB9426C4C69D6E54",
+  "replacements": [
+    [
+      "for name in ('full107-exact-product-energy-repair-resource02',\n                 'full109-exact-crosslevel-warning-repair-resource02'):",
+      "for name, version, qualification in [('full89-resource02', 'consumption-v2', 'qualification'), ('full90-material-resource02', 'consumption-v1', 'qualification'), ('full95-manuscript-moment-syntax-repair-resource02', 'consumption-v1', 'qualification'), ('full97-spectral-bridge-utf8-section-repair-resource02', 'consumption-v1', 'qualification'), ('full100-matrix-fourier-bullet-repair-resource02', 'consumption-v2', 'qualification'), ('full103-spectral-owned-warning-repair-resource02', 'consumption-v2', 'qualification-v3')]:"
+    ],
+    [
+      "trace = BASE / name / 'consumption-v3'",
+      "trace = BASE / name / version"
+    ],
+    [
+      "trace / 'qualification/qualification-summary.json'",
+      "trace / qualification / 'qualification-summary.json'"
+    ],
+    [
+      "trace / 'qualification' / relative",
+      "trace / qualification / relative"
+    ],
+    [
+      "full109-settled-graphs-lossless-compression-v1",
+      "full109-settled-graphs-lossless-compression-v3"
+    ],
+    [
+      "full109-settled-graph-lossless-storage-v1",
+      "full109-settled-graph-lossless-storage-v3"
+    ]
+  ],
+  "unchanged_termination_qualification_and_logical_byte_checks": true,
+  "no_deletion": true,
+  "compiler_invoked": false
+}
