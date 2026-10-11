@@ -1,0 +1,40 @@
+{
+  "source": "plan_full115_redundant_native_copies_v1.py",
+  "source_sha256": "2EB1F35A8FD4A8B8FC66114CB88D792F737DEBA8716FEB7EB239064F3F3B04A1",
+  "target": "plan_full115_redundant_native_copies_v2.py",
+  "target_sha256": "EF6FACA7C8BAB19894953A04CAEC78BD7A2D6763AFEF513D10F2F70CE4894DEC",
+  "changes": [
+    {
+      "old": "for row in value.get('records', value.get('files', [])):",
+      "new": "for row in (value if isinstance(value, list) else value.get('records', value.get('files', []))):",
+      "count": 1
+    },
+    {
+      "old": "if path.is_file() and path.relative_to(REPO).as_posix() in tree:",
+      "new": "if path.is_file() and path.resolve().is_relative_to(REPO.resolve()) and path.relative_to(REPO).as_posix() in tree:",
+      "count": 1
+    },
+    {
+      "old": "            members = []",
+      "new": "            earlier = json.loads((HERE/'full114-redundant-native-copy-cleanup-plan-v1/plan.json').read_bytes())\n            direct = next((r for r in earlier['files'] if Path(r['remove']).resolve() == short), None)\n            if direct:\n                assert direct['sha256'] == pin and direct['bytes'] == custody['bytes']\n                retained = committed(Path(direct['retain_committed_archive']), direct['committed_archive_sha256'])\n                if direct['committed_member']:\n                    with tarfile.open(retained['path'], 'r:gz') as saved:\n                        saved_raw = saved.extractfile(direct['committed_member']).read()\n                    assert len(saved_raw) == custody['bytes'] and hashlib.sha256(saved_raw).hexdigest().upper() == pin\n                else:\n                    assert retained['sha256'] == pin\n                rows.append(dict(remove=str(short), bytes=custody['bytes'], sha256=pin,\n                    retain_original=str(original), run=marker['run'],\n                    terminal_receipt=str(receipt_path), terminal_receipt_sha256=digest(receipt_path),\n                    independent_stop=str(stop_path), independent_stop_sha256=digest(stop_path),\n                    retained_exact_archive=retained, committed_member=direct['committed_member'],\n                    representation='Second exact compressed archive, direct or inside committed custody archive'))\n                continue\n            members = []",
+      "count": 1
+    },
+    {
+      "old": "full115-redundant-native-copy-cleanup-plan-v1",
+      "new": "full115-redundant-native-copy-cleanup-plan-v2",
+      "count": 1
+    },
+    {
+      "old": "every_native_member_retained_in_exact_committed_file=True",
+      "new": "complete_native_evidence_retained_in_committed_files_or_archive_members=True",
+      "count": 1
+    }
+  ],
+  "original_failure": {
+    "chunk": "4758d5",
+    "exit": 1,
+    "error": "AttributeError: list metadata has no get",
+    "before_plan_output_or_any_deletion": true
+  },
+  "files_deleted": false
+}

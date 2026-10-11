@@ -1,0 +1,31 @@
+{
+  "source": "plan_full115_redundant_native_copies_v2.py",
+  "source_sha256": "EF6FACA7C8BAB19894953A04CAEC78BD7A2D6763AFEF513D10F2F70CE4894DEC",
+  "target": "plan_full115_redundant_native_copies_v3.py",
+  "target_sha256": "17A343F7002C4239AE5D78EE530B4C89FA20B9D9BF68229D8917D67E1EEB7A72",
+  "changes": [
+    {
+      "old": "                    assert candidates, 'No committed extracted member for ' + member.name\n                    path, index = candidates[0]\n                    retained = committed(path, member_pin)\n                    assert retained['bytes'] == member.size\n                    members.append(dict(member=member.name, **retained, custody_index=str(index),\n                                        custody_index_sha256=digest(index)))",
+      "new": "                    if candidates:\n                        path, index = candidates[0]\n                        retained = committed(path, member_pin)\n                        assert retained['bytes'] == member.size\n                        members.append(dict(member=member.name, **retained, custody_index=str(index),\n                                            custody_index_sha256=digest(index)))\n                    else:\n                        members.append(dict(member=member.name, bytes=member.size, sha256=member_pin,\n                            retained_in_complete_original_archive=str(original),\n                            separate_committed_exact_member_verified=False))",
+      "count": 1
+    },
+    {
+      "old": "full115-redundant-native-copy-cleanup-plan-v2",
+      "new": "full115-redundant-native-copy-cleanup-plan-v3",
+      "count": 1
+    },
+    {
+      "old": "complete_native_evidence_retained_in_committed_files_or_archive_members=True",
+      "new": "all_complete_native_evidence_retained_in_byte_identical_original_archives=True",
+      "count": 1
+    },
+    {
+      "old": "no_claim_of_second_identical_compressed_archive=True",
+      "new": "not_all_archives_have_a_second_retained_complete_Git_copy=True,\n                requested_authorization_includes_retaining_one_exact_full_original_per_removed_duplicate=True",
+      "count": 1
+    }
+  ],
+  "authorization_requirement": "New explicit authorization for the entire exact list, retaining one byte-identical complete original archive per removed duplicate; stronger extra-copy availability remains reported per row",
+  "all_native_and_stop_archive_identity_checks_retained": true,
+  "files_deleted": false
+}
