@@ -1,0 +1,54 @@
+{
+  "offer": "full113-complex-append-repair-v1",
+  "files": [
+    {"path":"ExactComplexAppendContinuation.lean","bytes":11892,"sha256":"632E7CFDDEAA5C420F979FA1E78203CBB7ED7FAA1B428C4B0C0CE674A6CCC359","utf8_no_bom":true},
+    {"path":"ExactComplexAppendContinuationChecks.lean","bytes":3055,"sha256":"6370EF898515FE5E620DE048C80643B42DDC1B4BA9266662BFF351BEE8F63E60","unchanged_from_full112":true},
+    {"path":"ARGUMENT-MAP.md","bytes":2932,"sha256":"460174FB9104D7FAB577EABDD0F9D291CB6868C480B2C8E7DB697AABE2B2BD48","utf8_no_bom":true}
+  ],
+  "parent_diagnostic_packet": {
+    "path":"C:/Users/dfred/.quantyra/reviews/openai-bridge-validation-20261007/scripts/research/openai-bridge-validation-20261007/full112-native-diagnostic-packet-v1",
+    "index_sha256":"A0CC0804ED5ABA8F393BEAFC5F65EFE2251324CDCBE24AC80462B7CBAAE9D249",
+    "original_source_sha256":"0C9E6F1302137019BA430AD02E38DBA28664A93734B098D0A04C84440ECB0541",
+    "original_source_bytes":11799,
+    "checks_sha256":"6370EF898515FE5E620DE048C80643B42DDC1B4BA9266662BFF351BEE8F63E60",
+    "diagnostics_sha256":"CCD66FF1B2ED74F138ED651FAB16881E3B5F8B649C3F6F5F6FE7D57543C7F722"
+  },
+  "pinned_full112_inputs": {
+    "input_archive": {"path":"C:/Users/dfred/.quantyra/builder02/full112-exact-real-complex-operators-repair2-resource02/input-archive.tar.gz","sha256":"1686A96C43231E3E02D88468C6EE5B176D131FF96B2A1F44C3C85C3E5CE531AA"},
+    "native_evidence_archive": {"path":"C:/Users/dfred/.quantyra/builder02/full112-exact-real-complex-operators-repair2-resource02/checks/20261011T051347974720Z/cmmsa_a8_output_20261011T051406Z_3ef6ddc2_evidence.tar.gz","sha256":"0392E798A4234ADC4386703FDB1817217D99DFBEA7FF48D4184E614AA42FD6B2"},
+    "embedded_package_sources": {"member":"package-sources.tar.gz","bytes":28053685,"sha256":"2DFA036C84860818068E8F5B64C203AE9F86A51DDB966B745B0743A988E50414"},
+    "project_members": [
+      {"path":"lean/PvNP/RealizableHardness/BinaryMatrixFourier.lean","bytes":22310,"sha256":"810324DDAD55B909A4EBA239FA3CB6988858A9426DC77ADEBEC051B0C11A70D8","api":"uniformMean"},
+      {"path":"lean/PvNP/RealizableHardness/ActualFixedFunctionalAppendOperator.lean","bytes":15420,"sha256":"EB71A55A38E8922333058F0D05D8E48472003AAA9BEE2B9F01A9DE00668A7B77","api":"appendAverage"},
+      {"path":"lean/PvNP/RealizableHardness/ActualFiniteFrameProductDuality.lean","bytes":7056,"sha256":"39E80A821DE4B51E8AC2A74CF9A0967D7CD3EA45D730E7DD47C0B2C144245DCE"},
+      {"path":"lean/PvNP/RealizableHardness/ExactAppendOperatorContracts.lean","bytes":4044,"sha256":"4F288DE5D06D01A188391431F9096ED87FDB273209670F4479F8FAC497F4860C"},
+      {"path":"lean/PvNP/RealizableHardness/ExactPhiEigenrelation.lean","bytes":19090,"sha256":"6E784A3BA94EDF55A4919E78DC82DA2D140EECBD894E5507F17696DC9785D51F"}
+    ]
+  },
+  "pinned_mathlib": {
+    "source_archive": {"path":"C:/Users/dfred/.quantyra/builder02/full112-exact-real-complex-operators-repair2-resource02/checks/20261011T051347974720Z/cmmsa_a8_output_20261011T051406Z_3ef6ddc2_evidence.tar.gz!package-sources.tar.gz","bytes":28053685,"sha256":"2DFA036C84860818068E8F5B64C203AE9F86A51DDB966B745B0743A988E50414"},
+    "Complex.Basic": {"member":".lake/packages/mathlib/Mathlib/Basic/Complex/Basic.lean","bytes":30053,"sha256":"744EB1D57D32044612AB388AA45E69FAE15C87F84BB966C909D2C5CF55D03115","api":"Complex.normSq_apply"},
+    "Complex.BigOperators": {"member":".lake/packages/mathlib/Mathlib/Basic/Complex/BigOperators.lean","bytes":2325,"sha256":"3F4B675C1064EA9972ECF75D3247820DDACC6ABC27611C31129D05F00C3DFF1D"}
+  },
+  "source_diff_summary": [
+    "After complexFiniteMean_re and _im, unfold uniformMean and close by rfl in the two append component lemmas.",
+    "Expose the beta-reduced Complex.normSq (F M) goal before rewriting by Complex.normSq_apply.",
+    "Pass (i := i) to complexRankProjection_energy_components.",
+    "Remove the reported unused simp arguments from the real and imaginary Phi component proofs."
+  ],
+  "validation": {
+    "public_statements_unchanged": true,
+    "declaration_headers_identical": true,
+    "declaration_header_count": 21,
+    "proof_body_changes_only": true,
+    "imports_unchanged": true,
+    "checks_byte_identical": true,
+    "utf8_no_bom": true,
+    "bare_question_mark_guard": true,
+    "lexical_preflight_passed": true,
+    "lean_invoked": false,
+    "gcp_invoked": false,
+    "native_verified": false,
+    "accepted": false
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "full113-exact-two-body-repair-capture-v1",
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full113-rectangular-gl-repair-v1\\manifest.json",
+      "copy": "manifest.json",
+      "bytes": 4430,
+      "sha256": "0A591957E840DC8CAAE9D758EAEA25B7F6F19468C2C64E9094B4ADB269369E47"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full113-rectangular-gl-repair-v1\\PROOF-AND-API-MAP.md",
+      "copy": "PROOF-AND-API-MAP.md",
+      "bytes": 4449,
+      "sha256": "675317EE0F6C4BC942161ACE49752C7E18A77FA30EF4A7BEF3DD7959FA9D97D9"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full113-rectangular-gl-repair-v1\\RectangularGLRowCompletion.lean",
+      "copy": "RectangularGLRowCompletion.lean",
+      "bytes": 17838,
+      "sha256": "FD0E815F4A816C82EFA77CD0334E40BDC7AF28A7C1E23937CF6CCDA90A8BA1FD"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full113-rectangular-gl-repair-v1\\RectangularGLRowCompletionChecks.lean",
+      "copy": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB"
+    }
+  ],
+  "source": "lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean",
+  "old_sha256": "1E117431C3D55B88A2F1BE2E18C9FAA17ABAE94BC504A0490D4DDB0D80720993",
+  "new_sha256": "FD0E815F4A816C82EFA77CD0334E40BDC7AF28A7C1E23937CF6CCDA90A8BA1FD",
+  "parent_run": "cmmsa_a8_output_20261011T051406Z_3ef6ddc2",
+  "parent_native_archive_sha256": "0392E798A4234ADC4386703FDB1817217D99DFBEA7FF48D4184E614AA42FD6B2",
+  "parent_input_sha256": "1686A96C43231E3E02D88468C6EE5B176D131FF96B2A1F44C3C85C3E5CE531AA",
+  "exact_diff": "--- Full112/RectangularGLRowCompletion.lean\n+++ Full113/RectangularGLRowCompletion.lean\n@@ -220,11 +220,11 @@\n     apply Subtype.ext\n     rfl\n \n+set_option maxHeartbeats 800000 in\n /-- Exact normalized row-prefix marginal: the inverse-pair carrier is uniform,\n and the image is uniform over every full-row-rank rectangular matrix. The\n proof uses equal fibres from explicit transitivity and does not count a fibre\n product formula. -/\n-set_option maxHeartbeats 400000 in\n theorem row_prefix_uniform_mean {c s : Nat}\n     (g : FullRowFrame c (c + s) → Real) :\n     (∑ p : InversePair (c + s), g (rowPrefixMap c s p)) /\n@@ -247,17 +247,34 @@\n   have hk : 0 < k := by\n     change 0 < Fintype.card (RectangularFrameFiberAverage.Fiber f X₀)\n     exact Fintype.card_pos_iff.mpr hbase\n+  letI : Nonempty (FullRowFrame c (c + s)) := ⟨X₀⟩\n   have hcard : ∀ X : FullRowFrame c (c + s),\n       Fintype.card (RectangularFrameFiberAverage.Fiber f X) = k := by\n     intro X\n     have hXX₀ : PrefixFiber c s X.1 ≃ PrefixFiber c s X₀.1 :=\n       prefix_fiber_equiv X.1 X₀.1 X.2 X₀.2\n-    have hfiber := (rowPrefixFiberEquiv X).trans\n-      (hXX₀.trans (rowPrefixFiberEquiv X₀).symm)\n-    simpa [k, f] using Fintype.card_congr hfiber\n-  simpa [f] using\n-    (RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers\n-      f k hk hcard g)\n+    have hFX : RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X ≃\n+        PrefixFiber c s X.1 := rowPrefixFiberEquiv X\n+    have hF₀ : RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀ ≃\n+        PrefixFiber c s X₀.1 := rowPrefixFiberEquiv X₀\n+    have hFib : RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X ≃\n+        RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀ :=\n+      hFX.trans (hXX₀.trans hF₀.symm)\n+    have hFibCard :\n+        Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X) =\n+          Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀) :=\n+      Fintype.card_congr hFib\n+    change Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X) =\n+      Fintype.card (RectangularFrameFiberAverage.Fiber (rowPrefixMap c s) X₀)\n+    exact hFibCard\n+  have hmap :\n+      (∑ p : InversePair (c + s), g (f p)) /\n+          (Fintype.card (InversePair (c + s)) : Real) =\n+        (∑ X : FullRowFrame c (c + s), g X) /\n+          (Fintype.card (FullRowFrame c (c + s)) : Real) :=\n+    RectangularFrameFiberAverage.uniformMean_map_of_equipotent_fibers\n+      f k hk hcard g\n+  exact hmap\n \n /-- Injective column maps become surjective row maps after transpose. The\n proof uses Mathlib's exact `mulVec_injective_iff` and the project row-frame\n",
+  "root_read_complete_source_diff_and_argument_map": true,
+  "declarations_imports_checks_preserved": true,
+  "project_and_mathlib_dependency_pins_verified": true,
+  "bounded_heartbeat_change": {
+    "theorem": "row_prefix_uniform_mean",
+    "before": 400000,
+    "after": 800000,
+    "reason": "Full112 deterministic whnf timeout"
+  },
+  "capture_control_sha256": "3D93CAA23E9400755C9E07339C8341C374CEB3EE144CCAA021EB71446EE05A22",
+  "compiler_invoked": false,
+  "accepted": false
+}

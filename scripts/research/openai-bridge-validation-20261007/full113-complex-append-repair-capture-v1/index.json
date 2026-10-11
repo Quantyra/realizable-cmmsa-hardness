@@ -1,0 +1,43 @@
+{
+  "schema": "full113-exact-two-body-repair-capture-v1",
+  "files": [
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full113-complex-append-repair-v1\\ARGUMENT-MAP.md",
+      "copy": "ARGUMENT-MAP.md",
+      "bytes": 2932,
+      "sha256": "460174FB9104D7FAB577EABDD0F9D291CB6868C480B2C8E7DB697AABE2B2BD48"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full113-complex-append-repair-v1\\ExactComplexAppendContinuation.lean",
+      "copy": "ExactComplexAppendContinuation.lean",
+      "bytes": 11892,
+      "sha256": "632E7CFDDEAA5C420F979FA1E78203CBB7ED7FAA1B428C4B0C0CE674A6CCC359"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full113-complex-append-repair-v1\\ExactComplexAppendContinuationChecks.lean",
+      "copy": "ExactComplexAppendContinuationChecks.lean",
+      "bytes": 3055,
+      "sha256": "6370EF898515FE5E620DE048C80643B42DDC1B4BA9266662BFF351BEE8F63E60"
+    },
+    {
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full113-complex-append-repair-v1\\OFFER-MANIFEST.json",
+      "copy": "OFFER-MANIFEST.json",
+      "bytes": 4402,
+      "sha256": "C8A9B41B36BD8198332C22E18D2D71FF8B890A5D1CD08EBEB3BE73E5A2A78829"
+    }
+  ],
+  "source": "lean/PvNP/RealizableHardness/ExactComplexAppendContinuation.lean",
+  "old_sha256": "0C9E6F1302137019BA430AD02E38DBA28664A93734B098D0A04C84440ECB0541",
+  "new_sha256": "632E7CFDDEAA5C420F979FA1E78203CBB7ED7FAA1B428C4B0C0CE674A6CCC359",
+  "parent_run": "cmmsa_a8_output_20261011T051406Z_3ef6ddc2",
+  "parent_native_archive_sha256": "0392E798A4234ADC4386703FDB1817217D99DFBEA7FF48D4184E614AA42FD6B2",
+  "parent_input_sha256": "1686A96C43231E3E02D88468C6EE5B176D131FF96B2A1F44C3C85C3E5CE531AA",
+  "exact_diff": "--- Full112/ExactComplexAppendContinuation.lean\n+++ Full113/ExactComplexAppendContinuation.lean\n@@ -122,6 +122,8 @@\n       appendAverage (fun X => (F X).re) M := by\n   unfold complexAppendAverage appendAverage\n   rw [complexFiniteMean_re]\n+  unfold uniformMean\n+  rfl\n \n theorem complexAppendAverage_im {n c s : Nat}\n     (F : BinaryMatrix n (c + s) → Complex) (M : BinaryMatrix n c) :\n@@ -129,6 +131,8 @@\n       appendAverage (fun X => (F X).im) M := by\n   unfold complexAppendAverage appendAverage\n   rw [complexFiniteMean_im]\n+  unfold uniformMean\n+  rfl\n \n /-- Paired-inverse right invariance of a complex function is exactly paired-\n inverse right invariance of its two real components. -/\n@@ -158,6 +162,7 @@\n   congr 1\n   apply Finset.sum_congr rfl\n   intro M hM\n+  change Complex.normSq (F M) = (F M).re ^ 2 + (F M).im ^ 2\n   rw [Complex.normSq_apply]\n   ring\n \n@@ -219,7 +224,7 @@\n     hi (fun X => (F X).im) hInvIm\n   have hLeft := uniformMean_normSq_components\n     (F := fun M => complexAppendAverage (complexRankProjection i F) M)\n-  have hRight := complexRankProjection_energy_components F\n+  have hRight := complexRankProjection_energy_components (i := i) F\n   rw [hLeft, hRight]\n   simp_rw [complexAppendRankProjection_re, complexAppendRankProjection_im]\n   rw [hRe, hIm]\n@@ -263,13 +268,13 @@\n   apply Complex.ext\n   · rw [complexPhiAverage_re]\n     simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,\n-      zero_mul, mul_zero, sub_zero]\n+      zero_mul, sub_zero]\n     simp_rw [complexRankProjection_re]\n     exact phiAverage_rankProjection_eigen (s := s) hs\n       (fun X => (F X).re) M\n   · rw [complexPhiAverage_im]\n     simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,\n-      zero_mul, mul_zero, add_zero, zero_add]\n+      zero_mul, add_zero]\n     simp_rw [complexRankProjection_im]\n     exact phiAverage_rankProjection_eigen (s := s) hs\n       (fun X => (F X).im) M\n",
+  "root_read_complete_source_diff_and_argument_map": true,
+  "declarations_imports_checks_preserved": true,
+  "project_and_mathlib_dependency_pins_verified": true,
+  "bounded_heartbeat_change": null,
+  "capture_control_sha256": "3D93CAA23E9400755C9E07339C8341C374CEB3EE144CCAA021EB71446EE05A22",
+  "compiler_invoked": false,
+  "accepted": false
+}

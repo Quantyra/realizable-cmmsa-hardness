@@ -1,0 +1,104 @@
+{
+  "schema": "full113-rectangular-gl-row-completion-offer-v1",
+  "status": "source-only uncompiled repair offer; root owns compilation/capture",
+  "source_path": "lean/PvNP/RealizableHardness/RectangularGLRowCompletion.lean",
+  "input_capture": {
+    "directory": "full112-native-diagnostic-packet-v1",
+    "packet_index_sha256": "A0CC0804ED5ABA8F393BEAFC5F65EFE2251324CDCBE24AC80462B7CBAAE9D249",
+    "source_sha256": "1E117431C3D55B88A2F1BE2E18C9FAA17ABAE94BC504A0490D4DDB0D80720993",
+    "checks_sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB",
+    "diagnostics_sha256": "40A9DFA408D6405D36AE8F31E2A1FCD8272D5C978E8C6C01F972A1F1E835EC71"
+  },
+  "full112_input_archive_sha256": "1686A96C43231E3E02D88468C6EE5B176D131FF96B2A1F44C3C85C3E5CE531AA",
+  "project_imports_from_full112_archive": [
+    {
+      "module": "PvNP.RealizableHardness.BinaryMatrixRightOrbit",
+      "member": "lean/PvNP/RealizableHardness/BinaryMatrixRightOrbit.lean",
+      "bytes": 2521,
+      "sha256": "409FD652E1F051E92688466EAC57BD6B85AF93866D5F5D4C9AA0152AB25286B0"
+    },
+    {
+      "module": "PvNP.RealizableHardness.RectangularFrameFiberAverage",
+      "member": "lean/PvNP/RealizableHardness/RectangularFrameFiberAverage.lean",
+      "bytes": 4413,
+      "sha256": "F1DBDBF44468D72573F2B15FACFFD3435A700B5AAB98362E2B70F217777C9B8F"
+    },
+    {
+      "module": "PvNP.RealizableHardness.ActualFiniteBinarySurjectionCounting",
+      "member": "lean/PvNP/RealizableHardness/ActualFiniteBinarySurjectionCounting.lean",
+      "bytes": 8251,
+      "sha256": "BA136FC5CA364B14F76447954F47EDE670930B042F1EA8276A11675B50C76C2F"
+    }
+  ],
+  "mathlib_import": {
+    "module": "Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Card",
+    "evidence_archive_sha256": "0392E798A4234ADC4386703FDB1817217D99DFBEA7FF48D4184E614AA42FD6B2",
+    "package_sources_member_sha256": "2DFA036C84860818068E8F5B64C203AE9F86A51DDB966B745B0743A988E50414",
+    "source_member": ".lake/packages/mathlib/Mathlib/LinearAlgebra/Matrix/GeneralLinearGroup/Card.lean",
+    "source_bytes": 4219,
+    "source_sha256": "AC31F64E47BA76F80C1C9BAB4E58645175A13C23C9175449C41ACD22B1E44F1F"
+  },
+  "repairs": [
+    "Move the scoped option before the theorem docstring so the option wraps the declaration.",
+    "Raise maxHeartbeats from 400000 to a finite 800000 only for row_prefix_uniform_mean.",
+    "Add explicit fiber-equivalence and cardinality-transport types, instantiate Nonempty from the canonical frame, and reuse a typed mean identity."
+  ],
+  "preservation_checks": {
+    "imports_unchanged": true,
+    "public_theorem_statement_headers_unchanged": true,
+    "checks_file_byte_identical_to_input": true,
+    "expected_unicode_glyphs_present": {
+      "\u2192": 8,
+      "\u2211": 15,
+      "\u2200": 1,
+      "\u2203": 1,
+      "\u27e8": 30,
+      "\u27e9": 30,
+      "\u2243": 10,
+      "\u00d7": 1
+    },
+    "replacement_character_absent": true
+  },
+  "files": {
+    "RectangularGLRowCompletion.lean": {
+      "bytes": 17838,
+      "sha256": "fd0e815f4a816c82efa77cd0334e40bdc7af28a7c1e23937cf6ccda90a8ba1fd"
+    },
+    "RectangularGLRowCompletionChecks.lean": {
+      "bytes": 1822,
+      "sha256": "d17bf262eb0e9aba0110c7e6c6cd51eaffece4ac03d68e033c3320383e6984fb"
+    },
+    "PROOF-AND-API-MAP.md": {
+      "bytes": 4449,
+      "sha256": "675317ee0f6c4bc942161ace49752c7e18a77fa30ef4a7bef3dd7959fa9d97d9"
+    }
+  },
+  "lexical_preflight": [
+    {
+      "path": "RectangularGLRowCompletion.lean",
+      "bytes": 17838,
+      "sha256": "FD0E815F4A816C82EFA77CD0334E40BDC7AF28A7C1E23937CF6CCDA90A8BA1FD",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true,
+      "utf8_valid": true,
+      "utf8_bom_absent": true
+    },
+    {
+      "path": "RectangularGLRowCompletionChecks.lean",
+      "bytes": 1822,
+      "sha256": "D17BF262EB0E9ABA0110C7E6C6CD51EAFFECE4AC03D68E033C3320383E6984FB",
+      "lexical_preflight_passed": true,
+      "lean_parse_or_compile_performed": false,
+      "bare_question_mark_guard_passed": true,
+      "utf8_valid": true,
+      "utf8_bom_absent": true
+    }
+  ],
+  "compiler_or_lake_invoked": false,
+  "gcp_invoked": false,
+  "git_invoked": false,
+  "native_verified": false,
+  "accepted": false,
+  "root_capture_acknowledged": false
+}
