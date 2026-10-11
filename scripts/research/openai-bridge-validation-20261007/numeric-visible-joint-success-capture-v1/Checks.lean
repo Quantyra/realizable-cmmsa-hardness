@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.ActualVisibleJointSuccess
+
+#print axioms PvNP.RealizableHardness.ActualVisibleJointSuccess.goodFavorable
+#print axioms PvNP.RealizableHardness.ActualVisibleJointSuccess.visibleEvent
+#print axioms PvNP.RealizableHardness.ActualVisibleJointSuccess.jointVisibleSuccess
+#print axioms PvNP.RealizableHardness.ActualVisibleJointSuccess.goodFavorable_eq_true
+#print axioms PvNP.RealizableHardness.ActualVisibleJointSuccess.favorable_marginal_lower
+#print axioms PvNP.RealizableHardness.ActualVisibleJointSuccess.jointVisibleSuccess_disintegration
+#print axioms PvNP.RealizableHardness.ActualVisibleJointSuccess.ready_visible_joint_success

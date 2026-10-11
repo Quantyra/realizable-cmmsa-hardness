@@ -1,0 +1,6 @@
+import PvNP.RealizableHardness.ActualTwoTableLeafLoss
+
+#print axioms PvNP.RealizableHardness.ActualTwoTableLeafLoss.transverseExceptionFraction_inf_window
+#print axioms PvNP.RealizableHardness.ActualTwoTableLeafLoss.transverseExceptionFraction_le_dimension_bound
+#print axioms PvNP.RealizableHardness.ActualTwoTableLeafLoss.agreement_ge_other_sub_two_exceptions
+#print axioms PvNP.RealizableHardness.ActualTwoTableLeafLoss.two_table_agreement_ge_sub_dyadic

@@ -1,0 +1,11 @@
+import PvNP.RealizableHardness.ActualOriginalDecoderSelection
+
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.defaultPair
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.selectedPair
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.favorable
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.originalAdviceMass
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.selectedPair_properties
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.originalAdviceMass_normalized
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.favorable_mass_eq_ratio
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.selected_original_decoder_mass
+#print axioms PvNP.RealizableHardness.ActualOriginalDecoderSelection.favorable_selectedPair_agreement

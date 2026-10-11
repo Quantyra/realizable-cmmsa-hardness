@@ -1,0 +1,5 @@
+import PvNP.RealizableHardness.ActualVisiblePosteriorMargin
+
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorMargin.actual_leaf_exponent_and_window_slack
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorMargin.actual_visible_posterior_margin
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorMargin.selected_visible_posterior_margin

@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.ActualVisiblePosteriorLedger
+
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorLedger.chargedScore
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorLedger.excluded
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorLedger.charged_mean_lower
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorLedger.visible_success_mass_lower
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorLedger.conditional_zero_of_not_contained
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorLedger.excluded_mass_le
+#print axioms PvNP.RealizableHardness.ActualVisiblePosteriorLedger.ready_visible_posterior_success

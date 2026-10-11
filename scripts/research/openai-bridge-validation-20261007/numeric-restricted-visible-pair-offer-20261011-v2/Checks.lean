@@ -1,0 +1,7 @@
+import PvNP.RealizableHardness.ActualRestrictedVisiblePair
+
+#print axioms PvNP.RealizableHardness.ActualRestrictedVisiblePair.restrictedPair
+#print axioms PvNP.RealizableHardness.ActualRestrictedVisiblePair.restrictedPair_apply
+#print axioms PvNP.RealizableHardness.ActualRestrictedVisiblePair.actualRetained_finrank
+#print axioms PvNP.RealizableHardness.ActualRestrictedVisiblePair.restrictedPair_finrank_lower
+#print axioms PvNP.RealizableHardness.ActualRestrictedVisiblePair.actual_restricted_visible_agreement_lower
