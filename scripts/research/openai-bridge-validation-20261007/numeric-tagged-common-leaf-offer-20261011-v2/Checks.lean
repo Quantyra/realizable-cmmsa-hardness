@@ -1,0 +1,5 @@
+import PvNP.RealizableHardness.ActualTaggedCommonLeafCoherence
+
+#print axioms PvNP.RealizableHardness.ActualTaggedCommonLeafCoherence.transported_labels_agree_on_intersection
+#print axioms PvNP.RealizableHardness.ActualTaggedCommonLeafCoherence.selected_labels_agree_on_intersection
+#print axioms PvNP.RealizableHardness.ActualTaggedCommonLeafCoherence.canonical_table_agrees_on_shared_leaf
