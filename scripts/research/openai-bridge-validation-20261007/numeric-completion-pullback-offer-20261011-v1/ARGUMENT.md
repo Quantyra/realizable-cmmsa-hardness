@@ -1,0 +1,15 @@
+# Actual completion equation-span pullback
+
+E002/S3137. Complete argument was recorded before translation in the planning numeric obligations note, section 2026-10-11 Visible table and extension captures; varying-completion exception argument. This is uncompiled.
+
+The inverse actual row-coordinate equivalence followed by the original coordinate-space inclusion defines an injective linear map from Vector J to the actual global tagged-variable ambient. The visible set for draw d is the actual retainedVariables set of the inverse row draw. completionForDraw invokes the already fixed completion on that visible set alone; equal visible sets give the same completion. There is no extra original-U input to the second-prover strategy. U indexes only the proof frame for the conditional law.
+
+Pull back the completion's actual equation span along that injection. Good-question row independence and the completion cardinality prove its global equation span has dimension J. Restriction of the injection maps the pullback injectively into that span, so its dimension is at most J. This discharges the dimension hypothesis of the separate varying-subspace probability theorem for the actual chosen completion, with no independent choice or uniform-completion assumption.
+
+Composition of the exact retained row-coordinate equality with the global visible-space equality proves the image of retained(d) is precisely the visibleCoordinateSpace of the same visible set. Consequently any retained advice maps into that space. For any coordinate subspace Q, its intersection with the pulled-back completion span is zero exactly when its global image has zero intersection with the actual completion span. In one direction choose a preimage of every vector in the global intersection; in the other direction injectivity shows a zero global image has zero preimage. Negating gives exact equivalence of the two exceptional events, pointwise for every draw and every Q.
+
+The separate arbitrary draw-dependent subspace estimate can therefore be instantiated with this actual pullback without supplying a new dimension premise. The event equivalence also permits exact rewriting of the same original joint/posterior sums. This source deliberately has no probability-bound premise or conclusion; the actual count, original-law average, Markov/TV and selected numerical substitutions are subsequent integration obligations. Leaf-level double-transversality charges and the full legitimate decoder remain open.
+
+Seven project sources match Full114 archive members; actual row and visible-completion candidate sources are exact-byte pinned. Eight theorem axiom requests and five definition checks are included. No local Lean/Lake ran. Full114 remains unaccepted and GCP verification must rebind the complete closure to the accepted operator parent.
+
+Remaining to-do list: GCP kernel/axiom/warning verification, exact probability-theorem specialization, selected numeric charges, decoder/source NO and all retained runtime/review gates.
