@@ -1,0 +1,41 @@
+{
+  "parent": "compress_full112_committed_text_v4.py",
+  "parent_sha256": "D67AA97BC20E1507B03C65E05878F6F6E6B8EB02222185EE8437D63E538712EB",
+  "target": "compress_full112_committed_text_v5.py",
+  "target_sha256": "181BDBD4B75606BF1C992E381D36F984A73C2EA32F511CFF8EFF514EBE0734EE",
+  "exact_replacements": [
+    {
+      "old": "head.startswith('eca22c39')",
+      "new": "head.startswith('81d9d655')"
+    },
+    {
+      "old": "target = HERE / 'full112-committed-text-lossless-v4'",
+      "new": "target = HERE / 'full112-committed-text-lossless-v5'"
+    },
+    {
+      "old": "    candidates = []",
+      "new": "    attributes = ctypes.windll.kernel32.GetFileAttributesW\n    attributes.argtypes = [ctypes.c_wchar_p]\n    attributes.restype = ctypes.c_uint32\n    candidates = []"
+    },
+    {
+      "old": "('.stdout', '.stderr', '.txt', '.patch', '.lean', '.md', '')",
+      "new": "('.json', '.jsonl', '.stdout', '.stderr', '.txt', '.patch', '.lean', '.md', '')"
+    },
+    {
+      "old": "        high = ctypes.c_uint32()",
+      "new": "        if attributes(str(path)) & 1024:\n            continue\n        high = ctypes.c_uint32()"
+    },
+    {
+      "old": "        if size > path.stat().st_size * 0.8:",
+      "new": "        if size >= 128000:"
+    },
+    {
+      "old": "[:120]",
+      "new": "[:400]"
+    }
+  ],
+  "current_committed_unchanged_files_only": true,
+  "reparse_already_WOF_files_excluded": true,
+  "all_logical_bytes_verified_against_HEAD_before_and_after": true,
+  "files_deleted": false,
+  "cloud_action_performed": false
+}

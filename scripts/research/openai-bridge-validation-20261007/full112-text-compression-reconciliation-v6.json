@@ -1,0 +1,38 @@
+{
+  "original_handle": 55808,
+  "native_exit": 1,
+  "failure": "Pre-compression exact-HEAD comparison failed; no target or compression was created",
+  "original_tool_streams_not_claimed_archived": true,
+  "parent": "compress_full112_committed_text_v5.py",
+  "parent_sha256": "181BDBD4B75606BF1C992E381D36F984A73C2EA32F511CFF8EFF514EBE0734EE",
+  "target": "compress_full112_committed_text_v6.py",
+  "target_sha256": "AFE027F4013C0A420D52ECEF5825CE4D48127D308C19CCBD6B40D614BAB4CDDE",
+  "nonexact_historical_files_excluded": true,
+  "no_original_file_deleted": true,
+  "exact_replacements": [
+    {
+      "old": "'full112-committed-text-lossless-v5'",
+      "new": "'full112-committed-text-lossless-v6'"
+    },
+    {
+      "old": "    rows = []",
+      "new": "    rows = []\n    skipped = []"
+    },
+    {
+      "old": "        assert original == committed",
+      "new": "        if original != committed:\n            skipped.append(dict(path=rel,reason='Git-clean historical file is not byte-identical to its HEAD blob; excluded'))\n            continue"
+    },
+    {
+      "old": "json.dumps(dict(head=head, files=rows), indent=2)",
+      "new": "json.dumps(dict(head=head, files=rows, skipped_nonexact=skipped), indent=2)"
+    },
+    {
+      "old": "    free_before = shutil.disk_usage(HERE).free",
+      "new": "    assert rows\n    free_before = shutil.disk_usage(HERE).free"
+    },
+    {
+      "old": "    value = dict(head=head, files=rows, free_before=free_before, free_after=free_after,",
+      "new": "    value = dict(head=head, files=rows, skipped_nonexact=skipped, free_before=free_before, free_after=free_after,"
+    }
+  ]
+}

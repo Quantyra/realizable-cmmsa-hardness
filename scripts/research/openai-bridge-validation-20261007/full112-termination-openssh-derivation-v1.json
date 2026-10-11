@@ -1,0 +1,23 @@
+{
+  "parent": "terminate_full112_builder02_after_custody.py",
+  "parent_sha256": "6B8D17BF6D493AF9B5340F7BF4D4BE106F8F77E70743B54224810694A17E683C",
+  "target": "terminate_full112_after_custody_openssh_v1.py",
+  "target_sha256": "682958835509A35CFACB2B00FDC7D17C902FC824B7AC24870C704D67DE941672",
+  "exact_replacements": [
+    {
+      "old": "from finalize_builder02_bootstrap import SDK, FLAGS",
+      "new": "from finalize_builder02_bootstrap import SDK, FLAGS\nfrom full112_dedicated_openssh_v2 import Session"
+    },
+    {
+      "old": "        out=cloud(['compute','ssh',VM,'--tunnel-through-iap','--command=ps -eo pid=,comm='])",
+      "new": "        with Session(folder/'openssh-transport') as session:\n            out=session.ssh('ps -eo pid=,comm=').read_bytes()"
+    }
+  ],
+  "original_custody_resource_native_terminal_quiescence_and_independent_termination_gates_retained": true,
+  "only_quiescence_transport_changed": true,
+  "SDK_describe_and_stop_unchanged": true,
+  "wrapper_parent_sha256": "5893ABB87ED11108F3E336204B9DD786285D95532E11876A476E7C1D9CD070E1",
+  "wrapper_sha256": "02D8CF26CA002BC23CEF9D10BEC0033634952349A8955DC0193EF5C081CBC6F0",
+  "cloud_action_performed": false,
+  "compiler_invoked": false
+}

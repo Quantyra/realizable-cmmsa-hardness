@@ -1,0 +1,18 @@
+{
+  "original_tool_chunk": "94b4b7",
+  "original_exit": 1,
+  "original_failure": "Two Full84 directories; the unlaunched original and launched warning-clean successor. No compression or destination creation occurred.",
+  "original_tool_streams_not_claimed_archived": true,
+  "parent_sha256": "563183A9C94698A41D037D5A3B364915CB9D6678D33437F9B05EC14E2E1D21E0",
+  "target_sha256": "1965DA0D50981C0F35D525318523F03DB922185BBC377D49F10B4F2F2A4CD00F",
+  "exact_replacements": [
+    {
+      "old": "resource,=BASE.glob('full'+str(n)+'-*')",
+      "new": "resource,=[p for p in BASE.glob('full'+str(n)+'-*') if p.is_dir() and (p/'launch-once.json').is_file()]"
+    },
+    {
+      "old": "'full112-settled-native-metadata-lossless-v3'",
+      "new": "'full112-settled-native-metadata-lossless-v4'"
+    }
+  ]
+}
