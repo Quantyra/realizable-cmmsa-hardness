@@ -1,0 +1,11 @@
+# Numbered occurrence producer candidate
+
+This source is a source-only semantic serialization candidate for the literal shared `BooleanParityInput.Input`. It defines the output variable order by actual owner-prefix enumeration and actual representative-edge order, serializes the exact `ActualOccurrenceAllocation.rows` list in order, and states a bijective Boolean/`ZMod 2` assignment transport with exact per-row and total failure-count equality.
+
+The candidate does not include an input parser, serialized `inputWords` runtime, or a `Complexity.FP` proof. It does not instantiate the upstream `BinaryLanguage.language` or local `Complexity.SAT.ThreeSAT.language`, and it does not establish a source promise bridge between them. In particular, it is not a complete reduction producer. No theorem here is represented as compiled or accepted; the compiler has not run on these bytes.
+
+The indexing is intended to match the committed occurrence-serialization argument at planning commit `43eda8a`, section “Exact occurrence serialization and rotation-runtime argument”. For every owner v, the local enumeration first lists `Fin (size v) × Fin (predecessor + 1)` in product order, then `edgeList (size v) × Fin 5` in product order. Owners are concatenated in `List.finRange I.variables` order and tagged with the allocation's actual Sigma owner. `variableIndexEquiv` is obtained from `List.Nodup.getEquiv` for that concrete list; no arbitrary finite equivalence chooses labels. The output equations map the original ordered row list, including duplicates, by this exact index and the `bitOf` encoding.
+
+Source and theorem requests are provisional. The core obligations after source compilation remain the degree/overlap transport, the V bound, concrete word serialization, parser equivalence, and an actual polynomial-time runtime proof. Root's committed argument fixes the NO witness before epsilon and uses the rational separation `NO delta < outputGap(1/4)`; this candidate does not discharge that end-to-end connection.
+
+Remaining to-do list: compile and repair the semantic source candidate; prove the remaining degree/overlap and V bounds; implement and prove the concrete serialized producer and input parser in FP; connect the two SAT-language interfaces and compose the upstream source promise.

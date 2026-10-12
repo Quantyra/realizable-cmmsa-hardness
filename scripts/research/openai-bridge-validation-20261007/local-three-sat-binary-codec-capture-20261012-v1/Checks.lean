@@ -1,0 +1,7 @@
+import LocalThreeSATBinaryCodec
+
+#check LocalThreeSATBinaryCodecOffer.run
+#check LocalThreeSATBinaryCodecOffer.convert
+#check LocalThreeSATBinaryCodecOffer.convert_empty
+#check LocalThreeSATBinaryCodecOffer.emitFormula
+#print axioms LocalThreeSATBinaryCodecOffer.convert_empty

@@ -21,7 +21,7 @@ def main(phase):
   assert 'native_exit' in v,('Original controller still live',folder)
   for n in ('stdout','stderr'):assert digest(folder/n)==v[n+'_sha256']
   paths.update(q for q in folder.rglob('*') if q.is_file())
- d=H/('full119-recovery-'+phase+'-record-v1');d.mkdir(exist_ok=False);(d/'.gitattributes').write_bytes(b'* -text\n');archive=d/'complete-originals.tar.gz';rows=[]
+ d=H/('full119-recovery-'+phase+'-record-v1');d.mkdir(exist_ok=False);(d/'.gitattributes').write_bytes(b'* -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol\n');archive=d/'complete-originals.tar.gz';rows=[]
  with archive.open('xb') as raw:
   with gzip.GzipFile(filename='',mode='wb',fileobj=raw,mtime=0) as z:
    with tarfile.open(fileobj=z,mode='w') as t:
