@@ -19,7 +19,12 @@ def main():
     folder=ROOT/'staging-controls'/datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     folder.mkdir(parents=True,exist_ok=False)
     here=Path(__file__).resolve().parent
-    for name in (Path(__file__).name,'full114_dedicated_openssh_v2.py','full115_authorized_cleanup_custody_v1.py','full115_cumulative_actual_receipts_v1.py','full115_cumulative_cleanup_custody_v2.py','full119_authorized16_nested_custody_v3.py','full119_pending16_nested_custody_v2.py','full118_consolidated_preservation_resolver_v1.py'):
+    negative_tests=here/'full119-recovery-stage-offline-negatives-v2/result.json'
+    assert digest(negative_tests)=='7E335455A8263CE7197B3CBB454DA5E09C5C8098E3BBE0385DD7CE233AD90503'
+    tested=json.loads(negative_tests.read_bytes());assert tested['all_expected_results'] and len(tested['checks'])==13
+    assert digest(here/'full119_recovery_stage_gate_v1.py')==tested['source_sha256']['full119_recovery_stage_gate_v1.py']
+    (folder/'stage-negative-tests.snapshot.json').write_bytes(negative_tests.read_bytes())
+    for name in (Path(__file__).name,'full119_recovery_stage_gate_v1.py','validate_full119_recovery_stage_gate_v2.py','full114_dedicated_openssh_v2.py','full115_authorized_cleanup_custody_v1.py','full115_cumulative_actual_receipts_v1.py','full115_cumulative_cleanup_custody_v2.py','full119_authorized16_nested_custody_v3.py','full119_pending16_nested_custody_v2.py','full118_consolidated_preservation_resolver_v1.py'):
         (folder/name).write_bytes((here/name).read_bytes())
     prior_stop=Path('C:\\Users\\dfred\\.quantyra\\builder02\\full118-exact-real-complex-operators-repair8-resource02\\checks\\20261012T023543679265Z\\vm-termination.json')
     assert digest(prior_stop)=='85D67B53B8CFA892E2982F6D88D6E7F0665029068253E9D1AFF59AE047A83A68'
@@ -43,14 +48,10 @@ def main():
     assert inspection['disk_available_bytes'] < 40*1024**3, 'Original failed capacity guard identity changed'
     from audit_full119_cache_recovery_v1 import validate_local_audit, AUDIT
     report=validate_local_audit()
-    custody=here/'full119-recovery-complete-record-v1/index.json';preserved=json.loads(custody.read_bytes())
-    assert preserved['all_selected_plans_verified'] and preserved['execution_included'] and preserved['all_members_roundtrip_verified']
-    payload=custody.parent/preserved['payload']['file'];assert digest(payload)==preserved['payload']['sha256'] and payload.stat().st_size==preserved['payload']['bytes']
-    audit_path=AUDIT/'audit.json';matches=[r for r in preserved['files'] if r['original']==str(audit_path)];assert len(matches)==1
-    audit_row=matches[0];assert digest(audit_path)==audit_row['sha256']
-    import tarfile
-    with tarfile.open(payload,'r:gz') as archive:assert archive.extractfile(audit_row['member']).read()==audit_path.read_bytes()
-    assert report['disk_available_bytes']>=40*1024**3 and report['state']['status']=='RUNNING' and str(report['state']['id'])==VM_ID
+    custody=here/'full119-recovery-complete-record-v1/index.json'
+    audit_path=AUDIT/'audit.json'
+    from full119_recovery_stage_gate_v1 import verify_binding
+    assert verify_binding(ROOT,audit_path,custody,VM_ID)==report
     (folder/'verified-recovery-audit.json').write_bytes(audit_path.read_bytes())
     (folder/'verified-recovery-custody-index.json').write_bytes(custody.read_bytes())
     (ROOT/'recovery-stage-request-once.json').open('x').write(json.dumps(dict(source_sha256=digest(Path(__file__)),actual16_receipt_sha256=digest(here/'full118-approved16-cleanup-execution-v1/receipt.json'),original_start_folder=str(original),inspection_sha256=digest(original/'inspection.json')))+'\n')

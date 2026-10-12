@@ -17,7 +17,7 @@ def main(phase):
   p=folder/'command.json'
   if not p.is_file():continue
   v=json.loads(p.read_bytes())
-  if any(Path(str(x)).name=='preserve_full119_recovery_v1.py' for x in v['argv']):continue
+  if 'native_exit' not in v and any(Path(str(x)).name=='preserve_full119_recovery_v1.py' for x in v['argv']):continue
   assert 'native_exit' in v,('Original controller still live',folder)
   for n in ('stdout','stderr'):assert digest(folder/n)==v[n+'_sha256']
   paths.update(q for q in folder.rglob('*') if q.is_file())

@@ -1,0 +1,103 @@
+{
+  "checks": [
+    {
+      "case": "valid",
+      "accepted": true,
+      "expected": true
+    },
+    {
+      "case": "missing-custody",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "FileNotFoundError",
+      "rejection": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\dfred\\\\.quantyra\\\\reviews\\\\openai-bridge-validation-20261007\\\\scripts\\\\research\\\\openai-bridge-validation-20261007\\\\full119-recovery-stage-offline-negatives-v1\\\\missing-custody\\\\index.json'"
+    },
+    {
+      "case": "unverified-custody",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Unverified recovery custody"
+    },
+    {
+      "case": "altered-audit",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Audit changed"
+    },
+    {
+      "case": "altered-payload",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Recovery payload changed"
+    },
+    {
+      "case": "wrong-vm",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Wrong VM identity or state"
+    },
+    {
+      "case": "wrong-state",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Wrong VM identity or state"
+    },
+    {
+      "case": "below-reserve",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Capacity below unchanged guard"
+    },
+    {
+      "case": "launch-marker",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Full119 already launched"
+    },
+    {
+      "case": "missing-audit-row",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Missing or ambiguous retained audit"
+    },
+    {
+      "case": "ambiguous-audit-row",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Missing or ambiguous retained audit"
+    },
+    {
+      "case": "retained-audit-mismatch",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Retained audit mismatch"
+    },
+    {
+      "case": "duplicate-member",
+      "accepted": false,
+      "expected": true,
+      "rejection_type": "AssertionError",
+      "rejection": "Duplicate custody member"
+    }
+  ],
+  "all_expected_results": true,
+  "offline_fixture_only": true,
+  "lean_executed": false,
+  "cloud_operation": false,
+  "accepted": false,
+  "source_sha256": {
+    "full119_recovery_stage_gate_v1.py": "27E12B32BCA2E6176D29E2B837E03DFC61A940E627FEBE01F303C43CBC75211F",
+    "stage_full119_openssh_v2.py": "9D17E4A0D85E487D7D7274F10711BF7416934C89E67FAB8A8B56783508EC04B0",
+    "validate_full119_recovery_stage_gate_v1.py": "7E1B7863FBF927EA427A53D09CBD8FDCACD64C3ECE6269E3814DB6550A81826A"
+  }
+}
