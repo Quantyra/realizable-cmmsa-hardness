@@ -1,0 +1,11 @@
+# Total local 3-SAT codec runtime offer (v4)
+
+This offer adds the concrete bounded-recursion and FP implementation to the total scanner and decoder semantics. It imports the scanner core from capture v1 and the local decoder semantics from capture v2. The preceding continuation source from offer/capture v3 supplies successful-scan inversion and the all-input scanner/decoder equality.
+
+The runtime represents the scanner with 22 explicit microstates: seven formula/literal boundary states, fourteen states holding a first bit of a pair, and one absorbing invalid state. A finite table encodes each state in five bits. Each transition appends at most two payload bits; invalid transitions clear the payload and remain invalid. `finishFn` appends the final false marker only for the accepting `between0` state and returns the empty word otherwise.
+
+The fold agrees with the pairwise scanner on every input. `recNotation` consumes from the right, so `scanRecFn` reverses the input before the bounded recursion. The accumulator has length at most `5 + 2*n` for every input of length n. The source supplies explicit Cobham certificates for the finite transition/finish tables, bounded recursion, reversal, and composition. `machineOutput_eq_convert` proves exact equality on every bitstring, including malformed and incomplete inputs. `convert_mem_FP` obtains an actual FP witness through `CobhamFP_subset_FP`; it assumes no FP premise about `convert`.
+
+`scannerMatchesDecoder` and `localThreeSAT_iff_decodedConverter` close the total local decoder-defined normal form. This offer does not claim equivalence with upstream `BinaryLanguage.language`, prove sparse-name assignment transport, or simulate the upstream TM2 machine. Those remain separate obligations. No compiler invocation has been run for this v4 source, so every new declaration and its axiom profile remain unverified and unaccepted. The seven `dependency.Cobham.*.source` snapshots and `vec-candidate.tmp` are preserved as provided inputs.
+
+Remaining to-do list: exact-byte GCP capture and compile/repair for v4; then prove upstream parser equivalence and both assignment transports, and complete the machine-model/toolchain join.

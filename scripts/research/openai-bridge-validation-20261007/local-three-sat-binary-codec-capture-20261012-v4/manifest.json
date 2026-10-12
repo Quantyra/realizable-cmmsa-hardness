@@ -1,0 +1,124 @@
+{
+    "schema":  "local-three-sat-binary-codec-offer-20261012-v4",
+    "story":  "E002/S3137",
+    "accepted":  false,
+    "compiler_invoked":  false,
+    "independent_static_review_completed":  false,
+    "source_module":  "LocalThreeSATBinaryCodecRuntime",
+    "claim":  "total scanner semantics plus concrete boundedRec/Cobham proof and actual local FP witness for convert; upstream BinaryLanguage equivalence and TM2 machine-model transport are not claimed",
+    "direct_imports":  [
+                           "LocalThreeSATBinaryCodec",
+                           "LocalThreeSATBinaryCodecSemantics",
+                           "Complexitylib.Classes.P.Cobham",
+                           "Complexitylib.Classes.P.Cobham.Internal.Algebra",
+                           "Complexitylib.Classes.P.Cobham.Internal.Reverse"
+                       ],
+    "prior_capture_lineage":  [
+                                  {
+                                      "source_sha256":  "B8F38CE6B3DFD205CADE3DA1D7FE39D6D3AD0F7FA0B9E61B6DB98311740909F6",
+                                      "index_sha256":  "30FC75F14821007D5545D18CC4B149E4B20503903C8903C6D06C2F313AB19C83",
+                                      "id":  "local-three-sat-binary-codec-capture-20261012-v1"
+                                  },
+                                  {
+                                      "source_sha256":  "2330AE0858786272F55F4174C520DA27D10DEC0D75E1A1576687A54BF86BBA1B",
+                                      "index_sha256":  "A70C85A320C9085D1F266EECE6B28294E282468030C9F0E886A74F15AFDE2332",
+                                      "id":  "local-three-sat-binary-codec-capture-20261012-v2"
+                                  },
+                                  {
+                                      "source_sha256":  "B6DDB10C094F16B86FDE511FF49EC461C1057C12B4B6C5012B0D17E8EFD2377A",
+                                      "id":  "local-three-sat-binary-codec-capture-20261012-v3",
+                                      "note":  "continuation predecessor; v4 reauthors/carries its semantic proofs in the runtime source"
+                                  }
+                              ],
+    "toolchain":  {
+                      "mathlib":  "e06eff5f95374108acfaf19f1ff7473aa7771df2",
+                      "lean":  "4.34.0-rc2",
+                      "execution":  "GCP only",
+                      "complexitylib":  "6c248df7859f2f245e731c1e07057bf69d165fe2"
+                  },
+    "dependencies":  [
+                         {
+                             "path":  "dependency.Cobham.Algebra.source",
+                             "sha256":  "CDC9CDD18A76D3F5D9E38EF62127F06A9392DD2B61F2F7F1E9A80FB2E707B27B",
+                             "bytes":  25518,
+                             "revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2"
+                         },
+                         {
+                             "path":  "dependency.Cobham.Blocks.source",
+                             "sha256":  "C6521B17AB33DE382053C05A066D1F1FDBEB6B99744EF1B56AB3BAFF3D1C6B46",
+                             "bytes":  12804,
+                             "revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2"
+                         },
+                         {
+                             "path":  "dependency.Cobham.Defs.source",
+                             "sha256":  "F3C67A7633DC861C32E45FE1B96780B8AE77350E88ED4AECE5982E5C1DB30BE8",
+                             "bytes":  6470,
+                             "revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2"
+                         },
+                         {
+                             "path":  "dependency.Cobham.Reverse.source",
+                             "sha256":  "7C6456E02BD0047150D28316056D924B3D437C58FB2969CB982CA86ADB4A4AE6",
+                             "bytes":  14077,
+                             "revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2"
+                         },
+                         {
+                             "path":  "dependency.Cobham.source",
+                             "sha256":  "76C47180EB1440E2C04D6FA3243CD6596503CB0DF83C6C8313981F5A823CC36C",
+                             "bytes":  3992,
+                             "revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2"
+                         },
+                         {
+                             "path":  "dependency.Cobham.StringOps.source",
+                             "sha256":  "179EDACA26D54E39EE671ABAD17DEE0B1691DBC4420A43AF6DB333CE4B1BF686",
+                             "bytes":  14538,
+                             "revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2"
+                         },
+                         {
+                             "path":  "dependency.Cobham.Vec.source",
+                             "sha256":  "EC6D03251FDB78FB59157FF48B314577B886486021808CD4691548882BF0441A",
+                             "bytes":  4596,
+                             "revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2"
+                         }
+                     ],
+    "semantic_status":  {
+                            "upstream_binary_language_equivalence":  false,
+                            "scanner_matches_decoder_authored":  true,
+                            "tm2_to_local_machine_transport":  false,
+                            "local_language_decoder_normal_form_authored":  true,
+                            "convert_fp_compiler_verified":  false,
+                            "convert_fp_witness_authored":  true,
+                            "sparse_name_assignment_transport":  false
+                        },
+    "planning_argument_pins":  {
+                                   "bounded_string_runtime":  "493b6d3",
+                                   "machine_model":  "c795dc1",
+                                   "scanner_grammar_directions":  "d43b144",
+                                   "finite_assignment":  "ade0217",
+                                   "codec":  "b4ff236"
+                               },
+    "files":  [
+                  {
+                      "path":  "LocalThreeSATBinaryCodecRuntime.lean",
+                      "sha256":  "4ECA04FD89ECF44DC4395981422AE5B2968D550BB5AF71C0AFF401FDDEB904F1",
+                      "bytes":  44451
+                  },
+                  {
+                      "path":  "Checks.lean",
+                      "sha256":  "9831931A7AB5B60D9AECAFC053C28D014C7676E2B301AE0300E8EA7ED366CDEF",
+                      "bytes":  876
+                  },
+                  {
+                      "path":  "ARGUMENT.md",
+                      "sha256":  "CB739FE8F6B747A9901983CC9045C64AD893203E639418AF8B5548B63DDB00BD",
+                      "bytes":  2193
+                  }
+              ],
+    "preserved_auxiliary":  [
+                                {
+                                    "path":  "vec-candidate.tmp",
+                                    "sha256":  "EC6D03251FDB78FB59157FF48B314577B886486021808CD4691548882BF0441A",
+                                    "bytes":  4596,
+                                    "role":  "preserved duplicate dependency source; not deleted"
+                                }
+                            ]
+}
