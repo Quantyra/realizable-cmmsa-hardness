@@ -1,0 +1,9 @@
+# Positive-column HC46 export
+
+This source-only offer extracts the positive-rank branch of the exact inherited Boolean HC46 proof into `ActualBinaryMatrixHC46PositiveColumns.lean`. It targets the arbitrary-column rank-one application in section 4 of `cmmsa-many-window-count-candidate-2026-10-12.md`: the generic theorem accepts every `d`, every positive rank `i ≤ r`, and every dyadic `p ≥ 4`, so the candidate can instantiate `i = 1` and its least dyadic `p ≥ 512 D^5` without an even-column premise.
+
+The proof is copied from the body of `original_HC46_exact` after its `i = 0` case split. It keeps the actual `PseudorandomExact` input, rank bound, positive-rank condition, dyadic budget, Boolean indicator, and unrestricted `eta` interface. It reuses the unchanged A22/A18/A21 chain through the exact Full119 module; the proof body derives the Boolean mean cap and uses the actual projection, support, moment, and norm arguments. No conclusion or covering predicate is supplied by the caller.
+
+This is only a source export. It has not been compiled or accepted, and it does not prove the level-one Fourier/covering estimate, the finite-law transports, the all-window count, or any D3c5 conclusion. The exact D3c5 extraction/loss contract remains controlling; this offer makes no change to its predicates or authorization boundary. `Checks.lean` exposes signatures and axiom profiles for the exported theorem, the actual A22/A18/A21 force-bearing theorems, and the predecessor public HC46 contract for the GCP capture.
+
+The predecessor is `full119-review-source-capsule-v1/lean/PvNP/RealizableHardness/ActualBinaryMatrixHC46OriginalExactInhabitant.lean`, SHA-256 `6F56EAF273DB3AA0C3BFD1C8525B36C2BF90B6851A270614EDBED1FB4C6F6C95`. The even-column equality occurs in the predecessor only in the rank-zero branch; the extracted positive-rank proof body does not use it.
