@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import runpy,sys;sys.path.insert(0,sys.argv[1]);import full119_authorized16_nested_custody_v3 as a;a.activate();p=sys.argv[2];sys.argv=sys.argv[2:];runpy.run_path(p,run_name="__main__")
+                                                                                                                                                        ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\run_full120_cache_recovery_v2.py", line 145, in <module>
+    main(sys.argv[1])
+    ~~~~^^^^^^^^^^^^^
+  File "C:\Users\dfred\.quantyra\reviews\openai-bridge-validation-20261007\scripts\research\openai-bridge-validation-20261007\run_full120_cache_recovery_v2.py", line 78, in main
+    assert __import__('shutil').disk_usage(ROOT).free >= 1803550720
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
