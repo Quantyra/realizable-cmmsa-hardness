@@ -1,0 +1,29 @@
+{
+  "checks": [
+    {
+      "test": "missing_actual_receipt",
+      "rejected": true,
+      "reason": "Pending 39-file cleanup has no actual authorized receipt"
+    },
+    {
+      "test": "wrong_complete_receipt_pin",
+      "rejected": true,
+      "reason": "Frozen document bytes changed"
+    },
+    {
+      "test": "unapproved_frozen_plan_is_not_receipt",
+      "rejected": true,
+      "reason": "Complete exact actual authorization and deletion receipt required"
+    },
+    {
+      "test": "outside_evidence_surface",
+      "rejected": true,
+      "reason": "Receipt must be retained on the evidence surface"
+    }
+  ],
+  "actual_authorization_assumed": false,
+  "actual_receipt_created": false,
+  "production_adapter_activated": false,
+  "receipt_mutation_and_retained_hash_positive_tests_pending_actual_receipt": true,
+  "cloud_operation": false
+}

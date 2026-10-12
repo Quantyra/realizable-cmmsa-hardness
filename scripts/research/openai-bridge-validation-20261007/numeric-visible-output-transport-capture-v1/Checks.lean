@@ -1,0 +1,5 @@
+import PvNP.RealizableHardness.ActualVisibleOutputTransport
+
+#print axioms PvNP.RealizableHardness.ActualVisibleOutputTransport.extensionMatchProbability_pushforward
+#print axioms PvNP.RealizableHardness.ActualVisibleOutputTransport.transported_visible_strategy_match_lower
+#print axioms PvNP.RealizableHardness.ActualVisibleOutputTransport.equivalent_visible_strategy_match_lower

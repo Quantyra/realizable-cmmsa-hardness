@@ -1,0 +1,64 @@
+{
+  "checks": [
+    {
+      "test": "all_three_new_archives_honest_one_copy",
+      "passed": true
+    },
+    {
+      "test": "approved14_and18_cumulative_truth_preserved",
+      "passed": true
+    },
+    {
+      "test": "missing_receipt",
+      "rejected": true,
+      "reason": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\dfred\\\\.quantyra\\\\reviews\\\\openai-bridge-validation-20261007\\\\scripts\\\\research\\\\openai-bridge-validation-20261007\\\\full118-authorized39-custody-tests-v2\\\\absent.json'"
+    },
+    {
+      "test": "changed_receipt_bytes_same_fields",
+      "rejected": true,
+      "reason": "Frozen document bytes changed"
+    },
+    {
+      "test": "unapproved_receipt",
+      "rejected": true,
+      "reason": "Complete exact actual authorization and deletion receipt required"
+    },
+    {
+      "test": "wrong_authorization",
+      "rejected": true,
+      "reason": "Complete exact actual authorization and deletion receipt required"
+    },
+    {
+      "test": "mismatched_removed_path",
+      "rejected": true,
+      "reason": "Receipt must cover exactly all frozen paths"
+    },
+    {
+      "test": "wrong_plan_pin",
+      "rejected": true,
+      "reason": "Complete exact actual authorization and deletion receipt required"
+    },
+    {
+      "test": "changed_complete_authorization_bytes",
+      "rejected": true,
+      "reason": "Frozen document bytes changed"
+    },
+    {
+      "test": "mismatched_retained_path",
+      "rejected": true,
+      "reason": "Exact current custody path and archive identities required"
+    },
+    {
+      "test": "changed_retained_archive_bytes_simulated_hash_only",
+      "rejected": true,
+      "reason": "Retained complete original archive bytes changed"
+    }
+  ],
+  "actual_receipt_sha256": "7DFB1421061A569CE498634C693D0FA81F5B33D7A7AD892D54FDB128B452A9A1",
+  "authorization_sha256": "71CC39AC43A564630C1D7178CE75BA068A1A5D7C69BE8FE21A94F93C71FE6E71",
+  "retained_archives_modified": false,
+  "fixture_documents_are_deliberately_invalid_derivatives": true,
+  "production_adapter_activated": false,
+  "cloud_operation": false,
+  "lean_executed": false
+}
