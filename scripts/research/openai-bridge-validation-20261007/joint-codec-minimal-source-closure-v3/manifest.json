@@ -1,0 +1,2686 @@
+{
+  "schema": "joint-codec-minimal-source-closure-v3",
+  "prior_failed_preparation": "joint-codec-minimal-source-closure-v2",
+  "prior_failure_qualification": "Compiler cache-name mapping error: public Defs and Vec were initially guessed Internal; all seven captured byte snapshots actually match unique pinned Git tree paths. Original bytes preserved.",
+  "source_only": true,
+  "compiler_invoked": false,
+  "local_Lean_or_Lake_invoked": false,
+  "accepted": false,
+  "compiler_admission": false,
+  "closure_complete_for_custom_OAI_and_complexitylib": true,
+  "external_import_modules": [
+    "Aesop.BuiltinRules",
+    "Mathlib",
+    "Mathlib.Algebra.BigOperators.Expect",
+    "Mathlib.Algebra.BigOperators.Fin",
+    "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+    "Mathlib.Algebra.BigOperators.Ring.Finset",
+    "Mathlib.Algebra.Order.BigOperators.Expect",
+    "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+    "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+    "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+    "Mathlib.Algebra.Order.Field.Basic",
+    "Mathlib.Algebra.Order.Field.Rat",
+    "Mathlib.Algebra.Polynomial.Degree.Defs",
+    "Mathlib.Algebra.Polynomial.Eval.Defs",
+    "Mathlib.Algebra.Polynomial.Eval.Degree",
+    "Mathlib.Algebra.Ring.GeomSum",
+    "Mathlib.Algebra.Ring.Parity",
+    "Mathlib.Analysis.Asymptotics.SpecificAsymptotics",
+    "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+    "Mathlib.Basic.Real.Basic",
+    "Mathlib.Computability.TuringMachine.Computable",
+    "Mathlib.Computability.TuringMachine.StackTuringMachine",
+    "Mathlib.Data.Fin.Tuple.Basic",
+    "Mathlib.Data.Fin.VecNotation",
+    "Mathlib.Data.Finset.Lattice.Fold",
+    "Mathlib.Data.Finset.Max",
+    "Mathlib.Data.Finset.Union",
+    "Mathlib.Data.Fintype.Basic",
+    "Mathlib.Data.Fintype.BigOperators",
+    "Mathlib.Data.Fintype.Option",
+    "Mathlib.Data.Fintype.Pi",
+    "Mathlib.Data.Fintype.Prod",
+    "Mathlib.Data.Fintype.Sets",
+    "Mathlib.Data.Fintype.Sum",
+    "Mathlib.Data.List.Basic",
+    "Mathlib.Data.List.Induction",
+    "Mathlib.Data.List.Infix",
+    "Mathlib.Data.List.MinMax",
+    "Mathlib.Data.Nat.Init",
+    "Mathlib.Data.Nat.Size",
+    "Mathlib.Data.Rat.Cast.Order",
+    "Mathlib.Data.Rat.Init",
+    "Mathlib.Logic.Equiv.Basic",
+    "Mathlib.Logic.Equiv.Fin.Basic",
+    "Mathlib.Tactic.Attr.Core",
+    "Mathlib.Tactic.Basic",
+    "Mathlib.Tactic.FieldSimp",
+    "Mathlib.Tactic.FinCases",
+    "Mathlib.Tactic.Linarith",
+    "Mathlib.Tactic.NormNum",
+    "Mathlib.Tactic.NormNum.Abs",
+    "Mathlib.Tactic.NormNum.DivMod",
+    "Mathlib.Tactic.NormNum.OfScientific",
+    "Mathlib.Tactic.NormNum.Pow",
+    "Mathlib.Tactic.Push",
+    "Mathlib.Tactic.Ring",
+    "Mathlib.Tactic.Ring.RingNF",
+    "Mathlib.Tactic.Widget.Calc",
+    "Std",
+    "Std.Tactic.BVDecide.Normalize.BitVec",
+    "Std.Tactic.BVDecide.Normalize.Prop"
+  ],
+  "external_package_resolution_and_Lean4341_mathlib_d13_compatibility_unverified": true,
+  "custom_module_count": 4,
+  "OAI_module_count": 20,
+  "complexitylib_module_count": 122,
+  "sources": [
+    {
+      "module": "LocalThreeSATBinaryCodec",
+      "file": "project/LocalThreeSATBinaryCodec.lean",
+      "bytes": 2696,
+      "sha256": "B8F38CE6B3DFD205CADE3DA1D7FE39D6D3AD0F7FA0B9E61B6DB98311740909F6",
+      "imports": [
+        "Complexitylib.SAT.Encoding"
+      ],
+      "kind": "exact immutable custom capture",
+      "capture_index_sha256": "30FC75F14821007D5545D18CC4B149E4B20503903C8903C6D06C2F313AB19C83",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v1\\LocalThreeSATBinaryCodec.lean"
+    },
+    {
+      "module": "LocalThreeSATBinaryCodecSemantics",
+      "file": "project/LocalThreeSATBinaryCodecSemantics.lean",
+      "bytes": 3631,
+      "sha256": "2330AE0858786272F55F4174C520DA27D10DEC0D75E1A1576687A54BF86BBA1B",
+      "imports": [
+        "LocalThreeSATBinaryCodec",
+        "Complexitylib.SAT.ThreeSAT"
+      ],
+      "kind": "exact immutable custom capture",
+      "capture_index_sha256": "A70C85A320C9085D1F266EECE6B28294E282468030C9F0E886A74F15AFDE2332",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v2\\LocalThreeSATBinaryCodecSemantics.lean"
+    },
+    {
+      "module": "LocalThreeSATBinaryCodecRuntime",
+      "file": "project/LocalThreeSATBinaryCodecRuntime.lean",
+      "bytes": 43268,
+      "sha256": "9D014AC23A501326B1DA7EC322BC0B86D5DFAF93E7868D2A11A735607318FAC0",
+      "imports": [
+        "LocalThreeSATBinaryCodec",
+        "LocalThreeSATBinaryCodecSemantics",
+        "Complexitylib.Classes.P.Cobham",
+        "Complexitylib.Classes.P.Cobham.Internal.Algebra",
+        "Complexitylib.Classes.P.Cobham.Internal.Reverse"
+      ],
+      "kind": "exact immutable custom capture",
+      "capture_index_sha256": "E07F1F446206050ACACD6D1C06B7E7AB4AAB648662FA2D39479E8F97AA2AABE0",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\LocalThreeSATBinaryCodecRuntime.lean"
+    },
+    {
+      "module": "LocalThreeSATBinaryCodecUpstream",
+      "file": "project/LocalThreeSATBinaryCodecUpstream.lean",
+      "bytes": 10089,
+      "sha256": "E1521AE310672E3572F4E58AFE88BEB9DBCD801878CB4E63DCF3D728254B7F7B",
+      "imports": [
+        "LocalThreeSATBinaryCodecRuntime",
+        "OAI.Computability.UniqueGames.Machines.MachineBinaryParsingLemmas"
+      ],
+      "kind": "exact immutable custom capture",
+      "capture_index_sha256": "E07F1F446206050ACACD6D1C06B7E7AB4AAB648662FA2D39479E8F97AA2AABE0",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\LocalThreeSATBinaryCodecUpstream.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Model",
+      "file": "project/OAI/Computability/UniqueGames/Model.lean",
+      "bytes": 8288,
+      "sha256": "7E320A904DB5C51EADCF4959604758DE2D6A7A37CA924E4897522B17D280F12D",
+      "imports": [
+        "Mathlib"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Model.lean",
+      "git_blob": "748ef33de28fd4154206ab82f501e72cdb7b439b",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Model.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Foundations.Basic",
+      "file": "project/OAI/Computability/UniqueGames/Foundations/Basic.lean",
+      "bytes": 7139,
+      "sha256": "7262859DF9DBB516E2281F865DBC14EACD938F02970309BC0FA99BF73569763F",
+      "imports": [
+        "Mathlib.Algebra.BigOperators.Ring.Finset",
+        "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+        "Mathlib.Data.Fintype.BigOperators",
+        "Mathlib.Basic.Real.Basic",
+        "Mathlib.Tactic.FieldSimp",
+        "Mathlib.Tactic.Linarith",
+        "Mathlib.Tactic.Ring"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Foundations/Basic.lean",
+      "git_blob": "f7758ced3cc9dcbabed2b44ddf2ca062d48a3f52",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Foundations\\Basic.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Foundations.Conditioning",
+      "file": "project/OAI/Computability/UniqueGames/Foundations/Conditioning.lean",
+      "bytes": 6912,
+      "sha256": "E4F81367DEDC6C23446E13544BA19D76FF98D54116D2C6E88D72CEB158DC2817",
+      "imports": [
+        "OAI.Computability.UniqueGames.Foundations.FiniteTrialsLemmas"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Foundations/Conditioning.lean",
+      "git_blob": "a9650b221300657daba387f9814a96dd862f4a7f",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Foundations\\Conditioning.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Foundations.FiniteTrialsLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Foundations/FiniteTrialsLemmas.lean",
+      "bytes": 32233,
+      "sha256": "3C0B5DF78E2D367AA948406B3ED62DB43E291BCAEC75F39D95B6ACB034A9A11B",
+      "imports": [
+        "Mathlib.Algebra.BigOperators.Fin",
+        "Mathlib.Algebra.BigOperators.Ring.Finset",
+        "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+        "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+        "Mathlib.Data.Fintype.Option",
+        "Mathlib.Data.Fintype.Pi",
+        "Mathlib.Data.Fintype.Prod",
+        "Mathlib.Basic.Real.Basic",
+        "OAI.Computability.UniqueGames.Foundations.Basic"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Foundations/FiniteTrialsLemmas.lean",
+      "git_blob": "2393b530e4a14edd8fbceeb7b29da2c3a9727bff",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Foundations\\FiniteTrialsLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Foundations.MixtureLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Foundations/MixtureLemmas.lean",
+      "bytes": 4510,
+      "sha256": "8846EAF14D4B72CE5A34DF72A9BC9453FCE9ED3E49E179346545F89D7CB1850F",
+      "imports": [
+        "Mathlib.Tactic.Linarith",
+        "OAI.Computability.UniqueGames.Foundations.FiniteTrialsLemmas"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Foundations/MixtureLemmas.lean",
+      "git_blob": "e4cb4a927ed8f70c21a543da10644374c1a0391d",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Foundations\\MixtureLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Foundations.PinskerLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Foundations/PinskerLemmas.lean",
+      "bytes": 25710,
+      "sha256": "BD75F8B1A67CB6282E154771B49E51C4A7A43F52A741DB099112301259848618",
+      "imports": [
+        "Mathlib.Data.Fintype.BigOperators",
+        "Mathlib.Data.Fintype.Pi",
+        "Std",
+        "OAI.Computability.UniqueGames.Foundations.SamplingLemmas",
+        "OAI.Computability.UniqueGames.Model"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Foundations/PinskerLemmas.lean",
+      "git_blob": "54508ccbc1d603bfecf8fdf5f2c05fa24311c8e8",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Foundations\\PinskerLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Foundations.SamplingLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Foundations/SamplingLemmas.lean",
+      "bytes": 34195,
+      "sha256": "42581CB9804813B0238B8A263348ED22CB5EBA582A80746AAEF3B19C3499EC41",
+      "imports": [
+        "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+        "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+        "Mathlib.Data.Fintype.BigOperators",
+        "Mathlib.Tactic.FieldSimp",
+        "Mathlib.Tactic.Linarith",
+        "Mathlib.Tactic.Ring",
+        "OAI.Computability.UniqueGames.Foundations.Conditioning",
+        "OAI.Computability.UniqueGames.Foundations.MixtureLemmas",
+        "OAI.Computability.UniqueGames.Foundations.ValueLemmas"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Foundations/SamplingLemmas.lean",
+      "git_blob": "7217dc529f8c0fed7ad32cdcea73761b2e9271dd",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Foundations\\SamplingLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Foundations.ValueLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Foundations/ValueLemmas.lean",
+      "bytes": 12869,
+      "sha256": "EE1BDC09884B1983572C3CC835802C1D131C157C8B42B9308C68327BCBD56BCC",
+      "imports": [
+        "Mathlib.Data.Finset.Max",
+        "Mathlib.Data.Fintype.BigOperators",
+        "OAI.Computability.UniqueGames.Foundations.FiniteTrialsLemmas"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Foundations/ValueLemmas.lean",
+      "git_blob": "ebd929b67bdb04b667114d6e6040986d943224c2",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Foundations\\ValueLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Machines.MachineBinaryFormulaLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Machines/MachineBinaryFormulaLemmas.lean",
+      "bytes": 22826,
+      "sha256": "E2C6855F3EEDA6C7CCAF9794C628EF132BCC1DE9E11CC1B724CA1C0AFC48A7BD",
+      "imports": [
+        "Mathlib.Data.Nat.Size",
+        "Mathlib.Tactic.Linarith",
+        "Mathlib.Tactic.Ring",
+        "OAI.Computability.UniqueGames.Model",
+        "OAI.Computability.UniqueGames.PCP.NameCompaction"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Machines/MachineBinaryFormulaLemmas.lean",
+      "git_blob": "13e121ac47490d00061a6f31b7d547653fe65f7b",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Machines\\MachineBinaryFormulaLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Machines.MachineBinaryNameMachine",
+      "file": "project/OAI/Computability/UniqueGames/Machines/MachineBinaryNameMachine.lean",
+      "bytes": 11751,
+      "sha256": "4F81AB9EF031584812D9F277FA4B19E41D27A76E8BFFE3FD3F9F32E42553626F",
+      "imports": [
+        "Mathlib.Data.List.Induction",
+        "OAI.Computability.UniqueGames.Machines.MachineCompare"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Machines/MachineBinaryNameMachine.lean",
+      "git_blob": "17200cded0c418f83238be1e12722a6886838574",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Machines\\MachineBinaryNameMachine.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Machines.MachineBinaryParsingLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Machines/MachineBinaryParsingLemmas.lean",
+      "bytes": 12107,
+      "sha256": "FD748296ADA3050ADCCD1C834F467B0A580330CB8C6CFBB461E53F1CF682F926",
+      "imports": [
+        "OAI.Computability.UniqueGames.Machines.MachineBinaryFormulaLemmas",
+        "OAI.Computability.UniqueGames.Machines.MachineBinaryNameMachine",
+        "OAI.Computability.UniqueGames.Model"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Machines/MachineBinaryParsingLemmas.lean",
+      "git_blob": "243f2f240b43c86cd5bea08518507166acf3d055",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Machines\\MachineBinaryParsingLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Machines.MachineCompare",
+      "file": "project/OAI/Computability/UniqueGames/Machines/MachineCompare.lean",
+      "bytes": 15984,
+      "sha256": "7CAD526D969B007FA7DA09F31C70E2533325D5B9ECAD1475F8BBA35ED6F97D6C",
+      "imports": [
+        "OAI.Computability.UniqueGames.Machines.MachineCompositionLemmas",
+        "OAI.Computability.UniqueGames.Reduction.MachineTransfer"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Machines/MachineCompare.lean",
+      "git_blob": "ab4147e2b195163a34c41433149ae0bedc17506e",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Machines\\MachineCompare.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Machines.MachineCompositionLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Machines/MachineCompositionLemmas.lean",
+      "bytes": 40392,
+      "sha256": "B16A9132FD6B15A0293FA01C0DD6E6533A72ED5036AFCF39CB7A8824D676FB8D",
+      "imports": [
+        "OAI.Computability.UniqueGames.Machines.MachineControlLemmas",
+        "OAI.Computability.UniqueGames.Machines.Runtime"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Machines/MachineCompositionLemmas.lean",
+      "git_blob": "09dc80c784f8164b0537ac62415fce170782fd57",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Machines\\MachineCompositionLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Machines.MachineControlLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Machines/MachineControlLemmas.lean",
+      "bytes": 16700,
+      "sha256": "93E8CF554C5E386D782156672B3408E6E179D7F7A51FF1E77C3FB98BCE2770A0",
+      "imports": [
+        "Mathlib.Computability.TuringMachine.StackTuringMachine",
+        "Mathlib.Logic.Equiv.Basic"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Machines/MachineControlLemmas.lean",
+      "git_blob": "c513d91c0258064c83c52bc6d13093269736e9c3",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Machines\\MachineControlLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Machines.MachineSubroutineLemmas",
+      "file": "project/OAI/Computability/UniqueGames/Machines/MachineSubroutineLemmas.lean",
+      "bytes": 34390,
+      "sha256": "ACE1CBE9976A3F632D197386CE9FA608DFFE52E7BBB6F6F5454E3FB8CA5CA457",
+      "imports": [
+        "OAI.Computability.UniqueGames.Foundations.PinskerLemmas",
+        "OAI.Computability.UniqueGames.Machines.MachineCompositionLemmas",
+        "OAI.Computability.UniqueGames.Model"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Machines/MachineSubroutineLemmas.lean",
+      "git_blob": "a90e223176d5c0c80d2f6338e4ddee8f60d0d4c0",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Machines\\MachineSubroutineLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Machines.Runtime",
+      "file": "project/OAI/Computability/UniqueGames/Machines/Runtime.lean",
+      "bytes": 8363,
+      "sha256": "A5D0DCA6226509FAACFBFD7B9E2DCF70AB8C4D5673F579F21615975E570E10B2",
+      "imports": [
+        "Mathlib.Computability.TuringMachine.Computable"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Machines/Runtime.lean",
+      "git_blob": "567be5f9a57b5d7f56c065d066f5ff414a9c3eb0",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Machines\\Runtime.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.PCP.ClauseVerifierLemmas",
+      "file": "project/OAI/Computability/UniqueGames/PCP/ClauseVerifierLemmas.lean",
+      "bytes": 31585,
+      "sha256": "9C61B413F43506D23ADE5719D66B8DF7A072D2C6E49EF95CCDE095DC3EA2DA5F",
+      "imports": [
+        "Mathlib.Logic.Equiv.Fin.Basic",
+        "OAI.Computability.UniqueGames.Foundations.PinskerLemmas",
+        "OAI.Computability.UniqueGames.PCP.SourceNoiseParameterLemmas"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/PCP/ClauseVerifierLemmas.lean",
+      "git_blob": "6440014003c0bc225383f1d4618f1cd0c508680e",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\PCP\\ClauseVerifierLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.PCP.NameCompaction",
+      "file": "project/OAI/Computability/UniqueGames/PCP/NameCompaction.lean",
+      "bytes": 11386,
+      "sha256": "8BADD7DE2E1E73AE25B2DB1C9386D2C4EADF7AB9CBD1D67A1D4E9B9B62DA4E1A",
+      "imports": [
+        "OAI.Computability.UniqueGames.Machines.MachineSubroutineLemmas",
+        "OAI.Computability.UniqueGames.PCP.ClauseVerifierLemmas"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/PCP/NameCompaction.lean",
+      "git_blob": "bae71ba5517e837be5a11dcc049b89da86f9ad66",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\PCP\\NameCompaction.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.PCP.SourceNoiseParameterLemmas",
+      "file": "project/OAI/Computability/UniqueGames/PCP/SourceNoiseParameterLemmas.lean",
+      "bytes": 32816,
+      "sha256": "933796BFE2BC95481DB5CDB7F6EEDC6F45F5FE4511CA01E28A9A9672BBB47CF7",
+      "imports": [
+        "Mathlib.Algebra.BigOperators.Expect",
+        "Mathlib.Algebra.Order.BigOperators.Expect",
+        "Mathlib.Algebra.Order.Field.Basic",
+        "Mathlib.Algebra.Order.Field.Rat",
+        "Mathlib.Algebra.Ring.GeomSum",
+        "Mathlib.Algebra.Ring.Parity",
+        "Mathlib.Basic.Real.Basic",
+        "Mathlib.Tactic.FieldSimp",
+        "Mathlib.Tactic.Linarith",
+        "Mathlib.Tactic.NormNum",
+        "Mathlib.Tactic.Ring"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/PCP/SourceNoiseParameterLemmas.lean",
+      "git_blob": "3dc0183fea9f3bb95f5ea3427f58b2ccd51c3fea",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\PCP\\SourceNoiseParameterLemmas.lean"
+    },
+    {
+      "module": "OAI.Computability.UniqueGames.Reduction.MachineTransfer",
+      "file": "project/OAI/Computability/UniqueGames/Reduction/MachineTransfer.lean",
+      "bytes": 14743,
+      "sha256": "0FFDCCAD4386ACCE883120B909399D1A6F5691C0F5A4BC255C3C429D340BA6BE",
+      "imports": [
+        "Mathlib.Computability.TuringMachine.Computable"
+      ],
+      "kind": "actual pinned OAI source",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/OAI/Computability/UniqueGames/Reduction/MachineTransfer.lean",
+      "git_blob": "fd59e2661ec1caf6cd5d9b5b5f060566372fa3e3",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-environment-source-plan-v1\\upstream-sources\\OAI\\Computability\\UniqueGames\\Reduction\\MachineTransfer.lean"
+    },
+    {
+      "module": "Complexitylib.SAT.Encoding",
+      "file": "project/Complexitylib/SAT/Encoding.lean",
+      "bytes": 13529,
+      "sha256": "91F0850A60A73ACD9D59735E98022E90908E1DA92016D8B1B7E1ECF9F6D8F116",
+      "imports": [
+        "Complexitylib.SAT.Semantics",
+        "Mathlib.Tactic.Ring.RingNF",
+        "Std.Tactic.BVDecide.Normalize.Prop"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/SAT/Encoding.lean",
+      "git_blob": "899bc18a229cd4421e5e916a1883fc8dd5acff56",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\SAT\\Encoding.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/SAT/Encoding.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.SAT.ThreeSAT",
+      "file": "project/Complexitylib/SAT/ThreeSAT.lean",
+      "bytes": 6601,
+      "sha256": "2AC675392479030D08EEFB9E289AB70B1D32C9F917E8D39AC4348B0AFC03FF86",
+      "imports": [
+        "Complexitylib.SAT.ThreeCNF",
+        "Complexitylib.SAT.Verifier"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/SAT/ThreeSAT.lean",
+      "git_blob": "78a5dd4251205ce77853dd088364b306085a39e3",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\SAT\\ThreeSAT.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/SAT/ThreeSAT.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham",
+      "file": "project/Complexitylib/Classes/P/Cobham.lean",
+      "bytes": 3992,
+      "sha256": "76C47180EB1440E2C04D6FA3243CD6596503CB0DF83C6C8313981F5A823CC36C",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Defs",
+        "Complexitylib.Classes.P.Cobham.Vec",
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Classes.P.Cobham.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham.lean",
+      "git_blob": "b3237d46700605ac2490d076bb29d42997e5e2bc",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\dependency.Cobham.source",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham.lean",
+      "transport": "existing byte-pinned capture"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Algebra",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Algebra.lean",
+      "bytes": 25518,
+      "sha256": "CDC9CDD18A76D3F5D9E38EF62127F06A9392DD2B61F2F7F1E9A80FB2E707B27B",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Blocks",
+        "Complexitylib.Classes.P.Cobham.Defs",
+        "Complexitylib.Encoding.Pairing",
+        "Mathlib.Data.Fin.VecNotation",
+        "Mathlib.Data.Fintype.Basic",
+        "Mathlib.Tactic.FinCases",
+        "Mathlib.Tactic.Ring"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Algebra.lean",
+      "git_blob": "c8a0c0291e25b4130a4920c38dea093486f99291",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\dependency.Cobham.Algebra.source",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Algebra.lean",
+      "transport": "existing byte-pinned capture"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Reverse",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Reverse.lean",
+      "bytes": 14077,
+      "sha256": "7C6456E02BD0047150D28316056D924B3D437C58FB2969CB982CA86ADB4A4AE6",
+      "imports": [
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Models.TuringMachine.Combinators",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Reverse.lean",
+      "git_blob": "2a309fd6886cd586d60765d14e4afab37836a915",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\dependency.Cobham.Reverse.source",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Reverse.lean",
+      "transport": "existing byte-pinned capture"
+    },
+    {
+      "module": "Complexitylib.SAT.Semantics",
+      "file": "project/Complexitylib/SAT/Semantics.lean",
+      "bytes": 18186,
+      "sha256": "0C488AB89F1E8098B209ADFAE9027CE73F36F1FB464C6FAEDB471DBADB170354",
+      "imports": [
+        "Mathlib.Data.Fintype.Pi",
+        "Mathlib.Data.Rat.Cast.Order",
+        "Mathlib.Tactic.NormNum.Abs",
+        "Mathlib.Tactic.NormNum.DivMod",
+        "Mathlib.Tactic.NormNum.OfScientific",
+        "Mathlib.Tactic.NormNum.Pow"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/SAT/Semantics.lean",
+      "git_blob": "92417cc2a4314c98be420fcd3342185292154e84",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\SAT\\Semantics.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/SAT/Semantics.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.SAT.ThreeCNF",
+      "file": "project/Complexitylib/SAT/ThreeCNF.lean",
+      "bytes": 4705,
+      "sha256": "3CB455A34CA9A248CB17D0E10208099F650469F6EA5EAD4E2DBE9C50ED53D9C4",
+      "imports": [
+        "Complexitylib.SAT.Rename",
+        "Std.Tactic.BVDecide.Normalize.Prop"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/SAT/ThreeCNF.lean",
+      "git_blob": "0c9ef54571dbc803af1e9623feeebb346297e766",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\SAT\\ThreeCNF.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/SAT/ThreeCNF.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.SAT.Verifier",
+      "file": "project/Complexitylib/SAT/Verifier.lean",
+      "bytes": 18688,
+      "sha256": "C6FB5E197A60CA98C9912BEECF9D0FD91A7880692AFCE0200252DE3893F62884",
+      "imports": [
+        "Complexitylib.SAT.Language",
+        "Std.Tactic.BVDecide.Normalize.BitVec"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/SAT/Verifier.lean",
+      "git_blob": "e8f5ddd3f6b68575d7214b04ed24f5abd9801c32",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\SAT\\Verifier.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/SAT/Verifier.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Defs",
+      "file": "project/Complexitylib/Classes/P/Cobham/Defs.lean",
+      "bytes": 6470,
+      "sha256": "F3C67A7633DC861C32E45FE1B96780B8AE77350E88ED4AECE5982E5C1DB30BE8",
+      "imports": [
+        "Mathlib.Data.Fin.Tuple.Basic"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Defs.lean",
+      "git_blob": "9378acc65a09c43dcc8450216b98882d7c2b18c4",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\dependency.Cobham.Defs.source",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Defs.lean",
+      "transport": "existing byte-pinned capture"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Vec",
+      "file": "project/Complexitylib/Classes/P/Cobham/Vec.lean",
+      "bytes": 4596,
+      "sha256": "EC6D03251FDB78FB59157FF48B314577B886486021808CD4691548882BF0441A",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Defs",
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Encoding.Pairing",
+        "Mathlib.Algebra.BigOperators.Group.Finset.Basic"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Vec.lean",
+      "git_blob": "018abd88dd10e03578ae681da4d8aa67bb3e7685",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\dependency.Cobham.Vec.source",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Vec.lean",
+      "transport": "existing byte-pinned capture"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Defs",
+      "file": "project/Complexitylib/Classes/P/Defs.lean",
+      "bytes": 1130,
+      "sha256": "629F44DEE10B3ABF9C668347EE1B77A3359571B594DD3F628D6D95C9DC69CC25",
+      "imports": [
+        "Complexitylib.Classes.Time",
+        "Complexitylib.Classes.Space"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Defs.lean",
+      "git_blob": "fff0f941c83370838622f1141da76f5bd4de98d6",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\P\\Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Defs.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal.lean",
+      "bytes": 56935,
+      "sha256": "7D6A5D381BD617830F07485A8C4AF20870C913A88A9AA0D6E93B235998A431B9",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Defs",
+        "Complexitylib.Classes.P.Cobham.Internal.FstBlock",
+        "Complexitylib.Classes.P.Cobham.Internal.SndBlock",
+        "Complexitylib.Classes.P.Cobham.Internal.Cat",
+        "Complexitylib.Classes.P.Cobham.Internal.ConsBit",
+        "Complexitylib.Classes.P.Cobham.Internal.Reorder",
+        "Complexitylib.Classes.P.Cobham.Internal.Vec",
+        "Complexitylib.Classes.P.Cobham.Internal.Algebra",
+        "Complexitylib.Classes.P.Cobham.Internal.PolyLen",
+        "Complexitylib.Classes.P.Cobham.Internal.StringOps",
+        "Complexitylib.Classes.P.Cobham.Internal.Encoding",
+        "Complexitylib.Classes.P.Cobham.Internal.StepAlgebra",
+        "Complexitylib.Classes.P.Cobham.Internal.Simulate",
+        "Complexitylib.Classes.P.Cobham.Internal.ChoiceSim",
+        "Complexitylib.Classes.P.Cobham.Internal.BlockLoop",
+        "Complexitylib.Classes.P.Cobham.Internal.IterateLayout",
+        "Complexitylib.Classes.P.Cobham.Internal.Iterate",
+        "Complexitylib.Classes.P.Cobham.Internal.TakeLen",
+        "Complexitylib.Classes.P.Cobham.Internal.Reverse",
+        "Complexitylib.Classes.P.UnaryLength",
+        "Complexitylib.Classes.P.Cobham.Internal.MulLen",
+        "Complexitylib.Classes.P.NormalForm",
+        "Complexitylib.Classes.P.Composition",
+        "Complexitylib.Classes.P.Cobham.Internal.HeadFlag",
+        "Complexitylib.Classes.P.PairWithInput"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal.lean",
+      "git_blob": "0fecbf14047d0d861a0adf240fbd817b679cc6a7",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\P\\Cobham\\Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Blocks",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Blocks.lean",
+      "bytes": 12804,
+      "sha256": "C6521B17AB33DE382053C05A066D1F1FDBEB6B99744EF1B56AB3BAFF3D1C6B46",
+      "imports": [
+        "Mathlib.Data.List.Basic"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Blocks.lean",
+      "git_blob": "11f7228d543ccb68ffc60c193240e06f0125c073",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\dependency.Cobham.Blocks.source",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Blocks.lean",
+      "transport": "existing byte-pinned capture"
+    },
+    {
+      "module": "Complexitylib.Encoding.Pairing",
+      "file": "project/Complexitylib/Encoding/Pairing.lean",
+      "bytes": 12405,
+      "sha256": "B798C48D67B7BF4EEB24A677751FBCE0A248F1284A693F409133BF7837BD97E4",
+      "imports": [
+        "Complexitylib.Encoding.Delimit",
+        "Mathlib.Data.Nat.Init",
+        "Aesop.BuiltinRules",
+        "Mathlib.Tactic.Attr.Core",
+        "Mathlib.Tactic.Basic",
+        "Mathlib.Tactic.Push",
+        "Mathlib.Tactic.Widget.Calc",
+        "Std.Tactic.BVDecide.Normalize.Prop"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Encoding/Pairing.lean",
+      "git_blob": "0d60299a389166027bdf16b40b130876cf1b356d",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Encoding\\Pairing.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Encoding/Pairing.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators.lean",
+      "bytes": 50612,
+      "sha256": "63EFF7B15117312F0215D512B9E12D2E53076325DF2085753AE1184C448A0A37",
+      "imports": [
+        "Complexitylib.Models.TuringMachine",
+        "Mathlib.Data.Fintype.Sum"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators.lean",
+      "git_blob": "42270fe6853477dad009f5f4cf6477e314fde8d8",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Models\\TuringMachine\\Combinators.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Tape.Encoding",
+      "file": "project/Complexitylib/Models/TuringMachine/Tape/Encoding.lean",
+      "bytes": 15929,
+      "sha256": "CAE5FBA3A2DDFC3D6303D64708EA4F21D98DF4FAD9E71D7B6218ADE58BAB6375",
+      "imports": [
+        "Complexitylib.Models.TuringMachine"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Tape/Encoding.lean",
+      "git_blob": "40575e6b5eade86f2c8cd161dcaefff9d91bc0a5",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Models\\TuringMachine\\Tape\\Encoding.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Tape/Encoding.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.SAT.Rename",
+      "file": "project/Complexitylib/SAT/Rename.lean",
+      "bytes": 8653,
+      "sha256": "DB04A77FC752A599A589A1EA12565D494A3FC9645BF475169E4C28784AE98523",
+      "imports": [
+        "Complexitylib.SAT.Semantics",
+        "Mathlib.Data.List.MinMax"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/SAT/Rename.lean",
+      "git_blob": "2284073a5ad3aa3680a49829b9989d41487cb58b",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\SAT\\Rename.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/SAT/Rename.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.SAT.Language",
+      "file": "project/Complexitylib/SAT/Language.lean",
+      "bytes": 8089,
+      "sha256": "36A5C20843D70CAF12613BC203F9514B4A6FFBACA9D575E56DCF7E201AB39467",
+      "imports": [
+        "Complexitylib.SAT.Encoding",
+        "Complexitylib.Classes.NP.Witness"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/SAT/Language.lean",
+      "git_blob": "8ff90d299eea1ac57fffdfcd9a6fb2ac75e68dda",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\SAT\\Language.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/SAT/Language.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.Time",
+      "file": "project/Complexitylib/Classes/Time.lean",
+      "bytes": 1997,
+      "sha256": "2C7F98667B32239733549F399BDD9C197E4C9A515E73874E6AE5829B4E71DC4A",
+      "imports": [
+        "Complexitylib.Models.TuringMachine",
+        "Complexitylib.Asymptotics"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/Time.lean",
+      "git_blob": "f5290fddee39808dd803ec2d21395fbed833a276",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\Time.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/Time.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.Space",
+      "file": "project/Complexitylib/Classes/Space.lean",
+      "bytes": 1421,
+      "sha256": "EFDED9F7FDF2A85ABBA41B0CCDCAA147E841FD2C2671F26E49F8CAF12DA1F357",
+      "imports": [
+        "Complexitylib.Models.TuringMachine",
+        "Complexitylib.Asymptotics"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/Space.lean",
+      "git_blob": "98c598f334d9753832c5b9bfcaad354b3fc28107",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\Space.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/Space.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.FstBlock",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/FstBlock.lean",
+      "bytes": 19092,
+      "sha256": "8BD1D9FF85FB75F98BAE614A36D87C2F57948067D2EE0B501E4337BBA9F32406",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.BlockScan",
+        "Complexitylib.Models.TuringMachine.Subroutines.Counter",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/FstBlock.lean",
+      "git_blob": "303078ec5513440a1eb984172c344abfbdc237cd",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\P\\Cobham\\Internal\\FstBlock.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/FstBlock.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.SndBlock",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/SndBlock.lean",
+      "bytes": 24175,
+      "sha256": "2A93488B2E7010AF01CA877D93B0F1E0D7A28D8EABC4AF2961F6B32F247592DB",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.BlockScan",
+        "Complexitylib.Models.TuringMachine.Subroutines.Counter",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/SndBlock.lean",
+      "git_blob": "f0fcdf295f8d57a4230d84c431789e2874cdf084",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\P\\Cobham\\Internal\\SndBlock.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/SndBlock.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Cat",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Cat.lean",
+      "bytes": 21195,
+      "sha256": "DF76E104A7FDB2968510AC7C8EFE4A338DCAD3D24227361E3BBF80B741C2806C",
+      "imports": [
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.Counter",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding",
+        "Complexitylib.Classes.P.Cobham.Internal.SndBlock"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Cat.lean",
+      "git_blob": "a4023987624664b8795e72c8dbec65f2c57d4564",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\P\\Cobham\\Internal\\Cat.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Cat.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.ConsBit",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/ConsBit.lean",
+      "bytes": 10183,
+      "sha256": "539D29A306B8AA8D5D1BAC025CBD8050DCF3A3C241ACE9F935A6795664FCB1DB",
+      "imports": [
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.Counter",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/ConsBit.lean",
+      "git_blob": "1b22e09b465e3690be260df3695b6b71ad7cf072",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\P\\Cobham\\Internal\\ConsBit.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/ConsBit.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Reorder",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Reorder.lean",
+      "bytes": 39456,
+      "sha256": "E112BD29F6833891910C461834D52A446208ED888CF2C16B1B1DDB6ACD70132B",
+      "imports": [
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.Counter",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding",
+        "Complexitylib.Classes.P.Cobham.Internal.SndBlock"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Reorder.lean",
+      "git_blob": "2d1f95e2a84564c87a711aa6b940502f7a208934",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\joint-codec-minimal-source-closure-v2\\project\\Complexitylib\\Classes\\P\\Cobham\\Internal\\Reorder.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Reorder.lean",
+      "transport": "prior source-only preparation; raw Git blob reverified"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Vec",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Vec.lean",
+      "bytes": 1512,
+      "sha256": "513DC23A685F60B51D53D7C4FAD06A318DE0563825E785C4302AD1488F6F09F1",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Vec",
+        "Complexitylib.Classes.P.FinsetDomain",
+        "Complexitylib.Classes.P.PairWithInput"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Vec.lean",
+      "git_blob": "1304eb85320adffd75e1664e2b074fffa22e3b80",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Vec.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Vec.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.PolyLen",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/PolyLen.lean",
+      "bytes": 3922,
+      "sha256": "B5FC5FB7FC74491223CFCAB320BB4F636C4B32802265D31B89A3A183EEA9917A",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Algebra",
+        "Mathlib.Algebra.Polynomial.Eval.Degree"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/PolyLen.lean",
+      "git_blob": "9eeb09dc02f2b79a49c871369ed9fc366b960c88",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/PolyLen.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/PolyLen.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.StringOps",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/StringOps.lean",
+      "bytes": 14538,
+      "sha256": "179EDACA26D54E39EE671ABAD17DEE0B1691DBC4420A43AF6DB333CE4B1BF686",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Algebra"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/StringOps.lean",
+      "git_blob": "6e41bb271e5c8a1b5174f2258e1aee41ad1a1ada",
+      "original": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\local-three-sat-binary-codec-capture-20261012-v6\\dependency.Cobham.StringOps.source",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/StringOps.lean",
+      "transport": "existing byte-pinned capture"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Encoding",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Encoding.lean",
+      "bytes": 44159,
+      "sha256": "993E86A699CED3238B077A8BEE0FCFF95BDF02DA119B88452678139E01201A58",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Blocks",
+        "Complexitylib.Models.TuringMachine",
+        "Complexitylib.Models.TuringMachine.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Encoding.lean",
+      "git_blob": "0c6d82c6f1bbf9cae72fe1ad36d710f4b83affef",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Encoding.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Encoding.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.StepAlgebra",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/StepAlgebra.lean",
+      "bytes": 35995,
+      "sha256": "78BFEE5C4444F3C27461C573F45DE22E50CB9806EED48BE5FC37EE44C9877268",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Algebra",
+        "Complexitylib.Classes.P.Cobham.Internal.Encoding",
+        "Mathlib.Data.Fintype.Prod"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/StepAlgebra.lean",
+      "git_blob": "2ee9b94608913ee0d478c23d8fc66bce57647388",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/StepAlgebra.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/StepAlgebra.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Simulate",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Simulate.lean",
+      "bytes": 23021,
+      "sha256": "B22281A99689CEC04DC6F8E5D68992ECCB9C00FCB0181072AE7D6E6B1117924C",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Extract",
+        "Complexitylib.Classes.P.Cobham.Internal.StepAlgebra",
+        "Complexitylib.Models.TuringMachine.OutputBounds",
+        "Complexitylib.Models.TuringMachine.OutputSemantics"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Simulate.lean",
+      "git_blob": "e0c816ee85b85bc8e23324cf75c25bc658172f04",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Simulate.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Simulate.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.ChoiceSim",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/ChoiceSim.lean",
+      "bytes": 27894,
+      "sha256": "63BA1BF220EC6A9E6E3C8BFEDE214BDE65C1B98DD48750806104A53237CDEA54",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Simulate",
+        "Complexitylib.Models.TuringMachine.ChoiceTape"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/ChoiceSim.lean",
+      "git_blob": "a6c3382fd704f31b1876a446aeff587c822c63c6",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/ChoiceSim.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/ChoiceSim.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.BlockLoop",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/BlockLoop.lean",
+      "bytes": 20601,
+      "sha256": "9AB32FD59EE4ABE11D7B740AD9717E96E0DE25CB67EFC2F1C124DBF830AE535D",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.ChoiceSim",
+        "Complexitylib.Classes.P.Cobham.Internal.PolyLen",
+        "Complexitylib.Classes.P.Cobham.Internal.StringOps"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/BlockLoop.lean",
+      "git_blob": "85c314c60ab4c0b5d54388963ad679b708234d4e",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/BlockLoop.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/BlockLoop.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.IterateLayout",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/IterateLayout.lean",
+      "bytes": 28281,
+      "sha256": "4AC571CEDB64342A2F332ED89E0B5D563D9679A659EDBCDBC010FB080DB21F19",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Apply",
+        "Complexitylib.Models.TuringMachine.Subroutines.CopyToVirtualInput"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/IterateLayout.lean",
+      "git_blob": "be5d2ff232b381ee1a4817c1f3a6d32752dc2ab2",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/IterateLayout.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/IterateLayout.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Iterate",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Iterate.lean",
+      "bytes": 50786,
+      "sha256": "8D4E15A4C2C9152BF643E047252D668C6A735C9CF575EF78D7E4E8349CAD77D6",
+      "imports": [
+        "Complexitylib.Asymptotics.PolyBound",
+        "Complexitylib.Classes.P.Cobham.Internal.IterateLayout",
+        "Complexitylib.Models.TuringMachine.Registers.Horner",
+        "Complexitylib.Models.TuringMachine.Registers.InputLen",
+        "Complexitylib.Models.TuringMachine.Subroutines.PairEmit",
+        "Complexitylib.Classes.P.NormalForm"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Iterate.lean",
+      "git_blob": "d1db1e377e9afa16d9638cd51198977b7ccb458d",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Iterate.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Iterate.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.TakeLen",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/TakeLen.lean",
+      "bytes": 29283,
+      "sha256": "E65E48F06DCE938DE56F1B968DFA34BD91E52EBAC20967CC815CBE7E4EC6C796",
+      "imports": [
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Encoding.Pairing",
+        "Complexitylib.Models.TuringMachine.Registers",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/TakeLen.lean",
+      "git_blob": "3dc211c98b4b72d900aef4c60a878bafd6c15726",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/TakeLen.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/TakeLen.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.UnaryLength",
+      "file": "project/Complexitylib/Classes/P/UnaryLength.lean",
+      "bytes": 625,
+      "sha256": "06F02E31893BD7619A55F223B425AF88A2CA0FB0B47425C835EC79DF799D7551",
+      "imports": [
+        "Complexitylib.Classes.P.UnaryLength.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/UnaryLength.lean",
+      "git_blob": "1afbde23e857616d90b8d6d81fd7f4e091eb9c09",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/UnaryLength.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/UnaryLength.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.MulLen",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/MulLen.lean",
+      "bytes": 33992,
+      "sha256": "DEC32238F6CC0DCD073D59C6CD665FCBA9656DE484A1BB528558EA5C134D5B00",
+      "imports": [
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Encoding.Pairing",
+        "Complexitylib.Models.TuringMachine.Registers",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/MulLen.lean",
+      "git_blob": "4bcd4caecea1a058cf1eb67031afa4de4a2740e0",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/MulLen.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/MulLen.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.NormalForm",
+      "file": "project/Complexitylib/Classes/P/NormalForm.lean",
+      "bytes": 1545,
+      "sha256": "E51294B994423969970B04E42D3D4D3A2461192F23601301FE2C60A3DBC38CE0",
+      "imports": [
+        "Complexitylib.Classes.P.Internal.NormalForm"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/NormalForm.lean",
+      "git_blob": "eaac3552dfb4cf02b9750ec723112b40c9c22e80",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/NormalForm.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/NormalForm.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Composition",
+      "file": "project/Complexitylib/Classes/P/Composition.lean",
+      "bytes": 657,
+      "sha256": "28928C547B4EFC8B3CF154A9EADFC308BDBD835A6592807EC39EEF9EA76C9298",
+      "imports": [
+        "Complexitylib.Classes.P.Internal.Composition"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Composition.lean",
+      "git_blob": "a285b2c1134fd441a4876e992fdb2e7208cfc7c0",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Composition.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Composition.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.HeadFlag",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/HeadFlag.lean",
+      "bytes": 6959,
+      "sha256": "FDABA261BCB5F336BBDEEB9EE6093AADCBEDE33CB3699FD5310CF787B1B6E8E0",
+      "imports": [
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/HeadFlag.lean",
+      "git_blob": "25436557a711a5781cb5caec3cd79a6973a930ea",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/HeadFlag.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/HeadFlag.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.PairWithInput",
+      "file": "project/Complexitylib/Classes/P/PairWithInput.lean",
+      "bytes": 709,
+      "sha256": "55DDB9EA3A62DA705D57B83773C2FA5E600A1CCD1AE0A8EE2E78E135BA989BCE",
+      "imports": [
+        "Complexitylib.Classes.P.PairWithInput.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/PairWithInput.lean",
+      "git_blob": "b167d13cd8a22a28707f1565de9b80b00ecf2ce2",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/PairWithInput.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/PairWithInput.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Encoding.Delimit",
+      "file": "project/Complexitylib/Encoding/Delimit.lean",
+      "bytes": 9014,
+      "sha256": "B4CAD2002E89972486BAEE676E794FC6A0DCF20929855C0202DE2DB05F644B06",
+      "imports": [
+        "Mathlib.Data.List.Basic",
+        "Mathlib.Data.Nat.Init",
+        "Aesop.BuiltinRules",
+        "Mathlib.Tactic.Attr.Core",
+        "Mathlib.Tactic.Basic",
+        "Mathlib.Tactic.Push",
+        "Mathlib.Tactic.Widget.Calc",
+        "Std.Tactic.BVDecide.Normalize.Prop"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Encoding/Delimit.lean",
+      "git_blob": "45a5f5424160e1a27e92750ec59b003a68332a07",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Encoding/Delimit.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Encoding/Delimit.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine",
+      "file": "project/Complexitylib/Models/TuringMachine.lean",
+      "bytes": 40367,
+      "sha256": "F424FBA4A35B53C7B0D0144DF4DB145B7E3BCCA31F882AE8294C14A35618125E",
+      "imports": [
+        "Mathlib.Data.Fintype.Pi",
+        "Mathlib.Data.Rat.Init",
+        "Std.Tactic.BVDecide.Normalize.Prop"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine.lean",
+      "git_blob": "6110e8f0ceed3a7de174c9cef306b47624fcfc74",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.NP.Witness",
+      "file": "project/Complexitylib/Classes/NP/Witness.lean",
+      "bytes": 7579,
+      "sha256": "985C0B2A13A4D63459A5794D08A4BE387A21E53074330DF2CA199FFA45380735",
+      "imports": [
+        "Complexitylib.Classes.NP",
+        "Complexitylib.Classes.FNP.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/NP/Witness.lean",
+      "git_blob": "313c7ece45e39f764bcad2e99e5e313a162cbd13",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/NP/Witness.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/NP/Witness.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Asymptotics",
+      "file": "project/Complexitylib/Asymptotics.lean",
+      "bytes": 21894,
+      "sha256": "4FFDD82CC49188DC76B149F1521FC3D5A3E8D5B5E1E28C19BBF7D03068245566",
+      "imports": [
+        "Mathlib.Analysis.Asymptotics.SpecificAsymptotics",
+        "Mathlib.Data.Nat.Size",
+        "Mathlib.Algebra.Polynomial.Degree.Defs",
+        "Mathlib.Algebra.Polynomial.Eval.Degree"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Asymptotics.lean",
+      "git_blob": "f32972de5434b650d14fee2b3d564a79e8125725",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Asymptotics.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Asymptotics.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.BlockScan",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/BlockScan.lean",
+      "bytes": 1707,
+      "sha256": "8183C75505706BB0E3CD4EE6920284FB0B114B5D5525961D2453CF68817C716E",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Vec"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/BlockScan.lean",
+      "git_blob": "25463086677e9e9806bff7d642cfb48fc2696ce0",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/BlockScan.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/BlockScan.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.Counter",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/Counter.lean",
+      "bytes": 62820,
+      "sha256": "A2C2A9696DE2EACD50D776398F40ADD9D95D7C21AA9C9DFB30C01F011B5CFECC",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+        "Complexitylib.Models.TuringMachine.Hoare.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/Counter.lean",
+      "git_blob": "26923a18bc06536d5ab1a883cc41ae916c6a942c",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/Counter.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/Counter.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.FinsetDomain",
+      "file": "project/Complexitylib/Classes/P/FinsetDomain.lean",
+      "bytes": 1562,
+      "sha256": "AF596F954155650E6A9890DBED806047D26234457F0F82A2C874EAB3013EB842",
+      "imports": [
+        "Complexitylib.Classes.P.FinsetDomain.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/FinsetDomain.lean",
+      "git_blob": "2cbf71489da065d3f549d9b9151935e52bce5014",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/FinsetDomain.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/FinsetDomain.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Internal.lean",
+      "bytes": 29329,
+      "sha256": "526E62E0AF216FBBAA3FC4CFD3C19CE0EF922F1074B5FF07DABB65206D858BAD",
+      "imports": [
+        "Complexitylib.Models.TuringMachine",
+        "Mathlib.Data.Finset.Lattice.Fold"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Internal.lean",
+      "git_blob": "f3970dda40087877ee774bf4f6b103477567b2f9",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Cobham.Internal.Extract",
+      "file": "project/Complexitylib/Classes/P/Cobham/Internal/Extract.lean",
+      "bytes": 10310,
+      "sha256": "5B59BE991D070EDE23CF941606AC90EC43175C8F7FCA78B3B5E9489C27D6E001",
+      "imports": [
+        "Complexitylib.Classes.P.Cobham.Internal.Blocks",
+        "Complexitylib.Classes.P.Cobham.Internal.Algebra"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Cobham/Internal/Extract.lean",
+      "git_blob": "12fd4879f25918a14d5d6792c7b7b8bbe99e8ccf",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Extract.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Cobham/Internal/Extract.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.OutputBounds",
+      "file": "project/Complexitylib/Models/TuringMachine/OutputBounds.lean",
+      "bytes": 1887,
+      "sha256": "4FCC5AC8421E0D8B92BBCB28F055B926D9A90FD1C687EE8534F61713180E5BA5",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Internal.OutputBounds"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/OutputBounds.lean",
+      "git_blob": "7398ae6cf4eda60a819aa654f46a580a1b3ed90a",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/OutputBounds.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/OutputBounds.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.OutputSemantics",
+      "file": "project/Complexitylib/Models/TuringMachine/OutputSemantics.lean",
+      "bytes": 11120,
+      "sha256": "E445C42E6796DAC1A56D5DFE65D4B9E305827A36E6EE31C5CFC106A409B628AB",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.OutputSemantics.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/OutputSemantics.lean",
+      "git_blob": "6e765042d1b096e4ec74b4c533650712a59a7343",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/OutputSemantics.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/OutputSemantics.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.ChoiceTape",
+      "file": "project/Complexitylib/Models/TuringMachine/ChoiceTape.lean",
+      "bytes": 7135,
+      "sha256": "6ACB5BAFC393B7FEF261060C2D27C06A5BEA6D9D9F1E91A05FFD1BBE79E5B2D2",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/ChoiceTape.lean",
+      "git_blob": "daaea56d23f7d8a801b75d2f6f67ad7352eb3280",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/ChoiceTape.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/ChoiceTape.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Apply",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Apply.lean",
+      "bytes": 7870,
+      "sha256": "F079EF951B4D3514DF6FA1008302B114E0B643D4E4E71476EABC42A764E459F0",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute",
+        "Complexitylib.Models.TuringMachine.Frame",
+        "Complexitylib.Models.TuringMachine.Hoare.RetargetOutput"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Apply.lean",
+      "git_blob": "211e2236be3bce6626ee16878c00d7bfa6b5e964",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Apply.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Apply.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.CopyToVirtualInput",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/CopyToVirtualInput.lean",
+      "bytes": 9905,
+      "sha256": "E758D63EFB0B550A58B82BF8C8FE75661529D1F02350EB89DE59C8110D30B346",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines.CopyWorkOutput",
+        "Complexitylib.Models.TuringMachine.Subroutines.ResetTapes"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/CopyToVirtualInput.lean",
+      "git_blob": "fe9d2e6bd6f84a9567ef32d74cb3367290e4860c",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/CopyToVirtualInput.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/CopyToVirtualInput.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Asymptotics.PolyBound",
+      "file": "project/Complexitylib/Asymptotics/PolyBound.lean",
+      "bytes": 3965,
+      "sha256": "E64F5EDBF515120D3D63A6C6F5E082CA0F32B6439D9278D37C51E7A3CB9F6AC3",
+      "imports": [
+        "Complexitylib.Asymptotics"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Asymptotics/PolyBound.lean",
+      "git_blob": "32f9852444cac19dc9ce539c19c74d3f50b82908",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Asymptotics/PolyBound.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Asymptotics/PolyBound.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Registers.Horner",
+      "file": "project/Complexitylib/Models/TuringMachine/Registers/Horner.lean",
+      "bytes": 29259,
+      "sha256": "E4305088A57F93DE884E428A9A94661CFCF9C2495C70F767C1987036D649A6E3",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers.EmitSeq",
+        "Mathlib.Algebra.Polynomial.Eval.Defs",
+        "Mathlib.Algebra.Polynomial.Eval.Degree",
+        "Complexitylib.Models.TuringMachine.Registers.Arith"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Registers/Horner.lean",
+      "git_blob": "ec90be7e19d633a23ea305fa64f84c0acae5d749",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/Horner.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/Horner.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Registers.InputLen",
+      "file": "project/Complexitylib/Models/TuringMachine/Registers/InputLen.lean",
+      "bytes": 20363,
+      "sha256": "9713AD79A5F463B802D4590EEFE8E0303E4C6A477887D6659BE6E0053A80749D",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers.RegisterOps"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Registers/InputLen.lean",
+      "git_blob": "6ae1595992a7602f6010b1b8513798bd5c957f3a",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/InputLen.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/InputLen.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.PairEmit",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/PairEmit.lean",
+      "bytes": 2826,
+      "sha256": "ABE481501B235D4BF35D5067874BD88D73688FEDE64E4ECA5231703FFB1CF94B",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines.PairEmit.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.PairEmit.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/PairEmit.lean",
+      "git_blob": "1c1a90c677757a8926d609856267fb9b54244d30",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/PairEmit.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/PairEmit.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Registers",
+      "file": "project/Complexitylib/Models/TuringMachine/Registers.lean",
+      "bytes": 10314,
+      "sha256": "F4AB67018B020B5659298711CF7D20E74877EF797DE37E1CD6FED8639023176C",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines.Counter"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Registers.lean",
+      "git_blob": "c28f9465ee8d0250bf2340459724b7c702144df4",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.UnaryLength.Internal",
+      "file": "project/Complexitylib/Classes/P/UnaryLength/Internal.lean",
+      "bytes": 854,
+      "sha256": "2931DF4F396D346B665A5CF1AFF16AAE058C3D3097E81B44E5B900067D4FCA4F",
+      "imports": [
+        "Complexitylib.Classes.P.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.UnaryLength"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/UnaryLength/Internal.lean",
+      "git_blob": "2c56cc2f38acd9ce70fa26857ce27b5fe6e84b64",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/UnaryLength/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/UnaryLength/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Internal.NormalForm",
+      "file": "project/Complexitylib/Classes/P/Internal/NormalForm.lean",
+      "bytes": 1897,
+      "sha256": "BF3B84205ED7F8A667B2D05BA537076B0F7CC3E6C1842F8753A9409E78D74682",
+      "imports": [
+        "Complexitylib.Classes.P.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Internal/NormalForm.lean",
+      "git_blob": "3cbbd343d15fff7165e66fbb48d1d203496b6ee2",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Internal/NormalForm.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Internal/NormalForm.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.Internal.Composition",
+      "file": "project/Complexitylib/Classes/P/Internal/Composition.lean",
+      "bytes": 1401,
+      "sha256": "DC78825BE40D3151D3FEFEED47CA0F019F4FFBCBCAE079E8C8F38A2B88B22A82",
+      "imports": [
+        "Complexitylib.Asymptotics.PolynomialComposition",
+        "Complexitylib.Classes.P.Internal.NormalForm",
+        "Complexitylib.Models.TuringMachine.Composition"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/Internal/Composition.lean",
+      "git_blob": "60f288cad06210da4916a3e45a5779b1b50b6193",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Internal/Composition.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/Internal/Composition.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines.lean",
+      "bytes": 20585,
+      "sha256": "E6E36898E53B82A451136C1B3458F9F5895AA99C20475EC8905F4F6FB16FC433",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines.lean",
+      "git_blob": "4b2f2786abf7f2586b52c39ab57e360a491f2dfa",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.PairWithInput.Internal",
+      "file": "project/Complexitylib/Classes/P/PairWithInput/Internal.lean",
+      "bytes": 1113,
+      "sha256": "9EDAAD6664FB07A1F16207B7B572639C82036BA5D4BD6DA723A791DC11552F52",
+      "imports": [
+        "Complexitylib.Classes.P.Internal.NormalForm",
+        "Complexitylib.Models.TuringMachine.Composition.PairWithInput"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/PairWithInput/Internal.lean",
+      "git_blob": "b315d60bdd6c692c1825aac5c2ca2847d1ecbcb5",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/PairWithInput/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/PairWithInput/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.NP",
+      "file": "project/Complexitylib/Classes/NP.lean",
+      "bytes": 1029,
+      "sha256": "3A95E8DF47665CE82D2F854C2243FD3BF80EB7251A19AB9B0FA9D46AF71EEA47",
+      "imports": [
+        "Complexitylib.Classes.Time",
+        "Complexitylib.Classes.Space"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/NP.lean",
+      "git_blob": "9e9a69484da52f5ca58a6b308d2bcd8e0307e0d3",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/NP.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/NP.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.FNP.Defs",
+      "file": "project/Complexitylib/Classes/FNP/Defs.lean",
+      "bytes": 1449,
+      "sha256": "F995F021FA77BB75881DCB8ABBE35218E0BF4EB59E5BBC521E3EA063BE4CFBFB",
+      "imports": [
+        "Complexitylib.Classes.Pairing",
+        "Complexitylib.Classes.P.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/FNP/Defs.lean",
+      "git_blob": "c74147f959bf3fbf49d669a79d61cbe8e5377689",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/FNP/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/FNP/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal/Generic.lean",
+      "bytes": 18154,
+      "sha256": "C314A2D87C6040FC4E3923757C98C9D966D7B8BF237C1C03D63A6F8D91B80D1B",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal/Generic.lean",
+      "git_blob": "38fc6894ab5db3caa11697a14be18f66a40a1c14",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Generic.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Generic.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Hoare.Defs",
+      "file": "project/Complexitylib/Models/TuringMachine/Hoare/Defs.lean",
+      "bytes": 14239,
+      "sha256": "CA8688AFC0ABCDF85985B44A446C54942EF74E09D911A04175CDBD259670854D",
+      "imports": [
+        "Complexitylib.Models.TuringMachine",
+        "Complexitylib.Models.TuringMachine.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Hoare/Defs.lean",
+      "git_blob": "f0a704f01231b02821e743aee568b6c79e63c332",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Hoare/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Hoare/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.P.FinsetDomain.Internal",
+      "file": "project/Complexitylib/Classes/P/FinsetDomain/Internal.lean",
+      "bytes": 22318,
+      "sha256": "03EA2008474E8BCA70EF18AF3647310C03BBBC10E8656BFBE39FF9131C59F7B4",
+      "imports": [
+        "Mathlib.Data.Fintype.Sets",
+        "Mathlib.Data.Fintype.Option",
+        "Mathlib.Data.Finset.Lattice.Fold",
+        "Complexitylib.Mathlib.FinsetPrefixes",
+        "Complexitylib.Classes.P.NormalForm",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding",
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/P/FinsetDomain/Internal.lean",
+      "git_blob": "d41d1a79c0eb4f03369c600e9567655e727cc562",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/FinsetDomain/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/P/FinsetDomain/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Internal.OutputBounds",
+      "file": "project/Complexitylib/Models/TuringMachine/Internal/OutputBounds.lean",
+      "bytes": 3472,
+      "sha256": "B91E6EFACB8BFCC336249F2EEC7C6DCB3ECEE611A8CE83584BB10376B1512E9E",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Internal/OutputBounds.lean",
+      "git_blob": "fceabfe6e4ff4a053a2de0d02b354be5cf4fb80a",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Internal/OutputBounds.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Internal/OutputBounds.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.OutputSemantics.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/OutputSemantics/Internal.lean",
+      "bytes": 16207,
+      "sha256": "585DD4A8FB5EBD0AA3E5FD245805A87D9F951B84366BE6F1520A585D96D24DD7",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Internal",
+        "Complexitylib.Models.TuringMachine.OutputSemantics.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/OutputSemantics/Internal.lean",
+      "git_blob": "5640ba3bf73240c42c4ec860775e6a5d5b28f913",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/OutputSemantics/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/OutputSemantics/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute.lean",
+      "bytes": 7673,
+      "sha256": "26DE05B0EA19E84225815D673A211F71A2061E018CCA899E8FA53EE92D0A4724",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute.Defs",
+        "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/RetargetCompute.lean",
+      "git_blob": "ab935f356a862395988c42da795437eed58afd6e",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Frame",
+      "file": "project/Complexitylib/Models/TuringMachine/Frame.lean",
+      "bytes": 10690,
+      "sha256": "3E372B84A3EC0F87E89265F91A6C9BBD36C72D900550CC3D0A6E9490B65774AD",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Internal",
+        "Complexitylib.Models.TuringMachine.Hoare",
+        "Complexitylib.Models.TuringMachine.Internal",
+        "Complexitylib.Models.TuringMachine.Placement",
+        "Complexitylib.Models.TuringMachine.Registers"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Frame.lean",
+      "git_blob": "d4816a0ff6d53b53a02ea063c17779bf3bde9bf3",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Frame.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Frame.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Hoare.RetargetOutput",
+      "file": "project/Complexitylib/Models/TuringMachine/Hoare/RetargetOutput.lean",
+      "bytes": 2424,
+      "sha256": "7F7C1479C8698B636C7520E6F0C4B2538523D4C8E870C44FCD7414B97FBBCE3C",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Hoare.Defs",
+        "Complexitylib.Models.TuringMachine.Lift"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Hoare/RetargetOutput.lean",
+      "git_blob": "2cd2dcb6350e48001a065ed78fbab535410a5b57",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Hoare/RetargetOutput.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Hoare/RetargetOutput.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.CopyWorkOutput",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/CopyWorkOutput.lean",
+      "bytes": 4219,
+      "sha256": "4A86E7DCBF8DD7DBE902E459695F185F005007131AE586B151EBF770DCF2106D",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines.Internal.CopyWorkOutput"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/CopyWorkOutput.lean",
+      "git_blob": "44ebd42a21bd7edbb306f1b37ce5d4724e54d8fb",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/CopyWorkOutput.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/CopyWorkOutput.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.ResetTapes",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/ResetTapes.lean",
+      "bytes": 14968,
+      "sha256": "ECF0A66BE5F231B453705D457E7DB7357DEE3A0727839242332010AEAB41F906",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines.RewindList",
+        "Complexitylib.Models.TuringMachine.Subroutines.WipeLoop"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/ResetTapes.lean",
+      "git_blob": "84bb4d098be225d4854e8bfa3d89e26dbbb2db46",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/ResetTapes.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/ResetTapes.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Registers.EmitSeq",
+      "file": "project/Complexitylib/Models/TuringMachine/Registers/EmitSeq.lean",
+      "bytes": 2433,
+      "sha256": "B6D17BB51ACA844D90A1D6D7F1101C4F3AB70FE27DA0DD80A25D8BF8B6AB3DD5",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers.RegisterOps"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Registers/EmitSeq.lean",
+      "git_blob": "8af16247497fc43924a6352da238648255d729e1",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/EmitSeq.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/EmitSeq.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Registers.Arith",
+      "file": "project/Complexitylib/Models/TuringMachine/Registers/Arith.lean",
+      "bytes": 13118,
+      "sha256": "D5BB3216BEDF71C65FC944C1B78261E7512E68E19CF6D22CC5EA0BABFBCC46FE",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers.ForReg",
+        "Complexitylib.Models.TuringMachine.Registers.RegisterOps"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Registers/Arith.lean",
+      "git_blob": "23e2a2581115b3f85a3fc937ba025742c198618c",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/Arith.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/Arith.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Registers.RegisterOps",
+      "file": "project/Complexitylib/Models/TuringMachine/Registers/RegisterOps.lean",
+      "bytes": 42196,
+      "sha256": "AB23ACB265A830B84F2BF6EB5190224E7AA0E969704B792C1E1EEAF913F8EDCD",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers.Emit"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Registers/RegisterOps.lean",
+      "git_blob": "a38d47e07598c120d953c8666a3bf0d42f724e5a",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/RegisterOps.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/RegisterOps.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.PairEmit.Defs",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/PairEmit/Defs.lean",
+      "bytes": 5107,
+      "sha256": "BBCD3B6CE04E57BB572D6504074DAC87452F6C0D383DA69FB3D66E0656EF1F77",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/PairEmit/Defs.lean",
+      "git_blob": "8a69018bd87c66df9fd0c2b03cfb429c622518f8",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/PairEmit/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/PairEmit/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.PairEmit.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/PairEmit/Internal.lean",
+      "bytes": 17092,
+      "sha256": "3AE2380E1909C161062D26BB25DF4C234A7B40C13145CE55F14B95A1FA48694B",
+      "imports": [
+        "Complexitylib.Encoding.Pairing",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+        "Complexitylib.Models.TuringMachine.Hoare.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.PairEmit.Defs",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/PairEmit/Internal.lean",
+      "git_blob": "b77f50d20188e62f2cd4c6adec394c72e5c76908",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/PairEmit/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/PairEmit/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.UnaryLength",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength.lean",
+      "bytes": 1027,
+      "sha256": "AE39548749DF1348CA10516EE299632F8FECAB2196EEAACFBA71DBF408B2F2C7",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines.UnaryLength.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.UnaryLength.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/UnaryLength.lean",
+      "git_blob": "543c66580ba5c1212b6ee4e6c1e480f6d317b320",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Asymptotics.PolynomialComposition",
+      "file": "project/Complexitylib/Asymptotics/PolynomialComposition.lean",
+      "bytes": 1549,
+      "sha256": "15820D2E386922D89200CBF83115F507DCC22EB1ED07272D6C5B1E2A429B92F6",
+      "imports": [
+        "Complexitylib.Asymptotics"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Asymptotics/PolynomialComposition.lean",
+      "git_blob": "194107f3db43363aa4005b6ef8cd5c36674f81b3",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Asymptotics/PolynomialComposition.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Asymptotics/PolynomialComposition.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Composition",
+      "file": "project/Complexitylib/Models/TuringMachine/Composition.lean",
+      "bytes": 2156,
+      "sha256": "4C8879CDD3652DD69151A8DCB7A62A3F8A16910541E5EE76CD496C6CB2DD4CD4",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Composition.Defs",
+        "Complexitylib.Models.TuringMachine.Composition.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Composition.lean",
+      "git_blob": "042dd90648562654b2e57dea0af3efdf62c96f8e",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Composition.PairWithInput",
+      "file": "project/Complexitylib/Models/TuringMachine/Composition/PairWithInput.lean",
+      "bytes": 1238,
+      "sha256": "A60FCC6D9FCC35E430699AE158F04E383938CCEE507B64EBD52059D85C9FA116",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Composition.PairWithInput.Defs",
+        "Complexitylib.Models.TuringMachine.Composition.PairWithInput.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Composition/PairWithInput.lean",
+      "git_blob": "9475e15a24fefc6b91fd305fb81ce4d37fa8e0cd",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/PairWithInput.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/PairWithInput.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Classes.Pairing",
+      "file": "project/Complexitylib/Classes/Pairing.lean",
+      "bytes": 1517,
+      "sha256": "DEFA138E7F0578387527A363DF7D5C96BB2A62C8EFBAAD45AD66E073B75704A0",
+      "imports": [
+        "Complexitylib.Encoding.Pairing",
+        "Complexitylib.Models.TuringMachine",
+        "Mathlib.Algebra.Polynomial.Eval.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Classes/Pairing.lean",
+      "git_blob": "88cce7816010e0791369f0326eca91108559baa7",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/Pairing.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Classes/Pairing.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Mathlib.FinsetPrefixes",
+      "file": "project/Complexitylib/Mathlib/FinsetPrefixes.lean",
+      "bytes": 2612,
+      "sha256": "31B35C7D4CEA61B61826F25790E18B7AC708B9E846A9AF33124AEF059AA8DBE5",
+      "imports": [
+        "Mathlib.Data.Finset.Union",
+        "Mathlib.Data.List.Infix"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Mathlib/FinsetPrefixes.lean",
+      "git_blob": "96ca3e9bd60f607b46c4b6760a1e59c8ac3f9a9c",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Mathlib/FinsetPrefixes.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Mathlib/FinsetPrefixes.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.OutputSemantics.Defs",
+      "file": "project/Complexitylib/Models/TuringMachine/OutputSemantics/Defs.lean",
+      "bytes": 2618,
+      "sha256": "D7AEB7075BC0ADDD5ADA02CB267BA4B379AA58775AB7D1A5440F3BA02D3B4951",
+      "imports": [
+        "Complexitylib.Models.TuringMachine"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/OutputSemantics/Defs.lean",
+      "git_blob": "f138557a3ec291b697453e654b8998384db37a88",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/OutputSemantics/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/OutputSemantics/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute.Defs",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute/Defs.lean",
+      "bytes": 3483,
+      "sha256": "CDEAA6FAF3F656F18DEE9255F6A2C6F999A682DE84BCEAAA023FC58842FBA462",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/RetargetCompute/Defs.lean",
+      "git_blob": "e9597f77485768ad57911ba341cc9c8bca616290",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute/Internal.lean",
+      "bytes": 12875,
+      "sha256": "28238734DF71C8D3C32217E3B0858555083570F2DDEF46E017167EB81F5C7E7C",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute.Defs",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Retarget",
+        "Complexitylib.Models.TuringMachine.Placement.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/RetargetCompute/Internal.lean",
+      "git_blob": "d04904c929bcc1b602a55df72bd3ab3deb2f35c7",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/RetargetCompute/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal.lean",
+      "bytes": 1159,
+      "sha256": "8BB2502E9AD5160989A765C4D23362F93B10C2CFF6B389E9BA06E0683D981EEB",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Complement",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Seq",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.If",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Loop",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Retarget",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Scanner",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Union"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal.lean",
+      "git_blob": "3661f7e4dd90400f62859190b4c6c2f0ea6cc409",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Hoare",
+      "file": "project/Complexitylib/Models/TuringMachine/Hoare.lean",
+      "bytes": 20644,
+      "sha256": "B737883CE3CF2DDF9639016B33714D65B17F1D0AD9C3AFA1A8472AFEEB649C99",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Hoare.Defs",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Seq",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.If",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Complement"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Hoare.lean",
+      "git_blob": "f81277732384b2d6935e1adede5ce7d7a3c8cac8",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Hoare.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Hoare.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Placement",
+      "file": "project/Complexitylib/Models/TuringMachine/Placement.lean",
+      "bytes": 6576,
+      "sha256": "2A1C6CFEF4B5BD645A33E26E76C14DEBEDC0AF4ECD98581D62ADF13BF8265F46",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Placement.Defs",
+        "Complexitylib.Models.TuringMachine.Placement.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Placement.lean",
+      "git_blob": "9fc18382125c006347b60c183601946465a47130",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Placement.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Placement.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Lift",
+      "file": "project/Complexitylib/Models/TuringMachine/Lift.lean",
+      "bytes": 28181,
+      "sha256": "43212C1B347A2C504451ACCC005F7AF6912B71BB5750413B1273B03A7F761E65",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Lift.lean",
+      "git_blob": "82f22fc6ff0f594dbcb74c143e78411e440a6f40",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Lift.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Lift.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.Internal.CopyWorkOutput",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/Internal/CopyWorkOutput.lean",
+      "bytes": 15819,
+      "sha256": "4B24EF33AE38FBC3EEB5D7E2BAFEB9CB96C97B8E84047585C138C556C9080B28",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+        "Complexitylib.Models.TuringMachine.Hoare.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/Internal/CopyWorkOutput.lean",
+      "git_blob": "45d70aebb3c848a1bfb417fede657aad83550836",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/Internal/CopyWorkOutput.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/Internal/CopyWorkOutput.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.RewindList",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/RewindList.lean",
+      "bytes": 6945,
+      "sha256": "FCC5AEA4E9152AE86E1AC4D3F599B88756B3F856C6732AF6C7BF5886A99CE044",
+      "imports": [
+        "Mathlib.Tactic.Ring",
+        "Complexitylib.Models.TuringMachine.Registers.EmitSeq",
+        "Complexitylib.Models.TuringMachine.Subroutines",
+        "Complexitylib.Models.TuringMachine.Subroutines.ParkAll"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/RewindList.lean",
+      "git_blob": "d5dcb2a9b4f8995d880054701baaff49aafd3e72",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/RewindList.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/RewindList.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.WipeLoop",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/WipeLoop.lean",
+      "bytes": 11247,
+      "sha256": "AB10DF90066867678515CFFA0AEC89A6F7698C1E1CCFE364D593CF91986785B5",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers.ForReg",
+        "Complexitylib.Models.TuringMachine.Subroutines.WipeStep"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/WipeLoop.lean",
+      "git_blob": "678af834f1cc39ecf0dfb6d7d1c98054ef95e318",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/WipeLoop.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/WipeLoop.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Registers.ForReg",
+      "file": "project/Complexitylib/Models/TuringMachine/Registers/ForReg.lean",
+      "bytes": 22221,
+      "sha256": "16588BE2A52A83DF9508B3FE0B70BF85AFABC48707D89A285DF460F9E2073327",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers.Emit"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Registers/ForReg.lean",
+      "git_blob": "990eee49bd88fb87f3542eec9e3b65226696162d",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/ForReg.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/ForReg.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Registers.Emit",
+      "file": "project/Complexitylib/Models/TuringMachine/Registers/Emit.lean",
+      "bytes": 41469,
+      "sha256": "EEA43DC9B3D2ECBD1E8AB40BB67DFF839389E95B3812EDB694D47EE44EE0C370",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers",
+        "Complexitylib.Models.TuringMachine.Hoare"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Registers/Emit.lean",
+      "git_blob": "b8a36cad55a05a710aa7d547002db1f9b90c8444",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/Emit.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Registers/Emit.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.UnaryLength.Defs",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength/Defs.lean",
+      "bytes": 1970,
+      "sha256": "2D82CE492EAA622481CB09FD2CEB9A715353E7EAF0A0933A92537FFEDE7C0974",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/UnaryLength/Defs.lean",
+      "git_blob": "5c81b173760144ab280c6ccc4157796c8b75eadf",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.UnaryLength.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength/Internal.lean",
+      "bytes": 6129,
+      "sha256": "39131D14BE460ED954D54CC287F16D5E6EBFD622EF992B64747A70AE4DBFEA23",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+        "Complexitylib.Models.TuringMachine.Subroutines.UnaryLength.Defs",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/UnaryLength/Internal.lean",
+      "git_blob": "5521a7feede0d9862fa1763337b918928e37a099",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/UnaryLength/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Composition.Defs",
+      "file": "project/Complexitylib/Models/TuringMachine/Composition/Defs.lean",
+      "bytes": 5140,
+      "sha256": "3BC172E2210EF15F19F3548159421BCEEE635B65E4E7A74C8872365989C14076",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute.Defs",
+        "Complexitylib.Models.TuringMachine.Lift",
+        "Complexitylib.Models.TuringMachine.Placement.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Composition/Defs.lean",
+      "git_blob": "3b6ec60407c14ff3fa5aedc5bda7419c9ece0938",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Composition.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Composition/Internal.lean",
+      "bytes": 5237,
+      "sha256": "8AE47AE0C5861E146CF684F1BFB8144C4955272ED44FCC2033F44D3ADC74BB72",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Composition.Internal.FirstPhase",
+        "Complexitylib.Models.TuringMachine.Composition.Internal.Tail",
+        "Complexitylib.Models.TuringMachine.OutputBounds"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Composition/Internal.lean",
+      "git_blob": "c1331b0230c9f06883500e2627baec83c81732c7",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Composition.PairWithInput.Defs",
+      "file": "project/Complexitylib/Models/TuringMachine/Composition/PairWithInput/Defs.lean",
+      "bytes": 2223,
+      "sha256": "69BA7DBF81F335EAC63082FAF6445D7EF2CAA772C28301ECEF70B0F1DF98F7A6",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Composition.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.PairEmit.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Composition/PairWithInput/Defs.lean",
+      "git_blob": "d3344a7c9dceb3bed974dd228279b4d188f3a744",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/PairWithInput/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/PairWithInput/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Composition.PairWithInput.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Composition/PairWithInput/Internal.lean",
+      "bytes": 12120,
+      "sha256": "FB61C16FE43D16164709907F295986A54DED86B073AAFA439D312787417D9C06",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Composition.Internal.FirstPhase",
+        "Complexitylib.Models.TuringMachine.Composition.PairWithInput.Defs",
+        "Complexitylib.Models.TuringMachine.OutputBounds",
+        "Complexitylib.Models.TuringMachine.Subroutines.Internal",
+        "Complexitylib.Models.TuringMachine.Subroutines.PairEmit"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Composition/PairWithInput/Internal.lean",
+      "git_blob": "8acc0c7b1b6ca5984bdc323b63606d1113fde41e",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/PairWithInput/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/PairWithInput/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal.Retarget",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal/Retarget.lean",
+      "bytes": 34773,
+      "sha256": "2DE82CEE0691AFE0511A22F43C2B22E6DEB026734332873970B5AE50AE9DF893",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines.Counter",
+        "Complexitylib.Models.TuringMachine.Subroutines.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal/Retarget.lean",
+      "git_blob": "bdce282ab69d21403ea66e4cb9f12c9234f374cb",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Retarget.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Retarget.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Placement.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Placement/Internal.lean",
+      "bytes": 9165,
+      "sha256": "DA80EB66201D637D6B535131CECD8C44A3B3D809FA894AE11720A69964BC2ED5",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Placement.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Placement/Internal.lean",
+      "git_blob": "6bb228fb171df1402be8f0837a15e9abd0588d8f",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Placement/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Placement/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal.Complement",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal/Complement.lean",
+      "bytes": 12176,
+      "sha256": "E8553EEAD68641493F2FA165F93E5508397947EBD64F32E2639B49DB23E4A540",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+        "Complexitylib.Models.TuringMachine.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal/Complement.lean",
+      "git_blob": "f4c3680c5cfb204b29b1e3dfa329115968675cb9",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Complement.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Complement.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal.Seq",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal/Seq.lean",
+      "bytes": 8429,
+      "sha256": "2B58F64DE8549C43AEF477CF7CB8014D570D2C6633718DB1E9E17DF2B80754D0",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal/Seq.lean",
+      "git_blob": "acd77e4872c3994c420dd8d5543aea6749d07ccf",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Seq.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Seq.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal.If",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal/If.lean",
+      "bytes": 19817,
+      "sha256": "BA3D2D3FE0285856EC28FA6ABEBED0D9D65334B5F3539255385FE86B826FF6B2",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal/If.lean",
+      "git_blob": "6bf69f79dcc1ed8e8232cbfe57c6cf6fac04643d",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/If.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/If.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal.Loop",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal/Loop.lean",
+      "bytes": 18798,
+      "sha256": "D1B637781BF28878F7F6C73F9DEC8BEE40E0D63B10570CD2FB4B6F7B80455D7B",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal/Loop.lean",
+      "git_blob": "206915059e54841fe6d89f91b24845f5ae72a24d",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Loop.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Loop.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal.Scanner",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal/Scanner.lean",
+      "bytes": 12091,
+      "sha256": "B273BCE6DA7868A3870126092AB8F0F240D464196266528159DB281F70DFE6DF",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+        "Std.Tactic.BVDecide.Normalize.BitVec"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal/Scanner.lean",
+      "git_blob": "d5c1eed1a41c065ae17bbdf2db5235ebd6f83674",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Scanner.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Scanner.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Combinators.Internal.Union",
+      "file": "project/Complexitylib/Models/TuringMachine/Combinators/Internal/Union.lean",
+      "bytes": 72140,
+      "sha256": "EC0F9EBEE34421AFFE6CEE5DC229FF304596772DF5D33F739CB38CBF2D91841B",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators",
+        "Complexitylib.Models.TuringMachine.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Combinators/Internal/Union.lean",
+      "git_blob": "873ad18b4aa51fc3cf3ecf544c3cbce4062ca4a2",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Union.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Combinators/Internal/Union.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Placement.Defs",
+      "file": "project/Complexitylib/Models/TuringMachine/Placement/Defs.lean",
+      "bytes": 7204,
+      "sha256": "CA56DD86A37E60761E5013291A09CD3C81AF1648013791F93E7C6A0A2E60D9E3",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Combinators"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Placement/Defs.lean",
+      "git_blob": "2c1ea1242269617b870fbfcd5626c8fb60d2af2c",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Placement/Defs.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Placement/Defs.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.ParkAll",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/ParkAll.lean",
+      "bytes": 3472,
+      "sha256": "4EF6A1B1DDF4A1EED1059173216707DCAB201FEE75A544D1FB959CC8EE4BA9F8",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Registers.RegisterOps",
+        "Complexitylib.Models.TuringMachine.Subroutines.MoveLeftStep"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/ParkAll.lean",
+      "git_blob": "53e3fa190acf180ec48aab24eb62d8471858ed25",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/ParkAll.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/ParkAll.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.WipeStep",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/WipeStep.lean",
+      "bytes": 4045,
+      "sha256": "288AC37FEA3BC48BEA2C1C4C9BF4E5DC331640A656003E379B62C4E4071B01D2",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Frame"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/WipeStep.lean",
+      "git_blob": "bc318605ed718c7a950fc0a7bef7cb434e9c8ae1",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/WipeStep.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/WipeStep.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Composition.Internal.FirstPhase",
+      "file": "project/Complexitylib/Models/TuringMachine/Composition/Internal/FirstPhase.lean",
+      "bytes": 7965,
+      "sha256": "F49F32FF3A1690F6D86564A877E76B2E325FCD8F7F1DE36D2E98C4DA0CD9EAAA",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Composition.Defs",
+        "Complexitylib.Models.TuringMachine.Combinators.Internal.Generic",
+        "Complexitylib.Models.TuringMachine.Placement.Internal",
+        "Complexitylib.Models.TuringMachine.Internal"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Composition/Internal/FirstPhase.lean",
+      "git_blob": "4aa333b75d4308d4476829f172bfa0b28596a260",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/Internal/FirstPhase.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/Internal/FirstPhase.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Composition.Internal.Tail",
+      "file": "project/Complexitylib/Models/TuringMachine/Composition/Internal/Tail.lean",
+      "bytes": 25665,
+      "sha256": "0946757DFD729D9E4B32AF88982C5267BC5AC61A8929934E3B39ED32E5252B49",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Composition.Defs",
+        "Complexitylib.Models.TuringMachine.Subroutines.CopyWorkOutput",
+        "Complexitylib.Models.TuringMachine.Combinators.RetargetCompute"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Composition/Internal/Tail.lean",
+      "git_blob": "fa65ef996e18ba3bec99541dcd0a617d18ebe5ba",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/Internal/Tail.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Composition/Internal/Tail.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.Internal",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/Internal.lean",
+      "bytes": 97968,
+      "sha256": "AC13BE8E0768488383B91801778C2774FF865A845F488434EC5DE6225F3C04BD",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines",
+        "Complexitylib.Models.TuringMachine.Tape.Encoding",
+        "Complexitylib.Models.TuringMachine.Hoare",
+        "Complexitylib.Models.TuringMachine.Hoare.Defs"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/Internal.lean",
+      "git_blob": "9ec49192698c85b5a1caa318647965a164bfa45c",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/Internal.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/Internal.lean",
+      "transport": "primary pinned HTTPS"
+    },
+    {
+      "module": "Complexitylib.Models.TuringMachine.Subroutines.MoveLeftStep",
+      "file": "project/Complexitylib/Models/TuringMachine/Subroutines/MoveLeftStep.lean",
+      "bytes": 4311,
+      "sha256": "4DC732FD7BCFF6618A7DBFC8A983B984AF36334807AA2B54C1B0D087FFB43D79",
+      "imports": [
+        "Complexitylib.Models.TuringMachine.Subroutines.WipeStep"
+      ],
+      "kind": "actual pinned complexitylib source",
+      "revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+      "git_path": "Complexitylib/Models/TuringMachine/Subroutines/MoveLeftStep.lean",
+      "git_blob": "8f9796503375ae8cdc5e0be5792a0cabb8cadbf5",
+      "original": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/MoveLeftStep.lean",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/Complexitylib/Models/TuringMachine/Subroutines/MoveLeftStep.lean",
+      "transport": "primary pinned HTTPS"
+    }
+  ],
+  "original_config_snapshots": [
+    {
+      "file": "original-complexitylib-configs/lake-manifest.json",
+      "bytes": 3518,
+      "sha256": "8A9800E900451E1EB754B33AE260B0CCD43236B47ECDE713E8B74636923146EF",
+      "git_blob": "c755307e3fcde1c2947bb1a484c250f9eed61746",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/lake-manifest.json"
+    },
+    {
+      "file": "original-complexitylib-configs/lean-toolchain",
+      "bytes": 29,
+      "sha256": "8190E75A201741065FE508B28955DD64DD72D090BABE5F70CE6848879D68AE88",
+      "git_blob": "b814d987e0c93cb99938be934d9b277778495ba1",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/lean-toolchain"
+    },
+    {
+      "file": "original-complexitylib-configs/LICENSE",
+      "bytes": 11348,
+      "sha256": "5969AF59903BAF143CDF101BAC053F262C093847AB0EFC43807AE81E19BDF190",
+      "git_blob": "34e00b21119479601387e1ec80f626bb327f2fdb",
+      "primary_url": "https://raw.githubusercontent.com/SamuelSchlesinger/complexitylib/6c248df7859f2f245e731c1e07057bf69d165fe2/LICENSE"
+    },
+    {
+      "file": "original-OAI-configs/lakefile.lean",
+      "bytes": 15457,
+      "sha256": "4CCA977EBECE444B6C999D99755C1AD3C93119BAFC127EA761F7F703C7279E74",
+      "git_blob": "66c3867331c7c607ffc0e60955cc86cccf046e12",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/lakefile.lean"
+    },
+    {
+      "file": "original-OAI-configs/lake-manifest.json",
+      "bytes": 14622,
+      "sha256": "CF6105A25D9DCA2F166B241D9191BD12C7E13305890DC9C4D0952351CCCC0794",
+      "git_blob": "67d01d2717d0aaff59fb8814bb53581b961f42b4",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/lake-manifest.json"
+    },
+    {
+      "file": "original-OAI-configs/lean-toolchain",
+      "bytes": 25,
+      "sha256": "D5EDBA4E4B8FAAD9C1BAEADB265716D20D03BE4D1A2647DC5E35B0C0325BEA7B",
+      "git_blob": "ba8ebf2dbaf6a668cd2a0e086186d6d569b69ff5",
+      "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+      "git_path": "lean/lean-toolchain"
+    }
+  ],
+  "complexitylib_git_tree": {
+    "file": "complexitylib-git-tree.json",
+    "bytes": 602799,
+    "sha256": "C0CBA149969E006FA79310E9EBE0F0773406B23F4D079CE05884643F3501465F",
+    "primary_url": "https://api.github.com/repos/SamuelSchlesinger/complexitylib/git/trees/6c248df7859f2f245e731c1e07057bf69d165fe2?recursive=1"
+  },
+  "checks_sha256": "BC9EF3E034F43B85AA034F90C99E7555BAB9EF68B6AD56845170DFE8EA498185",
+  "selected_Lean": "leanprover/lean4:v4.34.1",
+  "selected_mathlib_revision": "d13f23b723b8a846827a245b89c10fc7d3f11612",
+  "selected_complexitylib_revision": "6c248df7859f2f245e731c1e07057bf69d165fe2",
+  "selected_OAI_revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "old_oleans_present": false,
+  "new_VM_or_disk_resources": false,
+  "Full120_scope_changed": false,
+  "config_only_new_selection": true,
+  "source_bodies_changed": false,
+  "future_native_execution_sequential_after_Full120_under_original_lease_and_admission": true
+}
