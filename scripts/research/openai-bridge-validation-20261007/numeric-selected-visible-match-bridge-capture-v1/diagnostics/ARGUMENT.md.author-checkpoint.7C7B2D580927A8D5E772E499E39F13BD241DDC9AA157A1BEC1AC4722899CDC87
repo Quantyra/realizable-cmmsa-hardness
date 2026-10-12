@@ -1,0 +1,36 @@
+# Actual selected-visible event to pointwise matching and assignment bridge
+
+## Target
+
+For the one already selected raw table `T`, representative choice, advice dimension `a`, threshold `C`, and original question `U`, instantiate the literal event used by the captured full-vector mean consumer:
+
+`goodFavorable F H Q && visibleEvent Q (W Q) H (g Q) C s`.
+
+The target is an actual pointwise bridge for that same selected pair. If the event is true, then any visible output functional compatible with the visible restricted pair and any original extension in the matching fiber induce the same assignment on every retained variable, and the original extension satisfies every tagged equation of `U`. The argument retains the fixed `T`, choice, `a`, and `C`; it selects no new pair after the draw. It does not identify a product law with source-game acceptance or claim a game-probability lower bound.
+
+## Event to actual score premise
+
+`visibleEvent` is the conjunction of `¬ excluded` and the Boolean decision `C / 4 ≤ g Q s`. The score `g` is `selectedVisibleAgreementScore`, which returns zero when `Q.val` is not contained in `retained s`. With `0 < C`, the true score decision therefore forces `Q.val ≤ retained s`. Clone the captured private `selected_coordinate_containment_actual` proof: map a subtype vector through `actualRowCoordinateEquiv`, rewrite `actualRetained_map_coordinates`, use containment in the canonical retained space, and pull the witness back with injectivity. This yields `hQVact` for
+
+- `Qact = (actualRowGrassEquiv I copies U a).symm Q`, and
+- `sact = (rowDrawEquiv I copies U).symm s`.
+
+Decode the `Favorable` conjunct from `goodFavorable = true` using `goodFavorable_eq_true`, then unfold the `decide`-based `ActualOriginalDecoderSelection.favorable` to get `actualFullDecoderFavorable I copies U e r T choice Qact`. On that same proposition, `selectedPair_properties` supplies codimension and RHS facts for the already-defined `Pact = selectedPair I copies U e r T choice Qact`. This is the pair used by the posterior score; no fresh existential pair is introduced.
+
+Unfold only the true branch of `selectedVisibleAgreementScore`. The captured `selectedVisibleRestrictedPair` is the whole row-coordinate transport of `restrictedPair I copies U Qact Pact sact hQVact`. The actual-row zoom/agreement equivalence transports the table and this dependent pair together, so `actualRowAgreement_eq` rewrites the canonical selected score into
+
+`agreement (visibleTableInOriginalCoordinates I copies U T choice (retainedVariables I copies J U sact)) Qact (restrictedPair I copies U Qact Pact sact hQVact)`.
+
+Thus the literal score premise yields the exact `hthreshold` required by `actual_visible_matching_bound`; it is not supplied as an unrelated hypothesis and incurs no second side-loss or rank-stability premise.
+
+## Matching and pointwise assignments
+
+Apply the captured `actual_visible_matching_bound` to `T`, `choice`, `sact`, `Qact`, `Pact`, `hQVact`, the selected pair's codimension bound, and `C`. This gives the actual visible list-level matching lower bound for the pushforward of the visible output law into the retained carrier. Its event fibers are the arbitrary-geometry `restrictionSuccessEvent` fibers, whose exact mass is `2 ^ (-codim (Pact.W.comap retained.subtype))`; codimension monotonicity supplies the `2 ^ (-r)` lower bound without assuming `Pact.W ⊔ retained = ⊤`.
+
+For an output `f` in the compatible-output event of the transported restricted pair, and an original extension `G : FunctionalExtensionFiber Pact.W Pact.g` whose retained restriction is `f` composed with `actualRetainedToVisible`, apply `original_visible_assignment_agreement_iff`. It turns the functional equality into equality of original and visible assignments on every retained variable. Independently, `selected_pair_equation_acceptance` uses the same actual favorable predicate and this same selected pair to prove every such `G` satisfies each tagged equation. The adapter `retained_assignment_of_original` confirms that restricting `G` preserves its original assignment on retained coordinates; totalization outside the retained set is irrelevant.
+
+This reaches a pointwise assignment/equation conclusion under the literal event and matching-fiber premises. Integrating it into a source-game acceptance probability still requires separate product-law and event-identification work.
+
+## Pins and validation boundary
+
+The consumer will import the immutable actual visible matching capture and the fixed-score visible application capture. Their source and capture hashes will be recorded in the manifest. The full-vector event capture is an upstream law consumer; it remains uncompiled and unaccepted. No local Lean/Lake/compiler or satellite Git is used. Static source checks are not kernel verification. Remaining work after this bridge: bind the pointwise assignments to the actual game event, prove the required law identity, run GCP/compiler verification, and satisfy the retained independent-review gates.

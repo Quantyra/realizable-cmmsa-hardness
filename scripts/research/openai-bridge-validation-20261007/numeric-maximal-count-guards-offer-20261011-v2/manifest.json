@@ -1,0 +1,103 @@
+{
+  "schema": "numeric-maximal-count-guards-offer-20261011-v2",
+  "author": "/root",
+  "story": "E002/S3137",
+  "accepted": false,
+  "compiler_invoked": false,
+  "full114_archive": {
+    "path": "C:\\Users\\dfred\\.quantyra\\builder02\\full114-exact-real-complex-operators-repair4-resource02\\input-archive.tar.gz",
+    "sha256": "70FC4654130BA2BD9D1FFC79EA015F511E9BC7E4297D5D2DB6F62E42DC38CA04"
+  },
+  "dependencies": [
+    {
+      "member": "lean/PvNP/RealizableHardness/SamplerParameters.lean",
+      "bytes": 4148,
+      "sha256": "4DA1946FED5522A9BFFE90CFE086352CD3874F73D515C220B6B8955E187B556D"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/DropTailParameters.lean",
+      "bytes": 6192,
+      "sha256": "11B44189C2F73AA35C67EC08D2B418BE575346F9B171B6C0B5424327E7BDDD7E"
+    },
+    {
+      "member": "lean/PvNP/RealizableHardness/DropCountTail.lean",
+      "bytes": 9290,
+      "sha256": "A814673336A22E6ACB39AD0B905C4701D8DB5377F92554A051AB07D4F14E668A"
+    }
+  ],
+  "candidate_dependencies": [],
+  "toolchain": {
+    "value": "leanprover/lean4:v4.34.0-rc2",
+    "sha256": "B563246BDE88BAD741A3FE1C6B126AD8DAB470340D55AC3E97CCA9B3F200878B"
+  },
+  "mathlib_revision": "e06eff5f95374108acfaf19f1ff7473aa7771df2",
+  "public_axiom_requests": [
+    "blocks_ge_strong_count_dimension",
+    "ladder_denominator_le_dyadic",
+    "all_ladder_thresholds_meet_count_cutoff",
+    "reciprocal_parameter_threshold_margin",
+    "actual_count_import_guards"
+  ],
+  "imported_maximal_count_used": false,
+  "supplied_count_bound": false,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705FD4D6451A31D36B3DF7DE96F83F30AC976C9B4A6D1E51671D8E2F33E2D0DA"
+    },
+    {
+      "path": "ActualMaximalCountGuards.lean",
+      "bytes": 6316,
+      "sha256": "00E66B15939C83F7A5DC951B7C590408B562FEECDB62961A9F43844B9D21AAA8"
+    },
+    {
+      "path": "ARGUMENT.md",
+      "bytes": 3377,
+      "sha256": "8FE18CD6C06EE7490C3742D7DF1FBCBADB78B6704E05CBA746FFAF7DFFDBBEDD"
+    },
+    {
+      "path": "Checks.lean",
+      "bytes": 539,
+      "sha256": "44FCC88EF534D437F8C8ADCF35DE0D9172D35FE79ED9AA13632EAEB479621608"
+    },
+    {
+      "path": "repair.json",
+      "bytes": 1271,
+      "sha256": "B33B3CD33569255E76A9CE000FAF6B921178F82013390D0401D036904D6F0409"
+    }
+  ],
+  "predecessor_capture": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\numeric-maximal-count-guards-capture-v1\\index.json",
+  "predecessor_capture_sha256": "037BE52EAC655132616E606E96BF9041844C14976ADAE4E4A72E8FDDBC5C4AA4",
+  "predecessor_manifest_sha256": "47946504EB4580631084CF5F4B1C2EF57B8A6276B047CDBCB0F2B90C393B5479",
+  "static_repair": {
+    "kind": "source-only-static-api-and-denominator-repair",
+    "accepted": false,
+    "compiler_invoked": false,
+    "old_source_sha256": "6C01F6A58BAC0645D307EB9B7436568E00DA79171448C0C1D06696E92D1D1647",
+    "new_source_sha256": "00E66B15939C83F7A5DC951B7C590408B562FEECDB62961A9F43844B9D21AAA8",
+    "unchanged_public_headers": true,
+    "unchanged_checks": true,
+    "exact_inverse_reconstruction": true,
+    "edits": [
+      {
+        "before": "pow_le_pow_left\u2080 (by norm_num) (by norm_num)\n",
+        "after": "pow_le_pow_left\u2080 (by norm_num) (by norm_num) r\n"
+      },
+      {
+        "before": "pow_le_pow_left\u2080 hdelta hdeltarho\n",
+        "after": "pow_le_pow_left\u2080 hdelta hdeltarho 3\n"
+      },
+      {
+        "before": "convert hc using 1 <;> ring",
+        "after": "convert hc using 1 <;> field_simp <;> ring"
+      }
+    ],
+    "mathlib_api": {
+      "path": "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full107-trace-qualified-source-record-v1\\review-sources\\external\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+      "sha256": "6458A83BB092CD7112133A4F3EC375F7421F6472EA9AD6F13C381129B88AA47F"
+    },
+    "historical_v1_unchanged": true,
+    "dependent_execution_rebind_required": true
+  }
+}
