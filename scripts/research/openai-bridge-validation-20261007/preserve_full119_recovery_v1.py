@@ -11,14 +11,16 @@ def main(phase):
  else:assert not (RECOVERY/'execution-request-once.json').exists()
  paths={Path(__file__).resolve(),DERIVATION,H/'run_full119_cache_recovery_v1.py'}
  paths.update(H/s['helper'] for s in scopes())
- for folder in [RECOVERY,ROOT/'research-resume-20261011',ROOT/'earlier-settled-capacity-inspection-v1',ROOT/'earlier-settled-capacity-inspection-v2',ROOT/'staging-controls']:
+ for folder in [RECOVERY,ROOT/'earlier-settled-capacity-inspection-v1',ROOT/'earlier-settled-capacity-inspection-v2',ROOT/'staging-controls']:
   paths.update(p for p in folder.rglob('*') if p.is_file())
  for folder in (ROOT/'research-resume-20261011').iterdir():
   p=folder/'command.json'
   if not p.is_file():continue
   v=json.loads(p.read_bytes())
+  if any(Path(str(x)).name=='preserve_full119_recovery_v1.py' for x in v['argv']):continue
   assert 'native_exit' in v,('Original controller still live',folder)
   for n in ('stdout','stderr'):assert digest(folder/n)==v[n+'_sha256']
+  paths.update(q for q in folder.rglob('*') if q.is_file())
  d=H/('full119-recovery-'+phase+'-record-v1');d.mkdir(exist_ok=False);(d/'.gitattributes').write_bytes(b'* -text\n');archive=d/'complete-originals.tar.gz';rows=[]
  with archive.open('xb') as raw:
   with gzip.GzipFile(filename='',mode='wb',fileobj=raw,mtime=0) as z:
