@@ -1,0 +1,9 @@
+# Full120 owned-warning cleanup offer
+
+This is a warning-only source successor for the five exact Full119 files identified in Sol's immutable warning packet. It addresses the 18 owned headers above the frozen baseline: 1 `haveI` style suggestion, 2 `letI` style suggestions, 2 unnecessary sequence-focus warnings, 4 unused/unreachable `ring` tactic warnings, 6 deprecated conditional rewrite warnings, and 3 unused `simp` arguments.
+
+Edits are confined to proof scripts at those sites. The proposition statements, assumptions, imports, declaration names, and all five `Checks.lean` files are preserved byte-for-byte from `full119-review-source-capsule-v1`. The nonempty typeclass evidence is now passed as explicit proof arguments to `normalized_product_mean`; this keeps the same finite carriers and proof obligations while avoiding `haveI`/`letI` style headers. The deprecated `if_pos`/`if_neg` rewrites are replaced with simplification by their existing hypotheses. No theorem statement or mathematical premise changed.
+
+Source custody is listed in `manifest.json`; the original SHA pins match Sol's packet. The packet's `stage-4.stdout`, `stage-5.stdout`, warning classification and exact source excerpts remain preserved and unchanged. Original Full119 sources are not edited.
+
+This offer has not been run through Lean. No warning reduction, proof success, kernel audit or Full120 acceptance is claimed. Sol must capture these exact successor bytes and run the required GCP stages against the frozen baseline. If diagnostics show a proof failure, preserve this offer and make a distinct successor after the normal capture/diagnostic cycle.

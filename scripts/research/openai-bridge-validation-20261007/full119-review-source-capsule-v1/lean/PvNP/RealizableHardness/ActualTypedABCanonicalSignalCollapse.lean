@@ -1,0 +1,159 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse
+import PvNP.RealizableHardness.BinaryMatrixFourier
+import PvNP.RealizableHardness.BinaryMatrixA1NestedCarrier
+import PvNP.RealizableHardness.BinaryMatrixTypedA15ReducedGlobal
+import PvNP.RealizableHardness.BinaryMatrixTypedA15HyperplaneReducedGlobal
+import PvNP.RealizableHardness.ActualTypedABHybridSelectorSteps
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse
+
+open ActualTypedABCanonicalDCollapse
+open ActualTypedABCanonicalFlag
+open ActualTypedABCanonicalProjection
+open ActualTypedABCanonicalEndpointCollapse
+open ActualTypedABRankedTower
+open ActualTypedABHybridSelectorSteps
+open BinaryMatrixA1TypedFourier
+open BinaryMatrixA15NestedLine
+open BinaryMatrixA15NestedHyperplane
+open BinaryMatrixTypedA14Line
+open BinaryMatrixTypedA14Hyperplane
+open BinaryMatrixFourier
+open BinaryMatrixA1Complex
+open BinaryMatrixA1NestedCarrier
+open BinaryMatrixTypedA15ReducedGlobal
+open BinaryMatrixTypedA15HyperplaneReducedGlobal
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+set_option maxHeartbeats 800000 in
+/-- The canonical selected-filter tower acts on any input signal, regardless
+of the signal stored in the A15 witness data. This is the direct manuscript
+operator identity needed to apply the original-input rank-energy theorem to
+each residual Fourier level. -/
+theorem canonical_source_signal_A1_collapse {n d r l h : Nat}
+    (lines : DomainLineFlag (⊥ : Submodule F (V d)) l)
+    (hypers : CodomainHyperplaneFlag (⊤ : Submodule F (W n)) h)
+    (fStored : ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) → Complex)
+    (T : V d →ₗ[F] W n)
+    (g : BinaryMatrix n d → Complex) :
+    let carrierBase := initialBottomTopBase T
+    let tower := buildCanonicalSourceTower (r := r) (f := fStored)
+      lines hypers carrierBase
+    applyCanonicalFilters tower
+      (if h + l = 0 then
+        (fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) T g M)
+       else
+        (fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) 0 g M)) =
+    filteredCarrierFunction (rankedTerminalData tower).Aend
+      (rankedTerminalData tower).Bend T g := by
+  dsimp only
+  let carrierBase := initialBottomTopBase T
+  let tower := buildCanonicalSourceTower (r := r) (f := fStored)
+    lines hypers carrierBase
+  have hbase :
+      (⊤ : Submodule F (W n)).subtype.comp
+        (carrierBase.comp (Submodule.mkQ (⊥ : Submodule F (V d)))) = T :=
+    initialBottomTopBase_ambient T
+  cases lines with
+  | done A =>
+      cases hypers with
+      | done B =>
+          simp only [buildCanonicalSourceTower, buildHyperplanePrefix,
+            applyCanonicalFilters, rankedTerminalData, Nat.zero_add, ite_true]
+          with_unfolding_all rfl
+      | @cons B H hH k tail =>
+          have hpos : (k + 1) + 0 ≠ 0 := by omega
+          simp only [if_neg hpos]
+          let e := hyperplaneCanonicalEquiv (d := d)
+            (A := (⊥ : Submodule F (V d))) (⊤ : Submodule F (W n)) H
+          let childSignal := fun N : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+              (H.map (⊤ : Submodule F (W n)).subtype) =>
+            typedHyperplaneReducedWitness (k := r + k) (⊤ : Submodule F (W n)) H hH carrierBase
+              fStored
+              ((Submodule.equivMapOfInjective (⊤ : Submodule F (W n)).subtype
+                (⊤ : Submodule F (W n)).injective_subtype H).symm.toLinearMap.comp N)
+          let tailTower := buildHyperplaneSuffix (r := r)
+            (f := childSignal) tail
+          change applyCanonicalFilters tailTower
+              (fun M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+                  (H.map (⊤ : Submodule F (W n)).subtype) =>
+                typedComplexHyperplaneFilter (⊤ : Submodule F (W n)) H hH
+                  (filteredCarrierFunction (⊥ : Submodule F (V d))
+                    (⊤ : Submodule F (W n)) 0 g)
+                  (carrierBase + H.subtype.comp (e.symm M))) =
+            filteredCarrierFunction (rankedTerminalData tailTower).Aend
+              (rankedTerminalData tailTower).Bend T g
+          have hstep :
+              (fun M : (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+                  (H.map (⊤ : Submodule F (W n)).subtype) =>
+                typedComplexHyperplaneFilter (⊤ : Submodule F (W n)) H hH
+                  (filteredCarrierFunction (⊥ : Submodule F (V d))
+                    (⊤ : Submodule F (W n)) 0 g)
+                  (carrierBase + H.subtype.comp (e.symm M))) =
+          filteredCarrierFunction (⊥ : Submodule F (V d))
+                (H.map (⊤ : Submodule F (W n)).subtype) T g := by
+            funext M
+            have hs := typed_hyperplane_A1_operator_step
+                (⊥ : Submodule F (V d)) (⊤ : Submodule F (W n)) H hH
+                0 carrierBase g (e.symm M)
+            simp only [zero_add, hbase] at hs
+            have hc : e (e.symm M) = M := e.apply_symm_apply M
+            rw [hc] at hs
+            with_unfolding_all exact hs
+          rw [hstep]
+          exact hyperplane_suffix_A1_collapse tail childSignal T g
+  | @cons A A' hA hL k tail =>
+      have hpos : h + (k + 1) ≠ 0 := by omega
+      simp only [if_neg hpos]
+      let e := lineCanonicalEquiv (⊥ : Submodule F (V d)) A' (⊤ : Submodule F (W n)) hA
+      let childSignal := fun M : (V d ⧸ A') →ₗ[F] (⊤ : Submodule F (W n)) =>
+        typedLineReducedWitness (k := r + (h + k)) (⊤ : Submodule F (W n))
+          (A'.map (⊥ : Submodule F (V d)).mkQ) hL carrierBase fStored
+          (M.comp (nestedDomainEquiv (⊥ : Submodule F (V d)) A' hA).toLinearMap)
+      let tailTower := buildLineSuffix (r := r) (f := childSignal) tail hypers
+      change applyCanonicalFilters tailTower
+          (fun M : (V d ⧸ A') →ₗ[F] (⊤ : Submodule F (W n)) =>
+            typedComplexLineFilter (⊤ : Submodule F (W n)) (A'.map (⊥ : Submodule F (V d)).mkQ)
+              hL (filteredCarrierFunction (⊥ : Submodule F (V d))
+                (⊤ : Submodule F (W n)) 0 g)
+              (carrierBase + (e.symm M).comp (A'.map (⊥ : Submodule F (V d)).mkQ).mkQ)) =
+        filteredCarrierFunction (rankedTerminalData tailTower).Aend
+          (rankedTerminalData tailTower).Bend T g
+      have hstep :
+          (fun M : (V d ⧸ A') →ₗ[F] (⊤ : Submodule F (W n)) =>
+            typedComplexLineFilter (⊤ : Submodule F (W n)) (A'.map (⊥ : Submodule F (V d)).mkQ)
+              hL (filteredCarrierFunction (⊥ : Submodule F (V d))
+                (⊤ : Submodule F (W n)) 0 g)
+              (carrierBase + (e.symm M).comp (A'.map (⊥ : Submodule F (V d)).mkQ).mkQ)) =
+          filteredCarrierFunction A' (⊤ : Submodule F (W n)) T g := by
+        funext M
+        change typedComplexLineFilter (⊤ : Submodule F (W n))
+          (A'.map (⊥ : Submodule F (V d)).mkQ) hL
+          (fun N => complexAmbientAffineRestrict (⊥ : Submodule F (V d))
+            (⊤ : Submodule F (W n)) 0
+            (complexAmbientHybridFilter (⊥ : Submodule F (V d))
+              (⊤ : Submodule F (W n)) g) N)
+          (carrierBase + (e.symm M).comp (A'.map (⊥ : Submodule F (V d)).mkQ).mkQ) =
+          complexAmbientAffineRestrict A' (⊤ : Submodule F (W n)) T
+            (complexAmbientHybridFilter A' (⊤ : Submodule F (W n)) g) M
+        have hs := typed_line_A1_operator_step
+          (⊥ : Submodule F (V d)) A' (⊤ : Submodule F (W n)) hA hL
+          0 carrierBase g (e.symm M)
+        simp only [zero_add, hbase] at hs
+        have hc : e (e.symm M) = M := e.apply_symm_apply M
+        rw [hc] at hs
+        with_unfolding_all exact hs
+      rw [hstep]
+      exact line_suffix_A1_collapse tail hypers childSignal T g
+
+end
+end PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse

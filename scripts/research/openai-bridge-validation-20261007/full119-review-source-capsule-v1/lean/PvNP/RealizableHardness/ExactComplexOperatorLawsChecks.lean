@@ -1,0 +1,17 @@
+import PvNP.RealizableHardness.ExactComplexOperatorLaws
+
+#check PvNP.RealizableHardness.ExactComplexOperatorLaws.complexGAverage
+#check PvNP.RealizableHardness.ExactComplexOperatorLaws.complexGAverage_re
+#check PvNP.RealizableHardness.ExactComplexOperatorLaws.complexGAverage_im
+#check PvNP.RealizableHardness.ExactComplexOperatorLaws.complexG_append_eq_phi
+#check PvNP.RealizableHardness.ExactComplexOperatorLaws.complexInnerProduct
+#check PvNP.RealizableHardness.ExactComplexOperatorLaws.complexInnerProduct_re
+#check PvNP.RealizableHardness.ExactComplexOperatorLaws.complexInnerProduct_im
+#check PvNP.RealizableHardness.ExactComplexOperatorLaws.complexRestrictedAdjoint_exact
+
+#print axioms PvNP.RealizableHardness.ExactComplexOperatorLaws.complexGAverage_re
+#print axioms PvNP.RealizableHardness.ExactComplexOperatorLaws.complexGAverage_im
+#print axioms PvNP.RealizableHardness.ExactComplexOperatorLaws.complexG_append_eq_phi
+#print axioms PvNP.RealizableHardness.ExactComplexOperatorLaws.complexInnerProduct_re
+#print axioms PvNP.RealizableHardness.ExactComplexOperatorLaws.complexInnerProduct_im
+#print axioms PvNP.RealizableHardness.ExactComplexOperatorLaws.complexRestrictedAdjoint_exact

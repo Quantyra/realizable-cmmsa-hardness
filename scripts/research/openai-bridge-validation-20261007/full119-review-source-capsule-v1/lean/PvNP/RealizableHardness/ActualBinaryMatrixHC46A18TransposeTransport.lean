@@ -1,0 +1,72 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+import PvNP.RealizableHardness.BinaryMatrixCodomainA15
+
+/-! Exact transpose transport for actual affine matrix fibres.
+
+This module records the order and uniform-fibre transport needed when an
+A18 argument is dualized to a codomain hyperplane. It does not identify the
+resulting hyperplane draw with the original line draw.
+-/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18SourceGlobal
+open BinaryMatrixActualAffine BinaryMatrixCodomainA15 BinaryMatrixComplexA15
+open BinaryMatrixFourier
+open scoped BigOperators
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+theorem actual_fibre_base_mem {n d : ℕ} (Q : ActualAffineRestriction n d) :
+    Q.base ∈ Q.fibre := by
+  simp [ActualAffineRestriction.fibre]
+
+theorem rawOfActual_base_mem {n d : ℕ} (Q : ActualAffineRestriction n d) :
+    Q.base ∈ (rawOfActual Q).fibre := by
+  rw [rawOfActual_fibre]
+  exact actual_fibre_base_mem Q
+
+theorem transposeRaw_rawOfActual_base_mem {n d : ℕ}
+    (Q : ActualAffineRestriction n d) :
+    Q.base.transpose ∈ (transposeRaw (rawOfActual Q)).fibre := by
+  rw [transposeRaw_fibre]
+  exact Finset.mem_image.mpr
+    ⟨Q.base, rawOfActual_base_mem Q, by simp⟩
+
+/-- Represent the transposed actual fibre through its raw affine equations.
+The base is the actual transposed base; the fibre equality below is exact. -/
+def transposeActualRestriction {n d : ℕ} (Q : ActualAffineRestriction n d) :
+    ActualAffineRestriction d n :=
+  actualOfRaw (transposeRaw (rawOfActual Q)) Q.base.transpose
+
+theorem transposeActualRestriction_order_le {n d : ℕ}
+    (Q : ActualAffineRestriction n d) :
+    (transposeActualRestriction Q).order ≤ Q.order := by
+  calc
+    (transposeActualRestriction Q).order ≤
+        (transposeRaw (rawOfActual Q)).budget :=
+      actualOfRaw_order_le_budget (transposeRaw (rawOfActual Q)) Q.base.transpose
+    _ = (rawOfActual Q).budget := transposeRaw_budget (rawOfActual Q)
+    _ = Q.order := rawOfActual_budget Q
+
+theorem transposeActualRestriction_fibre {n d : ℕ}
+    (Q : ActualAffineRestriction n d) :
+    (transposeActualRestriction Q).fibre = Q.fibre.image Matrix.transpose := by
+  rw [transposeActualRestriction,
+    actualOfRaw_fibre (transposeRaw (rawOfActual Q)) Q.base.transpose
+      (transposeRaw_rawOfActual_base_mem Q),
+    transposeRaw_fibre, rawOfActual_fibre]
+
+/-- Actual squared-globalness is invariant under matrix transpose. Nonnegativity
+of the energy parameter is derived from the global premise, so no extra sign
+assumption is added to the statement. -/
+theorem upToActualNormSqGlobal_transpose {n d r : ℕ} {η : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToActualNormSqGlobal r η f) :
+    UpToActualNormSqGlobal r η (fun M => f M.transpose) := by
+  have hη : 0 ≤ η := actual_source_parameter_nonneg f hf
+  apply raw_implies_actual
+  exact transpose_raw f (actual_implies_raw f hη hf)
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeTransport

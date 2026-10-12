@@ -1,0 +1,106 @@
+import PvNP.RealizableHardness.ActualTypedABCanonicalProjection
+import PvNP.RealizableHardness.ActualTypedABCanonicalSignalCollapse
+import PvNP.RealizableHardness.ActualTypedABBottomTopRankReindex
+import PvNP.RealizableHardness.ActualTypedABCanonicalDCollapse
+import PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse
+import PvNP.RealizableHardness.BinaryMatrixFourier
+import PvNP.RealizableHardness.BinaryMatrixTypedA14Line
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionCollapse
+
+open ActualTypedABCanonicalProjection
+open ActualTypedABCanonicalSignalCollapse
+open ActualTypedABBottomTopRankReindex
+open ActualTypedABCanonicalDCollapse
+open ActualTypedABCanonicalEndpointCollapse
+open ActualTypedABCanonicalFlag
+open ActualTypedABRankedTower
+open BinaryMatrixFourier
+open BinaryMatrixTypedA14Line
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- For a nonempty canonical source flag, the terminal A15 witness at
+residual rank `r` is exactly the manuscript's affine hybrid restriction of
+the original ambient signal after projection to rank `r + h + l`. This joins
+the ranked-tower projection induction, the bottom/top Fourier reindexing, and
+the actual A1 line/hyperplane composition identity. -/
+theorem canonical_source_rank_projection_collapse {n d r l h : Nat}
+    (lines : DomainLineFlag (⊥ : Submodule F (V d)) l)
+    (hypers : CodomainHyperplaneFlag (⊤ : Submodule F (W n)) h)
+    (T : V d →ₗ[F] W n)
+    (ambientf : BinaryMatrix n d → Complex)
+    (hpositive : l + h ≠ 0) :
+    let source : ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+        (⊤ : Submodule F (W n))) → Complex := fun M =>
+      filteredCarrierFunction (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) 0 ambientf M
+    let tower := buildCanonicalSourceTower (r := r) (f := source)
+      lines hypers (initialBottomTopBase T)
+    typedComplexRankProjection (rankedTerminalData tower).Aend
+      (rankedTerminalData tower).Bend r (rankedTerminalData tower).fend =
+    fun M => filteredCarrierFunction (rankedTerminalData tower).Aend
+      (rankedTerminalData tower).Bend T
+      (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M := by
+  dsimp only
+  let source : ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) → Complex := fun M =>
+    filteredCarrierFunction (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) 0 ambientf M
+  let tower := buildCanonicalSourceTower (r := r) (f := source)
+    lines hypers (initialBottomTopBase T)
+  have hsource :
+      typedComplexRankProjection (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) (r + (h + l)) source =
+      fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) 0
+        (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M := by
+    funext M
+    change typedComplexRankProjection (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) (r + (h + l))
+        (filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) 0 ambientf) M =
+      filteredCarrierFunction (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) 0
+        (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M
+    have hb := bottomTopSourceRankProjection (j := r + (h + l)) ambientf M
+    rw [bottomTopAmbientMatrixEquiv_apply] at hb
+    rw [ActualTypedABCanonicalDCollapse.filteredCarrierFunction_bot_top]
+    exact hb
+  have hpositive' : h + l ≠ 0 := by omega
+  have hcollapse :
+      applyCanonicalFilters tower
+        (fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) 0
+          (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M) =
+      fun M => filteredCarrierFunction (rankedTerminalData tower).Aend
+        (rankedTerminalData tower).Bend T
+        (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M := by
+    have hs := canonical_source_signal_A1_collapse (r := r) lines hypers source T
+      (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf)
+    rw [if_neg hpositive'] at hs
+    simpa only [source, tower] using hs
+  calc
+    typedComplexRankProjection (rankedTerminalData tower).Aend
+        (rankedTerminalData tower).Bend r (rankedTerminalData tower).fend =
+      applyCanonicalFilters tower
+        (typedComplexRankProjection (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) (r + (h + l)) source) :=
+        ranked_terminal_projection_eq_canonicalFilters tower
+    _ = applyCanonicalFilters tower
+        (fun M => filteredCarrierFunction (⊥ : Submodule F (V d))
+          (⊤ : Submodule F (W n)) 0
+          (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M) :=
+        congrArg (applyCanonicalFilters tower) hsource
+    _ = fun M => filteredCarrierFunction (rankedTerminalData tower).Aend
+        (rankedTerminalData tower).Bend T
+        (BinaryMatrixComplexA14.complexRankProjection (r + (h + l)) ambientf) M :=
+        hcollapse
+
+end
+end PvNP.RealizableHardness.ActualTypedABCanonicalRankProjectionCollapse

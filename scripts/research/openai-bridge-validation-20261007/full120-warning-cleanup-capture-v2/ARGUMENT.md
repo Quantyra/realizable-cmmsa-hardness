@@ -1,0 +1,5 @@
+# Full120 owned-warning cleanup offer v2
+
+This successor preserves the exact scope and checks of Full120 offer v1. It corrects one proof-script regression found by comparison with recorded Full118 repair history: in `ExactRealRankGram`, the `Y.rank ≠ i` branch must simplify the second factor directly from `hj` and must not rewrite the first factor using `hi`. Offer v2 uses `simp [hj]` there. It preserves v1 for exact custody; v1 is not to be compiled or treated as this successor.
+
+The remaining warning edits are the same warning-only changes listed in v1: no proposition statements, assumptions, imports, names, or Checks files changed. The five Checks files are byte-identical to the Full119 capsule. Offer v2 has not been compiled; no warning reduction, proof success, kernel audit or Full120 acceptance is claimed. Sol should capture this exact successor and run GCP against the frozen baseline.

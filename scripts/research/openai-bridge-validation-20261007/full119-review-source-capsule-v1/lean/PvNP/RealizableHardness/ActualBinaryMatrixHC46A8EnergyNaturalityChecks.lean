@@ -1,0 +1,13 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A8EnergyNaturality
+
+#check a8_whole_typed_w6_derivative_naturality
+#print axioms a8_whole_typed_w6_derivative_naturality
+#check a8_typed_w6_energy_naturality
+#print axioms a8_typed_w6_energy_naturality
+#check a8NestedDomainEquiv
+#check a8NestedRangeEquiv
+#check a8NestedFrequency
+#check a8_nested_actual_w6_energy_naturality
+#print axioms a8_nested_actual_w6_energy_naturality

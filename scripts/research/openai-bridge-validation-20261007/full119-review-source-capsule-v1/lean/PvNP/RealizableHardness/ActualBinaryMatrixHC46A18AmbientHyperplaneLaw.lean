@@ -1,0 +1,146 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage
+import Mathlib.LinearAlgebra.Dual.Basis
+
+/-! The ambient codomain-hyperplane form of the transposed A18 sampling law.
+
+The functional index is converted to its vector of dual-basis coefficients.
+This identifies the condition `psi v = 1` with the affine output slice
+`dotProduct v u = 1` and preserves the uniform finite measure.
+-/
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw
+
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18FullFunctionalBridge
+open PvNP.RealizableHardness.ActualBinaryMatrixHC46A18TransposeAverage
+open BinaryMatrixComplexA15 BinaryMatrixFourier
+open scoped BigOperators
+
+noncomputable section
+attribute [local instance] Classical.propDecidable
+attribute [local instance] Fintype.ofFinite
+
+private abbrev F := ZMod 2
+private abbrev V (d : ℕ) := Fin d → F
+private abbrev Dual (d : ℕ) := V d →ₗ[F] F
+
+/-- The same finite basis duality used in the typed hyperplane coordinate
+proofs: a linear functional is identified with its values on the standard
+coordinate vectors. -/
+def functionalVectorEquiv (d : ℕ) : Dual d ≃ V d :=
+  (Pi.basisFun F (Fin d)).dualBasis.equivFun
+
+@[simp] theorem functionalVectorEquiv_apply {d : ℕ}
+    (psi : Dual d) (j : Fin d) :
+    functionalVectorEquiv d psi j = psi (Pi.single j (1 : F)) := by
+  simp [functionalVectorEquiv, Module.Basis.dualBasis_equivFun,
+    Pi.basisFun_apply]
+
+theorem functionalVectorEquiv_dotProduct {d : ℕ}
+    (psi : Dual d) (v : V d) :
+    dotProduct v (functionalVectorEquiv d psi) = psi v := by
+  classical
+  have hv : v = ∑ j : Fin d, v j • Pi.single j (1 : F) := by
+    ext j
+    simp [Pi.single_apply, eq_comm, Finset.sum_ite_eq']
+  calc
+    dotProduct v (functionalVectorEquiv d psi) =
+        ∑ j : Fin d, v j * psi (Pi.single j (1 : F)) := by
+      simp [dotProduct, functionalVectorEquiv,
+        Module.Basis.dualBasis_equivFun, Pi.basisFun_apply]
+    _ = psi (∑ j : Fin d, v j • Pi.single j (1 : F)) := by
+      simp [map_sum, map_smul, smul_eq_mul, mul_comm]
+    _ = psi v := by exact (congrArg psi hv).symm
+
+theorem functionalVectorEquiv_symm_apply_single {d : ℕ}
+    (u : V d) (j : Fin d) :
+    (functionalVectorEquiv d).symm u (Pi.single j (1 : F)) = u j := by
+  have h := (functionalVectorEquiv d).apply_symm_apply u
+  have hj := congrFun h j
+  rw [functionalVectorEquiv_apply] at hj
+  exact hj
+
+/-- Functionals taking value one at `v` are in bijection with output vectors
+on the corresponding affine hyperplane. -/
+def functionalsAtVectorEquiv {d : ℕ} (v : V d) :
+    FunctionalsAt v ≃ {u : V d // dotProduct v u = 1} where
+  toFun psi :=
+    ⟨functionalVectorEquiv d psi.1,
+      by simpa [functionalVectorEquiv_dotProduct] using psi.2⟩
+  invFun u :=
+    ⟨(functionalVectorEquiv d).symm u.1,
+      by
+        have hval := functionalVectorEquiv_dotProduct
+          ((functionalVectorEquiv d).symm u.1) v
+        rw [(functionalVectorEquiv d).apply_symm_apply] at hval
+        exact hval.symm.trans u.2⟩
+  left_inv psi := by
+    apply Subtype.ext
+    exact (functionalVectorEquiv d).left_inv psi.1
+  right_inv u := by
+    apply Subtype.ext
+    exact (functionalVectorEquiv d).right_inv u.1
+
+/-- The exact transposed uniform draw expressed as an unrestricted domain
+functional and a uniform vector on the output affine hyperplane. -/
+def ambientCodomainHyperplaneAverage {n d : ℕ}
+    (v : V d) (f : BinaryMatrix d n → ℂ) (N : BinaryMatrix d n) : ℂ :=
+  (∑ p : Dual n × {u : V d // dotProduct v u = 1},
+    f (N + LinearMap.toMatrix' (p.1.smulRight p.2.1))) /
+      (Fintype.card (Dual n ×
+        {u : V d // dotProduct v u = 1}) : ℂ)
+
+private def transposeIndexEquiv {n d : ℕ} (v : V d) :
+    FunctionalsAt v × V n ≃
+      Dual n × {u : V d // dotProduct v u = 1} :=
+  (Equiv.prodCongr (functionalsAtVectorEquiv v)
+    (functionalVectorEquiv n).symm).trans (Equiv.prodComm _ _)
+
+theorem actualA18RankOne_transpose_eq {n d : ℕ} {v : V d}
+    (psi : FunctionalsAt v) (w : V n) :
+    (actualA18RankOne psi.1 w).transpose =
+      LinearMap.toMatrix'
+        (((functionalVectorEquiv n).symm w).smulRight
+          (functionalVectorEquiv d psi.1)) := by
+  ext i j
+  calc
+    (actualA18RankOne psi.1 w).transpose i j =
+        w j * psi.1 (Pi.single i (1 : F)) := by
+      simp [actualA18RankOne_entry, mul_comm]
+    _ = LinearMap.toMatrix'
+        (((functionalVectorEquiv n).symm w).smulRight
+          (functionalVectorEquiv d psi.1)) i j := by
+      simp [LinearMap.toMatrix'_apply, LinearMap.smulRight_apply,
+        functionalVectorEquiv_apply, functionalVectorEquiv_symm_apply_single,
+        Pi.basisFun_apply, mul_comm]
+
+theorem actualA18TransposeAverage_eq_ambientCodomainHyperplaneAverage
+    {n d : ℕ} (v : V d)
+    (f : BinaryMatrix d n → ℂ) (N : BinaryMatrix d n) :
+    actualA18TransposeAverage v f N =
+      ambientCodomainHyperplaneAverage v f N := by
+  classical
+  let e := transposeIndexEquiv (n := n) v
+  let g : FunctionalsAt v × V n → ℂ := fun p =>
+    f (N + (actualA18RankOne p.1.1 p.2).transpose)
+  let g' : Dual n × {u : V d // dotProduct v u = 1} → ℂ :=
+    fun p => f (N + LinearMap.toMatrix' (p.1.smulRight p.2.1))
+  have hpoint : ∀ p, g p = g' (e p) := by
+    intro p
+    rcases p with ⟨psi, w⟩
+    apply congrArg f
+    rw [actualA18RankOne_transpose_eq]
+    rfl
+  have hsum : (∑ p, g p) = ∑ p, g' p := by
+    calc
+      (∑ p, g p) = ∑ p, g' (e p) := by
+        apply Finset.sum_congr rfl
+        intro p hp
+        exact hpoint p
+      _ = ∑ p, g' p := Equiv.sum_comp e g'
+  have hcard : Fintype.card (FunctionalsAt v × V n) =
+      Fintype.card (Dual n × {u : V d // dotProduct v u = 1}) :=
+    Fintype.card_congr e
+  simpa [actualA18TransposeAverage, ambientCodomainHyperplaneAverage, g, g']
+    using congrArg₂ (fun (x : ℂ) (c : ℕ) => x / (c : ℂ)) hsum hcard
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46A18AmbientHyperplaneLaw

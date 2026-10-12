@@ -1,0 +1,109 @@
+import PvNP.RealizableHardness.ActualTypedABEndpointTransport
+
+namespace PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse
+
+open ActualTypedABCanonicalDCollapse
+open ActualTypedABCanonicalFlag
+open ActualTypedABRankedTower
+open ActualTypedABCanonicalProjection
+open ActualTypedABEndpointTransport
+open BinaryMatrixA1TypedFourier BinaryMatrixFourier BinaryMatrixTypedA15Transport
+open BinaryMatrixTypedA14Line
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- Re-express an ambient affine base as the actual unrestricted bottom/top
+carrier map used by the source tower. -/
+def initialBottomTopBase {n d : Nat} (T : V d →ₗ[F] W n) :
+    (V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n)) :=
+  (Submodule.topEquiv : (⊤ : Submodule F (W n)) ≃ₗ[F] W n).symm.toLinearMap.comp
+    (T.comp (((⊥ : Submodule F (V d)).quotEquivOfEqBot rfl).toLinearMap))
+
+/-- Returning the bottom/top carrier base to ambient coordinates recovers the
+original linear map exactly. -/
+theorem initialBottomTopBase_ambient {n d : Nat}
+    (T : V d →ₗ[F] W n) :
+    (Submodule.subtype (⊤ : Submodule F (W n))).comp
+      ((initialBottomTopBase T).comp
+        (Submodule.mkQ (⊥ : Submodule F (V d)))) = T := by
+  ext x
+  simp [initialBottomTopBase, LinearMap.comp_apply]
+
+/-- The full source-canonical tower collapses to the manuscript's direct
+hybrid-filter/affine-restriction operator on the requested endpoint carrier.
+This includes the zero-length branch: its initial carrier signal is translated
+by the ambient base, and the endpoint Hom equivalence is explicit. -/
+theorem canonical_source_tower_endpoint_collapse {n d r l h : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (lines : DomainLineFlag (⊥ : Submodule F (V d)) l)
+    (hypers : CodomainHyperplaneFlag (⊤ : Submodule F (W n)) h)
+    (hA : lines.endpoint = A) (hB : hypers.endpoint = B)
+    (T : V d →ₗ[F] W n)
+    (ambientf : BinaryMatrix n d → Complex) :
+    let source : ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+        (⊤ : Submodule F (W n))) → Complex := fun M =>
+      filteredCarrierFunction (⊥ : Submodule F (V d))
+        (⊤ : Submodule F (W n)) 0 ambientf M
+    let base := (Submodule.subtype (⊤ : Submodule F (W n))).comp
+      ((initialBottomTopBase T).comp
+        (Submodule.mkQ (⊥ : Submodule F (V d))))
+    let tower := buildCanonicalSourceTower (r := r) (f := source)
+      lines hypers (initialBottomTopBase T)
+    let hEnd := buildCanonicalSourceTower_endpoints
+      (r := r) (f := source) lines hypers (initialBottomTopBase T)
+    let e := endpointHomEquiv (hEnd.1.trans hA) (hEnd.2.trans hB)
+    (fun M : (V d ⧸ A) →ₗ[F] B =>
+      applyCanonicalFilters tower
+        (if h + l = 0 then
+          fun N => filteredCarrierFunction (⊥ : Submodule F (V d))
+            (⊤ : Submodule F (W n)) base ambientf N
+        else source) (e.symm M)) =
+      filteredCarrierFunction A B T ambientf := by
+  dsimp only
+  let source : ((V d ⧸ (⊥ : Submodule F (V d))) →ₗ[F]
+      (⊤ : Submodule F (W n))) → Complex := fun M =>
+    filteredCarrierFunction (⊥ : Submodule F (V d))
+      (⊤ : Submodule F (W n)) 0 ambientf M
+  let base : V d →ₗ[F] W n :=
+    (Submodule.subtype (⊤ : Submodule F (W n))).comp
+      ((initialBottomTopBase T).comp
+        (Submodule.mkQ (⊥ : Submodule F (V d))))
+  let tower := buildCanonicalSourceTower (r := r) (f := source)
+    lines hypers (initialBottomTopBase T)
+  let hEnd := buildCanonicalSourceTower_endpoints
+    (r := r) (f := source) lines hypers (initialBottomTopBase T)
+  let hTA : (rankedTerminalData tower).Aend = A := hEnd.1.trans hA
+  let hTB : (rankedTerminalData tower).Bend = B := hEnd.2.trans hB
+  let e := endpointHomEquiv hTA hTB
+  have hbase : base = T := initialBottomTopBase_ambient T
+  have hcollapse :
+      applyCanonicalFilters tower
+        (if h + l = 0 then
+          fun N => filteredCarrierFunction (⊥ : Submodule F (V d))
+            (⊤ : Submodule F (W n)) base ambientf N
+        else source) =
+      filteredCarrierFunction (rankedTerminalData tower).Aend
+        (rankedTerminalData tower).Bend base ambientf := by
+    simpa [tower, source, base, initialBottomTopBase_ambient] using
+      (canonical_source_tower_A1_collapse
+        (r := r) lines hypers (initialBottomTopBase T) ambientf)
+  funext M
+  rw [hcollapse]
+  cases hTA
+  cases hTB
+  have he : e = LinearEquiv.refl F _ := endpointHomEquiv_self rfl rfl
+  change filteredCarrierFunction (rankedTerminalData tower).Aend
+      (rankedTerminalData tower).Bend base ambientf (e.symm M) =
+    filteredCarrierFunction (rankedTerminalData tower).Aend
+      (rankedTerminalData tower).Bend T ambientf M
+  rw [he]
+  simp [hbase]
+
+end
+end PvNP.RealizableHardness.ActualTypedABCanonicalEndpointCollapse

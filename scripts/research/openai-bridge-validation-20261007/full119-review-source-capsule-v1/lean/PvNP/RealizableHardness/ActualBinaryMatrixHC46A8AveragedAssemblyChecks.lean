@@ -1,0 +1,9 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly
+
+/-! Narrow declaration checks for the S3132 averaged-transport composition. -/
+
+#check PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly.a8_two_base_actual_averaged_transport
+#print axioms PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly.a8_two_base_actual_averaged_transport
+
+#check PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly.a8_actual_energy_zero_outside_supported_window
+#print axioms PvNP.RealizableHardness.ActualBinaryMatrixHC46A8AveragedAssembly.a8_actual_energy_zero_outside_supported_window

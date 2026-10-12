@@ -1,0 +1,354 @@
+import PvNP.RealizableHardness.ActualBinaryMatrixHC46MixedPeeling
+import PvNP.RealizableHardness.BinaryMatrixA15BaseCase
+
+namespace PvNP.RealizableHardness.ActualBinaryMatrixHC46FourierA16
+open BinaryMatrixFourier BinaryMatrixComplexA14 BinaryMatrixComplexA15
+open ActualBinaryMatrixHC46MixedPeeling
+open scoped BigOperators
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Fourier support of a real rank projection is confined to its selected matrix rank. -/
+theorem rankProjection_fourier_support {n d i : Nat}
+    (f : BinaryMatrix n d -> Real) (Y : BinaryMatrix n d)
+    (hY : Y.rank ≠ i) :
+    fourierCoeff (rankProjection i f) Y = 0 := by
+  rw [fourierCoeff_rankProjection]
+  simp [hY]
+
+private theorem uniformMean_add_square {n d : Nat}
+    (f g : BinaryMatrix n d -> Real) :
+    uniformMean (fun M => (f M + g M) ^ 2) =
+      uniformMean (fun M => f M ^ 2) + uniformMean (fun M => g M ^ 2) +
+        2 * uniformMean (fun M => f M * g M) := by
+  have hsum :
+      (∑ M : BinaryMatrix n d, (f M + g M) ^ 2) =
+        (∑ M : BinaryMatrix n d, f M ^ 2) +
+          (∑ M : BinaryMatrix n d, g M ^ 2) +
+            2 * (∑ M : BinaryMatrix n d, f M * g M) := by
+    calc
+      (∑ M : BinaryMatrix n d, (f M + g M) ^ 2) =
+          ∑ M : BinaryMatrix n d, (f M ^ 2 + g M ^ 2 + 2 * (f M * g M)) := by
+            apply Finset.sum_congr rfl
+            intro M hM
+            ring
+      _ = _ := by simp only [Finset.sum_add_distrib, Finset.mul_sum]
+  unfold uniformMean
+  rw [hsum]
+  ring
+
+private theorem uniformMean_sum_mul {n d : Nat} {ι : Type}
+    (s : Finset ι) (f : ι -> BinaryMatrix n d -> Real)
+    (g : BinaryMatrix n d -> Real) :
+    uniformMean (fun M => (∑ i ∈ s, f i M) * g M) =
+      ∑ i ∈ s, uniformMean (fun M => f i M * g M) := by
+  unfold uniformMean
+  simp_rw [div_eq_mul_inv]
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+
+/-- Distinct real Fourier-rank slices are orthogonal in the uniform inner product.
+This derives orthogonality from Parseval and the concrete support formula. -/
+theorem rankProjection_inner_eq_zero {n d i j : Nat}
+    (f g : BinaryMatrix n d -> Real) (hij : i ≠ j) :
+    uniformMean (fun M => rankProjection i f M * rankProjection j g M) = 0 := by
+  let u : BinaryMatrix n d -> Real := rankProjection i f
+  let v : BinaryMatrix n d -> Real := rankProjection j g
+  have hparseval :
+      uniformMean (fun M => (u M + v M) ^ 2) =
+        uniformMean (fun M => u M ^ 2) + uniformMean (fun M => v M ^ 2) := by
+    rw [fourier_parseval (fun M => u M + v M), fourier_parseval u, fourier_parseval v]
+    rw [← Finset.sum_add_distrib]
+    apply Finset.sum_congr rfl
+    intro Y hY
+    rw [fourierCoeff_add]
+    by_cases hi : Y.rank = i
+    · have hj : Y.rank ≠ j := by
+        intro heq
+        exact hij (hi.symm.trans heq)
+      simp [u, v, fourierCoeff_rankProjection, hi, hj, hij]
+    · by_cases hj : Y.rank = j
+      · simp [u, v, fourierCoeff_rankProjection, hi, hj, hij.symm]
+      · simp [u, v, fourierCoeff_rankProjection, hi, hj, hij, hij.symm]
+  have hpolar := uniformMean_add_square u v
+  rw [hparseval] at hpolar
+  have hcross : 2 * uniformMean (fun M => u M * v M) = 0 := by linarith
+  have hzero : uniformMean (fun M => u M * v M) = 0 := by linarith
+  simpa [u, v] using hzero
+
+/-- Additivity of squared energy for a finite set of pairwise distinct
+rank-supported projections. This is the finite orthogonal-sum step used to
+combine the per-level mixed derivative estimates. -/
+theorem rankProjection_finite_energy_sum {n d q : Nat}
+    (f : BinaryMatrix n d -> Real) :
+    uniformMean (fun M =>
+      (∑ i ∈ Finset.range (q + 1), rankProjection i f M) ^ 2) =
+      ∑ i ∈ Finset.range (q + 1),
+        uniformMean (fun M => (rankProjection i f M) ^ 2) := by
+  induction q with
+  | zero =>
+      simp
+  | succ q ih =>
+      have hsumfun : (fun M =>
+          ∑ i ∈ Finset.range (q + 2), rankProjection i f M) =
+          fun M => (∑ i ∈ Finset.range (q + 1), rankProjection i f M) +
+            rankProjection (q + 1) f M := by
+        funext M
+        rw [Finset.sum_range_succ]
+      have hsumSquare := congrArg (fun g : BinaryMatrix n d -> Real =>
+        uniformMean (fun M => g M ^ 2)) hsumfun
+      rw [hsumSquare, uniformMean_add_square, ih]
+      have hcross :
+          uniformMean (fun M =>
+            (∑ i ∈ Finset.range (q + 1), rankProjection i f M) *
+              rankProjection (q + 1) f M) = 0 := by
+        rw [uniformMean_sum_mul]
+        apply Finset.sum_eq_zero
+        intro i hi
+        have hneq : i ≠ q + 1 := by
+          simp only [Finset.mem_range] at hi
+          omega
+        exact rankProjection_inner_eq_zero f f hneq
+      have hsumrhs :
+          ∑ i ∈ Finset.range (q + 2),
+              uniformMean (fun M => (rankProjection i f M) ^ 2) =
+            (∑ i ∈ Finset.range (q + 1),
+              uniformMean (fun M => (rankProjection i f M) ^ 2)) +
+              uniformMean (fun M => (rankProjection (q + 1) f M) ^ 2) := by
+        rw [Finset.sum_range_succ]
+      rw [hsumrhs, hcross]
+      ring
+
+/-- The real part of the coordinate mixed derivative at input rank r is
+supported exactly on output Fourier rank r. The proof transports support
+through the proved mixed A14 identity, not through an assumed output-rank
+condition. -/
+theorem mixedCoordinateDerivativeChain_re_fourier_support
+    {n d r k l : Nat}
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2)
+    (Y : BinaryMatrix n d) :
+    fourierCoeff
+      (fun M => (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).re) Y =
+      if Y.rank = r then
+        fourierCoeff
+          (fun M => (mixedCoordinatePeel r k l f tLine tHyp M).re) Y
+      else 0 := by
+  have hfun :
+      (fun M => (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).re) =
+      (fun M => rankProjection r
+        (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).re) M) := by
+    funext M
+    rw [← mixedCoordinatePeel_rankProjection_eq_derivativeChain f tLine tHyp]
+    exact complexRankProjection_re
+      (mixedCoordinatePeel r k l f tLine tHyp) M
+  rw [hfun, fourierCoeff_rankProjection]
+
+/-- The imaginary part of the same mixed derivative has the same output-rank
+support, derived from the actual mixed A14 identity. -/
+theorem mixedCoordinateDerivativeChain_im_fourier_support
+    {n d r k l : Nat}
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2)
+    (Y : BinaryMatrix n d) :
+    fourierCoeff
+      (fun M => (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).im) Y =
+      if Y.rank = r then
+        fourierCoeff
+          (fun M => (mixedCoordinatePeel r k l f tLine tHyp M).im) Y
+      else 0 := by
+  have hfun :
+      (fun M => (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).im) =
+      (fun M => rankProjection r
+        (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).im) M) := by
+    funext M
+    rw [← mixedCoordinatePeel_rankProjection_eq_derivativeChain f tLine tHyp]
+    exact complexRankProjection_im
+      (mixedCoordinatePeel r k l f tLine tHyp) M
+  rw [hfun, fourierCoeff_rankProjection]
+
+/-- Distinct input ranks produce mixed coordinate derivative outputs
+orthogonal in each real component. Their output ranks are the distinct
+residual ranks proved above. -/
+theorem mixedCoordinateDerivativeChain_re_orthogonal
+    {n d r s k l : Nat} (hrs : r ≠ s)
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2) :
+    uniformMean (fun M =>
+      (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).re *
+      (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).re) = 0 := by
+  have hr := rankProjection_inner_eq_zero
+    (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).re)
+    (fun X => (mixedCoordinatePeel s k l f tLine tHyp X).re) hrs
+  -- The support identities identify each output with its selected real rank
+  -- projection before applying the Parseval-derived orthogonality theorem.
+  have hfunr :
+      (fun M => (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).re) =
+      (fun M => rankProjection r
+        (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).re) M) := by
+    funext M
+    rw [← mixedCoordinatePeel_rankProjection_eq_derivativeChain f tLine tHyp]
+    exact complexRankProjection_re (mixedCoordinatePeel r k l f tLine tHyp) M
+  have hfuns :
+      (fun M => (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).re) =
+      (fun M => rankProjection s
+        (fun X => (mixedCoordinatePeel s k l f tLine tHyp X).re) M) := by
+    funext M
+    rw [← mixedCoordinatePeel_rankProjection_eq_derivativeChain f tLine tHyp]
+    exact complexRankProjection_re
+      (mixedCoordinatePeel s k l f tLine tHyp) M
+  have hprod :
+      (fun M => (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).re *
+        (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).re) =
+      (fun M => rankProjection r
+        (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).re) M *
+        rankProjection s
+        (fun X => (mixedCoordinatePeel s k l f tLine tHyp X).re) M) := by
+    funext M
+    calc
+      (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).re *
+          (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).re =
+        rankProjection r
+          (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).re) M *
+            (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).re :=
+          congrArg (fun x => x * _) (congrFun hfunr M)
+      _ = rankProjection r
+          (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).re) M *
+            rankProjection s
+          (fun X => (mixedCoordinatePeel s k l f tLine tHyp X).re) M :=
+          congrArg (fun x => _ * x) (congrFun hfuns M)
+  rw [congrArg uniformMean hprod]
+  exact hr
+
+/-- Imaginary-component orthogonality for distinct mixed output ranks. -/
+theorem mixedCoordinateDerivativeChain_im_orthogonal
+    {n d r s k l : Nat} (hrs : r ≠ s)
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2) :
+    uniformMean (fun M =>
+      (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).im *
+      (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).im) = 0 := by
+  have hr := rankProjection_inner_eq_zero
+    (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).im)
+    (fun X => (mixedCoordinatePeel s k l f tLine tHyp X).im) hrs
+  have hfunr :
+      (fun M => (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).im) =
+      (fun M => rankProjection r
+        (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).im) M) := by
+    funext M
+    rw [← mixedCoordinatePeel_rankProjection_eq_derivativeChain f tLine tHyp]
+    exact complexRankProjection_im
+      (mixedCoordinatePeel r k l f tLine tHyp) M
+  have hfuns :
+      (fun M => (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).im) =
+      (fun M => rankProjection s
+        (fun X => (mixedCoordinatePeel s k l f tLine tHyp X).im) M) := by
+    funext M
+    rw [← mixedCoordinatePeel_rankProjection_eq_derivativeChain f tLine tHyp]
+    exact complexRankProjection_im
+      (mixedCoordinatePeel s k l f tLine tHyp) M
+  have hprod :
+      (fun M => (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).im *
+        (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).im) =
+      (fun M => rankProjection r
+        (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).im) M *
+        rankProjection s
+        (fun X => (mixedCoordinatePeel s k l f tLine tHyp X).im) M) := by
+    funext M
+    calc
+      (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).im *
+          (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).im =
+        rankProjection r
+          (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).im) M *
+            (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).im :=
+          congrArg (fun x => x * _) (congrFun hfunr M)
+      _ = rankProjection r
+          (fun X => (mixedCoordinatePeel r k l f tLine tHyp X).im) M *
+            rankProjection s
+          (fun X => (mixedCoordinatePeel s k l f tLine tHyp X).im) M :=
+          congrArg (fun x => _ * x) (congrFun hfuns M)
+  rw [congrArg uniformMean hprod]
+  exact hr
+
+/-- The complex Hermitian cross-energy of two distinct output ranks vanishes:
+both its real and imaginary-coordinate contributions are proved above. -/
+theorem mixedCoordinateDerivativeChain_complex_orthogonal
+    {n d r s k l : Nat} (hrs : r ≠ s)
+    (f : BinaryMatrix (n + l) (d + k) -> Complex)
+    (tLine : Fin k -> Fin (n + l) -> ZMod 2)
+    (tHyp : Fin l -> Fin d -> ZMod 2) :
+    uniformMean (fun M =>
+      (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).re *
+      (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).re +
+      (mixedCoordinateDerivativeChain r k l
+        (complexRankProjection (r + (k + l)) f) tLine tHyp M).im *
+      (mixedCoordinateDerivativeChain s k l
+        (complexRankProjection (s + (k + l)) f) tLine tHyp M).im) = 0 := by
+  have hre := mixedCoordinateDerivativeChain_re_orthogonal hrs f tLine tHyp
+  have him := mixedCoordinateDerivativeChain_im_orthogonal hrs f tLine tHyp
+  unfold uniformMean at *
+  rw [Finset.sum_add_distrib, add_div, hre, him]
+  simp
+
+/-- Rank-class reconstruction: indexing by the ranks that actually occur
+in the finite Fourier domain, the rank projections sum back to the input.
+This is the reconstruction half of the A16 level decomposition. -/
+theorem rankProjection_reconstruct {n d : Nat}
+    (f : BinaryMatrix n d -> Real) (M : BinaryMatrix n d) :
+    (∑ i ∈ (Finset.univ : Finset (BinaryMatrix n d)).image
+        (fun Y => Y.rank), rankProjection i f M) = f M := by
+  let ranks : Finset Nat :=
+    (Finset.univ : Finset (BinaryMatrix n d)).image (fun Y => Y.rank)
+  have hrank (Y : BinaryMatrix n d) : Y.rank ∈ ranks := by
+    exact Finset.mem_image.mpr ⟨Y, Finset.mem_univ Y, rfl⟩
+  have hinner (Y : BinaryMatrix n d) :
+      (∑ i ∈ ranks, if Y.rank = i then
+        fourierCoeff f Y * character Y M else 0) =
+        fourierCoeff f Y * character Y M := by
+    rw [Finset.sum_eq_single Y.rank]
+    · simp
+    · intro i hi hne
+      simp [Ne.symm hne]
+    · intro hnot
+      exact False.elim (hnot (hrank Y))
+  unfold rankProjection
+  change (∑ i ∈ ranks, ∑ Y ∈
+      (Finset.univ : Finset (BinaryMatrix n d)).filter
+        (fun Y => Y.rank = i),
+      fourierCoeff f Y * character Y M) = f M
+  simp_rw [Finset.sum_filter]
+  rw [Finset.sum_comm]
+  simp_rw [hinner]
+  exact fourier_inversion f M
+
+end
+end PvNP.RealizableHardness.ActualBinaryMatrixHC46FourierA16

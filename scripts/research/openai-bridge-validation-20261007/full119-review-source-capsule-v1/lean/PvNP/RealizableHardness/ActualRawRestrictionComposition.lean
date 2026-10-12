@@ -1,0 +1,132 @@
+import PvNP.RealizableHardness.BinaryMatrixComplexA15
+
+namespace PvNP.RealizableHardness.ActualRawRestrictionComposition
+
+open PvNP.RealizableHardness.BinaryMatrixFourier
+open PvNP.RealizableHardness.BinaryMatrixComplexA15
+open scoped BigOperators
+
+set_option autoImplicit false
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+/-- Concatenate two families of right-hand constraint columns. -/
+def appendRightDirections {n d : Nat}
+    (R S : AffineRestriction n d) : Matrix (Fin d) (Fin (R.columns + S.columns)) (ZMod 2) :=
+  fun i j => Sum.elim (R.rightDirections i) (S.rightDirections i)
+    (finSumFinEquiv.symm j)
+
+def appendRightValues {n d : Nat}
+    (R S : AffineRestriction n d) : Matrix (Fin n) (Fin (R.columns + S.columns)) (ZMod 2) :=
+  fun i j => Sum.elim (R.rightValues i) (S.rightValues i)
+    (finSumFinEquiv.symm j)
+
+/-- Concatenate two families of left-hand constraint rows. -/
+def appendLeftDirections {n d : Nat}
+    (R S : AffineRestriction n d) : Matrix (Fin (R.rows + S.rows)) (Fin n) (ZMod 2) :=
+  fun i j => Sum.elim (fun k => R.leftDirections k j) (fun k => S.leftDirections k j)
+    (finSumFinEquiv.symm i)
+
+def appendLeftValues {n d : Nat}
+    (R S : AffineRestriction n d) : Matrix (Fin (R.rows + S.rows)) (Fin d) (ZMod 2) :=
+  fun i j => Sum.elim (fun k => R.leftValues k j) (fun k => S.leftValues k j)
+    (finSumFinEquiv.symm i)
+
+def composeRawRestriction {n d : Nat} (R S : AffineRestriction n d) :
+    AffineRestriction n d where
+  columns := R.columns + S.columns
+  rows := R.rows + S.rows
+  rightDirections := appendRightDirections R S
+  rightValues := appendRightValues R S
+  leftDirections := appendLeftDirections R S
+  leftValues := appendLeftValues R S
+
+@[simp] theorem composeRawRestriction_budget {n d : Nat}
+    (R S : AffineRestriction n d) :
+    (composeRawRestriction R S).budget = R.budget + S.budget := by
+  simp [composeRawRestriction, AffineRestriction.budget]
+  omega
+
+private theorem right_constraint_append_iff {n d : Nat}
+    (R S : AffineRestriction n d) (M : BinaryMatrix n d) :
+    M * appendRightDirections R S = appendRightValues R S ↔
+      (M * R.rightDirections = R.rightValues ∧ M * S.rightDirections = S.rightValues) := by
+  constructor
+  · intro h
+    constructor
+    · apply Matrix.ext
+      intro i j
+      have := congrFun (congrFun h i) (finSumFinEquiv (Sum.inl j))
+      simpa [Matrix.mul_apply, appendRightDirections, appendRightValues] using this
+    · apply Matrix.ext
+      intro i j
+      have := congrFun (congrFun h i) (finSumFinEquiv (Sum.inr j))
+      simpa [Matrix.mul_apply, appendRightDirections, appendRightValues] using this
+  · rintro ⟨hR, hS⟩
+    apply Matrix.ext
+    intro i j
+    rcases hidx : finSumFinEquiv.symm j with k | k
+    · have hpart := congrFun (congrFun hR i) k
+      simpa [Matrix.mul_apply, appendRightDirections, appendRightValues, hidx] using hpart
+    · have hpart := congrFun (congrFun hS i) k
+      simpa [Matrix.mul_apply, appendRightDirections, appendRightValues, hidx] using hpart
+
+private theorem left_constraint_append_iff {n d : Nat}
+    (R S : AffineRestriction n d) (M : BinaryMatrix n d) :
+    appendLeftDirections R S * M = appendLeftValues R S ↔
+      (R.leftDirections * M = R.leftValues ∧ S.leftDirections * M = S.leftValues) := by
+  constructor
+  · intro h
+    constructor
+    · apply Matrix.ext
+      intro i j
+      have := congrFun (congrFun h (finSumFinEquiv (Sum.inl i))) j
+      simpa [Matrix.mul_apply, appendLeftDirections, appendLeftValues] using this
+    · apply Matrix.ext
+      intro i j
+      have := congrFun (congrFun h (finSumFinEquiv (Sum.inr i))) j
+      simpa [Matrix.mul_apply, appendLeftDirections, appendLeftValues] using this
+  · rintro ⟨hR, hS⟩
+    apply Matrix.ext
+    intro i j
+    rcases hidx : finSumFinEquiv.symm i with k | k
+    · have hpart := congrFun (congrFun hR k) j
+      simpa [Matrix.mul_apply, appendLeftDirections, appendLeftValues, hidx] using hpart
+    · have hpart := congrFun (congrFun hS k) j
+      simpa [Matrix.mul_apply, appendLeftDirections, appendLeftValues, hidx] using hpart
+
+/-- The composed raw restriction imposes exactly both original equation families. -/
+theorem composeRawRestriction_fibre {n d : Nat}
+    (R S : AffineRestriction n d) :
+    (composeRawRestriction R S).fibre = R.fibre ∩ S.fibre := by
+  ext M
+  simp only [AffineRestriction.fibre, Finset.mem_filter, Finset.mem_univ, true_and,
+    Finset.mem_inter]
+  change (M * appendRightDirections R S = appendRightValues R S ∧
+      appendLeftDirections R S * M = appendLeftValues R S) ↔
+    (M * R.rightDirections = R.rightValues ∧ R.leftDirections * M = R.leftValues) ∧
+      (M * S.rightDirections = S.rightValues ∧ S.leftDirections * M = S.leftValues)
+  rw [right_constraint_append_iff, left_constraint_append_iff]
+  simp only [and_assoc]
+  tauto
+
+/-- Normalized squared fibre energy is unchanged by replacing two simultaneous
+raw equation families with their concatenation. -/
+theorem composeRawRestriction_fibreEnergy {n d : Nat}
+    (R S : AffineRestriction n d) (f : BinaryMatrix n d → ℂ) :
+    fibreEnergy (composeRawRestriction R S).fibre f = fibreEnergy (R.fibre ∩ S.fibre) f := by
+  rw [composeRawRestriction_fibre]
+
+/-- Any raw-global estimate transfers to the composed restriction using the
+additive nominal budget. This keeps the original normalized denominator. -/
+theorem rawGlobal_compose {n d r : Nat} {ε : ℝ}
+    (f : BinaryMatrix n d → ℂ)
+    (hf : UpToRawNormSqGlobal r ε f)
+    (R S : AffineRestriction n d)
+    (hbudget : R.budget + S.budget ≤ r) :
+    fibreEnergy (R.fibre ∩ S.fibre) f ≤ ε := by
+  rw [← composeRawRestriction_fibre R S]
+  exact hf (composeRawRestriction R S) (by simpa using hbudget)
+
+end
+end PvNP.RealizableHardness.ActualRawRestrictionComposition

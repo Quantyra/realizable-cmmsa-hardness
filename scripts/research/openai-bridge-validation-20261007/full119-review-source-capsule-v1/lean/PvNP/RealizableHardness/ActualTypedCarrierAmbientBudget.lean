@@ -1,0 +1,249 @@
+import PvNP.RealizableHardness.BinaryMatrixTypedA15Transport
+
+namespace PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget
+
+open BinaryMatrixActualAffine BinaryMatrixTypedA15Transport BinaryMatrixFourier
+
+noncomputable section
+set_option autoImplicit false
+
+private abbrev F := ZMod 2
+private abbrev V (d : Nat) := Fin d → F
+private abbrev W (n : Nat) := Fin n → F
+
+/-- Lift a carrier restriction to the original matrix ambient space. Its
+fixed domain is the full preimage of the carrier-fixed domain under the
+quotient map; its varying codomain is the image of the carrier variation
+under the original carrier inclusion. The affine base is the actual source
+base plus the carrier's affine base pulled back through both maps. -/
+def liftCarrierRestriction {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : (V d) →ₗ[F] (W n))
+    (Q : CarrierRestriction A B) : ActualAffineRestriction n d where
+  domainFixed := Q.domainFixed.comap A.mkQ
+  codomainVariation := Q.codomainVariation.map B.subtype
+  base := LinearMap.toMatrix' (T + B.subtype.comp (Q.base.comp A.mkQ))
+
+/-- The ambient matrix represented by a typed carrier map at affine source
+base `T`. -/
+def liftCarrierMatrix {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : (V d) →ₗ[F] (W n))
+    (M : (V d ⧸ A) →ₗ[F] B) : BinaryMatrix n d :=
+  LinearMap.toMatrix' (T + B.subtype.comp (M.comp A.mkQ))
+
+theorem liftCarrierMatrix_sub_mulVec {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : (V d) →ₗ[F] (W n)) (Q : CarrierRestriction A B)
+    (M : (V d ⧸ A) →ₗ[F] B) (v : V d) :
+    (liftCarrierMatrix A B T M -
+      (liftCarrierRestriction A B T Q).base).mulVec v =
+        B.subtype ((M - Q.base) (A.mkQ v)) := by
+  simp [liftCarrierMatrix, liftCarrierRestriction, Matrix.sub_mulVec,
+    LinearMap.toMatrix'_mulVec, map_sub, LinearMap.comp_apply] <;> abel
+
+/-- A carrier map belongs to the lifted ambient fibre exactly when its
+carrier parameter belongs to the original typed restriction fibre. This is
+the pointwise fibre bridge; together with a quotient-Hom bijection it gives
+the normalized-energy transport. -/
+theorem liftCarrierMatrix_mem_fibre_iff {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : (V d) →ₗ[F] (W n)) (Q : CarrierRestriction A B)
+    (M : (V d ⧸ A) →ₗ[F] B) :
+    liftCarrierMatrix A B T M ∈ (liftCarrierRestriction A B T Q).fibre ↔
+      M ∈ Q.fibre := by
+  simp only [ActualAffineRestriction.fibre, CarrierRestriction.fibre,
+    Finset.mem_filter, Finset.mem_univ, true_and]
+  constructor
+  · rintro ⟨hfix, hvar⟩
+    constructor
+    · intro u hu
+      obtain ⟨v, hv⟩ := Submodule.mkQ_surjective A u
+      have hpre : v ∈ (liftCarrierRestriction A B T Q).domainFixed := by
+        change A.mkQ v ∈ Q.domainFixed
+        rw [hv]
+        exact hu
+      have h0 := hfix v hpre
+      have hcoord := liftCarrierMatrix_sub_mulVec A B T Q M v
+      rw [hcoord] at h0
+      have hzero : (M - Q.base) u = 0 := by
+        apply B.injective_subtype
+        simpa only [hv, map_zero] using h0
+      exact hzero
+    · intro u
+      obtain ⟨v, hv⟩ := Submodule.mkQ_surjective A u
+      have hcoord := liftCarrierMatrix_sub_mulVec A B T Q M v
+      have hmem : B.subtype ((M - Q.base) (A.mkQ v)) ∈
+          Q.codomainVariation.map B.subtype := by
+        rw [← hcoord]
+        exact hvar v
+      rcases Submodule.mem_map.mp hmem with ⟨y, hy, hval⟩
+      have hyval : y = (M - Q.base) (A.mkQ v) :=
+        B.injective_subtype hval
+      rw [← hv, ← hyval]
+      exact hy
+  · rintro ⟨hfix, hvar⟩
+    constructor
+    · intro a ha
+      have hqa : A.mkQ a ∈ Q.domainFixed := by
+        simpa [liftCarrierRestriction] using ha
+      have hzero := hfix (A.mkQ a) hqa
+      rw [liftCarrierMatrix_sub_mulVec]
+      rw [hzero]
+      simp
+    · intro v
+      have hcv : (M - Q.base) (A.mkQ v) ∈ Q.codomainVariation := hvar (A.mkQ v)
+      apply Submodule.mem_map.mpr
+      exact ⟨(M - Q.base) (A.mkQ v), hcv,
+        (liftCarrierMatrix_sub_mulVec A B T Q M v).symm⟩
+
+/-- A typed carrier fibre is equivalent to the quotient-Hom space obtained by
+factoring its linear difference through the fixed-domain quotient. -/
+noncomputable def carrierFibreQuotientHomEquiv {n d : Nat}
+    {A : Submodule F (V d)} {B : Submodule F (W n)}
+    (Q : CarrierRestriction A B) :
+    {M : (V d ⧸ A) →ₗ[F] B // M ∈ Q.fibre} ≃
+      (((V d ⧸ A) ⧸ Q.domainFixed) →ₗ[F] Q.codomainVariation) := by
+  let toFun :
+      {M : (V d ⧸ A) →ₗ[F] B // M ∈ Q.fibre} →
+        ((V d ⧸ A) ⧸ Q.domainFixed) →ₗ[F] Q.codomainVariation :=
+    fun x => by
+      have hprops :
+          (∀ a ∈ Q.domainFixed, (x.1 - Q.base) a = 0) ∧
+          (∀ v : V d ⧸ A, (x.1 - Q.base) v ∈ Q.codomainVariation) := by
+        simpa [CarrierRestriction.fibre] using x.2
+      let deltaC : (V d ⧸ A) →ₗ[F] Q.codomainVariation :=
+        (x.1 - Q.base).codRestrict Q.codomainVariation hprops.2
+      have hker : Q.domainFixed ≤ LinearMap.ker deltaC := by
+        intro a ha
+        apply LinearMap.mem_ker.mpr
+        apply Subtype.ext
+        exact hprops.1 a ha
+      exact Q.domainFixed.liftQ deltaC hker
+  let invFun :
+      (((V d ⧸ A) ⧸ Q.domainFixed) →ₗ[F] Q.codomainVariation) →
+        {M : (V d ⧸ A) →ₗ[F] B // M ∈ Q.fibre} :=
+    fun N => by
+      refine ⟨Q.base + Q.codomainVariation.subtype.comp
+        (N.comp Q.domainFixed.mkQ), ?_⟩
+      simp only [CarrierRestriction.fibre, Finset.mem_filter,
+        Finset.mem_univ, true_and]
+      constructor
+      · intro a ha
+        have hqa : Q.domainFixed.mkQ a = 0 := by
+          apply LinearMap.mem_ker.mp
+          simpa only [Submodule.ker_mkQ] using ha
+        simp [LinearMap.comp_apply, hqa]
+      · intro v
+        simpa [LinearMap.comp_apply] using
+          (N (Q.domainFixed.mkQ v)).property
+  refine
+    { toFun := toFun
+      invFun := invFun
+      left_inv := ?_
+      right_inv := ?_ }
+  · intro x
+    apply Subtype.ext
+    apply LinearMap.ext
+    intro u
+    simp [toFun, invFun, LinearMap.comp_apply,
+      Submodule.liftQ_mkQ, add_sub_cancel_left]
+  · intro N
+    apply LinearMap.ext
+    intro x
+    refine Submodule.Quotient.induction_on _ x ?_
+    intro u
+    simp [toFun, invFun, LinearMap.comp_apply,
+      Submodule.liftQ_mkQ]
+    apply Subtype.ext
+    rfl
+
+/-- The precise ambient-order charge for lifting a typed carrier
+restriction. It is the dimension removed by the initial quotient `A`, the
+codomain codimension outside `B`, and the order already spent inside the
+carrier. This rules out an uncharged ambient-to-carrier globalness step. -/
+theorem liftCarrierRestriction_order {n d : Nat}
+    (A : Submodule F (V d)) (B : Submodule F (W n))
+    (T : (V d) →ₗ[F] (W n))
+    (Q : CarrierRestriction A B) :
+    (liftCarrierRestriction A B T Q).order =
+      Module.finrank F A + Module.finrank F (W n ⧸ B) + Q.order := by
+  let P : Submodule F (V d) := Q.domainFixed.comap A.mkQ
+  have hAP : A ≤ P := by
+    intro x hx
+    change A.mkQ x ∈ Q.domainFixed
+    have hxker : x ∈ LinearMap.ker A.mkQ := by
+      simpa only [Submodule.ker_mkQ] using hx
+    have hxzero : A.mkQ x = 0 := LinearMap.mem_ker.mp hxker
+    rw [hxzero]
+    exact Q.domainFixed.zero_mem
+  have hmap : P.map A.mkQ = Q.domainFixed := by
+    exact Submodule.map_comap_eq_self (by
+      rw [Submodule.range_mkQ]
+      exact le_top)
+  have hNested : Module.finrank F (V d ⧸ P) =
+      Module.finrank F ((V d ⧸ A) ⧸ Q.domainFixed) := by
+    let e := BinaryMatrixA1NestedCarrier.nestedDomainEquiv A P hAP
+    rw [← hmap]
+    exact e.finrank_eq.symm
+  with_unfolding_all
+    change Module.finrank (ZMod 2) (V d ⧸ P) =
+      Module.finrank (ZMod 2) ((V d ⧸ A) ⧸ Q.domainFixed) at hNested
+  have hAq := A.finrank_quotient_add_finrank
+  have hPq := P.finrank_quotient_add_finrank
+  have hDq := Q.domainFixed.finrank_quotient_add_finrank
+  with_unfolding_all
+    change Module.finrank (ZMod 2) (V d ⧸ A) + Module.finrank (ZMod 2) A =
+      Module.finrank (ZMod 2) (V d) at hAq
+  with_unfolding_all
+    change Module.finrank (ZMod 2) (V d ⧸ P) + Module.finrank (ZMod 2) P =
+      Module.finrank (ZMod 2) (V d) at hPq
+  with_unfolding_all
+    change Module.finrank (ZMod 2) ((V d ⧸ A) ⧸ Q.domainFixed) +
+      Module.finrank (ZMod 2) Q.domainFixed =
+      Module.finrank (ZMod 2) (V d ⧸ A) at hDq
+  have hPdim : Module.finrank F P =
+      Module.finrank F A + Module.finrank F Q.domainFixed := by
+    with_unfolding_all
+      change Module.finrank (ZMod 2) P = Module.finrank (ZMod 2) A +
+        Module.finrank (ZMod 2) Q.domainFixed
+    omega
+  let C : Submodule F (W n) := Q.codomainVariation.map B.subtype
+  have hCdim : Module.finrank F C = Module.finrank F Q.codomainVariation := by
+    simpa [C] using
+      (Submodule.finrank_map_subtype_eq B Q.codomainVariation)
+  with_unfolding_all
+    change Module.finrank (ZMod 2) C =
+      Module.finrank (ZMod 2) Q.codomainVariation at hCdim
+  have hBq := B.finrank_quotient_add_finrank
+  have hCq := C.finrank_quotient_add_finrank
+  have hVq := Q.codomainVariation.finrank_quotient_add_finrank
+  with_unfolding_all
+    change Module.finrank (ZMod 2) (W n ⧸ B) + Module.finrank (ZMod 2) B =
+      Module.finrank (ZMod 2) (W n) at hBq
+  with_unfolding_all
+    change Module.finrank (ZMod 2) (W n ⧸ C) + Module.finrank (ZMod 2) C =
+      Module.finrank (ZMod 2) (W n) at hCq
+  with_unfolding_all
+    change Module.finrank (ZMod 2) (B ⧸ Q.codomainVariation) +
+      Module.finrank (ZMod 2) Q.codomainVariation =
+      Module.finrank (ZMod 2) B at hVq
+  have hCodim : Module.finrank F (W n ⧸ C) =
+      Module.finrank F (W n ⧸ B) +
+        Module.finrank F (B ⧸ Q.codomainVariation) := by
+    with_unfolding_all
+      change Module.finrank (ZMod 2) (W n ⧸ C) =
+        Module.finrank (ZMod 2) (W n ⧸ B) +
+          Module.finrank (ZMod 2) (B ⧸ Q.codomainVariation)
+    omega
+  simp only [liftCarrierRestriction, ActualAffineRestriction.order,
+    CarrierRestriction.order]
+  change Module.finrank F P + Module.finrank F (W n ⧸ C) =
+    Module.finrank F A + Module.finrank F (W n ⧸ B) +
+      (Module.finrank F Q.domainFixed +
+        Module.finrank F (B ⧸ Q.codomainVariation))
+  rw [hPdim, hCodim]
+  omega
+
+end
+end PvNP.RealizableHardness.ActualTypedCarrierAmbientBudget
