@@ -1,0 +1,10 @@
+import PvNP.RealizableHardness.ActualFullAdvicePrefix
+
+#check PvNP.RealizableHardness.ActualFullAdvicePrefix.advicePrefix
+#check PvNP.RealizableHardness.ActualFullAdvicePrefix.fullAdviceJointScore
+#check PvNP.RealizableHardness.ActualFullAdvicePrefix.uniform_prefix_mean
+#check PvNP.RealizableHardness.ActualFullAdvicePrefix.fullAdviceJointScore_eq
+#check PvNP.RealizableHardness.ActualFullAdvicePrefix.visible_joint_event_full_advice_transfer
+#print axioms PvNP.RealizableHardness.ActualFullAdvicePrefix.uniform_prefix_mean
+#print axioms PvNP.RealizableHardness.ActualFullAdvicePrefix.fullAdviceJointScore_eq
+#print axioms PvNP.RealizableHardness.ActualFullAdvicePrefix.visible_joint_event_full_advice_transfer

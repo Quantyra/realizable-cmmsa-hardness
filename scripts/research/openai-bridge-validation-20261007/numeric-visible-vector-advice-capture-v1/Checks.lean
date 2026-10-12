@@ -1,0 +1,3 @@
+import PvNP.RealizableHardness.ActualVisibleVectorAdvice
+
+#print axioms PvNP.RealizableHardness.ActualVisibleVectorAdvice.visible_joint_event_vector_transfer
