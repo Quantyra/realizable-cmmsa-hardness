@@ -1,0 +1,11 @@
+# Occurrence consumer candidate
+
+This v4 successor preserves the exact numbered-list and row serialization from the captured v3 source, while repairing the `Pairwise (Disjoint on f)` proof shape. It adds a row-index equivalence derived from the actual `rowIndices` list and its `rows_eq_map` theorem, then constructs the exact `ActualMZOuterSourceContract.Encoded3Lin` consumer for each literal `BooleanParityInput.Input`.
+
+The consumer's row map follows source row occurrences in list order. Its finite source uses the owner-prefix variable equivalence; the field proofs transfer per-variable degree at most 10 and pairwise support intersection at most 1 from the actual occurrence allocation. It states exact equality between finite-source violations and the serialized Boolean failure count, derives the variable count `3 D m + 5 E`, then the required `2 V ≤ 51 D m`, and gives the exact `inputWords` list produced by the serializer.
+
+This is still a source-only semantic candidate. It does not define a bitstring parser or prove that `OuterEncoding.decode` consumes these words. It does not construct a `Gap3LinReduction`, a `SeededMap`, a bounded-string runtime, or a `Complexity.FP` witness. It does not connect the upstream `BinaryLanguage.language` to the shared literal interface or establish the local `Complexity.SAT.ThreeSAT.language` bridge. No declarations are claimed compiled or accepted.
+
+The canonical variable order is the exact owner-prefix concatenation of local ports and representative-edge internals. The row index is derived from `ActualOccurrenceAllocation.Instance.rowIndices` and its ordered map to `rows`; therefore the producer does not relabel equations with an arbitrary finite equivalence. Repeated input occurrences are retained because original rows are indexed by `Fin I.equations.length`, while generated cloud rows are indexed by actual representative-edge occurrences.
+
+Remaining to-do list: compile and repair the source candidate; implement the canonical encoded-input parser and prove decode/roundtrip against `inputWords`; implement the bounded-string producer in FP and build `Gap3LinReduction`; instantiate the upstream-to-shared and shared-to-local language bridges and compose source promises.

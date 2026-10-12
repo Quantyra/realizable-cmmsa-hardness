@@ -1,0 +1,13 @@
+# Total scanner and local decoder bridge
+
+This successor depends on the immutable scanner core in `local-three-sat-binary-codec-capture-20261012-v1` and the decoder normal form in `local-three-sat-binary-codec-capture-20261012-v2`. It provides the missing scanner proof layer: body-state induction characterizes successful unary-name scans, between-state inversion extracts literals, and a clause-boundary inversion extracts exactly three literals followed by the required clause token.
+
+The forward lemmas show that each literal body emits the doubled unary-name digits and terminator, each three-literal clause returns to `between0` with `emitClause` output, and induction on formulas proves `run .between0 phi.encode = some (emitFormula phi)` for every `phi.Is3CNF`. Decoder success therefore implies scanner output equality by `CNF.decode3?_sound`.
+
+The reverse strong induction `run_between0_sound` reconstructs a typed exact-three CNF encoding from every successful scanner run. An empty run reconstructs the empty formula. A nonempty successful run must contain three body-separated literals and a `10` clause separator, after which the shorter suffix is handled by the induction hypothesis. If `CNF.decode3?` returns `none`, this reconstruction contradicts `CNF.decode3?_encode`; therefore the scanner rejects every decoder-invalid word. `scannerMatchesDecoder` states the resulting all-input function equality, and `localThreeSAT_iff_decodedConverter` transfers the authoritative `ThreeSAT.mem_language_iff_decode3` characterization through it.
+
+The source contains no new axioms, `sorry`, or `admit`. No local Lean invocation has been performed. All proofs, including the exact strong-induction and simplifier steps, remain compiler-unverified and the offer is not accepted. The output-size bounds, upstream parser/assignment correspondence, actual Cobham `FP` witness, and machine-model simulation remain separate work; none is asserted here.
+
+The local sign convention remains `Lit.eval alpha ell = (alpha.get ell.var == ell.sign)`: true denotes positive and false negative. The eventual semantic transport must retain finite local assignments and use sparse upstream names `g(n)=2^n-1`, represented by `n` true binary digits. Planning argument pins: codec `b4ff236`, finite assignment `ade0217`, machine model `c795dc1`, bounded-string runtime `493b6d3`, and scanner grammar directions `d43b144`.
+
+Remaining to-do list: compiler validation and proof repair; prove the upstream parser accepts exactly the emitted framed words with the sparse-name assignment correspondence; instantiate an actual `FP` witness through the pinned bounded-string runtime route; prove the machine-model simulation.
