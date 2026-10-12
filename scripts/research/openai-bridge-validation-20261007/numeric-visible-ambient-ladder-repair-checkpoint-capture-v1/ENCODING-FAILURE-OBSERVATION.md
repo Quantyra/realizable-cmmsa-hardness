@@ -1,0 +1,11 @@
+# Encoding failure observation and reconstruction checkpoint
+
+This is an explicit record of a lost scratch state. The first scratch source at `ActualVisibleAmbientLadder.lean` was overwritten during an attempted encoding repair before preservation was requested. Its original bytes and the complete diagnostic from the failed broad re-encoding are unavailable. No lossless recovery is claimed.
+
+The overwritten scratch had shown mojibake in a PowerShell display. A broad encode/decode conversion was attempted and replaced mathematical glyphs with `?`; that damaged state was itself overwritten while reconstructing the source from the available earlier command text. The failed intermediate bytes and full diagnostics cannot be reproduced.
+
+The reconstruction was rebuilt from the earlier source text using ASCII placeholders for mathematical glyphs, then PowerShell string substitutions to Unicode code points before writing UTF-8 without BOM. The available conversion map included U+2208 (membership), U+2190 (left arrow), U+27E8/U+27E9 (subtype delimiters), U+2243 plus subscript-l (linear equivalence), U+2192 (function arrow), U+2264 (order), U+2294/U+2293/U+22A4 (sup/inf/top), U+2203 (exists), U+2227 (and), U+22A2 (turnstile), and U+211A (rationals). The exact prior command transcript remains in the active conversation; the original scratch and failed diagnostic do not.
+
+The separately preserved current reconstruction is `ActualVisibleAmbientLadder.repair-checkpoint-1.lean`, SHA-256 `ECEA56BAC29B2A4C9EF2DA714FD716736F611342698AB2D696562F91082F0EFD`, 10,507 bytes. A strict UTF-8 decode succeeded, the file has no BOM, and a text scan found no common mojibake markers, `sorry`, or `admit`. This is a glyph/encoding audit only; it is not a Lean parse, compile, or proof acceptance. It is a new candidate reconstruction, not a byte-complete recovery of the overwritten scratch.
+
+The checkpoint is immutable for this recovery record. Substantive continuation must be authored in a disjoint successor source file. Sol capture acknowledgement, if issued, must identify this exact path and hash and must not be represented as compiler acceptance.

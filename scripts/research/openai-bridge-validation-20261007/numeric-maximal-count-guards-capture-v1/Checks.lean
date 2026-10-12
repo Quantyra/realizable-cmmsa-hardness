@@ -1,0 +1,7 @@
+import PvNP.RealizableHardness.ActualMaximalCountGuards
+
+#print axioms PvNP.RealizableHardness.ActualMaximalCountGuards.blocks_ge_strong_count_dimension
+#print axioms PvNP.RealizableHardness.ActualMaximalCountGuards.ladder_denominator_le_dyadic
+#print axioms PvNP.RealizableHardness.ActualMaximalCountGuards.all_ladder_thresholds_meet_count_cutoff
+#print axioms PvNP.RealizableHardness.ActualMaximalCountGuards.reciprocal_parameter_threshold_margin
+#print axioms PvNP.RealizableHardness.ActualMaximalCountGuards.actual_count_import_guards

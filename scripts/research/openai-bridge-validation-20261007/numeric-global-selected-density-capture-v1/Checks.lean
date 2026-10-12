@@ -1,0 +1,5 @@
+import PvNP.RealizableHardness.ActualGlobalSelectedDensity
+
+#print axioms PvNP.RealizableHardness.ActualGlobalSelectedDensity.physical_le_same_choice_mean_plus_collision
+#print axioms PvNP.RealizableHardness.ActualGlobalSelectedDensity.physical_forces_same_choice_high_density
+#print axioms PvNP.RealizableHardness.ActualGlobalSelectedDensity.physical_forces_same_choice_side_density
