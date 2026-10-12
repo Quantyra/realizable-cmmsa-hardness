@@ -1,0 +1,66 @@
+{
+    "schema":  "local-three-sat-binary-codec-offer-20261012-v6",
+    "story":  "E002/S3137",
+    "status":  "source-only successor; exact-byte capture requested; uncompiled and unaccepted",
+    "accepted":  false,
+    "compiler_invoked":  false,
+    "target_environment":  {
+                               "lean":  "4.34.1",
+                               "mathlib":  "d13f23b723b8a846827a245b89c10fc7d3f11612",
+                               "complexitylib":  "6c248df7859f2f245e731c1e07057bf69d165fe2",
+                               "upstream":  "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+                               "execution":  "GCP only",
+                               "old_olean_reuse_permitted":  false,
+                               "parser_clones_permitted":  false
+                           },
+    "direct_joint_imports":  [
+                                 "LocalThreeSATBinaryCodecRuntime",
+                                 "OAI.Computability.UniqueGames.Machines.MachineBinaryParsingLemmas"
+                             ],
+    "prior_capture":  {
+                          "id":  "local-three-sat-binary-codec-capture-20261012-v5",
+                          "index_sha256":  "9EC5C5E51E6DE1579CF5D89E02A3654782A282384503E4EABBBC451E22603D9F",
+                          "manifest_sha256":  "B8598463B6E47EF3795C4806EAEA0A452FD7E0A6F4C4F09D53AC0388AC956988"
+                      },
+    "claims":  {
+                   "machine_output_eq_convert_authored":  true,
+                   "scanner_matches_local_decoder_authored":  true,
+                   "sparse_name_injectivity_authored":  true,
+                   "finite_assignment_transport_both_directions_authored":  true,
+                   "compiler_verified":  false,
+                   "tm2_to_local_machine_transport_authored":  false,
+                   "convert_fp_witness_authored":  true,
+                   "upstream_binary_language_all_input_equivalence_authored":  true
+               },
+    "source_notes":  [
+                         "Actual pinned OAI BinaryLanguage/parser declarations; no duplicate parser.",
+                         "Sparse name is bitsValue (List.replicate n true), with canonical digits and length used for injectivity.",
+                         "Malformed local decoder output is []; upstream parser rejects empty input. Empty local formula emits [false] and decodes to the empty upstream formula.",
+                         "V6 fixes source-review issues in v5: fully qualified upstream namespaces, noncomputable choice-based extension, clause marker equation, and malformed-input rewrite.",
+                         "Runtime removes the false v4 run_success_implies_microFold claim and corrects three MicroState argument constructor errors."
+                     ],
+    "upstream_source_plan":  "joint-codec-environment-source-plan-v1/manifest.json",
+    "local_runtime_dependencies_from":  "local-three-sat-binary-codec-offer-20261012-v4 pinned dependency snapshots (preserved)",
+    "files":  [
+                  {
+                      "path":  "LocalThreeSATBinaryCodecRuntime.lean",
+                      "bytes":  43268,
+                      "sha256":  "9D014AC23A501326B1DA7EC322BC0B86D5DFAF93E7868D2A11A735607318FAC0"
+                  },
+                  {
+                      "path":  "LocalThreeSATBinaryCodecUpstream.lean",
+                      "bytes":  10089,
+                      "sha256":  "E1521AE310672E3572F4E58AFE88BEB9DBCD801878CB4E63DCF3D728254B7F7B"
+                  },
+                  {
+                      "path":  "Checks.lean",
+                      "bytes":  748,
+                      "sha256":  "BC9EF3E034F43B85AA034F90C99E7555BAB9EF68B6AD56845170DFE8EA498185"
+                  },
+                  {
+                      "path":  "ARGUMENT.md",
+                      "bytes":  2896,
+                      "sha256":  "0D3D64678F969E3D411422DE2B386C821EB50E0A838CD27F149014919DE10E0A"
+                  }
+              ]
+}
