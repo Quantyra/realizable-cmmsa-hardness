@@ -1,0 +1,16 @@
+# Exact local supplied-advice spans and coordinate law
+
+E002/S3137. UNCOMPILED and UNACCEPTED.
+
+## 2026-10-11 The two locally computed prefix spans and coordinate law
+
+Fix an actual good question U, actual retained draw s and the full supplied tuple v in the actual retained subspace V. The first prover receives each vector through the inclusion V->E_U; the second receives each vector through the retainedVisibleEquiv V->E_X. Each takes the same fixed a-entry prefix. Inclusion and the visible equivalence are injective linear maps. Linear independence of a prefix is preserved in both directions: mapping preserves independence because the kernel is zero, and independence after mapping implies independence before mapping. Consequently both local output functions return none on exactly the dependent prefixes. They may choose fixed normalized outputs there; the analysis scores those tuples as zero and later uses actual acceptance nonnegativity, without discarding their probability.
+
+On an independent prefix with retained span R, the first prover's locally computed span is precisely includeSubspace(V,R), because a linear map takes the span of a family to the span of its image. Its preimage under the inclusion is R, using injectivity, so retainedPreimageGrass recovers R regardless of the containment proof. The second prover's locally computed span is exactly pushGrass(retainedVisibleEquiv,R). Thus if the first output is some Q, the visible output is some of the very visible advice used by selectedAssignmentMass; conversely, any successful visible prefix comes from the same retained R and hence the same original Q. These are equalities of deterministic output objects, not merely equality of their distributions. They let the two local strategies compute their advice using only their own vectors and questions.
+
+The row-coordinate linear equivalence sends actual V bijectively to retained(rowDrawEquiv(s)), by actualRetained_map_coordinates. Its restriction is a linear equivalence on these retained carriers. Applying it componentwise gives a bijection of the full r-tuples, including the unused suffix. This bijection preserves the constant uniform-array weight because both finite tuple carriers have equal cardinality. The original span maps under actualRowGrassEquiv to the canonical included span, and its inverse recovers exactly the actual Q used in canonicalAssignmentScore. The visible span identity above then identifies the same second-law input. Reindexing the full tuple sum by this bijection and the draw sum by rowDrawEquiv preserves the actual draw prior pointwise. No vector, tail, side-loss or eligibility charge is introduced by these exact transports.
+
+The local output laws remain to be instantiated and their independent product compared with assignmentPairLaw, including the dependent-prefix fallback. Original iid rows and the declared external strategy domain remain separate joins; this argument supplies their deterministic advice and coordinate-law prerequisites, not a final source-game conclusion.
+
+Remaining to-do list: translate both local span equalities and exact tuple/draw transports, instantiate the actual local strategy laws and original iid-row score, discharge the common floor/source NO and complete all verification and certification gates.
+

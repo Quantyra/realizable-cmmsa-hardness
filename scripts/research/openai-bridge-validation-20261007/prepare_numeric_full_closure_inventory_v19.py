@@ -1,0 +1,118 @@
+"""Source-only inventory; never creates an execution archive or invokes Lean."""
+import hashlib
+import json
+from pathlib import Path
+import re
+
+HERE = Path(__file__).resolve().parent
+
+
+def pin(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest().upper()
+
+
+def main():
+    old = json.loads((HERE / 'complete-numeric-additive-scope-proposal-v7.json').read_bytes())
+    selected = {}
+    for row in old['exact_candidate_sources']:
+        if row['capture'] in ('numeric-fixed-frame-transport-capture-v2', 'numeric-side-extension-formal-capture-v2'):
+            continue
+        directory = HERE / row['capture']
+        matches = [p for p in directory.rglob('*.lean') if pin(p) == row['sha256']]
+        assert len(matches) == 1, row
+        selected[row['path']] = (matches[0], row['capture'])
+    captures = [
+        'numeric-fixed-frame-transport-capture-v3', 'numeric-side-extension-formal-capture-v12',
+        'numeric-tagged-common-leaf-capture-v2', 'numeric-rational-decoder-capture-v1',
+        'numeric-row-deletion-capture-v1', 'numeric-refresh-progress-capture-v1',
+        'numeric-star-marginal-capture-v1', 'numeric-refresh-cover-capture-v1',
+        'numeric-refresh-formal-encoding-successor-v1', 'numeric-refresh-tail-capture-v2',
+        'numeric-refresh-history-capture-v1', 'numeric-refresh-history-capture-v2',
+        'numeric-refresh-history-capture-v6', 'numeric-distinct-advice-capture-v1',
+        'numeric-complement-mass-capture-v1', 'numeric-advice-average-capture-v1',
+        'numeric-refresh-preservation-capture-v1', 'numeric-visible-completion-capture-v1',
+        'numeric-random-extension-capture-v1', 'numeric-completion-pullback-capture-v1', 'numeric-selected-refresh-cover-capture-v2',
+        'numeric-restricted-visible-pair-capture-v2', 'numeric-actual-visible-leaf-loss-capture-v1', 'numeric-two-table-leaf-loss-capture-v1', 'numeric-transverse-agreement-loss-capture-v2', 'numeric-hside-full-zoom-capture-v2',
+        'numeric-hside-selected-charge-capture-v1', 'numeric-hside-visible-table-capture-v1',
+        'numeric-original-law-amplification-capture-v3', 'numeric-varying-completion-exception-capture-v7',
+        'numeric-visible-posterior-ledger-capture-v1', 'numeric-visible-posterior-margin-capture-v1', 'numeric-visible-joint-success-capture-v1', 'numeric-original-law-full-decoder-integration-capture-v2',
+        'numeric-fixed-score-conditional-agreement-capture-v5', 'numeric-original-ordered-row-law-capture-v1', 'numeric-functional-assignment-acceptance-capture-v2', 'numeric-varying-coefficient-base-capture-v1', 'numeric-visible-list-strategy-capture-v1', 'numeric-maximal-count-guards-capture-v2', 'numeric-global-selected-density-capture-v1', 'numeric-visible-output-transport-capture-v1', 'numeric-visible-vector-advice-capture-v1', 'numeric-full-advice-prefix-capture-v1', 'numeric-global-posterior-success-capture-v1', 'numeric-global-decoder-scalar-capture-v1', 'numeric-global-full-vector-event-capture-v1', 'numeric-visible-actual-matching-capture-v1', 'numeric-maximal-count-specialization-capture-v1', 'numeric-selected-visible-match-bridge-capture-v2', 'numeric-private-assignment-law-capture-v1', 'numeric-actual-visible-count-capture-v1', 'numeric-counted-assignment-score-capture-v1', 'numeric-full-vector-assignment-capture-v1', 'numeric-shared-advice-spans-capture-v1', 'numeric-local-assignment-strategies-capture-v1', 'numeric-original-real-row-law-capture-v1', 'numeric-actual-local-question-law-capture-v1', 'numeric-ordered-deletion-law-capture-v1', 'numeric-occurrence-advice-law-capture-v1', 'numeric-total-ordered-strategy-capture-v1', 'numeric-selected-coordinate-mass-capture-v1', 'numeric-visible-ambient-ladder-capture-v1', 'numeric-original-decoder-selection-capture-v1', 'numeric-refresh-checks-supplement-v1', 'numeric-refresh-history-checks-supplement-v6',
+    ]
+    renames = {'ExactRefresh.lean': 'NumericRefreshFormalOffer.lean',
+               'ExactRefreshTail.lean': 'NumericRefreshTailOffer.lean', 'ActualVisibleAmbientLadder.reconstruction-v2.lean': 'ActualVisibleAmbientLadder.lean'}
+    for capture in captures:
+        directory = HERE / capture
+        assert (directory / 'index.json').is_file(), capture
+        sources = sorted(p for p in directory.rglob('*.lean') if 'diagnostics' not in p.relative_to(directory).parts)
+        for source in sources:
+            name = renames.get(source.name, source.name)
+            if name == 'Checks.lean':
+                imports = re.findall(r'^import\s+(PvNP\.RealizableHardness\.\w+)\s*$', source.read_text(), re.M)
+                assert imports and len(imports)==len(set(imports)), source
+                name = imports[0].rsplit('.', 1)[-1] + ('BundleChecks.lean' if len(imports)>1 else 'Checks.lean')
+            path = 'lean/PvNP/RealizableHardness/' + name
+            assert path not in selected, (path, capture, selected.get(path))
+            selected[path] = (source, capture)
+    namespace_capture='numeric-decay-namespace-repair-capture-v1'
+    namespace_manifest=json.loads((HERE/namespace_capture/'manifest.json').read_bytes())
+    assert pin(HERE/namespace_capture/'index.json')=='87CD0A81AC0EEEBC5C188CBEA914D6ED753BBA6AFD8E7DFE9C18C315ABCDF190'
+    namespace_bindings=[]
+    for r in namespace_manifest['source_successors']:
+        path='lean/'+r['module'].replace('.','/')+'.lean';assert path in selected
+        assert pin(selected[path][0])==r['parent_source_sha256']
+        source=HERE/namespace_capture/r['path'];assert pin(source)==r['sha256']
+        selected[path]=(source,namespace_capture)
+        namespace_bindings.append(dict(module=r['module'],historical_parent_source_sha256=r['parent_source_sha256'],selected_successor_source_sha256=r['sha256'],parent_capture_index_sha256=r['parent_capture_index_sha256'],bundle_index_sha256=pin(HERE/namespace_capture/'index.json'),checks_unchanged=True,explicit_execution_rebind_required=True))
+    parent = Path('C:/Users/dfred/.quantyra/builder02/full114-exact-real-complex-operators-repair4-resource02')
+    manifest = json.loads((parent / 'capture-manifest.json').read_bytes())
+    assert len(manifest['project_sources']) == 369 and len(manifest['requested_axioms']) == 347 and len(manifest['stages']) == 7
+    baseline = set(manifest['project_sources'])
+    # Manifest source entries can be mappings or records; normalize without changing them.
+    if baseline and not isinstance(next(iter(baseline)), str):
+        raise AssertionError('Unexpected parent manifest source format')
+    known = {p.removeprefix('lean/').removesuffix('.lean').replace('/', '.') for p in baseline}
+    known.update(p.removeprefix('lean/').removesuffix('.lean').replace('/', '.') for p in selected)
+    rows = []; requests = set(); missing = []
+    for path, (source, capture) in sorted(selected.items()):
+        text = source.read_text(encoding='utf-8-sig')
+        imports = re.findall(r'^import\s+(\S+)\s*$', text, re.M)
+        explicit = re.findall(r'^#print axioms\s+(\S+)\s*$', text, re.M)
+        namespace = sorted(set(re.findall(r'^namespace\s+(\S+)\s*$', text, re.M)))
+        public = re.findall(r'^(?:theorem|lemma)\s+(\w+)', text, re.M)
+        inferred = [namespace[0] + '.' + n for n in public] if len(namespace) == 1 else []
+        if public and len(namespace) != 1:
+            missing.append(dict(kind='namespace_requires_explicit_review', source=path, namespaces=namespace))
+        requests.update(explicit); requests.update(inferred)
+        for name in imports:
+            if name.startswith('PvNP.') and name not in known:
+                missing.append(dict(kind='unmapped_project_import', source=path, module=name))
+        rows.append(dict(path=path, captured_source=str(source), capture=capture,
+                         capture_index_sha256=pin(HERE / capture / 'index.json'),
+                         sha256=pin(source), bytes=source.stat().st_size,
+                         imports=imports, explicit_axiom_requests=explicit,
+                         public_theorem_requests=inferred))
+    original_requests = set(manifest['requested_axioms'])
+    additional = sorted(requests - original_requests)
+    value = dict(schema='full-numeric-source-only-inventory-v19',
+                 original_operator_baseline=dict(sources=369, requests=347, stages=7,
+                     input_sha256=pin(parent / 'input-archive.tar.gz'), manifest_sha256=pin(parent / 'capture-manifest.json')),
+                 namespace_successor_bindings=namespace_bindings, selected_sources=rows, selected_source_count=len(rows),
+                 total_project_source_count=369 + len(rows),
+                 additional_requests=additional, additional_request_count=len(additional),
+                 total_request_count=347 + len(additional), unresolved=missing,
+                 source_inventory_incomplete=True, historical_global_posterior_planning_pin_reconstruction_index_sha256=pin(HERE/'numeric-global-posterior-historical-planning-reconstruction-v1/index.json'),
+                 historical_offer_dependency_pins_are_preserved_and_require_explicit_successor_execution_binding=True,
+                 known_selected_dependency_successors=[dict(source_capture='numeric-visible-ambient-ladder-capture-v1',historical_dependency_capture='numeric-functional-assignment-acceptance-capture-v1',selected_dependency_capture='numeric-functional-assignment-acceptance-capture-v2',same_module=True,kernel_acceptance=False)],
+                 metadata_corrections=[dict(capture='numeric-global-posterior-metadata-correction-capture-v1',index_sha256=pin(HERE/'numeric-global-posterior-metadata-correction-capture-v1/index.json'),source_game_identified=False)],
+                 remaining_drafts=['actual strategy domination and final geometric/posterior composition', 'kernel verification of all selected uncompiled candidates', 'actual accepted operator successor rebind'],
+                 requires_rebind_to_actual_accepted_operator_successor_before_execution=True,
+                 execution_archive_created=False, cloud_operation=False, lean_executed=False,
+                 native_verified=False, accepted=False)
+    target = HERE / 'complete-numeric-source-only-inventory-v19.json'
+    target.open('xb').write((json.dumps(value, indent=2) + '\n').encode())
+    print(json.dumps(dict(inventory=str(target), sha256=pin(target), sources=value['total_project_source_count'],
+                          requests=value['total_request_count'], unresolved=len(missing))), flush=True)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,18 @@
+# Actual full-vector assignment averaging
+
+E002/S3137. UNCOMPILED and UNACCEPTED.
+
+## 2026-10-11 Averaging the actual conditional score over full supplied advice
+
+For the same globally fixed choice and dimension a, define selectedFullVectorAssignmentScore(U) by the already captured fullAdviceJointScore with the canonical conditional assignment score as its integrand. This is the identical deletion prior and the identical full r-vector tuple used by selectedFullVectorVisibleScore. For an independent used prefix, both integrands evaluate at the same included span Q. If the literal event holds, the counted conditional bound supplies cost<=assignmentScore; if it fails, its indicator is zero and the assignment score is nonnegative. For a dependent prefix both Option-eliminated integrands are zero. Thus pointwise cost times the event integrand is at most the assignment integrand on every tuple, with no conditioning or resampling.
+
+All uniform array weights and deletion-prior weights are nonnegative. Finite-sum monotonicity preserves the pointwise inequality through both sums; distributing the fixed real cost over the sums gives cost*selectedFullVectorVisibleScore(U)<=selectedFullVectorAssignmentScore(U). The same argument using the pointwise[0,1] bounds, uniform array normalization and prior normalization shows that the latter score is in[0,1]. At this point the source is still the canonical full-array representation; it does not yet assert that the two local spans are exactly those each original prover independently computes.
+
+Apply the actual physical-to-full-vector-visible-mean theorem with all of its original hypotheses. It produces one globally fixed choice and a before integrating U. For that same choice and a, multiply its D8 lower bound by the nonnegative cost, distribute the cost into the original uniform GoodU mean and apply the per-U inequality. The result is an actual physical-to-conditional-assignment mean of at least cost*D8. The theorem must call the captured physical theorem; no desired global game probability is an input. The external count contract and every count/height guard remain additional explicit same-index hypotheses. No second vector-dependence error, side loss, favorable-mass factor or eligibility charge is paid here.
+
+Next identify the separately computed original and visible spans from the supplied vectors in both directions, push the draw prior through rowDrawEquiv, and return to original iid rows by zero-extending ineligible rows. The existing ordered-row identity is rational-valued, while the displayed averaging score is real-valued; an exact real finite-sum version or a rational score with a proved cast identity is required before composing them. This type mismatch cannot be hidden by an assumed final success bound. The already proved eligibility factor is charged once at that final law connection, followed by the same-index count-cost absorption.
+
+Route assessment: actual count applicability, literal private assignment mass and its uniform cost now address successive parts of the original probability obligation. They suffice for the averaging argument just given, but the local strategy/span correspondence, original question law, declared external source-game strategy domain and final source NO remain material gaps. None of these source increments is certified before full relevant GCP and review gates.
+
+Remaining to-do list: translate and verify this actual full-vector averaging, identify local spans and the original draw/iid-row laws, finish the common floor and source NO, and complete all operator, numeric, runtime, manuscript and certification gates.
+

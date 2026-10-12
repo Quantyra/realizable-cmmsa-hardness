@@ -1,0 +1,11 @@
+--- Full118
++++ Full119
+@@ -142,7 +142,7 @@
+   · have hj : Y.rank ≠ j := by
+       intro hj
+       exact hij (hi.symm.trans hj)
+-    simp [hi, hj]
++    simp only [if_pos hi, if_neg hj, mul_zero]
+   · simp [hi]
+ 
+ /-- Exact equal-rank bilinear Parseval form, with no input restriction. -/

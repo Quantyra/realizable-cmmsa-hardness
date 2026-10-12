@@ -1,0 +1,82 @@
+"""Freeze exact local prefix spans and coordinate reindexing; no Lean execution."""
+from pathlib import Path
+import hashlib, json, re, subprocess, sys, tarfile
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from lean_source_static_preflight_v2 import inspect_bytes
+
+S = Path(__file__).resolve().parent
+OUT = S/'numeric-shared-advice-spans-offer-20261011-v1'
+P = Path(r'C:\Users\dfred\Desktop\Projects\IGH\Quantyra-AI-Planning')
+ARCHIVE = Path(r'C:\Users\dfred\.quantyra\builder02\full114-exact-real-complex-operators-repair4-resource02\input-archive.tar.gz')
+PIN = '70FC4654130BA2BD9D1FFC79EA015F511E9BC7E4297D5D2DB6F62E42DC38CA04'
+sha = lambda b: hashlib.sha256(b).hexdigest().upper()
+assert not (OUT/'manifest.json').exists()
+with ARCHIVE.open('rb') as stream:
+    assert hashlib.file_digest(stream, 'sha256').hexdigest().upper() == PIN
+with tarfile.open(ARCHIVE, 'r:gz') as archive:
+    toolchain = archive.extractfile('lean-toolchain').read()
+assert toolchain.decode().strip() == 'leanprover/lean4:v4.34.0-rc2'
+candidates = []
+for module, directory, sourcepin, cappin in [
+    ('ActualCountedAssignmentScore', 'numeric-counted-assignment-score-capture-v1',
+     'ADADC0C54FDD6CE27912A9C550E723FD116A183233CE48EDF3C238B816BBC2FD',
+     '7369AF940ADDF9F4B0B2741D3F363912AA29D33A13710C7846C8D8F5F80CBBB4'),
+    ('ActualFullAdvicePrefix', 'numeric-full-advice-prefix-capture-v1',
+     '4654E93638DA46D2E694B2F53B169DC4837AA1AC580C7417BA09578930438687',
+     'D9AD0FB92D0CF1140FCAB633CD661260A629D89D6A7FCA73FD44FD9FBF32704B')]:
+    capdir = S/directory
+    index = (capdir/'index.json').read_bytes()
+    assert sha(index) == cappin and sourcepin in index.decode()
+    files = [p for p in capdir.glob('*.lean') if sha(p.read_bytes()) == sourcepin]
+    assert len(files) == 1
+    raw = files[0].read_bytes()
+    candidates.append(dict(module='PvNP.RealizableHardness.'+module, path=str(files[0]),
+        bytes=len(raw), sha256=sourcepin, capture_index=str(capdir/'index.json'),
+        capture_sha256=cappin, accepted=False))
+source = (OUT/'ActualSharedAdviceSpans.lean').read_bytes()
+preflight = inspect_bytes(source, 'ActualSharedAdviceSpans.lean')
+code = source.decode('utf-8')
+imports = re.findall(r'(?m)^import (\S+)', code)
+assert imports == [row['module'] for row in candidates]
+exports = re.findall(r'(?m)^theorem (\w+)', code)
+definitions = re.findall(r'(?m)^def (\w+)', code)
+assert len(exports) == 9 and len(definitions) == 1
+checks = 'import PvNP.RealizableHardness.ActualSharedAdviceSpans\n\n'
+for name in definitions+exports:
+    checks += '#check PvNP.RealizableHardness.ActualSharedAdviceSpans.'+name+'\n'
+for name in exports:
+    checks += '#print axioms PvNP.RealizableHardness.ActualSharedAdviceSpans.'+name+'\n'
+relative = 'docs/research/pvnp/full90-actual-rhs-numeric-no-obligations-2026-10-08.md'
+plan = subprocess.run(['git', '-C', str(P), 'show', 'e1cdeaf:'+relative], check=True, stdout=subprocess.PIPE).stdout
+heading = '## 2026-10-11 The two locally computed prefix spans and coordinate law'
+text = plan.decode()
+assert text.count(heading) == 1
+section = text[text.index(heading):].split('\n## ', 1)[0]
+argument = '# Exact local supplied-advice spans and coordinate law\n\nE002/S3137. UNCOMPILED and UNACCEPTED.\n\n'+section+'\n'
+for name, value in [('Checks.lean', checks), ('ARGUMENT.md', argument), ('.gitattributes', '* -text\n')]:
+    (OUT/name).write_text(value, encoding='utf-8', newline='\n')
+files = []
+for path in sorted(OUT.rglob('*')):
+    if path.is_file():
+        raw = path.read_bytes()
+        files.append(dict(path=path.relative_to(OUT).as_posix(), bytes=len(raw), sha256=sha(raw),
+            diagnostic='diagnostics' in path.relative_to(OUT).parts))
+manifest = dict(schema=OUT.name, author='/root', story='E002/S3137', accepted=False,
+    compiler_invoked=False, source_only_lexical_preflight=preflight, independent_static_review_completed=False,
+    full114_archive=dict(path=str(ARCHIVE), sha256=PIN, accepted=False),
+    candidate_dependencies=candidates, direct_imports=imports,
+    planning_argument=dict(repository=str(P), relative_path=relative, committed_head='e1cdeaf',
+        committed_blob_sha256=sha(plan), heading=heading, section_sha256=sha(section.encode())),
+    toolchain=dict(value=toolchain.decode().strip(), sha256=sha(toolchain)),
+    mathlib_revision='e06eff5f95374108acfaf19f1ff7473aa7771df2', public_axiom_requests=exports,
+    checked_definitions=definitions, local_original_visible_prefix_spans_identified=True,
+    independent_and_dependent_branches_present=True, actual_full_tuple_reindexing_present=True,
+    arbitrary_real_draw_score_transport_present=True, second_vector_loss_added=False,
+    ordered_row_eligibility_charged=False, local_strategy_laws_instantiated=False,
+    source_game_law_identified=False, source_no_proved=False,
+    supplied_final_probability_assumed=False, external_count_explicit_hypothesis=True,
+    historical_dependency_pins_unchanged=True, dependency_successor_recompilation_required=True,
+    files=files)
+(OUT/'manifest.json').write_text(json.dumps(manifest, indent=2)+'\n', encoding='utf-8', newline='\n')
+print(json.dumps(dict(source_sha256=sha(source), checks_sha256=sha((OUT/'Checks.lean').read_bytes()),
+    manifest_sha256=sha((OUT/'manifest.json').read_bytes()), public_theorems=len(exports))))
