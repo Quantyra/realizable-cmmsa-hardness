@@ -1,0 +1,26 @@
+{
+  "schema":"tm2-cobham-transfer-offer-20261012-v3",
+  "status":"source-only distinct successor; awaiting immutable capture and GCP diagnostics; not accepted",
+  "predecessor":"tm2-cobham-transfer-capture-20261012-v2 is immutable and source-only",
+  "toolchain_target":"Lean 4.34.1 / mathlib d13f23b723b8a846827a245b89c10fc7d3f11612",
+  "upstream_revision":"adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "local_complexitylib_revision":"6c248df7859f2f245e731c1e07057bf69d165fe2",
+  "minimal_import_roots":["OAI.Computability.UniqueGames.Model","OAI.Computability.UniqueGames.Machines.Runtime","Complexitylib.Classes.P.Cobham.Algebra","Complexitylib.Classes.P.Cobham.Vec"],
+  "source_inputs":{
+    "OAI.Computability.UniqueGames.Model":"7E320A904DB5C51EADCF4959604758DE2D6A7A37CA924E4897522B17D280F12D",
+    "OAI.Computability.UniqueGames.Machines.Runtime":"A5D0DCA6226509FAACFBFD7B9E2DCF70AB8C4D5673F579F21615975E570E10B2",
+    "Complexitylib.Models.TuringMachine":"expected SHA256 F424FBA4A35B53C7B0D0144DF4DB145B7E3BCCA31F882AE8294C14A35618125E; raw snapshot verification pending",
+    "Complexitylib.Classes.P.Cobham.Algebra":"pinned v6 capture source; import closure must be recompiled in joint environment",
+    "Complexitylib.Classes.P.Cobham.Vec":"pinned v6 capture source; import closure must be recompiled in joint environment"
+  },
+  "files":{
+    "TM2CobhamTransfer.lean":{"bytes":2697,"sha256":"C19AFF7D7062EC4CB3F87D389ECDB4257720783B9502C8C56CA756ED45F84F29"},
+    "TM2CobhamConfigurationCode.lean":{"bytes":8486,"sha256":"3606810C802D36C89466E5A88EC4BE0BD5FBF6EF563069C77F2F82E8D4CC5AB3"},
+    "TM2CobhamBoundedStack.lean":{"bytes":8267,"sha256":"DFBD3D06C8562E8BFEE5E944B7945934912DA5D0D34A7E97CAABE700746024DC"},
+    "Checks.lean":{"bytes":2088,"sha256":"C7E0F7D5AE81D6C233BAFF366F619AA9CA51170F1DBBF1DD10974392885EF620"},
+    "ARGUMENT.md":{"bytes":6325,"sha256":"0B0626A17294FD786473CFD28AE4A1D08420447CC8628C5C83FC48CD4AB97A58"}
+  },
+  "unresolved_source_obligations":["prove injectivity/decoding of bounded tagged cell and fixed-capacity stack fields","encode the clock-dependent capacity into the actual fixed-field configuration layout and add the absorbing overflow transition","give constructor-by-constructor Cobham code for actual upstream TM2.step and prove the valid-state encoded-step invariant","prove every finite-table matching branch agrees","initialize from actual inputAlphabet and TM2.initList into fixed-width fields","extract exact output under actual outputAlphabet","show the all-clock polynomial length bound for iterFn and identify its clock","establish actual local FP and Cobham endpoint without caller premise"],
+  "compiler_invoked":false,
+  "accepted":false
+}

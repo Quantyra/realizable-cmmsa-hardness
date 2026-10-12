@@ -1,0 +1,25 @@
+{
+  "schema":"tm2-cobham-transfer-offer-20261012-v2",
+  "status":"source-only distinct successor; awaiting immutable capture and GCP diagnostics; not accepted",
+  "predecessor":"tm2-cobham-transfer-offer-20261012-v1 remains unchanged and uncaptured",
+  "toolchain_target":"Lean 4.34.1 / mathlib d13f23b723b8a846827a245b89c10fc7d3f11612",
+  "upstream_revision":"adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "local_complexitylib_revision":"6c248df7859f2f245e731c1e07057bf69d165fe2",
+  "minimal_import_roots":["OAI.Computability.UniqueGames.Model","OAI.Computability.UniqueGames.Machines.Runtime","Complexitylib.Classes.P.Cobham.Algebra","Complexitylib.Classes.P.Cobham.Vec"],
+  "source_inputs":{
+    "OAI.Computability.UniqueGames.Model":"7E320A904DB5C51EADCF4959604758DE2D6A7A37CA924E4897522B17D280F12D",
+    "OAI.Computability.UniqueGames.Machines.Runtime":"A5D0DCA6226509FAACFBFD7B9E2DCF70AB8C4D5673F579F21615975E570E10B2",
+    "Complexitylib.Models.TuringMachine":"F424FBA4A35B53C7B0D0144DF4DB145B7E3BCCA31F882AE8294C14A35618125E",
+    "Complexitylib.Classes.P.Cobham.Algebra":"pinned v6 capture source; import closure must be recompiled in joint environment",
+    "Complexitylib.Classes.P.Cobham.Vec":"pinned v6 capture source; import closure must be recompiled in joint environment"
+  },
+  "files":{
+    "TM2CobhamTransfer.lean":{"bytes":2697,"sha256":"C19AFF7D7062EC4CB3F87D389ECDB4257720783B9502C8C56CA756ED45F84F29"},
+    "TM2CobhamConfigurationCode.lean":{"bytes":8486,"sha256":"3606810C802D36C89466E5A88EC4BE0BD5FBF6EF563069C77F2F82E8D4CC5AB3"},
+    "Checks.lean":{"bytes":1106,"sha256":"8A75CE2FA6126C4A19B1045DC4E8BE216253E96E02E6550B11D3197C843121AD"},
+    "ARGUMENT.md":{"bytes":4746,"sha256":"F5D1758D25E30379710DCBBBD81948A762DE63C433969975089D6FEB1A06D6D7"}
+  },
+  "unresolved_source_obligations":["prove injectivity/decoding of variable-length stack blocks and full configuration code","give constructor-by-constructor Cobham code for actual upstream TM2.step, including stack table lookup/update","prove encoded-step invariant for reachable encoded configurations","initialize from actual inputAlphabet and TM2.initList","extract exact output under actual outputAlphabet","show all-clock polynomial bound and identify Cobham.iterFn clock","establish actual local FP and Cobham endpoint without caller premise"],
+  "compiler_invoked":false,
+  "accepted":false
+}

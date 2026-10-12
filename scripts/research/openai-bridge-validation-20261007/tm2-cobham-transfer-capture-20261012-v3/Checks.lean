@@ -1,0 +1,27 @@
+import OAI.Computability.UniqueGames.Model
+import OAI.Computability.UniqueGames.Machines.Runtime
+import Complexitylib.Classes.P.Cobham.Algebra
+import Complexitylib.Classes.P.Cobham.Vec
+import TM2CobhamTransfer
+import TM2CobhamConfigurationCode
+import TM2CobhamBoundedStack
+
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.oneHotCode_injective
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.oneHotCode_length
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.stackBlock_length
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.configurationFields
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.configurationCode
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.configurationFields_vectorLength
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.configurationCode_length_le
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.stackCellCode_length
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.stackCellWidth_pos
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.boundedStackCells_length
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.boundedStackCode_length
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.dropCell_mem
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.pushCellField_mem
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.popCellField_mem
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.initial_totalStackLength_le
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.stackLength_le_totalStackLength
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.iterate_absorbingStep_stackLength_lt_capacity
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.absorbingStep_stackLength_le
+#print OAI.UniqueGamesTheorem.Foundations.Complexity.TM2CobhamTransfer.iterate_absorbingStep_stackLength_le
