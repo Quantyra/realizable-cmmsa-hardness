@@ -1,0 +1,430 @@
+{
+    "schema":  "numeric-numbered-occurrence-producer-offer-20261012-v17-manifest-reconciled-v7",
+    "author":  "/root/source_transport",
+    "story":  "E002/S3137",
+    "accepted":  false,
+    "compiler_invoked":  false,
+    "independent_static_review_completed":  false,
+    "status":  "source-only/uncompiled: exact source-slot and typed owner-prefix occurrence phases; representative edge-list ordering and owner cloud accumulation; exact pointwise original-row anchor indices and gadget source-embedding tags; output-step contracts for original rows, gadget rows, and final unary serialization. Full sourceRowsWords? traversal equality to the output loop, parser-start composition, candidate clock sufficiency, every-prefix state bound, complete bounded-string/Cobham translation, totalProducer equality, whole-producer FP, compilation, and acceptance remain open.",
+    "toolchain":  "leanprover/lean4:v4.34.0-rc2",
+    "mathlib_revision":  "e06eff5f95374108acfaf19f1ff7473aa7771df2",
+    "source_only_lexical_preflight":  {
+                                          "files":  [
+                                                        {
+                                                            "path":  "ActualNumberedOccurrenceProducer.lean",
+                                                            "valid_utf8":  true,
+                                                            "utf8_bom_absent":  true,
+                                                            "literal_ascii_unicode_escape_absent":  true,
+                                                            "sorry_admit_axiom_absent":  true
+                                                        },
+                                                        {
+                                                            "path":  "ActualOccurrenceUnaryCodec.lean",
+                                                            "valid_utf8":  true,
+                                                            "utf8_bom_absent":  true,
+                                                            "literal_ascii_unicode_escape_absent":  true,
+                                                            "sorry_admit_axiom_absent":  true
+                                                        },
+                                                        {
+                                                            "path":  "ActualOccurrenceBoundedRuntime.lean",
+                                                            "valid_utf8":  true,
+                                                            "utf8_bom_absent":  true,
+                                                            "literal_ascii_unicode_escape_absent":  true,
+                                                            "sorry_admit_axiom_absent":  true
+                                                        },
+                                                        {
+                                                            "path":  "Checks.lean",
+                                                            "valid_utf8":  true,
+                                                            "utf8_bom_absent":  true,
+                                                            "literal_ascii_unicode_escape_absent":  true,
+                                                            "sorry_admit_axiom_absent":  true
+                                                        }
+                                                    ],
+                                          "lexical_preflight_passed":  true,
+                                          "lean_parse_or_compile_performed":  false,
+                                          "bare_question_mark_guard_passed":  true,
+                                          "valid_utf8":  true,
+                                          "utf8_bom_absent":  true,
+                                          "literal_ascii_unicode_escape_guard_passed":  true,
+                                          "sorry_admit_axiom_scan_passed":  true
+                                      },
+    "direct_imports":  [
+                           "PvNP.RealizableHardness.ActualBooleanOccurrenceSource",
+                           "PvNP.RealizableHardness.ActualOccurrenceCounts",
+                           "PvNP.RealizableHardness.ActualOccurrenceGapBridge",
+                           "PvNP.RealizableHardness.ActualFinite3LinSource",
+                           "PvNP.RealizableHardness.ActualOccurrenceDegree",
+                           "PvNP.RealizableHardness.ActualMZOuterSourceContract",
+                           "PvNP.RealizableHardness.BooleanParityInput",
+                           "Mathlib.Tactic",
+                           "PvNP.RealizableHardness.ActualOccurrenceBoundedRuntime",
+                           "Complexitylib.Classes.PCP.Internal.AlgFamily"
+                       ],
+    "pinned_imports":  [
+                           {
+                               "module":  "PvNP.RealizableHardness.ActualBooleanOccurrenceSource",
+                               "path":  "numeric-boolean-occurrence-source-capture-v3/ActualBooleanOccurrenceSource.lean",
+                               "sha256":  "AA2810A6CCBDD473ADF7153208B709FAAA3BF203101F7B6B3165B16725945487",
+                               "capture_index_sha256":  "EEF71EBC38D5400A77063E2AB6536E21DC163C114DF3464D95334160117BB6B4",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "PvNP.RealizableHardness.ActualOccurrenceGapBridge",
+                               "path":  "numeric-actual-occurrence-gap-capture-v1/ActualOccurrenceGapBridge.lean",
+                               "sha256":  "244B1002FAC5D250B21B448332413662115C9AB67799A1CEE3602D3CB95D9028",
+                               "capture_index_sha256":  "A4366E4354F2E8379E61F0C6C2B4C83DFCC2F9A0EF0E04DA841D28C14B5D04F9",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "PvNP.RealizableHardness.BooleanParityInput",
+                               "path":  "shared-boolean-parity-input-capture-v1/BooleanParityInput.lean",
+                               "sha256":  "704B76A68488A6473613A2B69C53A962A54E9914AC298FE24CFAED78865A1414",
+                               "capture_index_sha256":  "75D4A29565E58DB905B614DDFC84E83856F82AD626384FC6F5B20BE09356AB3F",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "PvNP.RealizableHardness.ActualOccurrenceCounts",
+                               "path":  "full107-trace-qualified-source-record-v1/review-sources/lean/PvNP/RealizableHardness/ActualOccurrenceCounts.lean",
+                               "sha256":  "C3CCF7B6240A780D5A03C120DAC18B72365AC71884AB1EA54B71497484E535D5",
+                               "bytes":  8563,
+                               "evidence":  "numeric-actual-occurrence-gap-capture-v1/manifest.json baseline_dependencies; local source matched archived source",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "PvNP.RealizableHardness.ActualOccurrenceAllocation",
+                               "path":  "full107-trace-qualified-source-record-v1/review-sources/lean/PvNP/RealizableHardness/ActualOccurrenceAllocation.lean",
+                               "sha256":  "2878D645A26935E4F9A8A0663FB12058002164850727E39A680047145422F982",
+                               "bytes":  13233,
+                               "evidence":  "numeric-actual-occurrence-gap-capture-v1/manifest.json baseline_dependencies; local source matched archived source",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "PvNP.RealizableHardness.ActualMZOuterSourceContract",
+                               "path":  "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\lean\\PvNP\\RealizableHardness\\ActualMZOuterSourceContract.lean",
+                               "sha256":  "7D377100F2F82CAB404A57B2F542510DBAFA1F66BE5B7C9F0C412E5308714585",
+                               "bytes":  7172,
+                               "evidence":  "main checkout read-only source pin",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "PvNP.RealizableHardness.ActualFinite3LinSource",
+                               "path":  "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\lean\\PvNP\\RealizableHardness\\ActualFinite3LinSource.lean",
+                               "sha256":  "A4A292DCAE0B5A27F292220B1D0CA9F1ED0F43D7AC5D363BB8851DE23C7DD8E2",
+                               "bytes":  3780,
+                               "evidence":  "main checkout read-only source pin",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "PvNP.RealizableHardness.ActualOccurrenceDegree",
+                               "path":  "C:\\Users\\dfred\\.quantyra\\reviews\\openai-bridge-validation-20261007\\scripts\\research\\openai-bridge-validation-20261007\\full107-trace-qualified-source-record-v1\\review-sources\\lean\\PvNP\\RealizableHardness\\ActualOccurrenceDegree.lean",
+                               "sha256":  "18A4151CD131776EFEE7B1C5925DAA7438EEBD9D1098A644E133F0D4545CA31E",
+                               "bytes":  5823,
+                               "evidence":  "full107 archived source matched local readback",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "PvNP.RealizableHardness.RandomizedReduction",
+                               "path":  "C:\\Users\\dfred\\Desktop\\Projects\\realizable-cmmsa-hardness\\lean\\PvNP\\RealizableHardness\\RandomizedReduction.lean",
+                               "sha256":  "AD58934039F5A84E68898DD591C6BADF5B47227A86AE3BAF1CA789822FF12E63",
+                               "bytes":  6085,
+                               "evidence":  "main checkout read-only source pin",
+                               "accepted":  false
+                           },
+                           {
+                               "module":  "Complexitylib.Classes.PCP.Internal.AlgFamily",
+                               "path":  "upstream-readback/AlgFamily.lean",
+                               "sha256":  "1B585F3F045BF9CFED2370F8D4D413647096EBB8B29C8DDEC956E24A1A83D8ED",
+                               "upstream_revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2",
+                               "accepted":  false
+                           }
+                       ],
+    "planning_argument":  {
+                              "repository":  "C:/Users/dfred/Desktop/Projects/IGH/Quantyra-AI-Planning",
+                              "relative_path":  "docs/research/pvnp/openai-math-source-bridge-crosswalk-2026-10-06.md",
+                              "committed_head":  "24dbb937a7cd7e9552f1e8e2d0799cf1b82ee06c",
+                              "committed_blob_sha1":  "3bf417dd2051f6ac663fde1961bf5fbaf128c8c7",
+                              "raw_git_stdout_sha256":  "C90BCBC93A008F8640B1B07DC847B29F939E52F2B478A287C1569CCA6CE5482E",
+                              "raw_git_blob_bytes":  60742,
+                              "raw_git_stdout_capture":  true,
+                              "heading":  "## 2026-10-11 Fixed unary parity wire format and parser ownership",
+                              "section_extraction_rule":  "Raw committed Git bytes from the named heading inclusive through EOF.",
+                              "section_sha256":  "DFAA56AC72A780DC468FC1CBC2574F61B3A006BDE7E969AB503EFE20870C2347",
+                              "section_bytes":  3422,
+                              "whole_blob_pin_verified":  true
+                          },
+    "upstream_wire_api_pins":  [
+                                   {
+                                       "path":  "lean/OAI/Computability/UniqueGames/Model.lean",
+                                       "sha256":  "7E320A904DB5C51EADCF4959604758DE2D6A7A37CA924E4897522B17D280F12D",
+                                       "declarations":  "Complexity.encodeWord/encodeWords; lines 147/149",
+                                       "upstream_revision":  "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+                                   },
+                                   {
+                                       "path":  "lean/OAI/Computability/UniqueGames/PCP/CanonicalBodyTemplateLemmas.lean",
+                                       "sha256":  "9F1AB77BAED916B131E62103A010E456004DDBD3993DC088B3B76F2384390AE5",
+                                       "declarations":  "Input, parseEquation, parseEquations, decodeInputWords and exact input roundtrip; lines 468-565",
+                                       "upstream_revision":  "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+                                   },
+                                   {
+                                       "path":  "lean/OAI/Computability/UniqueGames/Machines/MachineSubroutineLemmas.lean",
+                                       "sha256":  "ACE1CBE9976A3F632D197386CE9FA608DFFE52E7BBB6F6F5454E3FB8CA5CA457",
+                                       "declarations":  "decodeWordsAux/decodeWords",
+                                       "upstream_revision":  "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+                                   },
+                                   {
+                                       "path":  "lean/OAI/Computability/VertexCover/Reduction/SourceEncoding.lean",
+                                       "sha256":  "BDCA10116E729EB88B26CE63A77A099905CC8CC9BE2B06EF4A706CA47B8AC845",
+                                       "declarations":  "inputWords/inputBits",
+                                       "upstream_revision":  "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+                                   }
+                               ],
+    "shared_boolean_wire_reference":  {
+                                          "capture":  "upstream-shared-boolean-source-capture-v2",
+                                          "source_sha256":  "0FB4A00E63A4EA7A751589B4EE9FB026B605F4C0656A3D9C5456C3000A8DEAF4",
+                                          "index_sha256":  "07C6EF720419A72D04533098746E79B9B1EA6EDE37800D18520D9CBE9611776E",
+                                          "lemma":  "inputWords_fromShared; sharedBits := SourceEncoding.inputBits (fromShared I)",
+                                          "accepted":  false
+                                      },
+    "candidate_claims":  {
+                             "owner_prefix_no_duplicate_and_membership_proofs_authored":  true,
+                             "variable_index_from_concrete_list_get":  true,
+                             "row_index_from_actual_rowIndices_and_rows_eq_map":  true,
+                             "ordered_rows_preserved_in_output":  true,
+                             "finite3lin_source_reindexed_to_fin":  true,
+                             "encoded3lin_degree_ten_field_proof_authored":  true,
+                             "encoded3lin_overlap_one_field_proof_authored":  true,
+                             "finite3lin_violations_equal_boolean_failure_count_authored":  true,
+                             "variable_count_formula_3Dm_plus_5E_authored":  true,
+                             "variable_bound_2V_le_51Dm_authored":  true,
+                             "exact_inputWords_expression_authored":  true,
+                             "canonical_unary_input_parser_authored":  true,
+                             "local_input_bits_roundtrip_authored":  true,
+                             "duplicate_rows_and_names_preserved_by_raw_parser":  true,
+                             "output_structure_validator_authored":  true,
+                             "output_decode_returns_exact_producer_source_authored":  true,
+                             "total_list_producer_with_fixed_legal_fallback_authored":  true,
+                             "concrete_eighteen_field_framed_state_authored":  true,
+                             "one_bit_unary_parser_transitions_authored":  true,
+                             "source_slot_scan_transition_authored":  true,
+                             "owner_prefix_occurrence_scan_authored":  true,
+                             "row_major_slot_trace_transition_authored":  true,
+                             "cloud_dart_product_scan_authored":  true,
+                             "representative_filter_uses_vertex_port_rank_authored":  true,
+                             "port_then_internal_tag_generation_authored":  true,
+                             "separate_bounded_tag_lookup_authored":  true,
+                             "fixed_2X_family_rotation_FP_and_value_lemmas_authored":  true,
+                             "fixed_family_Cobham_vector_embedding_authored":  true,
+                             "original_row_owner_prefix_port0_serialization_authored":  true,
+                             "equality_gadget_row_table_serialization_authored":  true,
+                             "exact_unary_encoded_serializer_from_explicit_tags_authored":  true,
+                             "invalid_state_fixed_fallback_serialization_authored":  true,
+                             "complete_bounded_occurrence_producer_authored":  false,
+                             "row_serializer_integrated_as_step_transition":  true,
+                             "tag_index_equivalence_proved":  false,
+                             "source_representative_list_equality_proved":  true,
+                             "totalProducer_serialized_equality_proved":  false,
+                             "all_prefix_runtime_state_bound_proved":  false,
+                             "bounded_string_program_authored":  false,
+                             "complete_producer_Complexity_FP_proved":  false,
+                             "theorems_compiled":  false,
+                             "v13_declarations_compiled":  false,
+                             "successful_firstIndex_implies_target_membership_proved":  true,
+                             "successful_firstIndex_implies_index_in_range_proved":  true,
+                             "successful_firstIndex_selects_requested_list_element_proved":  true,
+                             "successful_firstIndex_equals_nodupGetEquiv_inverse_proved":  true,
+                             "concrete_variableList_search_equals_variableIndexEquiv_proved":  true,
+                             "source_slot_trace_eq_actual_slotList_proved":  true,
+                             "owner_occurrence_prefix_eq_actual_occurrenceList_proved":  true,
+                             "consecutive_owner_blocks_eq_actual_occurrenceLists_proved":  true,
+                             "original_row_anchor_indices_authored":  true,
+                             "output_step_original_gadget_and_finish_contracts_authored":  true
+                         },
+    "remaining_unproved_or_unimplemented":  {
+                                                "source_representative_list_equality":  false,
+                                                "tag_lists_equal_variableList":  true,
+                                                "firstIndex_results_equal_variableIndexEquiv":  true,
+                                                "row_serializer_integrated_in_state_transition":  true,
+                                                "totalProducer_serialized_equality":  true,
+                                                "all_prefix_state_and_clock_bound":  true,
+                                                "Cobham_iterator_and_whole_producer_FP":  true,
+                                                "TM2_composition":  true,
+                                                "Gap3LinReduction_and_SeededMap":  true,
+                                                "upstream_binary_language_to_shared_interface":  true,
+                                                "shared_interface_to_local_ThreeSAT_language":  true,
+                                                "source_promise_composition":  true,
+                                                "owner_prefix_filter_completion":  false,
+                                                "typed_occurrenceList_bridge":  false,
+                                                "sourceRowsWords_outputLoop_traversal_equality":  true
+                                            },
+    "files":  [
+                  {
+                      "path":  ".gitattributes",
+                      "bytes":  20,
+                      "sha256":  "D711B6BA64C7208F3059111E2A74A2453348584BEF1FEC237198AD08BEFE28B9"
+                  },
+                  {
+                      "path":  "ActualNumberedOccurrenceProducer.lean",
+                      "bytes":  17010,
+                      "sha256":  "C220E9A6DA2FFC6247DEBE3503C3EE278E20DCFDA30CEE35F4F107629CECCC6F"
+                  },
+                  {
+                      "path":  "ActualOccurrenceUnaryCodec.lean",
+                      "bytes":  23723,
+                      "sha256":  "C3A12330E4586570A56B3DECBA5A84CFF74AB50746374D4C0AA6596D663F516F"
+                  },
+                  {
+                      "path":  "ActualOccurrenceBoundedRuntime.lean",
+                      "bytes":  161143,
+                      "sha256":  "7EF32F3E9F707827E1D1C5EC3C39418D2FFB9BE88216A9BFAA7A1C932723FF3E"
+                  },
+                  {
+                      "path":  "ARGUMENT.md",
+                      "bytes":  17630,
+                      "sha256":  "1F573C5E881197B3126F15D53B03F1EE1C50E272188DD311BBAB5858FDC03F80"
+                  },
+                  {
+                      "path":  "Checks.lean",
+                      "bytes":  25414,
+                      "sha256":  "D77CBFA8229EC92B003D5F018725EF55F2C7DFDB6261B3F6EF277EBE3ED6F2DB"
+                  },
+                  {
+                      "path":  "upstream-readback/AlgFamily.lean",
+                      "bytes":  11830,
+                      "sha256":  "1B585F3F045BF9CFED2370F8D4D413647096EBB8B29C8DDEC956E24A1A83D8ED"
+                  },
+                  {
+                      "path":  "upstream-readback/FamilyFin.lean",
+                      "bytes":  17019,
+                      "sha256":  "28FD588FFFFF5EDAF85487FB0E9B8772036B23794E76C3D1EFBCA0F7730DAE8C"
+                  }
+              ],
+    "previous_capture":  {
+                             "capture_index":  "numeric-numbered-occurrence-producer-capture-v16/index.json",
+                             "capture_index_sha256":  "6BB27590AE2C2E6E9A3B6945DCC8D012D80A42394D76C4624DE3FCA4B8E3223E",
+                             "manifest_sha256":  "A33DC0587DCB91B2C12C0747DA5813EBDFAF5256C522E4010EA7D80F8078F932",
+                             "immutable":  true,
+                             "compiled":  false,
+                             "accepted":  false
+                         },
+    "successor_changes":  [
+                              "Repairs the fixed-family Cobham inclusion to the explicit Fin 1 vector lift required by Complexity.Cobham.",
+                              "Adds structural list access and exact first-match lookup from each original source slot to its owner-prefix occurrence and port-zero variable tag.",
+                              "Adds the four literal equality-gadget row triples and maps terminals/internal labels to generated representative/tag identities.",
+                              "Adds a fixed seven-field output accumulator; outputStep emits one original or gadget row per transition, and runOutput/completeRun compose it with explicit clock arguments.",
+                              "Adds source-level polynomial clock candidates and the exact unary encodeWords output with fixed malformed-input fallback; clock sufficiency remains unproved.",
+                              "Keeps tag equivalence, source-list equality, totalProducer equality, Cobham primitive translation, all-prefix bounds, full FP, compilation, and acceptance explicitly open.",
+                              "Corrects the output accumulator field-count description to seven fields.",
+                              "Proves for arbitrary lists that a successful firstIndex? result implies target membership and an in-range index; this does not yet identify the result with variableIndexEquiv.",
+                              "Proves a successful firstIndex? result selects the requested element in the enumerated list.",
+                              "Proves that on any Nodup list, firstIndex? returns exactly the value of List.Nodup.getEquiv.symm, the exact enumeration principle used by variableIndexEquiv.",
+                              "This generic lookup theorem is not yet instantiated because the scanner reachable-state equality between variableTags and encoded variableList remains open.",
+                              "Instantiates the Nodup-list first-match theorem on the exact owner-prefix variableList and proves its returned numeral equals variableIndexEquiv.",
+                              "Proves both Fin cycle and inverse numeric modulo formulas from pinned Mathlib rotation APIs, then identifies each typed source reverse case with the runtime numeric reverse tuple.",
+                              "Proves pointwise that the rank-filtered cursor emits the exact full typed dart tuple iff ActualGraphEdges.IsRep holds; full list-order and edgeList equality remain open.",
+                              "Defines typed row-major cursor darts and states their full list equals the source ActualGraphEdges.dartList product.",
+                              "States that the complete runtime representative scan equals the ordered ActualEqualityCloud.edgeList after numeric projection, via the pointwise source IsRep bridge.",
+                              "Composes one owner cloud and internal-tag loop with the ordered ActualEqualityCloud.edgeList projection and exact edge-list tag count.",
+                              "Repairs identified forward references by placing each helper/definition before its consumers.",
+                              "Adds the source-coordinate-to-variableIndexEquiv theorem and exact original-row anchor serialization under the complete typed slot/owner/tag invariants.",
+                              "Adds the all-owner representative cloud accumulation theorem and exact gadget tag mapping to the source embedding.",
+                              "Adds one-step output transition contracts for original rows, gadget rows, and final unary serialization; these do not prove repeated traversal or clock sufficiency."
+                          ],
+    "public_axiom_requests":  [
+                                  "ActualOccurrenceUnaryCodec.decodeWords_encodeWords",
+                                  "ActualOccurrenceUnaryCodec.parseEquation_encoded",
+                                  "ActualOccurrenceUnaryCodec.parseEquations_encoded",
+                                  "ActualOccurrenceUnaryCodec.decodeInputWords_encoded",
+                                  "ActualOccurrenceUnaryCodec.decodeInputBits_shared",
+                                  "ActualOccurrenceUnaryCodec.output_inputDegreeTen",
+                                  "ActualOccurrenceUnaryCodec.output_inputOverlapOne",
+                                  "ActualOccurrenceUnaryCodec.decodeEncodedInput_output",
+                                  "ActualOccurrenceUnaryCodec.decodeOutput_serializeOutput",
+                                  "ActualOccurrenceUnaryCodec.totalProducer_validInput",
+                                  "ActualOccurrenceUnaryCodec.totalProducer_decodes",
+                                  "ActualOccurrenceUnaryCodec.totalProducer_roundtrip",
+                                  "ActualOccurrenceUnaryCodec.equationWireLength_le",
+                                  "ActualOccurrenceUnaryCodec.equationRowsWireLength_le",
+                                  "ActualOccurrenceUnaryCodec.inputWireLength_le",
+                                  "ActualOccurrenceUnaryCodec.serializeOutput_wireLength_le",
+                                  "ActualOccurrenceUnaryCodec.serializeOutput_polynomial_length_bound",
+                                  "ActualOccurrenceUnaryCodec.decodeWordsAux_values_le",
+                                  "ActualOccurrenceUnaryCodec.decodeWordsAux_length_le",
+                                  "ActualOccurrenceUnaryCodec.decodeWords_values_le",
+                                  "ActualOccurrenceUnaryCodec.decodeWords_length_le",
+                                  "ActualOccurrenceUnaryCodec.parseEquations_length_eq",
+                                  "ActualOccurrenceUnaryCodec.decodeInputWords_headers_eq",
+                                  "ActualOccurrenceUnaryCodec.decodeInputBits_headers_le",
+                                  "ActualOccurrenceBoundedRuntime.firstIndex?_some_get",
+                                  "ActualOccurrenceBoundedRuntime.firstIndex?_eq_nodupGetEquiv_symm_val",
+                                  "ActualOccurrenceBoundedRuntime.variableListSearchIndex_eq_variableIndex",
+                                  "ActualOccurrenceBoundedRuntime.finRotate_val_mod",
+                                  "ActualOccurrenceBoundedRuntime.finRotate_symm_val_mod",
+                                  "ActualOccurrenceBoundedRuntime.reverseDart_typed",
+                                  "ActualOccurrenceBoundedRuntime.selectedDart_typed",
+                                  "ActualOccurrenceBoundedRuntime.sourceDartTracePrefix_eq_dartList",
+                                  "ActualOccurrenceBoundedRuntime.selectedDartPrefix_eq_typedRepresentatives",
+                                  "ActualOccurrenceBoundedRuntime.selectedDartPrefix_eq_edgeList",
+                                  "ActualOccurrenceBoundedRuntime.runCloudAndInternal_complete_edgeList",
+                                  "ActualOccurrenceBoundedRuntime.originalRowWords?_eq_anchorIndices",
+                                  "ActualOccurrenceBoundedRuntime.runAllOwnerTagSequence_representatives",
+                                  "ActualOccurrenceBoundedRuntime.gadgetVariableTag_eq_sourceEmbedding",
+                                  "ActualOccurrenceBoundedRuntime.outputStep_originalRows_emits",
+                                  "ActualOccurrenceBoundedRuntime.outputStep_cloudRows_emits",
+                                  "ActualOccurrenceBoundedRuntime.outputStep_finish_serializes"
+                              ],
+    "bounded_string_library_pins":  [
+                                        {
+                                            "path":  "Classes/P/Cobham.lean",
+                                            "sha256":  "76C47180EB1440E2C04D6FA3243CD6596503CB0DF83C6C8313981F5A823CC36C"
+                                        },
+                                        {
+                                            "path":  "Cobham/Defs.lean",
+                                            "sha256":  "F3C67A7633DC861C32E45FE1B96780B8AE77350E88ED4AECE5982E5C1DB30BE8"
+                                        },
+                                        {
+                                            "path":  "Cobham/Internal/Algebra.lean",
+                                            "sha256":  "CDC9CDD18A76D3F5D9E38EF62127F06A9392DD2B61F2F7F1E9A80FB2E707B27B"
+                                        },
+                                        {
+                                            "path":  "Cobham/Internal/StringOps.lean",
+                                            "sha256":  "179EDACA26D54E39EE671ABAD17DEE0B1691DBC4420A43AF6DB333CE4B1BF686"
+                                        },
+                                        {
+                                            "path":  "Cobham/Internal/Reverse.lean",
+                                            "sha256":  "7C6456E02BD0047150D28316056D924B3D437C58FB2969CB982CA86ADB4A4AE6"
+                                        },
+                                        {
+                                            "path":  "Cobham/Vec.lean",
+                                            "sha256":  "EC6D03251FDB78FB59157FF48B314577B886486021808CD4691548882BF0441A"
+                                        }
+                                    ],
+    "family_runtime_api_pins":  [
+                                    {
+                                        "path":  "upstream-readback/AlgFamily.lean",
+                                        "sha256":  "1B585F3F045BF9CFED2370F8D4D413647096EBB8B29C8DDEC956E24A1A83D8ED",
+                                        "declarations":  "Complexity.FinBase.famRotFn_mem_FP and famRotFn_eq"
+                                    },
+                                    {
+                                        "path":  "upstream-readback/FamilyFin.lean",
+                                        "sha256":  "28FD588FFFFF5EDAF85487FB0E9B8772036B23794E76C3D1EFBCA0F7730DAE8C",
+                                        "declarations":  "Complexity.Family.fitLevel_le used to discharge fixed 2X premise; copied from full107 trace-qualified source record"
+                                    },
+                                    {
+                                        "path":  "bounded_string_library_pins",
+                                        "declaration":  "Complexity.FP_subset_CobhamFP",
+                                        "note":  "Pinned Cobham source closure is listed under bounded_string_library_pins; inclusion used for family subroutine only"
+                                    }
+                                ],
+    "original_v13_recovery":  {
+                                  "status":  "unrecovered",
+                                  "preflight_manifest_sha256":  "A5C0FE6DC62DB2852A4831C647BAFC432670297E1AC04550BB0C6FAAA76BAF60",
+                                  "preflight_source_snapshot_persisted":  false,
+                                  "attempted_exact_reconstruction_from_v12":  true,
+                                  "expected_runtime_sha256":  "AFE2658FA70E5C3D0969AA5459F7F73E6EDB07F0814FCBFC775CE55B15EA56CA",
+                                  "v12_runtime_sha256":  "EA354D3B3759287EE2BBC7C68A4523EEAEF203AD498FB9C78D44EBEB3B018235",
+                                  "current_post_request_runtime_sha256":  "3F072F8F0400D2458590DF991EC226EF3E9F456F25B294353D83EF1065AA4284",
+                                  "expected_argument_sha256":  "C14B9C8F05C5163962D63C4B0148C2223E6003C7094131C1DD3D5751A34220DB",
+                                  "current_post_request_argument_sha256":  "EA5FAA7DDBBD37E5E09583309A1555D987E09C41276B13D7987E5766042F51F4",
+                                  "note":  "Preflight failure record contains only capture control and post-request manifest, not original source bytes. Mismatching candidates are not represented as recovered originals."
+                              },
+    "manifest_recovery_record":  "numeric-numbered-occurrence-producer-offer-20261012-v17-manifest-refresh-recovery-record-v1.json"
+}

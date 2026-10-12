@@ -1,0 +1,77 @@
+{
+    "schema":  "tm2-cobham-transfer-offer-20261012-v4",
+    "status":  "mutable source-only coherent constructor-to-haltCode increment; awaiting Sol immutable capture/GCP diagnostics; not compiled or accepted",
+    "predecessor":  "tm2-cobham-transfer-capture-20261012-v3 (immutable source-only)",
+    "toolchain_target":  "Lean 4.34.1 / mathlib d13f23b723b8a846827a245b89c10fc7d3f11612",
+    "upstream_revision":  "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+    "local_complexitylib_revision":  "6c248df7859f2f245e731c1e07057bf69d165fe2",
+    "minimal_import_roots":  [
+                                 "OAI.Computability.UniqueGames.Model",
+                                 "OAI.Computability.UniqueGames.Machines.Runtime",
+                                 "Complexitylib.Classes.P.Cobham.Internal.Algebra",
+                                 "Complexitylib.Classes.P.Cobham.Vec"
+                             ],
+    "source_inputs":  {
+                          "OAI.Computability.UniqueGames.Model":  "pinned source SHA256 7E320A904DB5C51EADCF4959604758DE2D6A7A37CA924E4897522B17D280F12D",
+                          "OAI.Computability.UniqueGames.Machines.Runtime":  "pinned source SHA256 A5D0DCA6226509FAACFBFD7B9E2DCF70AB8C4D5673F579F21615975E570E10B2",
+                          "Complexitylib.Models.TuringMachine":  "pinned source SHA256 F424FBA4A35B53C7B0D0144DF4DB145B7E3BCCA31F882AE8294C14A35618125E; source closure snapshot copied, joint GCP recompile pending",
+                          "Complexitylib.Classes.P.Cobham.Internal.Algebra":  "pinned v6 capture source; recompile its closure in joint environment",
+                          "Complexitylib.Classes.P.Cobham.Vec":  "pinned v6 capture source; recompile its closure in joint environment"
+                      },
+    "files":  {
+                  "ARGUMENT.md":  {
+                                      "bytes":  4518,
+                                      "sha256":  "0BEB2D4216B32F2F9AB7F9D169F6950D0476FF1D6A4EF2DF588B0619018DBAAC"
+                                  },
+                  "Checks.lean":  {
+                                      "bytes":  16728,
+                                      "sha256":  "3F3618EFF60B0D48C976EEEA42AC272CA29480D6B869290D15E5818484C19623"
+                                  },
+                  "TM2CobhamBoundedStack.lean":  {
+                                                     "bytes":  14564,
+                                                     "sha256":  "1AD380AD1B584FA6A547AFAD094C8182AD5A622A3EB2000D023DC57E81D5CEDA"
+                                                 },
+                  "TM2CobhamConfigurationCode.lean":  {
+                                                          "bytes":  8552,
+                                                          "sha256":  "CA863EF2C0922C1A34D9CC86B06B7CC8E8BE3AEA7B806EC35FBF362CCD6F10D8"
+                                                      },
+                  "TM2CobhamConstructors.lean":  {
+                                                     "bytes":  6024,
+                                                     "sha256":  "89570CF279C4F018DCD21167D1D4CF111CF75B9A7D3BFAB8B58064A00A17E713"
+                                                 },
+                  "TM2CobhamFiniteDispatch.lean":  {
+                                                       "bytes":  106016,
+                                                       "sha256":  "E421F1340879F7BA72FD972758C644FD3956A14CA9DE309CBE47692F52B457FA"
+                                                   },
+                  "TM2CobhamFixedFields.lean":  {
+                                                    "bytes":  13555,
+                                                    "sha256":  "9E349A5C899525C5B32B5CCADB8F5B18E04688DD4B479F19246614BE800E3A4A"
+                                                },
+                  "TM2CobhamTransfer.lean":  {
+                                                 "bytes":  6117,
+                                                 "sha256":  "C7AB22C0E31AE4596AB76265F868F20DDF6032965212730CD1E3E73C097BCCB2"
+                                             }
+              },
+    "claims":  {
+                   "authored":  [
+                                    "actual seven-constructor stmtFieldMap correctness under internal push slack",
+                                    "program-label dispatch and encoded stepAux correspondence",
+                                    "total fixed-width whole-configuration transition and all-clock Cobham.iterFn membership",
+                                    "bounded actual run correspondence and absorption through the certified haltList"
+                                ],
+                   "open":  [
+                                "certificate input initialization",
+                                "outputAlphabet decoding",
+                                "polynomial clock and capacity construction",
+                                "actual CobhamFP membership and FP inclusion"
+                            ],
+                   "not_claimed":  [
+                                       "Lean/GCP compilation",
+                                       "kernel checking",
+                                       "axiom audit result",
+                                       "formal acceptance"
+                                   ]
+               },
+    "compiler_invoked":  false,
+    "accepted":  false
+}
