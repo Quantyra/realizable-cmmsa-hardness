@@ -1,6 +1,6 @@
 # Realizable Nearlinear-Gap Hardness for Small Monotone Formulas
 
-Quantyra Research | 12 September 2026 | Version 0.1.0
+Daniel Fredriksen | Quantyra Inc. | ORCID: [0009-0002-9123-7435](https://orcid.org/0009-0002-9123-7435) | 12 September 2026 | Version 0.1.0
 
 ## Abstract
 

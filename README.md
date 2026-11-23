@@ -33,7 +33,7 @@ polynomial exponent may depend on L. The result does not settle the
 separate superconstant-parameter question, attain a linear approximation
 factor, construct one-way functions, or resolve P versus NP.
 
-Version 0.1.0 | Quantyra Research | 12 September 2026.
+Version 0.1.0 | Daniel Fredriksen | Quantyra Inc. | ORCID: [0009-0002-9123-7435](https://orcid.org/0009-0002-9123-7435) | 12 September 2026.
 Informal AI mathematical review; no human peer review or complete
 machine-checked proof is claimed. Citation metadata is in
 [CITATION.cff](CITATION.cff).
